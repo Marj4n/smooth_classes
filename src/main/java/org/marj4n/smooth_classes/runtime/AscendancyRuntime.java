@@ -54,7 +54,7 @@ public final class AscendancyRuntime {
         if (!unlocked(p,ability)) return ExecutionResult.failure(ability+" is not unlocked in Puffish Ascendancy.");
         int pts=points(p);
         return switch (ability) {
-            case "righteous_hammers" -> effect(p,SmoothEffects.RIGHTEOUS_HAMMERS,800,1+pts/10,ability);
+            case "righteous_hammers" -> effect(p,SmoothEffects.RIGHTEOUS_HAMMERS,800,5,ability);
             case "bone_armor" -> effect(p,SmoothEffects.BONE_ARMOR,800,3+pts/10,ability);
             case "cyclonic_cleave" -> cyclonicCleave(p);
             case "magic_circle" -> magicCircle(p,pts);
@@ -88,12 +88,17 @@ public final class AscendancyRuntime {
     }
 
     private static ExecutionResult arcaneSlash(ServerPlayerEntity p,int pts){
-        boolean cast=InternalSpellRuntime.target(p,"smooth_classes:arcane_slash",p,3F);
+        if (!ArcaneSlashVisuals.hasSword(p))
+            return ExecutionResult.failure("Arcane Slash requires a sword in your main hand.");
+        if (p.hasStatusEffect(SmoothEffects.ARCANE_SLASH))
+            return ExecutionResult.failure("Arcane Slash is already charging.");
+        boolean cast=InternalSpellRuntime.target(p,"smooth_classes:arcane_slash",p,1F);
         if(cast){
             ContinuedFx.sound(p,"spell_slash",0.4F,1.1F);
             if(pts>9) increment(p,SmoothEffects.ARCANE_ATTUNEMENT,60,1+pts/10,19);
         }
-        return ExecutionResult.success(cast?1:0,"arcane_slash");
+        return cast ? ExecutionResult.success(1,"arcane_slash")
+                : ExecutionResult.failure("Arcane Slash spell unavailable.");
     }
 
     private static ExecutionResult curse(ServerPlayerEntity p,StatusEffect fx,int duration,String name,int pts){

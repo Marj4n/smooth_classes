@@ -43,11 +43,13 @@ public final class CombatEventRuntime {
 
     /** Spell-projectile impact hook. Ascendancy/projectile effects attach here in Chapters 6-7. */
     public static void onSpellProjectileHit(ServerPlayerEntity owner, Entity projectile, LivingEntity target) {
+        RighteousHammerChargeRuntime.onTriggeredHit(owner,target);
         AscendancyRuntime.spellProjectileHit(owner, target);
     }
 
     public static void onMeleeAttack(ServerPlayerEntity player, Entity target) {
         if (!player.isAlive() || !target.isAttackable() || !(target instanceof LivingEntity living)) return;
+        RighteousHammerChargeRuntime.onTriggeredHit(player,living);
         BasePathRuntime.onMeleeHit(player, living);
         ClassPassiveRuntime.onMeleeHit(player, living);
         RulerRuntime.onAnointedMeleeHit(player);

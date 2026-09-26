@@ -32,8 +32,11 @@ public final class SmoothClasses implements ModInitializer {
     public void onInitialize() {
         PassiveSkillReward.register();
         SmoothSounds.register();
+        org.marj4n.smooth_classes.registry.SmoothParticles.register();
         PuffishSkillFeedback.register();
         SmoothEffects.register();
+        org.marj4n.smooth_classes.runtime.DivineRayLightRuntime.register();
+        org.marj4n.smooth_classes.registry.SmoothBlocks.register();
         SmoothEntities.register();
         SmoothClassContent.register();
         AvengerServerRuntime.register();
@@ -42,6 +45,16 @@ public final class SmoothClasses implements ModInitializer {
         SpellEvents.SPELL_CAST.register(args -> {
             if (args.caster() instanceof ServerPlayerEntity player) {
                 CombatEventRuntime.onSpellCast(player, args.targets(), args.spell().value().school);
+                // DIRECT delivery has applied its impact to the selected targets here.
+                // Projectile spells consume a hammer only at their entity collision hook.
+                var delivery=args.spell().value().deliver;
+                if (delivery!=null && delivery.type!=null
+                        && "DIRECT".equals(String.valueOf(delivery.type))) {
+                    for (var entity:args.targets()) {
+                        if (entity instanceof net.minecraft.entity.LivingEntity target)
+                            org.marj4n.smooth_classes.runtime.RighteousHammerChargeRuntime.onTriggeredHit(player,target);
+                    }
+                }
             }
         });
         SmoothClassesNetworking.registerServer();

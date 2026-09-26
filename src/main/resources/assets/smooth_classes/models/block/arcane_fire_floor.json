@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/template_fire_floor",
+  "textures": {
+    "fire": "smooth_classes:block/arcane_fire_0",
+    "particle": "smooth_classes:block/arcane_fire_0"
+  }
+}

@@ -39,7 +39,8 @@ public abstract class SpellProjectileMixin extends ProjectileEntity {
     private void smooth$entityHit(EntityHitResult hit,CallbackInfo ci){
         if(getWorld().isClient || !(getOwner() instanceof ServerPlayerEntity owner)
                 || !(hit.getEntity() instanceof LivingEntity target))return;
-        CombatEventRuntime.onSpellProjectileHit(owner,this,target);
+        if (smooth$spellId()==null || !smooth$spellId().getPath().equals("righteous_hammer_projectile"))
+            CombatEventRuntime.onSpellProjectileHit(owner,this,target);
         ProjectileEntityRuntime.onSpellProjectileHit(owner,smooth$self(),smooth$spellId(),target);
     }
 

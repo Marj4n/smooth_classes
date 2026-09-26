@@ -57,6 +57,7 @@ public final class SmoothEffects {
     public static final StatusEffect DIVINE_ADJUDICATION = register("divine_adjudication", StatusEffectCategory.BENEFICIAL, 0x2FA5AF);
     public static final StatusEffect TAUNTED = register("taunted", StatusEffectCategory.HARMFUL, 0x2FA5AF);
     public static final StatusEffect UNDYING = register("undying", StatusEffectCategory.BENEFICIAL, 0x2FA5AF);
+    public static final StatusEffect DIVINE_RAY = register("divine_ray", StatusEffectCategory.BENEFICIAL, 0xFFF2C6);
     public static final StatusEffect RAGE = register("rage", StatusEffectCategory.BENEFICIAL, 0x2FA5AF);
     public static final StatusEffect OVERLOAD = register("overload", StatusEffectCategory.BENEFICIAL, 0x2FA5AF);
     public static final StatusEffect BLADESTORM = register("bladestorm", StatusEffectCategory.BENEFICIAL, 0x2FA5AF);

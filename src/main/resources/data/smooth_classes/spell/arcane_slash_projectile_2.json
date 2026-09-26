@@ -1,6 +1,6 @@
 {
   "school": "ARCANE",
-  "range": 256,
+  "range": 32,
   "tier": 1,
   "learn": {},
   "active": {
@@ -31,9 +31,12 @@
   },
   "release": {
     "sound": {
-      "id": "smooth_classes:spell_radiant_cast",
-      "volume": 0.3,
-      "pitch": 1.4
+      "id": "smooth_classes:spell_slash",
+      "volume": 0.9,
+      "pitch": 0.8
+    },
+    "animation": {
+      "id": "smooth_classes:arcane_slash_alt"
     }
   },
   "target": {
@@ -44,7 +47,7 @@
     "type": "PROJECTILE",
     "projectile": {
       "launch_properties": {
-        "velocity": 0.3
+        "velocity": 1.6
       },
       "projectile": {
         "homing_angle": 0,
@@ -57,7 +60,7 @@
               "id": "spell_engine:arcane_spell",
               "appearance": {},
               "batch": {
-                "count": 2.0,
+                "count": 4.0,
                 "shape": "CIRCLE",
                 "min_speed": 0.05,
                 "max_speed": 0.1,
@@ -66,18 +69,7 @@
                 "alignment": "LOOK"
               }
             }
-          ],
-          "composite_model": {
-            "models": [
-              {
-                "orientation": "ALONG_MOTION",
-                "fx": {
-                  "model_id": "smooth_classes:spell_projectile/arcane_slash",
-                  "scale": 2
-                }
-              }
-            ]
-          }
+          ]
         }
       }
     }

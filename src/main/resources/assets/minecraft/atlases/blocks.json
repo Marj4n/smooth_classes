@@ -1,0 +1,14 @@
+{
+  "sources": [
+    {
+      "type": "minecraft:single",
+      "resource": "minecraft:block/fire_0",
+      "sprite": "smooth_classes:block/arcane_fire_0"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "minecraft:block/fire_1",
+      "sprite": "smooth_classes:block/arcane_fire_1"
+    }
+  ]
+}

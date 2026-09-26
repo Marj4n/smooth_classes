@@ -45,7 +45,7 @@ public final class RulerRuntime {
         var eye=player.getEyePos();var look=player.getRotationVec(1F).normalize();
         LivingEntity aimed=null;double nearest=25;
         for(LivingEntity e:player.getWorld().getEntitiesByClass(LivingEntity.class,
-                player.getBoundingBox().expand(25), e->e!=player&&e.isAlive()&&e.isTeammate(player))){
+                player.getBoundingBox().expand(25), e->e!=player&&e.isAlive()&&isAlly(e,player))){
             var to=e.getEyePos().subtract(eye);double along=to.dotProduct(look);
             if(along>0&&along<nearest&&to.subtract(look.multiply(along)).lengthSquared()<2.25){aimed=e;nearest=along;}
         }
@@ -56,13 +56,21 @@ public final class RulerRuntime {
         var center=aimed!=null?aimed.getPos():hit.getType()==net.minecraft.util.hit.HitResult.Type.MISS?end:hit.getPos();
         LivingEntity target=player.getWorld().getEntitiesByClass(LivingEntity.class,
                 new net.minecraft.util.math.Box(center,center).expand(3),
-                e->e!=player&&e.isAlive()&&e.isTeammate(player)).stream().findFirst().orElse(null);
+                e->e!=player&&e.isAlive()&&isAlly(e,player)).stream().findFirst().orElse(null);
         if(target==null)return ExecutionResult.failure("No allied Divine Intervention target at the aimed position.");
+        boolean cast=InternalSpellRuntime.target(player,"smooth_classes:divine_intervention",target,1F);
+        if(!cast)return ExecutionResult.failure("Divine Intervention spell unavailable.");
         if(plan.fireResistance())stack(target,StatusEffects.FIRE_RESISTANCE,240,1,5);
         if(plan.might())stack(target,SmoothEffects.MIGHT,240,3,10);
         if(plan.spellforged())stack(target,SmoothEffects.SPELLFORGED,240,3,10);
-        boolean cast=InternalSpellRuntime.target(player,"smooth_classes:divine_intervention",target,1F);
-        return cast?ExecutionResult.success(1,"divine_intervention"):ExecutionResult.failure("Divine Intervention spell unavailable.");
+        target.addStatusEffect(new StatusEffectInstance(SmoothEffects.DIVINE_RAY,30,0,false,false,false));
+        org.marj4n.smooth_classes.runtime.DivineRayLightRuntime.illuminate(target);
+        return ExecutionResult.success(1,"divine_intervention");
+    }
+
+    private static boolean isAlly(LivingEntity entity,ServerPlayerEntity player) {
+        return entity.isTeammate(player) || entity instanceof net.minecraft.entity.passive.TameableEntity tame
+                && tame.isOwner(player);
     }
 
     private static void stack(LivingEntity entity, net.minecraft.entity.effect.StatusEffect effect,

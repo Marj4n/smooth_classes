@@ -45,6 +45,7 @@ public final class ModelRegistry {
             id("effect/magic_circle"),
             id("effect/taunted"),
             id("effect/undying"),
+            id("effect/undying_barrier"),
             id("effect/undying_glow"),
             id("effect/vitality_bond")
     );

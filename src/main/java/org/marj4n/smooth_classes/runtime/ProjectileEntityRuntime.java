@@ -63,7 +63,10 @@ public final class ProjectileEntityRuntime {
         // the datapack. Their runtime state here provides movement/target behavior.
         if(spell.contains("righteous_hammer_projectile") && p.getFollowedTarget()==null)
             nearest(p,owner,12,true).ifPresent(p::setFollowedTarget);
-        if(spell.contains("arcane_slash_projectile") && p.age>80)p.discard();
+        if (spell.contains("arcane_slash_projectile")) {
+            ArcaneSlashVisuals.projectile(p, spell.endsWith("_2"));
+            if (p.age > 30) p.discard();
+        }
         if(spell.contains("rapidfire") && p.getFollowedTarget()==null)
             nearest(p,owner,16,true).ifPresent(p::setFollowedTarget);
         if(spell.equals("smooth_classes:passive_throw") && p.getFollowedTarget()==null)
