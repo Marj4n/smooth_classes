@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "id": "smooth_classes",
+  "version": "${version}",
+  "name": "Smooth Classes",
+  "description": "A Puffish Skills-powered class, talent, signature ability, and Ascendancy gameplay system for Minecraft 1.20.1.",
+  "authors": [
+    "Marj4n"
+  ],
+  "license": "All-Rights-Reserved",
+  "icon": "assets/smooth_classes/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "org.marj4n.smooth_classes.SmoothClasses"
+    ],
+    "client": [
+      "org.marj4n.smooth_classes.client.SmoothClassesClient"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric-api": "*",
+    "minecraft": "${minecraft_version}",
+    "puffish_skills": "*",
+    "puffish_attributes": "*",
+    "spell_engine": "*",
+    "spell_power": "*"
+  },
+  "mixins": [
+    "smooth_classes.mixins.json"
+  ],
+  "suggests": {
+    "simplyswords": "*",
+    "paladins": "*",
+    "archers": "*",
+    "immersive_melodies": "*",
+    "openpartiesandclaims": "*"
+  }
+}

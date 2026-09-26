@@ -1,0 +1,442 @@
+{
+  "fx_skill_backstab": {
+    "sounds": [
+      "smooth_classes:fx_skill_backstab"
+    ]
+  },
+  "fx_ui_unlock": {
+    "sounds": [
+      "smooth_classes:fx_ui_unlock"
+    ]
+  },
+  "fx_ui_unlock2": {
+    "sounds": [
+      "smooth_classes:fx_ui_unlock2"
+    ]
+  },
+  "fx_ui_unlock3": {
+    "sounds": [
+      "smooth_classes:fx_ui_unlock3"
+    ]
+  },
+  "soundeffect_6": {
+    "sounds": [
+      "smooth_classes:soundeffect_6"
+    ]
+  },
+  "soundeffect_7": {
+    "sounds": [
+      "smooth_classes:soundeffect_7"
+    ]
+  },
+  "soundeffect_8": {
+    "sounds": [
+      "smooth_classes:soundeffect_8"
+    ]
+  },
+  "soundeffect_9": {
+    "sounds": [
+      "smooth_classes:soundeffect_9"
+    ]
+  },
+  "soundeffect_10": {
+    "sounds": [
+      "smooth_classes:soundeffect_10"
+    ]
+  },
+  "soundeffect_11": {
+    "sounds": [
+      "smooth_classes:soundeffect_11"
+    ]
+  },
+  "soundeffect_12": {
+    "sounds": [
+      "smooth_classes:soundeffect_12"
+    ]
+  },
+  "soundeffect_13": {
+    "sounds": [
+      "smooth_classes:soundeffect_13"
+    ]
+  },
+  "soundeffect_14": {
+    "sounds": [
+      "smooth_classes:soundeffect_14"
+    ]
+  },
+  "soundeffect_15": {
+    "sounds": [
+      "smooth_classes:soundeffect_15"
+    ]
+  },
+  "soundeffect_16": {
+    "sounds": [
+      "smooth_classes:soundeffect_16"
+    ]
+  },
+  "soundeffect_17": {
+    "sounds": [
+      "smooth_classes:soundeffect_17"
+    ]
+  },
+  "soundeffect_18": {
+    "sounds": [
+      "smooth_classes:soundeffect_18"
+    ]
+  },
+  "soundeffect_19": {
+    "sounds": [
+      "smooth_classes:soundeffect_19"
+    ]
+  },
+  "soundeffect_20": {
+    "sounds": [
+      "smooth_classes:soundeffect_20"
+    ]
+  },
+  "soundeffect_21": {
+    "sounds": [
+      "smooth_classes:soundeffect_21"
+    ]
+  },
+  "soundeffect_22": {
+    "sounds": [
+      "smooth_classes:soundeffect_22"
+    ]
+  },
+  "soundeffect_23": {
+    "sounds": [
+      "smooth_classes:soundeffect_23"
+    ]
+  },
+  "soundeffect_24": {
+    "sounds": [
+      "smooth_classes:soundeffect_24"
+    ]
+  },
+  "soundeffect_25": {
+    "sounds": [
+      "smooth_classes:soundeffect_25"
+    ]
+  },
+  "soundeffect_26": {
+    "sounds": [
+      "smooth_classes:soundeffect_26"
+  ]
+},
+  "soundeffect_27": {
+    "sounds": [
+      "smooth_classes:soundeffect_27"
+    ]
+  },
+  "soundeffect_28": {
+    "sounds": [
+      "smooth_classes:soundeffect_28"
+    ]
+  },
+  "soundeffect_29": {
+    "sounds": [
+      "smooth_classes:soundeffect_29"
+    ]
+  },
+  "soundeffect_30": {
+    "sounds": [
+      "smooth_classes:soundeffect_30"
+    ]
+  },
+  "soundeffect_31": {
+    "sounds": [
+      "smooth_classes:soundeffect_31"
+    ]
+  },
+  "soundeffect_32": {
+    "sounds": [
+      "smooth_classes:soundeffect_32"
+    ]
+  },
+  "soundeffect_33": {
+    "sounds": [
+      "smooth_classes:soundeffect_33"
+    ]
+  },
+  "soundeffect_34": {
+    "sounds": [
+      "smooth_classes:soundeffect_34"
+    ]
+  },
+  "soundeffect_35": {
+    "sounds": [
+      "smooth_classes:soundeffect_35"
+    ]
+  },
+  "soundeffect_36": {
+    "sounds": [
+      "smooth_classes:soundeffect_36"
+    ]
+  },
+  "soundeffect_37": {
+    "sounds": [
+      "smooth_classes:soundeffect_37"
+    ]
+  },
+  "soundeffect_38": {
+    "sounds": [
+      "smooth_classes:soundeffect_38"
+    ]
+  },
+  "soundeffect_39": {
+    "sounds": [
+      "smooth_classes:soundeffect_39"
+    ]
+  },
+  "soundeffect_40": {
+    "sounds": [
+      "smooth_classes:soundeffect_40"
+    ]
+  },
+  "soundeffect_41": {
+    "sounds": [
+      "smooth_classes:soundeffect_41"
+    ]
+  },
+  "soundeffect_42": {
+    "sounds": [
+      "smooth_classes:soundeffect_42"
+    ]
+  },
+  "soundeffect_43": {
+    "sounds": [
+      "smooth_classes:soundeffect_43"
+    ]
+  },
+  "soundeffect_44": {
+    "sounds": [
+      "smooth_classes:soundeffect_44"
+    ]
+  },
+  "soundeffect_45": {
+    "sounds": [
+      "smooth_classes:soundeffect_45"
+    ]
+  },
+  "soundeffect_46": {
+    "sounds": [
+      "smooth_classes:soundeffect_46"
+    ]
+  },
+  "soundeffect_47": {
+    "sounds": [
+      "smooth_classes:soundeffect_47"
+    ]
+  },
+  "soundeffect_48": {
+    "sounds": [
+      "smooth_classes:soundeffect_48"
+    ]
+  },
+  "spell_energy": {
+    "sounds": [
+      "smooth_classes:spell_energy"
+    ]
+  },
+  "spell_earth_punch": {
+    "sounds": [
+      "smooth_classes:spell_earth_punch"
+    ]
+  },
+  "spell_misc_01": {
+    "sounds": [
+      "smooth_classes:spell_misc_01"
+    ]
+  },
+  "spell_fireball": {
+    "sounds": [
+      "smooth_classes:spell_fireball"
+    ]
+  },
+  "spell_slash": {
+    "sounds": [
+      "smooth_classes:spell_slash"
+    ]
+  },
+  "spell_slash_02": {
+    "sounds": [
+      "smooth_classes:spell_slash_02"
+    ]
+  },
+  "spell_arcane_hit": {
+    "sounds": [
+      "smooth_classes:spell_arcane_hit"
+    ]
+  },
+  "spell_arcane_cast": {
+    "sounds": [
+      "smooth_classes:spell_arcane_cast"
+    ]
+  },
+  "spell_gain_barrier": {
+    "sounds": [
+      "smooth_classes:spell_gain_barrier"
+    ]
+  },
+  "spell_arcane_nova": {
+    "sounds": [
+      "smooth_classes:spell_arcane_nova"
+    ]
+  },
+  "spell_radiant_cast": {
+    "sounds": [
+      "smooth_classes:spell_radiant_cast"
+    ]
+  },
+  "spell_radiant_hit": {
+    "sounds": [
+      "smooth_classes:spell_radiant_hit"
+    ]
+  },
+  "spell_radiant_expire": {
+    "sounds": [
+      "smooth_classes:spell_radiant_expire"
+    ]
+  },
+  "spell_celestial_cast": {
+    "sounds": [
+      "smooth_classes:spell_celestial_cast"
+    ]
+  },
+  "spell_celestial_hit": {
+    "sounds": [
+      "smooth_classes:spell_celestial_hit"
+    ]
+  },
+  "spell_thunder_cast": {
+    "sounds": [
+      "smooth_classes:spell_thunder_cast"
+    ]
+  },
+  "spell_fire_cast": {
+    "sounds": [
+      "smooth_classes:spell_fire_cast"
+    ]
+  },
+  "spell_lightning_cast": {
+    "sounds": [
+      "smooth_classes:spell_lightning_cast"
+    ]
+  },
+  "activate_tower_beacon": {
+    "sounds": [
+      "smooth_classes:activate_tower_beacon"
+    ]
+  },
+  "ui_replenish_01": {
+    "sounds": [
+      "smooth_classes:ui_replenish_01"
+    ]
+  },
+  "gong_warbly": {
+    "sounds": [
+      "smooth_classes:gong_warbly"
+    ]
+  },
+  "magic_shamanic_power_12": {
+    "sounds": [
+      "smooth_classes:magic_shamanic_power_12"
+    ]
+  },
+  "place_stone_06": {
+    "sounds": [
+      "smooth_classes:place_stone_06"
+    ]
+  },
+  "place_stone_07": {
+    "sounds": [
+      "smooth_classes:place_stone_07"
+    ]
+  },
+  "place_stone_08": {
+    "sounds": [
+      "smooth_classes:place_stone_08"
+    ]
+  },
+  "place_stone_09": {
+    "sounds": [
+      "smooth_classes:place_stone_09"
+    ]
+  },
+  "place_stone_10": {
+    "sounds": [
+      "smooth_classes:place_stone_10"
+    ]
+  },
+  "slash_02": {
+    "sounds": [
+      "smooth_classes:slash_02"
+    ]
+  },
+  "damage_03": {
+    "sounds": [
+      "smooth_classes:damage_03"
+    ]
+  },
+  "object_impact_thud_repeat": {
+    "sounds": [
+      "smooth_classes:object_impact_thud_repeat"
+    ]
+  },
+  "object_impact_thud": {
+    "sounds": [
+      "smooth_classes:object_impact_thud"
+    ]
+  },
+  "hit_03": {
+    "sounds": [
+      "smooth_classes:hit_03"
+    ]
+  },
+  "magic_shamanic_voice_20": {
+    "sounds": [
+      "smooth_classes:magic_shamanic_voice_20"
+    ]
+  },
+  "magic_shamanic_spell_01": {
+    "sounds": [
+      "smooth_classes:magic_shamanic_spell_01"
+    ]
+  },
+  "magic_shamanic_spell_02": {
+    "sounds": [
+      "smooth_classes:magic_shamanic_spell_02"
+    ]
+  },
+  "magic_shamanic_spell_03": {
+    "sounds": [
+      "smooth_classes:magic_shamanic_spell_03"
+    ]
+  },
+  "magic_shamanic_spell_04": {
+    "sounds": [
+      "smooth_classes:magic_shamanic_spell_04"
+    ]
+  },
+  "dark_whirlwind_whoosh": {
+    "sounds": [
+      "smooth_classes:dark_whirlwind_whoosh"
+    ]
+  },
+  "energy_charge": {
+    "sounds": [
+      "smooth_classes:energy_charge"
+    ]
+  },
+  "maw": {
+    "sounds": [
+      "smooth_classes:maw"
+    ]
+  },
+  "activate_plinth_01": {
+    "sounds": [
+      "smooth_classes:activate_plinth_01"
+    ]
+  }
+}

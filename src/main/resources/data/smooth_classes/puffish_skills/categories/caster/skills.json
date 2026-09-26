@@ -1,0 +1,188 @@
+{
+	"a3ns9xl58ixdg2lo": {
+		"definition": "wizardSignatureStaticDischarge",
+		"x": 0,
+		"y": -64,
+		"root": false
+	},
+	"is053f9imz801s57": {
+		"definition": "wizardSignatureMeteorShower",
+		"x": 64,
+		"y": 0,
+		"root": false
+	},
+	"kp8uei8ppni71b5x": {
+		"definition": "wizardSignatureIceComet",
+		"x": -64,
+		"y": 0,
+		"root": false
+	},
+	"7peocg44cggilh9z": {
+		"definition": "wizardSignatureArcaneBolt",
+		"x": 0,
+		"y": 64,
+		"root": false
+	},
+	"c4ufo4n0g61fn18d": {
+		"definition": "wizardSignatureMeteorShowerGreater",
+		"x": 96,
+		"y": -32,
+		"root": false
+	},
+	"u0ypy4wxhyxcdy0q": {
+		"definition": "wizardSignatureMeteorShowerWrath",
+		"x": 96,
+		"y": 32,
+		"root": false
+	},
+	"1jk1kpkeiu183egl": {
+		"definition": "wizardSignatureMeteorShowerRenewingWrath",
+		"x": 128,
+		"y": 32,
+		"root": false
+	},
+	"80vfz0ye7lxpzx0j": {
+		"definition": "wizardSignatureMeteorShowerRenewingWrath++",
+		"x": 160,
+		"y": 32,
+		"root": false
+	},
+	"ryqv4fap1td01iwy": {
+		"definition": "wizardSignatureMeteorShowerRenewingWrath+++",
+		"x": 192,
+		"y": 32,
+		"root": false
+	},
+	"wk0uiyaoo1plysk4": {
+		"definition": "wizardSignatureIceCometLeap",
+		"x": -128,
+		"y": -32,
+		"root": false
+	},
+	"ahp5rugvghtpvv0j": {
+		"definition": "wizardSignatureIceCometVolley",
+		"x": -96,
+		"y": -32,
+		"root": false
+	},
+	"l6i62nziygs3ishg": {
+		"definition": "wizardSignatureIceCometDamage+",
+		"x": -96,
+		"y": 32,
+		"root": false
+	},
+	"7ngfgbcdg33dpadz": {
+		"definition": "wizardSignatureIceCometDamage++",
+		"x": -128,
+		"y": 32,
+		"root": false
+	},
+	"m5h4006g0loxutrg": {
+		"definition": "wizardSignatureIceCometDamage+++",
+		"x": -160,
+		"y": 32,
+		"root": false
+	},
+	"2o8v7vhfgf8lyzu8": {
+		"definition": "wizardSignatureStaticDischargeLeap",
+		"x": 32,
+		"y": -96,
+		"root": false
+	},
+	"09yy7mk9csney6w2": {
+		"definition": "wizardSignatureStaticDischargeLeap++",
+		"x": 32,
+		"y": -128,
+		"root": false
+	},
+	"cefchlgpfk2j5fg4": {
+		"definition": "wizardSignatureStaticDischargeLeap+++",
+		"x": 32,
+		"y": -160,
+		"root": false
+	},
+	"o078mm4i08rill6x": {
+		"definition": "wizardSignatureStaticDischargeSpeed",
+		"x": -32,
+		"y": -96,
+		"root": false
+	},
+	"s18lslxmj1eu3rmt": {
+		"definition": "wizardSignatureStaticDischargeSpeed++",
+		"x": -32,
+		"y": -128,
+		"root": false
+	},
+	"cwae603z395ehxm6": {
+		"definition": "wizardSignatureStaticDischargeSpeed+++",
+		"x": -32,
+		"y": -160,
+		"root": false
+	},
+	"y54opte3llirc0z2": {
+		"definition": "wizardSignatureArcaneBoltLesser",
+		"x": -32,
+		"y": 96,
+		"root": false
+	},
+	"kddxqi4rdizetygz": {
+		"definition": "wizardSignatureArcaneBoltGreater",
+		"x": 32,
+		"y": 96,
+		"root": false
+	},
+	"v2w2y0ggvyb6q8x1": {
+		"definition": "wizardSignatureArcaneBoltVolley",
+		"x": 0,
+		"y": 96,
+		"root": false
+	},
+	"668b6cq3md39qvos": {
+		"definition": "wizardPassiveSpellEcho",
+		"x": -32,
+		"y": 32,
+		"root": false
+	},
+	"vp0tvtnkjc4uqa6a": {
+		"definition": "spell_crit_chance_multi+1%",
+		"x": 0,
+		"y": 0,
+		"root": true
+	},
+	"895irv34rw9geuh6": {
+		"definition": "spell_crit_damage_multi+1%",
+		"x": 32,
+		"y": 32,
+		"root": false
+	},
+	"q214t21dz11bbnp5": {
+		"definition": "spell_crit_chance_multi+1%",
+		"x": 32,
+		"y": -32,
+		"root": false
+	},
+	"vcuu2g57y7g54zz3": {
+		"definition": "spell_haste_multi+1%",
+		"x": -32,
+		"y": -32,
+		"root": false
+	},
+	"xb9uxi8zv4e1pdzy": {
+		"definition": "wizardSignatureStaticDischargeLightningBall",
+		"x": 64,
+		"y": -160,
+		"root": false
+	},
+	"2j006q1mn1lqegtz": {
+		"definition": "wizardSignatureStaticDischargeLightningOrb",
+		"x": -64,
+		"y": -160,
+		"root": false
+	},
+	"c0ghqir9rswndnkv": {
+		"definition": "wizardSignatureStaticDischargeLightningOrbOnHit",
+		"x": -96,
+		"y": -160,
+		"root": false
+	}
+}

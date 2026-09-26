@@ -1,0 +1,27 @@
+{
+  "required": true,
+  "package": "org.marj4n.smooth_classes.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "ServerPlayerEntityMixin",
+    "PlayerEntityMixin",
+    "BowItemMixin",
+    "CrossbowItemMixin",
+    "SpellProjectileMixin",
+    "LivingEntityGameplayMixin",
+    "FollowOwnerGoalMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "client": [
+    "client.SpellProjectileRendererClientMixin",
+    "client.CustomModelsMixin",
+    "client.PlayerStealthRendererMixin",
+    "client.ArmorStealthRendererMixin",
+    "client.StealthShadowRendererMixin",
+    "client.SkillsScreenAccessor",
+    "client.SkillsScreenMixin",
+    "client.LivingEntityShieldBorderMixin"
+  ]
+}

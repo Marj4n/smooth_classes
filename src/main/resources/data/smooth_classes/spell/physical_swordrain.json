@@ -1,0 +1,181 @@
+{
+  "school": "PHYSICAL_MELEE",
+  "range": 16,
+  "tier": 3,
+  "learn": {},
+  "active": {
+    "cast": {
+      "duration": 0.5,
+      "sound": {
+        "id": "smooth_classes:soundeffect_32",
+        "volume": 1.5,
+        "randomness": 0
+      },
+      "particles": [
+        {
+          "id": "mycelium",
+          "appearance": {},
+          "batch": {
+            "count": 1.0,
+            "shape": "PIPE",
+            "min_speed": 0.05,
+            "max_speed": 0.1,
+            "anchor": "ENTITY",
+            "vertical_origin": 0.0
+          }
+        }
+      ]
+    }
+  },
+  "release": {
+    "animation": {
+      "id": "spell_engine:one_handed_area_release"
+    },
+    "sound": {
+      "id": "smooth_classes:spell_slash",
+      "volume": 0.6,
+      "pitch": 1.2
+    }
+  },
+  "target": {
+    "type": "AIM",
+    "aim": {}
+  },
+  "deliver": {
+    "type": "METEOR",
+    "meteor": {
+      "launch_height": 15,
+      "launch_properties": {
+        "velocity": 1.5,
+        "extra_launch_count": 12,
+        "extra_launch_delay": 14
+      },
+      "projectile": {
+        "divergence": 0,
+        "homing_angle": 1.0,
+        "client_data": {
+          "travel_particles": [
+            {
+              "id": "mycelium",
+              "appearance": {},
+              "batch": {
+                "count": 5.0,
+                "shape": "CIRCLE",
+                "min_speed": 0.0,
+                "max_speed": 0.1,
+                "anchor": "ENTITY",
+                "vertical_origin": 0.5,
+                "alignment": "LOOK"
+              }
+            },
+            {
+              "id": "cloud",
+              "appearance": {},
+              "batch": {
+                "count": 4.0,
+                "shape": "CIRCLE",
+                "min_speed": 0.0,
+                "max_speed": 0.1,
+                "anchor": "ENTITY",
+                "vertical_origin": 0.5,
+                "alignment": "LOOK"
+              }
+            }
+          ],
+          "composite_model": {
+            "models": [
+              {
+                "fx": {
+                  "model_id": "smooth_classes:spell_projectile/swordfall",
+                  "scale": 1.0
+                },
+                "orientation": "ALONG_MOTION"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "impacts": [
+    {
+      "action": {
+        "type": "DAMAGE",
+        "damage": {
+          "spell_power_coefficient": 1.2
+        }
+      },
+      "sound": {
+        "id": "smooth_classes:soundeffect_14",
+        "volume": 0.3
+      },
+      "visuals": {
+        "particles": [
+          {
+            "id": "firework",
+            "appearance": {},
+            "batch": {
+              "count": 2.0,
+              "shape": "SPHERE",
+              "min_speed": 0.01,
+              "max_speed": 0.3,
+              "anchor": "ENTITY",
+              "vertical_origin": 0.5
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "area_impact": {
+    "radius": 2,
+    "area": {
+      "distance_dropoff": "SQUARED"
+    },
+    "sound": {
+      "id": "smooth_classes:soundeffect_32",
+      "volume": 1.5
+    },
+    "visuals": {
+      "particles": [
+        {
+          "id": "mycelium",
+          "appearance": {},
+          "batch": {
+            "count": 100.0,
+            "shape": "SPHERE",
+            "min_speed": 0.4,
+            "max_speed": 0.5,
+            "anchor": "ENTITY",
+            "vertical_origin": 0.5
+          }
+        },
+        {
+          "id": "cloud",
+          "appearance": {},
+          "batch": {
+            "count": 40.0,
+            "shape": "SPHERE",
+            "min_speed": 0.05,
+            "max_speed": 0.2,
+            "anchor": "ENTITY",
+            "vertical_origin": 0.5
+          }
+        },
+        {
+          "id": "smoke",
+          "appearance": {},
+          "batch": {
+            "count": 50.0,
+            "shape": "SPHERE",
+            "min_speed": 0.1,
+            "max_speed": 0.3,
+            "anchor": "ENTITY",
+            "vertical_origin": 0.5
+          }
+        }
+      ]
+    }
+  },
+  "cost": {}
+}

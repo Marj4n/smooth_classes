@@ -1,0 +1,112 @@
+{
+  "school": "PHYSICAL_MELEE",
+  "range": 24,
+  "tier": 1,
+  "learn": {},
+  "active": {
+    "cast": {
+      "duration": 0.0,
+      "sound": {
+        "id": "spell_engine:generic_fire_casting",
+        "randomness": 0
+      },
+      "particles": [
+        {
+          "id": "mycelium",
+          "appearance": {},
+          "batch": {
+            "count": 1.0,
+            "shape": "SPHERE",
+            "min_speed": 0.12,
+            "max_speed": 0.15,
+            "anchor": "ENTITY",
+            "vertical_origin": 0.5
+          }
+        }
+      ]
+    }
+  },
+  "release": {
+    "sound": {
+      "id": "smooth_classes:soundeffect_7",
+      "volume": 0.2,
+      "pitch": 1.1
+    }
+  },
+  "target": {
+    "type": "AIM",
+    "aim": {}
+  },
+  "deliver": {
+    "type": "PROJECTILE",
+    "projectile": {
+      "launch_properties": {
+        "velocity": 0.5
+      },
+      "projectile": {
+        "homing_angle": 16.1,
+        "client_data": {
+          "travel_particles": [
+            {
+              "id": "mycelium",
+              "appearance": {},
+              "batch": {
+                "count": 1.0,
+                "shape": "SPHERE",
+                "min_speed": 0.12,
+                "max_speed": 0.15,
+                "anchor": "ENTITY",
+                "vertical_origin": 0.5
+              }
+            }
+          ],
+          "composite_model": {
+            "models": [
+              {
+                "orientation": "ALONG_MOTION",
+                "fx": {
+                  "model_id": "smooth_classes:spell_projectile/sword",
+                  "scale": 0.2
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "impacts": [
+    {
+      "action": {
+        "type": "DAMAGE",
+        "damage": {
+          "knockback": 0.1,
+          "spell_power_coefficient": 0.2
+        }
+      },
+      "sound": {
+        "id": "smooth_classes:soundeffect_32",
+        "volume": 0.2
+      },
+      "visuals": {
+        "particles": [
+          {
+            "id": "cloud",
+            "appearance": {},
+            "batch": {
+              "count": 5,
+              "shape": "SPHERE",
+              "min_speed": 0.01,
+              "max_speed": 0.07,
+              "anchor": "ENTITY",
+              "vertical_origin": 0.5
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "cost": {
+    "durability": 0
+  }
+}

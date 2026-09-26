@@ -1,0 +1,154 @@
+{
+  "school": "LIGHTNING",
+  "range": 24,
+  "tier": 1,
+  "learn": {},
+  "active": {
+    "cast": {
+      "duration": 0.75,
+      "animation": {
+        "id": "spell_engine:one_handed_projectile_charge"
+      },
+      "sound": {
+        "id": "spell_engine:generic_fire_casting",
+        "randomness": 0
+      },
+      "particles": [
+        {
+          "id": "spell_engine:electric_arc_a",
+          "appearance": {},
+          "batch": {
+            "count": 45.0,
+            "shape": "SPHERE",
+            "min_speed": 0.12,
+            "max_speed": 0.15,
+            "anchor": "ENTITY",
+            "vertical_origin": 0.5
+          }
+        }
+      ]
+    }
+  },
+  "release": {
+    "animation": {
+      "id": "spell_engine:one_handed_projectile_release"
+    },
+    "sound": {
+      "id": "smooth_classes:spell_thunder_cast",
+      "volume": 0.3,
+      "pitch": 1.6
+    }
+  },
+  "target": {
+    "type": "AIM",
+    "aim": {}
+  },
+  "deliver": {
+    "type": "PROJECTILE",
+    "projectile": {
+      "launch_properties": {
+        "velocity": 0.1
+      },
+      "projectile": {
+        "homing_angle": 0.1,
+        "client_data": {
+          "travel_particles": [
+            {
+              "id": "spell_engine:electric_arc_a",
+              "appearance": {},
+              "batch": {
+                "count": 1.0,
+                "shape": "SPHERE",
+                "min_speed": 0.12,
+                "max_speed": 0.15,
+                "anchor": "ENTITY",
+                "vertical_origin": 0.5
+              }
+            },
+            {
+              "id": "cloud",
+              "appearance": {},
+              "batch": {
+                "count": 3.0,
+                "shape": "SPHERE",
+                "min_speed": 0.01,
+                "max_speed": 0.05,
+                "anchor": "ENTITY",
+                "vertical_origin": 0.5
+              }
+            },
+            {
+              "id": "spell_engine:electric_arc_a",
+              "appearance": {},
+              "batch": {
+                "count": 1.0,
+                "shape": "SPHERE",
+                "min_speed": 0.01,
+                "max_speed": 0.05,
+                "anchor": "ENTITY",
+                "vertical_origin": 0.5
+              }
+            },
+            {
+              "id": "spell_engine:electric_arc_b",
+              "appearance": {},
+              "batch": {
+                "count": 1.0,
+                "shape": "SPHERE",
+                "min_speed": 0.01,
+                "max_speed": 0.05,
+                "anchor": "ENTITY",
+                "vertical_origin": 0.5
+              }
+            }
+          ],
+          "composite_model": {
+            "models": [
+              {
+                "orientation": "ALONG_MOTION",
+                "fx": {
+                  "model_id": "minecraft:sea_lantern",
+                  "scale": 0.0
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "impacts": [
+    {
+      "action": {
+        "type": "DAMAGE",
+        "damage": {
+          "knockback": 0.5,
+          "spell_power_coefficient": 2.8
+        }
+      },
+      "sound": {
+        "id": "smooth_classes:soundeffect_35",
+        "volume": 0.2
+      },
+      "visuals": {
+        "particles": [
+          {
+            "id": "spell_engine:electric_arc_a",
+            "appearance": {},
+            "batch": {
+              "count": 40,
+              "shape": "SPHERE",
+              "min_speed": 0.2,
+              "max_speed": 0.7,
+              "anchor": "ENTITY",
+              "vertical_origin": 0.5
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "cost": {
+    "durability": 0
+  }
+}

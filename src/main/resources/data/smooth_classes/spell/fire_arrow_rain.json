@@ -1,0 +1,133 @@
+{
+  "school": "FIRE",
+  "range": 512,
+  "tier": 1,
+  "learn": {},
+  "active": {
+    "cast": {
+      "duration": 0.75,
+      "animation": {
+        "id": "spell_engine:one_handed_projectile_charge"
+      },
+      "sound": {
+        "id": "spell_engine:generic_fire_casting",
+        "randomness": 0
+      },
+      "particles": [
+        {
+          "id": "spell_engine:flame",
+          "appearance": {},
+          "batch": {
+            "count": 1.0,
+            "shape": "PIPE",
+            "min_speed": 0.05,
+            "max_speed": 0.1,
+            "anchor": "ENTITY",
+            "vertical_origin": 0.0
+          }
+        }
+      ]
+    }
+  },
+  "release": {
+    "animation": {
+      "id": "spell_engine:one_handed_projectile_release"
+    },
+    "sound": {
+      "id": "smooth_classes:spell_fire_cast",
+      "volume": 0.2,
+      "pitch": 1.4
+    }
+  },
+  "target": {
+    "type": "AIM",
+    "aim": {}
+  },
+  "deliver": {
+    "type": "PROJECTILE",
+    "projectile": {
+      "launch_properties": {
+        "velocity": 0.8
+      },
+      "projectile": {
+        "homing_angle": 16,
+        "client_data": {
+          "travel_particles": [
+            {
+              "id": "spell_engine:flame",
+              "appearance": {},
+              "batch": {
+                "count": 2.0,
+                "shape": "CIRCLE",
+                "min_speed": 0.05,
+                "max_speed": 0.1,
+                "anchor": "ENTITY",
+                "vertical_origin": 0.5,
+                "alignment": "LOOK"
+              }
+            },
+            {
+              "id": "campfire_cosy_smoke",
+              "appearance": {},
+              "batch": {
+                "count": 2.0,
+                "shape": "CIRCLE",
+                "min_speed": 0.05,
+                "max_speed": 0.1,
+                "anchor": "ENTITY",
+                "vertical_origin": 0.5,
+                "alignment": "LOOK"
+              }
+            }
+          ],
+          "composite_model": {
+            "models": [
+              {
+                "orientation": "ALONG_MOTION",
+                "fx": {
+                  "model_id": "smooth_classes:spell_projectile/fire_projectile",
+                  "scale": 1
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "impacts": [
+    {
+      "action": {
+        "type": "DAMAGE",
+        "damage": {
+          "knockback": 0.5,
+          "spell_power_coefficient": 2.0
+        }
+      },
+      "sound": {
+        "id": "smooth_classes:soundeffect_14",
+        "volume": 0.1,
+        "pitch": 1.1
+      },
+      "visuals": {
+        "particles": [
+          {
+            "id": "lava",
+            "appearance": {},
+            "batch": {
+              "count": 6,
+              "shape": "SPHERE",
+              "min_speed": 0.2,
+              "max_speed": 0.7,
+              "anchor": "ENTITY",
+              "vertical_origin": 0.5
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "cost": {
+    "durability": 0
+  }
+}

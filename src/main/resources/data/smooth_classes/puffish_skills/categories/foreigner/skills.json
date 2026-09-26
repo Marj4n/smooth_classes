@@ -1,0 +1,92 @@
+{
+	"a3ns9xl58ixdg2lo": {
+		"definition": "spellbladeSignatureElementalSurge",
+		"x": 0,
+		"y": -32,
+		"root": false
+	},
+	"is053f9imz801s57": {
+		"definition": "spellbladeSignatureSpellweaver",
+		"x": 32,
+		"y": 0,
+		"root": false
+	},
+	"kp8uei8ppni71b5x": {
+		"definition": "spellbladeSignatureElementalImpact",
+		"x": -32,
+		"y": 0,
+		"root": false
+	},
+	"7ulbfzfs4es5omck": {
+		"definition": "spellbladeSignatureSpellweaverHaste",
+		"x": 96,
+		"y": -32,
+		"root": false
+	},
+	"ue2j6uln9psnruaq": {
+		"definition": "spellbladeSignatureSpellweaverRegeneration",
+		"x": 96,
+		"y": 32,
+		"root": false
+	},
+	"nra3vu36kko3iza6": {
+		"definition": "spellbladeSignatureElementalSurgeNoFrost",
+		"x": -64,
+		"y": -160,
+		"root": false
+	},
+	"yz661tbyosmyjaa9": {
+		"definition": "spellbladeSignatureElementalSurgeNoFire",
+		"x": 0,
+		"y": -160,
+		"root": false
+	},
+	"3abpfmug0031gzyg": {
+		"definition": "spellbladeSignatureElementalSurgeNoLightning",
+		"x": 64,
+		"y": -160,
+		"root": false
+	},
+	"t4yk1ygmlwzrhc9m": {
+		"definition": "spellbladeSignatureElementalSurgeRenewal",
+		"x": 0,
+		"y": -96,
+		"root": false
+	},
+	"ml4d2oh936rz57jk": {
+		"definition": "spellbladeSignatureElementalImpactMagnet",
+		"x": -96,
+		"y": 32,
+		"root": false
+	},
+	"lstknjelt6ia7hww": {
+		"definition": "spellbladeSignatureElementalImpactResistance",
+		"x": -96,
+		"y": -32,
+		"root": false
+	},
+	"endsaris2tu3h8h2": {
+		"definition": "spellbladeWeaponExpert",
+		"x": -32,
+		"y": 96,
+		"root": false
+	},
+	"ldgsqpyo0z0hniqx": {
+		"definition": "spellbladeSpellweaving",
+		"x": 32,
+		"y": 96,
+		"root": false
+	},
+	"46lc6zsvifix6uem": {
+		"definition": "attack_speed_multi+2%",
+		"x": 0,
+		"y": 0,
+		"root": true
+	},
+	"48fyq8ws6poqnrgm": {
+		"definition": "melee_damage_multi+2%",
+		"x": 0,
+		"y": 32,
+		"root": false
+	}
+}
