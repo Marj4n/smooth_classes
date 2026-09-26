@@ -1,0 +1,53 @@
+{
+  "name": "arcane_charge",
+  "author": "Smooth Classes",
+  "description": "Short raised-sword windup without spinning",
+  "emote": {
+    "isLoop": "false",
+    "returnTick": 1,
+    "beginTick": 1,
+    "endTick": 15,
+    "stopTick": 16,
+    "degrees": false,
+    "moves": [
+      {
+        "tick": 1,
+        "easing": "EASEOUTQUAD",
+        "rightArm": {
+          "pitch": -0.6,
+          "roll": -0.15
+        }
+      },
+      {
+        "tick": 6,
+        "easing": "EASEOUTQUAD",
+        "rightArm": {
+          "pitch": -2.5,
+          "roll": -0.2
+        }
+      },
+      {
+        "tick": 15,
+        "easing": "LINEAR",
+        "rightArm": {
+          "pitch": -2.5,
+          "roll": -0.2
+        }
+      },
+      {
+        "tick": 1,
+        "easing": "LINEAR",
+        "torso": {
+          "yaw": 0.0
+        }
+      },
+      {
+        "tick": 15,
+        "easing": "LINEAR",
+        "torso": {
+          "yaw": 0.0
+        }
+      }
+    ]
+  }
+}

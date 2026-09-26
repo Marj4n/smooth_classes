@@ -10,6 +10,9 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.particle.ItemStackParticleEffect;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.spell_engine.fx.SpellEngineParticles;
 import net.minecraft.item.BowItem;
 import net.spell_engine.entity.SpellProjectile;
@@ -93,10 +96,7 @@ public final class EffectBehaviorRuntime {
             entity.damage(entity.getDamageSources().magic(),entity.getMaxHealth());
         } else if ("rapidfire".equals(id) && entity instanceof ServerPlayerEntity p) {
             RAPIDFIRE_ARROW_COUNT.remove(p.getUuid());
-        } else if ("arcane_slash".equals(id) && entity instanceof ServerPlayerEntity p
-                && p.getRandom().nextInt(100)<80) {
-            p.addStatusEffect(new StatusEffectInstance(SmoothEffects.ARCANE_SLASH,
-                    PuffishSkillsIntegration.countUnlockedSkills(PuffishSkillsIntegration.ASCENDANCY,p)>29?15:10,0,false,false,true));
+
         }
     }
 
@@ -141,7 +141,7 @@ public final class EffectBehaviorRuntime {
             case "arcane_volley" -> casterVolley(entity, "arcane_bolt_lesser", 3);
             case "meteoric_wrath" -> meteoricWrath(entity);
             case "barrier" -> statusAura(entity, ParticleTypes.REVERSE_PORTAL, 0.85);
-            case "bone_armor" -> statusAura(entity, ParticleTypes.ASH, 1.15);
+            case "bone_armor" -> boneArmorParticles(entity, amplifier);
             case "undying" -> { statusAura(entity, ParticleTypes.SOUL, 0.9); undyingWarning(entity); }
             case "rampage" -> rampage(entity);
             // Marker/state effects are consumed by combat, signature, projectile
@@ -152,6 +152,24 @@ public final class EffectBehaviorRuntime {
 
     private static void rage(LivingEntity e, int amp) {
         if (amp > 25 && e.age % 10 == 0) decrement(e, SmoothEffects.EXHAUSTION, 1);
+    }
+
+    /** Bone fragments provide the Bone Armor visual without orbiting models. */
+    private static void boneArmorParticles(LivingEntity entity, int amplifier) {
+        if (entity.age % 8 != 0
+                || !(entity.getWorld() instanceof net.minecraft.server.world.ServerWorld world)) return;
+        int count = Math.min(amplifier + 1, 12);
+        var particle = new ItemStackParticleEffect(ParticleTypes.ITEM, new ItemStack(Items.BONE));
+        double radius = 1.2 * entity.getScaleFactor();
+        for (int i = 0; i < count; i++) {
+            double angle = Math.toRadians(entity.getWorld().getTime() * 6.0 - 45.0)
+                    + i * Math.PI * 2.0 / count;
+            world.spawnParticles(particle,
+                    entity.getX() + Math.sin(angle) * radius,
+                    entity.getY() + entity.getHeight() * 0.5,
+                    entity.getZ() - Math.cos(angle) * radius,
+                    1, 0.025, 0.04, 0.025, 0.015);
+        }
     }
 
     private static void statusAura(LivingEntity entity, net.minecraft.particle.ParticleEffect effect, double radius) {
@@ -485,8 +503,25 @@ public final class EffectBehaviorRuntime {
         if(e.age%20==0)e.addStatusEffect(new StatusEffectInstance(SmoothEffects.IMMOBILIZE,25,0,false,false,true));
     }
     private static void righteousHammers(LivingEntity e,int amp){
-        if(!(e instanceof ServerPlayerEntity p)||p.age%20!=0)return;
-        CombatRuntime.damageNearby(p,3,(float)p.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE)*(1.0F+amp*0.15F));
+        if (!(e instanceof ServerPlayerEntity p) || p.age % 10 != 0) return;
+        int count=amp+1;
+        double angleBase=Math.toRadians(p.getWorld().getTime()*9.0-45.0);
+        double hammerY=p.getY()+p.getHeight()*0.5;
+        for (LivingEntity target:nearbyHostiles(p,4.5)) {
+            if (target instanceof net.minecraft.entity.passive.TameableEntity tame && tame.isOwner(p)) continue;
+            if (target.getBoundingBox().maxY < hammerY-0.7 || target.getBoundingBox().minY > hammerY+0.7) continue;
+            for (int i=0;i<count;i++) {
+                double a=angleBase+(Math.PI*2*i/count);
+                double hx=p.getX()-Math.sin(a)*3.0;
+                double hz=p.getZ()-Math.cos(a)*3.0;
+                double dx=Math.max(target.getBoundingBox().minX-hx,Math.max(0,hx-target.getBoundingBox().maxX));
+                double dz=Math.max(target.getBoundingBox().minZ-hz,Math.max(0,hz-target.getBoundingBox().maxZ));
+                if (dx*dx+dz*dz > 0.75*0.75) continue;
+                org.marj4n.smooth_classes.runtime.RighteousHammerChargeRuntime.passiveHit(p,target,
+                        (float)p.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE)*0.8F);
+                break;
+            }
+        }
     }
     private static void cyclonicCleave(LivingEntity e){
         if(!(e instanceof ServerPlayerEntity p))return;
@@ -509,16 +544,22 @@ public final class EffectBehaviorRuntime {
             }
         }
     }
-    private static void arcaneSlash(LivingEntity e){
-        if(!(e instanceof ServerPlayerEntity p))return;
-        StatusEffectInstance fx=p.getStatusEffect(SmoothEffects.ARCANE_SLASH);if(fx==null)return;
-        int dur=fx.getDuration(),pts=PuffishSkillsIntegration.countUnlockedSkills(PuffishSkillsIntegration.ASCENDANCY,p);
-        // Continued fires once at 10 ticks (<30 points) or the stronger variant at 15 (30+).
-        if((pts<30&&dur==10)||(pts>29&&dur==15)){
-            LivingEntity target=lookTarget(p,12);
-            String spell=pts>29?"smooth_classes:arcane_slash_projectile_2":"smooth_classes:arcane_slash_projectile";
-            if(target!=null)org.marj4n.smooth_classes.runtime.InternalSpellRuntime.target(p,spell,target,3F);
-            else org.marj4n.smooth_classes.runtime.InternalSpellRuntime.dumbFire(p,spell,3F);
+    private static void arcaneSlash(LivingEntity e) {
+        if (!(e instanceof ServerPlayerEntity p)) return;
+        StatusEffectInstance fx = p.getStatusEffect(SmoothEffects.ARCANE_SLASH);
+        if (fx == null) return;
+        if (!ArcaneSlashVisuals.hasSword(p)) {
+            p.removeStatusEffect(SmoothEffects.ARCANE_SLASH);
+            return;
+        }
+        ArcaneSlashVisuals.charge(p, fx.getDuration());
+        // The status is a single 16-tick windup. No recast on removal.
+        if (fx.getDuration() == 1) {
+            int pts = PuffishSkillsIntegration.countUnlockedSkills(PuffishSkillsIntegration.ASCENDANCY, p);
+            String spell = pts >= 30 ? "smooth_classes:arcane_slash_projectile_2"
+                    : "smooth_classes:arcane_slash_projectile";
+            p.swingHand(net.minecraft.util.Hand.MAIN_HAND);
+            InternalSpellRuntime.dumbFire(p, spell, 3F);
         }
     }
     private static void rapidfire(LivingEntity e){

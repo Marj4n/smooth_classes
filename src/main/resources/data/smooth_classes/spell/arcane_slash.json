@@ -1,5 +1,5 @@
 {
-  "school": "PHYSICAL_MELEE",
+  "school": "ARCANE",
   "range": 42,
   "tier": 1,
   "learn": {},
@@ -9,40 +9,13 @@
     }
   },
   "release": {
-    "animation": {
-      "id": "smooth_classes:arcane_slash_alt"
-    },
     "sound": {
-      "id": "smooth_classes:soundeffect_32",
-      "volume": 0.2
+      "id": "smooth_classes:energy_charge",
+      "volume": 0.6,
+      "pitch": 0.8
     },
-    "visuals": {
-      "particles": [
-        {
-          "id": "minecraft:poof",
-          "appearance": {},
-          "batch": {
-            "count": 10.0,
-            "shape": "PILLAR",
-            "min_speed": 0.1,
-            "max_speed": 0.35,
-            "anchor": "ENTITY",
-            "vertical_origin": 0.0
-          }
-        },
-        {
-          "id": "minecraft:poof",
-          "appearance": {},
-          "batch": {
-            "count": 10.0,
-            "shape": "PIPE",
-            "min_speed": 0.1,
-            "max_speed": 0.3,
-            "anchor": "ENTITY",
-            "vertical_origin": 0.0
-          }
-        }
-      ]
+    "animation": {
+      "id": "smooth_classes:arcane_charge"
     }
   },
   "target": {
@@ -57,7 +30,7 @@
         "type": "STATUS_EFFECT",
         "status_effect": {
           "effect_id": "smooth_classes:arcane_slash",
-          "duration": 1.0,
+          "duration": 0.8,
           "apply_mode": "SET",
           "show_particles": false
         }

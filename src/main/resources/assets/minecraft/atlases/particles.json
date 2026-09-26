@@ -1,0 +1,9 @@
+{
+  "sources": [
+    {
+      "type": "minecraft:single",
+      "resource": "minecraft:particle/flame",
+      "sprite": "smooth_classes:arcane_flame"
+    }
+  ]
+}

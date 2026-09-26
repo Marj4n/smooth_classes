@@ -49,7 +49,7 @@ public final class AscendancyAbilityDispatcher {
             case "bone_armor" -> 70*20;
             case "cyclonic_cleave" -> 15*20;
             case "magic_circle" -> 40*20;
-            case "arcane_slash" -> 10*20;
+            case "arcane_slash" -> 12*20;
             case "agony","torment" -> 40*20;
             case "rapidfire" -> 30*20;
             case "cataclysm" -> 60*20;

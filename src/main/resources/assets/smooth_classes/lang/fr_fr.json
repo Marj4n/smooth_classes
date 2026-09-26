@@ -1114,7 +1114,7 @@
   "text.skills.ascendancyMagicCircle.title": "Compétence d'ascension : §6[Cercle magique]§7",
   "text.skills.ascendancyMagicCircle.description": "§7\nImmobilisez-vous pour invoquer un cercle magique sous vos pieds, vous accordant une augmentation de 30% à toutes les Puissances de sort pendant 12s.\n\n§6[Pour chaque 1 Ascension]§7\nAugmente la durée de l'effet.\n\n§6[À 30+ Ascension]§7\nCercle magique accorde maintenant également le passif Écho de sort du sorcier.\nSi vous avez déjà débloqué Écho de sort, augmentez sa chance de se produire de 10%.\n\n§a40s Temps de recharge§7",
   "text.skills.ascendancyArcaneSlash.title": "Compétence d'ascension : §6[Coupe arcane]§7",
-  "text.skills.ascendancyArcaneSlash.description": "§7\nConcentrez l'énergie arcane dans votre lame et effectuez une coupe en avant, libérant un projectile arcane qui transperce jusqu'à 5 cibles.\nCoupe arcane a 80% de chances de se lancer à nouveau.\n\n§6[Pour chaque 10 Ascension]§7\nGagnez +1 stack d'Attunement arcane à l'utilisation.\n\n§6[À 30+ Ascension]§7\nCoupe arcane est maintenant plus large, inflige plus de dégats et transperce jusqu'à 10 cibles.\n\n§a10s Temps de recharge§7",
+  "text.skills.ascendancyArcaneSlash.description": "§7\nRequires a sword in your main hand. Charge for 0.75s, then release one large purple crescent straight ahead, dealing Arcane damage and piercing up to 5 targets. Leaves one line of purple fire starting 2 blocks ahead for 4 seconds. Charging does not ignite your feet. Contact deals 2 magic damage to any living entity, including the caster and allies. Fire does not spread. Switching away from your sword cancels the charge.\n\n§6[For every 10 Ascendancy]§7\nGain +1 stack of Arcane Attunement on use.\n\n§6[At 30+ Ascendancy]§7\nThe slash is larger, deals more damage, and pierces up to 10 targets.\n\n§a12s Cooldown§7",
   "text.skills.ascendancyAgony.title": "Compétence d'ascension : §6[Agonie]§7",
   "text.skills.ascendancyAgony.description": "§7\nMaudissez l'ennemi le plus proche avec Agonie, causant des dégats supplémentaires chaque fois qu'il est frappé par un projectile de sort.\nDure 8s.\n\n§6[Pour chaque 1 Ascension]§7\nAugmente la durée de l'effet.\n\n§6[À 30+ Ascension]§7\nLorsque Agonie se déclenche, elle soigne également le lanceur de sort qui a causé le déclenchement.\nCe soin est basé sur votre Puissance de soin des sorts.\n\n§a40s Temps de recharge§7",
   "text.skills.ascendancyTorment.title": "Compétence d'ascension : §6[Tourment]§7",
@@ -1284,5 +1284,6 @@
   "text.skills.berserkerSwordMasteryProficient.description": "§7Gain increased pulsing Speed when wielding a sword in your mainhand.",
   "text.skills.initiateWhisperedWizardry.description": "§7Casting a spell while you have Stealth grants you several stacks of Spellforged for a few seconds.\n\n§f(Spellforged)§7 grants §a+0.25 §f[x]§7 Spell Power per stack.",
   "text.skills.jump+0.2%.title": "§a+0.2%§f [+] §7Jump",
-  "text.skills.berserkerSwordMasterySkilled.description": "§7When not dual wielding, gain pulsing Might.\n\n§f(Might)§7 grants §a+10% §f[x]§7 increased attack damage per stack."
+  "text.skills.berserkerSwordMasterySkilled.description": "§7When not dual wielding, gain pulsing Might.\n\n§f(Might)§7 grants §a+10% §f[x]§7 increased attack damage per stack.",
+  "block.smooth_classes.arcane_fire": "Arcane Fire"
 }

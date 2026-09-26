@@ -1,0 +1,32 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "smooth_classes:block/arcane_fire_floor"
+      }
+    },
+    {
+      "apply": {
+        "model": "smooth_classes:block/arcane_fire_side0"
+      }
+    },
+    {
+      "apply": {
+        "model": "smooth_classes:block/arcane_fire_side0",
+        "y": 90
+      }
+    },
+    {
+      "apply": {
+        "model": "smooth_classes:block/arcane_fire_side1",
+        "y": 180
+      }
+    },
+    {
+      "apply": {
+        "model": "smooth_classes:block/arcane_fire_side1",
+        "y": 270
+      }
+    }
+  ]
+}

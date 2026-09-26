@@ -810,7 +810,7 @@
   "text.skills.ascendancyMagicCircle.title": "Умение восхождения: §6[Магический круг]",
   "text.skills.ascendancyMagicCircle.description": "§7Обездвижьте себя для призыва магического круга под собой, что даёт Вам 30% к повышенной силы всех заклинаний на 12 секунд.\n\n§6[За каждое 1 умение восхождения]:§7\nПовышает срок действия эффекта.\n\n§6[При 30+ умений восхождения]:§7\nМагический круг в свою очередь даёт Вам пассивное умение: Эхо заклинания Чародея.\nЕсли Вы уже разблокировали Эхо заклинания: повышает шанс его появления на 10%.\n\nПерезарядка: §a40 секунд.§7",
   "text.skills.ascendancyArcaneSlash.title": "Умение восхождения: §6[Чародейский выпад]",
-  "text.skills.ascendancyArcaneSlash.description": "§7Сконцентрируйте мистическую энергию в свой клинок и выполните дерзкий удар с плеча, высвободив мистический снаряд, пробивающий до 5 целей.\nЧародейский выпад может с 80% шансом снова самоисполниться.\n\n§6[За каждые 10 умений восхождения]:§7\nПолучение +1 заряда «Созвучие с мистикой» при использовании.\n\n§6[При 30+ умений восхождения]:§7\nТеперь чародейский выпад ещё длиннее, наносит больше урона и пробивает до 10 целей.\n\nПерезарядка: §a10 секунд.§7",
+  "text.skills.ascendancyArcaneSlash.description": "§7\nRequires a sword in your main hand. Charge for 0.75s, then release one large purple crescent straight ahead, dealing Arcane damage and piercing up to 5 targets. Leaves one line of purple fire starting 2 blocks ahead for 4 seconds. Charging does not ignite your feet. Contact deals 2 magic damage to any living entity, including the caster and allies. Fire does not spread. Switching away from your sword cancels the charge.\n\n§6[For every 10 Ascendancy]§7\nGain +1 stack of Arcane Attunement on use.\n\n§6[At 30+ Ascendancy]§7\nThe slash is larger, deals more damage, and pierces up to 10 targets.\n\n§a12s Cooldown§7",
   "text.skills.ascendancyAgony.title": "Умение восхождения: §6[Телесные страдания]",
   "text.skills.ascendancyAgony.description": "§7Причините страдания ближайшему врагу «Телесными страданиями», заставив его получать дополнительный урон всякий раз при попадании снарядом заклинания.\nДлится 8 секунд.\n\n§6[За каждое 1 умение восхождения]:§7\nПовышает срок действия эффекта.\n\n§6[При 30+ умений восхождения]:§7\nПри активации «Телесных страданий»: он в свою очередь исцеляет заклинателя, что вызвал активацию эффекта.\nЭто исцеление увеличивается в зависимости от Силы исцеляющего заклинания.\n\nПерезарядка: §a40 секунд.§7",
   "text.skills.ascendancyTorment.title": "Умение восхождения: §6[Мучение]",
@@ -1463,5 +1463,6 @@
   "key.smooth_classes.ascendancy": "Ascendancy Ability",
   "text.skills.initiateWhisperedWizardry.description": "§7Casting a spell while you have Stealth grants you several stacks of Spellforged for a few seconds.\n\n§f(Spellforged)§7 grants §a+0.25 §f[x]§7 Spell Power per stack.",
   "text.skills.shamanSignatureNovaTotem.description": "Summon a totem that releases a nova around it.",
-  "text.skills.initiateWhisperedWizardry.title": "§7§a[Whispered Wizardry]§7"
+  "text.skills.initiateWhisperedWizardry.title": "§7§a[Whispered Wizardry]§7",
+  "block.smooth_classes.arcane_fire": "Arcane Fire"
 }

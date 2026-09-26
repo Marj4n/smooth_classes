@@ -124,17 +124,6 @@
           }
         ]
       }
-    },
-    {
-      "action": {
-        "type": "STATUS_EFFECT",
-        "status_effect": {
-          "effect_id": "smooth_classes:undying",
-          "duration": 14,
-          "apply_mode": "ADD",
-          "show_particles": false
-        }
-      }
     }
   ],
   "area_impact": {

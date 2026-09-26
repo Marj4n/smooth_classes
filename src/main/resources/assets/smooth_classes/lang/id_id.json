@@ -342,7 +342,7 @@
   "text.skills.berserkerIgnorePain.description": "§7When your HP drops below 40% you gain pulsing resistance.",
   "text.skills.necromancerShadowCombust.title": "§f[Shadow Combust]",
   "text.skills.initiateSpellcloak.description": "§7Casting a spell grants you brief Stealth, as long as you aren't currently Revealed.\n\n§f(Stealth)§7 causes you to blend into the shadows, avoiding monster detection completely. Dealing or Receiving damage removes stealth.",
-  "text.skills.ascendancyArcaneSlash.description": "§7\nFocus arcane energy into your blade and perform a forward slash, releasing an arcane projectile that pierces up to 5 targets.\nArcane Slash has an 80% chance to cast itself again.\n\n§6[For every 10 Ascendancy]§7\nGain +1 stack of Arcane Attunement on use.\n\n§6[At 30+ Ascendancy]§7\nArcane Slash is now larger, deals more damage, and pierces up to 10 targets.\n\n§a10s Cooldown§7",
+  "text.skills.ascendancyArcaneSlash.description": "§7\nRequires a sword in your main hand. Charge for 0.75s, then release one large purple crescent straight ahead, dealing Arcane damage and piercing up to 5 targets. Leaves one line of purple fire starting 2 blocks ahead for 4 seconds. Charging does not ignite your feet. Contact deals 2 magic damage to any living entity, including the caster and allies. Fire does not spread. Switching away from your sword cancels the charge.\n\n§6[For every 10 Ascendancy]§7\nGain +1 stack of Arcane Attunement on use.\n\n§6[At 30+ Ascendancy]§7\nThe slash is larger, deals more damage, and pierces up to 10 targets.\n\n§a12s Cooldown§7",
   "text.skills.initiate.description": "§a+1§7 To all schools of magic",
   "text.skills.initiateNullification.description": "§7Periodically strip buffs from nearby hostiles.",
   "text.skills.roguePath.extra_description": "\n§7The §bAssassin§7 is a master of §astealth§7 and subterfuge. They thrive in the shadows, utilizing their exceptional skills to remain unseen and catch their enemies off guard with §aprecision strikes§7. If caught in the open, they are more than capable of §aevading§7 enemy attacks and escaping back to the safety of the shadows.",
@@ -579,5 +579,6 @@
   "text.skills.berserkerChallenge.description": "§7Gain a stack of haste for each nearby enemy.",
   "text.skills.crusaderSignatureHeavensmithsCallEffectMighty.title": "§f[Mighty]",
   "text.skills.spellbladeSignatureSpellweaverRegeneration.description": "§7Your Spellweaving procs now have a 50% chance to grant you regeneration for 5s.",
-  "text.skills.wayfarerGuarding.description": "§7While you have a Crossbow in your offhand, you periodically gain Barrier.\n\n§f(Barrier)§7 The next damage you take is completely negated."
+  "text.skills.wayfarerGuarding.description": "§7While you have a Crossbow in your offhand, you periodically gain Barrier.\n\n§f(Barrier)§7 The next damage you take is completely negated.",
+  "block.smooth_classes.arcane_fire": "Arcane Fire"
 }

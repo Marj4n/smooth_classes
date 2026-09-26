@@ -7,6 +7,9 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
+import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
+import net.minecraft.util.math.MathHelper;
+import org.marj4n.smooth_classes.client.effects.RighteousHammersRenderer;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
@@ -32,6 +35,7 @@ public final class SmoothClassesClient implements ClientModInitializer {
     private static KeyBinding signature;
     private static KeyBinding ascendancy;
     private static final AbilityHud HUD = new AbilityHud();
+    private static final RighteousHammersRenderer HAMMER_RENDERER = new RighteousHammersRenderer();
 
     public static KeyBinding signatureKey() { return signature; }
     public static KeyBinding ascendancyKey() { return ascendancy; }
@@ -39,8 +43,34 @@ public final class SmoothClassesClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         ModelRegistry.registerModels();
+        net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap.INSTANCE.putBlock(
+                org.marj4n.smooth_classes.registry.SmoothBlocks.ARCANE_FIRE,
+                net.minecraft.client.render.RenderLayer.getCutout());
+        net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry.getInstance().register(
+                org.marj4n.smooth_classes.registry.SmoothParticles.ARCANE_FLAME,
+                org.marj4n.smooth_classes.client.effects.ArcaneFlameFactory::new);
         registerVisualEffects();
         registerEntities();
+        // The local player entity is not rendered in first person, so render its
+        // orbit in world space after entities using camera-relative coordinates.
+        WorldRenderEvents.AFTER_ENTITIES.register(context -> {
+            var client=net.minecraft.client.MinecraftClient.getInstance();
+            var player=client.player;
+            if (player==null || !client.options.getPerspective().isFirstPerson()
+                    || context.matrixStack()==null || context.consumers()==null) return;
+            var status=player.getStatusEffect(SmoothEffects.RIGHTEOUS_HAMMERS);
+            if (status==null) return;
+            float delta=context.tickDelta();
+            var camera=context.camera().getPos();
+            var matrices=context.matrixStack();
+            matrices.push();
+            matrices.translate(MathHelper.lerp(delta,player.prevX,player.getX())-camera.x,
+                    MathHelper.lerp(delta,player.prevY,player.getY())-camera.y,
+                    MathHelper.lerp(delta,player.prevZ,player.getZ())-camera.z);
+            if (status!=null) HAMMER_RENDERER.renderEffect(0L,status.getAmplifier(),player,delta,
+                    matrices,context.consumers(),0xF000F0);
+            matrices.pop();
+        });
 
         signature = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "key.smooth_classes.signature", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_V, "key.category.smooth_classes"));
@@ -102,8 +132,8 @@ public final class SmoothClassesClient implements ClientModInitializer {
         CustomModelStatusEffect.register(SmoothEffects.FROST_VOLLEY, new FrostVolleyRenderer());
         CustomModelStatusEffect.register(SmoothEffects.VITALITY_BOND, new VitalityBondRenderer());
         CustomModelStatusEffect.register(SmoothEffects.UNDYING, new UndyingRenderer());
+        CustomModelStatusEffect.register(SmoothEffects.DIVINE_RAY, new DivineRayRenderer());
         CustomParticleStatusEffect.register(SmoothEffects.UNDYING, new UndyingParticles(2));
-        CustomModelStatusEffect.register(SmoothEffects.BARRIER, new BarrierRenderer());
         CustomParticleStatusEffect.register(SmoothEffects.BARRIER, new BarrierParticles(1));
         CustomParticleStatusEffect.register(SmoothEffects.RAGE, new RageParticles(1));
         CustomParticleStatusEffect.register(SmoothEffects.EVASION, new EvasionParticles(1));
@@ -111,8 +141,6 @@ public final class SmoothClassesClient implements ClientModInitializer {
         CustomModelStatusEffect.register(SmoothEffects.DEATH_MARK, new DeathMarkRenderer());
         CustomModelStatusEffect.register(SmoothEffects.TAUNTED, new TauntedRenderer());
         CustomModelStatusEffect.register(SmoothEffects.MARKSMANSHIP, new MarksmanshipRenderer());
-        CustomModelStatusEffect.register(SmoothEffects.RIGHTEOUS_HAMMERS, new RighteousHammersRenderer());
-        CustomModelStatusEffect.register(SmoothEffects.BONE_ARMOR, new BoneArmorRenderer());
         CustomModelStatusEffect.register(SmoothEffects.MAGIC_CIRCLE, new MagicCircleRenderer());
         CustomModelStatusEffect.register(SmoothEffects.AGONY, new CurseRenderer());
         CustomModelStatusEffect.register(SmoothEffects.TORMENT, new CurseRenderer());
