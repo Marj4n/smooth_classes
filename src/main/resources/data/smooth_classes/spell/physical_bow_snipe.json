@@ -1,0 +1,135 @@
+{
+  "school": "PHYSICAL_RANGED",
+  "range": 120,
+  "tier": 1,
+  "learn": {},
+  "active": {
+    "cast": {
+      "duration": 0.75,
+      "animation": {
+        "id": "spell_engine:archery_pull"
+      },
+      "sound": {
+        "id": "spell_engine:generic_arcane_casting",
+        "randomness": 0
+      },
+      "particles": [
+        {
+          "id": "mycelium",
+          "appearance": {},
+          "batch": {
+            "count": 20.0,
+            "shape": "PIPE",
+            "min_speed": 0.05,
+            "max_speed": 0.1,
+            "anchor": "ENTITY",
+            "vertical_origin": 0.0
+          }
+        }
+      ]
+    }
+  },
+  "release": {
+    "animation": {
+      "id": "spell_engine:archery_release"
+    },
+    "sound": {
+      "id": "smooth_classes:magic_shamanic_power_12",
+      "volume": 0.1,
+      "pitch": 1.5
+    }
+  },
+  "target": {
+    "type": "AIM",
+    "aim": {}
+  },
+  "deliver": {
+    "type": "PROJECTILE",
+    "projectile": {
+      "launch_properties": {
+        "velocity": 1.8
+      },
+      "projectile": {
+        "homing_angle": 0.1,
+        "client_data": {
+          "travel_particles": [
+            {
+              "id": "campfire_cosy_smoke",
+              "appearance": {},
+              "batch": {
+                "count": 4.0,
+                "shape": "CIRCLE",
+                "min_speed": 0.04,
+                "max_speed": 0.06,
+                "anchor": "ENTITY",
+                "vertical_origin": 0.5,
+                "alignment": "LOOK"
+              }
+            }
+          ],
+          "composite_model": {
+            "models": [
+              {
+                "orientation": "ALONG_MOTION",
+                "fx": {
+                  "model_id": "smooth_classes:spell_projectile/arrow",
+                  "scale": 0.9
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "impacts": [
+    {
+      "action": {
+        "type": "DAMAGE",
+        "damage": {
+          "knockback": 0,
+          "spell_power_coefficient": 2.2
+        }
+      },
+      "sound": {
+        "id": "smooth_classes:soundeffect_14",
+        "volume": 0.2
+      },
+      "visuals": {
+        "particles": [
+          {
+            "id": "mycelium",
+            "appearance": {},
+            "batch": {
+              "count": 30,
+              "shape": "SPHERE",
+              "min_speed": 0.2,
+              "max_speed": 0.7,
+              "anchor": "ENTITY",
+              "vertical_origin": 0.5
+            }
+          }
+        ]
+      }
+    },
+    {
+      "action": {
+        "type": "STATUS_EFFECT",
+        "status_effect": {
+          "effect_id": "smooth_classes:death_mark",
+          "duration": 10,
+          "apply_mode": "ADD",
+          "show_particles": true
+        }
+      },
+      "sound": {
+        "id": "smooth_classes:soundeffect_31",
+        "volume": 0.3,
+        "pitch": 1.0
+      }
+    }
+  ],
+  "cost": {
+    "durability": 0
+  }
+}

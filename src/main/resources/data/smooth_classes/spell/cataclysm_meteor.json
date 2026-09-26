@@ -1,0 +1,196 @@
+{
+  "school": "FIRE",
+  "range": 32.0,
+  "tier": 3,
+  "learn": {},
+  "active": {
+    "cast": {
+      "duration": 1,
+      "animation": {
+        "id": "spell_engine:one_handed_projectile_charge"
+      },
+      "sound": {
+        "id": "spell_engine:generic_fire_casting",
+        "randomness": 0
+      },
+      "particles": [
+        {
+          "id": "spell_engine:flame",
+          "appearance": {},
+          "batch": {
+            "count": 3.0,
+            "shape": "PIPE",
+            "min_speed": 0.1,
+            "max_speed": 0.3,
+            "anchor": "ENTITY",
+            "vertical_origin": 0.0
+          }
+        }
+      ]
+    }
+  },
+  "release": {
+    "sound": {
+      "id": "smooth_classes:spell_fireball",
+      "volume": 1,
+      "pitch": 1.1
+    }
+  },
+  "target": {
+    "type": "AIM",
+    "aim": {}
+  },
+  "deliver": {
+    "type": "METEOR",
+    "meteor": {
+      "launch_height": 70,
+      "launch_properties": {
+        "velocity": 1.5
+      },
+      "projectile": {
+        "divergence": 10,
+        "homing_angle": 1.0,
+        "client_data": {
+          "travel_particles": [
+            {
+              "id": "spell_engine:flame",
+              "appearance": {},
+              "batch": {
+                "count": 9.0,
+                "shape": "CIRCLE",
+                "min_speed": 0.0,
+                "max_speed": 0.4,
+                "anchor": "ENTITY",
+                "vertical_origin": 0.0,
+                "alignment": "LOOK"
+              }
+            },
+            {
+              "id": "smoke",
+              "appearance": {},
+              "batch": {
+                "count": 10.0,
+                "shape": "CIRCLE",
+                "min_speed": 0.3,
+                "max_speed": 0.6,
+                "anchor": "ENTITY",
+                "vertical_origin": 0.0,
+                "alignment": "LOOK"
+              }
+            },
+            {
+              "id": "campfire_cosy_smoke",
+              "appearance": {},
+              "batch": {
+                "count": 12.0,
+                "shape": "CIRCLE",
+                "min_speed": 0.0,
+                "max_speed": 0.1,
+                "anchor": "ENTITY",
+                "vertical_origin": 0.0,
+                "alignment": "LOOK"
+              }
+            }
+          ],
+          "composite_model": {
+            "models": [
+              {
+                "orientation": "ALONG_MOTION",
+                "fx": {
+                  "model_id": "smooth_classes:spell_projectile/meteor_projectile",
+                  "scale": 4
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "impacts": [
+    {
+      "action": {
+        "type": "DAMAGE",
+        "damage": {
+          "spell_power_coefficient": 4.0,
+          "knockback": 4
+        }
+      },
+      "sound": {
+        "id": "smooth_classes:soundeffect_14",
+        "volume": 0.1
+      },
+      "visuals": {
+        "particles": [
+          {
+            "id": "lava",
+            "appearance": {},
+            "batch": {
+              "count": 26.0,
+              "shape": "CIRCLE",
+              "min_speed": 0.5,
+              "max_speed": 12.0,
+              "anchor": "ENTITY",
+              "vertical_origin": 0.0
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "area_impact": {
+    "radius": 10,
+    "area": {
+      "distance_dropoff": "SQUARED"
+    },
+    "sound": {
+      "id": "smooth_classes:spell_earth_punch",
+      "volume": 0.4,
+      "pitch": 1.8
+    },
+    "visuals": {
+      "particles": [
+        {
+          "id": "lava",
+          "appearance": {},
+          "batch": {
+            "count": 110.0,
+            "shape": "CIRCLE",
+            "min_speed": 3.5,
+            "max_speed": 10.0,
+            "anchor": "ENTITY",
+            "vertical_origin": 0.0
+          }
+        },
+        {
+          "id": "flame",
+          "appearance": {},
+          "batch": {
+            "count": 120.0,
+            "shape": "SPHERE",
+            "min_speed": 0.4,
+            "max_speed": 0.6,
+            "anchor": "ENTITY",
+            "vertical_origin": 0.0
+          }
+        },
+        {
+          "id": "smoke",
+          "appearance": {},
+          "batch": {
+            "count": 120.0,
+            "shape": "SPHERE",
+            "min_speed": 0.3,
+            "max_speed": 0.6,
+            "anchor": "ENTITY",
+            "vertical_origin": 0.0
+          }
+        }
+      ]
+    }
+  },
+  "cost": {
+    "exhaust": 0.3,
+    "durability": 0
+  }
+}

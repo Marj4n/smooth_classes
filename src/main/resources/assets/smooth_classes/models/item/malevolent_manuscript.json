@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "smooth_classes:item/malevolent_manuscript_base",
+    "layer1": "smooth_classes:item/malevolent_manuscript_eye_strip",
+    "layer2": "smooth_classes:item/malevolent_manuscript_eyelid_strip"
+  }
+}
