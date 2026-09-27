@@ -20,6 +20,7 @@
     "defaultRequire": 1
   },
   "client": [
+    "client.BloodRainWeatherMixin",
     "client.SpellProjectileRendererClientMixin",
     "client.CustomModelsMixin",
     "client.PlayerStealthRendererMixin",

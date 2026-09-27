@@ -117,8 +117,9 @@ public final class ClassPassiveRuntime {
     // ASSASSIN / ROGUE
     // ------------------------------------------------------------
     private static void assassinTick(ServerPlayerEntity p) {
+        if (p.age % 20 != 0) return;
         // Backstab's secondary passive: nearby weakened enemies can return the rogue to stealth.
-        if (has(p,PuffishSkillsIntegration.ASSASSIN,SkillNodeIds.rogueBackstab) && p.age%20==0) {
+        if (has(p,PuffishSkillsIntegration.ASSASSIN,SkillNodeIds.rogueBackstab)) {
             for (LivingEntity e:enemies(p,8)) {
                 if (e.hasStatusEffect(StatusEffects.WEAKNESS) && p.getRandom().nextInt(100)<3) {
                     p.addStatusEffect(new StatusEffectInstance(SmoothEffects.STEALTH,200,0,false,false,true));
@@ -134,46 +135,57 @@ public final class ClassPassiveRuntime {
     // ARCHER / RANGER
     // ------------------------------------------------------------
     private static void archerTick(ServerPlayerEntity p) {
-        if(has(p,PuffishSkillsIntegration.ARCHER,SkillNodeIds.rangerReveal) && p.age%80==0) {
+        int age = p.age;
+        if (age % 10 != 0) return;
+
+        boolean every80 = age % 80 == 0;
+        boolean every20 = age % 20 == 0;
+
+        if (every80 && has(p,PuffishSkillsIntegration.ARCHER,SkillNodeIds.rangerReveal)) {
             for(LivingEntity e:enemies(p,12)) if(e.hasStatusEffect(SmoothEffects.STEALTH)) {
                 e.removeStatusEffect(SmoothEffects.STEALTH);
                 e.addStatusEffect(new StatusEffectInstance(SmoothEffects.REVEALED,180,1,false,false,true));
             }
         }
 
-        List<LivingEntity> pets=pets(p,12);
-        if(has(p,PuffishSkillsIntegration.ARCHER,SkillNodeIds.rangerTamer) && p.age%80==0)
-            pets.forEach(e->{
-                e.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION,85,1,false,false,true));
-                e.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE,85,2,false,false,true));
-            });
+        boolean tamer = every80 && has(p,PuffishSkillsIntegration.ARCHER,SkillNodeIds.rangerTamer);
+        boolean bonded = has(p,PuffishSkillsIntegration.ARCHER,SkillNodeIds.rangerBonded);
+        boolean trained = every80 && has(p,PuffishSkillsIntegration.ARCHER,SkillNodeIds.rangerTrained);
+        boolean incognito = every20 && p.hasStatusEffect(SmoothEffects.STEALTH)
+                && has(p,PuffishSkillsIntegration.ARCHER,SkillNodeIds.rangerIncognito);
+        if (!tamer && !bonded && !trained && !incognito) return;
 
-        if(has(p,PuffishSkillsIntegration.ARCHER,SkillNodeIds.rangerBonded) && p.age%10==0) {
+        // One nearby-pet query serves every Archer passive due on this tick.
+        List<LivingEntity> pets = pets(p,12);
+        if (tamer) pets.forEach(e -> {
+            e.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION,85,1,false,false,true));
+            e.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE,85,2,false,false,true));
+        });
+
+        if (bonded) {
             for(LivingEntity e:pets) {
                 float petPct=e.getHealth()/e.getMaxHealth()*100F, playerPct=p.getHealth()/p.getMaxHealth()*100F;
                 if(petPct>playerPct && petPct>30F) { e.setHealth(Math.max(1F,e.getHealth()-1F)); p.heal(1F); }
             }
         }
 
-        if(has(p,PuffishSkillsIntegration.ARCHER,SkillNodeIds.rangerTrained) && p.age%80==0)
-            pets.forEach(e->{
-                if(e.getHealth()/e.getMaxHealth()*100F>70F) {
-                    e.addStatusEffect(new StatusEffectInstance(StatusEffects.STRENGTH,85,1,false,false,true));
-                    e.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED,85,1,false,false,true));
-                }
-            });
+        if (trained) pets.forEach(e -> {
+            if(e.getHealth()/e.getMaxHealth()*100F>70F) {
+                e.addStatusEffect(new StatusEffectInstance(StatusEffects.STRENGTH,85,1,false,false,true));
+                e.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED,85,1,false,false,true));
+            }
+        });
 
-        if(has(p,PuffishSkillsIntegration.ARCHER,SkillNodeIds.rangerIncognito)
-                && p.age%20==0 && p.hasStatusEffect(SmoothEffects.STEALTH))
-            pets.forEach(e->e.addStatusEffect(new StatusEffectInstance(StatusEffects.INVISIBILITY,25,0,false,false,true)));
+        if (incognito)
+            pets.forEach(e -> e.addStatusEffect(new StatusEffectInstance(StatusEffects.INVISIBILITY,25,0,false,false,true)));
     }
 
     // ------------------------------------------------------------
     // SABER / CRUSADER
     // ------------------------------------------------------------
     private static void saberTick(ServerPlayerEntity p) {
-        if(has(p,PuffishSkillsIntegration.SABER,SkillNodeIds.crusaderAegis)
-                && p.age%25==0 && p.hasStatusEffect(SmoothEffects.EXHAUSTION)) {
+        if(p.age%25==0 && p.hasStatusEffect(SmoothEffects.EXHAUSTION)
+                && has(p,PuffishSkillsIntegration.SABER,SkillNodeIds.crusaderAegis)) {
             StatusEffectInstance exhaustion=p.getStatusEffect(SmoothEffects.EXHAUSTION);
             if(exhaustion!=null && exhaustion.getAmplifier()>35) {
                 // Paladins' Divine Protection is optional in this runtime. Core Smooth Classes
@@ -188,8 +200,8 @@ public final class ClassPassiveRuntime {
     // RULER / CLERIC
     // ------------------------------------------------------------
     private static void rulerTick(ServerPlayerEntity p) {
-        if(has(p,PuffishSkillsIntegration.RULER,SkillNodeIds.clericAltruism)
-                && p.age%600==0 && p.getArmor()<=10)
+        if(p.age%600==0 && p.getArmor()<=10
+                && has(p,PuffishSkillsIntegration.RULER,SkillNodeIds.clericAltruism))
             inc(p,SmoothEffects.SPELLFORGED,605,1,2);
     }
 

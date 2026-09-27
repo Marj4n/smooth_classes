@@ -194,13 +194,15 @@ public final class AscendancyRuntime {
 
     /** >29 ascendancy points grants one Golden Aegis stack every 200 ticks. */
     public static void serverTick(ServerPlayerEntity p){
-        if(unlocked(p,"righteous_shield")&&points(p)>29&&p.age%200==0)
-            increment(p,SmoothEffects.GOLDEN_AEGIS,2400,1,15+points(p)/10);
+        if (p.age % 200 != 0 || !unlocked(p,"righteous_shield")) return;
+        int points = points(p);
+        if (points > 29) increment(p,SmoothEffects.GOLDEN_AEGIS,2400,1,15+points/10);
     }
 
     public static void shieldHit(ServerPlayerEntity p){
-        if(unlocked(p,"righteous_shield"))
-            increment(p,SmoothEffects.GOLDEN_AEGIS,2400,1,15+points(p)/10);
+        if (!unlocked(p,"righteous_shield")) return;
+        int points = points(p);
+        increment(p,SmoothEffects.GOLDEN_AEGIS,2400,1,15+points/10);
     }
 
     private static float highestSpellPower(ServerPlayerEntity p){

@@ -17,19 +17,25 @@ import java.lang.reflect.Method;
  * is absent.
  */
 public final class OptionalCompatRuntime {
+    private static final FabricLoader LOADER = FabricLoader.getInstance();
+    private static final boolean SIMPLY_SWORDS = LOADER.isModLoaded("simplyswords")
+            && LOADER.getModContainer("simplyswords").map(c -> {
+                String version = c.getMetadata().getVersion().toString();
+                return !version.contains("1.50") && !version.contains("1.48");
+            }).orElse(false);
+    private static final boolean PALADINS = LOADER.isModLoaded("paladins");
+    private static final boolean ARCHERS = LOADER.isModLoaded("archers");
+    private static final boolean IMMERSIVE_MELODIES = LOADER.isModLoaded("immersive_melodies");
+    private static final boolean OPAC = LOADER.isModLoaded("openpartiesandclaims");
+
     private OptionalCompatRuntime(){}
 
-    public static boolean loaded(String id){ return FabricLoader.getInstance().isModLoaded(id); }
-    public static boolean simplySwords(){
-        if(!loaded("simplyswords"))return false;
-        return FabricLoader.getInstance().getModContainer("simplyswords").map(c->{
-            String v=c.getMetadata().getVersion().toString(); return !v.contains("1.50")&&!v.contains("1.48");
-        }).orElse(false);
-    }
-    public static boolean paladins(){ return loaded("paladins"); }
-    public static boolean archers(){ return loaded("archers"); }
-    public static boolean immersiveMelodies(){ return loaded("immersive_melodies"); }
-    public static boolean opac(){ return loaded("openpartiesandclaims"); }
+    public static boolean loaded(String id){ return LOADER.isModLoaded(id); }
+    public static boolean simplySwords(){ return SIMPLY_SWORDS; }
+    public static boolean paladins(){ return PALADINS; }
+    public static boolean archers(){ return ARCHERS; }
+    public static boolean immersiveMelodies(){ return IMMERSIVE_MELODIES; }
+    public static boolean opac(){ return OPAC; }
 
     /**
      * Simply Swords socket read without linking its API.

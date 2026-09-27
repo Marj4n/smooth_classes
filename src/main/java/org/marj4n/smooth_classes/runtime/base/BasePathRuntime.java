@@ -45,34 +45,39 @@ public final class BasePathRuntime {
     }
 
     private static void tick(ServerPlayerEntity p) {
+        int age = p.age;
         tickEarthshaker(p);
         tickAttuned(p);
+
         // MAGIC (Initiate)
-        if (has(p, SkillNodeIds.initiateNullification) && p.age % 80 == 0) nullification(p);
-        if (has(p, SkillNodeIds.initiateLightningRod) && p.age % 500 == 0 && p.getWorld().isThundering())
+        if (age % 80 == 0 && has(p, SkillNodeIds.initiateNullification)) nullification(p);
+        if (age % 500 == 0 && p.getWorld().isThundering()
+                && has(p, SkillNodeIds.initiateLightningRod))
             inc(p,SmoothEffects.LIGHTNING_ATTUNEMENT,600,1,5);
-        if (has(p, SkillNodeIds.initiateLightningRod) && p.age % 40 == 0 && p.hasStatusEffect(SmoothEffects.SOULSHOCK))
+        if (age % 40 == 0 && p.hasStatusEffect(SmoothEffects.SOULSHOCK)
+                && has(p, SkillNodeIds.initiateLightningRod))
             lightningRodPulse(p);
         if (has(p, SkillNodeIds.wizardPath)) frail(p);
 
         // AGILITY (Wayfarer)
-        if (has(p,SkillNodeIds.wayfarerStealth) && p.age%10==0 && p.isSneaking()
-                && !p.hasStatusEffect(SmoothEffects.REVEALED) && !targeted(p,20))
+        if (age % 10 == 0 && p.isSneaking() && !p.hasStatusEffect(SmoothEffects.REVEALED)
+                && has(p,SkillNodeIds.wayfarerStealth) && !targeted(p,20))
             p.addStatusEffect(new StatusEffectInstance(SmoothEffects.STEALTH,20,0,false,false,true));
         if (p.hasStatusEffect(SmoothEffects.STEALTH)) p.setInvisible(true);
         else if (!p.hasStatusEffect(StatusEffects.INVISIBILITY)) p.setInvisible(false);
-        if (has(p,SkillNodeIds.wayfarerSneak) && p.isSneaking() && p.age%10==0) {
+        if (age % 10 == 0 && p.isSneaking() && has(p,SkillNodeIds.wayfarerSneak)) {
             p.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED,15,2,false,false,true));
             if (p.hasStatusEffect(SmoothEffects.STEALTH)) inc(p,SmoothEffects.MIGHT,15,1,22);
         }
-        if (has(p,SkillNodeIds.wayfarerGuarding) && p.getOffHandStack().getItem() instanceof CrossbowItem && p.age%800==0)
+        if (age % 800 == 0 && p.getOffHandStack().getItem() instanceof CrossbowItem
+                && has(p,SkillNodeIds.wayfarerGuarding))
             inc(p,SmoothEffects.BARRIER,3400,1,3);
-        if (p.age%20==0) slender(p);
+        if (age % 20 == 0) slender(p);
 
         // STRENGTH (Warrior)
-        if (has(p,SkillNodeIds.warriorDeathDefy) && p.age%20==0) deathDefy(p);
-        if (has(p,SkillNodeIds.warriorCarnage) && p.age%15==0) carnage(p);
-        if (has(p,SkillNodeIds.bulwarkShieldMastery) && p.age%10==0) shieldMastery(p);
+        if (age % 20 == 0 && has(p,SkillNodeIds.warriorDeathDefy)) deathDefy(p);
+        if (age % 15 == 0 && has(p,SkillNodeIds.warriorCarnage)) carnage(p);
+        if (age % 10 == 0 && has(p,SkillNodeIds.bulwarkShieldMastery)) shieldMastery(p);
     }
 
     public static void onMeleeHit(ServerPlayerEntity p, LivingEntity target) {
@@ -194,7 +199,7 @@ public final class BasePathRuntime {
     }
 
     private static void tickAttuned(ServerPlayerEntity p) {
-        if (!has(p,SkillNodeIds.initiateAttuned) || p.age%20!=0) return;
+        if (p.age%20!=0 || !has(p,SkillNodeIds.initiateAttuned)) return;
         StatusEffect[] attunements={SmoothEffects.ARCANE_ATTUNEMENT,SmoothEffects.SOUL_ATTUNEMENT,
                 SmoothEffects.HOLY_ATTUNEMENT,SmoothEffects.FIRE_ATTUNEMENT,
                 SmoothEffects.FROST_ATTUNEMENT,SmoothEffects.LIGHTNING_ATTUNEMENT};

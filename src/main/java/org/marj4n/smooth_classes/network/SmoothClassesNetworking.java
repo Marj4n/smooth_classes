@@ -34,10 +34,16 @@ public final class SmoothClassesNetworking {
                     boolean held = buf.readBoolean();
                     server.execute(() -> org.marj4n.smooth_classes.runtime.ArcaneSlashChargeRuntime.hold(player, held));
                 });
-        ServerPlayConnectionEvents.DISCONNECT.register((handler, server) ->
-                org.marj4n.smooth_classes.runtime.ArcaneSlashChargeRuntime.disconnect(handler.player));
-        net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents.SERVER_STOPPED.register(server ->
-                org.marj4n.smooth_classes.runtime.ArcaneSlashChargeRuntime.clear());
+        ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
+            org.marj4n.smooth_classes.runtime.ArcaneSlashChargeRuntime.disconnect(handler.player);
+            LAST_SELECTION.remove(handler.player.getUuid());
+            PuffishSkillsIntegration.invalidateRuntimeCache(handler.player);
+        });
+        net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents.SERVER_STOPPED.register(server -> {
+            org.marj4n.smooth_classes.runtime.ArcaneSlashChargeRuntime.clear();
+            LAST_SELECTION.clear();
+            PuffishSkillsIntegration.clearRuntimeCaches();
+        });
         ServerPlayNetworking.registerGlobalReceiver(CAST_SIGNATURE, (server, player, handler, buf, responseSender) ->
                 server.execute(() -> {
                     var result = SignatureAbilityDispatcher.cast(player);

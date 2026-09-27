@@ -99,6 +99,9 @@ public final class SmoothEffects {
     }
 
     public static void register() {
-        SmoothClasses.LOGGER.info("Registered {} Smooth Classes status effects registered.", 73);
+        long count = Registries.STATUS_EFFECT.getIds().stream()
+                .filter(id -> SmoothClasses.MOD_ID.equals(id.getNamespace()))
+                .count();
+        SmoothClasses.LOGGER.info("Registered {} Smooth Classes status effects.", count);
     }
 }

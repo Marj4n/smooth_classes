@@ -34,7 +34,7 @@ import java.util.UUID;
 import java.util.HashMap;
 
 /**
- * Server-side gameplay for the full 73-effect parity surface.
+ * Server-side gameplay for the registered Smooth Classes status-effect surface.
  *
  * intentionally has many marker/state effects whose update method is
  * empty; those remain marker effects here. Effects with real update behavior
@@ -43,6 +43,22 @@ import java.util.HashMap;
 public final class EffectBehaviorRuntime {
     private EffectBehaviorRuntime() {}
     private static final Map<UUID,Integer> RAPIDFIRE_ARROW_COUNT=new HashMap<>();
+
+    static boolean hasTickBehavior(String id) {
+        return switch (id) {
+            case "rage", "overload", "immobilize", "immobilizing_aura", "exhaustion",
+                 "stealth", "bladestorm", "elemental_surge", "elemental_impact",
+                 "consecration", "sacred_onslaught", "focus", "melody_of_safety",
+                 "bullrush", "leapslam", "earthshaker", "disenchantment", "magic_circle",
+                 "righteous_hammers", "cyclonic_cleave", "arcane_slash", "rapidfire",
+                 "cataclysm", "ghostwalk", "skyward_sunder", "righteous_shield",
+                 "spellbreaking", "raging_javelin", "agony", "torment", "taunted",
+                 "vitality_bond", "anointed", "shadow_aura", "static_charge",
+                 "fanofblades", "frost_volley", "arcane_volley", "meteoric_wrath",
+                 "barrier", "bone_armor", "undying", "rampage" -> true;
+            default -> false;
+        };
+    }
 
     public static void applied(String id, LivingEntity entity, int amplifier) {
         if (!entity.getWorld().isClient()) {

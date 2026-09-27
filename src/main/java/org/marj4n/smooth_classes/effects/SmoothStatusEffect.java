@@ -37,6 +37,6 @@ public final class SmoothStatusEffect extends StatusEffect {
 
     @Override
     public boolean canApplyUpdateEffect(int duration, int amplifier) {
-        return true;
+        return EffectBehaviorRuntime.hasTickBehavior(id);
     }
 }

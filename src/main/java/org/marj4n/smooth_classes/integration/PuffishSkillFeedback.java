@@ -23,6 +23,7 @@ public final class PuffishSkillFeedback {
             }
             playUnlockSound(player);
             syncJunctions(player, categoryId, skillId);
+            PuffishSkillsIntegration.invalidateRuntimeCache(player);
             PuffishSkillsIntegration.ensureAscendancyUnlocked(player);
             SmoothClassesNetworking.sendAbilityState(player);
         });
