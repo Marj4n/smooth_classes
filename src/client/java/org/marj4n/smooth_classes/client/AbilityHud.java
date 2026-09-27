@@ -31,9 +31,21 @@ public final class AbilityHud {
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         context.drawTexture(FRAME, x + 5, y + 6, 58, 22, 24, 24, 256, 256);
-        context.drawTexture(icon, x + 10, y + 10, 0, 0, 16, 16, 16, 16);
+        if ("sacred_orb".equals(ability))
+            context.drawItem(new net.minecraft.item.ItemStack(org.marj4n.smooth_classes.registry.SmoothItems.SACRED_BANNER_ICON), x + 10, y + 10);
+        else context.drawTexture(icon, x + 10, y + 10, 0, 0, 16, 16, 16, 16);
 
-        if (remainingMs > 0) {
+        // Item icons write GUI depth around z=150. Flush them before drawing
+        // cooldown/text on a higher plane so the banner cannot hide the timer.
+        context.draw();
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        context.getMatrices().push();
+        context.getMatrices().translate(0, 0, 300);
+        if ("sacred_orb".equals(ability) && AbilityHudState.bannerActive) {
+            context.fill(x+10,y+10,x+26,y+26,0xB0000000);
+            context.drawCenteredTextWithShadow(client.textRenderer,Text.literal("X"),x+18,y+14,0xFF5555);
+        } else if (remainingMs > 0) {
             int overlayHeight = Math.max(1, Math.min(16, (int)(16F * (remainingMs / (float)Math.max(1,totalMs)))));
             int overlayY = y + 10 + (16 - overlayHeight);
             context.drawTexture(COOLDOWN, x + 10, overlayY, 0, 16 - overlayHeight, 16, overlayHeight, 16, 16);
@@ -41,6 +53,8 @@ public final class AbilityHud {
             context.drawCenteredTextWithShadow(client.textRenderer, Text.literal(Integer.toString(secs)), x + 18, y + 14, 0xFFFFFF);
         }
         context.drawCenteredTextWithShadow(client.textRenderer, key.getBoundKeyLocalizedText(), x + 18, y, 0xFFFFFF);
+        context.draw();
+        context.getMatrices().pop();
         RenderSystem.disableBlend();
     }
 }

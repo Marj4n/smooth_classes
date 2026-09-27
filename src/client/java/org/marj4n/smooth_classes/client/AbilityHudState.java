@@ -7,6 +7,7 @@ import org.marj4n.smooth_classes.SmoothClasses;
 public final class AbilityHudState {
     private AbilityHudState() {}
 
+    public static boolean bannerActive;
     public static String signatureAbility = "";
     public static String ascendancyAbility = "";
     public static int signatureCooldownMs = 500;

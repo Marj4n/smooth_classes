@@ -6670,12 +6670,7 @@
                 "excluded": "smooth_classes:textures/frames/excluded.png"
             }
         },
-        "icon": {
-            "type": "texture",
-            "data": {
-                "texture": "smooth_classes:textures/icons/alternate_reduced/cleric_signature_sacred_orb.png"
-            }
-        },
+        "icon": {"type":"item","data":{"item":"smooth_classes:sacred_banner_icon"}},
         "rewards": [
             {
                 "type": "puffish_skills:passive_skill",
@@ -6701,7 +6696,7 @@
         "icon": {
             "type": "texture",
             "data": {
-                "texture": "smooth_classes:textures/icons/alternate_reduced/cleric_signature_sacred_orb.png"
+                "texture": "minecraft:textures/mob_effect/strength.png"
             }
         },
         "rewards": [
@@ -6729,7 +6724,7 @@
         "icon": {
             "type": "texture",
             "data": {
-                "texture": "smooth_classes:textures/icons/alternate_reduced/cleric_signature_sacred_orb.png"
+                "texture": "minecraft:textures/mob_effect/resistance.png"
             }
         },
         "rewards": [
@@ -6757,7 +6752,7 @@
         "icon": {
             "type": "texture",
             "data": {
-                "texture": "smooth_classes:textures/icons/alternate_reduced/cleric_signature_sacred_orb.png"
+                "texture": "minecraft:textures/mob_effect/haste.png"
             }
         },
         "rewards": [

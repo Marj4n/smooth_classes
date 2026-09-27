@@ -16,6 +16,9 @@ public final class SmoothEntities {
     public static final EntityType<SpellTargetEntity> SPELL_TARGET = Registry.register(Registries.ENTITY_TYPE,
             SmoothClasses.id("spell_target"), FabricEntityTypeBuilder.create(SpawnGroup.MISC, SpellTargetEntity::new)
                     .dimensions(EntityDimensions.fixed(.1f,.1f)).build());
+    public static final EntityType<SacredBannerEntity> SACRED_BANNER = Registry.register(Registries.ENTITY_TYPE,
+            SmoothClasses.id("sacred_banner"), FabricEntityTypeBuilder.create(SpawnGroup.MISC, SacredBannerEntity::new)
+                    .dimensions(EntityDimensions.fixed(1.3F,4F)).trackRangeBlocks(64).build());
     public static void register() {
         FabricDefaultAttributeRegistry.register(DREADGLARE, DreadglareEntity.createAttributes());
         FabricDefaultAttributeRegistry.register(GREATER_DREADGLARE, GreaterDreadglareEntity.createAttributes());

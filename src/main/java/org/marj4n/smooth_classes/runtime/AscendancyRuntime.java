@@ -92,9 +92,11 @@ public final class AscendancyRuntime {
             return ExecutionResult.failure("Arcane Slash requires a sword in your main hand.");
         if (p.hasStatusEffect(SmoothEffects.ARCANE_SLASH))
             return ExecutionResult.failure("Arcane Slash is already charging.");
+        if (!ArcaneSlashChargeRuntime.isHeld(p))
+            return ExecutionResult.failure("Hold the Ascendancy key until Arcane Slash is released.");
         boolean cast=InternalSpellRuntime.target(p,"smooth_classes:arcane_slash",p,1F);
         if(cast){
-            ContinuedFx.sound(p,"spell_slash",0.4F,1.1F);
+            ArcaneSlashChargeRuntime.begin(p);
             if(pts>9) increment(p,SmoothEffects.ARCANE_ATTUNEMENT,60,1+pts/10,19);
         }
         return cast ? ExecutionResult.success(1,"arcane_slash")

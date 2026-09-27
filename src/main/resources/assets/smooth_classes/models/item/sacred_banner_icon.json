@@ -1,0 +1,79 @@
+{
+  "credit": "Banner artwork by Scrython; user supplied selected image.",
+  "ambientocclusion": false,
+  "textures": {
+    "banner": "smooth_classes:item/sacred_banner_white",
+    "particle": "smooth_classes:item/sacred_banner_white"
+  },
+  "elements": [
+    {
+      "from": [
+        2.5,
+        0,
+        7.95
+      ],
+      "to": [
+        13.5,
+        16,
+        8.05
+      ],
+      "shade": false,
+      "faces": {
+        "north": {
+          "uv": [
+            16,
+            0,
+            0,
+            16
+          ],
+          "texture": "#banner"
+        },
+        "south": {
+          "uv": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "texture": "#banner"
+        }
+      }
+    }
+  ],
+  "display": {
+    "gui": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        0.95,
+        0.95,
+        0.95
+      ]
+    },
+    "fixed": {
+      "rotation": [
+        0,
+        0,
+        0
+      ],
+      "translation": [
+        0,
+        0,
+        0
+      ],
+      "scale": [
+        1,
+        1,
+        1
+      ]
+    }
+  }
+}

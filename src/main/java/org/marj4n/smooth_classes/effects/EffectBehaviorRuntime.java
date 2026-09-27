@@ -67,6 +67,8 @@ public final class EffectBehaviorRuntime {
     }
 
     public static void removed(String id, LivingEntity entity, int amplifier) {
+        if ("arcane_slash".equals(id) && entity instanceof ServerPlayerEntity player)
+            ArcaneSlashChargeRuntime.removed(player);
         if (entity instanceof ServerPlayerEntity player && switch (id) {
             case "sacred_onslaught", "arcane_slash", "rapidfire", "cataclysm",
                  "ghostwalk", "bullrush", "cyclonic_cleave", "skyward_sunder" -> true;
@@ -548,10 +550,11 @@ public final class EffectBehaviorRuntime {
         if (!(e instanceof ServerPlayerEntity p)) return;
         StatusEffectInstance fx = p.getStatusEffect(SmoothEffects.ARCANE_SLASH);
         if (fx == null) return;
-        if (!ArcaneSlashVisuals.hasSword(p)) {
+        if (!ArcaneSlashChargeRuntime.canContinue(p)) {
             p.removeStatusEffect(SmoothEffects.ARCANE_SLASH);
             return;
         }
+        p.setSprinting(false);
         ArcaneSlashVisuals.charge(p, fx.getDuration());
         // The status is a single 16-tick windup. No recast on removal.
         if (fx.getDuration() == 1) {
@@ -559,7 +562,9 @@ public final class EffectBehaviorRuntime {
             String spell = pts >= 30 ? "smooth_classes:arcane_slash_projectile_2"
                     : "smooth_classes:arcane_slash_projectile";
             p.swingHand(net.minecraft.util.Hand.MAIN_HAND);
-            InternalSpellRuntime.dumbFire(p, spell, 3F);
+            if (InternalSpellRuntime.dumbFire(p, spell, 3F))
+                ArcaneSlashChargeRuntime.finish(p);
+            // Natural status removal cancels if projectile delivery failed.
         }
     }
     private static void rapidfire(LivingEntity e){

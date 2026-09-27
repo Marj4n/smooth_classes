@@ -32,12 +32,14 @@ public final class SmoothClasses implements ModInitializer {
     public void onInitialize() {
         PassiveSkillReward.register();
         SmoothSounds.register();
+        org.marj4n.smooth_classes.registry.SmoothItems.register();
         org.marj4n.smooth_classes.registry.SmoothParticles.register();
         PuffishSkillFeedback.register();
         SmoothEffects.register();
         org.marj4n.smooth_classes.runtime.DivineRayLightRuntime.register();
         org.marj4n.smooth_classes.registry.SmoothBlocks.register();
         SmoothEntities.register();
+        org.marj4n.smooth_classes.content.ruler.runtime.SacredBannerRuntime.register();
         SmoothClassContent.register();
         AvengerServerRuntime.register();
         BasePathRuntime.register();
