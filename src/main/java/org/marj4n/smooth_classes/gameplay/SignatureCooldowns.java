@@ -30,6 +30,9 @@ public final class SignatureCooldowns {
             case "divine_intervention" -> SmoothBalance.Ruler.divineInterventionCooldown;
             case "anoint_weapon" -> SmoothBalance.Ruler.anointWeaponCooldown;
             case "summoning_ritual" -> SmoothBalance.Avenger.summoningRitualCooldown;
+            case "rider_charge" -> SmoothBalance.Rider.chargeCooldown;
+            case "rider_war_aura" -> SmoothBalance.Rider.auraCooldown;
+            case "rider_blazing_hooves" -> SmoothBalance.Rider.blazingHoovesCooldown;
             default -> 20;
         };
         return seconds*20;

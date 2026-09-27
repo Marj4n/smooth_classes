@@ -39,11 +39,30 @@ public final class BloodRainEntity extends Entity {
                 // Saturation is instant: pulse once per second instead of filling every game tick.
                 if(age%20==0)e.addStatusEffect(new StatusEffectInstance(StatusEffects.SATURATION,1,2,false,false,true));
                 if(empowered)effect(e,StatusEffects.RESISTANCE,2);
+            }else if(isOwnedByCaster(e)){
+                // Raining Blood is hostile to enemies, never to the caster's own
+                // pets, Rider mounts, Avenger minions, Wraiths, Dreadglares, etc.
+                continue;
             }else{
                 effect(e,StatusEffects.WITHER,empowered?2:1);
                 effect(e,StatusEffects.HUNGER,empowered?4:2);
             }
         }
+    }
+
+    private boolean isOwnedByCaster(LivingEntity e){
+        if(owner==null)return false;
+        if(e instanceof net.minecraft.entity.passive.TameableEntity tame
+                && owner.equals(tame.getOwnerUuid()))return true;
+        if(e instanceof net.minecraft.entity.passive.AbstractHorseEntity horse
+                && owner.equals(horse.getOwnerUuid()))return true;
+        if(e instanceof net.minecraft.entity.Ownable owned){
+            Entity master=owned.getOwner();
+            if(master!=null&&owner.equals(master.getUuid()))return true;
+            if(master instanceof net.minecraft.entity.passive.TameableEntity tame
+                    && owner.equals(tame.getOwnerUuid()))return true;
+        }
+        return false;
     }
     private static void effect(LivingEntity e,StatusEffect fx,int amplifier){
         // Preserve vanilla pulse cadence when refreshing an aura, rather than restarting its timer.

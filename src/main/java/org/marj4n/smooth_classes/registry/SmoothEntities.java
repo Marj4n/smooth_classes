@@ -28,10 +28,40 @@ public final class SmoothEntities {
     public static final EntityType<HighBeamEntity> HIGH_BEAM = Registry.register(Registries.ENTITY_TYPE,
             SmoothClasses.id("high_beam"), FabricEntityTypeBuilder.create(SpawnGroup.MISC, HighBeamEntity::new)
                     .dimensions(EntityDimensions.fixed(1F,4F)).trackRangeBlocks(128).trackedUpdateRate(1).build());
+    public static final EntityType<RiderHorseEntity> RIDER_HORSE = Registry.register(
+            Registries.ENTITY_TYPE,
+            SmoothClasses.id("rider_horse"),
+            FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, RiderHorseEntity::new)
+                    .dimensions(EntityDimensions.fixed(1.39648F, 1.6F))
+                    .trackRangeBlocks(96)
+                    .trackedUpdateRate(1)
+                    .build());
+
+    public static final EntityType<RiderDreadSteedEntity> RIDER_DREAD_STEED = Registry.register(
+            Registries.ENTITY_TYPE,
+            SmoothClasses.id("rider_dread_steed"),
+            FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, RiderDreadSteedEntity::new)
+                    .fireImmune()
+                    .dimensions(EntityDimensions.fixed(1.39648F, 1.6F))
+                    .trackRangeBlocks(96)
+                    .build());
+
+    public static final EntityType<RiderHippogryphEntity> RIDER_HIPPOGRYPH = Registry.register(
+            Registries.ENTITY_TYPE,
+            SmoothClasses.id("rider_hippogryph"),
+            FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, RiderHippogryphEntity::new)
+                    .fireImmune()
+                    .dimensions(EntityDimensions.fixed(1.7F, 1.6F))
+                    .trackRangeBlocks(128)
+                    .trackedUpdateRate(1)
+                    .build());
     public static void register() {
         FabricDefaultAttributeRegistry.register(DREADGLARE, DreadglareEntity.createAttributes());
         FabricDefaultAttributeRegistry.register(GREATER_DREADGLARE, GreaterDreadglareEntity.createAttributes());
         FabricDefaultAttributeRegistry.register(WRAITH, WraithEntity.createAttributes());
-        SmoothClasses.LOGGER.info("Registered Avenger summon entities.");
+        FabricDefaultAttributeRegistry.register(RIDER_HORSE, RiderHorseEntity.createAttributes());
+        FabricDefaultAttributeRegistry.register(RIDER_DREAD_STEED, RiderDreadSteedEntity.createAttributes());
+        FabricDefaultAttributeRegistry.register(RIDER_HIPPOGRYPH, RiderHippogryphEntity.createAttributes());
+        SmoothClasses.LOGGER.info("Registered Smooth Classes entities, including standalone Rider mounts.");
     }
 }

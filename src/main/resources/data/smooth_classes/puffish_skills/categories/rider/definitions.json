@@ -1,27 +1,891 @@
 {
-    "riderPath": {
-        "title": {
-            "translate": "text.skills.riderPath.title"
-        },
-        "description": {
-            "translate": "text.skills.riderPath.description"
-        },
-        "size": 1.4,
-        "frame": {
-            "type": "texture",
-            "data": {
-                "unlocked": "smooth_classes:textures/frames/unlocked.png",
-                "available": "smooth_classes:textures/frames/available.png",
-                "locked": "smooth_classes:textures/frames/locked.png",
-                "excluded": "smooth_classes:textures/frames/excluded.png"
-            }
-        },
-        "icon": {
-            "type": "texture",
-            "data": {
-                "texture": "smooth_classes:textures/icons/classes/rider.png"
-            }
-        },
-        "rewards": []
-    }
+  "riderPath": {
+    "title": {
+      "translate": "text.skills.riderPath.title"
+    },
+    "description": {
+      "translate": "text.skills.riderPath.description"
+    },
+    "size": 1.4,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/classes/rider.png"
+      }
+    },
+    "rewards": []
+  },
+  "riderCharge": {
+    "title": {
+      "translate": "text.skills.riderCharge.title"
+    },
+    "description": {
+      "translate": "text.skills.riderCharge.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/berserker_signature_rampage.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "riderCharge"
+        }
+      }
+    ]
+  },
+  "riderChargeReach": {
+    "title": {
+      "translate": "text.skills.riderChargeReach.title"
+    },
+    "description": {
+      "translate": "text.skills.riderChargeReach.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/movespeed_up.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "riderChargeReach"
+        }
+      }
+    ]
+  },
+  "riderChargeImpact": {
+    "title": {
+      "translate": "text.skills.riderChargeImpact.title"
+    },
+    "description": {
+      "translate": "text.skills.riderChargeImpact.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/attack_up.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "riderChargeImpact"
+        }
+      }
+    ]
+  },
+  "riderChargePhase": {
+    "title": {
+      "translate": "text.skills.riderChargePhase.title"
+    },
+    "description": {
+      "translate": "text.skills.riderChargePhase.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/resist_up.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "riderChargePhase"
+        }
+      }
+    ]
+  },
+  "riderWarAura": {
+    "title": {
+      "translate": "text.skills.riderWarAura.title"
+    },
+    "description": {
+      "translate": "text.skills.riderWarAura.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/cleric_signature_anoint_weapon.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "riderWarAura"
+        }
+      }
+    ]
+  },
+  "riderAuraResistance": {
+    "title": {
+      "translate": "text.skills.riderAuraResistance.title"
+    },
+    "description": {
+      "translate": "text.skills.riderAuraResistance.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/resist_up.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "riderAuraResistance"
+        }
+      }
+    ]
+  },
+  "riderAuraStrength": {
+    "title": {
+      "translate": "text.skills.riderAuraStrength.title"
+    },
+    "description": {
+      "translate": "text.skills.riderAuraStrength.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/attack_up.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "riderAuraStrength"
+        }
+      }
+    ]
+  },
+  "riderAuraHarm": {
+    "title": {
+      "translate": "text.skills.riderAuraHarm.title"
+    },
+    "description": {
+      "translate": "text.skills.riderAuraHarm.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/spell_up.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "riderAuraHarm"
+        }
+      }
+    ]
+  },
+  "riderBlazingHooves": {
+    "title": {
+      "translate": "text.skills.riderBlazingHooves.title"
+    },
+    "description": {
+      "translate": "text.skills.riderBlazingHooves.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/fire_up.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "riderBlazingHooves"
+        }
+      }
+    ]
+  },
+  "riderFireDamage": {
+    "title": {
+      "translate": "text.skills.riderFireDamage.title"
+    },
+    "description": {
+      "translate": "text.skills.riderFireDamage.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/fire_up.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "riderFireDamage"
+        }
+      }
+    ]
+  },
+  "riderFireDuration": {
+    "title": {
+      "translate": "text.skills.riderFireDuration.title"
+    },
+    "description": {
+      "translate": "text.skills.riderFireDuration.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/fire_up.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "riderFireDuration"
+        }
+      }
+    ]
+  },
+  "riderFireRadius": {
+    "title": {
+      "translate": "text.skills.riderFireRadius.title"
+    },
+    "description": {
+      "translate": "text.skills.riderFireRadius.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/fire_up.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "riderFireRadius"
+        }
+      }
+    ]
+  },
+  "riderWaterStride": {
+    "title": {
+      "translate": "text.skills.riderWaterStride.title"
+    },
+    "description": {
+      "translate": "text.skills.riderWaterStride.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/rider_path.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "riderWaterStride"
+        }
+      }
+    ]
+  },
+  "riderDreadSteed": {
+    "title": {
+      "translate": "text.skills.riderDreadSteed.title"
+    },
+    "description": {
+      "translate": "text.skills.riderDreadSteed.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/rider_path.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "riderDreadSteed"
+        }
+      }
+    ]
+  },
+  "riderHippogryph": {
+    "title": {
+      "translate": "text.skills.riderHippogryph.title"
+    },
+    "description": {
+      "translate": "text.skills.riderHippogryph.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/classes/rider.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "riderHippogryph"
+        }
+      }
+    ]
+  },
+  "riderHealthI": {
+    "title": {
+      "translate": "text.skills.riderHealthI.title"
+    },
+    "description": {
+      "translate": "text.skills.riderHealthI.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/health_up.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "riderHealthI"
+        }
+      }
+    ]
+  },
+  "riderHealthII": {
+    "title": {
+      "translate": "text.skills.riderHealthII.title"
+    },
+    "description": {
+      "translate": "text.skills.riderHealthII.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/health_up.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "riderHealthII"
+        }
+      }
+    ]
+  },
+  "riderHealthIII": {
+    "title": {
+      "translate": "text.skills.riderHealthIII.title"
+    },
+    "description": {
+      "translate": "text.skills.riderHealthIII.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/health_up.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "riderHealthIII"
+        }
+      }
+    ]
+  },
+  "riderSpeedI": {
+    "title": {
+      "translate": "text.skills.riderSpeedI.title"
+    },
+    "description": {
+      "translate": "text.skills.riderSpeedI.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/movespeed_up.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "riderSpeedI"
+        }
+      }
+    ]
+  },
+  "riderSpeedII": {
+    "title": {
+      "translate": "text.skills.riderSpeedII.title"
+    },
+    "description": {
+      "translate": "text.skills.riderSpeedII.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/movespeed_up.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "riderSpeedII"
+        }
+      }
+    ]
+  },
+  "riderSpeedIII": {
+    "title": {
+      "translate": "text.skills.riderSpeedIII.title"
+    },
+    "description": {
+      "translate": "text.skills.riderSpeedIII.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/movespeed_up.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "riderSpeedIII"
+        }
+      }
+    ]
+  },
+  "riderArmorI": {
+    "title": {
+      "translate": "text.skills.riderArmorI.title"
+    },
+    "description": {
+      "translate": "text.skills.riderArmorI.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/resist_up.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "riderArmorI"
+        }
+      }
+    ]
+  },
+  "riderArmorII": {
+    "title": {
+      "translate": "text.skills.riderArmorII.title"
+    },
+    "description": {
+      "translate": "text.skills.riderArmorII.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/resist_up.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "riderArmorII"
+        }
+      }
+    ]
+  },
+  "riderJumpI": {
+    "title": {
+      "translate": "text.skills.riderJumpI.title"
+    },
+    "description": {
+      "translate": "text.skills.riderJumpI.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/jump_up.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "riderJumpI"
+        }
+      }
+    ]
+  },
+  "riderJumpII": {
+    "title": {
+      "translate": "text.skills.riderJumpII.title"
+    },
+    "description": {
+      "translate": "text.skills.riderJumpII.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/jump_up.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "riderJumpII"
+        }
+      }
+    ]
+  },
+  "riderRecoveryI": {
+    "title": {
+      "translate": "text.skills.riderRecoveryI.title"
+    },
+    "description": {
+      "translate": "text.skills.riderRecoveryI.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/healing_up.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "riderRecoveryI"
+        }
+      }
+    ]
+  },
+  "riderRecoveryII": {
+    "title": {
+      "translate": "text.skills.riderRecoveryII.title"
+    },
+    "description": {
+      "translate": "text.skills.riderRecoveryII.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/healing_up.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "riderRecoveryII"
+        }
+      }
+    ]
+  }
 }

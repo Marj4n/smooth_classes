@@ -1,6 +1,7 @@
 package org.marj4n.smooth_classes.mixin;
 
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import org.marj4n.smooth_classes.effects.SmoothEffects;
@@ -24,6 +25,12 @@ public abstract class LivingEntityGameplayMixin {
             entity.setHealth(1F);
             cir.setReturnValue(false);
         }
+    }
+
+    @Inject(method = "damage", at = @At("HEAD"), cancellable = true)
+    private void smooth_classes$riderChargeProtection(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+        LivingEntity entity = (LivingEntity) (Object) this;
+        if (org.marj4n.smooth_classes.content.rider.runtime.RiderRuntime.isChargeProtected(entity)) cir.setReturnValue(false);
     }
 
     @Inject(method = "addStatusEffect(Lnet/minecraft/entity/effect/StatusEffectInstance;)Z",

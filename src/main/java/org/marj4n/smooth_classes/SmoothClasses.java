@@ -44,6 +44,7 @@ public final class SmoothClasses implements ModInitializer {
         org.marj4n.smooth_classes.runtime.WhenOnHighRuntime.register();
         SmoothClassContent.register();
         AvengerServerRuntime.register();
+        org.marj4n.smooth_classes.content.rider.runtime.RiderRuntime.register();
         BasePathRuntime.register();
         ClassPassiveRuntime.register();
         SpellEvents.SPELL_CAST.register(args -> {

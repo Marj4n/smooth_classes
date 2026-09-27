@@ -30,6 +30,9 @@
     "client.SkillsScreenMixin",
     "client.LivingEntityShieldBorderMixin",
     "client.ArcaneFireSpriteMixin",
-    "client.SacredBannerSpriteMixin"
+    "client.SacredBannerSpriteMixin",
+    "client.RiderHorseSurfaceAnimationMixin",
+    "client.RiderFireRenderMixin",
+    "client.RiderFlightFovMixin"
   ]
 }

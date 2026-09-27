@@ -10,6 +10,7 @@ import org.marj4n.smooth_classes.content.avenger.runtime.AvengerMinionGameplay;
 import org.marj4n.smooth_classes.content.berserker.runtime.BerserkerRuntime;
 import org.marj4n.smooth_classes.content.caster.runtime.CasterRuntime;
 import org.marj4n.smooth_classes.content.foreigner.runtime.ForeignerRuntime;
+import org.marj4n.smooth_classes.content.rider.runtime.RiderRuntime;
 import org.marj4n.smooth_classes.content.ruler.runtime.RulerRuntime;
 import org.marj4n.smooth_classes.content.saber.runtime.SaberRuntime;
 import org.marj4n.smooth_classes.integration.PuffishSkillsIntegration;
@@ -63,6 +64,11 @@ public final class SignatureAbilityDispatcher {
                 if (skill(player,"ruler","is053f9imz801s57")) return result(player, "sacred_orb", () -> RulerRuntime.executeSacredOrb(player));
                 if (skill(player,"ruler","a3ns9xl58ixdg2lo")) return result(player, "divine_intervention", () -> RulerRuntime.executeDivineIntervention(player));
                 if (skill(player,"ruler","kp8uei8ppni71b5x")) return result(player, "anoint_weapon", () -> RulerRuntime.executeAnointWeapon(player));
+            }
+            if (clazz(player, "rider")) {
+                if (skill(player,"rider","rider_charge")) return result(player, "rider_charge", () -> RiderRuntime.executeCharge(player));
+                if (skill(player,"rider","rider_war_aura")) return result(player, "rider_war_aura", () -> RiderRuntime.executeWarAura(player));
+                if (skill(player,"rider","rider_blazing_hooves")) return result(player, "rider_blazing_hooves", () -> RiderRuntime.executeBlazingHooves(player));
             }
             if (clazz(player, "avenger") && skill(player,"avenger","yl0wtsb5m85wmvfa")) {
                 Identifier abilityId = new Identifier("smooth_classes", "summoning_ritual");
@@ -118,6 +124,10 @@ public final class SignatureAbilityDispatcher {
                 case "divine_intervention" -> unlocked(player,"ruler","a3ns9xl58ixdg2lo",a,()->RulerRuntime.executeDivineIntervention(player));
                 case "anoint_weapon" -> unlocked(player,"ruler","kp8uei8ppni71b5x",a,()->RulerRuntime.executeAnointWeapon(player));
 
+                case "rider_charge" -> unlocked(player,"rider","rider_charge",a,()->RiderRuntime.executeCharge(player));
+                case "rider_war_aura" -> unlocked(player,"rider","rider_war_aura",a,()->RiderRuntime.executeWarAura(player));
+                case "rider_blazing_hooves" -> unlocked(player,"rider","rider_blazing_hooves",a,()->RiderRuntime.executeBlazingHooves(player));
+
                 case "summoning_ritual" -> castSummoningRitual(player);
                 default -> DispatchResult.fail("Unknown ability: " + ability);
             };
@@ -164,7 +174,8 @@ public final class SignatureAbilityDispatcher {
             {"foreigner","a3ns9xl58ixdg2lo","elemental_surge"},{"foreigner","kp8uei8ppni71b5x","elemental_impact"},{"foreigner","is053f9imz801s57","spellweaver"},
             {"saber","is053f9imz801s57","consecration"},{"saber","kp8uei8ppni71b5x","sacred_onslaught"},{"saber","a3ns9xl58ixdg2lo","heavensmiths_call"},
             {"ruler","is053f9imz801s57","sacred_orb"},{"ruler","a3ns9xl58ixdg2lo","divine_intervention"},{"ruler","kp8uei8ppni71b5x","anoint_weapon"},
-            {"avenger","yl0wtsb5m85wmvfa","summoning_ritual"}
+            {"avenger","yl0wtsb5m85wmvfa","summoning_ritual"},
+            {"rider","rider_charge","rider_charge"},{"rider","rider_war_aura","rider_war_aura"},{"rider","rider_blazing_hooves","rider_blazing_hooves"}
         };
         for (String[] row : rows) if (clazz(player,row[0]) && skill(player,row[0],row[1])) out.add(row[2]);
         return out;
