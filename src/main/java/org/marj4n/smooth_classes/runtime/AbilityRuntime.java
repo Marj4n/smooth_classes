@@ -18,9 +18,15 @@ public final class AbilityRuntime {
         if (slash <= 0) return 0;
 
         Identifier categoryId = new Identifier(talentId.getNamespace(), path.substring(0, slash));
+        var category = PuffishSkillsIntegration.category(categoryId);
+        if (category.isEmpty()) return 0;
+
         int rank = 0;
         for (String skillId : PuffishTalentSkillMap.skillIds(path)) {
-            if (PuffishSkillsIntegration.isSkillUnlocked(categoryId, skillId, player)) rank++;
+            var skill = category.get().getSkill(skillId);
+            if (skill.isPresent() && skill.get().getState(player) == net.puffish.skillsmod.api.Skill.State.UNLOCKED) {
+                rank++;
+            }
         }
         return rank;
     }

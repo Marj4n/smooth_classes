@@ -12,7 +12,8 @@ public final class AvengerServerRuntime {
     public static void register() {
         ServerTickEvents.END_SERVER_TICK.register(server -> {
             for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
-                if (AbilityRuntime.isClass(player, AvengerClass.ID)) {
+                // tickPlayer only has 20/200-tick work; avoid a Puffish class lookup on the other 19 ticks.
+                if (player.age % 20 == 0 && AbilityRuntime.isClass(player, AvengerClass.ID)) {
                     AvengerMinionGameplay.tickPlayer(player);
                 }
             }
