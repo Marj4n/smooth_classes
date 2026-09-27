@@ -95,7 +95,7 @@
   "text.skills.crusaderSignatureSacredOnslaughtMighty.description": "Your §6[Sacred Onslaught]§7 also grants you Might for a duration.",
   "text.skills.warriorBound.description": "§7After activating Earthshaker, you gain Jump Boost and Raging Javelin for a short duration.\n\n§f(Raging Javelin)§7 causes you to periodically throw your held item at nearby enemies.",
   "text.skills.initiatePerilousPrecision.description": "§7Your spell critical chance is increased by §a+5% §f[x]§7, but your max health is reduced by §c15% §f[x]§7.\n\nYou have a 50% chance on spell cast to gain stacking Barrier.\nThis chance is reduced by a percentage equal to your max health.",
-  "text.skills.ascendancyMagicCircle.title": "Ascendancy Ability: §6[Magic Circle]§7",
+  "text.skills.ascendancyMagicCircle.title": "Ascendancy Ability: §4[Raining Blood]§7",
   "text.skills.rogueSignatureEvasionFanOfBladesRenewal.title": "§f[Renewal]",
   "text.skills.wizardSignatureStaticDischargeSpeed++.title": "§f[Speed +]",
   "text.skills.necromancerWraithLegion.title": "§f[Wraith Legion]",
@@ -316,7 +316,7 @@
   "text.skills.wizardSignatureStaticDischargeSpeed+++.description": "§7Each time §6[Static Discharge]§7 leaps or is cast, you have a 15% chance to gain speed.",
   "text.skills.rangerSignatureElementalArrowsRadius+.description": "§7The radius of your §6[Elemental Arrows]§7 is increased by 2.",
   "text.skills.rogueSignatureSiphoningStrikesAura.description": "§7When you gain §6[Siphoning Strikes]§7 you also gain Immobilizing Aura.\n\n§f(Immobilizing Aura)§7 periodically inflicts nearby enemies with Immobilize.",
-  "text.skills.ascendancyMagicCircle.description": "§7\nImmobilize yourself in order to summon a magic circle beneath your feet, granting you a 30% increase to all Spell Power for 12s.\n\n§6[For every 1 Ascendancy]§7\nIncreases effect duration.\n\n§6[At 30+ Ascendancy]§7\nMagic Circle now also grants you Caster's Spell Echo passive.\nIf you already have Spell Echo unlocked, increase its chance to occur by 10%.\n\n§a40s Cooldown§7",
+  "text.skills.ascendancyMagicCircle.description": "§7Call lightning where you aim and summon a fixed blood rain storm around your casting position. Radius: 64 blocks. Duration: 150 seconds. Requires open sky in the Overworld or The End. Only entities exposed to the rain are affected; roofs provide shelter.\n\nOthers: Wither II and Hunger III.\nCaster: Regeneration II and Saturation III.\n\n§6[At 30+ Ascendancy]§7\nOthers: Wither III and Hunger V.\nCaster: Regeneration III, Saturation III and Resistance III.\n\nCannot recast while active. Leaving the area ends your storm.\n§a60s Cooldown after the storm ends§7",
   "text.skills.wizardSignatureStaticDischargeLeap.title": "§f[Leap]",
   "text.skills.rangerBonded.title": "§7§a[Bonded]§7",
   "text.skills.clericSignatureAnointWeaponResistance.title": "§f[Resistance]",
@@ -386,7 +386,7 @@
   "text.skills.crusaderSignatureConsecrationWard.title": "§f[Ward]",
   "text.skills.ranged_damage+0.5%.title": "§a+0.5%§f [+] §7Ranged Damage",
   "text.skills.berserkerRecklessness.title": "§7§a[Recklessness]§7",
-  "text.skills.ascendancyTorment.description": "§7\nCurse the nearest enemy with Torment.\nWhile tormented, all damage the enemy would deal to you is instead redirected to them.\nLasts 8s.\n\n§6[For every 1 Ascendancy]§7\nIncreases effect duration.\n\n§6[At 30+ Ascendancy]§7\nIn addition to tormenting your enemy, you also taunt them.\n\n§a40s Cooldown§7",
+  "text.skills.ascendancyTorment.description": "§7Unleash three black-flame blasts at the targeted ground or enemy (24 blocks). Leaves a circular 5-block-wide fire field for 180 seconds. Black flames cling to anyone who touches them, including you, until the original cast expires. Water, rain, Fire Resistance and Fire Protection cannot extinguish or negate this spell fire. Does not spread or destroy blocks. Each blast deals 70% Fire Spell Power; burns deal 35% Fire Spell Power per second. Uses current caster power and spell critical chance on each hit. Overlapping burns use the strongest active damage.\n\n§a40s Cooldown§7",
   "text.skills.warriorHeavyWeight.description": "§7Your Earthshaker effects are enhanced, causing them to deal additional damage the longer you are in the air.",
   "text.skills.necromancerSignatureSummoningRitual.title": "Signature Ability: §6[Summoning Ritual]§7",
   "text.skills.rangerSignatureElementalArrowsStacks+++.description": "§7You gain three additional stacks of §6[Elemental Arrows]§7.",
@@ -581,5 +581,7 @@
   "text.skills.spellbladeSignatureSpellweaverRegeneration.description": "§7Your Spellweaving procs now have a 50% chance to grant you regeneration for 5s.",
   "text.skills.wayfarerGuarding.description": "§7While you have a Crossbow in your offhand, you periodically gain Barrier.\n\n§f(Barrier)§7 The next damage you take is completely negated.",
   "block.smooth_classes.arcane_fire": "Arcane Fire",
-  "item.smooth_classes.sacred_banner_icon": "Sacred Banner"
+  "item.smooth_classes.sacred_banner_icon": "Sacred Banner",
+  "death.attack.smooth_classes.torment": "%1$s was consumed by black flames",
+  "death.attack.smooth_classes.torment.player": "%1$s was consumed by %2$s's black flames"
 }

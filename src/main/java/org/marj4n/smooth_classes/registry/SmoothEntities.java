@@ -19,6 +19,12 @@ public final class SmoothEntities {
     public static final EntityType<SacredBannerEntity> SACRED_BANNER = Registry.register(Registries.ENTITY_TYPE,
             SmoothClasses.id("sacred_banner"), FabricEntityTypeBuilder.create(SpawnGroup.MISC, SacredBannerEntity::new)
                     .dimensions(EntityDimensions.fixed(1.3F,4F)).trackRangeBlocks(64).build());
+    public static final EntityType<TormentFieldEntity> TORMENT_FIELD = Registry.register(Registries.ENTITY_TYPE,
+            SmoothClasses.id("torment_field"), FabricEntityTypeBuilder.create(SpawnGroup.MISC, TormentFieldEntity::new)
+                    .dimensions(EntityDimensions.fixed(5F,2.5F)).trackRangeBlocks(64).build());
+    public static final EntityType<BloodRainEntity> BLOOD_RAIN = Registry.register(Registries.ENTITY_TYPE,
+            SmoothClasses.id("blood_rain"), FabricEntityTypeBuilder.create(SpawnGroup.MISC, BloodRainEntity::new)
+                    .dimensions(EntityDimensions.fixed(1F,1F)).trackRangeBlocks(160).build());
     public static void register() {
         FabricDefaultAttributeRegistry.register(DREADGLARE, DreadglareEntity.createAttributes());
         FabricDefaultAttributeRegistry.register(GREATER_DREADGLARE, GreaterDreadglareEntity.createAttributes());

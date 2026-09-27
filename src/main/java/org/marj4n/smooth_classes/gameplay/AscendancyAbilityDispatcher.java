@@ -27,7 +27,7 @@ public final class AscendancyAbilityDispatcher {
         if(remaining>0)return DispatchResult.fail(ability+" cooldown "+String.format(Locale.ROOT,"%.1f",remaining/20D)+"s");
         ExecutionResult r=AscendancyRuntime.cast(p,ability);
         if(!r.success())return DispatchResult.fail(r.detail());
-        AbilityCooldowns.start(p,id,AbilityCooldowns.adjustedTicks(p,cooldownTicks(ability)));
+        if(!"magic_circle".equals(ability)) AbilityCooldowns.start(p,id,"torment".equals(ability) ? 800 : AbilityCooldowns.adjustedTicks(p,cooldownTicks(ability)));
         return new DispatchResult(true,ability,r.detail());
     }
 
@@ -48,7 +48,7 @@ public final class AscendancyAbilityDispatcher {
             case "righteous_hammers" -> 60*20;
             case "bone_armor" -> 70*20;
             case "cyclonic_cleave" -> 15*20;
-            case "magic_circle" -> 40*20;
+            case "magic_circle" -> 60*20;
             case "arcane_slash" -> 12*20;
             case "agony","torment" -> 40*20;
             case "rapidfire" -> 30*20;

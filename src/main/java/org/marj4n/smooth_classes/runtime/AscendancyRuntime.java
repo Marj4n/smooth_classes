@@ -57,10 +57,10 @@ public final class AscendancyRuntime {
             case "righteous_hammers" -> effect(p,SmoothEffects.RIGHTEOUS_HAMMERS,800,5,ability);
             case "bone_armor" -> effect(p,SmoothEffects.BONE_ARMOR,800,3+pts/10,ability);
             case "cyclonic_cleave" -> cyclonicCleave(p);
-            case "magic_circle" -> magicCircle(p,pts);
+            case "magic_circle" -> BloodRainRuntime.cast(p,pts);
             case "arcane_slash" -> arcaneSlash(p,pts);
             case "agony" -> curse(p,SmoothEffects.AGONY,200+pts,ability,pts);
-            case "torment" -> curse(p,SmoothEffects.TORMENT,160+pts,ability,pts);
+            case "torment" -> TormentRuntime.cast(p);
             case "rapidfire" -> effect(p,SmoothEffects.RAPIDFIRE,120+pts,0,ability);
             case "cataclysm" -> cataclysm(p);
             case "ghostwalk" -> ghostwalk(p);
