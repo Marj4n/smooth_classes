@@ -7,7 +7,7 @@ import net.minecraft.registry.Registry;
 import org.marj4n.smooth_classes.SmoothClasses;
 
 /**
- * Full status-effect ID surface from SimplySkills Continued.
+ * Full status-effect ID surface from Smooth Classes.
  *
  * IDs are owned by Smooth Classes. Behavioral logic lives in class/ascendancy
  * runtimes instead of one giant legacy effect registry, keeping this registry
@@ -99,6 +99,6 @@ public final class SmoothEffects {
     }
 
     public static void register() {
-        SmoothClasses.LOGGER.info("Registered {} Smooth Classes status effects (SimplySkills parity surface).", 73);
+        SmoothClasses.LOGGER.info("Registered {} Smooth Classes status effects registered.", 73);
     }
 }

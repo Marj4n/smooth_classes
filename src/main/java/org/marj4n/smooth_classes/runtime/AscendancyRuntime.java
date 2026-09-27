@@ -10,13 +10,13 @@ import net.minecraft.util.math.Vec3d;
 import org.marj4n.smooth_classes.effects.SmoothEffects;
 import org.marj4n.smooth_classes.effects.SourceStatusEffectInstance;
 import org.marj4n.smooth_classes.integration.PuffishSkillsIntegration;
-import org.marj4n.smooth_classes.integration.SimplySkillsNodeIds;
+import org.marj4n.smooth_classes.integration.SkillNodeIds;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-/** Continued-style Ascendancy gameplay, isolated from optional compatibility mods. */
+/** Ascendancy gameplay, isolated from optional compatibility mods. */
 public final class AscendancyRuntime {
     private AscendancyRuntime() {}
 
@@ -28,19 +28,19 @@ public final class AscendancyRuntime {
 
     public static boolean unlocked(ServerPlayerEntity p, String ability) {
         String node = switch (ability) {
-            case "righteous_hammers" -> SimplySkillsNodeIds.ascendancyRighteousHammers;
-            case "bone_armor" -> SimplySkillsNodeIds.ascendancyBoneArmor;
-            case "cyclonic_cleave" -> SimplySkillsNodeIds.ascendancyCyclonicCleave;
-            case "magic_circle" -> SimplySkillsNodeIds.ascendancyMagicCircle;
-            case "arcane_slash" -> SimplySkillsNodeIds.ascendancyArcaneSlash;
-            case "agony" -> SimplySkillsNodeIds.ascendancyAgony;
-            case "torment" -> SimplySkillsNodeIds.ascendancyTorment;
-            case "rapidfire" -> SimplySkillsNodeIds.ascendancyRapidfire;
-            case "cataclysm" -> SimplySkillsNodeIds.ascendancyCataclysm;
-            case "ghostwalk" -> SimplySkillsNodeIds.ascendancyGhostwalk;
-            case "skyward_sunder" -> SimplySkillsNodeIds.ascendancySkywardSunder;
-            case "righteous_shield" -> SimplySkillsNodeIds.ascendancyRighteousShield;
-            case "chainbreaker" -> SimplySkillsNodeIds.ascendancyChainbreaker;
+            case "righteous_hammers" -> SkillNodeIds.ascendancyRighteousHammers;
+            case "bone_armor" -> SkillNodeIds.ascendancyBoneArmor;
+            case "cyclonic_cleave" -> SkillNodeIds.ascendancyCyclonicCleave;
+            case "magic_circle" -> SkillNodeIds.ascendancyMagicCircle;
+            case "arcane_slash" -> SkillNodeIds.ascendancyArcaneSlash;
+            case "agony" -> SkillNodeIds.ascendancyAgony;
+            case "torment" -> SkillNodeIds.ascendancyTorment;
+            case "rapidfire" -> SkillNodeIds.ascendancyRapidfire;
+            case "cataclysm" -> SkillNodeIds.ascendancyCataclysm;
+            case "ghostwalk" -> SkillNodeIds.ascendancyGhostwalk;
+            case "skyward_sunder" -> SkillNodeIds.ascendancySkywardSunder;
+            case "righteous_shield" -> SkillNodeIds.ascendancyRighteousShield;
+            case "chainbreaker" -> SkillNodeIds.ascendancyChainbreaker;
             default -> null;
         };
         return node != null && PuffishSkillsIntegration.isSkillUnlocked(PuffishSkillsIntegration.ASCENDANCY,node,p);
@@ -54,14 +54,14 @@ public final class AscendancyRuntime {
         if (!unlocked(p,ability)) return ExecutionResult.failure(ability+" is not unlocked in Puffish Ascendancy.");
         int pts=points(p);
         return switch (ability) {
-            case "righteous_hammers" -> effect(p,SmoothEffects.RIGHTEOUS_HAMMERS,800,5,ability);
-            case "bone_armor" -> effect(p,SmoothEffects.BONE_ARMOR,800,3+pts/10,ability);
+            case "righteous_hammers" -> effect(p,SmoothEffects.RIGHTEOUS_HAMMERS,500,5,ability);
+            case "bone_armor" -> effect(p,SmoothEffects.BONE_ARMOR,400,AscendancyBalance.boneCharges(pts)-1,ability);
             case "cyclonic_cleave" -> cyclonicCleave(p);
             case "magic_circle" -> BloodRainRuntime.cast(p,pts);
             case "arcane_slash" -> arcaneSlash(p,pts);
-            case "agony" -> curse(p,SmoothEffects.AGONY,200+pts,ability,pts);
+            case "agony" -> WhenOnHighRuntime.cast(p,pts);
             case "torment" -> TormentRuntime.cast(p);
-            case "rapidfire" -> effect(p,SmoothEffects.RAPIDFIRE,120+pts,0,ability);
+            case "rapidfire" -> rapidfire(p,pts);
             case "cataclysm" -> cataclysm(p);
             case "ghostwalk" -> ghostwalk(p);
             case "skyward_sunder" -> effect(p,SmoothEffects.SKYWARD_SUNDER,45,0,ability);
@@ -76,6 +76,22 @@ public final class AscendancyRuntime {
         return ExecutionResult.success(1,name);
     }
 
+    private static ExecutionResult rapidfire(ServerPlayerEntity p,int pts){
+        if(!(p.getMainHandStack().getItem() instanceof net.minecraft.item.BowItem)
+                && !(p.getMainHandStack().getItem() instanceof net.minecraft.item.CrossbowItem))
+            return ExecutionResult.failure("Rapidfire requires a bow or crossbow.");
+        return effect(p,SmoothEffects.RAPIDFIRE,AscendancyBalance.rapidfireDuration(pts),0,"rapidfire");
+    }
+    public static void boneArmorHit(ServerPlayerEntity p){
+        var fx=p.getStatusEffect(SmoothEffects.BONE_ARMOR);
+        if(fx==null)return;
+        boolean last=fx.getAmplifier()==0;
+        decrement(p,SmoothEffects.BONE_ARMOR,1);
+        if(last&&points(p)>=30){
+            p.addStatusEffect(new StatusEffectInstance(SmoothEffects.BARRIER,60,0,false,false,true));
+            p.addStatusEffect(new StatusEffectInstance(net.minecraft.entity.effect.StatusEffects.REGENERATION,80,1,false,false,true));
+        }
+    }
     private static ExecutionResult magicCircle(ServerPlayerEntity p,int pts){
         p.addStatusEffect(new StatusEffectInstance(SmoothEffects.MAGIC_CIRCLE,240+pts,0,false,false,true));
         p.addStatusEffect(new StatusEffectInstance(SmoothEffects.IMMOBILIZE,25,0,false,false,true));
@@ -83,8 +99,8 @@ public final class AscendancyRuntime {
     }
 
     private static ExecutionResult cyclonicCleave(ServerPlayerEntity p){
-        boolean cast=InternalSpellRuntime.target(p,"smooth_classes:cyclonic_cleave",p,3F);
-        return ExecutionResult.success(cast?1:0,"cyclonic_cleave");
+        boolean cast=InternalSpellRuntime.target(p,"smooth_classes:cyclonic_cleave",p,1F);
+        return cast?ExecutionResult.success(1,"cyclonic_cleave"):ExecutionResult.failure("Cyclonic Cleave spell unavailable.");
     }
 
     private static ExecutionResult arcaneSlash(ServerPlayerEntity p,int pts){
@@ -107,17 +123,17 @@ public final class AscendancyRuntime {
         LivingEntity target=nearestEnemy(p,10);
         if(target==null)return ExecutionResult.failure("No valid target within 10 blocks.");
         target.addStatusEffect(new SourceStatusEffectInstance(fx,duration,0,false,false,true,p));
-        ContinuedFx.sound(p,"magic_shamanic_spell_04",0.2F,1F);
+        SkillFx.sound(p,"magic_shamanic_spell_04",0.2F,1F);
         if(fx==SmoothEffects.TORMENT)
-            ContinuedFx.beam(p,target,net.minecraft.particle.ParticleTypes.SMOKE,20);
+            SkillFx.beam(p,target,net.minecraft.particle.ParticleTypes.SMOKE,20);
         if(fx==SmoothEffects.TORMENT && pts>29)
             target.addStatusEffect(new SourceStatusEffectInstance(SmoothEffects.TAUNTED,duration,0,false,false,true,p));
         return ExecutionResult.success(1,name);
     }
 
     private static ExecutionResult cataclysm(ServerPlayerEntity p){
-        boolean cast=InternalSpellRuntime.target(p,"smooth_classes:cataclysm",p,3F);
-        if(cast)ContinuedFx.sound(p,"energy_charge",0.3F,1F);
+        boolean cast=InternalSpellRuntime.target(p,"smooth_classes:cataclysm",p,1F);
+        if(cast)SkillFx.sound(p,"energy_charge",0.3F,1F);
         return cast?ExecutionResult.success(1,"cataclysm"):ExecutionResult.failure("Cataclysm spell unavailable.");
     }
 
@@ -131,7 +147,7 @@ public final class AscendancyRuntime {
         if(!p.hasStatusEffect(SmoothEffects.GOLDEN_AEGIS))
             return ExecutionResult.failure("Righteous Shield requires Golden Aegis.");
         boolean cast=InternalSpellRuntime.target(p,"smooth_classes:righteous_shield",p,1F);
-        return ExecutionResult.success(cast?1:0,"righteous_shield");
+        return cast?ExecutionResult.success(1,"righteous_shield"):ExecutionResult.failure("Righteous Shield spell unavailable.");
     }
 
     private static ExecutionResult chainbreaker(ServerPlayerEntity p,int pts){
@@ -139,11 +155,15 @@ public final class AscendancyRuntime {
         for(StatusEffectInstance e:p.getStatusEffects())
             if(e.getEffectType().getCategory()==StatusEffectCategory.HARMFUL)remove.add(e.getEffectType());
         remove.forEach(p::removeStatusEffect);
-        increment(p,SmoothEffects.MIGHT,120,1+pts/10,19);
-        increment(p,SmoothEffects.MARKSMANSHIP,120,1+pts/10,19);
-        if(pts>29)p.addStatusEffect(new StatusEffectInstance(SmoothEffects.UNDYING,120,0,false,false,true));
-        ContinuedFx.sound(p,"spell_arcane_cast",0.3F,1.1F);
-        ContinuedFx.plane(p,net.minecraft.particle.ParticleTypes.POOF,p.getBlockPos(),1,0,0.1,0);
+        increment(p,SmoothEffects.MIGHT,160,1+AscendancyBalance.points(pts)/10,19);
+        increment(p,SmoothEffects.MARKSMANSHIP,160,1+AscendancyBalance.points(pts)/10,19);
+        if(pts>=30){
+            p.addStatusEffect(new StatusEffectInstance(net.minecraft.entity.effect.StatusEffects.RESISTANCE,80,1,false,false,true));
+            p.addStatusEffect(new StatusEffectInstance(SmoothEffects.BARRIER,60,0,false,false,true));
+        }
+        SkillFx.orbit(p,net.minecraft.particle.ParticleTypes.END_ROD,1.5,32);
+        SkillFx.sound(p,"spell_arcane_cast",0.3F,1.1F);
+        SkillFx.plane(p,net.minecraft.particle.ParticleTypes.POOF,p.getBlockPos(),1,0,0.1,0);
         return ExecutionResult.success(1,"chainbreaker");
     }
 
@@ -154,12 +174,10 @@ public final class AscendancyRuntime {
             attacker.timeUntilRegen=0;
             attacker.damage(p.getDamageSources().indirectMagic(p,p),amount);
             attacker.timeUntilRegen=0;
-            ContinuedFx.beam(p,attacker,net.minecraft.particle.ParticleTypes.SMOKE,12);
+            SkillFx.beam(p,attacker,net.minecraft.particle.ParticleTypes.SMOKE,12);
             return false;
         }
-        if(p.hasStatusEffect(SmoothEffects.BONE_ARMOR)){
-            decrement(p,SmoothEffects.BONE_ARMOR,1);
-        }
+        // Bone charges are consumed only after a successful incoming hit.
         return true;
     }
 
@@ -174,9 +192,9 @@ public final class AscendancyRuntime {
         }
     }
 
-    /** Continued: >29 ascendancy points grants one Golden Aegis stack every 400 ticks. */
+    /** >29 ascendancy points grants one Golden Aegis stack every 200 ticks. */
     public static void serverTick(ServerPlayerEntity p){
-        if(unlocked(p,"righteous_shield")&&points(p)>29&&p.age%400==0)
+        if(unlocked(p,"righteous_shield")&&points(p)>29&&p.age%200==0)
             increment(p,SmoothEffects.GOLDEN_AEGIS,2400,1,15+points(p)/10);
     }
 
@@ -204,7 +222,7 @@ public final class AscendancyRuntime {
     private static void decrement(LivingEntity e,StatusEffect fx,int amount){
         StatusEffectInstance old=e.getStatusEffect(fx);if(old==null)return;
         int amp=old.getAmplifier()-amount;
-        if(amp<0)e.removeStatusEffect(fx);
-        else e.addStatusEffect(new StatusEffectInstance(fx,old.getDuration(),amp,false,false,true));
+        e.removeStatusEffect(fx);
+        if(amp>=0)e.addStatusEffect(new StatusEffectInstance(fx,old.getDuration(),amp,false,false,true));
     }
 }

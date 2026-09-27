@@ -14,12 +14,12 @@ import net.puffish.skillsmod.api.util.Result;
 import java.util.ArrayList;
 
 /**
- * Compatibility reward used by the SimplySkills-derived Puffish trees.
+ * Compatibility reward used by the Smooth Classes-derived Puffish trees.
  *
  * The reward intentionally stores only the passive skill id. Gameplay is owned by
  * Smooth Classes runtimes, which query Puffish unlock state. Registering this
  * reward makes Puffish able to deserialize the original tree definitions without
- * coupling the datapack to the old SimplySkills Java code.
+ * coupling the datapack to the old Smooth Classes Java code.
  */
 public final class PassiveSkillReward implements Reward {
     public static final Identifier ID = new Identifier("puffish_skills", "passive_skill");

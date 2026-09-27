@@ -1,3 +1,0 @@
-Battle Standard model geometry and texture sourced from user-provided Simply Swords Fabric 1.70.2 for Minecraft 1.20.1.
-Original project: Simply Swords by Sweenus / Timefall Development.
-Source asset: assets/simplyswords/textures/entity/battlestandard/battlestandard_texture.png

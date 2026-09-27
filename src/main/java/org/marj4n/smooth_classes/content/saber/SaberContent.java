@@ -8,7 +8,7 @@ import org.marj4n.smooth_classes.content.saber.talent.SaberTalent;
 import org.marj4n.smooth_classes.registry.AbilityRegistry;
 import org.marj4n.smooth_classes.registry.TalentRegistry;
 
-/** Baseline content ported from SimplySkills Crusader; runtime behavior is implemented separately. */
+/** Class abilities and talents; runtime behavior is implemented separately. */
 public final class SaberContent {
     private SaberContent() {}
 
@@ -43,6 +43,6 @@ public final class SaberContent {
     }
     public static List<Ability> abilities() { return ABILITIES; }
     public static List<Talent> talents() { return TALENTS; }
-    private static Ability ability(String path, String name, int cooldownTicks) { return new SaberAbility(path, name, "Ported Crusader signature ability.", cooldownTicks); }
-    private static Talent talent(String path, String name) { return new SaberTalent(path, name, "Ported Crusader talent node."); }
+    private static Ability ability(String path, String name, int cooldownTicks) { return new SaberAbility(path, name, "Saber signature ability.", cooldownTicks); }
+    private static Talent talent(String path, String name) { return new SaberTalent(path, name, "Saber talent node."); }
 }

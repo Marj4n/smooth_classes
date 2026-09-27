@@ -21,7 +21,7 @@ import net.spell_power.api.SpellSchool;
 import net.spell_power.api.SpellSchools;
 import org.marj4n.smooth_classes.effects.SmoothEffects;
 import org.marj4n.smooth_classes.integration.PuffishSkillsIntegration;
-import org.marj4n.smooth_classes.integration.SimplySkillsNodeIds;
+import org.marj4n.smooth_classes.integration.SkillNodeIds;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -48,39 +48,39 @@ public final class BasePathRuntime {
         tickEarthshaker(p);
         tickAttuned(p);
         // MAGIC (Initiate)
-        if (has(p, SimplySkillsNodeIds.initiateNullification) && p.age % 80 == 0) nullification(p);
-        if (has(p, SimplySkillsNodeIds.initiateLightningRod) && p.age % 500 == 0 && p.getWorld().isThundering())
+        if (has(p, SkillNodeIds.initiateNullification) && p.age % 80 == 0) nullification(p);
+        if (has(p, SkillNodeIds.initiateLightningRod) && p.age % 500 == 0 && p.getWorld().isThundering())
             inc(p,SmoothEffects.LIGHTNING_ATTUNEMENT,600,1,5);
-        if (has(p, SimplySkillsNodeIds.initiateLightningRod) && p.age % 40 == 0 && p.hasStatusEffect(SmoothEffects.SOULSHOCK))
+        if (has(p, SkillNodeIds.initiateLightningRod) && p.age % 40 == 0 && p.hasStatusEffect(SmoothEffects.SOULSHOCK))
             lightningRodPulse(p);
-        if (has(p, SimplySkillsNodeIds.wizardPath)) frail(p);
+        if (has(p, SkillNodeIds.wizardPath)) frail(p);
 
         // AGILITY (Wayfarer)
-        if (has(p,SimplySkillsNodeIds.wayfarerStealth) && p.age%10==0 && p.isSneaking()
+        if (has(p,SkillNodeIds.wayfarerStealth) && p.age%10==0 && p.isSneaking()
                 && !p.hasStatusEffect(SmoothEffects.REVEALED) && !targeted(p,20))
             p.addStatusEffect(new StatusEffectInstance(SmoothEffects.STEALTH,20,0,false,false,true));
         if (p.hasStatusEffect(SmoothEffects.STEALTH)) p.setInvisible(true);
         else if (!p.hasStatusEffect(StatusEffects.INVISIBILITY)) p.setInvisible(false);
-        if (has(p,SimplySkillsNodeIds.wayfarerSneak) && p.isSneaking() && p.age%10==0) {
+        if (has(p,SkillNodeIds.wayfarerSneak) && p.isSneaking() && p.age%10==0) {
             p.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED,15,2,false,false,true));
             if (p.hasStatusEffect(SmoothEffects.STEALTH)) inc(p,SmoothEffects.MIGHT,15,1,22);
         }
-        if (has(p,SimplySkillsNodeIds.wayfarerGuarding) && p.getOffHandStack().getItem() instanceof CrossbowItem && p.age%800==0)
+        if (has(p,SkillNodeIds.wayfarerGuarding) && p.getOffHandStack().getItem() instanceof CrossbowItem && p.age%800==0)
             inc(p,SmoothEffects.BARRIER,3400,1,3);
         if (p.age%20==0) slender(p);
 
         // STRENGTH (Warrior)
-        if (has(p,SimplySkillsNodeIds.warriorDeathDefy) && p.age%20==0) deathDefy(p);
-        if (has(p,SimplySkillsNodeIds.warriorCarnage) && p.age%15==0) carnage(p);
-        if (has(p,SimplySkillsNodeIds.bulwarkShieldMastery) && p.age%10==0) shieldMastery(p);
+        if (has(p,SkillNodeIds.warriorDeathDefy) && p.age%20==0) deathDefy(p);
+        if (has(p,SkillNodeIds.warriorCarnage) && p.age%15==0) carnage(p);
+        if (has(p,SkillNodeIds.bulwarkShieldMastery) && p.age%10==0) shieldMastery(p);
     }
 
     public static void onMeleeHit(ServerPlayerEntity p, LivingEntity target) {
         if (p.hasStatusEffect(SmoothEffects.STEALTH)) breakStealth(p);
-        if (has(p,SimplySkillsNodeIds.warriorFrenzy)) inc(p,SmoothEffects.EXHAUSTION,400,1,79);
-        if (has(p,SimplySkillsNodeIds.warriorSpellbreaker) && p.getRandom().nextInt(100) < 25)
+        if (has(p,SkillNodeIds.warriorFrenzy)) inc(p,SmoothEffects.EXHAUSTION,400,1,79);
+        if (has(p,SkillNodeIds.warriorSpellbreaker) && p.getRandom().nextInt(100) < 25)
             p.addStatusEffect(new StatusEffectInstance(SmoothEffects.RAGING_JAVELIN,50,0,false,false,true));
-        if (has(p,SimplySkillsNodeIds.warriorTwinstrike)) {
+        if (has(p,SkillNodeIds.warriorTwinstrike)) {
             int chance=p.hasStatusEffect(StatusEffects.HEALTH_BOOST)?30:15;
             if (p.getRandom().nextInt(100)<chance) {
                 target.timeUntilRegen=0;
@@ -88,7 +88,7 @@ public final class BasePathRuntime {
                 target.timeUntilRegen=0;
             }
         }
-        if (has(p,SimplySkillsNodeIds.warriorSwordfall)
+        if (has(p,SkillNodeIds.warriorSwordfall)
                 && (p.getMainHandStack().getItem() instanceof SwordItem || p.getMainHandStack().getItem() instanceof AxeItem)) {
             int chance = SmoothBalance.Strength.swordfallChance;
             if (p.hasStatusEffect(SmoothEffects.MIGHT)) chance *= 2;
@@ -96,19 +96,19 @@ public final class BasePathRuntime {
                 InternalSpellRuntime.target(p, "smooth_classes:physical_swordfall", target, 1.0F);
             }
         }
-        if (has(p,SimplySkillsNodeIds.wizardPath)) frail(p);
+        if (has(p,SkillNodeIds.wizardPath)) frail(p);
     }
 
 
     /** Incoming-damage hook, called by SmoothClasses ServerPlayerEntity mixin. */
     public static void onDamaged(ServerPlayerEntity p) {
-        if (has(p, SimplySkillsNodeIds.warriorHeavyArmorMastery)
-                || has(p, SimplySkillsNodeIds.warriorMediumArmorMastery)) armorMastery(p);
-        if (has(p, SimplySkillsNodeIds.warriorSpellbreaker) && p.getRandom().nextInt(100) < 25)
+        if (has(p, SkillNodeIds.warriorHeavyArmorMastery)
+                || has(p, SkillNodeIds.warriorMediumArmorMastery)) armorMastery(p);
+        if (has(p, SkillNodeIds.warriorSpellbreaker) && p.getRandom().nextInt(100) < 25)
             p.addStatusEffect(new StatusEffectInstance(SmoothEffects.SPELLBREAKING,100,0,false,false,true));
-        if (has(p, SimplySkillsNodeIds.initiateHasty)) inc(p, StatusEffects.SLOWNESS,20,1,4);
+        if (has(p, SkillNodeIds.initiateHasty)) inc(p, StatusEffects.SLOWNESS,20,1,4);
         if (p.hasStatusEffect(SmoothEffects.STEALTH)) {
-            if (has(p,SimplySkillsNodeIds.wayfarerReflexive) && p.getRandom().nextInt(100)<75)
+            if (has(p,SkillNodeIds.wayfarerReflexive) && p.getRandom().nextInt(100)<75)
                 inc(p,SmoothEffects.EVASION,100,1,1);
             p.removeStatusEffect(SmoothEffects.STEALTH);
             p.addStatusEffect(new StatusEffectInstance(SmoothEffects.REVEALED,180,5,false,false,true));
@@ -118,20 +118,20 @@ public final class BasePathRuntime {
 
     /** Shield-block hook for Bulwark Rebuke. */
     public static void onShieldHit(ServerPlayerEntity p, LivingEntity attacker) {
-        if (has(p,SimplySkillsNodeIds.bulwarkRebuke) && p.getRandom().nextInt(100)<25)
+        if (has(p,SkillNodeIds.bulwarkRebuke) && p.getRandom().nextInt(100)<25)
             attacker.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS,80,0,false,false,true));
     }
 
     /** Full-charge bow hook for Wayfarer Quickfire. */
     public static void onBowRelease(ServerPlayerEntity p, boolean fullCharge) {
         if (p.hasStatusEffect(SmoothEffects.STEALTH)) breakStealth(p);
-        if (fullCharge && has(p,SimplySkillsNodeIds.wayfarerQuickfire))
+        if (fullCharge && has(p,SkillNodeIds.wayfarerQuickfire))
             inc(p,SmoothEffects.MARKSMANSHIP,40,1,6);
     }
 
     /** Crossbow use hook for Wayfarer Unseen. */
     public static void onCrossbowUse(ServerPlayerEntity p, boolean charged) {
-        if (!charged && has(p,SimplySkillsNodeIds.wayfarerUnseen)) {
+        if (!charged && has(p,SkillNodeIds.wayfarerUnseen)) {
             if (!p.hasStatusEffect(SmoothEffects.STEALTH))
                 p.addStatusEffect(new StatusEffectInstance(SmoothEffects.STEALTH,45,0,false,false,true));
             else inc(p,SmoothEffects.MARKSMANSHIP,60,1,10);
@@ -140,11 +140,11 @@ public final class BasePathRuntime {
 
     /** Spell Engine cast hook: completes the Initiate/Magic branch. */
     public static void onFallTick(ServerPlayerEntity p) {
-        if (has(p,SimplySkillsNodeIds.initiateSlowfall) && p.fallDistance>3F && !p.hasStatusEffect(StatusEffects.SLOW_FALLING))
+        if (has(p,SkillNodeIds.initiateSlowfall) && p.fallDistance>3F && !p.hasStatusEffect(StatusEffects.SLOW_FALLING))
             p.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOW_FALLING,20,0,false,false,true));
-        if (has(p,SimplySkillsNodeIds.warriorGoliath) && p.fallDistance>3F && !p.hasStatusEffect(StatusEffects.SLOW_FALLING)) {
+        if (has(p,SkillNodeIds.warriorGoliath) && p.fallDistance>3F && !p.hasStatusEffect(StatusEffects.SLOW_FALLING)) {
             p.addStatusEffect(new StatusEffectInstance(SmoothEffects.EARTHSHAKER,200,0,false,false,true));
-            if(has(p,SimplySkillsNodeIds.warriorBound)){
+            if(has(p,SkillNodeIds.warriorBound)){
                 p.addStatusEffect(new StatusEffectInstance(StatusEffects.JUMP_BOOST,80,2,false,false,true));
                 p.addStatusEffect(new StatusEffectInstance(SmoothEffects.RAGING_JAVELIN,80,0,false,false,true));
             }
@@ -152,33 +152,33 @@ public final class BasePathRuntime {
     }
 
     public static void onSpellCast(ServerPlayerEntity p, List<Entity> targets, SpellSchool school) {
-        if (has(p,SimplySkillsNodeIds.initiateEmpower) && school != null) empower(p, school);
+        if (has(p,SkillNodeIds.initiateEmpower) && school != null) empower(p, school);
 
         if (p.hasStatusEffect(SmoothEffects.STEALTH)) {
             breakStealth(p);
-            if (has(p,SimplySkillsNodeIds.initiateWhisperedWizardry))
+            if (has(p,SkillNodeIds.initiateWhisperedWizardry))
                 inc(p,SmoothEffects.SPELLFORGED,80,1,5);
-        } else if (has(p,SimplySkillsNodeIds.initiateSpellcloak) && !p.hasStatusEffect(SmoothEffects.REVEALED)) {
+        } else if (has(p,SkillNodeIds.initiateSpellcloak) && !p.hasStatusEffect(SmoothEffects.REVEALED)) {
             p.addStatusEffect(new StatusEffectInstance(SmoothEffects.STEALTH,40,0,false,false,true));
         }
 
-        if (has(p,SimplySkillsNodeIds.initiateOverload)) inc(p,SmoothEffects.OVERLOAD,160,1,9);
+        if (has(p,SkillNodeIds.initiateOverload)) inc(p,SmoothEffects.OVERLOAD,160,1,9);
 
         if (targets != null && !targets.isEmpty()) {
-            if (has(p,SimplySkillsNodeIds.initiateEldritchEnfeeblement)) eldritchEnfeeblement(p);
-            if (has(p,SimplySkillsNodeIds.initiatePerilousPrecision)) perilousPrecision(p);
+            if (has(p,SkillNodeIds.initiateEldritchEnfeeblement)) eldritchEnfeeblement(p);
+            if (has(p,SkillNodeIds.initiatePerilousPrecision)) perilousPrecision(p);
         }
 
         if (school != null && school.id.toString().contains("physical_ranged")
-                && has(p,SimplySkillsNodeIds.wayfarerQuickfire))
+                && has(p,SkillNodeIds.wayfarerQuickfire))
             inc(p,SmoothEffects.MARKSMANSHIP,40,1,6);
     }
 
     private static void armorMastery(ServerPlayerEntity p) {
         if (p.getRandom().nextInt(100)>=10) return;
-        if (p.getArmor()>=15 && has(p,SimplySkillsNodeIds.warriorHeavyArmorMastery))
+        if (p.getArmor()>=15 && has(p,SkillNodeIds.warriorHeavyArmorMastery))
             p.addStatusEffect(new StatusEffectInstance(StatusEffects.STRENGTH,100,0,false,false,true));
-        else if (has(p,SimplySkillsNodeIds.warriorMediumArmorMastery))
+        else if (has(p,SkillNodeIds.warriorMediumArmorMastery))
             p.addStatusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION,100,0,false,false,true));
     }
 
@@ -194,7 +194,7 @@ public final class BasePathRuntime {
     }
 
     private static void tickAttuned(ServerPlayerEntity p) {
-        if (!has(p,SimplySkillsNodeIds.initiateAttuned) || p.age%20!=0) return;
+        if (!has(p,SkillNodeIds.initiateAttuned) || p.age%20!=0) return;
         StatusEffect[] attunements={SmoothEffects.ARCANE_ATTUNEMENT,SmoothEffects.SOUL_ATTUNEMENT,
                 SmoothEffects.HOLY_ATTUNEMENT,SmoothEffects.FIRE_ATTUNEMENT,
                 SmoothEffects.FROST_ATTUNEMENT,SmoothEffects.LIGHTNING_ATTUNEMENT};
@@ -231,7 +231,7 @@ public final class BasePathRuntime {
         }
         Float fall=EARTHSHAKER_FALL.remove(p.getUuid());
         if(fall==null||fall<=0)return;
-        float damage=2.0F + (has(p,SimplySkillsNodeIds.warriorHeavyWeight)?fall*0.3F:0F);
+        float damage=2.0F + (has(p,SkillNodeIds.warriorHeavyWeight)?fall*0.3F:0F);
         for(LivingEntity e:p.getWorld().getEntitiesByClass(LivingEntity.class,p.getBoundingBox().expand(4),e->e!=p&&e.isAlive())){
             if(e instanceof PlayerEntity other && !p.shouldDamagePlayer(other))continue;
             e.timeUntilRegen=0;e.damage(p.getDamageSources().playerAttack(p),damage);
@@ -254,7 +254,7 @@ public final class BasePathRuntime {
     }
     private static void shieldMastery(ServerPlayerEntity p) {
         if(!(p.getOffHandStack().getItem() instanceof ShieldItem))return;
-        int a=0;if(has(p,SimplySkillsNodeIds.bulwarkShieldMasterySkilled))a=2;else if(has(p,SimplySkillsNodeIds.bulwarkShieldMasteryProficient))a=1;
+        int a=0;if(has(p,SkillNodeIds.bulwarkShieldMasterySkilled))a=2;else if(has(p,SkillNodeIds.bulwarkShieldMasteryProficient))a=1;
         p.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE,15,a,false,false,true));
         p.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS,15,0,false,false,true));
     }
@@ -266,7 +266,7 @@ public final class BasePathRuntime {
     }
     private static void slender(ServerPlayerEntity p) {
         int armor=p.getArmor();if(armor>=35)return;
-        if(has(p,SimplySkillsNodeIds.roguePath)||has(p,SimplySkillsNodeIds.rangerPath)||has(p,SimplySkillsNodeIds.wizardPath))
+        if(has(p,SkillNodeIds.roguePath)||has(p,SkillNodeIds.rangerPath)||has(p,SkillNodeIds.wizardPath))
             p.addStatusEffect(new StatusEffectInstance(SmoothEffects.AGILE,25,(35-armor)/5,false,false,false));
     }
     private static void nullification(ServerPlayerEntity p) {
@@ -277,7 +277,7 @@ public final class BasePathRuntime {
         }
     }
     private static void breakStealth(ServerPlayerEntity p) {
-        if(has(p,SimplySkillsNodeIds.wayfarerReflexive)){inc(p,SmoothEffects.MIGHT,40,1,20);inc(p,SmoothEffects.MARKSMANSHIP,40,1,20);}
+        if(has(p,SkillNodeIds.wayfarerReflexive)){inc(p,SmoothEffects.MIGHT,40,1,20);inc(p,SmoothEffects.MARKSMANSHIP,40,1,20);}
         p.removeStatusEffect(SmoothEffects.STEALTH);if(p.hasStatusEffect(StatusEffects.INVISIBILITY))p.removeStatusEffect(StatusEffects.INVISIBILITY);
         p.addStatusEffect(new StatusEffectInstance(SmoothEffects.REVEALED,180,5,false,false,true));p.setInvisible(false);
     }

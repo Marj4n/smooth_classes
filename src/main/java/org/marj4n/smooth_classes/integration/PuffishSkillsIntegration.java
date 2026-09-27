@@ -46,7 +46,7 @@ public final class PuffishSkillsIntegration {
     }
 
 
-    /** Exact Continued ascendancy scaling: every unlocked skill in the
+    /** Exact ascendancy scaling: every unlocked skill in the
      *  ascendancy category contributes one point, including stat nodes. */
     private static final String[] ASCENDANCY_SKILLS = {
                 "xpfympjreeee2xg3", "19feeqjl8v2tw7qs", "684vl5wk1uh39tgs", "j29h5uttpvxwtsrl", "uz120cj1eh3m47f1", "8vd2keep69wmz91q", "m9rtlf3ie21632pa", "9b93chqgrmfdvu5h",
@@ -133,7 +133,7 @@ public final class PuffishSkillsIntegration {
         return count;
     }
 
-    /** Continued parity: Ascendancy becomes visible/unlocked after more than 40
+    /** parity: Ascendancy becomes visible/unlocked after more than 40
      * unlocked skills in the base tree category. */
     public static void ensureAscendancyUnlocked(ServerPlayerEntity player) {
         Optional<Category> tree=category(TREE);

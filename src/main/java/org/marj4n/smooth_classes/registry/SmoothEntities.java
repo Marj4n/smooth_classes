@@ -25,6 +25,9 @@ public final class SmoothEntities {
     public static final EntityType<BloodRainEntity> BLOOD_RAIN = Registry.register(Registries.ENTITY_TYPE,
             SmoothClasses.id("blood_rain"), FabricEntityTypeBuilder.create(SpawnGroup.MISC, BloodRainEntity::new)
                     .dimensions(EntityDimensions.fixed(1F,1F)).trackRangeBlocks(160).build());
+    public static final EntityType<HighBeamEntity> HIGH_BEAM = Registry.register(Registries.ENTITY_TYPE,
+            SmoothClasses.id("high_beam"), FabricEntityTypeBuilder.create(SpawnGroup.MISC, HighBeamEntity::new)
+                    .dimensions(EntityDimensions.fixed(1F,4F)).trackRangeBlocks(128).trackedUpdateRate(1).build());
     public static void register() {
         FabricDefaultAttributeRegistry.register(DREADGLARE, DreadglareEntity.createAttributes());
         FabricDefaultAttributeRegistry.register(GREATER_DREADGLARE, GreaterDreadglareEntity.createAttributes());

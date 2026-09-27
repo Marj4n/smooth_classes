@@ -27,7 +27,7 @@ import org.marj4n.smooth_classes.entity.WraithEntity;
 import org.marj4n.smooth_classes.registry.SmoothEntities;
 import org.marj4n.smooth_classes.runtime.AbilityRuntime;
 import org.marj4n.smooth_classes.runtime.SpellPowerRuntime;
-import org.marj4n.smooth_classes.runtime.ContinuedFx;
+import org.marj4n.smooth_classes.runtime.SkillFx;
 import net.spell_power.api.SpellPower;
 import net.spell_power.api.SpellSchools;
 
@@ -50,7 +50,7 @@ public final class AvengerMinionGameplay {
                 spawned++;
             }
         }
-        if (spawned > 0) ContinuedFx.sound(owner, "magic_shamanic_voice_20", 0.3F, 1.0F);
+        if (spawned > 0) SkillFx.sound(owner, "magic_shamanic_voice_20", 0.3F, 1.0F);
         return spawned;
     }
 
@@ -157,7 +157,7 @@ public final class AvengerMinionGameplay {
     }
 
     /**
-     * Continued-style ranged pulse for Dreadglares.
+     * ranged pulse for Dreadglares.
      * Wraiths keep melee combat and receive their elemental/wither rider on hit.
      */
     public static boolean trySpecialAttack(
@@ -166,14 +166,14 @@ public final class AvengerMinionGameplay {
     ) {
         LivingEntity target = minion.getTarget();
 
-        // Continued intentionally rolls a fresh divisor every tick rather than using a fixed cooldown.
+        // intentionally rolls a fresh divisor every tick rather than using a fixed cooldown.
         int cadence = minion instanceof WraithEntity ? 20 + minion.getRandom().nextInt(30)
                 : minion instanceof GreaterDreadglareEntity ? 10 + minion.getRandom().nextInt(10)
                 : 15 + minion.getRandom().nextInt(15);
         if (minion.age % cadence != 0) return false;
 
         if (minion instanceof WraithEntity) {
-            // Continued Wraith does not use melee target goals. Every pulse it independently
+            // Wraith does not use melee target goals. Every pulse it independently
             // finds the nearest non-passive valid living target in a 16 block box.
             Entity nearest=minion.getWorld().getOtherEntities(
                             minion,
@@ -189,7 +189,7 @@ public final class AvengerMinionGameplay {
                     .orElse(null);
             if (!(nearest instanceof LivingEntity found) || !org.marj4n.smooth_classes.integration.OptionalCompatRuntime.canHarm(owner,found)) return false;
             target=found;
-            // Continued Wraiths are ranged casters rather than ordinary melee summons.
+            // Wraiths are ranged casters rather than ordinary melee summons.
             float damage = AbilityRuntime.hasTalent(owner, AvengerContent.WITHER_WRAITHS.id())
                     ? SpellPowerRuntime.soul(owner, 0.5)
                     : AbilityRuntime.hasTalent(owner, AvengerContent.FROST_WRAITHS.id())
@@ -202,7 +202,7 @@ public final class AvengerMinionGameplay {
             else if (AbilityRuntime.hasTalent(owner, AvengerContent.FROST_WRAITHS.id()))
                 target.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 160, 0), minion);
             applyAttackTalents(owner,minion,target);
-            // Continued Wraith Legion: proc chance is 5% per harmful effect currently
+            // Wraith Legion: proc chance is 5% per harmful effect currently
             // carried by this wraith; Agony lasts 200 + Ascendancy points and owns its caster.
             if (AbilityRuntime.hasTalent(owner, AvengerContent.WRAITH_LEGION.id())) {
                 int chanceCheck=countHarmfulEffects(minion)*5;
@@ -218,7 +218,7 @@ public final class AvengerMinionGameplay {
 
         if (target == null || !target.isAlive() || target == owner || minion.squaredDistanceTo(target) > 20.0 * 20.0) return false;
 
-        // Continued fires only when the Dreadglare is facing the target and is not point blank.
+        // fires only when the Dreadglare is facing the target and is not point blank.
         net.minecraft.util.math.Vec3d look=minion.getRotationVec(1F);
         net.minecraft.util.math.Vec3d to=target.getPos().subtract(minion.getPos()).normalize();
         double threshold=Math.cos(Math.toRadians(minion instanceof GreaterDreadglareEntity?20:15));
@@ -322,12 +322,12 @@ public final class AvengerMinionGameplay {
             }
         }
 
-        // Continued Pestilence moves one harmful stack from the minion to its victim.
+        // Pestilence moves one harmful stack from the minion to its victim.
         if (AbilityRuntime.hasTalent(owner, AvengerContent.PESTILENCE.id())) {
             transferHarmfulStack(minion, target);
         }
 
-        // Continued applies Taunted + Might here only for Greater Dreadglare melee hits.
+        // applies Taunted + Might here only for Greater Dreadglare melee hits.
         if (minion instanceof GreaterDreadglareEntity) {
             target.addStatusEffect(new SourceStatusEffectInstance(
                     SmoothEffects.TAUNTED,100,0,false,false,true,minion), minion);
@@ -386,8 +386,8 @@ public final class AvengerMinionGameplay {
                 && !minions.isEmpty()) {
             AvengerMinionEntity recipient = minions.get(owner.getRandom().nextInt(minions.size()));
             transferHarmfulStack(owner, recipient);
-            ContinuedFx.beam(owner, recipient, ParticleTypes.EFFECT, 12);
-            ContinuedFx.sound(owner, "magic_shamanic_spell_03", 0.1F, 1.5F);
+            SkillFx.beam(owner, recipient, ParticleTypes.EFFECT, 12);
+            SkillFx.sound(owner, "magic_shamanic_spell_03", 0.1F, 1.5F);
         }
     }
 
@@ -412,9 +412,9 @@ public final class AvengerMinionGameplay {
         for (AvengerMinionEntity sacrifice : sacrifices) {
             owner.heal(heal);
             sacrifice.damage(owner.getDamageSources().generic(), heal);
-            ContinuedFx.beam(owner, sacrifice, ParticleTypes.POOF, 20);
+            SkillFx.beam(owner, sacrifice, ParticleTypes.POOF, 20);
         }
-        if (!sacrifices.isEmpty()) ContinuedFx.sound(owner, "magic_shamanic_voice_20", 0.2F, 1.3F);
+        if (!sacrifices.isEmpty()) SkillFx.sound(owner, "magic_shamanic_voice_20", 0.2F, 1.3F);
     }
 
     private static List<AvengerMinionEntity> ownedMinions(
@@ -472,7 +472,7 @@ public final class AvengerMinionGameplay {
                                 )
                         )
                 );
-                ContinuedFx.sound(owner, "magic_shamanic_spell_02", 0.2F, 1.0F);
+                SkillFx.sound(owner, "magic_shamanic_spell_02", 0.2F, 1.0F);
             }
         }
     }
@@ -494,7 +494,7 @@ public final class AvengerMinionGameplay {
             incrementEffect(minion, StatusEffects.STRENGTH, 200, 3);
             incrementEffect(minion, StatusEffects.RESISTANCE, 200, 3);
         }
-        ContinuedFx.sound(owner, "magic_shamanic_voice_20", 0.2F, 1.2F);
+        SkillFx.sound(owner, "magic_shamanic_voice_20", 0.2F, 1.2F);
     }
 
     private static void incrementBoneArmor(ServerPlayerEntity owner) {
@@ -556,13 +556,13 @@ public final class AvengerMinionGameplay {
                             owner.getDamageSources().indirectMagic(owner, owner),
                             damage
                     );
-                    ContinuedFx.beam(minion, entity, ParticleTypes.SMOKE, 8);
+                    SkillFx.beam(minion, entity, ParticleTypes.SMOKE, 8);
                 });
-        ContinuedFx.sound(owner, "magic_shamanic_spell_03", 0.1F, 1.0F);
+        SkillFx.sound(owner, "magic_shamanic_spell_03", 0.1F, 1.0F);
         owner.getServerWorld().playSound(null, minion.getBlockPos(), SoundEvents.ENTITY_GENERIC_EXPLODE,
                 minion.getSoundCategory(), 0.1F, 1.0F);
-        ContinuedFx.orbit(minion, ParticleTypes.EXPLOSION, 1, 2);
-        ContinuedFx.orbit(minion, ParticleTypes.SOUL, 2, 20);
-        ContinuedFx.orbit(minion, ParticleTypes.SMOKE, radius, 20);
+        SkillFx.orbit(minion, ParticleTypes.EXPLOSION, 1, 2);
+        SkillFx.orbit(minion, ParticleTypes.SOUL, 2, 20);
+        SkillFx.orbit(minion, ParticleTypes.SMOKE, radius, 20);
     }
 }

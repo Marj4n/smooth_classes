@@ -24,6 +24,8 @@ public abstract class ServerPlayerEntityMixin {
     @ModifyVariable(method="damage", at=@At("HEAD"), argsOnly=true)
     private float smooth_classes$modifyIncomingDamage(float amount) {
         ServerPlayerEntity player=(ServerPlayerEntity)(Object)this;
+        if(player.hasStatusEffect(SmoothEffects.BONE_ARMOR))
+            amount*=org.marj4n.smooth_classes.runtime.AscendancyBalance.boneMultiplier(org.marj4n.smooth_classes.runtime.AscendancyRuntime.points(player));
         if (player.hasStatusEffect(SmoothEffects.RAGE)) {
             float modifier=1F + player.getStatusEffect(SmoothEffects.RAGE).getAmplifier()/200F;
             return amount * modifier;

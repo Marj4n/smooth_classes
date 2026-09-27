@@ -8,16 +8,16 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import org.marj4n.smooth_classes.registry.SmoothSounds;
 
-/** Server-side visual/audio helpers ported from SimplySkills Continued HelperMethods. */
-public final class ContinuedFx {
-    private ContinuedFx() {}
+/** Server-side visual/audio helpers Smooth Classes HelperMethods. */
+public final class SkillFx {
+    private SkillFx() {}
 
     public static void sound(Entity entity, String id, float volume, float pitch) {
         var event = SmoothSounds.get(id);
         if (event != null) entity.getWorld().playSoundFromEntity(null, entity, event, SoundCategory.PLAYERS, volume, pitch);
     }
 
-    /** Continued HelperMethods.spawnParticle equivalent anchored to an entity. */
+    /** HelperMethods.spawnParticle equivalent anchored to an entity. */
     public static void particle(Entity entity, ParticleEffect particle,
                                 double vx, double vy, double vz) {
         if (!(entity.getWorld() instanceof ServerWorld world)) return;

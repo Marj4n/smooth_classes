@@ -9,8 +9,8 @@ public final class ArcherClass implements PlayerClass {
     public static final Identifier ID = SmoothClasses.id("archer");
     @Override public Identifier id() { return ID; }
     @Override public String name() { return "Archer"; }
-    @Override public String description() { return "Smooth Classes successor to SimplySkills Ranger."; }
-    @Override public Identifier legacySource() { return new Identifier("simplyskills", "ranger"); }
+    @Override public String description() { return "Ranged combat, precision shots, and elemental arrows."; }
+
     @Override public List<Identifier> abilityIds() { return ArcherContent.abilities().stream().map(a -> a.id()).toList(); }
     @Override public List<Identifier> talentIds() { return ArcherContent.talents().stream().map(t -> t.id()).toList(); }
 }

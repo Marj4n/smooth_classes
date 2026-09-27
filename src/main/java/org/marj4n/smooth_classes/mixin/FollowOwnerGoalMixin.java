@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-/** Continued keeps Dreadglares close to their owner without unnecessary teleporting. */
+/** keeps Dreadglares close to their owner without unnecessary teleporting. */
 @Mixin(FollowOwnerGoal.class)
 public abstract class FollowOwnerGoalMixin {
     @Shadow private TameableEntity tameable;

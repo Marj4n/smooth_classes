@@ -8,7 +8,7 @@ import org.marj4n.smooth_classes.content.archer.talent.ArcherTalent;
 import org.marj4n.smooth_classes.registry.AbilityRegistry;
 import org.marj4n.smooth_classes.registry.TalentRegistry;
 
-/** Baseline content ported from SimplySkills Ranger; runtime behavior is implemented separately. */
+/** Class abilities and talents; runtime behavior is implemented separately. */
 public final class ArcherContent {
     private ArcherContent() {}
 
@@ -45,6 +45,6 @@ public final class ArcherContent {
     }
     public static List<Ability> abilities() { return ABILITIES; }
     public static List<Talent> talents() { return TALENTS; }
-    private static Ability ability(String path, String name, int cooldownTicks) { return new ArcherAbility(path, name, "Ported Ranger signature ability.", cooldownTicks); }
-    private static Talent talent(String path, String name) { return new ArcherTalent(path, name, "Ported Ranger talent node."); }
+    private static Ability ability(String path, String name, int cooldownTicks) { return new ArcherAbility(path, name, "Archer signature ability.", cooldownTicks); }
+    private static Talent talent(String path, String name) { return new ArcherTalent(path, name, "Archer talent node."); }
 }

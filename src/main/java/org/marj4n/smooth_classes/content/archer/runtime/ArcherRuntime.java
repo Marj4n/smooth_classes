@@ -20,7 +20,7 @@ import org.marj4n.smooth_classes.runtime.ExecutionResult;
 import org.marj4n.smooth_classes.runtime.ClassEffectRuntime;
 import org.marj4n.smooth_classes.effects.SmoothEffects;
 import org.marj4n.smooth_classes.integration.PuffishSkillsIntegration;
-import org.marj4n.smooth_classes.integration.SimplySkillsNodeIds;
+import org.marj4n.smooth_classes.integration.SkillNodeIds;
 import org.marj4n.smooth_classes.runtime.InternalSpellRuntime;
 import org.marj4n.smooth_classes.integration.OptionalCompatRuntime;
 
@@ -47,11 +47,11 @@ public final class ArcherRuntime {
         }
         int radius = 4;
         if (PuffishSkillsIntegration.isSkillUnlocked(PuffishSkillsIntegration.ARCHER,
-                SimplySkillsNodeIds.rangerSpecialisationElementalArrowsRadiusThree, player)) radius += 6;
+                SkillNodeIds.rangerSpecialisationElementalArrowsRadiusThree, player)) radius += 6;
         else if (PuffishSkillsIntegration.isSkillUnlocked(PuffishSkillsIntegration.ARCHER,
-                SimplySkillsNodeIds.rangerSpecialisationElementalArrowsRadiusTwo, player)) radius += 4;
+                SkillNodeIds.rangerSpecialisationElementalArrowsRadiusTwo, player)) radius += 4;
         else if (PuffishSkillsIntegration.isSkillUnlocked(PuffishSkillsIntegration.ARCHER,
-                SimplySkillsNodeIds.rangerSpecialisationElementalArrowsRadiusOne, player)) radius += 2;
+                SkillNodeIds.rangerSpecialisationElementalArrowsRadiusOne, player)) radius += 2;
         Vec3d center = aimedPosition(player, 120);
         var box = new net.minecraft.util.math.Box(center, center).expand(radius);
         var targets = player.getWorld().getEntitiesByClass(LivingEntity.class, box,
@@ -119,18 +119,18 @@ public final class ArcherRuntime {
         return ExecutionResult.success(1, "arrow_rain");
     }
 
-    /** Continued Arrow Rain is consumed by a fully drawn bow release, not passively over time. */
+    /** Arrow Rain is consumed by a fully drawn bow release, not passively over time. */
     public static boolean fireArrowRain(ServerPlayerEntity player) {
         if(!AbilityRuntime.isClass(player,ArcherClass.ID)||!player.hasStatusEffect(SmoothEffects.ARROW_RAIN))return false;
         ArrowRainPlan plan=arrowRain(player);
         int radius=3;
-        if(PuffishSkillsIntegration.isSkillUnlocked(PuffishSkillsIntegration.ARCHER,SimplySkillsNodeIds.rangerSpecialisationArrowRainRadiusThree,player))radius+=3;
-        else if(PuffishSkillsIntegration.isSkillUnlocked(PuffishSkillsIntegration.ARCHER,SimplySkillsNodeIds.rangerSpecialisationArrowRainRadiusTwo,player))radius+=2;
-        else if(PuffishSkillsIntegration.isSkillUnlocked(PuffishSkillsIntegration.ARCHER,SimplySkillsNodeIds.rangerSpecialisationArrowRainRadiusOne,player))radius+=1;
+        if(PuffishSkillsIntegration.isSkillUnlocked(PuffishSkillsIntegration.ARCHER,SkillNodeIds.rangerSpecialisationArrowRainRadiusThree,player))radius+=3;
+        else if(PuffishSkillsIntegration.isSkillUnlocked(PuffishSkillsIntegration.ARCHER,SkillNodeIds.rangerSpecialisationArrowRainRadiusTwo,player))radius+=2;
+        else if(PuffishSkillsIntegration.isSkillUnlocked(PuffishSkillsIntegration.ARCHER,SkillNodeIds.rangerSpecialisationArrowRainRadiusOne,player))radius+=1;
         int volleys=2;
-        if(PuffishSkillsIntegration.isSkillUnlocked(PuffishSkillsIntegration.ARCHER,SimplySkillsNodeIds.rangerSpecialisationArrowRainVolleyThree,player))volleys+=3;
-        else if(PuffishSkillsIntegration.isSkillUnlocked(PuffishSkillsIntegration.ARCHER,SimplySkillsNodeIds.rangerSpecialisationArrowRainVolleyTwo,player))volleys+=2;
-        else if(PuffishSkillsIntegration.isSkillUnlocked(PuffishSkillsIntegration.ARCHER,SimplySkillsNodeIds.rangerSpecialisationArrowRainVolleyOne,player))volleys+=1;
+        if(PuffishSkillsIntegration.isSkillUnlocked(PuffishSkillsIntegration.ARCHER,SkillNodeIds.rangerSpecialisationArrowRainVolleyThree,player))volleys+=3;
+        else if(PuffishSkillsIntegration.isSkillUnlocked(PuffishSkillsIntegration.ARCHER,SkillNodeIds.rangerSpecialisationArrowRainVolleyTwo,player))volleys+=2;
+        else if(PuffishSkillsIntegration.isSkillUnlocked(PuffishSkillsIntegration.ARCHER,SkillNodeIds.rangerSpecialisationArrowRainVolleyOne,player))volleys+=1;
         int density=25;
         int range=64;
         Vec3d eye=player.getEyePos();
@@ -207,9 +207,9 @@ public final class ArcherRuntime {
     public static ExecutionResult executeElementalArrows(ServerPlayerEntity player) {
         require(player);
         int stacks=4;
-        if(PuffishSkillsIntegration.isSkillUnlocked(PuffishSkillsIntegration.ARCHER,SimplySkillsNodeIds.rangerSpecialisationElementalArrowsStacksThree,player))stacks+=3;
-        else if(PuffishSkillsIntegration.isSkillUnlocked(PuffishSkillsIntegration.ARCHER,SimplySkillsNodeIds.rangerSpecialisationElementalArrowsStacksTwo,player))stacks+=2;
-        else if(PuffishSkillsIntegration.isSkillUnlocked(PuffishSkillsIntegration.ARCHER,SimplySkillsNodeIds.rangerSpecialisationElementalArrowsStacksOne,player))stacks+=1;
+        if(PuffishSkillsIntegration.isSkillUnlocked(PuffishSkillsIntegration.ARCHER,SkillNodeIds.rangerSpecialisationElementalArrowsStacksThree,player))stacks+=3;
+        else if(PuffishSkillsIntegration.isSkillUnlocked(PuffishSkillsIntegration.ARCHER,SkillNodeIds.rangerSpecialisationElementalArrowsStacksTwo,player))stacks+=2;
+        else if(PuffishSkillsIntegration.isSkillUnlocked(PuffishSkillsIntegration.ARCHER,SkillNodeIds.rangerSpecialisationElementalArrowsStacksOne,player))stacks+=1;
         ClassEffectRuntime.apply(player, SmoothEffects.ELEMENTAL_ARROWS, 600, stacks);
         return ExecutionResult.success(1, "elemental_arrows");
     }

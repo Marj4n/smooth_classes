@@ -8,7 +8,7 @@ import org.marj4n.smooth_classes.content.foreigner.talent.ForeignerTalent;
 import org.marj4n.smooth_classes.registry.AbilityRegistry;
 import org.marj4n.smooth_classes.registry.TalentRegistry;
 
-/** Baseline content ported from SimplySkills Spellblade; runtime behavior is implemented separately. */
+/** Class abilities and talents; runtime behavior is implemented separately. */
 public final class ForeignerContent {
     private ForeignerContent() {}
 
@@ -36,6 +36,6 @@ public final class ForeignerContent {
     }
     public static List<Ability> abilities() { return ABILITIES; }
     public static List<Talent> talents() { return TALENTS; }
-    private static Ability ability(String path, String name, int cooldownTicks) { return new ForeignerAbility(path, name, "Ported Spellblade signature ability.", cooldownTicks); }
-    private static Talent talent(String path, String name) { return new ForeignerTalent(path, name, "Ported Spellblade talent node."); }
+    private static Ability ability(String path, String name, int cooldownTicks) { return new ForeignerAbility(path, name, "Foreigner signature ability.", cooldownTicks); }
+    private static Talent talent(String path, String name) { return new ForeignerTalent(path, name, "Foreigner talent node."); }
 }

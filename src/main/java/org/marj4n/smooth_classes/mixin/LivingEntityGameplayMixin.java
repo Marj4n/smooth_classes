@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-/** Core Continued rules that belong to every living entity, including nonplayers. */
+/** Core rules that belong to every living entity, including nonplayers. */
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityGameplayMixin {
     @Inject(method = "canTarget(Lnet/minecraft/entity/LivingEntity;)Z", at = @At("HEAD"), cancellable = true)

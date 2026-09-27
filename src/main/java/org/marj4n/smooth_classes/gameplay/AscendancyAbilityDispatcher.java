@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-/** Cast surface for all thirteen Continued ascendancy abilities. */
+/** Cast surface for all thirteen ascendancy abilities. */
 public final class AscendancyAbilityDispatcher {
     private AscendancyAbilityDispatcher() {}
 
@@ -20,6 +20,7 @@ public final class AscendancyAbilityDispatcher {
     }
 
     public static DispatchResult castNamed(ServerPlayerEntity p,String raw){
+        if(org.marj4n.smooth_classes.runtime.WhenOnHighRuntime.active(p))return DispatchResult.fail("When On High is still channeling.");
         String ability=raw.toLowerCase(Locale.ROOT);
         if(!AscendancyRuntime.unlocked(p,ability))return DispatchResult.fail(ability+" is not unlocked in Puffish Ascendancy.");
         Identifier id=new Identifier("smooth_classes","ascendancy_"+ability);
@@ -27,11 +28,11 @@ public final class AscendancyAbilityDispatcher {
         if(remaining>0)return DispatchResult.fail(ability+" cooldown "+String.format(Locale.ROOT,"%.1f",remaining/20D)+"s");
         ExecutionResult r=AscendancyRuntime.cast(p,ability);
         if(!r.success())return DispatchResult.fail(r.detail());
-        if(!"magic_circle".equals(ability)) AbilityCooldowns.start(p,id,"torment".equals(ability) ? 800 : AbilityCooldowns.adjustedTicks(p,cooldownTicks(ability)));
+        if(!"magic_circle".equals(ability)&&!"agony".equals(ability)) AbilityCooldowns.start(p,id,"torment".equals(ability) ? 800 : effectiveCooldownTicks(p,ability));
         return new DispatchResult(true,ability,r.detail());
     }
 
-    /** Continued HUD slot selection: the unlocked ascendancy ability appears on the R slot. */
+    /** HUD slot selection: the unlocked ascendancy ability appears on the R slot. */
     public static String selectedAbility(ServerPlayerEntity p){
         List<String> values=unlocked(p);
         return values.isEmpty()?"":values.get(0);
@@ -43,21 +44,12 @@ public final class AscendancyAbilityDispatcher {
         return out;
     }
 
+    public static int effectiveCooldownTicks(ServerPlayerEntity p,String ability){
+        int base=cooldownTicks(ability);
+        if("torment".equals(ability)||"magic_circle".equals(ability)||"agony".equals(ability))return base;
+        return Math.max((int)Math.ceil(base*.65),AbilityCooldowns.adjustedTicks(p,base));
+    }
     public static int cooldownTicks(String ability){
-        return switch(ability){
-            case "righteous_hammers" -> 60*20;
-            case "bone_armor" -> 70*20;
-            case "cyclonic_cleave" -> 15*20;
-            case "magic_circle" -> 60*20;
-            case "arcane_slash" -> 12*20;
-            case "agony","torment" -> 40*20;
-            case "rapidfire" -> 30*20;
-            case "cataclysm" -> 60*20;
-            case "ghostwalk" -> 30*20;
-            case "skyward_sunder" -> 16*20;
-            case "righteous_shield" -> 6*20;
-            case "chainbreaker" -> 45*20;
-            default -> 25*20;
-        };
+        return org.marj4n.smooth_classes.runtime.AscendancyBalance.cooldownTicks(ability);
     }
 }

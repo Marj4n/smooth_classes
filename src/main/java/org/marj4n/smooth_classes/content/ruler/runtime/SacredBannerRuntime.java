@@ -14,7 +14,7 @@ import org.joml.Vector3f;
 import org.marj4n.smooth_classes.entity.SacredBannerEntity;
 import org.marj4n.smooth_classes.registry.SmoothEntities;
 import org.marj4n.smooth_classes.integration.PuffishSkillsIntegration;
-import org.marj4n.smooth_classes.integration.SimplySkillsNodeIds;
+import org.marj4n.smooth_classes.integration.SkillNodeIds;
 import org.marj4n.smooth_classes.runtime.ExecutionResult;
 import java.util.*;
 
@@ -80,9 +80,9 @@ public final class SacredBannerRuntime {
         if(isActive(player)) return ExecutionResult.failure("Sacred Banner is still active.");
         var world = player.getServerWorld();
         int buffs = 0;
-        if (has(player, SimplySkillsNodeIds.clericSpecialisationSacredOrbSpeed)) buffs |= 1;
-        if (has(player, SimplySkillsNodeIds.clericSpecialisationSacredOrbDebuffs)) buffs |= 2;
-        if (has(player, SimplySkillsNodeIds.clericSpecialisationSacredOrbBuffs)) buffs |= 4;
+        if (has(player, SkillNodeIds.clericSpecialisationSacredOrbSpeed)) buffs |= 1;
+        if (has(player, SkillNodeIds.clericSpecialisationSacredOrbDebuffs)) buffs |= 2;
+        if (has(player, SkillNodeIds.clericSpecialisationSacredOrbBuffs)) buffs |= 4;
         var from = player.getPos().add(0, 0.5, 0);
         var ground = world.raycast(new net.minecraft.world.RaycastContext(from, from.add(0, -64, 0),
                 net.minecraft.world.RaycastContext.ShapeType.COLLIDER,

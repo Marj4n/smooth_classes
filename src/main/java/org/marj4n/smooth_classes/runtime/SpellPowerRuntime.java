@@ -7,7 +7,7 @@ import net.spell_power.api.SpellSchools;
 
 /**
  * Small boundary around Spell Power. Class code never needs to know the
- * external API shape, which keeps Continued-style scaling readable.
+ * external API shape, which keeps scaling readable.
  */
 public final class SpellPowerRuntime {
     private SpellPowerRuntime() {}

@@ -45,7 +45,7 @@ public final class ArcaneSlashChargeRuntime {
 
     public static void finish(ServerPlayerEntity player) {
         if (!CHARGING.remove(player.getUuid())) return;
-        AbilityCooldowns.start(player, ID, AbilityCooldowns.adjustedTicks(player, 240));
+        AbilityCooldowns.start(player, ID, org.marj4n.smooth_classes.gameplay.AscendancyAbilityDispatcher.effectiveCooldownTicks(player,"arcane_slash"));
         SmoothClassesNetworking.sendAbilityState(player);
     }
 

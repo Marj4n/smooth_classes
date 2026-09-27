@@ -7,7 +7,6 @@ public interface PlayerClass {
     Identifier id();
     String name();
     String description();
-    Identifier legacySource();
     default List<Identifier> abilityIds() { return List.of(); }
     default List<Identifier> talentIds() { return List.of(); }
 }

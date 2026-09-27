@@ -5,7 +5,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import org.marj4n.smooth_classes.runtime.InternalSpellRuntime;
-import org.marj4n.smooth_classes.runtime.ContinuedFx;
+import org.marj4n.smooth_classes.runtime.SkillFx;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.util.Identifier;
 import org.marj4n.smooth_classes.content.saber.SaberClass;
@@ -44,7 +44,7 @@ public final class SaberRuntime {
         ClassEffectRuntime.apply(player, SmoothEffects.SACRED_ONSLAUGHT, 40, 0);
         if (plan.defend()) {
             ClassEffectRuntime.apply(player, SmoothEffects.GOLDEN_AEGIS, 200, 0);
-            ContinuedFx.sound(player, "soundeffect_15", 0.5F, 1.1F);
+            SkillFx.sound(player, "soundeffect_15", 0.5F, 1.1F);
         }
         if (plan.mighty()) ClassEffectRuntime.apply(player, SmoothEffects.MIGHT, 200, 2);
         return ExecutionResult.success(1, "sacred_onslaught");
@@ -60,7 +60,7 @@ public final class SaberRuntime {
         return ExecutionResult.success(cast?1:0,"heavensmiths_call");
     }
 
-    /** Continued impact callback: Mark/Taunt are applied around the actual spell impact. */
+    /** impact callback: Mark/Taunt are applied around the actual spell impact. */
     public static void onHeavensmithImpact(ServerPlayerEntity player, LivingEntity impact) {
         HeavensmithPlan plan=heavensmithsCall(player);
         for(LivingEntity target:impact.getWorld().getEntitiesByClass(LivingEntity.class,
@@ -72,7 +72,7 @@ public final class SaberRuntime {
         }
     }
 
-    /** Continued Divine Adjudication: periodic AOE judgement, chance rolled per hostile. */
+    /** Divine Adjudication: periodic AOE judgement, chance rolled per hostile. */
     public static void tick(ServerPlayerEntity player) {
         if(!player.hasStatusEffect(SmoothEffects.DIVINE_ADJUDICATION)||player.age%5!=0)return;
         HeavensmithPlan plan=heavensmithsCall(player);

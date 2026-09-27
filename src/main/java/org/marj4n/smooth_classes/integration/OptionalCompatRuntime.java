@@ -32,7 +32,7 @@ public final class OptionalCompatRuntime {
     public static boolean opac(){ return loaded("openpartiesandclaims"); }
 
     /**
-     * Continued-compatible Simply Swords socket read without linking its API.
+     * Simply Swords socket read without linking its API.
      * Simply Swords stores its socket power in the item's nether_power NBT.
      */
     public static boolean hasNetherPower(PlayerEntity player,String power){
@@ -62,7 +62,7 @@ public final class OptionalCompatRuntime {
         if (hasNetherPower(p, "spell_Standard") && p.getRandom().nextInt(100)<10
                 && !hasOwnSpellStandard(p)) {
             if (spawnStandard(p, -2, "smooth_classes:precision", "smooth_classes:spellforged",
-                    0, null, null)) ContinuedSound(p);
+                    0, null, null)) playCompatibilitySound(p);
         }
     }
 
@@ -100,7 +100,7 @@ public final class OptionalCompatRuntime {
 
     public static void onChannelEnd(ServerPlayerEntity p) {
         if (hasNetherPower(p,"war_standard") && spawnStandard(p,3,"smooth_classes:might",null,
-                4,"smooth_classes:revealed",null)) ContinuedSound(p);
+                4,"smooth_classes:revealed",null)) playCompatibilitySound(p);
     }
 
     public static void tick(ServerPlayerEntity p){
@@ -113,14 +113,14 @@ public final class OptionalCompatRuntime {
         // not linked by class name; their APIs remain genuinely optional.
     }
 
-    /** Socket effects applied to Continued's signature cooldown before haste. */
+    /** Socket effects applied to signature cooldown before haste. */
     public static int signatureCooldown(ServerPlayerEntity player, int ticks) {
         if (hasNetherPower(player, "renewed") && player.getRandom().nextInt(100) < 15) {
-            ContinuedSound(player);
+            playCompatibilitySound(player);
             ticks = Math.max(20, org.marj4n.smooth_classes.config.SmoothBalance.General.minimumAchievableCooldown * 20);
         }
         if (hasNetherPower(player, "accelerant")) {
-            ContinuedSound(player);
+            playCompatibilitySound(player);
             ticks = Math.max(1, ticks - 240);
         }
         return ticks;
@@ -130,12 +130,12 @@ public final class OptionalCompatRuntime {
         if (player.hasStatusEffect(SmoothEffects.REVEALED) && hasNetherPower(player, "deception")
                 && player.getRandom().nextBoolean()) {
             player.removeStatusEffect(SmoothEffects.REVEALED);
-            ContinuedSound(player);
+            playCompatibilitySound(player);
         }
     }
 
-    private static void ContinuedSound(PlayerEntity player) {
-        org.marj4n.smooth_classes.runtime.ContinuedFx.sound(player, "fx_ui_unlock3", 1F, 1.6F);
+    private static void playCompatibilitySound(PlayerEntity player) {
+        org.marj4n.smooth_classes.runtime.SkillFx.sound(player, "fx_ui_unlock3", 1F, 1.6F);
     }
 
     /**

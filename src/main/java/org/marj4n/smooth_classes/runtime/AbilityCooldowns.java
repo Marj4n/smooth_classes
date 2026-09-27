@@ -27,7 +27,7 @@ public final class AbilityCooldowns {
     }
 
 
-    /** Continued 1.10.x cooldown formula: only haste above the neutral 1.0 multiplier reduces CD. */
+    /** 1.10.x cooldown formula: only haste above the neutral 1.0 multiplier reduces CD. */
     public static int adjustedTicks(ServerPlayerEntity player, int baseTicks) {
         double baseMs = Math.max(0, baseTicks) * 50.0D;
         double hasteBonus = Math.max(0.0D, SpellPower.getHaste(player, SpellSchools.GENERIC) - 1.0D);

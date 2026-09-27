@@ -1,12 +1,11 @@
 package org.marj4n.smooth_classes.integration;
 
 /**
- * Authoritative Puffish node ids imported from the SimplySkills Continued
- * reference. Keep ids centralized: gameplay runtimes should never scatter
+ * Centralized Puffish skill node IDs for Smooth Classes. Keep ids centralized: gameplay runtimes should never scatter
  * opaque Puffish ids through class logic.
  */
-public final class SimplySkillsNodeIds {
-    private SimplySkillsNodeIds() {}
+public final class SkillNodeIds {
+    private SkillNodeIds() {}
 
     public static final String sapphire_portal_1 = "fblggw09uwd4mk3d";
     public static final String sapphire_portal_2 = "4jsg72vigi1qyj9j";
