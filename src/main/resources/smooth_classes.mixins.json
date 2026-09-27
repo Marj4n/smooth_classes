@@ -11,7 +11,8 @@
     "ArrowHammerImpactMixin",
     "LivingEntityGameplayMixin",
     "FollowOwnerGoalMixin",
-    "SacredBannerBuffMixin"
+    "SacredBannerBuffMixin",
+    "TormentBurnMixin"
   ],
   "injectors": {
     "defaultRequire": 1

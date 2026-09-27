@@ -19,7 +19,7 @@ public abstract class ArcaneFireSpriteMixin {
         if (!id.getNamespace().equals("smooth_classes")) return;
         String path = id.getPath();
         if (!path.equals("block/arcane_fire_0") && !path.equals("block/arcane_fire_1")
-                && !path.equals("arcane_flame")) return;
+                && !path.equals("arcane_flame") && !path.equals("black_flame")) return;
         for (int y = 0; y < image.getHeight(); y++) {
             for (int x = 0; x < image.getWidth(); x++) {
                 int abgr = image.getColor(x, y);
@@ -32,6 +32,7 @@ public abstract class ArcaneFireSpriteMixin {
                 int r = (int) (100 + 145 * heat);
                 int g = (int) (12 + 168 * heat * heat);
                 int b = (int) (170 + 85 * heat);
+                if(path.equals("black_flame")){r=(int)(5+24*heat);g=(int)(3+17*heat);b=(int)(8+30*heat);}
                 image.setColor(x, y, (alpha << 24) | (b << 16) | (g << 8) | r);
             }
         }

@@ -40,6 +40,7 @@ public final class SmoothClasses implements ModInitializer {
         org.marj4n.smooth_classes.registry.SmoothBlocks.register();
         SmoothEntities.register();
         org.marj4n.smooth_classes.content.ruler.runtime.SacredBannerRuntime.register();
+        org.marj4n.smooth_classes.runtime.BloodRainRuntime.register();
         SmoothClassContent.register();
         AvengerServerRuntime.register();
         BasePathRuntime.register();

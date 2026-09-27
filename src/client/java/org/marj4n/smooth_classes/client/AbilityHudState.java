@@ -8,6 +8,7 @@ public final class AbilityHudState {
     private AbilityHudState() {}
 
     public static boolean bannerActive;
+    public static boolean bloodRainActive;
     public static String signatureAbility = "";
     public static String ascendancyAbility = "";
     public static int signatureCooldownMs = 500;

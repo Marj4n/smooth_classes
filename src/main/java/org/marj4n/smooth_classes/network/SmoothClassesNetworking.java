@@ -69,7 +69,7 @@ public final class SmoothClassesNetworking {
         String asc = AscendancyAbilityDispatcher.selectedAbility(player);
 
         int sigTotal = "sacred_orb".equals(sig) ? 2400 : sig.isBlank() ? 1 : AbilityCooldowns.adjustedTicks(player, SignatureCooldowns.ticks(sig));
-        int ascTotal = asc.isBlank() ? 1 : AbilityCooldowns.adjustedTicks(player, AscendancyAbilityDispatcher.cooldownTicks(asc));
+        int ascTotal = "magic_circle".equals(asc) ? 1200 : "torment".equals(asc) ? 800 : asc.isBlank() ? 1 : AbilityCooldowns.adjustedTicks(player, AscendancyAbilityDispatcher.cooldownTicks(asc));
         long sigRemain = sig.isBlank() ? 0 : AbilityCooldowns.remainingTicks(player, new Identifier(SmoothClasses.MOD_ID, sig));
         long ascRemain = asc.isBlank() ? 0 : AbilityCooldowns.remainingTicks(player, new Identifier(SmoothClasses.MOD_ID, "ascendancy_" + asc));
 
@@ -81,6 +81,7 @@ public final class SmoothClassesNetworking {
         out.writeInt(ascTotal);
         out.writeLong(ascRemain);
         out.writeBoolean(org.marj4n.smooth_classes.content.ruler.runtime.SacredBannerRuntime.isActive(player));
+        out.writeBoolean(org.marj4n.smooth_classes.runtime.BloodRainRuntime.active(player));
         ServerPlayNetworking.send(player, SYNC_ABILITY_STATE, out);
         LAST_SELECTION.put(player.getUuid(), sig + "|" + asc);
     }

@@ -42,7 +42,8 @@ public final class AbilityHud {
         RenderSystem.defaultBlendFunc();
         context.getMatrices().push();
         context.getMatrices().translate(0, 0, 300);
-        if ("sacred_orb".equals(ability) && AbilityHudState.bannerActive) {
+        if (("sacred_orb".equals(ability) && AbilityHudState.bannerActive)
+                || ("magic_circle".equals(ability) && AbilityHudState.bloodRainActive)) {
             context.fill(x+10,y+10,x+26,y+26,0xB0000000);
             context.drawCenteredTextWithShadow(client.textRenderer,Text.literal("X"),x+18,y+14,0xFF5555);
         } else if (remainingMs > 0) {
