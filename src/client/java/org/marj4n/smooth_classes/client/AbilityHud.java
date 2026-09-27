@@ -8,7 +8,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.marj4n.smooth_classes.SmoothClasses;
 
-/** two-slot ability HUD: signature (V) + ascendancy (R). */
+/** Ability HUD: signature (V), ascendancy (R), plus Rider mount summon (H) when applicable. */
 public final class AbilityHud {
     private static final Identifier FRAME = new Identifier("minecraft", "textures/gui/widgets.png");
     private static final Identifier COOLDOWN = SmoothClasses.id("textures/gui/cooldown_overlay.png");
@@ -23,6 +23,10 @@ public final class AbilityHud {
                 AbilityHudState.signatureCooldownMs, AbilityHudState.signatureRemainingMs(), SmoothClassesClient.signatureKey());
         renderSlot(context, client, x + 22, y, AbilityHudState.ascendancyAbility, AbilityHudState.ascendancyIcon(),
                 AbilityHudState.ascendancyCooldownMs, AbilityHudState.ascendancyRemainingMs(), SmoothClassesClient.ascendancyKey());
+        if (AbilityHudState.riderMountVisible) {
+            renderSlot(context, client, x + 44, y, "rider_mount", AbilityHudState.riderMountIcon(),
+                    AbilityHudState.riderMountCooldownMs, AbilityHudState.riderMountRemainingMs(), SmoothClassesClient.riderMountKey());
+        }
     }
 
     private void renderSlot(DrawContext context, MinecraftClient client, int x, int y, String ability, Identifier icon,
@@ -44,7 +48,9 @@ public final class AbilityHud {
         context.getMatrices().translate(0, 0, 300);
         if (("sacred_orb".equals(ability) && AbilityHudState.bannerActive)
                 || ("magic_circle".equals(ability) && AbilityHudState.bloodRainActive)
-                || ("agony".equals(ability) && AbilityHudState.whenOnHighActive)) {
+                || ("agony".equals(ability) && AbilityHudState.whenOnHighActive)
+                || ("rider_mount".equals(ability) && (AbilityHudState.riderMountActive
+                || isLocalRiderMount(client)))) {
             context.fill(x+10,y+10,x+26,y+26,0xB0000000);
             context.drawCenteredTextWithShadow(client.textRenderer,Text.literal("X"),x+18,y+14,0xFF5555);
         } else if (remainingMs > 0) {
@@ -59,4 +65,13 @@ public final class AbilityHud {
         context.getMatrices().pop();
         RenderSystem.disableBlend();
     }
+
+    private static boolean isLocalRiderMount(MinecraftClient client) {
+        if (client.player == null) return false;
+        var vehicle = client.player.getVehicle();
+        return vehicle instanceof org.marj4n.smooth_classes.entity.RiderHorseEntity
+                || vehicle instanceof org.marj4n.smooth_classes.entity.RiderDreadSteedEntity
+                || vehicle instanceof org.marj4n.smooth_classes.entity.RiderHippogryphEntity;
+    }
+
 }

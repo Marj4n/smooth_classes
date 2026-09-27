@@ -1,8 +1,170 @@
 {
-    "rider_root": {
-        "definition": "riderPath",
-        "x": 0,
-        "y": 0,
-        "root": true
-    }
+  "rider_root": {
+    "definition": "riderPath",
+    "x": 0,
+    "y": 0,
+    "root": true
+  },
+  "rider_charge": {
+    "definition": "riderCharge",
+    "x": -96,
+    "y": -72,
+    "root": false
+  },
+  "rider_charge_reach": {
+    "definition": "riderChargeReach",
+    "x": -160,
+    "y": -136,
+    "root": false
+  },
+  "rider_charge_impact": {
+    "definition": "riderChargeImpact",
+    "x": -96,
+    "y": -152,
+    "root": false
+  },
+  "rider_charge_phase": {
+    "definition": "riderChargePhase",
+    "x": -32,
+    "y": -136,
+    "root": false
+  },
+  "rider_war_aura": {
+    "definition": "riderWarAura",
+    "x": 0,
+    "y": -112,
+    "root": false
+  },
+  "rider_aura_resistance": {
+    "definition": "riderAuraResistance",
+    "x": -48,
+    "y": -184,
+    "root": false
+  },
+  "rider_aura_strength": {
+    "definition": "riderAuraStrength",
+    "x": 0,
+    "y": -200,
+    "root": false
+  },
+  "rider_aura_harm": {
+    "definition": "riderAuraHarm",
+    "x": 48,
+    "y": -184,
+    "root": false
+  },
+  "rider_blazing_hooves": {
+    "definition": "riderBlazingHooves",
+    "x": 96,
+    "y": -72,
+    "root": false
+  },
+  "rider_fire_damage": {
+    "definition": "riderFireDamage",
+    "x": 32,
+    "y": -136,
+    "root": false
+  },
+  "rider_fire_duration": {
+    "definition": "riderFireDuration",
+    "x": 96,
+    "y": -152,
+    "root": false
+  },
+  "rider_fire_radius": {
+    "definition": "riderFireRadius",
+    "x": 160,
+    "y": -136,
+    "root": false
+  },
+  "rider_water_stride": {
+    "definition": "riderWaterStride",
+    "x": -96,
+    "y": 80,
+    "root": false
+  },
+  "rider_dread_steed": {
+    "definition": "riderDreadSteed",
+    "x": -128,
+    "y": 128,
+    "root": false
+  },
+  "rider_hippogryph": {
+    "definition": "riderHippogryph",
+    "x": -160,
+    "y": 176,
+    "root": false
+  },
+  "rider_health_i": {
+    "definition": "riderHealthI",
+    "x": 32,
+    "y": 64,
+    "root": false
+  },
+  "rider_health_ii": {
+    "definition": "riderHealthII",
+    "x": 64,
+    "y": 96,
+    "root": false
+  },
+  "rider_health_iii": {
+    "definition": "riderHealthIII",
+    "x": 96,
+    "y": 128,
+    "root": false
+  },
+  "rider_speed_i": {
+    "definition": "riderSpeedI",
+    "x": 0,
+    "y": 80,
+    "root": false
+  },
+  "rider_speed_ii": {
+    "definition": "riderSpeedII",
+    "x": 32,
+    "y": 128,
+    "root": false
+  },
+  "rider_speed_iii": {
+    "definition": "riderSpeedIII",
+    "x": 64,
+    "y": 176,
+    "root": false
+  },
+  "rider_armor_i": {
+    "definition": "riderArmorI",
+    "x": 96,
+    "y": 64,
+    "root": false
+  },
+  "rider_armor_ii": {
+    "definition": "riderArmorII",
+    "x": 128,
+    "y": 112,
+    "root": false
+  },
+  "rider_jump_i": {
+    "definition": "riderJumpI",
+    "x": 96,
+    "y": 160,
+    "root": false
+  },
+  "rider_jump_ii": {
+    "definition": "riderJumpII",
+    "x": 128,
+    "y": 208,
+    "root": false
+  },
+  "rider_recovery_i": {
+    "definition": "riderRecoveryI",
+    "x": 32,
+    "y": 208,
+    "root": false
+  },
+  "rider_recovery_ii": {
+    "definition": "riderRecoveryII",
+    "x": 64,
+    "y": 256,
+    "root": false
+  }
 }

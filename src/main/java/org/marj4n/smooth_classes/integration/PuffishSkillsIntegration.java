@@ -25,9 +25,10 @@ public final class PuffishSkillsIntegration {
     public static final Identifier ASSASSIN = id("assassin");
     public static final Identifier SABER = id("saber");
     public static final Identifier RULER = id("ruler");
+    public static final Identifier RIDER = id("rider");
 
     public static final List<Identifier> CLASS_CATEGORIES = List.of(
-            AVENGER, FOREIGNER, CASTER, BERSERKER, ARCHER, ASSASSIN, SABER, RULER
+            AVENGER, FOREIGNER, CASTER, BERSERKER, ARCHER, ASSASSIN, SABER, RULER, RIDER
     );
 
     private PuffishSkillsIntegration() {}

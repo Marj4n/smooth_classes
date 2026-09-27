@@ -3,7 +3,7 @@ package org.marj4n.smooth_classes.client;
 import net.minecraft.util.Identifier;
 import org.marj4n.smooth_classes.SmoothClasses;
 
-/** Client mirror of two ability slots. Server remains authoritative. */
+/** Client mirror of ability HUD state. Server remains authoritative. */
 public final class AbilityHudState {
     private AbilityHudState() {}
 
@@ -17,6 +17,11 @@ public final class AbilityHudState {
     public static long signatureReadyAtMs = 0L;
     public static long ascendancyReadyAtMs = 0L;
 
+    public static boolean riderMountVisible;
+    public static boolean riderMountActive;
+    public static int riderMountCooldownMs = 6000;
+    public static long riderMountReadyAtMs = 0L;
+
     public static void sync(String signature, int signatureTotalTicks, long signatureRemainingTicks,
                             String ascendancy, int ascendancyTotalTicks, long ascendancyRemainingTicks) {
         signatureAbility = signature == null ? "" : signature;
@@ -28,11 +33,20 @@ public final class AbilityHudState {
         ascendancyReadyAtMs = now + Math.max(0L, ascendancyRemainingTicks) * 50L;
     }
 
+    public static void syncRiderMount(boolean visible, boolean active, int totalTicks, long remainingTicks) {
+        riderMountVisible = visible;
+        riderMountActive = active;
+        riderMountCooldownMs = Math.max(1, totalTicks * 50);
+        riderMountReadyAtMs = System.currentTimeMillis() + Math.max(0L, remainingTicks) * 50L;
+    }
+
     public static long signatureRemainingMs() { return Math.max(0L, signatureReadyAtMs - System.currentTimeMillis()); }
     public static long ascendancyRemainingMs() { return Math.max(0L, ascendancyReadyAtMs - System.currentTimeMillis()); }
+    public static long riderMountRemainingMs() { return Math.max(0L, riderMountReadyAtMs - System.currentTimeMillis()); }
 
     public static Identifier signatureIcon() { return icon(signatureAbility, false); }
     public static Identifier ascendancyIcon() { return icon(ascendancyAbility, true); }
+    public static Identifier riderMountIcon() { return SmoothClasses.id("textures/icons/alternate_reduced/rider_path.png"); }
 
     private static Identifier icon(String ability, boolean ascendancy) {
         if (ability == null || ability.isBlank()) return SmoothClasses.id("textures/gui/cooldown_overlay.png");
@@ -64,6 +78,9 @@ public final class AbilityHudState {
                 case "divine_intervention" -> "cleric_signature_divine_intervention";
                 case "anoint_weapon" -> "cleric_signature_anoint_weapon";
                 case "summoning_ritual" -> "necromancer_signature_summoning_ritual";
+                case "rider_charge" -> "berserker_signature_rampage";
+                case "rider_war_aura" -> "cleric_signature_anoint_weapon";
+                case "rider_blazing_hooves" -> "spellblade_signature_elemental_surge";
                 default -> "";
             };
         }
