@@ -1,0 +1,8 @@
+{
+    "rider_root": {
+        "definition": "riderPath",
+        "x": 0,
+        "y": 0,
+        "root": true
+    }
+}

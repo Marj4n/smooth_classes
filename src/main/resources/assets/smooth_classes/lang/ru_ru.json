@@ -781,7 +781,7 @@
   "key.smooth_classes.ascendancy": "Ascendancy Ability",
   "text.skills.initiateWhisperedWizardry.description": "§7Casting a spell while you have Stealth grants you several stacks of Spellforged for a few seconds.\n\n§f(Spellforged)§7 grants §a+0.25 §f[x]§7 Spell Power per stack.",
   "text.skills.shamanSignatureNovaTotem.description": "Summon a totem that releases a nova around it.",
-  "text.skills.initiateWhisperedWizardry.title": "§7§a[Whispered Wizardry]§7",
+  "text.skills.initiateWhisperedWizardry.title": "§7§a[Whispered Casterry]§7",
   "block.smooth_classes.arcane_fire": "Arcane Fire",
   "item.smooth_classes.sacred_banner_icon": "Sacred Banner",
   "death.attack.smooth_classes.torment": "%1$s was consumed by black flames",
@@ -1269,5 +1269,13 @@
   "text.autoconfig.smooth_classes.option.misc.promWarriorsDevotionAttackSpeedMulti": "Множитель скорости урона «Хватка титана»",
   "text.autoconfig.smooth_classes.option.misc.promWarriorsDevotionAttackSpeedMulti.@Tooltip": "Атрибут generic_attack_speed отрицательно умножается на это число.\n0.9 = -90% ПРИМЕЧАНИЕ: Свыше 0.9 вероятнее всего, сломает атаки из Better Combat.",
   "text.autoconfig.smooth_classes.option.misc.promSkellaksCallPhysDmgMulti": "Множитель физического урона S'kellak's Call",
-  "text.autoconfig.smooth_classes.option.misc.promSkellaksCallPhysDmgMulti.@Tooltip": "Количество generic_attack_damage используется в качестве физического урона при использовании S'kellak's Call.\nВ дополнение этой настройки, умение также наносит не настраиваемый урон от огненного заклинания."
+  "text.autoconfig.smooth_classes.option.misc.promSkellaksCallPhysDmgMulti.@Tooltip": "Количество generic_attack_damage используется в качестве физического урона при использовании S'kellak's Call.\nВ дополнение этой настройки, умение также наносит не настраиваемый урон от огненного заклинания.",
+  "text.skills.lancer_category.title": "§7§bLancer Specialisation§7",
+  "text.skills.rider_category.title": "§7§bRider Specialisation§7",
+  "text.skills.lancerPath.title": "Path of the §bLancer§7",
+  "text.skills.lancerPath.description": "§7Coming soon. This path is reserved for the §bLancer§7 class branch.",
+  "text.skills.lancerPath.extra_description": "\n§7The §bLancer§7 slot is now prepared visually. Internal branch skills will be added later.",
+  "text.skills.riderPath.title": "Path of the §bRider§7",
+  "text.skills.riderPath.description": "§7Coming soon. This path is reserved for the §bRider§7 class branch.",
+  "text.skills.riderPath.extra_description": "\n§7The §bRider§7 slot is now prepared visually. Internal branch skills will be added later."
 }

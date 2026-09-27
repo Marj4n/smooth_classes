@@ -1,0 +1,27 @@
+{
+    "riderPath": {
+        "title": {
+            "translate": "text.skills.riderPath.title"
+        },
+        "description": {
+            "translate": "text.skills.riderPath.description"
+        },
+        "size": 1.4,
+        "frame": {
+            "type": "texture",
+            "data": {
+                "unlocked": "smooth_classes:textures/frames/unlocked.png",
+                "available": "smooth_classes:textures/frames/available.png",
+                "locked": "smooth_classes:textures/frames/locked.png",
+                "excluded": "smooth_classes:textures/frames/excluded.png"
+            }
+        },
+        "icon": {
+            "type": "texture",
+            "data": {
+                "texture": "smooth_classes:textures/icons/classes/rider.png"
+            }
+        },
+        "rewards": []
+    }
+}

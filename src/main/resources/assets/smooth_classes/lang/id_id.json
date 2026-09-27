@@ -420,7 +420,7 @@
   "text.skills.crusaderPath.extra_description": "\n§7The §bSaber§7, is often chosen by those who are not content with merely §adefending their allies§7 but also strive to be a beacon of hope on the battlefield. They combine the fervor of a §ahealer§7 with the might of a §awarrior§7, making them formidable champions in both §aoffense and defense§7.",
   "text.skills.initiateOverload.title": "§7§a[Overload]§7",
   "text.skills.ascendancyRapidfire.description": "§7Requires a bow or crossbow. Fire 4 projectiles per second for 6 seconds, plus up to 2 seconds from Ascendancy. Each projectile deals 97.5% ranged spell power. Switching away from a ranged weapon ends the barrage. At 30+: every fourth shot grants one Marksmanship stack, up to 8.\n\n§a24s Base Cooldown§7",
-  "text.skills.initiateWhisperedWizardry.title": "§7§a[Whispered Wizardry]§7",
+  "text.skills.initiateWhisperedWizardry.title": "§7§a[Whispered Casterry]§7",
   "text.skills.rogueSignatureEvasionFanOfBladesAssault.title": "§f[Assault]",
   "text.skills.warriorDeathDefy.description": "§7When at low HP, you gain Regeneration and Exhaustion relative to your remaining health percent.\n\n§f(Exhaustion)§7 reduces your Melee Attack, Movement Speed, and Attack Speed by §c1% §f[x]§7 per stack.\n\nYou lose several stacks of Exhaustion per second, relative to your Stamina attribute.",
   "text.skills.spellbladeSignatureElementalSurgeNoFrost.title": "§f[Remove Frost]",
@@ -583,5 +583,13 @@
   "block.smooth_classes.arcane_fire": "Arcane Fire",
   "item.smooth_classes.sacred_banner_icon": "Sacred Banner",
   "death.attack.smooth_classes.torment": "%1$s was consumed by black flames",
-  "death.attack.smooth_classes.torment.player": "%1$s was consumed by %2$s's black flames"
+  "death.attack.smooth_classes.torment.player": "%1$s was consumed by %2$s's black flames",
+  "text.skills.lancer_category.title": "§7§bLancer Specialisation§7",
+  "text.skills.rider_category.title": "§7§bRider Specialisation§7",
+  "text.skills.lancerPath.title": "Path of the §bLancer§7",
+  "text.skills.lancerPath.description": "§7Coming soon. This path is reserved for the §bLancer§7 class branch.",
+  "text.skills.lancerPath.extra_description": "\n§7The §bLancer§7 slot is now prepared visually. Internal branch skills will be added later.",
+  "text.skills.riderPath.title": "Path of the §bRider§7",
+  "text.skills.riderPath.description": "§7Coming soon. This path is reserved for the §bRider§7 class branch.",
+  "text.skills.riderPath.extra_description": "\n§7The §bRider§7 slot is now prepared visually. Internal branch skills will be added later."
 }
