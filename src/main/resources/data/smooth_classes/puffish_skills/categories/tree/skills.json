@@ -1369,8 +1369,8 @@
     },
     "qf95jsl0904pzxt8": {
         "definition": "riderPath",
-        "x": 96,
-        "y": 424.9297981235645,
+        "x": 128,
+        "y": 517.3058411939046,
         "root": false
     },
     "e57tmwjqvrwe9wwm": {
@@ -1843,8 +1843,8 @@
     },
     "60e1gxdvxa5lig3n": {
         "definition": "lancerPath",
-        "x": -96,
-        "y": 424.9297981235646,
+        "x": -128,
+        "y": 517.3058411939046,
         "root": false
     },
     "nw7wok9tqzpcb9ag": {
@@ -2031,6 +2031,18 @@
         "definition": "necromancerPath",
         "x": -256,
         "y": -443.40500673763256,
+        "root": false
+    },
+    "base_rider_junction": {
+        "definition": "movement_speed+1%",
+        "x": 96,
+        "y": 424.9297981235645,
+        "root": false
+    },
+    "base_lancer_junction": {
+        "definition": "jump+1%",
+        "x": -96,
+        "y": 424.9297981235646,
         "root": false
     }
 }
