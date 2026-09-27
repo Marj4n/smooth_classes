@@ -34,6 +34,9 @@ public final class SmoothClassesClient implements ClientModInitializer {
     public static final EntityModelLayer WRAITH_MODEL = new EntityModelLayer(SmoothClasses.id("wraith"), "main");
     private static KeyBinding signature;
     private static KeyBinding ascendancy;
+    private static boolean arcaneHoldSent;
+    private static boolean arcaneWasDown;
+    private static int arcaneHoldTicks;
     private static final AbilityHud HUD = new AbilityHud();
     private static final RighteousHammersRenderer HAMMER_RENDERER = new RighteousHammersRenderer();
 
@@ -85,14 +88,49 @@ public final class SmoothClassesClient implements ClientModInitializer {
                     String asc = buf.readString();
                     int ascTotal = buf.readInt();
                     long ascRemaining = buf.readLong();
-                    client.execute(() -> AbilityHudState.sync(sig,sigTotal,sigRemaining,asc,ascTotal,ascRemaining));
+                    boolean bannerActive=buf.readBoolean();
+                    client.execute(() -> {
+                        AbilityHudState.sync(sig,sigTotal,sigRemaining,asc,ascTotal,ascRemaining);
+                        AbilityHudState.bannerActive=bannerActive;
+                    });
                 });
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
+            boolean holdingArcane = client.player != null && client.currentScreen == null
+                    && client.isWindowFocused() && ascendancy.isPressed()
+                    && "arcane_slash".equals(AbilityHudState.ascendancyAbility);
+            boolean freshArcanePress = holdingArcane && !arcaneWasDown;
+            arcaneWasDown = holdingArcane;
+            // Send press/heartbeat before cast on the same ordered connection.
+            if (holdingArcane && (!arcaneHoldSent || ++arcaneHoldTicks >= 2)) {
+                sendArcaneHold(true);
+                arcaneHoldSent = true;
+                arcaneHoldTicks = 0;
+            } else if (!holdingArcane && arcaneHoldSent) {
+                sendArcaneHold(false);
+                arcaneHoldSent = false;
+                arcaneHoldTicks = 0;
+            }
             while (signature.wasPressed()) cast(client, false);
-            while (ascendancy.wasPressed()) cast(client, true);
+            while (ascendancy.wasPressed()) {
+                if (!"arcane_slash".equals(AbilityHudState.ascendancyAbility)) cast(client, true);
+                else if (freshArcanePress) {
+                    cast(client, true);
+                    freshArcanePress = false;
+                }
+            }
+            if (client.player != null && client.player.hasStatusEffect(SmoothEffects.ARCANE_SLASH))
+                client.player.setSprinting(false);
         });
         HudRenderCallback.EVENT.register((context, tickDelta) -> HUD.render(context, tickDelta));
+    }
+
+    private static void sendArcaneHold(boolean held) {
+        if (net.minecraft.client.MinecraftClient.getInstance().getNetworkHandler() == null) return;
+        if (!ClientPlayNetworking.canSend(SmoothClassesNetworking.ARCANE_SLASH_HOLD)) return;
+        var packet = PacketByteBufs.create();
+        packet.writeBoolean(held);
+        ClientPlayNetworking.send(SmoothClassesNetworking.ARCANE_SLASH_HOLD, packet);
     }
 
     private static void cast(net.minecraft.client.MinecraftClient client, boolean asc) {
@@ -102,6 +140,10 @@ public final class SmoothClassesClient implements ClientModInitializer {
         if (ability == null || ability.isBlank()) {
             client.player.sendMessage(Text.literal(asc ? "No Ascendancy ability unlocked." : "No Signature ability unlocked."), true);
             client.player.getWorld().playSound(client.player, client.player.getBlockPos(), SmoothSounds.ABILITY_BLOCKED, SoundCategory.PLAYERS, 0.1F, 1.5F);
+            return;
+        }
+        if (!asc && "sacred_orb".equals(ability) && AbilityHudState.bannerActive) {
+            client.player.sendMessage(Text.literal("Sacred Banner is still active."), true);
             return;
         }
         if (remaining > 0) {
@@ -117,6 +159,7 @@ public final class SmoothClassesClient implements ClientModInitializer {
     }
 
     private static void registerEntities() {
+        EntityRendererRegistry.register(SmoothEntities.SACRED_BANNER, SacredBannerRenderer::new);
         EntityRendererRegistry.register(SmoothEntities.SPELL_TARGET, SpellTargetRenderer::new);
         EntityRendererRegistry.register(SmoothEntities.DREADGLARE, DreadglareRenderer::new);
         EntityRendererRegistry.register(SmoothEntities.GREATER_DREADGLARE, GreaterDreadglareRenderer::new);

@@ -23,11 +23,21 @@ import java.util.UUID;
 public final class SmoothClassesNetworking {
     public static final Identifier CAST_SIGNATURE = SmoothClasses.id("cast_signature");
     public static final Identifier CAST_ASCENDANCY = SmoothClasses.id("cast_ascendancy");
+    public static final Identifier ARCANE_SLASH_HOLD = SmoothClasses.id("arcane_slash_hold");
     public static final Identifier SYNC_ABILITY_STATE = SmoothClasses.id("sync_ability_state");
     private static final Map<UUID,String> LAST_SELECTION = new HashMap<>();
     private SmoothClassesNetworking() {}
 
     public static void registerServer() {
+        ServerPlayNetworking.registerGlobalReceiver(ARCANE_SLASH_HOLD,
+                (server, player, handler, buf, responseSender) -> {
+                    boolean held = buf.readBoolean();
+                    server.execute(() -> org.marj4n.smooth_classes.runtime.ArcaneSlashChargeRuntime.hold(player, held));
+                });
+        ServerPlayConnectionEvents.DISCONNECT.register((handler, server) ->
+                org.marj4n.smooth_classes.runtime.ArcaneSlashChargeRuntime.disconnect(handler.player));
+        net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents.SERVER_STOPPED.register(server ->
+                org.marj4n.smooth_classes.runtime.ArcaneSlashChargeRuntime.clear());
         ServerPlayNetworking.registerGlobalReceiver(CAST_SIGNATURE, (server, player, handler, buf, responseSender) ->
                 server.execute(() -> {
                     var result = SignatureAbilityDispatcher.cast(player);
@@ -58,7 +68,7 @@ public final class SmoothClassesNetworking {
         String sig = SignatureAbilityDispatcher.selectedAbility(player);
         String asc = AscendancyAbilityDispatcher.selectedAbility(player);
 
-        int sigTotal = sig.isBlank() ? 1 : AbilityCooldowns.adjustedTicks(player, SignatureCooldowns.ticks(sig));
+        int sigTotal = "sacred_orb".equals(sig) ? 2400 : sig.isBlank() ? 1 : AbilityCooldowns.adjustedTicks(player, SignatureCooldowns.ticks(sig));
         int ascTotal = asc.isBlank() ? 1 : AbilityCooldowns.adjustedTicks(player, AscendancyAbilityDispatcher.cooldownTicks(asc));
         long sigRemain = sig.isBlank() ? 0 : AbilityCooldowns.remainingTicks(player, new Identifier(SmoothClasses.MOD_ID, sig));
         long ascRemain = asc.isBlank() ? 0 : AbilityCooldowns.remainingTicks(player, new Identifier(SmoothClasses.MOD_ID, "ascendancy_" + asc));
@@ -70,6 +80,7 @@ public final class SmoothClassesNetworking {
         out.writeString(asc);
         out.writeInt(ascTotal);
         out.writeLong(ascRemain);
+        out.writeBoolean(org.marj4n.smooth_classes.content.ruler.runtime.SacredBannerRuntime.isActive(player));
         ServerPlayNetworking.send(player, SYNC_ABILITY_STATE, out);
         LAST_SELECTION.put(player.getUuid(), sig + "|" + asc);
     }

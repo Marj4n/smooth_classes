@@ -69,7 +69,10 @@ public final class SmoothEffects {
     public static final StatusEffect BONE_ARMOR = register("bone_armor", StatusEffectCategory.BENEFICIAL, 0x2FA5AF);
     public static final StatusEffect CYCLONIC_CLEAVE = register("cyclonic_cleave", StatusEffectCategory.BENEFICIAL, 0x2FA5AF);
     public static final StatusEffect MAGIC_CIRCLE = register("magic_circle", StatusEffectCategory.BENEFICIAL, 0x2FA5AF);
-    public static final StatusEffect ARCANE_SLASH = register("arcane_slash", StatusEffectCategory.BENEFICIAL, 0x2FA5AF);
+    public static final StatusEffect ARCANE_SLASH = register("arcane_slash", StatusEffectCategory.BENEFICIAL, 0x2FA5AF)
+            .addAttributeModifier(net.minecraft.entity.attribute.EntityAttributes.GENERIC_MOVEMENT_SPEED,
+                    "e12e9fa1-a053-4e6a-9ead-186993319ec4", -0.7D,
+                    net.minecraft.entity.attribute.EntityAttributeModifier.Operation.MULTIPLY_TOTAL);
     public static final StatusEffect AGONY = register("agony", StatusEffectCategory.HARMFUL, 0x2FA5AF);
     public static final StatusEffect TORMENT = register("torment", StatusEffectCategory.HARMFUL, 0x2FA5AF);
     public static final StatusEffect RAPIDFIRE = register("rapidfire", StatusEffectCategory.BENEFICIAL, 0x2FA5AF);

@@ -10,7 +10,8 @@
     "SpellProjectileMixin",
     "ArrowHammerImpactMixin",
     "LivingEntityGameplayMixin",
-    "FollowOwnerGoalMixin"
+    "FollowOwnerGoalMixin",
+    "SacredBannerBuffMixin"
   ],
   "injectors": {
     "defaultRequire": 1
@@ -24,6 +25,7 @@
     "client.SkillsScreenAccessor",
     "client.SkillsScreenMixin",
     "client.LivingEntityShieldBorderMixin",
-    "client.ArcaneFireSpriteMixin"
+    "client.ArcaneFireSpriteMixin",
+    "client.SacredBannerSpriteMixin"
   ]
 }

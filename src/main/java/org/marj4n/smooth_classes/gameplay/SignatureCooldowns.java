@@ -26,7 +26,7 @@ public final class SignatureCooldowns {
             case "consecration" -> SmoothBalance.Saber.consecrationCooldown;
             case "sacred_onslaught" -> SmoothBalance.Saber.sacredOnslaughtCooldown;
             case "heavensmiths_call" -> SmoothBalance.Saber.heavensmithCooldown;
-            case "sacred_orb" -> SmoothBalance.Ruler.sacredOrbCooldown;
+            case "sacred_orb" -> 120*20;
             case "divine_intervention" -> SmoothBalance.Ruler.divineInterventionCooldown;
             case "anoint_weapon" -> SmoothBalance.Ruler.anointWeaponCooldown;
             case "summoning_ritual" -> SmoothBalance.Avenger.summoningRitualCooldown;

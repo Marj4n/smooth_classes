@@ -186,8 +186,9 @@ public final class SignatureAbilityDispatcher {
         ExecutionResult r = action.run();
         if (!r.success()) return DispatchResult.fail(r.detail());
         OptionalCompatRuntime.onSignatureAbility(player);
-        AbilityCooldowns.start(player, abilityId, AbilityCooldowns.adjustedTicks(player,
-                OptionalCompatRuntime.signatureCooldown(player, SignatureCooldowns.ticks(ability))));
+        if (!"sacred_orb".equals(ability))
+            AbilityCooldowns.start(player, abilityId, AbilityCooldowns.adjustedTicks(player,
+                    OptionalCompatRuntime.signatureCooldown(player, SignatureCooldowns.ticks(ability))));
         return new DispatchResult(true, ability, r.detail() + " affected=" + r.affectedTargets());
     }
 

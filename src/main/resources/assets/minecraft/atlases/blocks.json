@@ -9,6 +9,11 @@
       "type": "minecraft:single",
       "resource": "minecraft:block/fire_1",
       "sprite": "smooth_classes:block/arcane_fire_1"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "smooth_classes:item/sacred_banner_source",
+      "sprite": "smooth_classes:item/sacred_banner_gold"
     }
   ]
 }

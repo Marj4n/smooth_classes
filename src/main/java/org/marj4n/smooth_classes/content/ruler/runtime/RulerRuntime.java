@@ -35,9 +35,8 @@ public final class RulerRuntime {
 
 
     public static ExecutionResult executeSacredOrb(ServerPlayerEntity player) {
-        SacredOrbPlan plan=sacredOrb(player);
-        boolean cast=org.marj4n.smooth_classes.runtime.InternalSpellRuntime.dumbFire(player,"smooth_classes:sacred_orb",1F);
-        return ExecutionResult.success(cast?1:0,"sacred_orb");
+        require(player);
+        return SacredBannerRuntime.cast(player);
     }
 
     public static ExecutionResult executeDivineIntervention(ServerPlayerEntity player) {
