@@ -17,8 +17,8 @@ public final class TormentRuntime {
     public static final int DURATION=3600;
     private TormentRuntime() {}
     public static long now(ServerWorld world) { return world.getServer().getOverworld().getTime(); }
-    public static final float BURN_COEFFICIENT = .35F;
-    public static final float BLAST_COEFFICIENT = .7F;
+    public static final float BURN_COEFFICIENT = .12F;
+    public static final float BLAST_COEFFICIENT = .9F;
     public static float scaledDamage(double power, float coefficient) {
         return (float)Math.max(0D, power * coefficient);
     }

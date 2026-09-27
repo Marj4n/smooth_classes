@@ -36,7 +36,7 @@ import java.util.HashMap;
 /**
  * Server-side gameplay for the full 73-effect parity surface.
  *
- * Continued intentionally has many marker/state effects whose update method is
+ * intentionally has many marker/state effects whose update method is
  * empty; those remain marker effects here. Effects with real update behavior
  * are implemented here without introducing optional-mod hard dependencies.
  */
@@ -47,12 +47,12 @@ public final class EffectBehaviorRuntime {
     public static void applied(String id, LivingEntity entity, int amplifier) {
         if (!entity.getWorld().isClient()) {
             switch (id) {
-                case "barrier", "golden_aegis" -> ContinuedFx.sound(entity, "spell_gain_barrier", 0.4F, 1F + amplifier / 10F);
-                case "marksmanship" -> ContinuedFx.sound(entity, "activate_tower_beacon", 0.1F, 1F + amplifier / 10F);
-                case "bone_armor" -> ContinuedFx.sound(entity, "magic_shamanic_spell_01", 0.2F, 1F + amplifier / 10F);
-                case "anointed" -> ContinuedFx.sound(entity, "spell_celestial_hit", 0.1F, 1.4F);
-                case "undying" -> ContinuedFx.sound(entity, "spell_celestial_hit", 0.1F, 1.4F);
-                case "vitality_bond" -> ContinuedFx.sound(entity, "spell_radiant_hit", 0.1F, 1.5F);
+                case "barrier", "golden_aegis" -> SkillFx.sound(entity, "spell_gain_barrier", 0.4F, 1F + amplifier / 10F);
+                case "marksmanship" -> SkillFx.sound(entity, "activate_tower_beacon", 0.1F, 1F + amplifier / 10F);
+                case "bone_armor" -> SkillFx.sound(entity, "magic_shamanic_spell_01", 0.2F, 1F + amplifier / 10F);
+                case "anointed" -> SkillFx.sound(entity, "spell_celestial_hit", 0.1F, 1.4F);
+                case "undying" -> SkillFx.sound(entity, "spell_celestial_hit", 0.1F, 1.4F);
+                case "vitality_bond" -> SkillFx.sound(entity, "spell_radiant_hit", 0.1F, 1.5F);
                 default -> { }
             }
         }
@@ -75,25 +75,19 @@ public final class EffectBehaviorRuntime {
             default -> false;
         }) OptionalCompatRuntime.onChannelEnd(player);
         if ("anointed".equals(id) && !entity.getWorld().isClient())
-            ContinuedFx.sound(entity, "spell_radiant_expire", 0.4F, 1F);
+            SkillFx.sound(entity, "spell_radiant_expire", 0.4F, 1F);
         if ("vitality_bond".equals(id) && !entity.getWorld().isClient())
-            ContinuedFx.sound(entity, "spell_radiant_expire", 0.4F, 1F);
+            SkillFx.sound(entity, "spell_radiant_expire", 0.4F, 1F);
         if ("undying".equals(id) && !entity.getWorld().isClient()) {
             if (entity.getHealth() / entity.getMaxHealth() < 0.60F) {
-                ContinuedFx.sound(entity, "soundeffect_36", 0.4F, 1.3F);
-                ContinuedFx.plane(entity, ParticleTypes.SOUL, entity.getBlockPos(), 2, 0, 0.4, 0);
-                ContinuedFx.plane(entity, ParticleTypes.SCULK_SOUL, entity.getBlockPos(), 2, 0, 0.6, 0);
-            } else ContinuedFx.sound(entity, "spell_radiant_expire", 0.4F, 1F);
+                SkillFx.sound(entity, "soundeffect_36", 0.4F, 1.3F);
+                SkillFx.plane(entity, ParticleTypes.SOUL, entity.getBlockPos(), 2, 0, 0.4, 0);
+                SkillFx.plane(entity, ParticleTypes.SCULK_SOUL, entity.getBlockPos(), 2, 0, 0.6, 0);
+            } else SkillFx.sound(entity, "spell_radiant_expire", 0.4F, 1F);
         }
         if ("ghostwalk".equals(id)) {
             entity.setNoGravity(false);
             entity.setInvisible(false);
-        } else if ("bone_armor".equals(id) && amplifier < 1 && entity instanceof ServerPlayerEntity p) {
-            int pts=PuffishSkillsIntegration.countUnlockedSkills(PuffishSkillsIntegration.ASCENDANCY,p);
-            if(pts>29){
-                p.addStatusEffect(new StatusEffectInstance(SmoothEffects.UNDYING,160,0,false,false,true));
-                p.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION,160,3,false,false,true));
-            }
         } else if ("undying".equals(id) && entity.getHealth()/entity.getMaxHealth() < 0.60F) {
             entity.damage(entity.getDamageSources().magic(),entity.getMaxHealth());
         } else if ("rapidfire".equals(id) && entity instanceof ServerPlayerEntity p) {
@@ -147,7 +141,7 @@ public final class EffectBehaviorRuntime {
             case "undying" -> { statusAura(entity, ParticleTypes.SOUL, 0.9); undyingWarning(entity); }
             case "rampage" -> rampage(entity);
             // Marker/state effects are consumed by combat, signature, projectile
-            // and ascendancy hooks exactly where Continued consumes them.
+            // and ascendancy hooks exactly where consumes them.
             default -> { }
         }
     }
@@ -187,7 +181,7 @@ public final class EffectBehaviorRuntime {
 
     private static void shadowAura(LivingEntity bearer, int amplifier) {
         if (!(bearer.getWorld() instanceof net.minecraft.server.world.ServerWorld world)) return;
-        ContinuedFx.orbit(bearer, ParticleTypes.SMOKE, 0.5, 3);
+        SkillFx.orbit(bearer, ParticleTypes.SMOKE, 0.5, 3);
         if (bearer.age % Math.max(22 - amplifier * 2, 1) != 0) return;
         ServerPlayerEntity owner = null;
         if (bearer instanceof ServerPlayerEntity player) owner = player;
@@ -201,7 +195,7 @@ public final class EffectBehaviorRuntime {
             target.timeUntilRegen = 0;
             target.damage(owner.getDamageSources().indirectMagic(owner, owner),
                     SpellPowerRuntime.soul(owner, amplifier / 5.0));
-            ContinuedFx.beam(bearer, target, ParticleTypes.SMOKE, 5);
+            SkillFx.beam(bearer, target, ParticleTypes.SMOKE, 5);
             target.timeUntilRegen = 0;
         }
         float drain = 1F + SpellPowerRuntime.soul(owner, amplifier / 10.0);
@@ -223,7 +217,7 @@ public final class EffectBehaviorRuntime {
                         && OptionalCompatRuntime.canHarm(owner, e))) {
             if (target.getRandom().nextInt(100) >= 30) continue;
             InternalSpellRuntime.target(owner, "smooth_classes:static_charge", target, 3F);
-            ContinuedFx.beam(charged, target, SpellEngineParticles.lightning_arc_A.type(), 6);
+            SkillFx.beam(charged, target, SpellEngineParticles.lightning_arc_A.type(), 6);
             target.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS, 80, 0, false, false, true));
             int remaining = effect.getAmplifier() - 1;
             if (remaining < 0) charged.removeStatusEffect(SmoothEffects.STATIC_CHARGE);
@@ -284,9 +278,9 @@ public final class EffectBehaviorRuntime {
         if (!InternalSpellRuntime.aoe(player, "smooth_classes:fire_meteor_small", 12, 35, true, false, 1F)) return;
         int renewal = 0;
         if (PuffishSkillsIntegration.isSkillUnlocked(PuffishSkillsIntegration.CASTER,
-                org.marj4n.smooth_classes.integration.SimplySkillsNodeIds.wizardSpecialisationMeteorShowerRenewingWrathThree, player)) renewal = 40;
+                org.marj4n.smooth_classes.integration.SkillNodeIds.wizardSpecialisationMeteorShowerRenewingWrathThree, player)) renewal = 40;
         else if (PuffishSkillsIntegration.isSkillUnlocked(PuffishSkillsIntegration.CASTER,
-                org.marj4n.smooth_classes.integration.SimplySkillsNodeIds.wizardSpecialisationMeteorShowerRenewingWrathTwo, player)) renewal = 25;
+                org.marj4n.smooth_classes.integration.SkillNodeIds.wizardSpecialisationMeteorShowerRenewingWrathTwo, player)) renewal = 25;
         else if (AbilityRuntime.hasTalent(player,
                 org.marj4n.smooth_classes.content.caster.CasterContent.METEOR_SHOWER_RENEWING_WRATH.id())) renewal = 10;
         if (player.getRandom().nextInt(100) > renewal) decrement(player, SmoothEffects.METEORIC_WRATH, 1);
@@ -307,7 +301,7 @@ public final class EffectBehaviorRuntime {
         StatusEffectInstance effect = bearer.getStatusEffect(SmoothEffects.UNDYING);
         if (effect != null && effect.getDuration() == 35
                 && bearer.getHealth() / bearer.getMaxHealth() < 0.60F)
-            ContinuedFx.sound(bearer, "soundeffect_11", 0.3F, 1F);
+            SkillFx.sound(bearer, "soundeffect_11", 0.3F, 1F);
     }
 
     private static void exhaustion(LivingEntity e) {
@@ -324,8 +318,8 @@ public final class EffectBehaviorRuntime {
             target.timeUntilRegen = 0;
         }
         e.damage(e.getDamageSources().indirectMagic(e, e), Math.max(0F, e.getMaxHealth() - 2F));
-        ContinuedFx.sound(e, "soundeffect_14", 0.8F, 0.9F);
-        ContinuedFx.plane(e, ParticleTypes.CAMPFIRE_COSY_SMOKE, e.getBlockPos(), 3, 0, 0.3, 0);
+        SkillFx.sound(e, "soundeffect_14", 0.8F, 0.9F);
+        SkillFx.plane(e, ParticleTypes.CAMPFIRE_COSY_SMOKE, e.getBlockPos(), 3, 0, 0.3, 0);
         e.removeStatusEffect(SmoothEffects.OVERLOAD);
     }
 
@@ -401,9 +395,9 @@ public final class EffectBehaviorRuntime {
         if (!(e instanceof ServerPlayerEntity p) || !p.isOnGround() || p.age%18!=0) return;
         float power=Math.max(1F,SpellPowerRuntime.healing(p,1.9));
         p.heal(power/5F);
-        ContinuedFx.plane(p, SpellEngineParticles.magic_holy.type(), p.getBlockPos(), 6, 0, 0.4, 0);
-        ContinuedFx.plane(p, SpellEngineParticles.magic_holy.type(), p.getBlockPos(), 6, 0, 0.2, 0);
-        ContinuedFx.sound(p, "soundeffect_25", 0.05F, 0.8F);
+        SkillFx.plane(p, SpellEngineParticles.magic_holy.type(), p.getBlockPos(), 6, 0, 0.4, 0);
+        SkillFx.plane(p, SpellEngineParticles.magic_holy.type(), p.getBlockPos(), 6, 0, 0.2, 0);
+        SkillFx.sound(p, "soundeffect_25", 0.05F, 0.8F);
         for(LivingEntity target:CombatRuntime.nearbyEnemies(p,6)) {
             target.timeUntilRegen=0;
             target.damage(p.getDamageSources().indirectMagic(p,p),power);
@@ -423,8 +417,8 @@ public final class EffectBehaviorRuntime {
         Vec3d look=p.getRotationVec(1).normalize();
         p.setVelocity(look.x,0,look.z); p.velocityModified=true;
         if(p.age%10!=0)return;
-        ContinuedFx.plane(p, ParticleTypes.CLOUD, p.getBlockPos(), 2, 0, 0.2, 0);
-        ContinuedFx.sound(p, "soundeffect_32", 0.6F, 1.0F);
+        SkillFx.plane(p, ParticleTypes.CLOUD, p.getBlockPos(), 2, 0, 0.2, 0);
+        SkillFx.sound(p, "soundeffect_32", 0.6F, 1.0F);
         float damage=(float)(p.getArmor()*0.60);
         for(LivingEntity target:CombatRuntime.nearbyEnemies(p,6)) {
             pushAway(p,target,4);
@@ -446,7 +440,7 @@ public final class EffectBehaviorRuntime {
                     Vec3d c=p.getEyePos().add(look.multiply(2));
                     for(int i=0;i<8;i++) world.spawnParticles(SpellEngineParticles.magic_holy.type(),c.x,c.y,c.z,0,look.x*0.1,look.y*0.1,look.z*0.1,1);
                 }
-                ContinuedFx.sound(p,"soundeffect_31",1.4F,1.0F);
+                SkillFx.sound(p,"soundeffect_31",1.4F,1.0F);
             }
         }
     }
@@ -460,8 +454,8 @@ public final class EffectBehaviorRuntime {
         Vec3d look=p.getRotationVec(1).normalize(); p.setVelocity(look.x*2,0,look.z*2);p.velocityModified=true;
         for(LivingEntity target:CombatRuntime.nearbyEnemies(p,3)) {
             pullToward(p,target,4);
-            ContinuedFx.plane(p, ParticleTypes.CLOUD, p.getBlockPos(), 2, 0, 0.2, 0);
-            ContinuedFx.sound(p,"soundeffect_32",0.6F,1.0F);
+            SkillFx.plane(p, ParticleTypes.CLOUD, p.getBlockPos(), 2, 0, 0.2, 0);
+            SkillFx.sound(p,"soundeffect_32",0.6F,1.0F);
             target.damage(p.getDamageSources().playerAttack(p),
                     (float)p.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE)*1.8F);
             target.addStatusEffect(new StatusEffectInstance(SmoothEffects.IMMOBILIZE,80,0,false,false,true));
@@ -471,8 +465,8 @@ public final class EffectBehaviorRuntime {
     private static void leapSlam(LivingEntity e) {
         if (!(e instanceof ServerPlayerEntity p)) return;
         if(!p.isOnGround()){ if(p.getVelocity().y>-0.9)p.setVelocity(p.getVelocity().x,-1.0,p.getVelocity().z); return; }
-        ContinuedFx.plane(p, ParticleTypes.CAMPFIRE_COSY_SMOKE, p.getBlockPos(), 3, 0, 0.3, 0);
-        ContinuedFx.sound(p,"soundeffect_14",0.5F,0.9F);
+        SkillFx.plane(p, ParticleTypes.CAMPFIRE_COSY_SMOKE, p.getBlockPos(), 3, 0, 0.3, 0);
+        SkillFx.sound(p,"soundeffect_14",0.5F,0.9F);
         for(LivingEntity target:CombatRuntime.nearbyEnemies(p,3)) {
             pushAway(p,target,4);
             target.damage(p.getDamageSources().playerAttack(p),
@@ -484,8 +478,8 @@ public final class EffectBehaviorRuntime {
 
     private static void earthshaker(LivingEntity e) {
         if (!(e instanceof ServerPlayerEntity p) || !p.isOnGround()) return;
-        ContinuedFx.sound(p,"soundeffect_14",0.3F,1.1F);
-        ContinuedFx.plane(p,ParticleTypes.CAMPFIRE_COSY_SMOKE,p.getBlockPos(),3,0,0.3,0);
+        SkillFx.sound(p,"soundeffect_14",0.3F,1.1F);
+        SkillFx.plane(p,ParticleTypes.CAMPFIRE_COSY_SMOKE,p.getBlockPos(),3,0,0.3,0);
         float damage=1F+p.getArmor()*0.5F;
         for(LivingEntity target:CombatRuntime.nearbyEnemies(p,3)) {
             pushAway(p,target,4); target.timeUntilRegen=0;
@@ -520,7 +514,7 @@ public final class EffectBehaviorRuntime {
                 double dz=Math.max(target.getBoundingBox().minZ-hz,Math.max(0,hz-target.getBoundingBox().maxZ));
                 if (dx*dx+dz*dz > 0.75*0.75) continue;
                 org.marj4n.smooth_classes.runtime.RighteousHammerChargeRuntime.passiveHit(p,target,
-                        (float)p.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE)*0.8F);
+                        (float)Math.max(p.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE),SpellPowerRuntime.healing(p,1))*.55F);
                 break;
             }
         }
@@ -530,18 +524,18 @@ public final class EffectBehaviorRuntime {
         StatusEffectInstance fx=p.getStatusEffect(SmoothEffects.CYCLONIC_CLEAVE); if(fx==null)return;
         int dur=fx.getDuration(), pts=PuffishSkillsIntegration.countUnlockedSkills(PuffishSkillsIntegration.ASCENDANCY,p);
         if(dur>10){
-            double velocity=0.05D*(39-dur);
+            double velocity=Math.min(.65,Math.max(0,0.05D*(39-dur)));
             Vec3d v=p.getRotationVector().multiply(velocity);
             p.setVelocity(v.x,0,v.z); p.velocityModified=true;
         }
         if(dur<30 && dur%5==0){
-            ContinuedFx.sound(p,"spell_slash",1.0F,1.1F);
-            ContinuedFx.plane(p, pts>29?ParticleTypes.PORTAL:ParticleTypes.CLOUD, p.getBlockPos(), 2, 0, 0.2, 0);
+            SkillFx.sound(p,"spell_slash",1.0F,1.1F);
+            SkillFx.plane(p, pts>29?ParticleTypes.PORTAL:ParticleTypes.CLOUD, p.getBlockPos(), 2, 0, 0.2, 0);
             float damage=(float)(Math.max(p.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE),
                     Math.max(SpellPowerRuntime.arcane(p,1),Math.max(SpellPowerRuntime.fire(p,1),SpellPowerRuntime.frost(p,1))))
-                    *(0.8D+0.03D*pts));
-            for(LivingEntity target:nearbyHostiles(p,2)){
-                if(pts>29) pullToward(p,target,4);
+                    *(0.75D+0.015D*AscendancyBalance.points(pts)));
+            for(LivingEntity target:nearbyHostiles(p,2.5)){
+                if(pts>29) pullToward(p,target,6);
                 target.timeUntilRegen=0;target.damage(p.getDamageSources().playerAttack(p),damage);target.timeUntilRegen=0;
             }
         }
@@ -570,43 +564,42 @@ public final class EffectBehaviorRuntime {
     private static void rapidfire(LivingEntity e){
         if(!(e instanceof ServerPlayerEntity p))return;
         if(!(p.getMainHandStack().getItem() instanceof BowItem)
-                && !(p.getMainHandStack().getItem() instanceof net.minecraft.item.CrossbowItem))return;
-        StatusEffectInstance fx=p.getStatusEffect(SmoothEffects.RAPIDFIRE);if(fx==null)return;
+                && !(p.getMainHandStack().getItem() instanceof net.minecraft.item.CrossbowItem)){
+            p.removeStatusEffect(SmoothEffects.RAPIDFIRE);return;
+        }
+        var fx=p.getStatusEffect(SmoothEffects.RAPIDFIRE);if(fx==null)return;
         int dur=fx.getDuration(),pts=PuffishSkillsIntegration.countUnlockedSkills(PuffishSkillsIntegration.ASCENDANCY,p);
-        if(dur%4==0){
-            LivingEntity target=lookTarget(p,20);
-            String spell=p.getMainHandStack().getItem() instanceof net.minecraft.item.CrossbowItem?
-                    "smooth_classes:rapidfire_crossbow":"smooth_classes:rapidfire";
-            if(target!=null)org.marj4n.smooth_classes.runtime.InternalSpellRuntime.target(p,spell,target,3F);
-            else org.marj4n.smooth_classes.runtime.InternalSpellRuntime.dumbFire(p,spell,3F);
-        } else if(dur%5==0){
+        if(dur%20==0)InternalSpellRuntime.target(p,p.getMainHandStack().getItem() instanceof net.minecraft.item.CrossbowItem?
+                "smooth_classes:rapidfire_crossbow":"smooth_classes:rapidfire",p,1F);
+        if(dur%5!=0)return;
+        LivingEntity target=lookTarget(p,32);
+        boolean fired=target!=null?InternalSpellRuntime.target(p,"smooth_classes:rapidfire_projectile",target,1.5F)
+                :InternalSpellRuntime.dumbFire(p,"smooth_classes:rapidfire_projectile",1.5F);
+        if(fired){
             int count=RAPIDFIRE_ARROW_COUNT.merge(p.getUuid(),1,Integer::sum);
-            LivingEntity target=lookTarget(p,20);
-            if(target!=null)org.marj4n.smooth_classes.runtime.InternalSpellRuntime.target(p,"smooth_classes:rapidfire_projectile",target,3F);
-            else org.marj4n.smooth_classes.runtime.InternalSpellRuntime.dumbFire(p,"smooth_classes:rapidfire_projectile",3F);
-            if(count>2&&pts>29){RAPIDFIRE_ARROW_COUNT.put(p.getUuid(),0);increment(p,SmoothEffects.MARKSMANSHIP,60,1,12);}
+            if(pts>=30&&count%4==0)increment(p,SmoothEffects.MARKSMANSHIP,60,1,8);
         }
     }
     private static void cataclysm(LivingEntity e){
         if(!(e instanceof ServerPlayerEntity p))return;
-        StatusEffectInstance fx=p.getStatusEffect(SmoothEffects.CATACLYSM);if(fx==null)return;
+        var fx=p.getStatusEffect(SmoothEffects.CATACLYSM);if(fx==null)return;
         int pts=PuffishSkillsIntegration.countUnlockedSkills(PuffishSkillsIntegration.ASCENDANCY,p);
-        int frequency=20-Math.min(12,pts/10),dur=fx.getDuration();
-        if(dur%frequency!=0)return;
-        int distance=(90-dur)/frequency*5;
+        int elapsed=70-fx.getDuration(),frequency=pts>=30?14:20;
+        if(elapsed<0||elapsed%frequency!=0)return;
+        int distance=6+(elapsed/frequency)*4;
         Vec3d look=p.getRotationVec(1F);
         Vec3d center=p.getPos().add(look.x*distance,0,look.z*distance);
-        String spell=SpellPowerRuntime.fire(p,1)>SpellPowerRuntime.frost(p,1)?
-                "smooth_classes:cataclysm_meteor":"smooth_classes:cataclysm_comet";
-        ContinuedFx.sound(p,"spell_energy",0.5F,1.1F);
-        InternalSpellRuntime.atPosition(p,spell,center,45F);
-        if(pts>29)increment(p,SmoothEffects.SPELLFORGED,60,1,10);
+        double fire=net.spell_power.api.SpellPower.getSpellPower(net.spell_power.api.SpellSchools.FIRE,p).baseValue();
+        double frost=net.spell_power.api.SpellPower.getSpellPower(net.spell_power.api.SpellSchools.FROST,p).baseValue();
+        String spell=fire>=frost?"smooth_classes:cataclysm_meteor":"smooth_classes:cataclysm_comet";
+        SkillFx.sound(p,"spell_energy",.5F,1.1F);
+        if(InternalSpellRuntime.atPosition(p,spell,center,1F)&&pts>=30)increment(p,SmoothEffects.SPELLFORGED,60,1,5);
     }
     private static void ghostwalk(LivingEntity e){
         if(!(e instanceof ServerPlayerEntity p))return;
         StatusEffectInstance fx=p.getStatusEffect(SmoothEffects.GHOSTWALK);if(fx==null)return;
         int dur=fx.getDuration(),pts=PuffishSkillsIntegration.countUnlockedSkills(PuffishSkillsIntegration.ASCENDANCY,p);
-        ContinuedFx.orbit(p,ParticleTypes.SMOKE,1,20);
+        SkillFx.orbit(p,ParticleTypes.SMOKE,1,20);
         if(dur>10){
             double groundY=p.getY()-3;
             for(int i=0;i<8;i++) if(!p.getWorld().getBlockState(p.getBlockPos().down(i)).isAir()) {
@@ -619,30 +612,33 @@ public final class EffectBehaviorRuntime {
             p.setVelocity(look.x*forward,lift,look.z*forward);
             p.setNoGravity(true);p.velocityModified=true;
         }
-        if(dur%5==0)for(LivingEntity target:nearbyHostiles(p,10))
-            if(target.getRandom().nextInt(100)<15){
+        if(dur%10==0){
+            LivingEntity target=nearbyHostiles(p,10).stream().min(java.util.Comparator.comparingDouble(p::squaredDistanceTo)).orElse(null);
+            if(target!=null){
                 float damage=(float)(Math.max(p.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE),
-                        Math.max(SpellPowerRuntime.soul(p,1),SpellPowerRuntime.arcane(p,1)))*(0.8D+0.03D*pts));
-                target.timeUntilRegen=0;target.damage(p.getDamageSources().playerAttack(p),damage);target.timeUntilRegen=0;
-                ContinuedFx.beam(p,target,ParticleTypes.SOUL,20);
-                if(pts>29)p.heal(damage/2F);break;
+                        Math.max(SpellPowerRuntime.soul(p,1),SpellPowerRuntime.arcane(p,1)))*(.35+.0075*AscendancyBalance.points(pts)));
+                int previous=target.timeUntilRegen;boolean hit;
+                try{target.timeUntilRegen=0;hit=target.damage(p.getDamageSources().playerAttack(p),damage);}finally{target.timeUntilRegen=previous;}
+                SkillFx.beam(p,target,ParticleTypes.SOUL,24);
+                if(hit&&pts>=30)p.heal(Math.min(p.getMaxHealth()*.05F,damage*.25F));
             }
+        }
     }
     private static void skywardSunder(LivingEntity e){
         if(!(e instanceof ServerPlayerEntity p))return;
         StatusEffectInstance fx=p.getStatusEffect(SmoothEffects.SKYWARD_SUNDER);if(fx==null)return;
         int dur=fx.getDuration(),pts=PuffishSkillsIntegration.countUnlockedSkills(PuffishSkillsIntegration.ASCENDANCY,p);
-        double damageModifier=0.9D+0.03D*pts;
+        double damageModifier=1D+0.02D*AscendancyBalance.points(pts);
         if(dur==42){
             org.marj4n.smooth_classes.runtime.InternalSpellRuntime.dumbFire(p,"smooth_classes:skyward_sunder",1F);
-            ContinuedFx.sound(p,"object_impact_thud_repeat",0.6F,1.0F);
+            SkillFx.sound(p,"object_impact_thud_repeat",0.6F,1.0F);
         }
         if(dur==20)org.marj4n.smooth_classes.runtime.InternalSpellRuntime.dumbFire(p,"smooth_classes:skyward_sunder_slam",1F);
-        if(dur==13) ContinuedFx.sound(p,"damage_03",0.8F,1.0F);
-        if(dur==12) ContinuedFx.sound(p,"spell_earth_punch",0.6F,1.0F);
+        if(dur==13) SkillFx.sound(p,"damage_03",0.8F,1.0F);
+        if(dur==12) SkillFx.sound(p,"spell_earth_punch",0.6F,1.0F);
         if(dur==2){
-            ContinuedFx.plane(p,ParticleTypes.CAMPFIRE_SIGNAL_SMOKE,p.getBlockPos(),2,0,1,0);
-            ContinuedFx.plane(p,ParticleTypes.POOF,p.getBlockPos(),2,0,1,0);
+            SkillFx.plane(p,ParticleTypes.CAMPFIRE_SIGNAL_SMOKE,p.getBlockPos(),2,0,1,0);
+            SkillFx.plane(p,ParticleTypes.POOF,p.getBlockPos(),2,0,1,0);
         }
         if(dur>30){
             double velocity=0.1D*(46-dur);Vec3d v=p.getRotationVector().multiply(velocity);
@@ -657,11 +653,11 @@ public final class EffectBehaviorRuntime {
             for(LivingEntity target:nearbyHostiles(p,2)){
                 target.timeUntilRegen=0;target.damage(p.getDamageSources().playerAttack(p),damage);target.timeUntilRegen=0;
                 target.setVelocity(p.getVelocity());target.velocityModified=true;
-                ContinuedFx.plane(p,ParticleTypes.CLOUD,p.getBlockPos(),1,0,1,0);
+                SkillFx.plane(p,ParticleTypes.CLOUD,p.getBlockPos(),1,0,1,0);
             }
         }
         if(dur>30&&dur%2==0)for(LivingEntity target:nearbyHostiles(p,2)){
-            if(pts>30)target.addStatusEffect(new StatusEffectInstance(SmoothEffects.DEATH_MARK,60,0,false,false,true));
+            if(pts>=30)target.addStatusEffect(new StatusEffectInstance(SmoothEffects.DEATH_MARK,60,0,false,false,true));
             target.timeUntilRegen=0;target.damage(p.getDamageSources().playerAttack(p),0.5F);target.timeUntilRegen=0;
             target.setVelocity(p.getVelocity());target.velocityModified=true;
         }
@@ -689,10 +685,10 @@ public final class EffectBehaviorRuntime {
             LivingEntity heal=ep<op?e:owner, sacrifice=ep<op?owner:e;
             if(sacrifice.getHealth()>5F){
                 sacrifice.setHealth(sacrifice.getHealth()-1F);heal.heal(1F);
-                ContinuedFx.plane(heal,SpellEngineParticles.magic_heal.type(),heal.getBlockPos(),1,0,0.2,0);
-                ContinuedFx.plane(heal,SpellEngineParticles.magic_holy.type(),heal.getBlockPos(),1,0,0.2,0);
-                ContinuedFx.sound(sacrifice,"soundeffect_28",0.1F,1.1F);
-                ContinuedFx.sound(heal,"soundeffect_25",0.1F,1.0F);
+                SkillFx.plane(heal,SpellEngineParticles.magic_heal.type(),heal.getBlockPos(),1,0,0.2,0);
+                SkillFx.plane(heal,SpellEngineParticles.magic_holy.type(),heal.getBlockPos(),1,0,0.2,0);
+                SkillFx.sound(sacrifice,"soundeffect_28",0.1F,1.1F);
+                SkillFx.sound(heal,"soundeffect_25",0.1F,1.0F);
             }
         }
     }
@@ -744,20 +740,21 @@ public final class EffectBehaviorRuntime {
         if(!(e instanceof ServerPlayerEntity p))return;
         StatusEffectInstance shield=p.getStatusEffect(SmoothEffects.RIGHTEOUS_SHIELD);
         if(shield==null||shield.getDuration()!=10)return;
-        ContinuedFx.sound(p,"hit_03",1F,1.1F);
+        SkillFx.sound(p,"hit_03",1F,1.1F);
         StatusEffectInstance aegis=p.getStatusEffect(SmoothEffects.GOLDEN_AEGIS);
         if(aegis==null)return;
         int stacks=aegis.getAmplifier();
         String spell;
         int consume;
-        if(stacks>14){spell="righteous_shield_projectile_4";consume=15;}
-        else if(stacks>9){spell="righteous_shield_projectile_3";consume=10;}
-        else if(stacks>4){spell="righteous_shield_projectile_2";consume=5;}
+        int tier=AscendancyBalance.shieldTier(stacks+1);
+        if(tier==4){spell="righteous_shield_projectile_4";consume=15;}
+        else if(tier==3){spell="righteous_shield_projectile_3";consume=10;}
+        else if(tier==2){spell="righteous_shield_projectile_2";consume=5;}
         else {spell="righteous_shield_projectile";consume=stacks+1;}
-        InternalSpellRuntime.target(p,"smooth_classes:"+spell,p,1F);
+        if(!InternalSpellRuntime.target(p,"smooth_classes:"+spell,p,1F))return;
         int remaining=(stacks+1)-consume;
-        if(remaining<=0)p.removeStatusEffect(SmoothEffects.GOLDEN_AEGIS);
-        else p.addStatusEffect(new StatusEffectInstance(SmoothEffects.GOLDEN_AEGIS,
+        p.removeStatusEffect(SmoothEffects.GOLDEN_AEGIS);
+        if(remaining>0)p.addStatusEffect(new StatusEffectInstance(SmoothEffects.GOLDEN_AEGIS,
                 aegis.getDuration(),remaining-1,false,false,true));
     }
 

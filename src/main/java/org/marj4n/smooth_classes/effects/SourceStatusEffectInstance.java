@@ -6,7 +6,7 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 
 /**
  * Source-aware effect instance used by curse/taunt mechanics.
- * Mirrors Continued's SimplyStatusEffectInstance without depending on Continued.
+ * Stores the source entity for a status effect.
  */
 public final class SourceStatusEffectInstance extends StatusEffectInstance {
     private final LivingEntity sourceEntity;

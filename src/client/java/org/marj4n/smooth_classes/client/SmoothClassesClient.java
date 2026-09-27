@@ -93,10 +93,12 @@ public final class SmoothClassesClient implements ClientModInitializer {
                     long ascRemaining = buf.readLong();
                     boolean bannerActive=buf.readBoolean();
                     boolean bloodRainActive=buf.readBoolean();
+                    boolean whenOnHighActive=buf.readBoolean();
                     client.execute(() -> {
                         AbilityHudState.sync(sig,sigTotal,sigRemaining,asc,ascTotal,ascRemaining);
                         AbilityHudState.bannerActive=bannerActive;
                         AbilityHudState.bloodRainActive=bloodRainActive;
+                        AbilityHudState.whenOnHighActive=whenOnHighActive;
                     });
                 });
 
@@ -154,6 +156,9 @@ public final class SmoothClassesClient implements ClientModInitializer {
         if (asc && "magic_circle".equals(ability) && AbilityHudState.bloodRainActive) {
             client.player.sendMessage(Text.literal("Raining Blood is still active."),true);return;
         }
+        if (AbilityHudState.whenOnHighActive) {
+            client.player.sendMessage(Text.literal("When On High is still channeling."),true);return;
+        }
         if (remaining > 0) {
             client.player.sendMessage(Text.literal("Ability can be used again in " + (int)Math.ceil(remaining/1000D) + "s"), true);
             client.player.getWorld().playSound(client.player, client.player.getBlockPos(), SmoothSounds.ABILITY_BLOCKED, SoundCategory.PLAYERS, 0.1F, 1.5F);
@@ -169,6 +174,7 @@ public final class SmoothClassesClient implements ClientModInitializer {
     private static void registerEntities() {
         EntityRendererRegistry.register(SmoothEntities.TORMENT_FIELD, org.marj4n.smooth_classes.client.renderer.TormentFieldRenderer::new);
         EntityRendererRegistry.register(SmoothEntities.BLOOD_RAIN, org.marj4n.smooth_classes.client.renderer.BloodRainRenderer::new);
+        EntityRendererRegistry.register(SmoothEntities.HIGH_BEAM, org.marj4n.smooth_classes.client.renderer.HighBeamRenderer::new);
         EntityRendererRegistry.register(SmoothEntities.SACRED_BANNER, SacredBannerRenderer::new);
         EntityRendererRegistry.register(SmoothEntities.SPELL_TARGET, SpellTargetRenderer::new);
         EntityRendererRegistry.register(SmoothEntities.DREADGLARE, DreadglareRenderer::new);

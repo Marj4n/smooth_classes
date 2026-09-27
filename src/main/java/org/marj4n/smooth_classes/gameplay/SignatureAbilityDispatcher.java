@@ -26,6 +26,7 @@ public final class SignatureAbilityDispatcher {
     }
 
     public static DispatchResult cast(ServerPlayerEntity player) {
+        if(org.marj4n.smooth_classes.runtime.WhenOnHighRuntime.active(player))return DispatchResult.fail("When On High is still channeling.");
         try {
             if (clazz(player, "caster")) {
                 if (skill(player,"caster","is053f9imz801s57")) return result(player, "meteor_shower", () -> CasterRuntime.executeMeteorShower(player));
@@ -83,6 +84,7 @@ public final class SignatureAbilityDispatcher {
 
     /** Playtest entrypoint: cast one exact ability while still enforcing Puffish unlock + cooldown. */
     public static DispatchResult castNamed(ServerPlayerEntity player, String ability) {
+        if(org.marj4n.smooth_classes.runtime.WhenOnHighRuntime.active(player))return DispatchResult.fail("When On High is still channeling.");
         String a = ability.toLowerCase(java.util.Locale.ROOT);
 
         try {
@@ -145,7 +147,7 @@ public final class SignatureAbilityDispatcher {
         return new DispatchResult(true, "summoning_ritual", "summoned " + spawned + " minion(s)");
     }
 
-    /** Continued HUD slot selection: exactly one active signature is displayed/cast. */
+    /** HUD slot selection: exactly one active signature is displayed/cast. */
     public static String selectedAbility(ServerPlayerEntity player) {
         java.util.List<String> unlocked = unlockedAbilities(player);
         return unlocked.isEmpty() ? "" : unlocked.get(0);

@@ -12,7 +12,9 @@
     "LivingEntityGameplayMixin",
     "FollowOwnerGoalMixin",
     "SacredBannerBuffMixin",
-    "TormentBurnMixin"
+    "TormentBurnMixin",
+    "WhenOnHighInvulnerabilityMixin",
+    "WhenOnHighEffectGuardMixin"
   ],
   "injectors": {
     "defaultRequire": 1

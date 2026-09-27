@@ -5,7 +5,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
-import org.marj4n.smooth_classes.runtime.ContinuedFx;
+import org.marj4n.smooth_classes.runtime.SkillFx;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.util.Identifier;
 import org.marj4n.smooth_classes.content.assassin.AssassinClass;
@@ -46,7 +46,7 @@ public final class AssassinRuntime {
         PreparationPlan plan = preparation(player);
         ClassEffectRuntime.apply(player, SmoothEffects.STEALTH, 80, 0);
         CombatRuntime.buff(player, StatusEffects.SPEED, 80, 2);
-        ContinuedFx.sound(player, "soundeffect_39", 0.6F, 1.6F);
+        SkillFx.sound(player, "soundeffect_39", 0.6F, 1.6F);
         if (has(player, AssassinContent.PREPARATION_SHADOWSTRIKE_SHIELD.id())) {
             ClassEffectRuntime.apply(player, SmoothEffects.BARRIER, 20, 0);
             player.removeStatusEffect(SmoothEffects.REVEALED);
@@ -74,7 +74,7 @@ public final class AssassinRuntime {
             Vec3d velocity=look.multiply(actualRange);
             player.setVelocity(velocity.x,0,velocity.z);
             player.velocityModified=true;
-            ContinuedFx.sound(player,"soundeffect_15",0.6F,1.3F);
+            SkillFx.sound(player,"soundeffect_15",0.6F,1.3F);
         }
         return ExecutionResult.success(1, "preparation");
     }

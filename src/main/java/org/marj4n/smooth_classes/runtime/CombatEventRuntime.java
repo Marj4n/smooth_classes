@@ -15,7 +15,7 @@ import org.marj4n.smooth_classes.runtime.base.BasePathRuntime;
 import org.marj4n.smooth_classes.runtime.classpass.ClassPassiveRuntime;
 import org.marj4n.smooth_classes.content.ruler.runtime.RulerRuntime;
 import org.marj4n.smooth_classes.integration.PuffishSkillsIntegration;
-import org.marj4n.smooth_classes.integration.SimplySkillsNodeIds;
+import org.marj4n.smooth_classes.integration.SkillNodeIds;
 import org.marj4n.smooth_classes.integration.OptionalCompatRuntime;
 import org.marj4n.smooth_classes.content.avenger.AvengerClass;
 import org.marj4n.smooth_classes.content.avenger.runtime.AvengerMinionGameplay;
@@ -54,18 +54,18 @@ public final class CombatEventRuntime {
         ClassPassiveRuntime.onMeleeHit(player, living);
         RulerRuntime.onAnointedMeleeHit(player);
 
-        // Continued: Elemental Surge Renewal extends the active surge by 3 ticks per melee hit.
-        if (has(player, PuffishSkillsIntegration.FOREIGNER, SimplySkillsNodeIds.spellbladeSpecialisationElementalSurgeRenewal)
+        // Elemental Surge Renewal extends the active surge by 3 ticks per melee hit.
+        if (has(player, PuffishSkillsIntegration.FOREIGNER, SkillNodeIds.spellbladeSpecialisationElementalSurgeRenewal)
                 && player.hasStatusEffect(SmoothEffects.ELEMENTAL_SURGE)) {
             int duration = player.getStatusEffect(SmoothEffects.ELEMENTAL_SURGE).getDuration();
             player.addStatusEffect(new StatusEffectInstance(SmoothEffects.ELEMENTAL_SURGE, duration + 3, 0, false, false, true));
         }
-        // Continued Bloodthirsty modifiers are melee-event procs.
+        // Bloodthirsty modifiers are melee-event procs.
         if (player.hasStatusEffect(SmoothEffects.BLOODTHIRSTY)) {
-            if (has(player, PuffishSkillsIntegration.BERSERKER, SimplySkillsNodeIds.berserkerSpecialisationBloodthirstyTremor)
+            if (has(player, PuffishSkillsIntegration.BERSERKER, SkillNodeIds.berserkerSpecialisationBloodthirstyTremor)
                     && player.getRandom().nextInt(100) < SmoothBalance.Berserker.bloodthirstyTremorChance)
                 increment(player, SmoothEffects.EARTHSHAKER, 30, 1, 1);
-            if (has(player, PuffishSkillsIntegration.BERSERKER, SimplySkillsNodeIds.berserkerSpecialisationBloodthirstyTireless)
+            if (has(player, PuffishSkillsIntegration.BERSERKER, SkillNodeIds.berserkerSpecialisationBloodthirstyTireless)
                     && player.getRandom().nextInt(100) < SmoothBalance.Berserker.bloodthirstyTirelessChance)
                 decrement(player, SmoothEffects.EXHAUSTION, 1);
         }
@@ -77,12 +77,12 @@ public final class CombatEventRuntime {
 
         if (!AscendancyRuntime.incomingDamage(player, source, amount)) return false;
 
-        // Continued Barrier consumes one stack and completely absorbs the hit.
+        // Barrier consumes one stack and completely absorbs the hit.
         if (player.hasStatusEffect(SmoothEffects.BARRIER)) {
             decrement(player, SmoothEffects.BARRIER, 1);
             return false;
         }
-        // Ghostwalk is an invulnerability movement state in Continued.
+        // Ghostwalk is an invulnerability movement state in this runtime.
         if (player.hasStatusEffect(SmoothEffects.GHOSTWALK)) return false;
 
         if (!ClassPassiveRuntime.allowDamage(player)) return false;
@@ -102,22 +102,23 @@ public final class CombatEventRuntime {
     }
 
     public static void afterIncomingDamage(ServerPlayerEntity player, DamageSource source, float amount) {
-        // Continued: Berserker path gains one Rage stack whenever real damage lands.
-        if (has(player, PuffishSkillsIntegration.TREE, SimplySkillsNodeIds.berserkerPath))
+        if(amount>0)AscendancyRuntime.boneArmorHit(player);
+        // Berserker path gains one Rage stack whenever real damage lands.
+        if (has(player, PuffishSkillsIntegration.TREE, SkillNodeIds.berserkerPath))
             increment(player, SmoothEffects.RAGE, 300, 1, 99);
     }
 
     public static void onKilledOther(ServerPlayerEntity player, ServerWorld world, LivingEntity victim) {
-        // Renewal effects are intentionally event-based, matching Continued's
+        // Renewal effects are intentionally event-based, matching the
         // PlayerEntity#onKilledOther hook rather than polling.
-        if (has(player, PuffishSkillsIntegration.BERSERKER, SimplySkillsNodeIds.berserkerSpecialisationBloodthirsty)
+        if (has(player, PuffishSkillsIntegration.BERSERKER, SkillNodeIds.berserkerSpecialisationBloodthirsty)
                 && player.hasStatusEffect(SmoothEffects.BLOODTHIRSTY))
             player.heal(player.getMaxHealth() * SmoothBalance.Berserker.bloodthirstyHealPercent);
-        if (has(player, PuffishSkillsIntegration.ARCHER, SimplySkillsNodeIds.rangerSpecialisationElementalArrowsRenewal)
+        if (has(player, PuffishSkillsIntegration.ARCHER, SkillNodeIds.rangerSpecialisationElementalArrowsRenewal)
                 && player.hasStatusEffect(SmoothEffects.ELEMENTAL_ARROWS))
             player.addStatusEffect(new StatusEffectInstance(SmoothEffects.ELEMENTAL_ARROWS, 500,
                     Math.max(0, player.getStatusEffect(SmoothEffects.ELEMENTAL_ARROWS).getAmplifier()), false, false, true));
-        if (has(player, PuffishSkillsIntegration.ASSASSIN, SimplySkillsNodeIds.rogueSpecialisationEvasionFanOfBladesRenewal))
+        if (has(player, PuffishSkillsIntegration.ASSASSIN, SkillNodeIds.rogueSpecialisationEvasionFanOfBladesRenewal))
             player.addStatusEffect(new StatusEffectInstance(SmoothEffects.FANOFBLADES, 500, 1, false, false, true));
     }
 

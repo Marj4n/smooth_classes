@@ -3,12 +3,13 @@ package org.marj4n.smooth_classes.client;
 import net.minecraft.util.Identifier;
 import org.marj4n.smooth_classes.SmoothClasses;
 
-/** Client mirror of Continued's two ability slots. Server remains authoritative. */
+/** Client mirror of two ability slots. Server remains authoritative. */
 public final class AbilityHudState {
     private AbilityHudState() {}
 
     public static boolean bannerActive;
     public static boolean bloodRainActive;
+    public static boolean whenOnHighActive;
     public static String signatureAbility = "";
     public static String ascendancyAbility = "";
     public static int signatureCooldownMs = 500;

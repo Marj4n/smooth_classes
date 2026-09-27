@@ -89,7 +89,7 @@
         "type": "DAMAGE",
         "damage": {
           "knockback": 0.1,
-          "spell_power_coefficient": 0.6
+          "spell_power_coefficient": 1.0
         }
       },
       "sound": {

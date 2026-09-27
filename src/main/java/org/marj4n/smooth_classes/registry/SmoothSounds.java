@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/** Registers every bundled SimplySkills Continued sound under smooth_classes. */
+/** Registers every bundled Smooth Classes sound under smooth_classes. */
 public final class SmoothSounds {
     private static final Map<String, SoundEvent> EVENTS = new LinkedHashMap<>();
 

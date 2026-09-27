@@ -7,7 +7,7 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.spell_engine.fx.SpellEngineParticles;
 import org.marj4n.smooth_classes.runtime.InternalSpellRuntime;
 import org.marj4n.smooth_classes.runtime.SpellPowerRuntime;
-import org.marj4n.smooth_classes.runtime.ContinuedFx;
+import org.marj4n.smooth_classes.runtime.SkillFx;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.util.Identifier;
 import org.marj4n.smooth_classes.content.ruler.RulerClass;
@@ -99,9 +99,9 @@ public final class RulerRuntime {
                 target.timeUntilRegen=0; target.damage(player.getDamageSources().indirectMagic(player,player),amount); target.timeUntilRegen=0;
                 if(target instanceof MobEntity mob&&mob.isUndead()) target.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS,40,1,false,false,true));
                 for(int i=6;i>0;i--){
-                    ContinuedFx.particle(target,SpellEngineParticles.magic_holy.type(),0.1,0.1+i,0.2);
-                    ContinuedFx.particle(target,SpellEngineParticles.magic_holy.type(),0.2,0.2+i,0.1);
-                    ContinuedFx.particle(target,SpellEngineParticles.magic_holy.type(),0.1,0.2*i,0.2);
+                    SkillFx.particle(target,SpellEngineParticles.magic_holy.type(),0.1,0.1+i,0.2);
+                    SkillFx.particle(target,SpellEngineParticles.magic_holy.type(),0.2,0.2+i,0.1);
+                    SkillFx.particle(target,SpellEngineParticles.magic_holy.type(),0.1,0.2*i,0.2);
                 }
             }
         }

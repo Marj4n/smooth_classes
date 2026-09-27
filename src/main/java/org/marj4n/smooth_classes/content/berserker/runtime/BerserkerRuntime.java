@@ -1,7 +1,7 @@
 package org.marj4n.smooth_classes.content.berserker.runtime;
 
 import net.minecraft.server.network.ServerPlayerEntity;
-import org.marj4n.smooth_classes.runtime.ContinuedFx;
+import org.marj4n.smooth_classes.runtime.SkillFx;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.util.Identifier;
 import org.marj4n.smooth_classes.content.berserker.BerserkerClass;
@@ -33,7 +33,7 @@ public final class BerserkerRuntime {
         ClassEffectRuntime.apply(player, SmoothEffects.RAMPAGE, 250, 0);
         if (plan.bloodlust()) {
             ClassEffectRuntime.apply(player, SmoothEffects.BULLRUSH, 20, 0);
-            ContinuedFx.sound(player, "soundeffect_15", 0.5F, 1.1F);
+            SkillFx.sound(player, "soundeffect_15", 0.5F, 1.1F);
         }
         return ExecutionResult.success(1, "rampage");
     }
@@ -52,7 +52,7 @@ public final class BerserkerRuntime {
         ClassEffectRuntime.apply(player, SmoothEffects.BERSERKING, Math.max(20, (int)(sacrifice * 20F)), 0);
         if (plan.resistance()) {
             ClassEffectRuntime.apply(player, SmoothEffects.LEAPSLAM, 62, 0);
-            ContinuedFx.sound(player, "soundeffect_15", 0.5F, 1.1F);
+            SkillFx.sound(player, "soundeffect_15", 0.5F, 1.1F);
         }
         return ExecutionResult.success(1, "berserking");
     }

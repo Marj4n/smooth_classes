@@ -7,7 +7,7 @@ import net.minecraft.util.Identifier;
 import org.marj4n.smooth_classes.content.caster.CasterClass;
 import org.marj4n.smooth_classes.content.caster.CasterContent;
 import org.marj4n.smooth_classes.integration.PuffishSkillsIntegration;
-import org.marj4n.smooth_classes.integration.SimplySkillsNodeIds;
+import org.marj4n.smooth_classes.integration.SkillNodeIds;
 import org.marj4n.smooth_classes.runtime.AbilityRuntime;
 import org.marj4n.smooth_classes.runtime.CombatRuntime;
 import org.marj4n.smooth_classes.runtime.ExecutionResult;
@@ -59,9 +59,9 @@ public final class CasterRuntime {
                 e->e!=player&&e.isAlive()&&OptionalCompatRuntime.canHarm(player,e)).stream().findFirst().orElse(null);
         String spell="ice_comet";
         if(PuffishSkillsIntegration.isSkillUnlocked(PuffishSkillsIntegration.CASTER,
-                SimplySkillsNodeIds.wizardSpecialisationIceCometDamageThree,player))spell="ice_comet_large_three";
+                SkillNodeIds.wizardSpecialisationIceCometDamageThree,player))spell="ice_comet_large_three";
         else if(PuffishSkillsIntegration.isSkillUnlocked(PuffishSkillsIntegration.CASTER,
-                SimplySkillsNodeIds.wizardSpecialisationIceCometDamageTwo,player))spell="ice_comet_large_two";
+                SkillNodeIds.wizardSpecialisationIceCometDamageTwo,player))spell="ice_comet_large_two";
         else if(plan.impact())spell="ice_comet_large";
         boolean cast=target!=null?InternalSpellRuntime.target(player,"smooth_classes:"+spell,target,1F)
                 :InternalSpellRuntime.dumbFire(player,"smooth_classes:"+spell,1F);
@@ -84,8 +84,8 @@ public final class CasterRuntime {
         boolean cast=org.marj4n.smooth_classes.runtime.InternalSpellRuntime.target(player,"smooth_classes:static_discharge",target,3F);
         if(cast&&has(player,CasterContent.STATIC_DISCHARGE_LEAP.id())){
             int amp=12;
-            if(PuffishSkillsIntegration.isSkillUnlocked(PuffishSkillsIntegration.CASTER, SimplySkillsNodeIds.wizardSpecialisationStaticDischargeLeapTwo,player))amp+=20;
-            else if(PuffishSkillsIntegration.isSkillUnlocked(PuffishSkillsIntegration.CASTER,SimplySkillsNodeIds.wizardSpecialisationStaticDischargeLeapThree,player))amp+=40;
+            if(PuffishSkillsIntegration.isSkillUnlocked(PuffishSkillsIntegration.CASTER, SkillNodeIds.wizardSpecialisationStaticDischargeLeapTwo,player))amp+=20;
+            else if(PuffishSkillsIntegration.isSkillUnlocked(PuffishSkillsIntegration.CASTER,SkillNodeIds.wizardSpecialisationStaticDischargeLeapThree,player))amp+=40;
             target.addStatusEffect(new org.marj4n.smooth_classes.effects.SourceStatusEffectInstance(
                     org.marj4n.smooth_classes.effects.SmoothEffects.STATIC_CHARGE,1600,amp,false,false,true,player));
         }
@@ -93,7 +93,7 @@ public final class CasterRuntime {
         return ExecutionResult.success(cast?1:0,"static_discharge");
     }
 
-    /** Continued's on-hit speed and lightning-orb rolls, shared by the first hit and every leap. */
+    /** on-hit speed and lightning-orb rolls, shared by the first hit and every leap. */
     public static void onStaticChargeHit(ServerPlayerEntity owner, LivingEntity target) {
         if (owner.getWorld() instanceof net.minecraft.server.world.ServerWorld world) {
             net.minecraft.entity.LightningEntity flash=net.minecraft.entity.EntityType.LIGHTNING_BOLT.create(world);
@@ -107,9 +107,9 @@ public final class CasterRuntime {
         }
         int chance = 5;
         if (PuffishSkillsIntegration.isSkillUnlocked(PuffishSkillsIntegration.CASTER,
-                SimplySkillsNodeIds.wizardSpecialisationStaticDischargeSpeedThree, owner)) chance += 10;
+                SkillNodeIds.wizardSpecialisationStaticDischargeSpeedThree, owner)) chance += 10;
         else if (PuffishSkillsIntegration.isSkillUnlocked(PuffishSkillsIntegration.CASTER,
-                SimplySkillsNodeIds.wizardSpecialisationStaticDischargeSpeedTwo, owner)) chance += 5;
+                SkillNodeIds.wizardSpecialisationStaticDischargeSpeedTwo, owner)) chance += 5;
         if (has(owner, CasterContent.STATIC_DISCHARGE_SPEED.id()) && owner.getRandom().nextInt(100) < chance) {
             net.minecraft.entity.effect.StatusEffectInstance old = owner.getStatusEffect(StatusEffects.SPEED);
             int amp = old == null ? 0 : Math.min(2, old.getAmplifier() + 1);

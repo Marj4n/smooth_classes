@@ -17,11 +17,11 @@ import net.spell_power.api.SpellSchool;
 import net.spell_power.api.SpellSchools;
 import org.marj4n.smooth_classes.effects.SmoothEffects;
 import org.marj4n.smooth_classes.integration.PuffishSkillsIntegration;
-import org.marj4n.smooth_classes.integration.SimplySkillsNodeIds;
+import org.marj4n.smooth_classes.integration.SkillNodeIds;
 import org.marj4n.smooth_classes.integration.OptionalCompatRuntime;
 import org.marj4n.smooth_classes.runtime.AscendancyRuntime;
 import org.marj4n.smooth_classes.content.saber.runtime.SaberRuntime;
-import org.marj4n.smooth_classes.runtime.ContinuedFx;
+import org.marj4n.smooth_classes.runtime.SkillFx;
 import org.marj4n.smooth_classes.runtime.InternalSpellRuntime;
 import org.marj4n.smooth_classes.runtime.AbilityRuntime;
 import org.marj4n.smooth_classes.content.foreigner.ForeignerContent;
@@ -30,7 +30,7 @@ import java.util.List;
 
 /**
  * Chapter 2: class passive parity.
- * Values and triggers mirror SimplySkills Continued's non-signature class passives.
+ * Values and triggers mirror Smooth Classes's non-signature class passives.
  * Puffish Skills remains authoritative for every unlock.
  */
 public final class ClassPassiveRuntime {
@@ -59,11 +59,11 @@ public final class ClassPassiveRuntime {
     }
 
     // ------------------------------------------------------------
-    // CASTER — Continued Lightning Orb lifecycle
+    // CASTER — Lightning Orb lifecycle
     // ------------------------------------------------------------
     private static void casterTick(ServerPlayerEntity p) {
         if(p.age%40!=0)return;
-        if(!has(p,PuffishSkillsIntegration.CASTER,SimplySkillsNodeIds.wizardSpecialisationStaticDischargeLightningOrb))return;
+        if(!has(p,PuffishSkillsIntegration.CASTER,SkillNodeIds.wizardSpecialisationStaticDischargeLightningOrb))return;
         int count=0;
         net.minecraft.util.math.Box box=new net.minecraft.util.math.Box(p.getX()+15,p.getY()+45,p.getZ()+15,p.getX()-15,p.getY()-45,p.getZ()-15);
         for(net.spell_engine.entity.SpellProjectile projectile:p.getWorld().getEntitiesByClass(net.spell_engine.entity.SpellProjectile.class,box,q->q.getOwner()==p))
@@ -77,37 +77,37 @@ public final class ClassPassiveRuntime {
     private static void berserkerTick(ServerPlayerEntity p) {
         if (p.age % 20 != 0) return;
 
-        if (has(p,PuffishSkillsIntegration.BERSERKER,SimplySkillsNodeIds.berserkerSwordMastery)
+        if (has(p,PuffishSkillsIntegration.BERSERKER,SkillNodeIds.berserkerSwordMastery)
                 && p.getMainHandStack().getItem() instanceof SwordItem) {
-            int mastery = has(p,PuffishSkillsIntegration.BERSERKER,SimplySkillsNodeIds.berserkerSwordMasteryProficient) ? 1 : 0;
+            int mastery = has(p,PuffishSkillsIntegration.BERSERKER,SkillNodeIds.berserkerSwordMasteryProficient) ? 1 : 0;
             p.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED,25,mastery,false,false,true));
-            if (has(p,PuffishSkillsIntegration.BERSERKER,SimplySkillsNodeIds.berserkerSwordMasterySkilled) && p.getOffHandStack().isEmpty())
+            if (has(p,PuffishSkillsIntegration.BERSERKER,SkillNodeIds.berserkerSwordMasterySkilled) && p.getOffHandStack().isEmpty())
                 inc(p,SmoothEffects.MIGHT,25,1,3);
         }
 
-        if (has(p,PuffishSkillsIntegration.BERSERKER,SimplySkillsNodeIds.berserkerAxeMastery)
+        if (has(p,PuffishSkillsIntegration.BERSERKER,SkillNodeIds.berserkerAxeMastery)
                 && p.getMainHandStack().getItem() instanceof AxeItem) {
             int mastery = 0;
-            if (has(p,PuffishSkillsIntegration.BERSERKER,SimplySkillsNodeIds.berserkerAxeMasterySkilled)) mastery += 2;
-            else if (has(p,PuffishSkillsIntegration.BERSERKER,SimplySkillsNodeIds.berserkerAxeMasteryProficient)) mastery += 1;
+            if (has(p,PuffishSkillsIntegration.BERSERKER,SkillNodeIds.berserkerAxeMasterySkilled)) mastery += 2;
+            else if (has(p,PuffishSkillsIntegration.BERSERKER,SkillNodeIds.berserkerAxeMasteryProficient)) mastery += 1;
             p.addStatusEffect(new StatusEffectInstance(StatusEffects.STRENGTH,25,mastery,false,false,true));
         }
 
-        if (has(p,PuffishSkillsIntegration.BERSERKER,SimplySkillsNodeIds.berserkerIgnorePain)
+        if (has(p,PuffishSkillsIntegration.BERSERKER,SkillNodeIds.berserkerIgnorePain)
                 && p.getHealth() <= p.getMaxHealth()*0.40F) {
             int mastery = 0;
-            if (has(p,PuffishSkillsIntegration.BERSERKER,SimplySkillsNodeIds.berserkerIgnorePainSkilled)) mastery += 2;
-            else if (has(p,PuffishSkillsIntegration.BERSERKER,SimplySkillsNodeIds.berserkerIgnorePainProficient)) mastery += 1;
+            if (has(p,PuffishSkillsIntegration.BERSERKER,SkillNodeIds.berserkerIgnorePainSkilled)) mastery += 2;
+            else if (has(p,PuffishSkillsIntegration.BERSERKER,SkillNodeIds.berserkerIgnorePainProficient)) mastery += 1;
             p.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE,25,mastery,false,false,true));
         }
 
-        // Continued contains the Recklessness method even though its current call site is absent.
+        // contains the Recklessness method even though its current call site is absent.
         // Smooth Classes wires the intended passive so the unlocked node is not dead.
-        if (has(p,PuffishSkillsIntegration.BERSERKER,SimplySkillsNodeIds.berserkerRecklessness)
+        if (has(p,PuffishSkillsIntegration.BERSERKER,SkillNodeIds.berserkerRecklessness)
                 && p.getHealth() >= p.getMaxHealth()*0.70F)
             p.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS,25,0,false,false,true));
 
-        if (has(p,PuffishSkillsIntegration.BERSERKER,SimplySkillsNodeIds.berserkerChallenge)) {
+        if (has(p,PuffishSkillsIntegration.BERSERKER,SkillNodeIds.berserkerChallenge)) {
             int count=Math.min(5,enemies(p,2).size());
             if(count>1)p.addStatusEffect(new StatusEffectInstance(StatusEffects.HASTE,25,count-1,false,false,true));
         }
@@ -118,11 +118,11 @@ public final class ClassPassiveRuntime {
     // ------------------------------------------------------------
     private static void assassinTick(ServerPlayerEntity p) {
         // Backstab's secondary passive: nearby weakened enemies can return the rogue to stealth.
-        if (has(p,PuffishSkillsIntegration.ASSASSIN,SimplySkillsNodeIds.rogueBackstab) && p.age%20==0) {
+        if (has(p,PuffishSkillsIntegration.ASSASSIN,SkillNodeIds.rogueBackstab) && p.age%20==0) {
             for (LivingEntity e:enemies(p,8)) {
                 if (e.hasStatusEffect(StatusEffects.WEAKNESS) && p.getRandom().nextInt(100)<3) {
                     p.addStatusEffect(new StatusEffectInstance(SmoothEffects.STEALTH,200,0,false,false,true));
-                    ContinuedFx.sound(p, "soundeffect_39", 0.6F, 1.6F);
+                    SkillFx.sound(p, "soundeffect_39", 0.6F, 1.6F);
                 }
             }
         }
@@ -134,7 +134,7 @@ public final class ClassPassiveRuntime {
     // ARCHER / RANGER
     // ------------------------------------------------------------
     private static void archerTick(ServerPlayerEntity p) {
-        if(has(p,PuffishSkillsIntegration.ARCHER,SimplySkillsNodeIds.rangerReveal) && p.age%80==0) {
+        if(has(p,PuffishSkillsIntegration.ARCHER,SkillNodeIds.rangerReveal) && p.age%80==0) {
             for(LivingEntity e:enemies(p,12)) if(e.hasStatusEffect(SmoothEffects.STEALTH)) {
                 e.removeStatusEffect(SmoothEffects.STEALTH);
                 e.addStatusEffect(new StatusEffectInstance(SmoothEffects.REVEALED,180,1,false,false,true));
@@ -142,20 +142,20 @@ public final class ClassPassiveRuntime {
         }
 
         List<LivingEntity> pets=pets(p,12);
-        if(has(p,PuffishSkillsIntegration.ARCHER,SimplySkillsNodeIds.rangerTamer) && p.age%80==0)
+        if(has(p,PuffishSkillsIntegration.ARCHER,SkillNodeIds.rangerTamer) && p.age%80==0)
             pets.forEach(e->{
                 e.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION,85,1,false,false,true));
                 e.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE,85,2,false,false,true));
             });
 
-        if(has(p,PuffishSkillsIntegration.ARCHER,SimplySkillsNodeIds.rangerBonded) && p.age%10==0) {
+        if(has(p,PuffishSkillsIntegration.ARCHER,SkillNodeIds.rangerBonded) && p.age%10==0) {
             for(LivingEntity e:pets) {
                 float petPct=e.getHealth()/e.getMaxHealth()*100F, playerPct=p.getHealth()/p.getMaxHealth()*100F;
                 if(petPct>playerPct && petPct>30F) { e.setHealth(Math.max(1F,e.getHealth()-1F)); p.heal(1F); }
             }
         }
 
-        if(has(p,PuffishSkillsIntegration.ARCHER,SimplySkillsNodeIds.rangerTrained) && p.age%80==0)
+        if(has(p,PuffishSkillsIntegration.ARCHER,SkillNodeIds.rangerTrained) && p.age%80==0)
             pets.forEach(e->{
                 if(e.getHealth()/e.getMaxHealth()*100F>70F) {
                     e.addStatusEffect(new StatusEffectInstance(StatusEffects.STRENGTH,85,1,false,false,true));
@@ -163,7 +163,7 @@ public final class ClassPassiveRuntime {
                 }
             });
 
-        if(has(p,PuffishSkillsIntegration.ARCHER,SimplySkillsNodeIds.rangerIncognito)
+        if(has(p,PuffishSkillsIntegration.ARCHER,SkillNodeIds.rangerIncognito)
                 && p.age%20==0 && p.hasStatusEffect(SmoothEffects.STEALTH))
             pets.forEach(e->e.addStatusEffect(new StatusEffectInstance(StatusEffects.INVISIBILITY,25,0,false,false,true)));
     }
@@ -172,11 +172,11 @@ public final class ClassPassiveRuntime {
     // SABER / CRUSADER
     // ------------------------------------------------------------
     private static void saberTick(ServerPlayerEntity p) {
-        if(has(p,PuffishSkillsIntegration.SABER,SimplySkillsNodeIds.crusaderAegis)
+        if(has(p,PuffishSkillsIntegration.SABER,SkillNodeIds.crusaderAegis)
                 && p.age%25==0 && p.hasStatusEffect(SmoothEffects.EXHAUSTION)) {
             StatusEffectInstance exhaustion=p.getStatusEffect(SmoothEffects.EXHAUSTION);
             if(exhaustion!=null && exhaustion.getAmplifier()>35) {
-                // Paladins' Divine Protection is optional in Continued. Core Smooth Classes
+                // Paladins' Divine Protection is optional in this runtime. Core Smooth Classes
                 // uses its own defensive effect surface so Saber remains functional without Paladins.
                 inc(p,SmoothEffects.GOLDEN_AEGIS,200,1,5);
                 dec(p,SmoothEffects.EXHAUSTION,35);
@@ -188,7 +188,7 @@ public final class ClassPassiveRuntime {
     // RULER / CLERIC
     // ------------------------------------------------------------
     private static void rulerTick(ServerPlayerEntity p) {
-        if(has(p,PuffishSkillsIntegration.RULER,SimplySkillsNodeIds.clericAltruism)
+        if(has(p,PuffishSkillsIntegration.RULER,SkillNodeIds.clericAltruism)
                 && p.age%600==0 && p.getArmor()<=10)
             inc(p,SmoothEffects.SPELLFORGED,605,1,2);
     }
@@ -202,24 +202,24 @@ public final class ClassPassiveRuntime {
             inc(p,StatusEffects.STRENGTH,200,1,3);
             inc(p,StatusEffects.SPEED,200,1,3);
         }
-        if(has(p,PuffishSkillsIntegration.BERSERKER,SimplySkillsNodeIds.berserkerExploit)
+        if(has(p,PuffishSkillsIntegration.BERSERKER,SkillNodeIds.berserkerExploit)
                 && target.hasStatusEffect(SmoothEffects.IMMOBILIZE))
             target.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS,120,1,false,false,true));
 
-        // Continued applies Backstab + Opportunistic Mastery on every melee hit;
+        // applies Backstab + Opportunistic Mastery on every melee hit;
         // only Exploitation is specifically gated behind a back/stealth break.
-        if(has(p,PuffishSkillsIntegration.ASSASSIN,SimplySkillsNodeIds.rogueBackstab) && behind(p,target))
+        if(has(p,PuffishSkillsIntegration.ASSASSIN,SkillNodeIds.rogueBackstab) && behind(p,target))
             target.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS,60,0,false,false,true));
 
-        if(has(p,PuffishSkillsIntegration.ASSASSIN,SimplySkillsNodeIds.rogueOpportunisticMastery)) {
+        if(has(p,PuffishSkillsIntegration.ASSASSIN,SkillNodeIds.rogueOpportunisticMastery)) {
             int duration=80;
-            if(has(p,PuffishSkillsIntegration.ASSASSIN,SimplySkillsNodeIds.rogueOpportunisticMasterySkilled))duration+=160;
-            else if(has(p,PuffishSkillsIntegration.ASSASSIN,SimplySkillsNodeIds.rogueOpportunisticMasteryProficient))duration+=80;
+            if(has(p,PuffishSkillsIntegration.ASSASSIN,SkillNodeIds.rogueOpportunisticMasterySkilled))duration+=160;
+            else if(has(p,PuffishSkillsIntegration.ASSASSIN,SkillNodeIds.rogueOpportunisticMasteryProficient))duration+=80;
             target.addStatusEffect(new StatusEffectInstance(StatusEffects.POISON,duration,2,false,false,true));
         }
 
         if(p.hasStatusEffect(SmoothEffects.STEALTH) && behind(p,target)) {
-            if(has(p,PuffishSkillsIntegration.ASSASSIN,SimplySkillsNodeIds.rogueExploitation))
+            if(has(p,PuffishSkillsIntegration.ASSASSIN,SkillNodeIds.rogueExploitation))
                 inc(target,SmoothEffects.DEATH_MARK,80,1,3);
         }
 
@@ -233,11 +233,11 @@ public final class ClassPassiveRuntime {
                 }
             }
         }
-        if(has(p,PuffishSkillsIntegration.ASSASSIN,SimplySkillsNodeIds.rogueSpecialisationSiphoningStrikesVanish)
+        if(has(p,PuffishSkillsIntegration.ASSASSIN,SkillNodeIds.rogueSpecialisationSiphoningStrikesVanish)
                 && p.hasStatusEffect(SmoothEffects.SIPHONING_STRIKES))
             p.removeStatusEffect(SmoothEffects.REVEALED);
 
-        if(has(p,PuffishSkillsIntegration.FOREIGNER,SimplySkillsNodeIds.spellbladeSpellweaving)) {
+        if(has(p,PuffishSkillsIntegration.FOREIGNER,SkillNodeIds.spellbladeSpellweaving)) {
             boolean enhanced=p.hasStatusEffect(SmoothEffects.SPELLWEAVER);
             if(p.getRandom().nextInt(100)<(enhanced?30:15)) {
                 String[] spells=enhanced
@@ -259,25 +259,25 @@ public final class ClassPassiveRuntime {
 
     /** Spell Engine cast hook. */
     public static void onSpellCast(ServerPlayerEntity p, List<Entity> targets, SpellSchool school) {
-        // Wizard Spell Echo: Continued uses a 15% random echo when a cast has targets.
-        if(has(p,PuffishSkillsIntegration.CASTER,SimplySkillsNodeIds.wizardSpellEcho)
+        // Wizard Spell Echo: uses a 15% random echo when a cast has targets.
+        if(has(p,PuffishSkillsIntegration.CASTER,SkillNodeIds.wizardSpellEcho)
                 && targets!=null && !targets.isEmpty() && p.getRandom().nextInt(100)<15)
             inc(p,SmoothEffects.ARCANE_VOLLEY,80,1,3);
 
-        // Weapon Expert is actually a spell-cast passive in Continued.
-        if(has(p,PuffishSkillsIntegration.FOREIGNER,SimplySkillsNodeIds.spellbladeWeaponExpert)) {
+        // Weapon Expert is actually a spell-cast passive in this runtime.
+        if(has(p,PuffishSkillsIntegration.FOREIGNER,SkillNodeIds.spellbladeWeaponExpert)) {
             inc(p,SmoothEffects.MIGHT,60,1,3);
             if(p.getRandom().nextInt(100)>5)inc(p,SmoothEffects.SPELLFORGED,80,1,3);
         }
 
         if(school==SpellSchools.HEALING) {
-            if(has(p,PuffishSkillsIntegration.RULER,SimplySkillsNodeIds.clericHealingWard)
+            if(has(p,PuffishSkillsIntegration.RULER,SkillNodeIds.clericHealingWard)
                     && targets!=null && p.getRandom().nextInt(100)<10)
                 for(Entity e:targets)if(e instanceof LivingEntity l)inc(l,SmoothEffects.BARRIER,100,1,20);
 
-            // Continued re-casts the same healing spell on self. Smooth Classes uses the
+            // re-casts the same healing spell on self. Smooth Classes uses the
             // healing result directly here so core Ruler remains independent of Paladins IDs.
-            if(has(p,PuffishSkillsIntegration.RULER,SimplySkillsNodeIds.clericMutualMending)
+            if(has(p,PuffishSkillsIntegration.RULER,SkillNodeIds.clericMutualMending)
                     && targets!=null && !targets.contains(p) && p.getRandom().nextInt(100)<20)
                 p.heal(Math.max(1F,p.getMaxHealth()*0.08F));
         }
@@ -285,30 +285,30 @@ public final class ClassPassiveRuntime {
 
     /**
      * Incoming damage pre-hook. Return false to cancel damage.
-     * This is the class-passive equivalent of Continued's ServerPlayerEntityMixin.
+     * This is the class-passive equivalent of ServerPlayerEntityMixin.
      */
     public static boolean allowDamage(ServerPlayerEntity p) {
-        if(has(p,PuffishSkillsIntegration.ASSASSIN,SimplySkillsNodeIds.rogueSmokeBomb)
+        if(has(p,PuffishSkillsIntegration.ASSASSIN,SkillNodeIds.rogueSmokeBomb)
                 && p.getRandom().nextInt(100)<10) {
             for(LivingEntity e:enemies(p,6))
                 e.addStatusEffect(new StatusEffectInstance(StatusEffects.BLINDNESS,40,0,false,false,true));
             p.addStatusEffect(new StatusEffectInstance(SmoothEffects.IMMOBILIZING_AURA,40,0,false,false,true));
-            ContinuedFx.sound(p, "soundeffect_32", 0.4F, 1.2F);
+            SkillFx.sound(p, "soundeffect_32", 0.4F, 1.2F);
         }
 
-        if(has(p,PuffishSkillsIntegration.ASSASSIN,SimplySkillsNodeIds.rogueEvasionMastery)) {
+        if(has(p,PuffishSkillsIntegration.ASSASSIN,SkillNodeIds.rogueEvasionMastery)) {
             int mastery=15;
-            if(has(p,PuffishSkillsIntegration.ASSASSIN,SimplySkillsNodeIds.rogueDeflection)
+            if(has(p,PuffishSkillsIntegration.ASSASSIN,SkillNodeIds.rogueDeflection)
                     && p.getMainHandStack().getItem() instanceof SwordItem
                     && p.getOffHandStack().getItem() instanceof SwordItem) mastery+=10;
-            if(has(p,PuffishSkillsIntegration.ASSASSIN,SimplySkillsNodeIds.rogueEvasionMasterySkilled))mastery+=10;
-            else if(has(p,PuffishSkillsIntegration.ASSASSIN,SimplySkillsNodeIds.rogueEvasionMasteryProficient))mastery+=5;
+            if(has(p,PuffishSkillsIntegration.ASSASSIN,SkillNodeIds.rogueEvasionMasterySkilled))mastery+=10;
+            else if(has(p,PuffishSkillsIntegration.ASSASSIN,SkillNodeIds.rogueEvasionMasteryProficient))mastery+=5;
             StatusEffectInstance blade=p.getStatusEffect(SmoothEffects.BLADESTORM);
             if(blade!=null)mastery+=blade.getAmplifier()+1;
             if(p.hasStatusEffect(SmoothEffects.EVASION))mastery*=2;
             if(p.hasStatusEffect(SmoothEffects.AGILE) && p.getRandom().nextInt(100)<mastery){
                 OptionalCompatRuntime.onEvasion(p);
-                ContinuedFx.sound(p, "fx_skill_backstab", 1.0F, 1.0F);
+                SkillFx.sound(p, "fx_skill_backstab", 1.0F, 1.0F);
                 return false;
             }
         }
@@ -316,16 +316,16 @@ public final class ClassPassiveRuntime {
     }
 
     /** Damage that was not evaded. Attacker may be null for environmental damage. */
-    /** Shield-block event. Continued triggers Saber Retribution and Exhaustive Recovery here too. */
+    /** Shield-block event. triggers Saber Retribution and Exhaustive Recovery here too. */
     public static void onShieldHit(ServerPlayerEntity p, LivingEntity attacker) {
-        if(has(p,PuffishSkillsIntegration.SABER,SimplySkillsNodeIds.crusaderRetribution)
+        if(has(p,PuffishSkillsIntegration.SABER,SkillNodeIds.crusaderRetribution)
                 && attacker!=null && p.getRandom().nextInt(100)<15) {
             attacker.timeUntilRegen=0;
             attacker.damage(p.getDamageSources().playerAttack(p),
                     (float)Math.max(1D,p.getAttributeValue(net.minecraft.entity.attribute.EntityAttributes.GENERIC_ATTACK_DAMAGE)));
             attacker.timeUntilRegen=0;
         }
-        if(has(p,PuffishSkillsIntegration.SABER,SimplySkillsNodeIds.crusaderExhaustiveRecovery)
+        if(has(p,PuffishSkillsIntegration.SABER,SkillNodeIds.crusaderExhaustiveRecovery)
                 && p.getRandom().nextInt(100)<15) {
             p.heal(Math.max(1F,p.getMaxHealth()*0.10F));
             inc(p,SmoothEffects.EXHAUSTION,300,9,99);
@@ -334,10 +334,10 @@ public final class ClassPassiveRuntime {
 
     public static void onDamaged(ServerPlayerEntity p, LivingEntity attacker) {
         if(p.hasStatusEffect(SmoothEffects.STEALTH)
-                && has(p,PuffishSkillsIntegration.ASSASSIN,SimplySkillsNodeIds.rogueFleetfooted))
+                && has(p,PuffishSkillsIntegration.ASSASSIN,SkillNodeIds.rogueFleetfooted))
             inc(p,StatusEffects.SPEED,40,1,6);
 
-        if(has(p,PuffishSkillsIntegration.SABER,SimplySkillsNodeIds.crusaderRetribution)
+        if(has(p,PuffishSkillsIntegration.SABER,SkillNodeIds.crusaderRetribution)
                 && attacker!=null && p.getRandom().nextInt(100)<15) {
             attacker.timeUntilRegen=0;
             attacker.damage(p.getDamageSources().playerAttack(p),
@@ -345,7 +345,7 @@ public final class ClassPassiveRuntime {
             attacker.timeUntilRegen=0;
         }
 
-        if(has(p,PuffishSkillsIntegration.SABER,SimplySkillsNodeIds.crusaderExhaustiveRecovery)
+        if(has(p,PuffishSkillsIntegration.SABER,SkillNodeIds.crusaderExhaustiveRecovery)
                 && p.getRandom().nextInt(100)<15) {
             p.heal(Math.max(1F,p.getMaxHealth()*0.10F));
             inc(p,SmoothEffects.EXHAUSTION,300,9,99);

@@ -8,7 +8,7 @@ import org.marj4n.smooth_classes.content.ruler.talent.RulerTalent;
 import org.marj4n.smooth_classes.registry.AbilityRegistry;
 import org.marj4n.smooth_classes.registry.TalentRegistry;
 
-/** Baseline content ported from SimplySkills Cleric; runtime behavior is implemented separately. */
+/** Class abilities and talents; runtime behavior is implemented separately. */
 public final class RulerContent {
     private RulerContent() {}
 
@@ -38,6 +38,6 @@ public final class RulerContent {
     }
     public static List<Ability> abilities() { return ABILITIES; }
     public static List<Talent> talents() { return TALENTS; }
-    private static Ability ability(String path, String name, int cooldownTicks) { return new RulerAbility(path, name, "Ported Cleric signature ability.", cooldownTicks); }
-    private static Talent talent(String path, String name) { return new RulerTalent(path, name, "Ported Cleric talent node."); }
+    private static Ability ability(String path, String name, int cooldownTicks) { return new RulerAbility(path, name, "Ruler signature ability.", cooldownTicks); }
+    private static Talent talent(String path, String name) { return new RulerTalent(path, name, "Ruler talent node."); }
 }

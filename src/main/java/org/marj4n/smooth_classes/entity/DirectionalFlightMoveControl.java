@@ -7,7 +7,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
-/** Port of SimplySkills Continued's summon flight controller. */
+/** Smooth Classes's summon flight controller. */
 public final class DirectionalFlightMoveControl extends MoveControl {
     private final int maxPitchChange;
     private final boolean noGravity;

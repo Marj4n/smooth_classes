@@ -112,7 +112,7 @@
       "action": {
         "type": "DAMAGE",
         "damage": {
-          "spell_power_coefficient": 2.5,
+          "spell_power_coefficient": 2.6,
           "knockback": 4
         }
       },
@@ -154,7 +154,7 @@
     }
   ],
   "area_impact": {
-    "radius": 10,
+    "radius": 7,
     "area": {
       "distance_dropoff": "SQUARED"
     },
@@ -164,7 +164,7 @@
           "id": "cloud",
           "appearance": {},
           "batch": {
-            "count": 110.0,
+            "count": 75,
             "shape": "CIRCLE",
             "min_speed": 3.5,
             "max_speed": 10.0,
@@ -176,7 +176,7 @@
           "id": "spell_engine:frost_hit",
           "appearance": {},
           "batch": {
-            "count": 120.0,
+            "count": 75,
             "shape": "SPHERE",
             "min_speed": 0.4,
             "max_speed": 0.6,
@@ -188,7 +188,7 @@
           "id": "cloud",
           "appearance": {},
           "batch": {
-            "count": 120.0,
+            "count": 75,
             "shape": "SPHERE",
             "min_speed": 0.2,
             "max_speed": 0.4,

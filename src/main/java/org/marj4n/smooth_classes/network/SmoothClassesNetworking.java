@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-/** Continued-style two ability channels with server-authoritative cooldown sync. */
+/** two ability channels with server-authoritative cooldown sync. */
 public final class SmoothClassesNetworking {
     public static final Identifier CAST_SIGNATURE = SmoothClasses.id("cast_signature");
     public static final Identifier CAST_ASCENDANCY = SmoothClasses.id("cast_ascendancy");
@@ -69,7 +69,7 @@ public final class SmoothClassesNetworking {
         String asc = AscendancyAbilityDispatcher.selectedAbility(player);
 
         int sigTotal = "sacred_orb".equals(sig) ? 2400 : sig.isBlank() ? 1 : AbilityCooldowns.adjustedTicks(player, SignatureCooldowns.ticks(sig));
-        int ascTotal = "magic_circle".equals(asc) ? 1200 : "torment".equals(asc) ? 800 : asc.isBlank() ? 1 : AbilityCooldowns.adjustedTicks(player, AscendancyAbilityDispatcher.cooldownTicks(asc));
+        int ascTotal = "agony".equals(asc) ? 600 : "magic_circle".equals(asc) ? 1200 : "torment".equals(asc) ? 800 : asc.isBlank() ? 1 : AscendancyAbilityDispatcher.effectiveCooldownTicks(player,asc);
         long sigRemain = sig.isBlank() ? 0 : AbilityCooldowns.remainingTicks(player, new Identifier(SmoothClasses.MOD_ID, sig));
         long ascRemain = asc.isBlank() ? 0 : AbilityCooldowns.remainingTicks(player, new Identifier(SmoothClasses.MOD_ID, "ascendancy_" + asc));
 
@@ -82,6 +82,7 @@ public final class SmoothClassesNetworking {
         out.writeLong(ascRemain);
         out.writeBoolean(org.marj4n.smooth_classes.content.ruler.runtime.SacredBannerRuntime.isActive(player));
         out.writeBoolean(org.marj4n.smooth_classes.runtime.BloodRainRuntime.active(player));
+        out.writeBoolean(org.marj4n.smooth_classes.runtime.WhenOnHighRuntime.active(player));
         ServerPlayNetworking.send(player, SYNC_ABILITY_STATE, out);
         LAST_SELECTION.put(player.getUuid(), sig + "|" + asc);
     }

@@ -14,7 +14,7 @@ import net.spell_engine.utils.RegistryHelper;
 import org.marj4n.smooth_classes.effects.SmoothEffects;
 import org.marj4n.smooth_classes.effects.SourceStatusEffectInstance;
 import org.marj4n.smooth_classes.integration.PuffishSkillsIntegration;
-import org.marj4n.smooth_classes.integration.SimplySkillsNodeIds;
+import org.marj4n.smooth_classes.integration.SkillNodeIds;
 import org.marj4n.smooth_classes.content.saber.runtime.SaberRuntime;
 
 import java.util.Comparator;
@@ -27,14 +27,14 @@ public final class ProjectileEntityRuntime {
         if(id==null)return;
         String spell=id.toString();
 
-        // Continued Sacred Orb: after its initial travel, acquire a nearby ally.
+        // Sacred Orb: after its initial travel, acquire a nearby ally.
         if(spell.equals("smooth_classes:sacred_orb") && p.age>20 && p.getFollowedTarget()==null){
             nearest(p,owner,6,false).ifPresent(p::setFollowedTarget);
         }
 
-        // Continued Lightning Orb: player-following persistent projectile.
+        // Lightning Orb: player-following persistent projectile.
         if(spell.contains("lightning_ball") && has(owner,PuffishSkillsIntegration.CASTER,
-                SimplySkillsNodeIds.wizardSpecialisationStaticDischargeLightningOrb)){
+                SkillNodeIds.wizardSpecialisationStaticDischargeLightningOrb)){
             p.setFollowedTarget(owner);
             p.range=512;
             if(p.age%20==0 && p.distanceTo(owner)>10){
@@ -44,9 +44,9 @@ public final class ProjectileEntityRuntime {
         }
 
         // Elemental Artillery: clone the parent projectile's context/perks and spawn
-        // a random elemental homing child exactly on Continued's 12-tick cadence.
+        // a random elemental homing child exactly on 12-tick cadence.
         if(spell.contains("arrow_rain") && p.age>30 && p.age%12==0
-                && has(owner,PuffishSkillsIntegration.ARCHER, SimplySkillsNodeIds.rangerSpecialisationArrowRainElementalArtillery)){
+                && has(owner,PuffishSkillsIntegration.ARCHER, SkillNodeIds.rangerSpecialisationArrowRainElementalArtillery)){
             spawnChild(owner,p,new Identifier("smooth_classes", switch(owner.getRandom().nextInt(3)){
                 case 0 -> "frost_arrow_homing"; case 1 -> "fire_arrow_homing"; default -> "lightning_arrow_homing";}),20,35);
         }
@@ -54,7 +54,7 @@ public final class ProjectileEntityRuntime {
         // Static Discharge Lightning Ball: emit lesser homing projectiles every 5 ticks.
         if((spell.contains("lightning_ball")||spell.contains("lightning_lesser")) && !spell.contains("ball_homing")
                 && p.age>5 && p.age%5==0 && has(owner,PuffishSkillsIntegration.CASTER,
-                SimplySkillsNodeIds.wizardSpecialisationStaticDischargeLightningBall)){
+                SkillNodeIds.wizardSpecialisationStaticDischargeLightningBall)){
             p.mutablePerks().pierce = 132;
             spawnChild(owner,p,new Identifier("smooth_classes","lightning_lesser"),5,5);
         }
@@ -87,7 +87,7 @@ public final class ProjectileEntityRuntime {
             owner.addStatusEffect(new SourceStatusEffectInstance(SmoothEffects.VITALITY_BOND,500,0,false,false,true,owner));
         }
 
-        // Homing lightning/physical daggers remain live through impact in Continued.
+        // Homing lightning/physical daggers remain live through impact in this runtime.
         if(spell.contains("lightning_ball_homing") || spell.contains("physical_dagger_homing")){
             target.timeUntilRegen=0;
         }

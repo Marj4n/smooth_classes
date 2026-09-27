@@ -10,7 +10,7 @@ import org.marj4n.smooth_classes.runtime.AbilityRuntime;
 import net.spell_power.api.SpellDamageSource;
 import net.spell_power.api.SpellSchools;
 
-/** Continued-compatible transient Arrow Rain arrow using vanilla ARROW entity type. */
+/** transient Arrow Rain arrow using vanilla ARROW entity type. */
 public final class ArrowRainEntity extends ArrowEntity {
     private int groundLife;
     public ArrowRainEntity(World world,double x,double y,double z){super(EntityType.ARROW,world);setPosition(x,y,z);}

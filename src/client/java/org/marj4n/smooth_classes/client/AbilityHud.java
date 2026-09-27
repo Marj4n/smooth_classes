@@ -8,7 +8,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.marj4n.smooth_classes.SmoothClasses;
 
-/** Continued-style two-slot ability HUD: signature (V) + ascendancy (R). */
+/** two-slot ability HUD: signature (V) + ascendancy (R). */
 public final class AbilityHud {
     private static final Identifier FRAME = new Identifier("minecraft", "textures/gui/widgets.png");
     private static final Identifier COOLDOWN = SmoothClasses.id("textures/gui/cooldown_overlay.png");
@@ -43,7 +43,8 @@ public final class AbilityHud {
         context.getMatrices().push();
         context.getMatrices().translate(0, 0, 300);
         if (("sacred_orb".equals(ability) && AbilityHudState.bannerActive)
-                || ("magic_circle".equals(ability) && AbilityHudState.bloodRainActive)) {
+                || ("magic_circle".equals(ability) && AbilityHudState.bloodRainActive)
+                || ("agony".equals(ability) && AbilityHudState.whenOnHighActive)) {
             context.fill(x+10,y+10,x+26,y+26,0xB0000000);
             context.drawCenteredTextWithShadow(client.textRenderer,Text.literal("X"),x+18,y+14,0xFF5555);
         } else if (remainingMs > 0) {
