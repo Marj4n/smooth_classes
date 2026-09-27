@@ -695,7 +695,7 @@
   "text.skills.resistance+0.5%.title": "§a+0.5%§f [+] §7Resistance",
   "text.skills.spell_crit_damage_additive+0.5%.title": "§a+0.5%§f [+] §7Spell Critical Damage",
   "text.skills.spell_fire_damage_additive+0.8%.title": "§a+0.8%§f [+] §7Fire Spell Damage",
-  "text.skills.initiateWhisperedWizardry.title": "§7§a[Whispered Wizardry]§7",
+  "text.skills.initiateWhisperedWizardry.title": "§7§a[Whispered Casterry]§7",
   "text.skills.berserkerAxeMasteryProficient.description": "§7Gain increased pulsing strength when wielding an axe in your mainhand.",
   "text.skills.shamanSignatureNovaTotem.description": "Summon a totem that releases a nova around it.",
   "text.skills.ranged_damage+0.5%.title": "§a+0.5%§f [+] §7Ranged Damage",
@@ -1167,5 +1167,13 @@
   "text.autoconfig.smooth_classes.option.necromancer.enableAvengerSpecialisation": "Enable Avenger Specialisation",
   "text.autoconfig.smooth_classes.option.necromancer.enableAvengerSpecialisation.@Tooltip": "Enable/Disable the ability to unlock this specialisation.\nDoes not retroactively lock the specialisation if already unlocked.",
   "text.autoconfig.smooth_classes.option.necromancer.enableAvengerSpecialisation.@PrefixText": "§aTweaking these values can lead to game instability/crashes. Use at your own risk.§7",
-  "text.autoconfig.smooth_classes.option.necromancer.signatureAvengerSummoningRitualCooldown": "§6[Signature]§7 Summoning Pool cooldown (in seconds)"
+  "text.autoconfig.smooth_classes.option.necromancer.signatureAvengerSummoningRitualCooldown": "§6[Signature]§7 Summoning Pool cooldown (in seconds)",
+  "text.skills.lancer_category.title": "§7§bLancer Specialisation§7",
+  "text.skills.rider_category.title": "§7§bRider Specialisation§7",
+  "text.skills.lancerPath.title": "Path of the §bLancer§7",
+  "text.skills.lancerPath.description": "§7Coming soon. This path is reserved for the §bLancer§7 class branch.",
+  "text.skills.lancerPath.extra_description": "\n§7The §bLancer§7 slot is now prepared visually. Internal branch skills will be added later.",
+  "text.skills.riderPath.title": "Path of the §bRider§7",
+  "text.skills.riderPath.description": "§7Coming soon. This path is reserved for the §bRider§7 class branch.",
+  "text.skills.riderPath.extra_description": "\n§7The §bRider§7 slot is now prepared visually. Internal branch skills will be added later."
 }

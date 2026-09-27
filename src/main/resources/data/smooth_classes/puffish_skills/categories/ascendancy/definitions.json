@@ -2841,7 +2841,7 @@
         "icon": {
             "type": "texture",
             "data": {
-                "texture": "smooth_classes:textures/icons/alternate_reduced/berserker_path.png"
+                "texture": "smooth_classes:textures/icons/classes/berserker.png"
             }
         },
         "rewards": [
@@ -3373,7 +3373,7 @@
         "icon": {
             "type": "texture",
             "data": {
-                "texture": "smooth_classes:textures/icons/alternate_reduced/rogue_path.png"
+                "texture": "smooth_classes:textures/icons/classes/assassin.png"
             }
         },
         "rewards": [
@@ -3738,7 +3738,7 @@
         "icon": {
             "type": "texture",
             "data": {
-                "texture": "smooth_classes:textures/icons/alternate_reduced/ranger_path.png"
+                "texture": "smooth_classes:textures/icons/classes/archer.png"
             }
         },
         "rewards": [
@@ -3879,7 +3879,7 @@
         "icon": {
             "type": "texture",
             "data": {
-                "texture": "smooth_classes:textures/icons/alternate_reduced/crusader_path.png"
+                "texture": "smooth_classes:textures/icons/classes/saber.png"
             }
         },
         "rewards": [
@@ -3937,7 +3937,7 @@
         "icon": {
             "type": "texture",
             "data": {
-                "texture": "smooth_classes:textures/icons/alternate_reduced/spellblade_path.png"
+                "texture": "smooth_classes:textures/icons/classes/foreigner.png"
             }
         },
         "rewards": [
@@ -4330,7 +4330,7 @@
         "icon": {
             "type": "texture",
             "data": {
-                "texture": "smooth_classes:textures/icons/alternate_reduced/wizard_path.png"
+                "texture": "smooth_classes:textures/icons/classes/caster.png"
             }
         },
         "rewards": [
@@ -4388,7 +4388,7 @@
         "icon": {
             "type": "texture",
             "data": {
-                "texture": "smooth_classes:textures/icons/alternate_reduced/cleric_path.png"
+                "texture": "smooth_classes:textures/icons/classes/ruler.png"
             }
         },
         "rewards": [
@@ -4417,7 +4417,7 @@
         "icon": {
             "type": "texture",
             "data": {
-                "texture": "smooth_classes:textures/icons/alternate_reduced/necromancer_path.png"
+                "texture": "smooth_classes:textures/icons/classes/avenger.png"
             }
         },
         "rewards": [

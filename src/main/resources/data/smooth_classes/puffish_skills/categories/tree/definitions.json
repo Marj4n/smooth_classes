@@ -1,7 +1,11 @@
 {
     "pathWayfarer": {
-        "title":{"translate": "text.skills.pathWayfarer.title"},
-        "description": {"translate": "text.skills.pathWayfarer.description"},
+        "title": {
+            "translate": "text.skills.pathWayfarer.title"
+        },
+        "description": {
+            "translate": "text.skills.pathWayfarer.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -30,8 +34,12 @@
         ]
     },
     "pathInitiate": {
-        "title":{"translate": "text.skills.initiate.title"},
-        "description": {"translate": "text.skills.initiate.description"},
+        "title": {
+            "translate": "text.skills.initiate.title"
+        },
+        "description": {
+            "translate": "text.skills.initiate.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -100,7 +108,9 @@
         ]
     },
     "spell_fire_damage_additive+1%": {
-        "title": {"translate":"text.skills.spell_fire_damage_additive+1%.title"},
+        "title": {
+            "translate": "text.skills.spell_fire_damage_additive+1%.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -128,7 +138,9 @@
         ]
     },
     "spell_fire_damage_additive+0.8%": {
-        "title": {"translate":"text.skills.spell_fire_damage_additive+0.8%.title"},
+        "title": {
+            "translate": "text.skills.spell_fire_damage_additive+0.8%.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -156,7 +168,9 @@
         ]
     },
     "spell_fire_damage_multi+1%": {
-        "title": {"translate":"text.skills.spell_fire_damage_multi+1%.title"},
+        "title": {
+            "translate": "text.skills.spell_fire_damage_multi+1%.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -184,7 +198,9 @@
         ]
     },
     "spell_arcane_damage_additive+1%": {
-        "title": {"translate":"text.skills.spell_arcane_damage_additive+1%.title"},
+        "title": {
+            "translate": "text.skills.spell_arcane_damage_additive+1%.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -212,7 +228,9 @@
         ]
     },
     "spell_arcane_damage_additive+0.8%": {
-        "title": {"translate":"text.skills.spell_arcane_damage_additive+0.8%.title"},
+        "title": {
+            "translate": "text.skills.spell_arcane_damage_additive+0.8%.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -240,7 +258,9 @@
         ]
     },
     "spell_arcane_damage_multi+1%": {
-        "title": {"translate":"text.skills.spell_arcane_damage_multi+1%.title"},
+        "title": {
+            "translate": "text.skills.spell_arcane_damage_multi+1%.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -268,7 +288,9 @@
         ]
     },
     "spell_frost_damage_additive+1%": {
-        "title": {"translate":"text.skills.spell_frost_damage_additive+1%.title"},
+        "title": {
+            "translate": "text.skills.spell_frost_damage_additive+1%.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -296,7 +318,9 @@
         ]
     },
     "spell_frost_damage_additive+0.8%": {
-        "title": {"translate":"text.skills.spell_frost_damage_additive+0.8%.title"},
+        "title": {
+            "translate": "text.skills.spell_frost_damage_additive+0.8%.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -324,7 +348,9 @@
         ]
     },
     "spell_frost_damage_multi+1%": {
-        "title": {"translate":"text.skills.spell_frost_damage_multi+1%.title"},
+        "title": {
+            "translate": "text.skills.spell_frost_damage_multi+1%.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -352,7 +378,9 @@
         ]
     },
     "spell_healing_power_additive+1%": {
-        "title": {"translate":"text.skills.spell_healing_power_additive+1%.title"},
+        "title": {
+            "translate": "text.skills.spell_healing_power_additive+1%.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -380,7 +408,9 @@
         ]
     },
     "spell_healing_power_additive+0.08%": {
-        "title": {"translate":"text.skills.spell_healing_power_additive+0.8%.title"},
+        "title": {
+            "translate": "text.skills.spell_healing_power_additive+0.8%.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -408,7 +438,9 @@
         ]
     },
     "spell_healing_power_multi+1%": {
-        "title": {"translate":"text.skills.spell_healing_power_multi+1%.title"},
+        "title": {
+            "translate": "text.skills.spell_healing_power_multi+1%.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -436,7 +468,9 @@
         ]
     },
     "spell_lightning_damage_additive+1%": {
-        "title": {"translate":"text.skills.spell_lightning_damage_additive+1%.title"},
+        "title": {
+            "translate": "text.skills.spell_lightning_damage_additive+1%.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -464,7 +498,9 @@
         ]
     },
     "spell_lightning_damage_additive+0.8%": {
-        "title": {"translate":"text.skills.spell_lightning_damage_additive+0.8%.title"},
+        "title": {
+            "translate": "text.skills.spell_lightning_damage_additive+0.8%.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -492,7 +528,9 @@
         ]
     },
     "spell_lightning_damage_multi+1%": {
-        "title": {"translate":"text.skills.spell_lightning_damage_multi+1%.title"},
+        "title": {
+            "translate": "text.skills.spell_lightning_damage_multi+1%.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -520,7 +558,9 @@
         ]
     },
     "spell_soul_damage_additive+1%": {
-        "title": {"translate":"text.skills.spell_soul_damage_additive+1%.title"},
+        "title": {
+            "translate": "text.skills.spell_soul_damage_additive+1%.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -548,7 +588,9 @@
         ]
     },
     "spell_soul_damage_additive+0.8%": {
-        "title": {"translate":"text.skills.spell_soul_damage_additive+0.8%.title"},
+        "title": {
+            "translate": "text.skills.spell_soul_damage_additive+0.8%.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -576,7 +618,9 @@
         ]
     },
     "spell_soul_damage_multi+1%": {
-        "title": {"translate":"text.skills.spell_soul_damage_multi+1%.title"},
+        "title": {
+            "translate": "text.skills.spell_soul_damage_multi+1%.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -604,7 +648,9 @@
         ]
     },
     "spell_crit_damage_additive+1%": {
-        "title": {"translate":"text.skills.spell_crit_damage_additive+1%.title"},
+        "title": {
+            "translate": "text.skills.spell_crit_damage_additive+1%.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -632,7 +678,9 @@
         ]
     },
     "spell_crit_damage_additive+0.5%": {
-        "title": {"translate":"text.skills.spell_crit_damage_additive+0.5%.title"},
+        "title": {
+            "translate": "text.skills.spell_crit_damage_additive+0.5%.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -660,7 +708,9 @@
         ]
     },
     "spell_crit_damage_multi+1%": {
-        "title": {"translate":"text.skills.spell_crit_damage_multi+1%.title"},
+        "title": {
+            "translate": "text.skills.spell_crit_damage_multi+1%.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -688,7 +738,9 @@
         ]
     },
     "spell_crit_chance_additive+1%": {
-        "title": {"translate":"text.skills.spell_crit_chance_additive+1%.title"},
+        "title": {
+            "translate": "text.skills.spell_crit_chance_additive+1%.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -716,7 +768,9 @@
         ]
     },
     "spell_crit_chance_additive+0.1%": {
-        "title": {"translate":"text.skills.spell_crit_chance_additive+0.1%.title"},
+        "title": {
+            "translate": "text.skills.spell_crit_chance_additive+0.1%.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -744,7 +798,9 @@
         ]
     },
     "spell_crit_chance_multi+1%": {
-        "title": {"translate":"text.skills.spell_crit_chance_multi+1%.title"},
+        "title": {
+            "translate": "text.skills.spell_crit_chance_multi+1%.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -772,7 +828,9 @@
         ]
     },
     "spell_haste_additive+1%": {
-        "title": {"translate":"text.skills.spell_haste_additive+1%.title"},
+        "title": {
+            "translate": "text.skills.spell_haste_additive+1%.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -800,7 +858,9 @@
         ]
     },
     "spell_haste_additive+0.5%": {
-        "title": {"translate":"text.skills.spell_haste_additive+0.5%.title"},
+        "title": {
+            "translate": "text.skills.spell_haste_additive+0.5%.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -828,7 +888,9 @@
         ]
     },
     "spell_haste_multi+1%": {
-        "title": {"translate":"text.skills.spell_haste_multi+1%.title"},
+        "title": {
+            "translate": "text.skills.spell_haste_multi+1%.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -856,7 +918,9 @@
         ]
     },
     "spell_power_additive": {
-        "title":{"translate": "text.skills.spell_power_additive.title"},
+        "title": {
+            "translate": "text.skills.spell_power_additive.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -924,7 +988,9 @@
         ]
     },
     "spell_power_additive+0.5%": {
-        "title":{"translate": "text.skills.spell_power_additive+0.5%.title"},
+        "title": {
+            "translate": "text.skills.spell_power_additive+0.5%.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -992,8 +1058,12 @@
         ]
     },
     "pathWarrior": {
-        "title": {"translate":"text.skills.warrior.title"},
-        "description": {"translate":"text.skills.warrior.description"},
+        "title": {
+            "translate": "text.skills.warrior.title"
+        },
+        "description": {
+            "translate": "text.skills.warrior.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -1022,7 +1092,9 @@
         ]
     },
     "health+2": {
-        "title": {"translate":"text.skills.health+2.title"},
+        "title": {
+            "translate": "text.skills.health+2.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -1050,7 +1122,9 @@
         ]
     },
     "health+0.5%": {
-        "title": {"translate":"text.skills.health+0.5%.title"},
+        "title": {
+            "translate": "text.skills.health+0.5%.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -1078,7 +1152,9 @@
         ]
     },
     "resistance+1%": {
-        "title": {"translate":"text.skills.resistance+1%.title"},
+        "title": {
+            "translate": "text.skills.resistance+1%.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -1106,7 +1182,9 @@
         ]
     },
     "resistance+0.5%": {
-        "title": {"translate":"text.skills.resistance+0.5%.title"},
+        "title": {
+            "translate": "text.skills.resistance+0.5%.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -1134,7 +1212,9 @@
         ]
     },
     "resistance_multi+2%": {
-        "title": {"translate":"text.skills.resistance_multi+2%.title"},
+        "title": {
+            "translate": "text.skills.resistance_multi+2%.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -1162,7 +1242,9 @@
         ]
     },
     "melee_damage+1%": {
-        "title": {"translate":"text.skills.melee_damage+1%.title"},
+        "title": {
+            "translate": "text.skills.melee_damage+1%.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -1190,7 +1272,9 @@
         ]
     },
     "melee_damage+0.5%": {
-        "title": {"translate":"text.skills.melee_damage+0.5%.title"},
+        "title": {
+            "translate": "text.skills.melee_damage+0.5%.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -1218,7 +1302,9 @@
         ]
     },
     "melee_damage_multi+2%": {
-        "title": {"translate":"text.skills.melee_damage_multi+2%.title"},
+        "title": {
+            "translate": "text.skills.melee_damage_multi+2%.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -1246,7 +1332,9 @@
         ]
     },
     "ranged_damage+1%": {
-        "title": {"translate":"text.skills.ranged_damage+1%.title"},
+        "title": {
+            "translate": "text.skills.ranged_damage+1%.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -1274,7 +1362,9 @@
         ]
     },
     "ranged_damage+0.5%": {
-        "title": {"translate":"text.skills.ranged_damage+0.5%.title"},
+        "title": {
+            "translate": "text.skills.ranged_damage+0.5%.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -1302,7 +1392,9 @@
         ]
     },
     "ranged_damage_multi+2%": {
-        "title": {"translate":"text.skills.ranged_damage_multi+2%.title"},
+        "title": {
+            "translate": "text.skills.ranged_damage_multi+2%.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -1330,7 +1422,9 @@
         ]
     },
     "attack_speed+1%": {
-        "title": {"translate":"text.skills.attack_speed+1%.title"},
+        "title": {
+            "translate": "text.skills.attack_speed+1%.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -1358,7 +1452,9 @@
         ]
     },
     "attack_speed+0.3%": {
-        "title": {"translate":"text.skills.attack_speed+0.3%.title"},
+        "title": {
+            "translate": "text.skills.attack_speed+0.3%.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -1386,7 +1482,9 @@
         ]
     },
     "attack_speed_multi+2%": {
-        "title": {"translate":"text.skills.attack_speed_multi+2%.title"},
+        "title": {
+            "translate": "text.skills.attack_speed_multi+2%.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -1414,7 +1512,9 @@
         ]
     },
     "movement_speed+1%": {
-        "title": {"translate":"text.skills.movement_speed+1%.title"},
+        "title": {
+            "translate": "text.skills.movement_speed+1%.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -1442,7 +1542,9 @@
         ]
     },
     "movement_speed+0.2%": {
-        "title": {"translate":"text.skills.movement_speed+0.2%.title"},
+        "title": {
+            "translate": "text.skills.movement_speed+0.2%.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -1470,7 +1572,9 @@
         ]
     },
     "movement_speed_multi+1.5%": {
-        "title": {"translate":"text.skills.movement_speed_multi+1.5%.title"},
+        "title": {
+            "translate": "text.skills.movement_speed_multi+1.5%.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -1498,7 +1602,9 @@
         ]
     },
     "luck+0.25": {
-        "title": {"translate":"text.skills.luck+0.25.title"},
+        "title": {
+            "translate": "text.skills.luck+0.25.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -1517,7 +1623,9 @@
         ]
     },
     "stamina+5%": {
-        "title": {"translate":"text.skills.stamina+5%.title"},
+        "title": {
+            "translate": "text.skills.stamina+5%.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -1535,17 +1643,19 @@
         },
         "rewards": [
             {
-				"type": "puffish_skills:attribute",
-				"data": {
-					"attribute": "puffish_skills:player.stamina",
-					"value": 0.03,
-					"operation": "multiply_base"
-				}
-			}
+                "type": "puffish_skills:attribute",
+                "data": {
+                    "attribute": "puffish_skills:player.stamina",
+                    "value": 0.03,
+                    "operation": "multiply_base"
+                }
+            }
         ]
     },
     "stamina+0.5%": {
-        "title": {"translate":"text.skills.stamina+0.5%.title"},
+        "title": {
+            "translate": "text.skills.stamina+0.5%.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -1573,7 +1683,9 @@
         ]
     },
     "stamina_multi+7%": {
-        "title": {"translate":"text.skills.stamina_multi+7%.title"},
+        "title": {
+            "translate": "text.skills.stamina_multi+7%.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -1591,17 +1703,19 @@
         },
         "rewards": [
             {
-				"type": "puffish_skills:attribute",
-				"data": {
-					"attribute": "puffish_skills:player.stamina",
-					"value": 0.05,
-					"operation": "multiply_base"
-				}
-			}
+                "type": "puffish_skills:attribute",
+                "data": {
+                    "attribute": "puffish_skills:player.stamina",
+                    "value": 0.05,
+                    "operation": "multiply_base"
+                }
+            }
         ]
     },
     "healing+1%": {
-        "title": {"translate":"text.skills.healing+1%.title"},
+        "title": {
+            "translate": "text.skills.healing+1%.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -1620,7 +1734,9 @@
         ]
     },
     "jump+1%": {
-        "title": {"translate":"text.skills.jump+1%.title"},
+        "title": {
+            "translate": "text.skills.jump+1%.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -1648,7 +1764,9 @@
         ]
     },
     "jump+0.2%": {
-        "title": {"translate":"text.skills.jump+0.2%.title"},
+        "title": {
+            "translate": "text.skills.jump+0.2%.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -1676,7 +1794,9 @@
         ]
     },
     "jump_multi+2%": {
-        "title": {"translate":"text.skills.jump_multi+2%.title"},
+        "title": {
+            "translate": "text.skills.jump_multi+2%.title"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -1704,7 +1824,9 @@
         ]
     },
     "hardy": {
-        "title": {"translate":"text.skills.hardy.title"},
+        "title": {
+            "translate": "text.skills.hardy.title"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -1731,8 +1853,12 @@
         ]
     },
     "initiateSlowfall": {
-        "title": {"translate":"text.skills.initiateSlowfall.title"},
-        "description": {"translate":"text.skills.initiateSlowfall.description"},
+        "title": {
+            "translate": "text.skills.initiateSlowfall.title"
+        },
+        "description": {
+            "translate": "text.skills.initiateSlowfall.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -1759,8 +1885,12 @@
         ]
     },
     "fervour": {
-        "title": {"translate":"text.skills.fervour.title"},
-        "description": {"translate":"text.skills.fervour.description"},
+        "title": {
+            "translate": "text.skills.fervour.title"
+        },
+        "description": {
+            "translate": "text.skills.fervour.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -1787,8 +1917,12 @@
         ]
     },
     "wayfarerStealth": {
-        "title": {"translate":"text.skills.wayfarerStealth.title"},
-        "description": {"translate":"text.skills.wayfarerStealth.description"},
+        "title": {
+            "translate": "text.skills.wayfarerStealth.title"
+        },
+        "description": {
+            "translate": "text.skills.wayfarerStealth.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -1815,8 +1949,12 @@
         ]
     },
     "wayfarerSneak": {
-        "title": {"translate":"text.skills.wayfarerSneak.title"},
-        "description": {"translate":"text.skills.wayfarerSneak.description"},
+        "title": {
+            "translate": "text.skills.wayfarerSneak.title"
+        },
+        "description": {
+            "translate": "text.skills.wayfarerSneak.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -1843,8 +1981,12 @@
         ]
     },
     "wayfarerReflexive": {
-        "title": {"translate":"text.skills.wayfarerReflexive.title"},
-        "description": {"translate":"text.skills.wayfarerReflexive.description"},
+        "title": {
+            "translate": "text.skills.wayfarerReflexive.title"
+        },
+        "description": {
+            "translate": "text.skills.wayfarerReflexive.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -1871,8 +2013,12 @@
         ]
     },
     "wayfarerUnseen": {
-        "title": {"translate":"text.skills.wayfarerUnseen.title"},
-        "description": {"translate":"text.skills.wayfarerUnseen.description"},
+        "title": {
+            "translate": "text.skills.wayfarerUnseen.title"
+        },
+        "description": {
+            "translate": "text.skills.wayfarerUnseen.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -1899,8 +2045,12 @@
         ]
     },
     "wayfarerGuarding": {
-        "title": {"translate":"text.skills.wayfarerGuarding.title"},
-        "description": {"translate":"text.skills.wayfarerGuarding.description"},
+        "title": {
+            "translate": "text.skills.wayfarerGuarding.title"
+        },
+        "description": {
+            "translate": "text.skills.wayfarerGuarding.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -1927,8 +2077,12 @@
         ]
     },
     "wayfarerQuickfire": {
-        "title": {"translate":"text.skills.wayfarerQuickfire.title"},
-        "description": {"translate":"text.skills.wayfarerQuickfire.description"},
+        "title": {
+            "translate": "text.skills.wayfarerQuickfire.title"
+        },
+        "description": {
+            "translate": "text.skills.wayfarerQuickfire.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -1955,8 +2109,12 @@
         ]
     },
     "initiateNullification": {
-        "title": {"translate":"text.skills.initiateNullification.title"},
-        "description": {"translate":"text.skills.initiateNullification.description"},
+        "title": {
+            "translate": "text.skills.initiateNullification.title"
+        },
+        "description": {
+            "translate": "text.skills.initiateNullification.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -1983,8 +2141,12 @@
         ]
     },
     "initiateGambit": {
-        "title": {"translate":"text.skills.initiateGambit.title"},
-        "description": {"translate":"text.skills.initiateGambit.description"},
+        "title": {
+            "translate": "text.skills.initiateGambit.title"
+        },
+        "description": {
+            "translate": "text.skills.initiateGambit.description"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -2061,8 +2223,12 @@
         ]
     },
     "initiateEmpower": {
-        "title": {"translate":"text.skills.initiateEmpower.title"},
-        "description": {"translate":"text.skills.initiateEmpower.description"},
+        "title": {
+            "translate": "text.skills.initiateEmpower.title"
+        },
+        "description": {
+            "translate": "text.skills.initiateEmpower.description"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -2089,8 +2255,12 @@
         ]
     },
     "initiateAttuned": {
-        "title": {"translate":"text.skills.initiateAttuned.title"},
-        "description": {"translate":"text.skills.initiateAttuned.description"},
+        "title": {
+            "translate": "text.skills.initiateAttuned.title"
+        },
+        "description": {
+            "translate": "text.skills.initiateAttuned.description"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -2117,8 +2287,12 @@
         ]
     },
     "initiateLightningRod": {
-        "title": {"translate":"text.skills.initiateLightningRod.title"},
-        "description": {"translate":"text.skills.initiateLightningRod.description"},
+        "title": {
+            "translate": "text.skills.initiateLightningRod.title"
+        },
+        "description": {
+            "translate": "text.skills.initiateLightningRod.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -2145,8 +2319,12 @@
         ]
     },
     "initiateEldritchEnfeeblement": {
-        "title": {"translate":"text.skills.initiateEldritchEnfeeblement.title"},
-        "description": {"translate":"text.skills.initiateEldritchEnfeeblement.description"},
+        "title": {
+            "translate": "text.skills.initiateEldritchEnfeeblement.title"
+        },
+        "description": {
+            "translate": "text.skills.initiateEldritchEnfeeblement.description"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -2223,8 +2401,12 @@
         ]
     },
     "initiateHasty": {
-        "title": {"translate":"text.skills.initiateHasty.title"},
-        "description": {"translate":"text.skills.initiateHasty.description"},
+        "title": {
+            "translate": "text.skills.initiateHasty.title"
+        },
+        "description": {
+            "translate": "text.skills.initiateHasty.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -2253,8 +2435,12 @@
         ]
     },
     "initiatePerilousPrecision": {
-        "title": {"translate":"text.skills.initiatePerilousPrecision.title"},
-        "description": {"translate":"text.skills.initiatePerilousPrecision.description"},
+        "title": {
+            "translate": "text.skills.initiatePerilousPrecision.title"
+        },
+        "description": {
+            "translate": "text.skills.initiatePerilousPrecision.description"
+        },
         "icon": {
             "type": "texture",
             "data": {
@@ -2291,8 +2477,12 @@
         ]
     },
     "cleric": {
-        "title": {"translate":"text.skills.cleric.title"},
-        "description": {"translate":"text.skills.cleric.description"},
+        "title": {
+            "translate": "text.skills.cleric.title"
+        },
+        "description": {
+            "translate": "text.skills.cleric.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -2319,8 +2509,12 @@
         ]
     },
     "cleansing": {
-        "title": {"translate":"text.skills.cleansing.title"},
-        "description": {"translate":"text.skills.cleansing.description"},
+        "title": {
+            "translate": "text.skills.cleansing.title"
+        },
+        "description": {
+            "translate": "text.skills.cleansing.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -2347,8 +2541,12 @@
         ]
     },
     "rangerReveal": {
-        "title": {"translate":"text.skills.rangerReveal.title"},
-        "description": {"translate":"text.skills.rangerReveal.description"},
+        "title": {
+            "translate": "text.skills.rangerReveal.title"
+        },
+        "description": {
+            "translate": "text.skills.rangerReveal.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -2375,8 +2573,12 @@
         ]
     },
     "rangerTamer": {
-        "title": {"translate":"text.skills.rangerTamer.title"},
-        "description": {"translate":"text.skills.rangerTamer.description"},
+        "title": {
+            "translate": "text.skills.rangerTamer.title"
+        },
+        "description": {
+            "translate": "text.skills.rangerTamer.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -2403,8 +2605,12 @@
         ]
     },
     "rangerBonded": {
-        "title": {"translate":"text.skills.rangerBonded.title"},
-        "description": {"translate":"text.skills.rangerBonded.description"},
+        "title": {
+            "translate": "text.skills.rangerBonded.title"
+        },
+        "description": {
+            "translate": "text.skills.rangerBonded.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -2431,8 +2637,12 @@
         ]
     },
     "rangerTrained": {
-        "title": {"translate":"text.skills.rangerTrained.title"},
-        "description": {"translate":"text.skills.rangerTrained.description"},
+        "title": {
+            "translate": "text.skills.rangerTrained.title"
+        },
+        "description": {
+            "translate": "text.skills.rangerTrained.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -2459,8 +2669,12 @@
         ]
     },
     "rangerIncognito": {
-        "title": {"translate":"text.skills.rangerIncognito.title"},
-        "description": {"translate":"text.skills.rangerIncognito.description"},
+        "title": {
+            "translate": "text.skills.rangerIncognito.title"
+        },
+        "description": {
+            "translate": "text.skills.rangerIncognito.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -2487,8 +2701,12 @@
         ]
     },
     "rogueBackstab": {
-        "title": {"translate":"text.skills.rogueBackstab.title"},
-        "description": {"translate":"text.skills.rogueBackstab.description"},
+        "title": {
+            "translate": "text.skills.rogueBackstab.title"
+        },
+        "description": {
+            "translate": "text.skills.rogueBackstab.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -2515,8 +2733,12 @@
         ]
     },
     "warriorHeavyArmorMastery": {
-        "title": {"translate":"text.skills.warriorHeavyArmorMastery.title"},
-        "description": {"translate":"text.skills.warriorHeavyArmorMastery.description"},
+        "title": {
+            "translate": "text.skills.warriorHeavyArmorMastery.title"
+        },
+        "description": {
+            "translate": "text.skills.warriorHeavyArmorMastery.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -2543,8 +2765,12 @@
         ]
     },
     "warriorMediumArmorMastery": {
-        "title": {"translate":"text.skills.warriorMediumArmorMastery.title"},
-        "description": {"translate":"text.skills.warriorMediumArmorMastery.description"},
+        "title": {
+            "translate": "text.skills.warriorMediumArmorMastery.title"
+        },
+        "description": {
+            "translate": "text.skills.warriorMediumArmorMastery.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -2571,8 +2797,12 @@
         ]
     },
     "warriorSpellbreaker": {
-        "title": {"translate":"text.skills.warriorSpellbreaker.title"},
-        "description": {"translate":"text.skills.warriorSpellbreaker.description"},
+        "title": {
+            "translate": "text.skills.warriorSpellbreaker.title"
+        },
+        "description": {
+            "translate": "text.skills.warriorSpellbreaker.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -2599,8 +2829,12 @@
         ]
     },
     "warriorGoliath": {
-        "title": {"translate":"text.skills.warriorGoliath.title"},
-        "description": {"translate":"text.skills.warriorGoliath.description"},
+        "title": {
+            "translate": "text.skills.warriorGoliath.title"
+        },
+        "description": {
+            "translate": "text.skills.warriorGoliath.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -2627,8 +2861,12 @@
         ]
     },
     "warriorHeavyWeight": {
-        "title": {"translate":"text.skills.warriorHeavyWeight.title"},
-        "description": {"translate":"text.skills.warriorHeavyWeight.description"},
+        "title": {
+            "translate": "text.skills.warriorHeavyWeight.title"
+        },
+        "description": {
+            "translate": "text.skills.warriorHeavyWeight.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -2655,8 +2893,12 @@
         ]
     },
     "warriorBound": {
-        "title": {"translate":"text.skills.warriorBound.title"},
-        "description": {"translate":"text.skills.warriorBound.description"},
+        "title": {
+            "translate": "text.skills.warriorBound.title"
+        },
+        "description": {
+            "translate": "text.skills.warriorBound.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -2683,8 +2925,12 @@
         ]
     },
     "warriorDeathDefy": {
-        "title": {"translate":"text.skills.warriorDeathDefy.title"},
-        "description": {"translate":"text.skills.warriorDeathDefy.description"},
+        "title": {
+            "translate": "text.skills.warriorDeathDefy.title"
+        },
+        "description": {
+            "translate": "text.skills.warriorDeathDefy.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -2711,8 +2957,12 @@
         ]
     },
     "warriorFrenzy": {
-        "title": {"translate":"text.skills.warriorFrenzy.title"},
-        "description": {"translate":"text.skills.warriorFrenzy.description"},
+        "title": {
+            "translate": "text.skills.warriorFrenzy.title"
+        },
+        "description": {
+            "translate": "text.skills.warriorFrenzy.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -2741,8 +2991,12 @@
         ]
     },
     "warriorCarnage": {
-        "title": {"translate":"text.skills.warriorCarnage.title"},
-        "description": {"translate":"text.skills.warriorCarnage.description"},
+        "title": {
+            "translate": "text.skills.warriorCarnage.title"
+        },
+        "description": {
+            "translate": "text.skills.warriorCarnage.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -2769,8 +3023,12 @@
         ]
     },
     "warriorTwinstrike": {
-        "title": {"translate":"text.skills.warriorTwinstrike.title"},
-        "description": {"translate":"text.skills.warriorTwinstrike.description"},
+        "title": {
+            "translate": "text.skills.warriorTwinstrike.title"
+        },
+        "description": {
+            "translate": "text.skills.warriorTwinstrike.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -2797,8 +3055,12 @@
         ]
     },
     "warriorSwordfall": {
-        "title": {"translate":"text.skills.warriorSwordfall.title"},
-        "description": {"translate":"text.skills.warriorSwordfall.description"},
+        "title": {
+            "translate": "text.skills.warriorSwordfall.title"
+        },
+        "description": {
+            "translate": "text.skills.warriorSwordfall.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -2825,9 +3087,15 @@
         ]
     },
     "berserkerPath": {
-        "title": {"translate":"text.skills.berserkerpath.title"},
-        "description": {"translate":"text.skills.berserkerpath.description"},
-        "extra_description": {"translate":"text.skills.berserkerpath.extra_description"},
+        "title": {
+            "translate": "text.skills.berserkerpath.title"
+        },
+        "description": {
+            "translate": "text.skills.berserkerpath.description"
+        },
+        "extra_description": {
+            "translate": "text.skills.berserkerpath.extra_description"
+        },
         "size": 1.6,
         "frame": {
             "type": "texture",
@@ -2841,7 +3109,7 @@
         "icon": {
             "type": "texture",
             "data": {
-                "texture": "smooth_classes:textures/icons/alternate_reduced/berserker_path.png"
+                "texture": "smooth_classes:textures/icons/classes/berserker.png"
             }
         },
         "rewards": [
@@ -2854,8 +3122,12 @@
         ]
     },
     "berserkerSwordMastery": {
-        "title": {"translate":"text.skills.berserkerSwordMastery.title"},
-        "description": {"translate":"text.skills.berserkerSwordMastery.description"},
+        "title": {
+            "translate": "text.skills.berserkerSwordMastery.title"
+        },
+        "description": {
+            "translate": "text.skills.berserkerSwordMastery.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -2882,8 +3154,12 @@
         ]
     },
     "berserkerSwordMasteryProficient": {
-        "title": {"translate":"text.skills.berserkerSwordMasteryProficient.title"},
-        "description": {"translate":"text.skills.berserkerSwordMasteryProficient.description"},
+        "title": {
+            "translate": "text.skills.berserkerSwordMasteryProficient.title"
+        },
+        "description": {
+            "translate": "text.skills.berserkerSwordMasteryProficient.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -2910,8 +3186,12 @@
         ]
     },
     "berserkerSwordMasterySkilled": {
-        "title": {"translate":"text.skills.berserkerSwordMasterySkilled.title"},
-        "description": {"translate":"text.skills.berserkerSwordMasterySkilled.description"},
+        "title": {
+            "translate": "text.skills.berserkerSwordMasterySkilled.title"
+        },
+        "description": {
+            "translate": "text.skills.berserkerSwordMasterySkilled.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -2938,8 +3218,12 @@
         ]
     },
     "berserkerAxeMastery": {
-        "title": {"translate":"text.skills.berserkerAxeMastery.title"},
-        "description": {"translate":"text.skills.berserkerAxeMastery.description"},
+        "title": {
+            "translate": "text.skills.berserkerAxeMastery.title"
+        },
+        "description": {
+            "translate": "text.skills.berserkerAxeMastery.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -2966,8 +3250,12 @@
         ]
     },
     "berserkerAxeMasteryProficient": {
-        "title": {"translate":"text.skills.berserkerAxeMasteryProficient.title"},
-        "description": {"translate":"text.skills.berserkerAxeMasteryProficient.description"},
+        "title": {
+            "translate": "text.skills.berserkerAxeMasteryProficient.title"
+        },
+        "description": {
+            "translate": "text.skills.berserkerAxeMasteryProficient.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -2994,8 +3282,12 @@
         ]
     },
     "berserkerAxeMasterySkilled": {
-        "title": {"translate":"text.skills.berserkerAxeMasterySkilled.title"},
-        "description": {"translate":"text.skills.berserkerAxeMasterySkilled.description"},
+        "title": {
+            "translate": "text.skills.berserkerAxeMasterySkilled.title"
+        },
+        "description": {
+            "translate": "text.skills.berserkerAxeMasterySkilled.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -3022,8 +3314,12 @@
         ]
     },
     "berserkerIgnorePain": {
-        "title": {"translate":"text.skills.berserkerIgnorePain.title"},
-        "description": {"translate":"text.skills.berserkerIgnorePain.description"},
+        "title": {
+            "translate": "text.skills.berserkerIgnorePain.title"
+        },
+        "description": {
+            "translate": "text.skills.berserkerIgnorePain.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -3050,8 +3346,12 @@
         ]
     },
     "berserkerIgnorePainProficient": {
-        "title": {"translate":"text.skills.berserkerIgnorePainProficient.title"},
-        "description": {"translate":"text.skills.berserkerIgnorePainProficient.description"},
+        "title": {
+            "translate": "text.skills.berserkerIgnorePainProficient.title"
+        },
+        "description": {
+            "translate": "text.skills.berserkerIgnorePainProficient.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -3078,8 +3378,12 @@
         ]
     },
     "berserkerIgnorePainSkilled": {
-        "title": {"translate":"text.skills.berserkerIgnorePainSkilled.title"},
-        "description": {"translate":"text.skills.berserkerIgnorePainSkilled.description"},
+        "title": {
+            "translate": "text.skills.berserkerIgnorePainSkilled.title"
+        },
+        "description": {
+            "translate": "text.skills.berserkerIgnorePainSkilled.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -3106,8 +3410,12 @@
         ]
     },
     "berserkerRecklessness": {
-        "title": {"translate":"text.skills.berserkerRecklessness.title"},
-        "description": {"translate":"text.skills.berserkerRecklessness.description"},
+        "title": {
+            "translate": "text.skills.berserkerRecklessness.title"
+        },
+        "description": {
+            "translate": "text.skills.berserkerRecklessness.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -3134,8 +3442,12 @@
         ]
     },
     "berserkerChallenge": {
-        "title": {"translate":"text.skills.berserkerChallenge.title"},
-        "description": {"translate":"text.skills.berserkerChallenge.description"},
+        "title": {
+            "translate": "text.skills.berserkerChallenge.title"
+        },
+        "description": {
+            "translate": "text.skills.berserkerChallenge.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -3162,8 +3474,12 @@
         ]
     },
     "berserkerExploit": {
-        "title": {"translate":"text.skills.berserkerExploit.title"},
-        "description": {"translate":"text.skills.berserkerExploit.description"},
+        "title": {
+            "translate": "text.skills.berserkerExploit.title"
+        },
+        "description": {
+            "translate": "text.skills.berserkerExploit.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -3190,7 +3506,9 @@
         ]
     },
     "bulwarkPath": {
-        "title": {"translate":"text.skills.bulwarkPath.title"},
+        "title": {
+            "translate": "text.skills.bulwarkPath.title"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -3217,8 +3535,12 @@
         ]
     },
     "bulwarkShieldMastery": {
-        "title": {"translate":"text.skills.bulwarkShieldMastery.title"},
-        "description": {"translate":"text.skills.bulwarkShieldMastery.description"},
+        "title": {
+            "translate": "text.skills.bulwarkShieldMastery.title"
+        },
+        "description": {
+            "translate": "text.skills.bulwarkShieldMastery.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -3245,8 +3567,12 @@
         ]
     },
     "bulwarkShieldMasteryProficient": {
-        "title": {"translate":"text.skills.bulwarkShieldMasteryProficient.title"},
-        "description": {"translate":"text.skills.bulwarkShieldMasteryProficient.description"},
+        "title": {
+            "translate": "text.skills.bulwarkShieldMasteryProficient.title"
+        },
+        "description": {
+            "translate": "text.skills.bulwarkShieldMasteryProficient.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -3273,8 +3599,12 @@
         ]
     },
     "bulwarkShieldMasterySkilled": {
-        "title": {"translate":"text.skills.bulwarkShieldMasterySkilled.title"},
-        "description": {"translate":"text.skills.bulwarkShieldMasterySkilled.description"},
+        "title": {
+            "translate": "text.skills.bulwarkShieldMasterySkilled.title"
+        },
+        "description": {
+            "translate": "text.skills.bulwarkShieldMasterySkilled.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -3301,8 +3631,12 @@
         ]
     },
     "bulwarkRebuke": {
-        "title": {"translate":"text.skills.bulwarkRebuke.title"},
-        "description": {"translate":"text.skills.bulwarkRebuke.description"},
+        "title": {
+            "translate": "text.skills.bulwarkRebuke.title"
+        },
+        "description": {
+            "translate": "text.skills.bulwarkRebuke.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -3329,8 +3663,12 @@
         ]
     },
     "wayfarerSlender": {
-        "title": {"translate":"text.skills.wayfarerSlender.title"},
-        "description": {"translate":"text.skills.wayfarerSlender.description"},
+        "title": {
+            "translate": "text.skills.wayfarerSlender.title"
+        },
+        "description": {
+            "translate": "text.skills.wayfarerSlender.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -3357,9 +3695,15 @@
         ]
     },
     "roguePath": {
-        "title": {"translate":"text.skills.roguePath.title"},
-        "description": {"translate":"text.skills.roguePath.description"},
-        "extra_description": {"translate":"text.skills.roguePath.extra_description"},
+        "title": {
+            "translate": "text.skills.roguePath.title"
+        },
+        "description": {
+            "translate": "text.skills.roguePath.description"
+        },
+        "extra_description": {
+            "translate": "text.skills.roguePath.extra_description"
+        },
         "size": 1.6,
         "frame": {
             "type": "texture",
@@ -3373,7 +3717,7 @@
         "icon": {
             "type": "texture",
             "data": {
-                "texture": "smooth_classes:textures/icons/alternate_reduced/rogue_path.png"
+                "texture": "smooth_classes:textures/icons/classes/assassin.png"
             }
         },
         "rewards": [
@@ -3386,8 +3730,12 @@
         ]
     },
     "rogueSmokeBomb": {
-        "title": {"translate":"text.skills.rogueSmokeBomb.title"},
-        "description": {"translate":"text.skills.rogueSmokeBomb.description"},
+        "title": {
+            "translate": "text.skills.rogueSmokeBomb.title"
+        },
+        "description": {
+            "translate": "text.skills.rogueSmokeBomb.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -3414,8 +3762,12 @@
         ]
     },
     "rogueOpportunisticMastery": {
-        "title": {"translate":"text.skills.rogueOpportunisticMastery.title"},
-        "description": {"translate":"text.skills.rogueOpportunisticMastery.description"},
+        "title": {
+            "translate": "text.skills.rogueOpportunisticMastery.title"
+        },
+        "description": {
+            "translate": "text.skills.rogueOpportunisticMastery.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -3442,8 +3794,12 @@
         ]
     },
     "rogueOpportunisticMasteryProficient": {
-        "title": {"translate":"text.skills.rogueOpportunisticMasteryProficient.title"},
-        "description": {"translate":"text.skills.rogueOpportunisticMasteryProficient.description"},
+        "title": {
+            "translate": "text.skills.rogueOpportunisticMasteryProficient.title"
+        },
+        "description": {
+            "translate": "text.skills.rogueOpportunisticMasteryProficient.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -3470,8 +3826,12 @@
         ]
     },
     "rogueOpportunisticMasterySkilled": {
-        "title": {"translate":"text.skills.rogueOpportunisticMasterySkilled.title"},
-        "description": {"translate":"text.skills.rogueOpportunisticMasterySkilled.description"},
+        "title": {
+            "translate": "text.skills.rogueOpportunisticMasterySkilled.title"
+        },
+        "description": {
+            "translate": "text.skills.rogueOpportunisticMasterySkilled.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -3498,8 +3858,12 @@
         ]
     },
     "rogueEvasionMastery": {
-        "title": {"translate":"text.skills.rogueEvasionMastery.title"},
-        "description": {"translate":"text.skills.rogueEvasionMastery.description"},
+        "title": {
+            "translate": "text.skills.rogueEvasionMastery.title"
+        },
+        "description": {
+            "translate": "text.skills.rogueEvasionMastery.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -3526,8 +3890,12 @@
         ]
     },
     "rogueEvasionMasteryProficient": {
-        "title": {"translate":"text.skills.rogueEvasionMasteryProficient.title"},
-        "description": {"translate":"text.skills.rogueEvasionMasteryProficient.description"},
+        "title": {
+            "translate": "text.skills.rogueEvasionMasteryProficient.title"
+        },
+        "description": {
+            "translate": "text.skills.rogueEvasionMasteryProficient.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -3554,8 +3922,12 @@
         ]
     },
     "rogueEvasionMasterySkilled": {
-        "title": {"translate":"text.skills.rogueEvasionMasterySkilled.title"},
-        "description": {"translate":"text.skills.rogueEvasionMasterySkilled.description"},
+        "title": {
+            "translate": "text.skills.rogueEvasionMasterySkilled.title"
+        },
+        "description": {
+            "translate": "text.skills.rogueEvasionMasterySkilled.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -3582,8 +3954,12 @@
         ]
     },
     "rogueExploitation": {
-        "title": {"translate":"text.skills.rogueExploitation.title"},
-        "description": {"translate":"text.skills.rogueExploitation.description"},
+        "title": {
+            "translate": "text.skills.rogueExploitation.title"
+        },
+        "description": {
+            "translate": "text.skills.rogueExploitation.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -3610,8 +3986,12 @@
         ]
     },
     "rogueRecovery": {
-        "title": {"translate":"text.skills.rogueRecovery.title"},
-        "description": {"translate":"text.skills.rogueRecovery.description"},
+        "title": {
+            "translate": "text.skills.rogueRecovery.title"
+        },
+        "description": {
+            "translate": "text.skills.rogueRecovery.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -3638,8 +4018,12 @@
         ]
     },
     "rogueShadowVeil": {
-        "title": {"translate":"text.skills.rogueShadowVeil.title"},
-        "description": {"translate":"text.skills.rogueShadowVeil.description"},
+        "title": {
+            "translate": "text.skills.rogueShadowVeil.title"
+        },
+        "description": {
+            "translate": "text.skills.rogueShadowVeil.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -3666,8 +4050,12 @@
         ]
     },
     "rogueDeflection": {
-        "title": {"translate":"text.skills.rogueDeflection.title"},
-        "description": {"translate":"text.skills.rogueDeflection.description"},
+        "title": {
+            "translate": "text.skills.rogueDeflection.title"
+        },
+        "description": {
+            "translate": "text.skills.rogueDeflection.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -3694,8 +4082,12 @@
         ]
     },
     "rogueFleetfooted": {
-        "title": {"translate":"text.skills.rogueFleetfooted.title"},
-        "description": {"translate":"text.skills.rogueFleetfooted.description"},
+        "title": {
+            "translate": "text.skills.rogueFleetfooted.title"
+        },
+        "description": {
+            "translate": "text.skills.rogueFleetfooted.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -3722,9 +4114,15 @@
         ]
     },
     "rangerPath": {
-        "title": {"translate":"text.skills.rangerPath.title"},
-        "description": {"translate":"text.skills.rangerPath.description"},
-        "extra_description": {"translate":"text.skills.rangerPath.extra_description"},
+        "title": {
+            "translate": "text.skills.rangerPath.title"
+        },
+        "description": {
+            "translate": "text.skills.rangerPath.description"
+        },
+        "extra_description": {
+            "translate": "text.skills.rangerPath.extra_description"
+        },
         "size": 1.6,
         "frame": {
             "type": "texture",
@@ -3738,7 +4136,7 @@
         "icon": {
             "type": "texture",
             "data": {
-                "texture": "smooth_classes:textures/icons/alternate_reduced/ranger_path.png"
+                "texture": "smooth_classes:textures/icons/classes/archer.png"
             }
         },
         "rewards": [
@@ -3751,8 +4149,12 @@
         ]
     },
     "initiateFrail": {
-        "title": {"translate":"text.skills.initiateFrail.title"},
-        "description": {"translate":"text.skills.initiateFrail.description"},
+        "title": {
+            "translate": "text.skills.initiateFrail.title"
+        },
+        "description": {
+            "translate": "text.skills.initiateFrail.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -3779,8 +4181,12 @@
         ]
     },
     "initiateWhisperedWizardry": {
-        "title": {"translate":"text.skills.initiateWhisperedWizardry.title"},
-        "description": {"translate":"text.skills.initiateWhisperedWizardry.description"},
+        "title": {
+            "translate": "text.skills.initiateWhisperedWizardry.title"
+        },
+        "description": {
+            "translate": "text.skills.initiateWhisperedWizardry.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -3807,8 +4213,12 @@
         ]
     },
     "initiateSpellcloak": {
-        "title": {"translate":"text.skills.initiateSpellcloak.title"},
-        "description": {"translate":"text.skills.initiateSpellcloak.description"},
+        "title": {
+            "translate": "text.skills.initiateSpellcloak.title"
+        },
+        "description": {
+            "translate": "text.skills.initiateSpellcloak.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -3835,8 +4245,12 @@
         ]
     },
     "initiateOverload": {
-        "title": {"translate":"text.skills.initiateOverload.title"},
-        "description": {"translate":"text.skills.initiateOverload.description"},
+        "title": {
+            "translate": "text.skills.initiateOverload.title"
+        },
+        "description": {
+            "translate": "text.skills.initiateOverload.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -3863,9 +4277,15 @@
         ]
     },
     "crusaderPath": {
-        "title": {"translate":"text.skills.crusaderPath.title"},
-        "description": {"translate":"text.skills.crusaderPath.description"},
-        "extra_description": {"translate":"text.skills.crusaderPath.extra_description"},
+        "title": {
+            "translate": "text.skills.crusaderPath.title"
+        },
+        "description": {
+            "translate": "text.skills.crusaderPath.description"
+        },
+        "extra_description": {
+            "translate": "text.skills.crusaderPath.extra_description"
+        },
         "size": 1.6,
         "frame": {
             "type": "texture",
@@ -3879,7 +4299,7 @@
         "icon": {
             "type": "texture",
             "data": {
-                "texture": "smooth_classes:textures/icons/alternate_reduced/crusader_path.png"
+                "texture": "smooth_classes:textures/icons/classes/saber.png"
             }
         },
         "rewards": [
@@ -3900,9 +4320,15 @@
         ]
     },
     "frostguardPath": {
-        "title": {"translate":"text.skills.frostguardPath.title"},
-        "description": {"translate":"text.skills.frostguardPath.description"},
-        "extra_description": {"translate":"text.skills.frostguardPath.extra_description"},
+        "title": {
+            "translate": "text.skills.frostguardPath.title"
+        },
+        "description": {
+            "translate": "text.skills.frostguardPath.description"
+        },
+        "extra_description": {
+            "translate": "text.skills.frostguardPath.extra_description"
+        },
         "size": 1.6,
         "frame": {
             "type": "texture",
@@ -3929,9 +4355,15 @@
         ]
     },
     "spellbladePath": {
-        "title": {"translate":"text.skills.spellbladePath.title"},
-        "description": {"translate":"text.skills.spellbladePath.description"},
-        "extra_description": {"translate":"text.skills.spellbladePath.extra_description"},
+        "title": {
+            "translate": "text.skills.spellbladePath.title"
+        },
+        "description": {
+            "translate": "text.skills.spellbladePath.description"
+        },
+        "extra_description": {
+            "translate": "text.skills.spellbladePath.extra_description"
+        },
         "size": 1.6,
         "frame": {
             "type": "texture",
@@ -3945,7 +4377,7 @@
         "icon": {
             "type": "texture",
             "data": {
-                "texture": "smooth_classes:textures/icons/alternate_reduced/spellblade_path.png"
+                "texture": "smooth_classes:textures/icons/classes/foreigner.png"
             }
         },
         "rewards": [
@@ -3958,8 +4390,12 @@
         ]
     },
     "spellbladeWeaponExpert": {
-        "title": {"translate":"text.skills.spellbladeWeaponExpert.title"},
-        "description": {"translate":"text.skills.spellbladeWeaponExpert.description"},
+        "title": {
+            "translate": "text.skills.spellbladeWeaponExpert.title"
+        },
+        "description": {
+            "translate": "text.skills.spellbladeWeaponExpert.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -3986,8 +4422,12 @@
         ]
     },
     "spellbladeSpellweaving": {
-        "title": {"translate":"text.skills.spellbladeSpellweaving.title"},
-        "description": {"translate":"text.skills.spellbladeSpellweaving.description"},
+        "title": {
+            "translate": "text.skills.spellbladeSpellweaving.title"
+        },
+        "description": {
+            "translate": "text.skills.spellbladeSpellweaving.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -4014,8 +4454,12 @@
         ]
     },
     "spellbladeSignatureElementalSurge": {
-        "title": {"translate":"text.skills.spellbladeSignatureElementalSurge.title"},
-        "description": {"translate":"text.skills.spellbladeSignatureElementalSurge.description"},
+        "title": {
+            "translate": "text.skills.spellbladeSignatureElementalSurge.title"
+        },
+        "description": {
+            "translate": "text.skills.spellbladeSignatureElementalSurge.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -4042,8 +4486,12 @@
         ]
     },
     "spellbladeSignatureElementalSurgeNoFrost": {
-        "title": {"translate":"text.skills.spellbladeSignatureElementalSurgeNoFrost.title"},
-        "description": {"translate":"text.skills.spellbladeSignatureElementalSurgeNoFrost.description"},
+        "title": {
+            "translate": "text.skills.spellbladeSignatureElementalSurgeNoFrost.title"
+        },
+        "description": {
+            "translate": "text.skills.spellbladeSignatureElementalSurgeNoFrost.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -4070,8 +4518,12 @@
         ]
     },
     "spellbladeSignatureElementalSurgeNoFire": {
-        "title": {"translate":"text.skills.spellbladeSignatureElementalSurgeNoFire.title"},
-        "description": {"translate":"text.skills.spellbladeSignatureElementalSurgeNoFire.description"},
+        "title": {
+            "translate": "text.skills.spellbladeSignatureElementalSurgeNoFire.title"
+        },
+        "description": {
+            "translate": "text.skills.spellbladeSignatureElementalSurgeNoFire.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -4098,8 +4550,12 @@
         ]
     },
     "spellbladeSignatureElementalSurgeRenewal": {
-        "title": {"translate":"text.skills.spellbladeSignatureElementalSurgeRenewal.title"},
-        "description": {"translate":"text.skills.spellbladeSignatureElementalSurgeRenewal.description"},
+        "title": {
+            "translate": "text.skills.spellbladeSignatureElementalSurgeRenewal.title"
+        },
+        "description": {
+            "translate": "text.skills.spellbladeSignatureElementalSurgeRenewal.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -4126,8 +4582,12 @@
         ]
     },
     "spellbladeSignatureElementalSurgeNoLightning": {
-        "title": {"translate":"text.skills.spellbladeSignatureElementalSurgeNoLightning.title"},
-        "description": {"translate":"text.skills.spellbladeSignatureElementalSurgeNoLightning.description"},
+        "title": {
+            "translate": "text.skills.spellbladeSignatureElementalSurgeNoLightning.title"
+        },
+        "description": {
+            "translate": "text.skills.spellbladeSignatureElementalSurgeNoLightning.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -4154,8 +4614,12 @@
         ]
     },
     "spellbladeSignatureElementalImpact": {
-        "title": {"translate":"text.skills.spellbladeSignatureElementalImpact.title"},
-        "description": {"translate":"text.skills.spellbladeSignatureElementalImpact.description"},
+        "title": {
+            "translate": "text.skills.spellbladeSignatureElementalImpact.title"
+        },
+        "description": {
+            "translate": "text.skills.spellbladeSignatureElementalImpact.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -4182,8 +4646,12 @@
         ]
     },
     "spellbladeSignatureElementalImpactMagnet": {
-        "title": {"translate":"text.skills.spellbladeSignatureElementalImpactMagnet.title"},
-        "description": {"translate":"text.skills.spellbladeSignatureElementalImpactMagnet.description"},
+        "title": {
+            "translate": "text.skills.spellbladeSignatureElementalImpactMagnet.title"
+        },
+        "description": {
+            "translate": "text.skills.spellbladeSignatureElementalImpactMagnet.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -4210,8 +4678,12 @@
         ]
     },
     "spellbladeSignatureElementalImpactResistance": {
-        "title": {"translate":"text.skills.spellbladeSignatureElementalImpactResistance.title"},
-        "description": {"translate":"text.skills.spellbladeSignatureElementalImpactResistance.description"},
+        "title": {
+            "translate": "text.skills.spellbladeSignatureElementalImpactResistance.title"
+        },
+        "description": {
+            "translate": "text.skills.spellbladeSignatureElementalImpactResistance.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -4238,8 +4710,12 @@
         ]
     },
     "spellbladeSignatureSpellweaver": {
-        "title": {"translate":"text.skills.spellbladeSignatureSpellweaver.title"},
-        "description": {"translate":"text.skills.spellbladeSignatureSpellweaver.description"},
+        "title": {
+            "translate": "text.skills.spellbladeSignatureSpellweaver.title"
+        },
+        "description": {
+            "translate": "text.skills.spellbladeSignatureSpellweaver.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -4266,8 +4742,12 @@
         ]
     },
     "spellbladeSignatureSpellweaverHaste": {
-        "title": {"translate":"text.skills.spellbladeSignatureSpellweaverHaste.title"},
-        "description": {"translate":"text.skills.spellbladeSignatureSpellweaverHaste.description"},
+        "title": {
+            "translate": "text.skills.spellbladeSignatureSpellweaverHaste.title"
+        },
+        "description": {
+            "translate": "text.skills.spellbladeSignatureSpellweaverHaste.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -4294,8 +4774,12 @@
         ]
     },
     "spellbladeSignatureSpellweaverRegeneration": {
-        "title": {"translate":"text.skills.spellbladeSignatureSpellweaverRegeneration.title"},
-        "description": {"translate":"text.skills.spellbladeSignatureSpellweaverRegeneration.description"},
+        "title": {
+            "translate": "text.skills.spellbladeSignatureSpellweaverRegeneration.title"
+        },
+        "description": {
+            "translate": "text.skills.spellbladeSignatureSpellweaverRegeneration.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -4322,9 +4806,15 @@
         ]
     },
     "wizardPath": {
-        "title": {"translate":"text.skills.wizardPath.title"},
-        "description": {"translate":"text.skills.wizardPath.description"},
-        "extra_description": {"translate":"text.skills.wizardPath.extra_description"},
+        "title": {
+            "translate": "text.skills.wizardPath.title"
+        },
+        "description": {
+            "translate": "text.skills.wizardPath.description"
+        },
+        "extra_description": {
+            "translate": "text.skills.wizardPath.extra_description"
+        },
         "size": 1.6,
         "frame": {
             "type": "texture",
@@ -4338,7 +4828,7 @@
         "icon": {
             "type": "texture",
             "data": {
-                "texture": "smooth_classes:textures/icons/alternate_reduced/wizard_path.png"
+                "texture": "smooth_classes:textures/icons/classes/caster.png"
             }
         },
         "rewards": [
@@ -4351,9 +4841,15 @@
         ]
     },
     "shamanPath": {
-        "title": {"translate":"text.skills.shamanPath.title"},
-        "description": {"translate":"text.skills.shamanPath.description"},
-        "extra_description": {"translate":"text.skills.shamanPath.extra_description"},
+        "title": {
+            "translate": "text.skills.shamanPath.title"
+        },
+        "description": {
+            "translate": "text.skills.shamanPath.description"
+        },
+        "extra_description": {
+            "translate": "text.skills.shamanPath.extra_description"
+        },
         "size": 1.6,
         "frame": {
             "type": "texture",
@@ -4380,9 +4876,15 @@
         ]
     },
     "clericPath": {
-        "title": {"translate":"text.skills.clericPath.title"},
-        "description": {"translate":"text.skills.clericPath.description"},
-        "extra_description": {"translate":"text.skills.clericPath.extra_description"},
+        "title": {
+            "translate": "text.skills.clericPath.title"
+        },
+        "description": {
+            "translate": "text.skills.clericPath.description"
+        },
+        "extra_description": {
+            "translate": "text.skills.clericPath.extra_description"
+        },
         "size": 1.6,
         "frame": {
             "type": "texture",
@@ -4396,7 +4898,7 @@
         "icon": {
             "type": "texture",
             "data": {
-                "texture": "smooth_classes:textures/icons/alternate_reduced/cleric_path.png"
+                "texture": "smooth_classes:textures/icons/classes/ruler.png"
             }
         },
         "rewards": [
@@ -4417,9 +4919,15 @@
         ]
     },
     "necromancerPath": {
-        "title": {"translate":"text.skills.necromancerPath.title"},
-        "description": {"translate":"text.skills.necromancerPath.description"},
-        "extra_description": {"translate":"text.skills.necromancerPath.extra_description"},
+        "title": {
+            "translate": "text.skills.necromancerPath.title"
+        },
+        "description": {
+            "translate": "text.skills.necromancerPath.description"
+        },
+        "extra_description": {
+            "translate": "text.skills.necromancerPath.extra_description"
+        },
         "size": 1.6,
         "frame": {
             "type": "texture",
@@ -4433,7 +4941,7 @@
         "icon": {
             "type": "texture",
             "data": {
-                "texture": "smooth_classes:textures/icons/alternate_reduced/necromancer_path.png"
+                "texture": "smooth_classes:textures/icons/classes/avenger.png"
             }
         },
         "rewards": [
@@ -4446,8 +4954,12 @@
         ]
     },
     "wizardPassiveSpellEcho": {
-        "title": {"translate":"text.skills.wizardPassiveSpellEcho.title"},
-        "description": {"translate":"text.skills.wizardPassiveSpellEcho.description"},
+        "title": {
+            "translate": "text.skills.wizardPassiveSpellEcho.title"
+        },
+        "description": {
+            "translate": "text.skills.wizardPassiveSpellEcho.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -4474,8 +4986,12 @@
         ]
     },
     "wizardSignatureMeteorShower": {
-        "title": {"translate":"text.skills.wizardSignatureMeteorShower.title"},
-        "description": {"translate":"text.skills.wizardSignatureMeteorShower.description"},
+        "title": {
+            "translate": "text.skills.wizardSignatureMeteorShower.title"
+        },
+        "description": {
+            "translate": "text.skills.wizardSignatureMeteorShower.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -4502,8 +5018,12 @@
         ]
     },
     "wizardSignatureMeteorShowerGreater": {
-        "title": {"translate":"text.skills.wizardSignatureMeteorShowerGreater.title"},
-        "description": {"translate":"text.skills.wizardSignatureMeteorShowerGreater.description"},
+        "title": {
+            "translate": "text.skills.wizardSignatureMeteorShowerGreater.title"
+        },
+        "description": {
+            "translate": "text.skills.wizardSignatureMeteorShowerGreater.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -4530,8 +5050,12 @@
         ]
     },
     "wizardSignatureMeteorShowerWrath": {
-        "title": {"translate":"text.skills.wizardSignatureMeteorShowerWrath.title"},
-        "description": {"translate":"text.skills.wizardSignatureMeteorShowerWrath.description"},
+        "title": {
+            "translate": "text.skills.wizardSignatureMeteorShowerWrath.title"
+        },
+        "description": {
+            "translate": "text.skills.wizardSignatureMeteorShowerWrath.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -4558,8 +5082,12 @@
         ]
     },
     "wizardSignatureMeteorShowerRenewingWrath": {
-        "title": {"translate":"text.skills.wizardSignatureMeteorShowerRenewingWrath.title"},
-        "description": {"translate":"text.skills.wizardSignatureMeteorShowerRenewingWrath.description"},
+        "title": {
+            "translate": "text.skills.wizardSignatureMeteorShowerRenewingWrath.title"
+        },
+        "description": {
+            "translate": "text.skills.wizardSignatureMeteorShowerRenewingWrath.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -4586,8 +5114,12 @@
         ]
     },
     "wizardSignatureMeteorShowerRenewingWrath++": {
-        "title": {"translate":"text.skills.wizardSignatureMeteorShowerRenewingWrath++.title"},
-        "description": {"translate":"text.skills.wizardSignatureMeteorShowerRenewingWrath++.description"},
+        "title": {
+            "translate": "text.skills.wizardSignatureMeteorShowerRenewingWrath++.title"
+        },
+        "description": {
+            "translate": "text.skills.wizardSignatureMeteorShowerRenewingWrath++.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -4614,8 +5146,12 @@
         ]
     },
     "wizardSignatureMeteorShowerRenewingWrath+++": {
-        "title": {"translate":"text.skills.wizardSignatureMeteorShowerRenewingWrath+++.title"},
-        "description": {"translate":"text.skills.wizardSignatureMeteorShowerRenewingWrath+++.description"},
+        "title": {
+            "translate": "text.skills.wizardSignatureMeteorShowerRenewingWrath+++.title"
+        },
+        "description": {
+            "translate": "text.skills.wizardSignatureMeteorShowerRenewingWrath+++.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -4642,8 +5178,12 @@
         ]
     },
     "wizardSignatureIceComet": {
-        "title": {"translate":"text.skills.wizardSignatureIceComet.title"},
-        "description": {"translate":"text.skills.wizardSignatureIceComet.description"},
+        "title": {
+            "translate": "text.skills.wizardSignatureIceComet.title"
+        },
+        "description": {
+            "translate": "text.skills.wizardSignatureIceComet.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -4670,8 +5210,12 @@
         ]
     },
     "wizardSignatureIceCometLeap": {
-        "title": {"translate":"text.skills.wizardSignatureIceCometLeap.title"},
-        "description": {"translate":"text.skills.wizardSignatureIceCometLeap.description"},
+        "title": {
+            "translate": "text.skills.wizardSignatureIceCometLeap.title"
+        },
+        "description": {
+            "translate": "text.skills.wizardSignatureIceCometLeap.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -4698,8 +5242,12 @@
         ]
     },
     "wizardSignatureIceCometVolley": {
-        "title": {"translate":"text.skills.wizardSignatureIceCometVolley.title"},
-        "description": {"translate":"text.skills.wizardSignatureIceCometVolley.description"},
+        "title": {
+            "translate": "text.skills.wizardSignatureIceCometVolley.title"
+        },
+        "description": {
+            "translate": "text.skills.wizardSignatureIceCometVolley.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -4726,8 +5274,12 @@
         ]
     },
     "wizardSignatureIceCometDamage+": {
-        "title": {"translate":"text.skills.wizardSignatureIceCometDamage.title"},
-        "description": {"translate":"text.skills.wizardSignatureIceCometDamage.description"},
+        "title": {
+            "translate": "text.skills.wizardSignatureIceCometDamage.title"
+        },
+        "description": {
+            "translate": "text.skills.wizardSignatureIceCometDamage.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -4754,8 +5306,12 @@
         ]
     },
     "wizardSignatureIceCometDamage++": {
-        "title": {"translate":"text.skills.wizardSignatureIceCometDamage++.title"},
-        "description": {"translate":"text.skills.wizardSignatureIceCometDamage++.description"},
+        "title": {
+            "translate": "text.skills.wizardSignatureIceCometDamage++.title"
+        },
+        "description": {
+            "translate": "text.skills.wizardSignatureIceCometDamage++.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -4782,8 +5338,12 @@
         ]
     },
     "wizardSignatureIceCometDamage+++": {
-        "title": {"translate":"text.skills.wizardSignatureIceCometDamage+++.title"},
-        "description": {"translate":"text.skills.wizardSignatureIceCometDamage+++.description"},
+        "title": {
+            "translate": "text.skills.wizardSignatureIceCometDamage+++.title"
+        },
+        "description": {
+            "translate": "text.skills.wizardSignatureIceCometDamage+++.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -4810,8 +5370,12 @@
         ]
     },
     "wizardSignatureStaticDischarge": {
-        "title": {"translate":"text.skills.wizardSignatureStaticDischarge.title"},
-        "description": {"translate":"text.skills.wizardSignatureStaticDischarge.description"},
+        "title": {
+            "translate": "text.skills.wizardSignatureStaticDischarge.title"
+        },
+        "description": {
+            "translate": "text.skills.wizardSignatureStaticDischarge.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -4838,8 +5402,12 @@
         ]
     },
     "wizardSignatureStaticDischargeLightningBall": {
-        "title": {"translate":"text.skills.wizardSignatureStaticDischargeLightningBall.title"},
-        "description": {"translate":"text.skills.wizardSignatureStaticDischargeLightningBall.description"},
+        "title": {
+            "translate": "text.skills.wizardSignatureStaticDischargeLightningBall.title"
+        },
+        "description": {
+            "translate": "text.skills.wizardSignatureStaticDischargeLightningBall.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -4866,8 +5434,12 @@
         ]
     },
     "wizardSignatureStaticDischargeLeap": {
-        "title": {"translate":"text.skills.wizardSignatureStaticDischargeLeap.title"},
-        "description": {"translate":"text.skills.wizardSignatureStaticDischargeLeap.description"},
+        "title": {
+            "translate": "text.skills.wizardSignatureStaticDischargeLeap.title"
+        },
+        "description": {
+            "translate": "text.skills.wizardSignatureStaticDischargeLeap.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -4894,8 +5466,12 @@
         ]
     },
     "wizardSignatureStaticDischargeLeap++": {
-        "title": {"translate":"text.skills.wizardSignatureStaticDischargeLeap++.title"},
-        "description": {"translate":"text.skills.wizardSignatureStaticDischargeLeap++.description"},
+        "title": {
+            "translate": "text.skills.wizardSignatureStaticDischargeLeap++.title"
+        },
+        "description": {
+            "translate": "text.skills.wizardSignatureStaticDischargeLeap++.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -4922,8 +5498,12 @@
         ]
     },
     "wizardSignatureStaticDischargeLeap+++": {
-        "title": {"translate":"text.skills.wizardSignatureStaticDischargeLeap+++.title"},
-        "description": {"translate":"text.skills.wizardSignatureStaticDischargeLeap+++.description"},
+        "title": {
+            "translate": "text.skills.wizardSignatureStaticDischargeLeap+++.title"
+        },
+        "description": {
+            "translate": "text.skills.wizardSignatureStaticDischargeLeap+++.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -4950,8 +5530,12 @@
         ]
     },
     "wizardSignatureStaticDischargeSpeed": {
-        "title": {"translate":"text.skills.wizardSignatureStaticDischargeSpeed.title"},
-        "description": {"translate":"text.skills.wizardSignatureStaticDischargeSpeed.description"},
+        "title": {
+            "translate": "text.skills.wizardSignatureStaticDischargeSpeed.title"
+        },
+        "description": {
+            "translate": "text.skills.wizardSignatureStaticDischargeSpeed.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -4978,8 +5562,12 @@
         ]
     },
     "wizardSignatureStaticDischargeSpeed++": {
-        "title": {"translate":"text.skills.wizardSignatureStaticDischargeSpeed++.title"},
-        "description": {"translate":"text.skills.wizardSignatureStaticDischargeSpeed++.description"},
+        "title": {
+            "translate": "text.skills.wizardSignatureStaticDischargeSpeed++.title"
+        },
+        "description": {
+            "translate": "text.skills.wizardSignatureStaticDischargeSpeed++.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -5006,8 +5594,12 @@
         ]
     },
     "wizardSignatureStaticDischargeSpeed+++": {
-        "title": {"translate":"text.skills.wizardSignatureStaticDischargeSpeed+++.title"},
-        "description": {"translate":"text.skills.wizardSignatureStaticDischargeSpeed+++.description"},
+        "title": {
+            "translate": "text.skills.wizardSignatureStaticDischargeSpeed+++.title"
+        },
+        "description": {
+            "translate": "text.skills.wizardSignatureStaticDischargeSpeed+++.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -5034,8 +5626,12 @@
         ]
     },
     "wizardSignatureStaticDischargeLightningOrb": {
-        "title": {"translate":"text.skills.wizardSignatureStaticDischargeLightningOrb.title"},
-        "description": {"translate":"text.skills.wizardSignatureStaticDischargeLightningOrb.description"},
+        "title": {
+            "translate": "text.skills.wizardSignatureStaticDischargeLightningOrb.title"
+        },
+        "description": {
+            "translate": "text.skills.wizardSignatureStaticDischargeLightningOrb.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -5062,8 +5658,12 @@
         ]
     },
     "wizardSignatureStaticDischargeLightningOrbOnHit": {
-        "title": {"translate":"text.skills.wizardSignatureStaticDischargeLightningOrbOnHit.title"},
-        "description": {"translate":"text.skills.wizardSignatureStaticDischargeLightningOrbOnHit.description"},
+        "title": {
+            "translate": "text.skills.wizardSignatureStaticDischargeLightningOrbOnHit.title"
+        },
+        "description": {
+            "translate": "text.skills.wizardSignatureStaticDischargeLightningOrbOnHit.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -5090,8 +5690,12 @@
         ]
     },
     "wizardSignatureArcaneBolt": {
-        "title": {"translate":"text.skills.wizardSignatureArcaneBolt.title"},
-        "description": {"translate":"text.skills.wizardSignatureArcaneBolt.description"},
+        "title": {
+            "translate": "text.skills.wizardSignatureArcaneBolt.title"
+        },
+        "description": {
+            "translate": "text.skills.wizardSignatureArcaneBolt.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -5118,8 +5722,12 @@
         ]
     },
     "wizardSignatureArcaneBoltLesser": {
-        "title": {"translate":"text.skills.wizardSignatureArcaneBoltLesser.title"},
-        "description": {"translate":"text.skills.wizardSignatureArcaneBoltLesser.description"},
+        "title": {
+            "translate": "text.skills.wizardSignatureArcaneBoltLesser.title"
+        },
+        "description": {
+            "translate": "text.skills.wizardSignatureArcaneBoltLesser.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -5146,8 +5754,12 @@
         ]
     },
     "wizardSignatureArcaneBoltVolley": {
-        "title": {"translate":"text.skills.wizardSignatureArcaneBoltVolley.title"},
-        "description": {"translate":"text.skills.wizardSignatureArcaneBoltVolley.description"},
+        "title": {
+            "translate": "text.skills.wizardSignatureArcaneBoltVolley.title"
+        },
+        "description": {
+            "translate": "text.skills.wizardSignatureArcaneBoltVolley.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -5174,8 +5786,12 @@
         ]
     },
     "wizardSignatureArcaneBoltGreater": {
-        "title": {"translate":"text.skills.wizardSignatureArcaneBoltGreater.title"},
-        "description": {"translate":"text.skills.wizardSignatureArcaneBoltGreater.description"},
+        "title": {
+            "translate": "text.skills.wizardSignatureArcaneBoltGreater.title"
+        },
+        "description": {
+            "translate": "text.skills.wizardSignatureArcaneBoltGreater.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -5202,8 +5818,12 @@
         ]
     },
     "shamanSignatureAstralTotem": {
-        "title": {"translate":"text.skills.shamanSignatureAstralTotem.title"},
-        "description": {"translate":"text.skills.shamanSignatureAstralTotem.description"},
+        "title": {
+            "translate": "text.skills.shamanSignatureAstralTotem.title"
+        },
+        "description": {
+            "translate": "text.skills.shamanSignatureAstralTotem.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -5230,8 +5850,12 @@
         ]
     },
     "shamanSignatureNovaTotem": {
-        "title": {"translate":"text.skills.shamanSignatureNovaTotem.title"},
-        "description": {"translate":"text.skills.shamanSignatureNovaTotem.description"},
+        "title": {
+            "translate": "text.skills.shamanSignatureNovaTotem.title"
+        },
+        "description": {
+            "translate": "text.skills.shamanSignatureNovaTotem.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -5258,8 +5882,12 @@
         ]
     },
     "shamanSignatureBoltTotem": {
-        "title": {"translate":"text.skills.shamanSignatureBoltTotem.title"},
-        "description": {"translate":"text.skills.shamanSignatureBoltTotem.description"},
+        "title": {
+            "translate": "text.skills.shamanSignatureBoltTotem.title"
+        },
+        "description": {
+            "translate": "text.skills.shamanSignatureBoltTotem.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -5286,8 +5914,12 @@
         ]
     },
     "rogueSignatureEvasion": {
-        "title": {"translate":"text.skills.rogueSignatureEvasion.title"},
-        "description": {"translate":"text.skills.rogueSignatureEvasion.description"},
+        "title": {
+            "translate": "text.skills.rogueSignatureEvasion.title"
+        },
+        "description": {
+            "translate": "text.skills.rogueSignatureEvasion.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -5314,8 +5946,12 @@
         ]
     },
     "rogueSignatureEvasionFanOfBlades": {
-        "title": {"translate":"text.skills.rogueSignatureEvasionFanOfBlades.title"},
-        "description": {"translate":"text.skills.rogueSignatureEvasionFanOfBlades.description"},
+        "title": {
+            "translate": "text.skills.rogueSignatureEvasionFanOfBlades.title"
+        },
+        "description": {
+            "translate": "text.skills.rogueSignatureEvasionFanOfBlades.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -5342,8 +5978,12 @@
         ]
     },
     "rogueSignatureEvasionFanOfBladesDisenchantment": {
-        "title": {"translate":"text.skills.rogueSignatureEvasionFanOfBladesDisenchantment.title"},
-        "description": {"translate":"text.skills.rogueSignatureEvasionFanOfBladesDisenchantment.description"},
+        "title": {
+            "translate": "text.skills.rogueSignatureEvasionFanOfBladesDisenchantment.title"
+        },
+        "description": {
+            "translate": "text.skills.rogueSignatureEvasionFanOfBladesDisenchantment.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -5370,8 +6010,12 @@
         ]
     },
     "rogueSignatureEvasionFanOfBladesAssault": {
-        "title": {"translate":"text.skills.rogueSignatureEvasionFanOfBladesAssault.title"},
-        "description": {"translate":"text.skills.rogueSignatureEvasionFanOfBladesAssault.description"},
+        "title": {
+            "translate": "text.skills.rogueSignatureEvasionFanOfBladesAssault.title"
+        },
+        "description": {
+            "translate": "text.skills.rogueSignatureEvasionFanOfBladesAssault.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -5398,8 +6042,12 @@
         ]
     },
     "rogueSignatureEvasionFanOfBladesRenewal": {
-        "title": {"translate":"text.skills.rogueSignatureEvasionFanOfBladesRenewal.title"},
-        "description": {"translate":"text.skills.rogueSignatureEvasionFanOfBladesRenewal.description"},
+        "title": {
+            "translate": "text.skills.rogueSignatureEvasionFanOfBladesRenewal.title"
+        },
+        "description": {
+            "translate": "text.skills.rogueSignatureEvasionFanOfBladesRenewal.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -5426,8 +6074,12 @@
         ]
     },
     "rogueSignatureEvasionFanOfBladesBladestorm": {
-        "title": {"translate":"text.skills.rogueSignatureEvasionFanOfBladesBladestorm.title"},
-        "description": {"translate":"text.skills.rogueSignatureEvasionFanOfBladesBladestorm.description"},
+        "title": {
+            "translate": "text.skills.rogueSignatureEvasionFanOfBladesBladestorm.title"
+        },
+        "description": {
+            "translate": "text.skills.rogueSignatureEvasionFanOfBladesBladestorm.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -5454,8 +6106,12 @@
         ]
     },
     "rogueSignatureEvasionFanOfBladesBladestormSiphon": {
-        "title": {"translate":"text.skills.rogueSignatureEvasionFanOfBladesBladestormSiphon.title"},
-        "description": {"translate":"text.skills.rogueSignatureEvasionFanOfBladesBladestormSiphon.description"},
+        "title": {
+            "translate": "text.skills.rogueSignatureEvasionFanOfBladesBladestormSiphon.title"
+        },
+        "description": {
+            "translate": "text.skills.rogueSignatureEvasionFanOfBladesBladestormSiphon.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -5482,8 +6138,12 @@
         ]
     },
     "rogueSignaturePreparation": {
-        "title": {"translate":"text.skills.rogueSignaturePreparation.title"},
-        "description": {"translate":"text.skills.rogueSignaturePreparation.description"},
+        "title": {
+            "translate": "text.skills.rogueSignaturePreparation.title"
+        },
+        "description": {
+            "translate": "text.skills.rogueSignaturePreparation.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -5510,8 +6170,12 @@
         ]
     },
     "rogueSignaturePreparationShadowstrike": {
-        "title": {"translate":"text.skills.rogueSignaturePreparationShadowstrike.title"},
-        "description": {"translate":"text.skills.rogueSignaturePreparationShadowstrike.description"},
+        "title": {
+            "translate": "text.skills.rogueSignaturePreparationShadowstrike.title"
+        },
+        "description": {
+            "translate": "text.skills.rogueSignaturePreparationShadowstrike.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -5538,8 +6202,12 @@
         ]
     },
     "rogueSignaturePreparationShadowstrikeVampire": {
-        "title": {"translate":"text.skills.rogueSignaturePreparationShadowstrikeVampire.title"},
-        "description": {"translate":"text.skills.rogueSignaturePreparationShadowstrikeVampire.description"},
+        "title": {
+            "translate": "text.skills.rogueSignaturePreparationShadowstrikeVampire.title"
+        },
+        "description": {
+            "translate": "text.skills.rogueSignaturePreparationShadowstrikeVampire.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -5566,8 +6234,12 @@
         ]
     },
     "rogueSignaturePreparationShadowstrikeShield": {
-        "title": {"translate":"text.skills.rogueSignaturePreparationShadowstrikeShield.title"},
-        "description": {"translate":"text.skills.rogueSignaturePreparationShadowstrikeShield.description"},
+        "title": {
+            "translate": "text.skills.rogueSignaturePreparationShadowstrikeShield.title"
+        },
+        "description": {
+            "translate": "text.skills.rogueSignaturePreparationShadowstrikeShield.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -5594,8 +6266,12 @@
         ]
     },
     "rogueSignatureSiphoningStrikes": {
-        "title": {"translate":"text.skills.rogueSignatureSiphoningStrikes.title"},
-        "description": {"translate":"text.skills.rogueSignatureSiphoningStrikes.description"},
+        "title": {
+            "translate": "text.skills.rogueSignatureSiphoningStrikes.title"
+        },
+        "description": {
+            "translate": "text.skills.rogueSignatureSiphoningStrikes.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -5622,8 +6298,12 @@
         ]
     },
     "rogueSignatureSiphoningStrikesMighty": {
-        "title": {"translate":"text.skills.rogueSignatureSiphoningStrikesMighty.title"},
-        "description": {"translate":"text.skills.rogueSignatureSiphoningStrikesMighty.description"},
+        "title": {
+            "translate": "text.skills.rogueSignatureSiphoningStrikesMighty.title"
+        },
+        "description": {
+            "translate": "text.skills.rogueSignatureSiphoningStrikesMighty.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -5650,8 +6330,12 @@
         ]
     },
     "rogueSignatureSiphoningStrikesAura": {
-        "title": {"translate":"text.skills.rogueSignatureSiphoningStrikesAura.title"},
-        "description": {"translate":"text.skills.rogueSignatureSiphoningStrikesAura.description"},
+        "title": {
+            "translate": "text.skills.rogueSignatureSiphoningStrikesAura.title"
+        },
+        "description": {
+            "translate": "text.skills.rogueSignatureSiphoningStrikesAura.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -5678,8 +6362,12 @@
         ]
     },
     "rogueSignatureSiphoningStrikesVanish": {
-        "title": {"translate":"text.skills.rogueSignatureSiphoningStrikesVanish.title"},
-        "description": {"translate":"text.skills.rogueSignatureSiphoningStrikesVanish.description"},
+        "title": {
+            "translate": "text.skills.rogueSignatureSiphoningStrikesVanish.title"
+        },
+        "description": {
+            "translate": "text.skills.rogueSignatureSiphoningStrikesVanish.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -5706,8 +6394,12 @@
         ]
     },
     "rangerSignatureArrowRain": {
-        "title": {"translate":"text.skills.rangerSignatureArrowRain.title"},
-        "description": {"translate":"text.skills.rangerSignatureArrowRain.description"},
+        "title": {
+            "translate": "text.skills.rangerSignatureArrowRain.title"
+        },
+        "description": {
+            "translate": "text.skills.rangerSignatureArrowRain.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -5734,8 +6426,12 @@
         ]
     },
     "rangerSignatureArrowRainElemental": {
-        "title": {"translate":"text.skills.rangerSignatureArrowRainElemental.title"},
-        "description": {"translate":"text.skills.rangerSignatureArrowRainElemental.description"},
+        "title": {
+            "translate": "text.skills.rangerSignatureArrowRainElemental.title"
+        },
+        "description": {
+            "translate": "text.skills.rangerSignatureArrowRainElemental.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -5762,8 +6458,12 @@
         ]
     },
     "rangerSignatureArrowRainElementalArtillery": {
-        "title": {"translate":"text.skills.rangerSignatureArrowRainElementalArtillery.title"},
-        "description": {"translate":"text.skills.rangerSignatureArrowRainElementalArtillery.description"},
+        "title": {
+            "translate": "text.skills.rangerSignatureArrowRainElementalArtillery.title"
+        },
+        "description": {
+            "translate": "text.skills.rangerSignatureArrowRainElementalArtillery.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -5790,8 +6490,12 @@
         ]
     },
     "rangerSignatureArrowRainEplosive": {
-        "title": {"translate":"text.skills.rangerSignatureArrowRainEplosive.title"},
-        "description": {"translate":"text.skills.rangerSignatureArrowRainEplosive.description"},
+        "title": {
+            "translate": "text.skills.rangerSignatureArrowRainEplosive.title"
+        },
+        "description": {
+            "translate": "text.skills.rangerSignatureArrowRainEplosive.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -5818,8 +6522,12 @@
         ]
     },
     "rangerSignatureArrowRainVolley+": {
-        "title": {"translate":"text.skills.rangerSignatureArrowRainVolley+.title"},
-        "description": {"translate":"text.skills.rangerSignatureArrowRainVolley+.description"},
+        "title": {
+            "translate": "text.skills.rangerSignatureArrowRainVolley+.title"
+        },
+        "description": {
+            "translate": "text.skills.rangerSignatureArrowRainVolley+.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -5846,8 +6554,12 @@
         ]
     },
     "rangerSignatureArrowRainVolley++": {
-        "title": {"translate":"text.skills.rangerSignatureArrowRainVolley++.title"},
-        "description": {"translate":"text.skills.rangerSignatureArrowRainVolley++.description"},
+        "title": {
+            "translate": "text.skills.rangerSignatureArrowRainVolley++.title"
+        },
+        "description": {
+            "translate": "text.skills.rangerSignatureArrowRainVolley++.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -5874,8 +6586,12 @@
         ]
     },
     "rangerSignatureArrowRainVolley+++": {
-        "title": {"translate":"text.skills.rangerSignatureArrowRainVolley+++.title"},
-        "description": {"translate":"text.skills.rangerSignatureArrowRainVolley+++.description"},
+        "title": {
+            "translate": "text.skills.rangerSignatureArrowRainVolley+++.title"
+        },
+        "description": {
+            "translate": "text.skills.rangerSignatureArrowRainVolley+++.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -5902,8 +6618,12 @@
         ]
     },
     "rangerSignatureArrowRainRadius+": {
-        "title": {"translate":"text.skills.rangerSignatureArrowRainRadius+.title"},
-        "description": {"translate":"text.skills.rangerSignatureArrowRainRadius+.description"},
+        "title": {
+            "translate": "text.skills.rangerSignatureArrowRainRadius+.title"
+        },
+        "description": {
+            "translate": "text.skills.rangerSignatureArrowRainRadius+.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -5930,8 +6650,12 @@
         ]
     },
     "rangerSignatureArrowRainRadius++": {
-        "title": {"translate":"text.skills.rangerSignatureArrowRainRadius++.title"},
-        "description": {"translate":"text.skills.rangerSignatureArrowRainRadius++.description"},
+        "title": {
+            "translate": "text.skills.rangerSignatureArrowRainRadius++.title"
+        },
+        "description": {
+            "translate": "text.skills.rangerSignatureArrowRainRadius++.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -5958,8 +6682,12 @@
         ]
     },
     "rangerSignatureArrowRainRadius+++": {
-        "title": {"translate":"text.skills.rangerSignatureArrowRainRadius+++.title"},
-        "description": {"translate":"text.skills.rangerSignatureArrowRainRadius+++.description"},
+        "title": {
+            "translate": "text.skills.rangerSignatureArrowRainRadius+++.title"
+        },
+        "description": {
+            "translate": "text.skills.rangerSignatureArrowRainRadius+++.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -5986,8 +6714,12 @@
         ]
     },
     "rangerSignatureDisengage": {
-        "title": {"translate":"text.skills.rangerSignatureDisengage.title"},
-        "description": {"translate":"text.skills.rangerSignatureDisengage.description"},
+        "title": {
+            "translate": "text.skills.rangerSignatureDisengage.title"
+        },
+        "description": {
+            "translate": "text.skills.rangerSignatureDisengage.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -6014,8 +6746,12 @@
         ]
     },
     "rangerSignatureDisengageRecuperate": {
-        "title": {"translate":"text.skills.rangerSignatureDisengageRecuperate.title"},
-        "description": {"translate":"text.skills.rangerSignatureDisengageRecuperate.description"},
+        "title": {
+            "translate": "text.skills.rangerSignatureDisengageRecuperate.title"
+        },
+        "description": {
+            "translate": "text.skills.rangerSignatureDisengageRecuperate.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -6042,8 +6778,12 @@
         ]
     },
     "rangerSignatureDisengageExploitation": {
-        "title": {"translate":"text.skills.rangerSignatureDisengageExploitation.title"},
-        "description": {"translate":"text.skills.rangerSignatureDisengageExploitation.description"},
+        "title": {
+            "translate": "text.skills.rangerSignatureDisengageExploitation.title"
+        },
+        "description": {
+            "translate": "text.skills.rangerSignatureDisengageExploitation.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -6070,8 +6810,12 @@
         ]
     },
     "rangerSignatureDisengageMarksman": {
-        "title": {"translate":"text.skills.rangerSignatureDisengageMarksman.title"},
-        "description": {"translate":"text.skills.rangerSignatureDisengageMarksman.description"},
+        "title": {
+            "translate": "text.skills.rangerSignatureDisengageMarksman.title"
+        },
+        "description": {
+            "translate": "text.skills.rangerSignatureDisengageMarksman.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -6098,8 +6842,12 @@
         ]
     },
     "rangerSignatureElementalArrows": {
-        "title": {"translate":"text.skills.rangerSignatureElementalArrows.title"},
-        "description": {"translate":"text.skills.rangerSignatureElementalArrows.description"},
+        "title": {
+            "translate": "text.skills.rangerSignatureElementalArrows.title"
+        },
+        "description": {
+            "translate": "text.skills.rangerSignatureElementalArrows.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -6126,8 +6874,12 @@
         ]
     },
     "rangerSignatureElementalArrowsFrostAttuned": {
-        "title": {"translate":"text.skills.rangerSignatureElementalArrowsFrostAttuned.title"},
-        "description": {"translate":"text.skills.rangerSignatureElementalArrowsFrostAttuned.description"},
+        "title": {
+            "translate": "text.skills.rangerSignatureElementalArrowsFrostAttuned.title"
+        },
+        "description": {
+            "translate": "text.skills.rangerSignatureElementalArrowsFrostAttuned.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -6154,8 +6906,12 @@
         ]
     },
     "rangerSignatureElementalArrowsFireAttuned": {
-        "title": {"translate":"text.skills.rangerSignatureElementalArrowsFireAttuned.title"},
-        "description": {"translate":"text.skills.rangerSignatureElementalArrowsFireAttuned.description"},
+        "title": {
+            "translate": "text.skills.rangerSignatureElementalArrowsFireAttuned.title"
+        },
+        "description": {
+            "translate": "text.skills.rangerSignatureElementalArrowsFireAttuned.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -6182,8 +6938,12 @@
         ]
     },
     "rangerSignatureElementalArrowsLightningAttuned": {
-        "title": {"translate":"text.skills.rangerSignatureElementalArrowsLightningAttuned.title"},
-        "description": {"translate":"text.skills.rangerSignatureElementalArrowsLightningAttuned.description"},
+        "title": {
+            "translate": "text.skills.rangerSignatureElementalArrowsLightningAttuned.title"
+        },
+        "description": {
+            "translate": "text.skills.rangerSignatureElementalArrowsLightningAttuned.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -6210,8 +6970,12 @@
         ]
     },
     "rangerSignatureElementalArrowsRadius+": {
-        "title": {"translate":"text.skills.rangerSignatureElementalArrowsRadius+.title"},
-        "description": {"translate":"text.skills.rangerSignatureElementalArrowsRadius+.description"},
+        "title": {
+            "translate": "text.skills.rangerSignatureElementalArrowsRadius+.title"
+        },
+        "description": {
+            "translate": "text.skills.rangerSignatureElementalArrowsRadius+.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -6238,8 +7002,12 @@
         ]
     },
     "rangerSignatureElementalArrowsRadius++": {
-        "title": {"translate":"text.skills.rangerSignatureElementalArrowsRadius++.title"},
-        "description": {"translate":"text.skills.rangerSignatureElementalArrowsRadius++.description"},
+        "title": {
+            "translate": "text.skills.rangerSignatureElementalArrowsRadius++.title"
+        },
+        "description": {
+            "translate": "text.skills.rangerSignatureElementalArrowsRadius++.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -6266,8 +7034,12 @@
         ]
     },
     "rangerSignatureElementalArrowsRadius+++": {
-        "title": {"translate":"text.skills.rangerSignatureElementalArrowsRadius+++.title"},
-        "description": {"translate":"text.skills.rangerSignatureElementalArrowsRadius+++.description"},
+        "title": {
+            "translate": "text.skills.rangerSignatureElementalArrowsRadius+++.title"
+        },
+        "description": {
+            "translate": "text.skills.rangerSignatureElementalArrowsRadius+++.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -6294,8 +7066,12 @@
         ]
     },
     "rangerSignatureElementalArrowsStacks+": {
-        "title": {"translate":"text.skills.rangerSignatureElementalArrowsStacks+.title"},
-        "description": {"translate":"text.skills.rangerSignatureElementalArrowsStacks+.description"},
+        "title": {
+            "translate": "text.skills.rangerSignatureElementalArrowsStacks+.title"
+        },
+        "description": {
+            "translate": "text.skills.rangerSignatureElementalArrowsStacks+.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -6322,8 +7098,12 @@
         ]
     },
     "rangerSignatureElementalArrowsStacks++": {
-        "title": {"translate":"text.skills.rangerSignatureElementalArrowsStacks++.title"},
-        "description": {"translate":"text.skills.rangerSignatureElementalArrowsStacks++.description"},
+        "title": {
+            "translate": "text.skills.rangerSignatureElementalArrowsStacks++.title"
+        },
+        "description": {
+            "translate": "text.skills.rangerSignatureElementalArrowsStacks++.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -6350,8 +7130,12 @@
         ]
     },
     "rangerSignatureElementalArrowsStacks+++": {
-        "title": {"translate":"text.skills.rangerSignatureElementalArrowsStacks+++.title"},
-        "description": {"translate":"text.skills.rangerSignatureElementalArrowsStacks+++.description"},
+        "title": {
+            "translate": "text.skills.rangerSignatureElementalArrowsStacks+++.title"
+        },
+        "description": {
+            "translate": "text.skills.rangerSignatureElementalArrowsStacks+++.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -6378,8 +7162,12 @@
         ]
     },
     "rangerSignatureElementalArrowsRenewal": {
-        "title": {"translate":"text.skills.rangerSignatureElementalArrowsRenewal.title"},
-        "description": {"translate":"text.skills.rangerSignatureElementalArrowsRenewal.description"},
+        "title": {
+            "translate": "text.skills.rangerSignatureElementalArrowsRenewal.title"
+        },
+        "description": {
+            "translate": "text.skills.rangerSignatureElementalArrowsRenewal.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -6406,8 +7194,12 @@
         ]
     },
     "necromancerSignatureSummoningRitual": {
-        "title": {"translate":"text.skills.necromancerSignatureSummoningRitual.title"},
-        "description": {"translate":"text.skills.necromancerSignatureSummoningRitual.description"},
+        "title": {
+            "translate": "text.skills.necromancerSignatureSummoningRitual.title"
+        },
+        "description": {
+            "translate": "text.skills.necromancerSignatureSummoningRitual.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -6434,8 +7226,12 @@
         ]
     },
     "necromancerNecroticFortification": {
-        "title": {"translate":"text.skills.necromancerNecroticFortification.title"},
-        "description": {"translate":"text.skills.necromancerNecroticFortification.description"},
+        "title": {
+            "translate": "text.skills.necromancerNecroticFortification.title"
+        },
+        "description": {
+            "translate": "text.skills.necromancerNecroticFortification.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -6462,8 +7258,12 @@
         ]
     },
     "necromancerUndeadLegion": {
-        "title": {"translate":"text.skills.necromancerUndeadLegion.title"},
-        "description": {"translate":"text.skills.necromancerUndeadLegion.description"},
+        "title": {
+            "translate": "text.skills.necromancerUndeadLegion.title"
+        },
+        "description": {
+            "translate": "text.skills.necromancerUndeadLegion.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -6490,8 +7290,12 @@
         ]
     },
     "necromancerSummonWraith": {
-        "title": {"translate":"text.skills.necromancerSummonWraith.title"},
-        "description": {"translate":"text.skills.necromancerSummonWraith.description"},
+        "title": {
+            "translate": "text.skills.necromancerSummonWraith.title"
+        },
+        "description": {
+            "translate": "text.skills.necromancerSummonWraith.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -6518,8 +7322,12 @@
         ]
     },
     "necromancerWitherWraiths": {
-        "title": {"translate":"text.skills.necromancerWitherWraiths.title"},
-        "description": {"translate":"text.skills.necromancerWitherWraiths.description"},
+        "title": {
+            "translate": "text.skills.necromancerWitherWraiths.title"
+        },
+        "description": {
+            "translate": "text.skills.necromancerWitherWraiths.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -6546,8 +7354,12 @@
         ]
     },
     "necromancerFrostWraiths": {
-        "title": {"translate":"text.skills.necromancerFrostWraiths.title"},
-        "description": {"translate":"text.skills.necromancerFrostWraiths.description"},
+        "title": {
+            "translate": "text.skills.necromancerFrostWraiths.title"
+        },
+        "description": {
+            "translate": "text.skills.necromancerFrostWraiths.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -6574,8 +7386,12 @@
         ]
     },
     "necromancerBloodHarvest": {
-        "title": {"translate":"text.skills.necromancerBloodHarvest.title"},
-        "description": {"translate":"text.skills.necromancerBloodHarvest.description"},
+        "title": {
+            "translate": "text.skills.necromancerBloodHarvest.title"
+        },
+        "description": {
+            "translate": "text.skills.necromancerBloodHarvest.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -6602,8 +7418,12 @@
         ]
     },
     "necromancerGreaterDreadglare": {
-        "title": {"translate":"text.skills.necromancerGreaterDreadglare.title"},
-        "description": {"translate":"text.skills.necromancerGreaterDreadglare.description"},
+        "title": {
+            "translate": "text.skills.necromancerGreaterDreadglare.title"
+        },
+        "description": {
+            "translate": "text.skills.necromancerGreaterDreadglare.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -6630,8 +7450,12 @@
         ]
     },
     "necromancerDeathEssence": {
-        "title": {"translate":"text.skills.necromancerDeathEssence.title"},
-        "description": {"translate":"text.skills.necromancerDeathEssence.description"},
+        "title": {
+            "translate": "text.skills.necromancerDeathEssence.title"
+        },
+        "description": {
+            "translate": "text.skills.necromancerDeathEssence.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -6658,8 +7482,12 @@
         ]
     },
     "necromancerDeathWarden": {
-        "title": {"translate":"text.skills.necromancerDeathWarden.title"},
-        "description": {"translate":"text.skills.necromancerDeathWarden.description"},
+        "title": {
+            "translate": "text.skills.necromancerDeathWarden.title"
+        },
+        "description": {
+            "translate": "text.skills.necromancerDeathWarden.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -6686,8 +7514,12 @@
         ]
     },
     "necromancerEnrage": {
-        "title": {"translate":"text.skills.necromancerEnrage.title"},
-        "description": {"translate":"text.skills.necromancerEnrage.description"},
+        "title": {
+            "translate": "text.skills.necromancerEnrage.title"
+        },
+        "description": {
+            "translate": "text.skills.necromancerEnrage.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -6714,8 +7546,12 @@
         ]
     },
     "necromancerWinterborn": {
-        "title": {"translate":"text.skills.necromancerWinterborn.title"},
-        "description": {"translate":"text.skills.necromancerWinterborn.description"},
+        "title": {
+            "translate": "text.skills.necromancerWinterborn.title"
+        },
+        "description": {
+            "translate": "text.skills.necromancerWinterborn.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -6742,8 +7578,12 @@
         ]
     },
     "necromancerPlague": {
-        "title": {"translate":"text.skills.necromancerPlague.title"},
-        "description": {"translate":"text.skills.necromancerPlague.description"},
+        "title": {
+            "translate": "text.skills.necromancerPlague.title"
+        },
+        "description": {
+            "translate": "text.skills.necromancerPlague.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -6770,8 +7610,12 @@
         ]
     },
     "necromancerPestilence": {
-        "title": {"translate":"text.skills.necromancerPestilence.title"},
-        "description": {"translate":"text.skills.necromancerPestilence.description"},
+        "title": {
+            "translate": "text.skills.necromancerPestilence.title"
+        },
+        "description": {
+            "translate": "text.skills.necromancerPestilence.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -6798,8 +7642,12 @@
         ]
     },
     "necromancerDelightfulSuffering": {
-        "title": {"translate":"text.skills.necromancerDelightfulSuffering.title"},
-        "description": {"translate":"text.skills.necromancerDelightfulSuffering.description"},
+        "title": {
+            "translate": "text.skills.necromancerDelightfulSuffering.title"
+        },
+        "description": {
+            "translate": "text.skills.necromancerDelightfulSuffering.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -6826,8 +7674,12 @@
         ]
     },
     "necromancerShadowAura": {
-        "title": {"translate":"text.skills.necromancerShadowAura.title"},
-        "description": {"translate":"text.skills.necromancerShadowAura.description"},
+        "title": {
+            "translate": "text.skills.necromancerShadowAura.title"
+        },
+        "description": {
+            "translate": "text.skills.necromancerShadowAura.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -6854,8 +7706,12 @@
         ]
     },
     "necromancerShadowCombust": {
-        "title": {"translate":"text.skills.necromancerShadowCombust.title"},
-        "description": {"translate":"text.skills.necromancerShadowCombust.description"},
+        "title": {
+            "translate": "text.skills.necromancerShadowCombust.title"
+        },
+        "description": {
+            "translate": "text.skills.necromancerShadowCombust.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -6882,8 +7738,12 @@
         ]
     },
     "necromancerEndlessServitude": {
-        "title": {"translate":"text.skills.necromancerEndlessServitude.title"},
-        "description": {"translate":"text.skills.necromancerEndlessServitude.description"},
+        "title": {
+            "translate": "text.skills.necromancerEndlessServitude.title"
+        },
+        "description": {
+            "translate": "text.skills.necromancerEndlessServitude.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -6910,8 +7770,12 @@
         ]
     },
     "necromancerWraithLegion": {
-        "title": {"translate":"text.skills.necromancerWraithLegion.title"},
-        "description": {"translate":"text.skills.necromancerWraithLegion.description"},
+        "title": {
+            "translate": "text.skills.necromancerWraithLegion.title"
+        },
+        "description": {
+            "translate": "text.skills.necromancerWraithLegion.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -6938,8 +7802,12 @@
         ]
     },
     "frostguardSignatureConjuringStrikes": {
-        "title": {"translate":"text.skills.frostguardSignatureConjuringStrikes.title"},
-        "description": {"translate":"text.skills.frostguardSignatureConjuringStrikes.description"},
+        "title": {
+            "translate": "text.skills.frostguardSignatureConjuringStrikes.title"
+        },
+        "description": {
+            "translate": "text.skills.frostguardSignatureConjuringStrikes.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -6966,8 +7834,12 @@
         ]
     },
     "frostguardSignatureFrostNova": {
-        "title": {"translate":"text.skills.frostguardSignatureFrostNova.title"},
-        "description": {"translate":"text.skills.frostguardSignatureFrostNova.description"},
+        "title": {
+            "translate": "text.skills.frostguardSignatureFrostNova.title"
+        },
+        "description": {
+            "translate": "text.skills.frostguardSignatureFrostNova.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -6994,8 +7866,12 @@
         ]
     },
     "frostguardSignatureIceBlock": {
-        "title": {"translate":"text.skills.frostguardSignatureIceBlock.title"},
-        "description": {"translate":"text.skills.frostguardSignatureIceBlock.description"},
+        "title": {
+            "translate": "text.skills.frostguardSignatureIceBlock.title"
+        },
+        "description": {
+            "translate": "text.skills.frostguardSignatureIceBlock.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -7022,8 +7898,12 @@
         ]
     },
     "crusaderAegis": {
-        "title": {"translate":"text.skills.crusaderAegis.title"},
-        "description": {"translate":"text.skills.crusaderAegis.description"},
+        "title": {
+            "translate": "text.skills.crusaderAegis.title"
+        },
+        "description": {
+            "translate": "text.skills.crusaderAegis.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -7050,8 +7930,12 @@
         ]
     },
     "crusaderRetribution": {
-        "title": {"translate":"text.skills.crusaderRetribution.title"},
-        "description": {"translate":"text.skills.crusaderRetribution.description"},
+        "title": {
+            "translate": "text.skills.crusaderRetribution.title"
+        },
+        "description": {
+            "translate": "text.skills.crusaderRetribution.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -7078,8 +7962,12 @@
         ]
     },
     "crusaderExhaustiveRecovery": {
-        "title": {"translate":"text.skills.crusaderExhaustiveRecovery.title"},
-        "description": {"translate":"text.skills.crusaderExhaustiveRecovery.description"},
+        "title": {
+            "translate": "text.skills.crusaderExhaustiveRecovery.title"
+        },
+        "description": {
+            "translate": "text.skills.crusaderExhaustiveRecovery.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -7106,8 +7994,12 @@
         ]
     },
     "crusaderSignatureConsecration": {
-        "title": {"translate":"text.skills.crusaderSignatureConsecration.title"},
-        "description": {"translate":"text.skills.crusaderSignatureConsecration.description"},
+        "title": {
+            "translate": "text.skills.crusaderSignatureConsecration.title"
+        },
+        "description": {
+            "translate": "text.skills.crusaderSignatureConsecration.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -7134,8 +8026,12 @@
         ]
     },
     "crusaderSignatureConsecrationDuration": {
-        "title": {"translate":"text.skills.crusaderSignatureConsecrationDuration.title"},
-        "description": {"translate":"text.skills.crusaderSignatureConsecrationDuration.description"},
+        "title": {
+            "translate": "text.skills.crusaderSignatureConsecrationDuration.title"
+        },
+        "description": {
+            "translate": "text.skills.crusaderSignatureConsecrationDuration.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -7162,8 +8058,12 @@
         ]
     },
     "crusaderSignatureConsecrationWard": {
-        "title": {"translate":"text.skills.crusaderSignatureConsecrationWard.title"},
-        "description": {"translate":"text.skills.crusaderSignatureConsecrationWard.description"},
+        "title": {
+            "translate": "text.skills.crusaderSignatureConsecrationWard.title"
+        },
+        "description": {
+            "translate": "text.skills.crusaderSignatureConsecrationWard.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -7190,8 +8090,12 @@
         ]
     },
     "crusaderSignatureConsecrationTaunt": {
-        "title": {"translate":"text.skills.crusaderSignatureConsecrationTaunt.title"},
-        "description": {"translate":"text.skills.crusaderSignatureConsecrationTaunt.description"},
+        "title": {
+            "translate": "text.skills.crusaderSignatureConsecrationTaunt.title"
+        },
+        "description": {
+            "translate": "text.skills.crusaderSignatureConsecrationTaunt.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -7218,8 +8122,12 @@
         ]
     },
     "crusaderSignatureConsecrationMighty": {
-        "title": {"translate":"text.skills.crusaderSignatureConsecrationMighty.title"},
-        "description": {"translate":"text.skills.crusaderSignatureConsecrationMighty.description"},
+        "title": {
+            "translate": "text.skills.crusaderSignatureConsecrationMighty.title"
+        },
+        "description": {
+            "translate": "text.skills.crusaderSignatureConsecrationMighty.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -7246,8 +8154,12 @@
         ]
     },
     "crusaderSignatureConsecrationSpellforged": {
-        "title": {"translate":"text.skills.crusaderSignatureConsecrationSpellforged.title"},
-        "description": {"translate":"text.skills.crusaderSignatureConsecrationSpellforged.description"},
+        "title": {
+            "translate": "text.skills.crusaderSignatureConsecrationSpellforged.title"
+        },
+        "description": {
+            "translate": "text.skills.crusaderSignatureConsecrationSpellforged.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -7274,8 +8186,12 @@
         ]
     },
     "crusaderSignatureSacredOnslaught": {
-        "title": {"translate":"text.skills.crusaderSignatureSacredOnslaught.title"},
-        "description": {"translate":"text.skills.crusaderSignatureSacredOnslaught.description"},
+        "title": {
+            "translate": "text.skills.crusaderSignatureSacredOnslaught.title"
+        },
+        "description": {
+            "translate": "text.skills.crusaderSignatureSacredOnslaught.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -7302,8 +8218,12 @@
         ]
     },
     "crusaderSignatureSacredOnslaughtHeal": {
-        "title": {"translate":"text.skills.crusaderSignatureSacredOnslaughtHeal.title"},
-        "description": {"translate":"text.skills.crusaderSignatureSacredOnslaughtHeal.description"},
+        "title": {
+            "translate": "text.skills.crusaderSignatureSacredOnslaughtHeal.title"
+        },
+        "description": {
+            "translate": "text.skills.crusaderSignatureSacredOnslaughtHeal.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -7330,8 +8250,12 @@
         ]
     },
     "crusaderSignatureSacredOnslaughtDefend": {
-        "title": {"translate":"text.skills.crusaderSignatureSacredOnslaughtDefend.title"},
-        "description": {"translate":"text.skills.crusaderSignatureSacredOnslaughtDefend.description"},
+        "title": {
+            "translate": "text.skills.crusaderSignatureSacredOnslaughtDefend.title"
+        },
+        "description": {
+            "translate": "text.skills.crusaderSignatureSacredOnslaughtDefend.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -7358,8 +8282,12 @@
         ]
     },
     "crusaderSignatureSacredOnslaughtMighty": {
-        "title": {"translate":"text.skills.crusaderSignatureSacredOnslaughtMighty.title"},
-        "description": {"translate":"text.skills.crusaderSignatureSacredOnslaughtMighty.description"},
+        "title": {
+            "translate": "text.skills.crusaderSignatureSacredOnslaughtMighty.title"
+        },
+        "description": {
+            "translate": "text.skills.crusaderSignatureSacredOnslaughtMighty.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -7386,8 +8314,12 @@
         ]
     },
     "crusaderSignatureSacredOnslaughtStun": {
-        "title": {"translate":"text.skills.crusaderSignatureSacredOnslaughtStun.title"},
-        "description": {"translate":"text.skills.crusaderSignatureSacredOnslaughtStun.description"},
+        "title": {
+            "translate": "text.skills.crusaderSignatureSacredOnslaughtStun.title"
+        },
+        "description": {
+            "translate": "text.skills.crusaderSignatureSacredOnslaughtStun.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -7414,8 +8346,12 @@
         ]
     },
     "crusaderSignatureHeavensmithsCall": {
-        "title": {"translate":"text.skills.crusaderSignatureHeavensmithsCall.title"},
-        "description": {"translate":"text.skills.crusaderSignatureHeavensmithsCall.description"},
+        "title": {
+            "translate": "text.skills.crusaderSignatureHeavensmithsCall.title"
+        },
+        "description": {
+            "translate": "text.skills.crusaderSignatureHeavensmithsCall.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -7442,8 +8378,12 @@
         ]
     },
     "crusaderSignatureHeavensmithsCallTaunt": {
-        "title": {"translate":"text.skills.crusaderSignatureHeavensmithsCallTaunt.title"},
-        "description": {"translate":"text.skills.crusaderSignatureHeavensmithsCallTaunt.description"},
+        "title": {
+            "translate": "text.skills.crusaderSignatureHeavensmithsCallTaunt.title"
+        },
+        "description": {
+            "translate": "text.skills.crusaderSignatureHeavensmithsCallTaunt.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -7470,8 +8410,12 @@
         ]
     },
     "crusaderSignatureHeavensmithsCallMark": {
-        "title": {"translate":"text.skills.crusaderSignatureHeavensmithsCallMark.title"},
-        "description": {"translate":"text.skills.crusaderSignatureHeavensmithsCallMark.description"},
+        "title": {
+            "translate": "text.skills.crusaderSignatureHeavensmithsCallMark.title"
+        },
+        "description": {
+            "translate": "text.skills.crusaderSignatureHeavensmithsCallMark.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -7498,8 +8442,12 @@
         ]
     },
     "crusaderSignatureHeavensmithsCallEffect": {
-        "title": {"translate":"text.skills.crusaderSignatureHeavensmithsCallEffect.title"},
-        "description": {"translate":"text.skills.crusaderSignatureHeavensmithsCallEffect.description"},
+        "title": {
+            "translate": "text.skills.crusaderSignatureHeavensmithsCallEffect.title"
+        },
+        "description": {
+            "translate": "text.skills.crusaderSignatureHeavensmithsCallEffect.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -7526,8 +8474,12 @@
         ]
     },
     "crusaderSignatureHeavensmithsCallEffectExhaust": {
-        "title": {"translate":"text.skills.crusaderSignatureHeavensmithsCallEffectExhaust.title"},
-        "description": {"translate":"text.skills.crusaderSignatureHeavensmithsCallEffectExhaust.description"},
+        "title": {
+            "translate": "text.skills.crusaderSignatureHeavensmithsCallEffectExhaust.title"
+        },
+        "description": {
+            "translate": "text.skills.crusaderSignatureHeavensmithsCallEffectExhaust.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -7554,8 +8506,12 @@
         ]
     },
     "crusaderSignatureHeavensmithsCallEffectMighty": {
-        "title": {"translate":"text.skills.crusaderSignatureHeavensmithsCallEffectMighty.title"},
-        "description": {"translate":"text.skills.crusaderSignatureHeavensmithsCallEffectMighty.description"},
+        "title": {
+            "translate": "text.skills.crusaderSignatureHeavensmithsCallEffectMighty.title"
+        },
+        "description": {
+            "translate": "text.skills.crusaderSignatureHeavensmithsCallEffectMighty.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -7582,8 +8538,12 @@
         ]
     },
     "clericAltruism": {
-        "title": {"translate":"text.skills.clericAltruism.title"},
-        "description": {"translate":"text.skills.clericAltruism.description"},
+        "title": {
+            "translate": "text.skills.clericAltruism.title"
+        },
+        "description": {
+            "translate": "text.skills.clericAltruism.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -7610,8 +8570,12 @@
         ]
     },
     "clericMutualMending": {
-        "title": {"translate":"text.skills.clericMutualMending.title"},
-        "description": {"translate":"text.skills.clericMutualMending.description"},
+        "title": {
+            "translate": "text.skills.clericMutualMending.title"
+        },
+        "description": {
+            "translate": "text.skills.clericMutualMending.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -7638,8 +8602,12 @@
         ]
     },
     "clericHealingWard": {
-        "title": {"translate":"text.skills.clericHealingWard.title"},
-        "description": {"translate":"text.skills.clericHealingWard.description"},
+        "title": {
+            "translate": "text.skills.clericHealingWard.title"
+        },
+        "description": {
+            "translate": "text.skills.clericHealingWard.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -7666,8 +8634,12 @@
         ]
     },
     "clericSignatureSacredOrb": {
-        "title": {"translate":"text.skills.clericSignatureSacredOrb.title"},
-        "description": {"translate":"text.skills.clericSignatureSacredOrb.description"},
+        "title": {
+            "translate": "text.skills.clericSignatureSacredOrb.title"
+        },
+        "description": {
+            "translate": "text.skills.clericSignatureSacredOrb.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -7678,7 +8650,12 @@
                 "excluded": "smooth_classes:textures/frames/excluded.png"
             }
         },
-        "icon": {"type":"item","data":{"item":"smooth_classes:sacred_banner_icon"}},
+        "icon": {
+            "type": "item",
+            "data": {
+                "item": "smooth_classes:sacred_banner_icon"
+            }
+        },
         "rewards": [
             {
                 "type": "puffish_skills:passive_skill",
@@ -7689,8 +8666,12 @@
         ]
     },
     "clericSignatureSacredOrbSpeed": {
-        "title": {"translate":"text.skills.clericSignatureSacredOrbSpeed.title"},
-        "description": {"translate":"text.skills.clericSignatureSacredOrbSpeed.description"},
+        "title": {
+            "translate": "text.skills.clericSignatureSacredOrbSpeed.title"
+        },
+        "description": {
+            "translate": "text.skills.clericSignatureSacredOrbSpeed.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -7717,8 +8698,12 @@
         ]
     },
     "clericSignatureSacredOrbDebuffs": {
-        "title": {"translate":"text.skills.clericSignatureSacredOrbDebuffs.title"},
-        "description": {"translate":"text.skills.clericSignatureSacredOrbDebuffs.description"},
+        "title": {
+            "translate": "text.skills.clericSignatureSacredOrbDebuffs.title"
+        },
+        "description": {
+            "translate": "text.skills.clericSignatureSacredOrbDebuffs.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -7745,8 +8730,12 @@
         ]
     },
     "clericSignatureSacredOrbBuffs": {
-        "title": {"translate":"text.skills.clericSignatureSacredOrbBuffs.title"},
-        "description": {"translate":"text.skills.clericSignatureSacredOrbBuffs.description"},
+        "title": {
+            "translate": "text.skills.clericSignatureSacredOrbBuffs.title"
+        },
+        "description": {
+            "translate": "text.skills.clericSignatureSacredOrbBuffs.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -7773,8 +8762,12 @@
         ]
     },
     "clericSignatureDivineIntervention": {
-        "title": {"translate":"text.skills.clericSignatureDivineIntervention.title"},
-        "description": {"translate":"text.skills.clericSignatureDivineIntervention.description"},
+        "title": {
+            "translate": "text.skills.clericSignatureDivineIntervention.title"
+        },
+        "description": {
+            "translate": "text.skills.clericSignatureDivineIntervention.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -7801,8 +8794,12 @@
         ]
     },
     "clericSignatureDivineInterventionFireResistance": {
-        "title": {"translate":"text.skills.clericSignatureDivineInterventionFireResistance.title"},
-        "description": {"translate":"text.skills.clericSignatureDivineInterventionFireResistance.description"},
+        "title": {
+            "translate": "text.skills.clericSignatureDivineInterventionFireResistance.title"
+        },
+        "description": {
+            "translate": "text.skills.clericSignatureDivineInterventionFireResistance.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -7829,8 +8826,12 @@
         ]
     },
     "clericSignatureDivineInterventionMight": {
-        "title": {"translate":"text.skills.clericSignatureDivineInterventionMight.title"},
-        "description": {"translate":"text.skills.clericSignatureDivineInterventionMight.description"},
+        "title": {
+            "translate": "text.skills.clericSignatureDivineInterventionMight.title"
+        },
+        "description": {
+            "translate": "text.skills.clericSignatureDivineInterventionMight.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -7857,8 +8858,12 @@
         ]
     },
     "clericSignatureDivineInterventionSpellforged": {
-        "title": {"translate":"text.skills.clericSignatureDivineInterventionSpellforged.title"},
-        "description": {"translate":"text.skills.clericSignatureDivineInterventionSpellforged.description"},
+        "title": {
+            "translate": "text.skills.clericSignatureDivineInterventionSpellforged.title"
+        },
+        "description": {
+            "translate": "text.skills.clericSignatureDivineInterventionSpellforged.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -7885,8 +8890,12 @@
         ]
     },
     "clericSignatureAnointWeapon": {
-        "title": {"translate":"text.skills.clericSignatureAnointWeapon.title"},
-        "description": {"translate":"text.skills.clericSignatureAnointWeapon.description"},
+        "title": {
+            "translate": "text.skills.clericSignatureAnointWeapon.title"
+        },
+        "description": {
+            "translate": "text.skills.clericSignatureAnointWeapon.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -7913,8 +8922,12 @@
         ]
     },
     "clericSignatureAnointWeaponResistance": {
-        "title": {"translate":"text.skills.clericSignatureAnointWeaponResistance.title"},
-        "description": {"translate":"text.skills.clericSignatureAnointWeaponResistance.description"},
+        "title": {
+            "translate": "text.skills.clericSignatureAnointWeaponResistance.title"
+        },
+        "description": {
+            "translate": "text.skills.clericSignatureAnointWeaponResistance.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -7941,8 +8954,12 @@
         ]
     },
     "clericSignatureAnointWeaponUndying": {
-        "title": {"translate":"text.skills.clericSignatureAnointWeaponUndying.title"},
-        "description": {"translate":"text.skills.clericSignatureAnointWeaponUndying.description"},
+        "title": {
+            "translate": "text.skills.clericSignatureAnointWeaponUndying.title"
+        },
+        "description": {
+            "translate": "text.skills.clericSignatureAnointWeaponUndying.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -7969,8 +8986,12 @@
         ]
     },
     "clericSignatureAnointWeaponCleanse": {
-        "title": {"translate":"text.skills.clericSignatureAnointWeaponCleanse.title"},
-        "description": {"translate":"text.skills.clericSignatureAnointWeaponCleanse.description"},
+        "title": {
+            "translate": "text.skills.clericSignatureAnointWeaponCleanse.title"
+        },
+        "description": {
+            "translate": "text.skills.clericSignatureAnointWeaponCleanse.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -7997,8 +9018,12 @@
         ]
     },
     "berserkerSignatureRampage": {
-        "title": {"translate":"text.skills.berserkerSignatureRampage.title"},
-        "description": {"translate":"text.skills.berserkerSignatureRampage.description"},
+        "title": {
+            "translate": "text.skills.berserkerSignatureRampage.title"
+        },
+        "description": {
+            "translate": "text.skills.berserkerSignatureRampage.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -8025,8 +9050,12 @@
         ]
     },
     "berserkerSignatureRampageCharge": {
-        "title": {"translate":"text.skills.berserkerSignatureRampageCharge.title"},
-        "description": {"translate":"text.skills.berserkerSignatureRampageCharge.description"},
+        "title": {
+            "translate": "text.skills.berserkerSignatureRampageCharge.title"
+        },
+        "description": {
+            "translate": "text.skills.berserkerSignatureRampageCharge.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -8053,8 +9082,12 @@
         ]
     },
     "berserkerSignatureRampageChargeRelentless": {
-        "title": {"translate":"text.skills.berserkerSignatureRampageChargeRelentless.title"},
-        "description": {"translate":"text.skills.berserkerSignatureRampageChargeRelentless.description"},
+        "title": {
+            "translate": "text.skills.berserkerSignatureRampageChargeRelentless.title"
+        },
+        "description": {
+            "translate": "text.skills.berserkerSignatureRampageChargeRelentless.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -8081,8 +9114,12 @@
         ]
     },
     "berserkerSignatureRampageChargeImmob": {
-        "title": {"translate":"text.skills.berserkerSignatureRampageChargeImmob.title"},
-        "description": {"translate":"text.skills.berserkerSignatureRampageChargeImmob.description"},
+        "title": {
+            "translate": "text.skills.berserkerSignatureRampageChargeImmob.title"
+        },
+        "description": {
+            "translate": "text.skills.berserkerSignatureRampageChargeImmob.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -8109,8 +9146,12 @@
         ]
     },
     "berserkerSignatureBloodthirsty": {
-        "title": {"translate":"text.skills.berserkerSignatureBloodthirsty.title"},
-        "description": {"translate":"text.skills.berserkerSignatureBloodthirsty.description"},
+        "title": {
+            "translate": "text.skills.berserkerSignatureBloodthirsty.title"
+        },
+        "description": {
+            "translate": "text.skills.berserkerSignatureBloodthirsty.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -8137,8 +9178,12 @@
         ]
     },
     "berserkerSignatureBloodthirstyMighty": {
-        "title": {"translate":"text.skills.berserkerSignatureBloodthirstyMighty.title"},
-        "description": {"translate":"text.skills.berserkerSignatureBloodthirstyMighty.description"},
+        "title": {
+            "translate": "text.skills.berserkerSignatureBloodthirstyMighty.title"
+        },
+        "description": {
+            "translate": "text.skills.berserkerSignatureBloodthirstyMighty.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -8165,8 +9210,12 @@
         ]
     },
     "berserkerSignatureBloodthirstyTireless": {
-        "title": {"translate":"text.skills.berserkerSignatureBloodthirstyTireless.title"},
-        "description": {"translate":"text.skills.berserkerSignatureBloodthirstyTireless.description"},
+        "title": {
+            "translate": "text.skills.berserkerSignatureBloodthirstyTireless.title"
+        },
+        "description": {
+            "translate": "text.skills.berserkerSignatureBloodthirstyTireless.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -8193,8 +9242,12 @@
         ]
     },
     "berserkerSignatureBloodthirstyTremor": {
-        "title": {"translate":"text.skills.berserkerSignatureBloodthirstyTremor.title"},
-        "description": {"translate":"text.skills.berserkerSignatureBloodthirstyTremor.description"},
+        "title": {
+            "translate": "text.skills.berserkerSignatureBloodthirstyTremor.title"
+        },
+        "description": {
+            "translate": "text.skills.berserkerSignatureBloodthirstyTremor.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -8221,8 +9274,12 @@
         ]
     },
     "berserkerSignatureBerserking": {
-        "title": {"translate":"text.skills.berserkerSignatureBerserking.title"},
-        "description": {"translate":"text.skills.berserkerSignatureBerserking.description"},
+        "title": {
+            "translate": "text.skills.berserkerSignatureBerserking.title"
+        },
+        "description": {
+            "translate": "text.skills.berserkerSignatureBerserking.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -8249,8 +9306,12 @@
         ]
     },
     "berserkerSignatureBerserkingLeap": {
-        "title": {"translate":"text.skills.berserkerSignatureBerserkingLeap.title"},
-        "description": {"translate":"text.skills.berserkerSignatureBerserkingLeap.description"},
+        "title": {
+            "translate": "text.skills.berserkerSignatureBerserkingLeap.title"
+        },
+        "description": {
+            "translate": "text.skills.berserkerSignatureBerserkingLeap.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -8277,8 +9338,12 @@
         ]
     },
     "berserkerSignatureBerserkingLeapImmob": {
-        "title": {"translate":"text.skills.berserkerSignatureBerserkingLeapImmob.title"},
-        "description": {"translate":"text.skills.berserkerSignatureBerserkingLeapImmob.description"},
+        "title": {
+            "translate": "text.skills.berserkerSignatureBerserkingLeapImmob.title"
+        },
+        "description": {
+            "translate": "text.skills.berserkerSignatureBerserkingLeapImmob.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -8305,8 +9370,12 @@
         ]
     },
     "berserkerSignatureBerserkingLeapPull": {
-        "title": {"translate":"text.skills.berserkerSignatureBerserkingLeapPull.title"},
-        "description": {"translate":"text.skills.berserkerSignatureBerserkingLeapPull.description"},
+        "title": {
+            "translate": "text.skills.berserkerSignatureBerserkingLeapPull.title"
+        },
+        "description": {
+            "translate": "text.skills.berserkerSignatureBerserkingLeapPull.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -8333,8 +9402,12 @@
         ]
     },
     "portalSapphire": {
-        "title": {"translate":"text.skills.portalSapphire.title"},
-        "description": {"translate":"text.skills.portalSapphire.description"},
+        "title": {
+            "translate": "text.skills.portalSapphire.title"
+        },
+        "description": {
+            "translate": "text.skills.portalSapphire.description"
+        },
         "size": 1.2,
         "frame": {
             "type": "texture",
@@ -8361,8 +9434,12 @@
         ]
     },
     "portalRuby": {
-        "title": {"translate":"text.skills.portalRuby.title"},
-        "description": {"translate":"text.skills.portalRuby.description"},
+        "title": {
+            "translate": "text.skills.portalRuby.title"
+        },
+        "description": {
+            "translate": "text.skills.portalRuby.description"
+        },
         "size": 1.2,
         "frame": {
             "type": "texture",
@@ -8389,8 +9466,12 @@
         ]
     },
     "ascendancyRighteousHammers": {
-        "title": {"translate":"text.skills.ascendancyRighteousHammers.title"},
-        "description": {"translate":"text.skills.ascendancyRighteousHammers.description"},
+        "title": {
+            "translate": "text.skills.ascendancyRighteousHammers.title"
+        },
+        "description": {
+            "translate": "text.skills.ascendancyRighteousHammers.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -8417,8 +9498,12 @@
         ]
     },
     "ascendancyBoneArmor": {
-        "title": {"translate":"text.skills.ascendancyBoneArmor.title"},
-        "description": {"translate":"text.skills.ascendancyBoneArmor.description"},
+        "title": {
+            "translate": "text.skills.ascendancyBoneArmor.title"
+        },
+        "description": {
+            "translate": "text.skills.ascendancyBoneArmor.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -8445,8 +9530,12 @@
         ]
     },
     "ascendancyCyclonicCleave": {
-        "title": {"translate":"text.skills.ascendancyCyclonicCleave.title"},
-        "description": {"translate":"text.skills.ascendancyCyclonicCleave.description"},
+        "title": {
+            "translate": "text.skills.ascendancyCyclonicCleave.title"
+        },
+        "description": {
+            "translate": "text.skills.ascendancyCyclonicCleave.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -8473,8 +9562,12 @@
         ]
     },
     "ascendancyMagicCircle": {
-        "title": {"translate":"text.skills.ascendancyMagicCircle.title"},
-        "description": {"translate":"text.skills.ascendancyMagicCircle.description"},
+        "title": {
+            "translate": "text.skills.ascendancyMagicCircle.title"
+        },
+        "description": {
+            "translate": "text.skills.ascendancyMagicCircle.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -8501,8 +9594,12 @@
         ]
     },
     "ascendancyArcaneSlash": {
-        "title": {"translate":"text.skills.ascendancyArcaneSlash.title"},
-        "description": {"translate":"text.skills.ascendancyArcaneSlash.description"},
+        "title": {
+            "translate": "text.skills.ascendancyArcaneSlash.title"
+        },
+        "description": {
+            "translate": "text.skills.ascendancyArcaneSlash.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -8529,8 +9626,12 @@
         ]
     },
     "ascendancyAgony": {
-        "title": {"translate":"text.skills.ascendancyAgony.title"},
-        "description": {"translate":"text.skills.ascendancyAgony.description"},
+        "title": {
+            "translate": "text.skills.ascendancyAgony.title"
+        },
+        "description": {
+            "translate": "text.skills.ascendancyAgony.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -8557,8 +9658,12 @@
         ]
     },
     "ascendancyTorment": {
-        "title": {"translate":"text.skills.ascendancyTorment.title"},
-        "description": {"translate":"text.skills.ascendancyTorment.description"},
+        "title": {
+            "translate": "text.skills.ascendancyTorment.title"
+        },
+        "description": {
+            "translate": "text.skills.ascendancyTorment.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -8585,8 +9690,12 @@
         ]
     },
     "ascendancyRapidfire": {
-        "title": {"translate":"text.skills.ascendancyRapidfire.title"},
-        "description": {"translate":"text.skills.ascendancyRapidfire.description"},
+        "title": {
+            "translate": "text.skills.ascendancyRapidfire.title"
+        },
+        "description": {
+            "translate": "text.skills.ascendancyRapidfire.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -8613,8 +9722,12 @@
         ]
     },
     "ascendancyCataclysm": {
-        "title": {"translate":"text.skills.ascendancyCataclysm.title"},
-        "description": {"translate":"text.skills.ascendancyCataclysm.description"},
+        "title": {
+            "translate": "text.skills.ascendancyCataclysm.title"
+        },
+        "description": {
+            "translate": "text.skills.ascendancyCataclysm.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -8641,8 +9754,12 @@
         ]
     },
     "ascendancyGhostwalk": {
-        "title": {"translate":"text.skills.ascendancyGhostwalk.title"},
-        "description": {"translate":"text.skills.ascendancyGhostwalk.description"},
+        "title": {
+            "translate": "text.skills.ascendancyGhostwalk.title"
+        },
+        "description": {
+            "translate": "text.skills.ascendancyGhostwalk.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -8669,8 +9786,12 @@
         ]
     },
     "ascendancySkywardSunder": {
-        "title": {"translate":"text.skills.ascendancySkywardSunder.title"},
-        "description": {"translate":"text.skills.ascendancySkywardSunder.description"},
+        "title": {
+            "translate": "text.skills.ascendancySkywardSunder.title"
+        },
+        "description": {
+            "translate": "text.skills.ascendancySkywardSunder.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -8697,8 +9818,12 @@
         ]
     },
     "ascendancyRighteousShield": {
-        "title": {"translate":"text.skills.ascendancyRighteousShield.title"},
-        "description": {"translate":"text.skills.ascendancyRighteousShield.description"},
+        "title": {
+            "translate": "text.skills.ascendancyRighteousShield.title"
+        },
+        "description": {
+            "translate": "text.skills.ascendancyRighteousShield.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -8725,8 +9850,12 @@
         ]
     },
     "ascendancyChainbreaker": {
-        "title": {"translate":"text.skills.ascendancyChainbreaker.title"},
-        "description": {"translate":"text.skills.ascendancyChainbreaker.description"},
+        "title": {
+            "translate": "text.skills.ascendancyChainbreaker.title"
+        },
+        "description": {
+            "translate": "text.skills.ascendancyChainbreaker.description"
+        },
         "size": 1.4,
         "frame": {
             "type": "texture",
@@ -8748,6 +9877,70 @@
                 "type": "puffish_skills:passive_skill",
                 "data": {
                     "passive_skill": "ascendancyChainbreaker"
+                }
+            }
+        ]
+    },
+    "lancerPath": {
+        "title": {
+            "translate": "text.skills.lancerPath.title"
+        },
+        "description": {
+            "translate": "text.skills.lancerPath.description"
+        },
+        "size": 1.4,
+        "frame": {
+            "type": "texture",
+            "data": {
+                "unlocked": "smooth_classes:textures/frames/unlocked.png",
+                "available": "smooth_classes:textures/frames/available.png",
+                "locked": "smooth_classes:textures/frames/locked.png",
+                "excluded": "smooth_classes:textures/frames/excluded.png"
+            }
+        },
+        "icon": {
+            "type": "texture",
+            "data": {
+                "texture": "smooth_classes:textures/icons/classes/lancer.png"
+            }
+        },
+        "rewards": [
+            {
+                "type": "puffish_skills:command",
+                "data": {
+                    "command": "puffish_skills category unlock @s smooth_classes:lancer"
+                }
+            }
+        ]
+    },
+    "riderPath": {
+        "title": {
+            "translate": "text.skills.riderPath.title"
+        },
+        "description": {
+            "translate": "text.skills.riderPath.description"
+        },
+        "size": 1.4,
+        "frame": {
+            "type": "texture",
+            "data": {
+                "unlocked": "smooth_classes:textures/frames/unlocked.png",
+                "available": "smooth_classes:textures/frames/available.png",
+                "locked": "smooth_classes:textures/frames/locked.png",
+                "excluded": "smooth_classes:textures/frames/excluded.png"
+            }
+        },
+        "icon": {
+            "type": "texture",
+            "data": {
+                "texture": "smooth_classes:textures/icons/classes/rider.png"
+            }
+        },
+        "rewards": [
+            {
+                "type": "puffish_skills:command",
+                "data": {
+                    "command": "puffish_skills category unlock @s smooth_classes:rider"
                 }
             }
         ]

@@ -5,7 +5,7 @@
 	"icon": {
 		"type": "texture",
 		"data": {
-			"texture": "smooth_classes:textures/icons/alternate_reduced/ranger_path.png"
+			"texture": "smooth_classes:textures/icons/classes/archer.png"
 		}
 	},
 	"background": {
