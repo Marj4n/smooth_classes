@@ -28,6 +28,16 @@ public final class SmoothEntities {
     public static final EntityType<HighBeamEntity> HIGH_BEAM = Registry.register(Registries.ENTITY_TYPE,
             SmoothClasses.id("high_beam"), FabricEntityTypeBuilder.create(SpawnGroup.MISC, HighBeamEntity::new)
                     .dimensions(EntityDimensions.fixed(1F,4F)).trackRangeBlocks(128).trackedUpdateRate(1).build());
+
+    public static final EntityType<LancerImpaleEntity> LANCER_IMPALE = Registry.register(
+            Registries.ENTITY_TYPE,
+            SmoothClasses.id("lancer_impale"),
+            FabricEntityTypeBuilder.create(SpawnGroup.MISC, LancerImpaleEntity::new)
+                    .dimensions(EntityDimensions.fixed(0.1F, 0.1F))
+                    .trackRangeBlocks(96)
+                    .trackedUpdateRate(1)
+                    .build());
+
     public static final EntityType<RiderHorseEntity> RIDER_HORSE = Registry.register(
             Registries.ENTITY_TYPE,
             SmoothClasses.id("rider_horse"),

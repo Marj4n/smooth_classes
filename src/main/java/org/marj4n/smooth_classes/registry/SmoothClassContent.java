@@ -12,6 +12,8 @@ import org.marj4n.smooth_classes.content.caster.CasterClass;
 import org.marj4n.smooth_classes.content.caster.CasterContent;
 import org.marj4n.smooth_classes.content.foreigner.ForeignerClass;
 import org.marj4n.smooth_classes.content.foreigner.ForeignerContent;
+import org.marj4n.smooth_classes.content.lancer.LancerClass;
+import org.marj4n.smooth_classes.content.lancer.LancerContent;
 import org.marj4n.smooth_classes.content.rider.RiderClass;
 import org.marj4n.smooth_classes.content.rider.RiderContent;
 import org.marj4n.smooth_classes.content.ruler.RulerClass;
@@ -35,6 +37,7 @@ public final class SmoothClassContent {
         ClassRegistry.register(new SaberClass());
         ClassRegistry.register(new RulerClass());
         ClassRegistry.register(new RiderClass());
+        ClassRegistry.register(new LancerClass());
 
         AvengerContent.register();
         ForeignerContent.register();
@@ -45,5 +48,6 @@ public final class SmoothClassContent {
         SaberContent.register();
         RulerContent.register();
         RiderContent.register();
+        LancerContent.register();
     }
 }

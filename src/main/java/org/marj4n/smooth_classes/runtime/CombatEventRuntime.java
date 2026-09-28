@@ -109,6 +109,7 @@ public final class CombatEventRuntime {
     }
 
     public static void onKilledOther(ServerPlayerEntity player, ServerWorld world, LivingEntity victim) {
+        org.marj4n.smooth_classes.content.lancer.runtime.LancerRuntime.onKill(player, victim);
         // Renewal effects are intentionally event-based, matching the
         // PlayerEntity#onKilledOther hook rather than polling.
         if (has(player, PuffishSkillsIntegration.BERSERKER, SkillNodeIds.berserkerSpecialisationBloodthirsty)
@@ -123,6 +124,7 @@ public final class CombatEventRuntime {
     }
 
     public static void onDeath(ServerPlayerEntity player, DamageSource source) {
+        org.marj4n.smooth_classes.content.lancer.runtime.LancerRuntime.onDeath(player);
         player.setInvisible(false);
     }
 

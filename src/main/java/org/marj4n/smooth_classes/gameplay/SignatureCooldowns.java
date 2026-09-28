@@ -33,6 +33,9 @@ public final class SignatureCooldowns {
             case "rider_charge" -> SmoothBalance.Rider.chargeCooldown;
             case "rider_war_aura" -> SmoothBalance.Rider.auraCooldown;
             case "rider_blazing_hooves" -> SmoothBalance.Rider.blazingHoovesCooldown;
+            case "impaling_volley" -> SmoothBalance.Lancer.impalingVolleyCooldown;
+            case "dragon_thrust" -> SmoothBalance.Lancer.dragonThrustCooldown;
+            case "spearstorm" -> SmoothBalance.Lancer.spearstormCooldown;
             default -> 20;
         };
         return seconds*20;

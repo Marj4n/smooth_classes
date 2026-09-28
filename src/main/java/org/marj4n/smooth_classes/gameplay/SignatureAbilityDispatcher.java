@@ -10,6 +10,7 @@ import org.marj4n.smooth_classes.content.avenger.runtime.AvengerMinionGameplay;
 import org.marj4n.smooth_classes.content.berserker.runtime.BerserkerRuntime;
 import org.marj4n.smooth_classes.content.caster.runtime.CasterRuntime;
 import org.marj4n.smooth_classes.content.foreigner.runtime.ForeignerRuntime;
+import org.marj4n.smooth_classes.content.lancer.runtime.LancerRuntime;
 import org.marj4n.smooth_classes.content.rider.runtime.RiderRuntime;
 import org.marj4n.smooth_classes.content.ruler.runtime.RulerRuntime;
 import org.marj4n.smooth_classes.content.saber.runtime.SaberRuntime;
@@ -70,6 +71,11 @@ public final class SignatureAbilityDispatcher {
                 if (skill(player,"rider","rider_war_aura")) return result(player, "rider_war_aura", () -> RiderRuntime.executeWarAura(player));
                 if (skill(player,"rider","rider_blazing_hooves")) return result(player, "rider_blazing_hooves", () -> RiderRuntime.executeBlazingHooves(player));
             }
+            if (clazz(player, "lancer")) {
+                if (skill(player,"lancer","lancer_impaling_volley")) return result(player, "impaling_volley", () -> LancerRuntime.executeImpalingVolley(player));
+                if (skill(player,"lancer","lancer_dragon_thrust")) return result(player, "dragon_thrust", () -> LancerRuntime.executeDragonThrust(player));
+                if (skill(player,"lancer","lancer_spearstorm")) return result(player, "spearstorm", () -> LancerRuntime.executeSpearstorm(player));
+            }
             if (clazz(player, "avenger") && skill(player,"avenger","yl0wtsb5m85wmvfa")) {
                 Identifier abilityId = new Identifier("smooth_classes", "summoning_ritual");
                 long remaining = AbilityCooldowns.remainingTicks(player, abilityId);
@@ -128,6 +134,10 @@ public final class SignatureAbilityDispatcher {
                 case "rider_war_aura" -> unlocked(player,"rider","rider_war_aura",a,()->RiderRuntime.executeWarAura(player));
                 case "rider_blazing_hooves" -> unlocked(player,"rider","rider_blazing_hooves",a,()->RiderRuntime.executeBlazingHooves(player));
 
+                case "impaling_volley" -> unlocked(player,"lancer","lancer_impaling_volley",a,()->LancerRuntime.executeImpalingVolley(player));
+                case "dragon_thrust" -> unlocked(player,"lancer","lancer_dragon_thrust",a,()->LancerRuntime.executeDragonThrust(player));
+                case "spearstorm" -> unlocked(player,"lancer","lancer_spearstorm",a,()->LancerRuntime.executeSpearstorm(player));
+
                 case "summoning_ritual" -> castSummoningRitual(player);
                 default -> DispatchResult.fail("Unknown ability: " + ability);
             };
@@ -175,7 +185,8 @@ public final class SignatureAbilityDispatcher {
             {"saber","is053f9imz801s57","consecration"},{"saber","kp8uei8ppni71b5x","sacred_onslaught"},{"saber","a3ns9xl58ixdg2lo","heavensmiths_call"},
             {"ruler","is053f9imz801s57","sacred_orb"},{"ruler","a3ns9xl58ixdg2lo","divine_intervention"},{"ruler","kp8uei8ppni71b5x","anoint_weapon"},
             {"avenger","yl0wtsb5m85wmvfa","summoning_ritual"},
-            {"rider","rider_charge","rider_charge"},{"rider","rider_war_aura","rider_war_aura"},{"rider","rider_blazing_hooves","rider_blazing_hooves"}
+            {"rider","rider_charge","rider_charge"},{"rider","rider_war_aura","rider_war_aura"},{"rider","rider_blazing_hooves","rider_blazing_hooves"},
+            {"lancer","lancer_impaling_volley","impaling_volley"},{"lancer","lancer_dragon_thrust","dragon_thrust"},{"lancer","lancer_spearstorm","spearstorm"}
         };
         for (String[] row : rows) if (clazz(player,row[0]) && skill(player,row[0],row[1])) out.add(row[2]);
         return out;

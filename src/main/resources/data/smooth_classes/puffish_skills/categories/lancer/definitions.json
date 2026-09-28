@@ -1,27 +1,702 @@
 {
-    "lancerPath": {
-        "title": {
-            "translate": "text.skills.lancerPath.title"
-        },
-        "description": {
-            "translate": "text.skills.lancerPath.description"
-        },
-        "size": 1.4,
-        "frame": {
-            "type": "texture",
-            "data": {
-                "unlocked": "smooth_classes:textures/frames/unlocked.png",
-                "available": "smooth_classes:textures/frames/available.png",
-                "locked": "smooth_classes:textures/frames/locked.png",
-                "excluded": "smooth_classes:textures/frames/excluded.png"
-            }
-        },
-        "icon": {
-            "type": "texture",
-            "data": {
-                "texture": "smooth_classes:textures/icons/classes/lancer.png"
-            }
-        },
-        "rewards": []
-    }
+  "lancerPath": {
+    "title": {
+      "translate": "text.skills.lancerPath.title"
+    },
+    "description": {
+      "translate": "text.skills.lancerPath.description"
+    },
+    "extra_description": {
+      "translate": "text.skills.lancerPath.extra_description"
+    },
+    "size": 1.4,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/classes/lancer.png"
+      }
+    },
+    "rewards": []
+  },
+  "lancerImpalingVolley": {
+    "title": {
+      "translate": "text.skills.lancerImpalingVolley.title"
+    },
+    "description": {
+      "translate": "text.skills.lancerImpalingVolley.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/lancer_signature_impaling_volley.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "lancerImpalingVolley"
+        }
+      }
+    ]
+  },
+  "lancerVolleyFive": {
+    "title": {
+      "translate": "text.skills.lancerVolleyFive.title"
+    },
+    "description": {
+      "translate": "text.skills.lancerVolleyFive.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/ranged_up.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "lancerVolleyFive"
+        }
+      }
+    ]
+  },
+  "lancerVolleySeven": {
+    "title": {
+      "translate": "text.skills.lancerVolleySeven.title"
+    },
+    "description": {
+      "translate": "text.skills.lancerVolleySeven.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/ranged_up.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "lancerVolleySeven"
+        }
+      }
+    ]
+  },
+  "lancerVolleyNine": {
+    "title": {
+      "translate": "text.skills.lancerVolleyNine.title"
+    },
+    "description": {
+      "translate": "text.skills.lancerVolleyNine.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/attack_up.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "lancerVolleyNine"
+        }
+      }
+    ]
+  },
+  "lancerDragonThrust": {
+    "title": {
+      "translate": "text.skills.lancerDragonThrust.title"
+    },
+    "description": {
+      "translate": "text.skills.lancerDragonThrust.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/lancer_signature_dragon_thrust.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "lancerDragonThrust"
+        }
+      }
+    ]
+  },
+  "lancerThrustReach": {
+    "title": {
+      "translate": "text.skills.lancerThrustReach.title"
+    },
+    "description": {
+      "translate": "text.skills.lancerThrustReach.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/movespeed_up.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "lancerThrustReach"
+        }
+      }
+    ]
+  },
+  "lancerThrustPin": {
+    "title": {
+      "translate": "text.skills.lancerThrustPin.title"
+    },
+    "description": {
+      "translate": "text.skills.lancerThrustPin.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/resist_up.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "lancerThrustPin"
+        }
+      }
+    ]
+  },
+  "lancerThrustBreaker": {
+    "title": {
+      "translate": "text.skills.lancerThrustBreaker.title"
+    },
+    "description": {
+      "translate": "text.skills.lancerThrustBreaker.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/attack_up.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "lancerThrustBreaker"
+        }
+      }
+    ]
+  },
+  "lancerSpearstorm": {
+    "title": {
+      "translate": "text.skills.lancerSpearstorm.title"
+    },
+    "description": {
+      "translate": "text.skills.lancerSpearstorm.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/lancer_signature_spearstorm.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "lancerSpearstorm"
+        }
+      }
+    ]
+  },
+  "lancerStormRadius": {
+    "title": {
+      "translate": "text.skills.lancerStormRadius.title"
+    },
+    "description": {
+      "translate": "text.skills.lancerStormRadius.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/ranged_up.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "lancerStormRadius"
+        }
+      }
+    ]
+  },
+  "lancerStormPulses": {
+    "title": {
+      "translate": "text.skills.lancerStormPulses.title"
+    },
+    "description": {
+      "translate": "text.skills.lancerStormPulses.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/attackspeed_up.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "lancerStormPulses"
+        }
+      }
+    ]
+  },
+  "lancerStormVortex": {
+    "title": {
+      "translate": "text.skills.lancerStormVortex.title"
+    },
+    "description": {
+      "translate": "text.skills.lancerStormVortex.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/movespeed_up.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "lancerStormVortex"
+        }
+      }
+    ]
+  },
+  "lancerMomentumTrainingI": {
+    "title": {
+      "translate": "text.skills.lancerMomentumTrainingI.title"
+    },
+    "description": {
+      "translate": "text.skills.lancerMomentumTrainingI.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/attack_up.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "lancerMomentumTrainingI"
+        }
+      }
+    ]
+  },
+  "lancerMomentumTrainingII": {
+    "title": {
+      "translate": "text.skills.lancerMomentumTrainingII.title"
+    },
+    "description": {
+      "translate": "text.skills.lancerMomentumTrainingII.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/attack_up.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "lancerMomentumTrainingII"
+        }
+      }
+    ]
+  },
+  "lancerExecutionRhythm": {
+    "title": {
+      "translate": "text.skills.lancerExecutionRhythm.title"
+    },
+    "description": {
+      "translate": "text.skills.lancerExecutionRhythm.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/attack_up.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "lancerExecutionRhythm"
+        }
+      }
+    ]
+  },
+  "lancerBattleRecoveryI": {
+    "title": {
+      "translate": "text.skills.lancerBattleRecoveryI.title"
+    },
+    "description": {
+      "translate": "text.skills.lancerBattleRecoveryI.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/health_up.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "lancerBattleRecoveryI"
+        }
+      }
+    ]
+  },
+  "lancerBattleRecoveryII": {
+    "title": {
+      "translate": "text.skills.lancerBattleRecoveryII.title"
+    },
+    "description": {
+      "translate": "text.skills.lancerBattleRecoveryII.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/health_up.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "lancerBattleRecoveryII"
+        }
+      }
+    ]
+  },
+  "lancerFleetI": {
+    "title": {
+      "translate": "text.skills.lancerFleetI.title"
+    },
+    "description": {
+      "translate": "text.skills.lancerFleetI.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/movespeed_up.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "lancerFleetI"
+        }
+      }
+    ]
+  },
+  "lancerFleetII": {
+    "title": {
+      "translate": "text.skills.lancerFleetII.title"
+    },
+    "description": {
+      "translate": "text.skills.lancerFleetII.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/movespeed_up.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "lancerFleetII"
+        }
+      }
+    ]
+  },
+  "lancerIronGrip": {
+    "title": {
+      "translate": "text.skills.lancerIronGrip.title"
+    },
+    "description": {
+      "translate": "text.skills.lancerIronGrip.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/resist_up.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "lancerIronGrip"
+        }
+      }
+    ]
+  },
+  "lancerPerfectMomentum": {
+    "title": {
+      "translate": "text.skills.lancerPerfectMomentum.title"
+    },
+    "description": {
+      "translate": "text.skills.lancerPerfectMomentum.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/warrior_frenzy.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "lancerPerfectMomentum"
+        }
+      }
+    ]
+  }
 }

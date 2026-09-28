@@ -81,6 +81,9 @@ public final class AbilityHudState {
                 case "rider_charge" -> "berserker_signature_rampage";
                 case "rider_war_aura" -> "cleric_signature_anoint_weapon";
                 case "rider_blazing_hooves" -> "spellblade_signature_elemental_surge";
+                case "impaling_volley" -> "lancer_signature_impaling_volley";
+                case "dragon_thrust" -> "lancer_signature_dragon_thrust";
+                case "spearstorm" -> "lancer_signature_spearstorm";
                 default -> "";
             };
         }

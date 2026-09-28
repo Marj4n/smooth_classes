@@ -1,8 +1,134 @@
 {
-    "lancer_root": {
-        "definition": "lancerPath",
-        "x": 0,
-        "y": 0,
-        "root": true
-    }
+  "lancer_root": {
+    "definition": "lancerPath",
+    "x": 0,
+    "y": 0,
+    "root": true
+  },
+  "lancer_impaling_volley": {
+    "definition": "lancerImpalingVolley",
+    "x": -96,
+    "y": -72,
+    "root": false
+  },
+  "lancer_volley_five": {
+    "definition": "lancerVolleyFive",
+    "x": -160,
+    "y": -128,
+    "root": false
+  },
+  "lancer_volley_seven": {
+    "definition": "lancerVolleySeven",
+    "x": -160,
+    "y": -176,
+    "root": false
+  },
+  "lancer_volley_nine": {
+    "definition": "lancerVolleyNine",
+    "x": -160,
+    "y": -224,
+    "root": false
+  },
+  "lancer_dragon_thrust": {
+    "definition": "lancerDragonThrust",
+    "x": 0,
+    "y": -96,
+    "root": false
+  },
+  "lancer_thrust_reach": {
+    "definition": "lancerThrustReach",
+    "x": -48,
+    "y": -160,
+    "root": false
+  },
+  "lancer_thrust_pin": {
+    "definition": "lancerThrustPin",
+    "x": 0,
+    "y": -176,
+    "root": false
+  },
+  "lancer_thrust_breaker": {
+    "definition": "lancerThrustBreaker",
+    "x": 48,
+    "y": -160,
+    "root": false
+  },
+  "lancer_spearstorm": {
+    "definition": "lancerSpearstorm",
+    "x": 96,
+    "y": -72,
+    "root": false
+  },
+  "lancer_storm_radius": {
+    "definition": "lancerStormRadius",
+    "x": 160,
+    "y": -128,
+    "root": false
+  },
+  "lancer_storm_pulses": {
+    "definition": "lancerStormPulses",
+    "x": 160,
+    "y": -176,
+    "root": false
+  },
+  "lancer_storm_vortex": {
+    "definition": "lancerStormVortex",
+    "x": 160,
+    "y": -224,
+    "root": false
+  },
+  "lancer_momentum_training_i": {
+    "definition": "lancerMomentumTrainingI",
+    "x": -96,
+    "y": 88,
+    "root": false
+  },
+  "lancer_momentum_training_ii": {
+    "definition": "lancerMomentumTrainingII",
+    "x": -96,
+    "y": 136,
+    "root": false
+  },
+  "lancer_execution_rhythm": {
+    "definition": "lancerExecutionRhythm",
+    "x": -96,
+    "y": 184,
+    "root": false
+  },
+  "lancer_battle_recovery_i": {
+    "definition": "lancerBattleRecoveryI",
+    "x": 0,
+    "y": 88,
+    "root": false
+  },
+  "lancer_battle_recovery_ii": {
+    "definition": "lancerBattleRecoveryII",
+    "x": 0,
+    "y": 136,
+    "root": false
+  },
+  "lancer_fleet_i": {
+    "definition": "lancerFleetI",
+    "x": 96,
+    "y": 88,
+    "root": false
+  },
+  "lancer_fleet_ii": {
+    "definition": "lancerFleetII",
+    "x": 96,
+    "y": 136,
+    "root": false
+  },
+  "lancer_iron_grip": {
+    "definition": "lancerIronGrip",
+    "x": 96,
+    "y": 184,
+    "root": false
+  },
+  "lancer_perfect_momentum": {
+    "definition": "lancerPerfectMomentum",
+    "x": 0,
+    "y": 232,
+    "root": false
+  }
 }
