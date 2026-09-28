@@ -4,9 +4,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import org.marj4n.smooth_classes.content.archer.runtime.ArcherRuntime;
 import org.marj4n.smooth_classes.content.assassin.runtime.AssassinRuntime;
-import org.marj4n.smooth_classes.content.avenger.runtime.AvengerSummonPlan;
-import org.marj4n.smooth_classes.content.avenger.runtime.AvengerSummoningRuntime;
-import org.marj4n.smooth_classes.content.avenger.runtime.AvengerMinionGameplay;
+import org.marj4n.smooth_classes.content.avenger.runtime.AvengerReworkRuntime;
 import org.marj4n.smooth_classes.content.berserker.runtime.BerserkerRuntime;
 import org.marj4n.smooth_classes.content.caster.runtime.CasterRuntime;
 import org.marj4n.smooth_classes.content.foreigner.runtime.ForeignerRuntime;
@@ -76,16 +74,11 @@ public final class SignatureAbilityDispatcher {
                 if (skill(player,"lancer","lancer_dragon_thrust")) return result(player, "dragon_thrust", () -> LancerRuntime.executeDragonThrust(player));
                 if (skill(player,"lancer","lancer_spearstorm")) return result(player, "spearstorm", () -> LancerRuntime.executeSpearstorm(player));
             }
-            if (clazz(player, "avenger") && skill(player,"avenger","yl0wtsb5m85wmvfa")) {
-                Identifier abilityId = new Identifier("smooth_classes", "summoning_ritual");
-                long remaining = AbilityCooldowns.remainingTicks(player, abilityId);
-                if (remaining > 0) return DispatchResult.fail("summoning_ritual cooldown " + formatSeconds(remaining) + "s");
-                AvengerSummonPlan plan = AvengerSummoningRuntime.resolve(player);
-                int spawned = AvengerMinionGameplay.summon(player, plan);
-                if (spawned <= 0) return DispatchResult.fail("summoning_ritual could not spawn minions");
-                AbilityCooldowns.start(player, abilityId, AbilityCooldowns.adjustedTicks(player,
-                        OptionalCompatRuntime.signatureCooldown(player, SignatureCooldowns.ticks("summoning_ritual"))));
-                return new DispatchResult(true, "summoning_ritual", "summoned " + spawned + " minion(s)");
+            if (clazz(player, "avenger")) {
+                if (skill(player,"avenger","avenger_curtain_call"))
+                    return result(player, "curtain_call", () -> AvengerReworkRuntime.executeCurtainCall(player));
+                if (skill(player,"avenger","avenger_endless_devour"))
+                    return result(player, "endless_devour", () -> AvengerReworkRuntime.executeEndlessDevour(player));
             }
             return DispatchResult.fail("No unlocked signature ability found in your active Puffish class tree.");
         } catch (IllegalStateException e) {
@@ -138,7 +131,8 @@ public final class SignatureAbilityDispatcher {
                 case "dragon_thrust" -> unlocked(player,"lancer","lancer_dragon_thrust",a,()->LancerRuntime.executeDragonThrust(player));
                 case "spearstorm" -> unlocked(player,"lancer","lancer_spearstorm",a,()->LancerRuntime.executeSpearstorm(player));
 
-                case "summoning_ritual" -> castSummoningRitual(player);
+                case "curtain_call" -> unlocked(player,"avenger","avenger_curtain_call",a,()->AvengerReworkRuntime.executeCurtainCall(player));
+                case "endless_devour" -> unlocked(player,"avenger","avenger_endless_devour",a,()->AvengerReworkRuntime.executeEndlessDevour(player));
                 default -> DispatchResult.fail("Unknown ability: " + ability);
             };
         } catch (IllegalStateException e) {
@@ -151,20 +145,6 @@ public final class SignatureAbilityDispatcher {
         if (!clazz(player, category)) return DispatchResult.fail("Active Puffish class is not " + category + ".");
         if (!skill(player, category, skillId)) return DispatchResult.fail(ability + " is not unlocked in Puffish Skills.");
         return result(player, ability, action);
-    }
-
-    private static DispatchResult castSummoningRitual(ServerPlayerEntity player) {
-        if (!clazz(player, "avenger")) return DispatchResult.fail("Active Puffish class is not avenger.");
-        if (!skill(player,"avenger","yl0wtsb5m85wmvfa")) return DispatchResult.fail("summoning_ritual is not unlocked in Puffish Skills.");
-        Identifier abilityId = new Identifier("smooth_classes", "summoning_ritual");
-        long remaining = AbilityCooldowns.remainingTicks(player, abilityId);
-        if (remaining > 0) return DispatchResult.fail("summoning_ritual cooldown " + formatSeconds(remaining) + "s");
-        AvengerSummonPlan plan = AvengerSummoningRuntime.resolve(player);
-        int spawned = AvengerMinionGameplay.summon(player, plan);
-        if (spawned <= 0) return DispatchResult.fail("summoning_ritual could not spawn minions");
-        AbilityCooldowns.start(player, abilityId, AbilityCooldowns.adjustedTicks(player,
-                OptionalCompatRuntime.signatureCooldown(player, SignatureCooldowns.ticks("summoning_ritual"))));
-        return new DispatchResult(true, "summoning_ritual", "summoned " + spawned + " minion(s)");
     }
 
     /** HUD slot selection: exactly one active signature is displayed/cast. */
@@ -184,7 +164,7 @@ public final class SignatureAbilityDispatcher {
             {"foreigner","a3ns9xl58ixdg2lo","elemental_surge"},{"foreigner","kp8uei8ppni71b5x","elemental_impact"},{"foreigner","is053f9imz801s57","spellweaver"},
             {"saber","is053f9imz801s57","consecration"},{"saber","kp8uei8ppni71b5x","sacred_onslaught"},{"saber","a3ns9xl58ixdg2lo","heavensmiths_call"},
             {"ruler","is053f9imz801s57","sacred_orb"},{"ruler","a3ns9xl58ixdg2lo","divine_intervention"},{"ruler","kp8uei8ppni71b5x","anoint_weapon"},
-            {"avenger","yl0wtsb5m85wmvfa","summoning_ritual"},
+            {"avenger","avenger_curtain_call","curtain_call"},{"avenger","avenger_endless_devour","endless_devour"},
             {"rider","rider_charge","rider_charge"},{"rider","rider_war_aura","rider_war_aura"},{"rider","rider_blazing_hooves","rider_blazing_hooves"},
             {"lancer","lancer_impaling_volley","impaling_volley"},{"lancer","lancer_dragon_thrust","dragon_thrust"},{"lancer","lancer_spearstorm","spearstorm"}
         };

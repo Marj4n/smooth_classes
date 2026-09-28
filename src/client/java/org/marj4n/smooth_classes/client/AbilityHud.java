@@ -23,7 +23,9 @@ public final class AbilityHud {
                 AbilityHudState.signatureCooldownMs, AbilityHudState.signatureRemainingMs(), SmoothClassesClient.signatureKey());
         renderSlot(context, client, x + 22, y, AbilityHudState.ascendancyAbility, AbilityHudState.ascendancyIcon(),
                 AbilityHudState.ascendancyCooldownMs, AbilityHudState.ascendancyRemainingMs(), SmoothClassesClient.ascendancyKey());
-        if (AbilityHudState.riderMountVisible) {
+        if (AbilityHudState.avengerSummonVisible) {
+            renderAvengerSummonSlot(context, client, x + 44, y);
+        } else if (AbilityHudState.riderMountVisible) {
             renderSlot(context, client, x + 44, y, "rider_mount", AbilityHudState.riderMountIcon(),
                     AbilityHudState.riderMountCooldownMs, AbilityHudState.riderMountRemainingMs(), SmoothClassesClient.riderMountKey());
         }
@@ -61,6 +63,37 @@ public final class AbilityHud {
             context.drawCenteredTextWithShadow(client.textRenderer, Text.literal(Integer.toString(secs)), x + 18, y + 14, 0xFFFFFF);
         }
         context.drawCenteredTextWithShadow(client.textRenderer, key.getBoundKeyLocalizedText(), x + 18, y, 0xFFFFFF);
+        context.draw();
+        context.getMatrices().pop();
+        RenderSystem.disableBlend();
+    }
+
+    private void renderAvengerSummonSlot(DrawContext context, MinecraftClient client, int x, int y) {
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        context.drawTexture(FRAME, x + 5, y + 6, 58, 22, 24, 24, 256, 256);
+        context.drawTexture(AbilityHudState.avengerSummonIcon(), x + 10, y + 10, 0, 0, 16, 16, 16, 16);
+        context.draw();
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        context.getMatrices().push();
+        context.getMatrices().translate(0, 0, 300);
+
+        long remaining = AbilityHudState.avengerSummonRemainingMs();
+        int charges = AbilityHudState.avengerSummonCharges;
+        if (charges < AbilityHudState.avengerSummonMaxCharges && remaining > 0) {
+            int overlayHeight = Math.max(1, Math.min(16, (int)(16F * (remaining / (float)Math.max(1, AbilityHudState.avengerSummonRechargeMs)))));
+            int overlayY = y + 10 + (16 - overlayHeight);
+            context.drawTexture(COOLDOWN, x + 10, overlayY, 0, 16 - overlayHeight, 16, overlayHeight, 16, 16);
+            if (charges == 0) {
+                int secs = (int)Math.ceil(remaining / 1000D);
+                context.drawCenteredTextWithShadow(client.textRenderer, Text.literal(Integer.toString(secs)), x + 18, y + 14, 0xFFFFFF);
+            }
+        }
+        // Charge badge remains visible while a recharge is running, so 1-2 stored casts are obvious.
+        context.drawTextWithShadow(client.textRenderer, Text.literal(Integer.toString(charges)), x + 21, y + 20,
+                charges > 0 ? 0xFFE066 : 0xFF5555);
+        context.drawCenteredTextWithShadow(client.textRenderer, SmoothClassesClient.riderMountKey().getBoundKeyLocalizedText(), x + 18, y, 0xFFFFFF);
         context.draw();
         context.getMatrices().pop();
         RenderSystem.disableBlend();

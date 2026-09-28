@@ -26,6 +26,7 @@ public final class SmoothClassesNetworking {
     public static final Identifier ARCANE_SLASH_HOLD = SmoothClasses.id("arcane_slash_hold");
     public static final Identifier RIDER_SUMMON_MOUNT = SmoothClasses.id("rider_summon_mount");
     public static final Identifier RIDER_FLIGHT_INPUT = SmoothClasses.id("rider_flight_input");
+    public static final Identifier AVENGER_SUMMON = SmoothClasses.id("avenger_summon");
     public static final Identifier SYNC_ABILITY_STATE = SmoothClasses.id("sync_ability_state");
     private static final Map<UUID,String> LAST_SELECTION = new HashMap<>();
     private SmoothClassesNetworking() {}
@@ -39,6 +40,12 @@ public final class SmoothClassesNetworking {
         ServerPlayNetworking.registerGlobalReceiver(RIDER_SUMMON_MOUNT,
                 (server, player, handler, buf, responseSender) -> server.execute(() -> {
                     var result = org.marj4n.smooth_classes.content.rider.runtime.RiderRuntime.summonMount(player);
+                    if (!result.success()) player.sendMessage(Text.literal("[Smooth Classes] " + result.detail()), true);
+                    sendAbilityState(player);
+                }));
+        ServerPlayNetworking.registerGlobalReceiver(AVENGER_SUMMON,
+                (server, player, handler, buf, responseSender) -> server.execute(() -> {
+                    var result = org.marj4n.smooth_classes.content.avenger.runtime.AvengerReworkRuntime.summonFromHands(player);
                     if (!result.success()) player.sendMessage(Text.literal("[Smooth Classes] " + result.detail()), true);
                     sendAbilityState(player);
                 }));
@@ -85,9 +92,16 @@ public final class SmoothClassesNetworking {
                 boolean rider = org.marj4n.smooth_classes.runtime.AbilityRuntime.isClass(
                         player, org.marj4n.smooth_classes.content.rider.RiderClass.ID);
                 boolean riderMountActive = org.marj4n.smooth_classes.content.rider.runtime.RiderRuntime.hasActiveMount(player);
+                boolean avenger = org.marj4n.smooth_classes.runtime.AbilityRuntime.isClass(
+                        player, org.marj4n.smooth_classes.content.avenger.AvengerClass.ID);
+                int avengerCharges = avenger
+                        ? org.marj4n.smooth_classes.content.avenger.runtime.AvengerReworkRuntime.summonCharges(player) : 0;
+                long avengerRemaining = avenger
+                        ? org.marj4n.smooth_classes.content.avenger.runtime.AvengerReworkRuntime.summonRechargeRemainingTicks(player) : 0L;
                 String selection = SignatureAbilityDispatcher.selectedAbility(player) + "|"
                         + AscendancyAbilityDispatcher.selectedAbility(player) + "|rider=" + rider
-                        + "|mount=" + riderMountActive;
+                        + "|mount=" + riderMountActive + "|avenger=" + avenger
+                        + "|avc=" + avengerCharges + "|avr=" + (avengerRemaining / 20L);
                 if (!selection.equals(LAST_SELECTION.get(player.getUuid()))) sendAbilityState(player);
             }
         });
@@ -120,8 +134,20 @@ public final class SmoothClassesNetworking {
         out.writeBoolean(riderMountActive);
         out.writeInt(org.marj4n.smooth_classes.content.rider.runtime.RiderRuntime.summonCooldownTicks(player));
         out.writeLong(org.marj4n.smooth_classes.content.rider.runtime.RiderRuntime.summonRemainingTicks(player));
+        boolean avengerSummonVisible = org.marj4n.smooth_classes.runtime.AbilityRuntime.isClass(
+                player, org.marj4n.smooth_classes.content.avenger.AvengerClass.ID);
+        int avengerCharges = avengerSummonVisible
+                ? org.marj4n.smooth_classes.content.avenger.runtime.AvengerReworkRuntime.summonCharges(player) : 0;
+        long avengerRemaining = avengerSummonVisible
+                ? org.marj4n.smooth_classes.content.avenger.runtime.AvengerReworkRuntime.summonRechargeRemainingTicks(player) : 0L;
+        out.writeBoolean(avengerSummonVisible);
+        out.writeInt(avengerCharges);
+        out.writeInt(org.marj4n.smooth_classes.content.avenger.runtime.AvengerReworkRuntime.maxSummonCharges());
+        out.writeInt(org.marj4n.smooth_classes.content.avenger.runtime.AvengerReworkRuntime.summonRechargeTotalTicks());
+        out.writeLong(avengerRemaining);
         ServerPlayNetworking.send(player, SYNC_ABILITY_STATE, out);
         LAST_SELECTION.put(player.getUuid(), sig + "|" + asc + "|rider=" + riderMountVisible
-                + "|mount=" + riderMountActive);
+                + "|mount=" + riderMountActive + "|avenger=" + avengerSummonVisible
+                + "|avc=" + avengerCharges + "|avr=" + (avengerRemaining / 20L));
     }
 }

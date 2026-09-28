@@ -11,6 +11,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.*;
 import net.minecraft.world.*;
 import org.marj4n.smooth_classes.runtime.BloodRainRuntime;
+import org.marj4n.smooth_classes.content.avenger.runtime.AvengerReworkRuntime;
 
 /** A fixed local storm; never changes the world's global weather. */
 public final class BloodRainEntity extends Entity {
@@ -93,19 +94,8 @@ public final class BloodRainEntity extends Entity {
         );
         for (var e : world.getEntitiesByClass(LivingEntity.class, box, t -> t.isAlive() && !t.isSpectator())) {
             if (!inside(e.getX() - getX(), e.getZ() - getZ()) || !exposed(e)) continue;
-            if (e.getUuid().equals(owner)) {
-                effect(e, StatusEffects.REGENERATION, transcendent ? 3 : empowered ? 2 : 1);
-                if (age % 20 == 0) {
-                    e.addStatusEffect(new StatusEffectInstance(StatusEffects.SATURATION, 1, 2, false, false, true));
-                }
-                if (transcendent) {
-                    effect(e, StatusEffects.RESISTANCE, 3);
-                    effect(e, StatusEffects.STRENGTH, 2);
-                } else if (empowered) {
-                    effect(e, StatusEffects.RESISTANCE, 2);
-                }
-            } else if (isOwnedByCaster(e)) {
-                continue;
+            if (e.getUuid().equals(owner) || isOwnedByCaster(e)) {
+                applyBeneficialRain(e);
             } else {
                 effect(e, StatusEffects.WITHER, transcendent ? 3 : empowered ? 2 : 1);
                 effect(e, StatusEffects.HUNGER, empowered ? 4 : 2);
@@ -117,8 +107,29 @@ public final class BloodRainEntity extends Entity {
         }
     }
 
+    private void applyBeneficialRain(LivingEntity e) {
+        int regeneration = transcendent ? 3 : empowered ? 2 : 1;
+        if (e.isUndead()) {
+            // Vanilla undead reject Regeneration, so Avenger undead summons get
+            // an equivalent direct heal pulse instead of silently receiving nothing.
+            e.heal(transcendent ? 2.0F : empowered ? 1.5F : 1.0F);
+        } else {
+            effect(e, StatusEffects.REGENERATION, regeneration);
+        }
+        if (age % 20 == 0 && e instanceof net.minecraft.entity.player.PlayerEntity) {
+            e.addStatusEffect(new StatusEffectInstance(StatusEffects.SATURATION, 1, 2, false, false, true));
+        }
+        if (transcendent) {
+            effect(e, StatusEffects.RESISTANCE, 3);
+            effect(e, StatusEffects.STRENGTH, 2);
+        } else if (empowered) {
+            effect(e, StatusEffects.RESISTANCE, 2);
+        }
+    }
+
     private boolean isOwnedByCaster(LivingEntity e) {
         if (owner == null) return false;
+        if (AvengerReworkRuntime.isOwnedSummon(owner, e)) return true;
         if (e instanceof net.minecraft.entity.passive.TameableEntity tame
                 && owner.equals(tame.getOwnerUuid())) return true;
         if (e instanceof net.minecraft.entity.passive.AbstractHorseEntity horse

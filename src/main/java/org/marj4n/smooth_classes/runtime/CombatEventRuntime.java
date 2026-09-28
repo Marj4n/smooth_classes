@@ -18,7 +18,6 @@ import org.marj4n.smooth_classes.integration.PuffishSkillsIntegration;
 import org.marj4n.smooth_classes.integration.SkillNodeIds;
 import org.marj4n.smooth_classes.integration.OptionalCompatRuntime;
 import org.marj4n.smooth_classes.content.avenger.AvengerClass;
-import org.marj4n.smooth_classes.content.avenger.runtime.AvengerMinionGameplay;
 
 /**
  * Chapter 5 event router. One authoritative entry point per combat event keeps
@@ -30,7 +29,6 @@ public final class CombatEventRuntime {
 
     /** Central Spell Engine cast route. */
     public static void onSpellCast(ServerPlayerEntity player, List<Entity> targets, SpellSchool school) {
-        if (AbilityRuntime.isClass(player, AvengerClass.ID)) AvengerMinionGameplay.onSpellCast(player);
         BasePathRuntime.onSpellCast(player, targets, school);
         ClassPassiveRuntime.onSpellCast(player, targets, school);
         OptionalCompatRuntime.onSpellCast(player);
@@ -87,7 +85,6 @@ public final class CombatEventRuntime {
 
         if (!ClassPassiveRuntime.allowDamage(player)) return false;
 
-        if (AbilityRuntime.isClass(player, AvengerClass.ID)) AvengerMinionGameplay.onIncomingDamage(player);
 
         BasePathRuntime.onDamaged(player);
         LivingEntity attacker = source.getAttacker() instanceof LivingEntity living ? living : null;
@@ -109,6 +106,7 @@ public final class CombatEventRuntime {
     }
 
     public static void onKilledOther(ServerPlayerEntity player, ServerWorld world, LivingEntity victim) {
+        org.marj4n.smooth_classes.content.avenger.runtime.AvengerReworkRuntime.onKilledOther(player, victim);
         org.marj4n.smooth_classes.content.lancer.runtime.LancerRuntime.onKill(player, victim);
         // Renewal effects are intentionally event-based, matching the
         // PlayerEntity#onKilledOther hook rather than polling.
