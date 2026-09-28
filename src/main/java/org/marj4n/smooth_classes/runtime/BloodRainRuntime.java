@@ -7,7 +7,6 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.entity.EntityType;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.hit.HitResult;
-import net.minecraft.world.World;
 import org.marj4n.smooth_classes.SmoothClasses;
 import org.marj4n.smooth_classes.entity.BloodRainEntity;
 import org.marj4n.smooth_classes.registry.SmoothEntities;
@@ -32,12 +31,12 @@ public final class BloodRainRuntime {
     public static ExecutionResult cast(ServerPlayerEntity p,int points){
         if(active(p))return ExecutionResult.failure("Raining Blood is still active.");
         var world=p.getServerWorld();
-        if((world.getRegistryKey()!=World.OVERWORLD&&world.getRegistryKey()!=World.END)||world.getDimension().hasCeiling())
-            return ExecutionResult.failure("Raining Blood requires the Overworld or The End.");
+        if (world.getDimension().hasCeiling())
+            return ExecutionResult.failure("Raining Blood requires a dimension with an open sky.");
         if(!BloodRainEntity.exposed(p))return ExecutionResult.failure("You must stand under the open sky.");
         var e=SmoothEntities.BLOOD_RAIN.create(world);
         if(e==null)return ExecutionResult.failure("Cannot summon blood rain here.");
-        e.setPosition(p.getPos());e.configure(p.getUuid(),points>=30);
+        e.setPosition(p.getPos());e.configure(p.getUuid(),points);
         if(!world.spawnEntity(e))return ExecutionResult.failure("Cannot summon blood rain here.");
         track(e);
         // Cosmetic lightning: no incidental vanilla damage, fire, or block changes.

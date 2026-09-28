@@ -529,8 +529,10 @@ public final class EffectBehaviorRuntime {
                 double dx=Math.max(target.getBoundingBox().minX-hx,Math.max(0,hx-target.getBoundingBox().maxX));
                 double dz=Math.max(target.getBoundingBox().minZ-hz,Math.max(0,hz-target.getBoundingBox().maxZ));
                 if (dx*dx+dz*dz > 0.75*0.75) continue;
+                int pts=PuffishSkillsIntegration.countUnlockedSkills(PuffishSkillsIntegration.ASCENDANCY,p);
+                float coefficient=pts>=60?1.00F:pts>=30?.75F:.55F;
                 org.marj4n.smooth_classes.runtime.RighteousHammerChargeRuntime.passiveHit(p,target,
-                        (float)Math.max(p.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE),SpellPowerRuntime.healing(p,1))*.55F);
+                        (float)Math.max(p.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE),SpellPowerRuntime.healing(p,1))*coefficient);
                 break;
             }
         }
@@ -540,22 +542,36 @@ public final class EffectBehaviorRuntime {
         StatusEffectInstance fx=p.getStatusEffect(SmoothEffects.CYCLONIC_CLEAVE); if(fx==null)return;
         int dur=fx.getDuration(), pts=PuffishSkillsIntegration.countUnlockedSkills(PuffishSkillsIntegration.ASCENDANCY,p);
         if(dur>10){
-            double velocity=Math.min(.65,Math.max(0,0.05D*(39-dur)));
+            double velocity=Math.min(pts>=60?.85:.65,Math.max(0,0.05D*(39-dur)));
             Vec3d v=p.getRotationVector().multiply(velocity);
             p.setVelocity(v.x,0,v.z); p.velocityModified=true;
         }
         if(dur<30 && dur%5==0){
-            SkillFx.sound(p,"spell_slash",1.0F,1.1F);
-            SkillFx.plane(p, pts>29?ParticleTypes.PORTAL:ParticleTypes.CLOUD, p.getBlockPos(), 2, 0, 0.2, 0);
+            SkillFx.sound(p,"spell_slash",1.0F,pts>=60?1.35F:1.1F);
+            SkillFx.plane(p, pts>=30?ParticleTypes.PORTAL:ParticleTypes.CLOUD, p.getBlockPos(), pts>=60?4:2, 0, 0.2, 0);
+            double base=(0.75D+0.015D*AscendancyBalance.points(pts));
+            if(pts>=60)base*=1.75D;
             float damage=(float)(Math.max(p.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE),
-                    Math.max(SpellPowerRuntime.arcane(p,1),Math.max(SpellPowerRuntime.fire(p,1),SpellPowerRuntime.frost(p,1))))
-                    *(0.75D+0.015D*AscendancyBalance.points(pts)));
-            for(LivingEntity target:nearbyHostiles(p,2.5)){
-                if(pts>29) pullToward(p,target,6);
+                    Math.max(SpellPowerRuntime.arcane(p,1),Math.max(SpellPowerRuntime.fire(p,1),SpellPowerRuntime.frost(p,1))))*base);
+            double radius=pts>=60?4.5:2.5;
+            for(LivingEntity target:nearbyHostiles(p,radius)){
+                if(pts>=30) pullToward(p,target,pts>=60?10:6);
+                if(pts>=60)target.addStatusEffect(new StatusEffectInstance(SmoothEffects.IMMOBILIZE,15,0,false,false,true));
                 target.timeUntilRegen=0;target.damage(p.getDamageSources().playerAttack(p),damage);target.timeUntilRegen=0;
+            }
+            if(pts>=60&&dur==5){
+                float shock=(float)(Math.max(p.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE),
+                        Math.max(SpellPowerRuntime.arcane(p,1),Math.max(SpellPowerRuntime.fire(p,1),SpellPowerRuntime.frost(p,1))))*2.5D);
+                for(LivingEntity target:nearbyHostiles(p,7)){
+                    target.timeUntilRegen=0;target.damage(p.getDamageSources().playerAttack(p),shock);target.timeUntilRegen=0;
+                    Vec3d away=target.getPos().subtract(p.getPos());
+                    if(away.lengthSquared()>0.01){Vec3d n=away.normalize().multiply(.8);target.addVelocity(n.x,.65,n.z);}
+                }
+                SkillFx.plane(p,ParticleTypes.EXPLOSION,p.getBlockPos(),5,0,0.35,0);
             }
         }
     }
+
     private static void arcaneSlash(LivingEntity e) {
         if (!(e instanceof ServerPlayerEntity p)) return;
         StatusEffectInstance fx = p.getStatusEffect(SmoothEffects.ARCANE_SLASH);
@@ -569,7 +585,8 @@ public final class EffectBehaviorRuntime {
         // The status is a single 16-tick windup. No recast on removal.
         if (fx.getDuration() == 1) {
             int pts = PuffishSkillsIntegration.countUnlockedSkills(PuffishSkillsIntegration.ASCENDANCY, p);
-            String spell = pts >= 30 ? "smooth_classes:arcane_slash_projectile_2"
+            String spell = pts >= 60 ? "smooth_classes:arcane_slash_projectile_3"
+                    : pts >= 30 ? "smooth_classes:arcane_slash_projectile_2"
                     : "smooth_classes:arcane_slash_projectile";
             p.swingHand(net.minecraft.util.Hand.MAIN_HAND);
             if (InternalSpellRuntime.dumbFire(p, spell, 3F))
@@ -587,64 +604,84 @@ public final class EffectBehaviorRuntime {
         int dur=fx.getDuration(),pts=PuffishSkillsIntegration.countUnlockedSkills(PuffishSkillsIntegration.ASCENDANCY,p);
         if(dur%20==0)InternalSpellRuntime.target(p,p.getMainHandStack().getItem() instanceof net.minecraft.item.CrossbowItem?
                 "smooth_classes:rapidfire_crossbow":"smooth_classes:rapidfire",p,1F);
-        if(dur%5!=0)return;
-        LivingEntity target=lookTarget(p,32);
-        boolean fired=target!=null?InternalSpellRuntime.target(p,"smooth_classes:rapidfire_projectile",target,1.5F)
-                :InternalSpellRuntime.dumbFire(p,"smooth_classes:rapidfire_projectile",1.5F);
+        int interval=pts>=60?2:5;
+        if(dur%interval!=0)return;
+        LivingEntity target=lookTarget(p,pts>=60?48:32);
+        float multiplier=pts>=60?2.0F:1.5F;
+        boolean fired=target!=null?InternalSpellRuntime.target(p,"smooth_classes:rapidfire_projectile",target,multiplier)
+                :InternalSpellRuntime.dumbFire(p,"smooth_classes:rapidfire_projectile",multiplier);
         if(fired){
             int count=RAPIDFIRE_ARROW_COUNT.merge(p.getUuid(),1,Integer::sum);
-            if(pts>=30&&count%4==0)increment(p,SmoothEffects.MARKSMANSHIP,60,1,8);
+            if(pts>=60&&count%2==0)increment(p,SmoothEffects.MARKSMANSHIP,80,1,12);
+            else if(pts>=30&&count%4==0)increment(p,SmoothEffects.MARKSMANSHIP,60,1,8);
         }
     }
+
     private static void cataclysm(LivingEntity e){
         if(!(e instanceof ServerPlayerEntity p))return;
         var fx=p.getStatusEffect(SmoothEffects.CATACLYSM);if(fx==null)return;
         int pts=PuffishSkillsIntegration.countUnlockedSkills(PuffishSkillsIntegration.ASCENDANCY,p);
-        int elapsed=70-fx.getDuration(),frequency=pts>=30?14:20;
+        int elapsed=70-fx.getDuration(),frequency=pts>=60?10:pts>=30?14:20;
         if(elapsed<0||elapsed%frequency!=0)return;
         int distance=6+(elapsed/frequency)*4;
         Vec3d look=p.getRotationVec(1F);
         Vec3d center=p.getPos().add(look.x*distance,0,look.z*distance);
         double fire=net.spell_power.api.SpellPower.getSpellPower(net.spell_power.api.SpellSchools.FIRE,p).baseValue();
         double frost=net.spell_power.api.SpellPower.getSpellPower(net.spell_power.api.SpellSchools.FROST,p).baseValue();
-        String spell=fire>=frost?"smooth_classes:cataclysm_meteor":"smooth_classes:cataclysm_comet";
-        SkillFx.sound(p,"spell_energy",.5F,1.1F);
-        if(InternalSpellRuntime.atPosition(p,spell,center,1F)&&pts>=30)increment(p,SmoothEffects.SPELLFORGED,60,1,5);
+        SkillFx.sound(p,"spell_energy",.5F,pts>=60?1.35F:1.1F);
+        boolean launched;
+        if(pts>=60){
+            boolean a=InternalSpellRuntime.atPosition(p,"smooth_classes:cataclysm_meteor",center,1.25F);
+            boolean b=InternalSpellRuntime.atPosition(p,"smooth_classes:cataclysm_comet",center,1.25F);
+            launched=a||b;
+        }else{
+            String spell=fire>=frost?"smooth_classes:cataclysm_meteor":"smooth_classes:cataclysm_comet";
+            launched=InternalSpellRuntime.atPosition(p,spell,center,1F);
+        }
+        if(launched&&pts>=60)increment(p,SmoothEffects.SPELLFORGED,100,2,10);
+        else if(launched&&pts>=30)increment(p,SmoothEffects.SPELLFORGED,60,1,5);
     }
+
     private static void ghostwalk(LivingEntity e){
         if(!(e instanceof ServerPlayerEntity p))return;
         StatusEffectInstance fx=p.getStatusEffect(SmoothEffects.GHOSTWALK);if(fx==null)return;
         int dur=fx.getDuration(),pts=PuffishSkillsIntegration.countUnlockedSkills(PuffishSkillsIntegration.ASCENDANCY,p);
-        SkillFx.orbit(p,ParticleTypes.SMOKE,1,20);
+        SkillFx.orbit(p,ParticleTypes.SMOKE,pts>=60?1.6:1,pts>=60?36:20);
         if(dur>10){
             double groundY=p.getY()-3;
             for(int i=0;i<8;i++) if(!p.getWorld().getBlockState(p.getBlockPos().down(i)).isAir()) {
                 groundY=p.getBlockPos().getY()-i+1; break;
             }
-            double lift=Math.min(dur>108?0.42:0.18,
+            double lift=Math.min(dur>(pts>=60?188:108)?0.42:0.18,
                     Math.max(-0.18,(groundY+3-p.getY())*0.35));
-            double forward=dur<=108?Math.min(0.6,0.02D*(111-dur)):0;
+            double forward=dur<=(pts>=60?188:108)?Math.min(pts>=60?.9:.6,0.02D*((pts>=60?191:111)-dur)):0;
             Vec3d look=p.getRotationVector();
             p.setVelocity(look.x*forward,lift,look.z*forward);
             p.setNoGravity(true);p.velocityModified=true;
         }
-        if(dur%10==0){
-            LivingEntity target=nearbyHostiles(p,10).stream().min(java.util.Comparator.comparingDouble(p::squaredDistanceTo)).orElse(null);
-            if(target!=null){
+        int interval=pts>=60?5:10;
+        if(dur%interval==0){
+            double radius=pts>=60?18:10;
+            int limit=pts>=60?2:1;
+            var targets=nearbyHostiles(p,radius).stream().sorted(java.util.Comparator.comparingDouble(p::squaredDistanceTo)).limit(limit).toList();
+            for(LivingEntity target:targets){
+                double coefficient=(.35+.0075*AscendancyBalance.points(pts))*(pts>=60?1.75:1.0);
                 float damage=(float)(Math.max(p.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE),
-                        Math.max(SpellPowerRuntime.soul(p,1),SpellPowerRuntime.arcane(p,1)))*(.35+.0075*AscendancyBalance.points(pts)));
+                        Math.max(SpellPowerRuntime.soul(p,1),SpellPowerRuntime.arcane(p,1)))*coefficient);
                 int previous=target.timeUntilRegen;boolean hit;
                 try{target.timeUntilRegen=0;hit=target.damage(p.getDamageSources().playerAttack(p),damage);}finally{target.timeUntilRegen=previous;}
-                SkillFx.beam(p,target,ParticleTypes.SOUL,24);
-                if(hit&&pts>=30)p.heal(Math.min(p.getMaxHealth()*.05F,damage*.25F));
+                SkillFx.beam(p,target,ParticleTypes.SOUL,pts>=60?36:24);
+                if(hit&&pts>=60)p.heal(Math.min(p.getMaxHealth()*.10F,damage*.50F));
+                else if(hit&&pts>=30)p.heal(Math.min(p.getMaxHealth()*.05F,damage*.25F));
             }
         }
     }
+
     private static void skywardSunder(LivingEntity e){
         if(!(e instanceof ServerPlayerEntity p))return;
         StatusEffectInstance fx=p.getStatusEffect(SmoothEffects.SKYWARD_SUNDER);if(fx==null)return;
         int dur=fx.getDuration(),pts=PuffishSkillsIntegration.countUnlockedSkills(PuffishSkillsIntegration.ASCENDANCY,p);
-        double damageModifier=1D+0.02D*AscendancyBalance.points(pts);
+        double damageModifier=pts>=60?3D:1D+0.02D*AscendancyBalance.points(pts);
         if(dur==42){
             org.marj4n.smooth_classes.runtime.InternalSpellRuntime.dumbFire(p,"smooth_classes:skyward_sunder",1F);
             SkillFx.sound(p,"object_impact_thud_repeat",0.6F,1.0F);
@@ -666,15 +703,17 @@ public final class EffectBehaviorRuntime {
         if(slash){
             float damage=(float)(Math.max(p.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE),
                     Math.max(SpellPowerRuntime.arcane(p,1),Math.max(SpellPowerRuntime.fire(p,1),SpellPowerRuntime.frost(p,1))))*damageModifier);
-            for(LivingEntity target:nearbyHostiles(p,2)){
+            for(LivingEntity target:nearbyHostiles(p,pts>=60?5:2)){
+                if(pts>=60)target.addStatusEffect(new StatusEffectInstance(SmoothEffects.DEATH_MARK,120,0,false,false,true));
                 target.timeUntilRegen=0;target.damage(p.getDamageSources().playerAttack(p),damage);target.timeUntilRegen=0;
                 target.setVelocity(p.getVelocity());target.velocityModified=true;
-                SkillFx.plane(p,ParticleTypes.CLOUD,p.getBlockPos(),1,0,1,0);
+                if(pts>=60&&dur==1){target.addStatusEffect(new StatusEffectInstance(SmoothEffects.IMMOBILIZE,40,0,false,false,true));target.addVelocity(0,.8,0);}
+                SkillFx.plane(p,ParticleTypes.CLOUD,p.getBlockPos(),pts>=60?3:1,0,1,0);
             }
         }
-        if(dur>30&&dur%2==0)for(LivingEntity target:nearbyHostiles(p,2)){
-            if(pts>=30)target.addStatusEffect(new StatusEffectInstance(SmoothEffects.DEATH_MARK,60,0,false,false,true));
-            target.timeUntilRegen=0;target.damage(p.getDamageSources().playerAttack(p),0.5F);target.timeUntilRegen=0;
+        if(dur>30&&dur%2==0)for(LivingEntity target:nearbyHostiles(p,pts>=60?3.5:2)){
+            if(pts>=30)target.addStatusEffect(new StatusEffectInstance(SmoothEffects.DEATH_MARK,pts>=60?120:60,0,false,false,true));
+            target.timeUntilRegen=0;target.damage(p.getDamageSources().playerAttack(p),pts>=60?2.0F:0.5F);target.timeUntilRegen=0;
             target.setVelocity(p.getVelocity());target.velocityModified=true;
         }
     }
@@ -759,6 +798,7 @@ public final class EffectBehaviorRuntime {
         SkillFx.sound(p,"hit_03",1F,1.1F);
         StatusEffectInstance aegis=p.getStatusEffect(SmoothEffects.GOLDEN_AEGIS);
         if(aegis==null)return;
+        int pts=PuffishSkillsIntegration.countUnlockedSkills(PuffishSkillsIntegration.ASCENDANCY,p);
         int stacks=aegis.getAmplifier();
         String spell;
         int consume;
@@ -767,12 +807,16 @@ public final class EffectBehaviorRuntime {
         else if(tier==3){spell="righteous_shield_projectile_3";consume=10;}
         else if(tier==2){spell="righteous_shield_projectile_2";consume=5;}
         else {spell="righteous_shield_projectile";consume=stacks+1;}
-        if(!InternalSpellRuntime.target(p,"smooth_classes:"+spell,p,1F))return;
+        float multiplier=pts>=60?1.25F:1F;
+        if(!InternalSpellRuntime.target(p,"smooth_classes:"+spell,p,multiplier))return;
+        if(pts>=60)InternalSpellRuntime.target(p,"smooth_classes:"+spell,p,multiplier);
+        if(pts>=60)consume=Math.max(1,(consume+1)/2);
         int remaining=(stacks+1)-consume;
         p.removeStatusEffect(SmoothEffects.GOLDEN_AEGIS);
         if(remaining>0)p.addStatusEffect(new StatusEffectInstance(SmoothEffects.GOLDEN_AEGIS,
                 aegis.getDuration(),remaining-1,false,false,true));
     }
+
 
 
     private static LivingEntity lookTarget(ServerPlayerEntity p,double radius){

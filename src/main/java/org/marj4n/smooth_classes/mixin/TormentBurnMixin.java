@@ -17,10 +17,10 @@ import java.util.*;
 @Mixin(LivingEntity.class)
 public abstract class TormentBurnMixin implements TormentBurnAccess {
     @Unique private final Map<UUID,NbtCompound> smooth$burns=new HashMap<>();
-    @Override public void smooth$ignite(UUID cast,UUID owner,long expires,float damage){
+    @Override public void smooth$ignite(UUID cast,UUID owner,long expires,float damage,float coefficient){
         // Re-entering the same cast never extends its absolute expiry.
         if(smooth$burns.containsKey(cast))return;
-        var n=new NbtCompound();n.putUuid("Cast",cast);if(owner!=null)n.putUuid("Owner",owner);n.putLong("Expires",expires);n.putFloat("Damage",damage);smooth$burns.put(cast,n);
+        var n=new NbtCompound();n.putUuid("Cast",cast);if(owner!=null)n.putUuid("Owner",owner);n.putLong("Expires",expires);n.putFloat("Damage",damage);n.putFloat("Coefficient",coefficient);smooth$burns.put(cast,n);
     }
     @Inject(method="tick",at=@At("TAIL"))
     private void smooth$burnTick(CallbackInfo ci){
@@ -34,7 +34,8 @@ public abstract class TormentBurnMixin implements TormentBurnAccess {
         if(e.age%20==0){
             // Overlapping casts retain independent expiry; only the strongest live burn deals damage.
             var strongest=smooth$burns.values().stream().max(Comparator.comparingDouble(n->n.getFloat("Damage"))).orElseThrow();
-            TormentRuntime.hurt(e,strongest.containsUuid("Owner")?strongest.getUuid("Owner"):null,strongest.getFloat("Damage"),TormentRuntime.BURN_COEFFICIENT);
+            float coefficient=strongest.contains("Coefficient")?strongest.getFloat("Coefficient"):TormentRuntime.BURN_COEFFICIENT;
+            TormentRuntime.hurt(e,strongest.containsUuid("Owner")?strongest.getUuid("Owner"):null,strongest.getFloat("Damage"),coefficient);
         }
     }
     @Inject(method="writeCustomDataToNbt",at=@At("TAIL"))
