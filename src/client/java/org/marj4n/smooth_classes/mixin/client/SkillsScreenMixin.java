@@ -8,23 +8,31 @@ import net.minecraft.util.Identifier;
 import net.puffish.skillsmod.client.data.ClientCategoryData;
 import net.puffish.skillsmod.client.gui.SkillsScreen;
 import net.puffish.skillsmod.util.Bounds2i;
-import org.marj4n.smooth_classes.client.gui.TextureState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 
 @Mixin(SkillsScreen.class)
 public abstract class SkillsScreenMixin {
 
     @Unique
-    Map<Identifier, TextureState> textureStates = new HashMap<>();
+    private static final boolean PROMINENT_LOADED = FabricLoader.getInstance().isModLoaded("prominent");
+    @Unique
+    private static final Identifier OMINOUS_EYE = new Identifier("smooth_classes", "textures/backgrounds/decor/ominous_eye.png");
+    @Unique
+    private static final int EYE_FRAME_COUNT = 8;
+    @Unique
+    private static final int EYE_FRAME_SIZE = 64;
+    @Unique
+    private static final int EYE_SHEET_WIDTH = EYE_FRAME_COUNT * EYE_FRAME_SIZE;
     @Unique
     private final Identifier cloudsTexture1 = new Identifier("smooth_classes", "textures/backgrounds/decor/clouds.png");
     @Unique
@@ -36,21 +44,18 @@ public abstract class SkillsScreenMixin {
 
     @Unique
     private Identifier selectedCloudsTexture = null;
+    @Unique
+    private final List<EyeManifestation> activeEyes = new ArrayList<>();
+    @Unique
+    private long nextEyeSpawnAt = 0L;
 
     @Unique
     private void selectRandomCloudsTexture() {
-        Random random = new Random();
-        int textureIndex = random.nextInt(3);
+        int textureIndex = ThreadLocalRandom.current().nextInt(3);
         switch (textureIndex) {
-            case 0:
-                selectedCloudsTexture = cloudsTexture1;
-                break;
-            case 1:
-                selectedCloudsTexture = cloudsTexture2;
-                break;
-            case 2:
-                selectedCloudsTexture = cloudsTexture3;
-                break;
+            case 0 -> selectedCloudsTexture = cloudsTexture1;
+            case 1 -> selectedCloudsTexture = cloudsTexture2;
+            default -> selectedCloudsTexture = cloudsTexture3;
         }
     }
 
@@ -112,93 +117,145 @@ public abstract class SkillsScreenMixin {
         Bounds2i bounds = accessor.getBounds();
 
         // Don't draw star systems when prominent is loaded
-        if (!FabricLoader.getInstance().isModLoaded("prominent"))
+        if (!PROMINENT_LOADED)
             drawParallaxTextures(context, bounds);
     }
 
     @Unique
     private void drawParallaxTextures(DrawContext context, Bounds2i bounds) {
-
         long currentTime = System.currentTimeMillis();
-
-        for(int i = 1; i <= 30; i++){
-            Identifier parallaxTexture = new Identifier("smooth_classes", String.format("textures/backgrounds/decor/planet_%02d.png", i));
-            updateAndDrawAnimatedTexture(context, parallaxTexture, bounds, currentTime);
-        }
-
+        updateEyes(bounds, currentTime);
+        drawOminousEyes(context, bounds, currentTime);
         updateAndDrawCloudsTexture(context, bounds);
     }
 
     @Unique
-    private void updateAndDrawAnimatedTexture(DrawContext context, Identifier texture, Bounds2i bounds, long currentTime) {
-        int frameCount = 120;
-        int spriteSheetWidth = 7680;
-        int frameWidth = spriteSheetWidth / frameCount;
-        int frameHeight = 64;
+    private void updateEyes(Bounds2i bounds, long currentTime) {
+        Iterator<EyeManifestation> iterator = activeEyes.iterator();
+        while (iterator.hasNext()) {
+            if (iterator.next().isExpired(currentTime)) {
+                iterator.remove();
+            }
+        }
 
-        // Initialize texture state if not present
-        textureStates.computeIfAbsent(texture, k -> {
-            float initialX = bounds.min().x + (float) Math.random() * (bounds.width() - frameWidth);
-            float initialY = bounds.min().y + (float) Math.random() * (bounds.height() - frameHeight);
-            float scale = (Math.max(0.4f, (float) (Math.random() * 5f)));
-            float speed = Math.min(0.04f, (float) ((Math.random() * 0.08f) / scale));
-            long animationSpeed = Math.max(240, (long) (Math.random() * 300 + (10 * scale)));
-            float brightness = Math.min(0.5f, 0.1f + (float) Math.random());
-            TextureState newState = new TextureState(initialX, bounds.min().y, speed, scale, animationSpeed, brightness);
-            float[] newPosition = updatePlanetPosition(initialX, initialY, bounds, speed, scale);
-            newState.x = newPosition[0];
-            newState.y = newPosition[1];
-            return newState;
-        });
+        if (nextEyeSpawnAt == 0L) {
+            nextEyeSpawnAt = currentTime + ThreadLocalRandom.current().nextLong(700L, 1800L);
+        }
 
-        TextureState state = textureStates.get(texture);
-        int currentFrame = (int) ((currentTime / state.animationSpeed) % frameCount);
-        int u = currentFrame * frameWidth;
-        float[] newPosition = updatePlanetPosition(state.x, state.y, bounds, state.speed, state.scale);
-        state.x = newPosition[0];
-        state.y = newPosition[1];
-        MatrixStack matrixStack = context.getMatrices();
-        matrixStack.push();
-        matrixStack.scale(state.scale, state.scale, 1.0f);
+        if (currentTime < nextEyeSpawnAt || activeEyes.size() >= 3) {
+            return;
+        }
 
-        int boundsWidth = bounds.width();
-        int scaledWidth = (int) (frameWidth * state.scale);
-        float effectiveXCenter = state.x + scaledWidth / 2.0f;
-        float distanceToLeftEdge = effectiveXCenter - bounds.min().x;
-        float distanceToRightEdge = bounds.max().x - effectiveXCenter;
-        float effectiveEdgeDistance = Math.min(distanceToLeftEdge, distanceToRightEdge);
-        float edgeFactor = effectiveEdgeDistance / (boundsWidth / 2.0f);
-        float dynamicBrightness = state.brightness * edgeFactor;
-        dynamicBrightness = Math.max(dynamicBrightness, 0.0f);
+        ThreadLocalRandom random = ThreadLocalRandom.current();
+        int capacity = 3 - activeEyes.size();
+        int burstMax = Math.min(capacity, activeEyes.isEmpty() ? 3 : 2);
+        int burst = random.nextInt(1, burstMax + 1);
 
-        RenderSystem.setShaderColor(dynamicBrightness, dynamicBrightness, dynamicBrightness, 1.0F);
-        context.drawTexture(texture, (int) state.x, (int) state.y, u, 0, frameWidth, frameHeight, spriteSheetWidth, frameHeight);
+        for (int i = 0; i < burst; i++) {
+            float scale = random.nextFloat(1.2F, 2.15F);
+            int renderSize = Math.round(EYE_FRAME_SIZE * scale);
+            int minX = bounds.min().x + 16;
+            int maxX = Math.max(minX, bounds.max().x - renderSize - 16);
+            int minY = bounds.min().y + 8;
+            int maxY = Math.max(minY, bounds.max().y - renderSize - 8);
+            int x = random.nextInt(minX, maxX + 1);
+            int y = random.nextInt(minY, maxY + 1);
+            long delay = i == 0 ? 0L : random.nextLong(90L, 260L);
+            long spawnAt = currentTime + delay;
+            long life = random.nextLong(1800L, 3600L);
+            activeEyes.add(new EyeManifestation(x, y, scale, spawnAt, life));
+        }
 
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        matrixStack.pop();
+        nextEyeSpawnAt = currentTime + random.nextLong(activeEyes.isEmpty() ? 600L : 1200L, 3200L);
     }
 
     @Unique
-    private float[] updatePlanetPosition(float x, float y, Bounds2i bounds, float moveSpeed, float scale) {
-        int frameCount = 120;
-        int spriteSheetWidth = 7680;
-        int frameWidth = spriteSheetWidth / frameCount;
-        int frameHeight = 64;
-        int scaledWidth = (int) (frameWidth * scale);
-        int scaledHeight = (int) (frameHeight * scale);
-        float newX = x - moveSpeed;
-        float newY = y + moveSpeed;
-        int outOfBoundsMargin = 800;
-
-        boolean outOfBoundsHorizontally = newX + scaledWidth + outOfBoundsMargin < bounds.min().x || newX - outOfBoundsMargin > bounds.max().x;
-        boolean outOfBoundsVertically = newY - outOfBoundsMargin > bounds.max().y;
-
-        if (outOfBoundsHorizontally || outOfBoundsVertically) {
-            newX = bounds.min().x + (float) Math.random() * (bounds.width() - scaledWidth);
-            newY = bounds.min().y - scaledHeight - (float) Math.random() * (scaledHeight + outOfBoundsMargin);
+    private void drawOminousEyes(DrawContext context, Bounds2i bounds, long currentTime) {
+        if (activeEyes.isEmpty()) {
+            return;
         }
 
-        return new float[]{newX, newY};
+        for (EyeManifestation eye : activeEyes) {
+            if (currentTime < eye.spawnAt()) {
+                continue;
+            }
+
+            float alpha = eye.alpha(currentTime);
+            if (alpha <= 0.01F) {
+                continue;
+            }
+
+            int frame = eye.frame(currentTime);
+            int u = frame * EYE_FRAME_SIZE;
+            float pulse = eye.pulse(currentTime);
+
+            MatrixStack matrices = context.getMatrices();
+            matrices.push();
+            matrices.translate(eye.x(), eye.y(), 0.0F);
+            matrices.scale(eye.scale(), eye.scale(), 1.0F);
+
+            RenderSystem.enableBlend();
+            RenderSystem.defaultBlendFunc();
+            RenderSystem.setShaderColor(pulse, pulse * 0.80F, pulse * 0.70F, alpha);
+            context.drawTexture(OMINOUS_EYE, 0, 0, u, 0, EYE_FRAME_SIZE, EYE_FRAME_SIZE, EYE_SHEET_WIDTH, EYE_FRAME_SIZE);
+            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+            RenderSystem.disableBlend();
+            matrices.pop();
+        }
+    }
+
+    @Unique
+    private record EyeManifestation(int x, int y, float scale, long spawnAt, long lifeMs) {
+
+        private static final long FADE_IN_MS = 180L;
+        private static final long FADE_OUT_MS = 280L;
+
+        boolean isExpired(long currentTime) {
+            return currentTime > spawnAt + lifeMs;
+        }
+
+        float alpha(long currentTime) {
+            long age = currentTime - spawnAt;
+            if (age <= 0L) {
+                return 0.0F;
+            }
+            if (age < FADE_IN_MS) {
+                return Math.min(1.0F, age / (float) FADE_IN_MS);
+            }
+
+            long remaining = (spawnAt + lifeMs) - currentTime;
+            if (remaining < FADE_OUT_MS) {
+                return Math.max(0.0F, remaining / (float) FADE_OUT_MS);
+            }
+            return 0.94F;
+        }
+
+        float pulse(long currentTime) {
+            return 0.88F + 0.12F * (float) Math.sin((currentTime + x * 17L + y * 31L) / 210.0D);
+        }
+
+        int frame(long currentTime) {
+            long age = Math.max(0L, currentTime - spawnAt);
+            long local = age % 2600L;
+
+            if (local < 1500L) return 4;
+            if (local < 1560L) return 3;
+            if (local < 1620L) return 2;
+            if (local < 1680L) return 1;
+            if (local < 1760L) return 0;
+            if (local < 1820L) return 1;
+            if (local < 1880L) return 2;
+            if (local < 1940L) return 3;
+            if (local < 2160L) return 4;
+            if (local < 2220L) return 3;
+            if (local < 2280L) return 2;
+            if (local < 2340L) return 1;
+            if (local < 2400L) return 0;
+            if (local < 2460L) return 1;
+            if (local < 2520L) return 2;
+            if (local < 2580L) return 3;
+            return 4;
+        }
     }
 
     @Unique

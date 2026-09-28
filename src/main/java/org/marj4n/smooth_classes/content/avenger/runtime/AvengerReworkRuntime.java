@@ -56,6 +56,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.WeakHashMap;
 
 /**
  * Reworked Avenger gameplay: persistent Death List, vanilla corpse summons,
@@ -69,6 +70,8 @@ public final class AvengerReworkRuntime {
     private static final Map<UUID, DevourChannel> DEVOURS = new HashMap<>();
     private static final Set<UUID> CURTAIN_BYPASS = new HashSet<>();
     private static final Set<UUID> MANUAL_CAPTURED = new HashSet<>();
+    private static final Set<UUID> DEATH_LIST_READY = new HashSet<>();
+    private static final Map<Entity, UUID> SUMMON_OWNER_CACHE = new WeakHashMap<>();
 
     private AvengerReworkRuntime() {}
 
@@ -79,11 +82,17 @@ public final class AvengerReworkRuntime {
             }
             tickDevours(server);
         });
-        ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> DEVOURS.remove(handler.player.getUuid()));
+        ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
+            UUID playerId = handler.player.getUuid();
+            DEVOURS.remove(playerId);
+            DEATH_LIST_READY.remove(playerId);
+        });
         ServerLifecycleEvents.SERVER_STOPPED.register(server -> {
             DEVOURS.clear();
             CURTAIN_BYPASS.clear();
             MANUAL_CAPTURED.clear();
+            DEATH_LIST_READY.clear();
+            SUMMON_OWNER_CACHE.clear();
         });
     }
 
@@ -91,17 +100,20 @@ public final class AvengerReworkRuntime {
         MinecraftServer server = player.getServer();
         if (server == null) return;
 
+        UUID playerId = player.getUuid();
         AvengerDeathListState state = AvengerDeathListState.get(server);
         boolean avenger = AbilityRuntime.isClass(player, AvengerClass.ID);
-        if (avenger) state.awaken(player.getUuid());
+        if (avenger) state.awaken(playerId);
 
-        if (state.hasAwakened(player.getUuid())) {
-            state.refreshCharges(player.getUuid(), System.currentTimeMillis());
-            ensureDeathList(player, state);
+        // The book is persistent, so a full inventory scan and page rebuild does not
+        // need to happen 20 times per second. We refresh immediately on first sight,
+        // then once per second; gameplay events still call refreshDeathListNow().
+        if (state.hasAwakened(playerId)) {
+            boolean firstCheck = DEATH_LIST_READY.add(playerId);
+            if (firstCheck || (player.age % 20) == 0) ensureDeathList(player, state);
         }
 
-        if (!avenger) return;
-        if ((player.age % 5) == 0) tickOwnedSummons(player);
+        if (avenger && (player.age % 5) == 0) tickOwnedSummons(player);
     }
 
     // ---------------------------------------------------------------------
@@ -178,11 +190,11 @@ public final class AvengerReworkRuntime {
         if (book == null) {
             book = createDeathListBook(player, state);
             if (!player.getInventory().insertStack(book)) return;
-        } else if ((player.age % 20) == 0) {
+        } else {
             writeDeathListPages(book, player, state);
             if (firstSlot >= 0) player.getInventory().markDirty();
         }
-        if ((player.age % 20) == 0) player.currentScreenHandler.sendContentUpdates();
+        player.currentScreenHandler.sendContentUpdates();
     }
 
     private static void refreshDeathListNow(ServerPlayerEntity player, AvengerDeathListState state) {
@@ -212,42 +224,102 @@ public final class AvengerReworkRuntime {
         nbt.putBoolean("resolved", true);
         nbt.putInt("generation", 0);
 
-        AvengerDeathListState.PlayerLedger ledger = state.ledger(player.getUuid());
-        AvengerDeathListState.ChargeSnapshot charges = state.refreshCharges(player.getUuid(), System.currentTimeMillis());
-        List<String> pages = new ArrayList<>();
-        pages.add("DEATH LIST\n\nFrom corpses we arise.\n\nH: summon / recall aimed soul\nCharges: "
-                + charges.charges() + "/" + AvengerDeathListState.MAX_SUMMON_CHARGES
-                + (charges.remainingMillis() > 0 ? "\nNext: " + Math.max(1, (charges.remainingMillis() + 999) / 1000) + "s" : "")
-                + "\n\nKill a creature first. Its soul and recipe will then appear here.");
+        UUID playerId = player.getUuid();
+        AvengerDeathListState.PlayerLedger ledger = state.ledger(playerId);
+        AvengerDeathListState.ChargeSnapshot charges = state.refreshCharges(playerId, System.currentTimeMillis());
+        List<Text> pages = new ArrayList<>();
+        pages.add(deathListCover(charges));
 
         List<Map.Entry<String, Integer>> entries = new ArrayList<>(ledger.kills().entrySet());
         entries.removeIf(entry -> !AvengerSummonRecipes.supported(entry.getKey()));
         entries.sort(Comparator.comparing(entry -> AvengerSummonRecipes.friendlyEntityName(entry.getKey())));
 
-        StringBuilder page = new StringBuilder();
-        int onPage = 0;
-        for (Map.Entry<String, Integer> entry : entries) {
-            String id = entry.getKey();
-            AvengerSummonRecipes.Recipe recipe = AvengerSummonRecipes.recipe(id);
-            if (recipe == null) continue;
-            String block = AvengerSummonRecipes.friendlyEntityName(id)
-                    + "\nSouls: " + state.available(player.getUuid(), id)
-                    + " | Slain: " + entry.getValue()
-                    + "\n" + recipe.displayRecipe() + "\n\n";
-            if (onPage >= 3 || page.length() + block.length() > 700) {
-                pages.add(page.toString());
-                page.setLength(0);
-                onPage = 0;
+        if (entries.isEmpty()) {
+            pages.add(Text.empty()
+                    .append(Text.literal("NO SOULS RECORDED\n\n").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
+                    .append(Text.literal("Defeat a supported creature to bind its soul to this book.\n\n")
+                            .formatted(Formatting.GRAY))
+                    .append(Text.literal("Kills made by your bound summons and creatures consumed by Endless Devour also count.")
+                            .formatted(Formatting.DARK_GRAY, Formatting.ITALIC)));
+        } else {
+            var page = Text.empty();
+            int onPage = 0;
+            int pageIndex = 1;
+            for (Map.Entry<String, Integer> entry : entries) {
+                if (onPage == 0) {
+                    page.append(Text.literal("SOUL RECORDS " + pageIndex + "\n")
+                            .formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
+                    page.append(Text.literal("----------------\n").formatted(Formatting.DARK_GRAY));
+                }
+
+                appendSoulRecord(page, playerId, state, entry.getKey(), entry.getValue());
+                onPage++;
+
+                // Two records per page keeps recipes readable on the narrow written-book UI.
+                if (onPage >= 2) {
+                    pages.add(page);
+                    page = Text.empty();
+                    onPage = 0;
+                    pageIndex++;
+                }
             }
-            page.append(block);
-            onPage++;
+            if (onPage > 0) pages.add(page);
         }
-        if (!page.isEmpty()) pages.add(page.toString());
-        if (entries.isEmpty()) pages.add("No names yet.\n\nThe Death List records creatures killed by its Avenger, devoured directly, or slain by bound summons.");
 
         NbtList list = new NbtList();
-        for (String text : pages) list.add(NbtString.of(Text.Serializer.toJson(Text.literal(text))));
+        for (Text page : pages) list.add(NbtString.of(Text.Serializer.toJson(page)));
         nbt.put("pages", list);
+    }
+
+    private static Text deathListCover(AvengerDeathListState.ChargeSnapshot charges) {
+        var page = Text.empty();
+        page.append(Text.literal("DEATH LIST\n").formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
+        page.append(Text.literal("From Corpses We Arise\n\n").formatted(Formatting.GRAY, Formatting.ITALIC));
+
+        page.append(Text.literal("[H] ").formatted(Formatting.GOLD, Formatting.BOLD));
+        page.append(Text.literal("Soul Command\n").formatted(Formatting.DARK_GRAY));
+        page.append(Text.literal("Summon ").formatted(Formatting.GREEN));
+        page.append(Text.literal("hold the listed recipe\n").formatted(Formatting.GRAY));
+        page.append(Text.literal("Recall ").formatted(Formatting.AQUA));
+        page.append(Text.literal("aim at your summon\n\n").formatted(Formatting.GRAY));
+
+        page.append(Text.literal("Charges  ").formatted(Formatting.GOLD));
+        page.append(Text.literal(charges.charges() + "/" + AvengerDeathListState.MAX_SUMMON_CHARGES + "\n")
+                .formatted(Formatting.GREEN, Formatting.BOLD));
+        if (charges.remainingMillis() > 0) {
+            long seconds = Math.max(1L, (charges.remainingMillis() + 999L) / 1000L);
+            page.append(Text.literal("Next charge  ").formatted(Formatting.DARK_GRAY));
+            page.append(Text.literal(seconds + "s\n").formatted(Formatting.AQUA));
+        }
+
+        page.append(Text.literal("\nRULE\n").formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
+        page.append(Text.literal("Kill it first. ").formatted(Formatting.RED));
+        page.append(Text.literal("Ingredients cannot summon a soul that has never entered your Death List.")
+                .formatted(Formatting.GRAY));
+        return page;
+    }
+
+    private static void appendSoulRecord(net.minecraft.text.MutableText page, UUID playerId,
+                                         AvengerDeathListState state, String entityId, int slain) {
+        AvengerSummonRecipes.Recipe recipe = AvengerSummonRecipes.recipe(entityId);
+        if (recipe == null) return;
+
+        page.append(Text.literal("\n" + AvengerSummonRecipes.friendlyEntityName(entityId) + "\n")
+                .formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
+        page.append(Text.literal("Souls ").formatted(Formatting.DARK_GRAY));
+        page.append(Text.literal(String.valueOf(state.available(playerId, entityId))).formatted(Formatting.AQUA, Formatting.BOLD));
+        page.append(Text.literal("   Slain ").formatted(Formatting.DARK_GRAY));
+        page.append(Text.literal(String.valueOf(slain) + "\n").formatted(Formatting.GOLD));
+
+        page.append(Text.literal("Main  ").formatted(Formatting.GREEN, Formatting.BOLD));
+        page.append(Text.literal(AvengerSummonRecipes.friendlyItemName(recipe.mainItemId()) + "\n").formatted(Formatting.GRAY));
+        page.append(Text.literal("Off   ").formatted(Formatting.BLUE, Formatting.BOLD));
+        if (recipe.offhandItemId() == null) {
+            page.append(Text.literal("Not required\n").formatted(Formatting.DARK_GRAY, Formatting.ITALIC));
+        } else {
+            page.append(Text.literal(AvengerSummonRecipes.friendlyItemName(recipe.offhandItemId()) + "\n")
+                    .formatted(Formatting.GRAY));
+        }
     }
 
     // ---------------------------------------------------------------------
@@ -482,6 +554,7 @@ public final class AvengerReworkRuntime {
     private static void tagSummon(LivingEntity entity, UUID owner) {
         entity.addCommandTag(SUMMON_TAG);
         entity.addCommandTag(OWNER_TAG_PREFIX + owner);
+        SUMMON_OWNER_CACHE.put(entity, owner);
     }
 
     public static boolean isAvengerSummon(Entity entity) {
@@ -499,10 +572,18 @@ public final class AvengerReworkRuntime {
 
     public static UUID summonOwnerUuid(Entity entity) {
         if (entity == null || !entity.getCommandTags().contains(SUMMON_TAG)) return null;
+        UUID cached = SUMMON_OWNER_CACHE.get(entity);
+        if (cached != null) return cached;
+
         for (String tag : entity.getCommandTags()) {
             if (!tag.startsWith(OWNER_TAG_PREFIX)) continue;
-            try { return UUID.fromString(tag.substring(OWNER_TAG_PREFIX.length())); }
-            catch (IllegalArgumentException ignored) { return null; }
+            try {
+                UUID owner = UUID.fromString(tag.substring(OWNER_TAG_PREFIX.length()));
+                SUMMON_OWNER_CACHE.put(entity, owner);
+                return owner;
+            } catch (IllegalArgumentException ignored) {
+                return null;
+            }
         }
         return null;
     }
@@ -571,7 +652,13 @@ public final class AvengerReworkRuntime {
         // Vanilla Warden darkness is an ambient pulse, not a normal combat target action.
         // Scrub it from the owner as a second line of defence in case vanilla/modded code
         // reaches a status-effect application path other than the sourced overload mixin.
-        boolean hasOwnedWardenNearby = summons.stream().anyMatch(WardenEntity.class::isInstance);
+        boolean hasOwnedWardenNearby = false;
+        for (LivingEntity summon : summons) {
+            if (summon instanceof WardenEntity) {
+                hasOwnedWardenNearby = true;
+                break;
+            }
+        }
         if (hasOwnedWardenNearby && owner.hasStatusEffect(StatusEffects.DARKNESS)) {
             owner.removeStatusEffect(StatusEffects.DARKNESS);
         }
@@ -730,7 +817,7 @@ public final class AvengerReworkRuntime {
         }
 
         int channelTicks = AbilityRuntime.hasTalent(player, AvengerContent.DEVOUR_FAST.id()) ? 14 : 24;
-        DEVOURS.put(player.getUuid(), new DevourChannel(player, target.getUuid(), target.getWorld().getRegistryKey().getValue(), channelTicks));
+        DEVOURS.put(player.getUuid(), new DevourChannel(target.getUuid(), target.getWorld().getRegistryKey().getValue(), channelTicks));
         player.getServerWorld().playSound(null, player.getBlockPos(), SoundEvents.ENTITY_WARDEN_HEARTBEAT,
                 SoundCategory.PLAYERS, 0.65F, 0.65F);
         return ExecutionResult.success(1, "Endless Devour channeling " + target.getName().getString());
@@ -808,13 +895,11 @@ public final class AvengerReworkRuntime {
     }
 
     private static final class DevourChannel {
-        final ServerPlayerEntity owner;
         final UUID targetId;
         final Identifier worldId;
         int ticksLeft;
 
-        DevourChannel(ServerPlayerEntity owner, UUID targetId, Identifier worldId, int ticksLeft) {
-            this.owner = owner;
+        DevourChannel(UUID targetId, Identifier worldId, int ticksLeft) {
             this.targetId = targetId;
             this.worldId = worldId;
             this.ticksLeft = ticksLeft;
