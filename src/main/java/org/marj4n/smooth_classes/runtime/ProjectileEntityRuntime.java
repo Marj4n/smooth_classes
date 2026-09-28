@@ -64,8 +64,31 @@ public final class ProjectileEntityRuntime {
         if(spell.contains("righteous_hammer_projectile") && p.getFollowedTarget()==null)
             nearest(p,owner,12,true).ifPresent(p::setFollowedTarget);
         if (spell.contains("arcane_slash_projectile")) {
-            ArcaneSlashVisuals.projectile(p, spell.endsWith("_2"));
-            if (p.age > 30) p.discard();
+            boolean transcend = spell.endsWith("_3");
+            ArcaneSlashVisuals.projectile(p, spell.endsWith("_2") || transcend);
+            if (transcend) {
+                // 60+ Arcane Slash has no artificial travel-distance or age cap.
+                // Keep Spell Engine's range guard effectively out of the way, but
+                // never force-load terrain: the slash dies before entering an
+                // unloaded chunk.
+                p.range = 1_000_000_000;
+                // Spell Engine also has a generic ~60 second projectile lifetime.
+                // Keep this specific transcendent slash perpetually young so its
+                // only natural travel limit is loaded-world availability.
+                p.age = 0;
+                if (p.getWorld() instanceof net.minecraft.server.world.ServerWorld world) {
+                    Vec3d next = p.getPos().add(p.getVelocity());
+                    int nextChunkX = net.minecraft.util.math.MathHelper.floor(next.x) >> 4;
+                    int nextChunkZ = net.minecraft.util.math.MathHelper.floor(next.z) >> 4;
+                    long nextChunk = net.minecraft.util.math.ChunkPos.toLong(nextChunkX, nextChunkZ);
+                    if (!world.isChunkLoaded(nextChunk)) {
+                        p.discard();
+                        return;
+                    }
+                }
+            } else if (p.age > 30) {
+                p.discard();
+            }
         }
         if(spell.contains("rapidfire") && p.getFollowedTarget()==null)
             nearest(p,owner,16,true).ifPresent(p::setFollowedTarget);

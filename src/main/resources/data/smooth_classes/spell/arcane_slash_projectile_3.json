@@ -1,6 +1,6 @@
 {
   "school": "ARCANE",
-  "range": 32,
+  "range": 1000000000,
   "tier": 1,
   "learn": {},
   "active": {
