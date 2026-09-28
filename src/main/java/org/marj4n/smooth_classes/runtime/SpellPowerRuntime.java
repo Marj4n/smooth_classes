@@ -4,6 +4,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.spell_power.api.SpellPower;
 import net.spell_power.api.SpellSchool;
 import net.spell_power.api.SpellSchools;
+import org.marj4n.smooth_classes.content.rider.runtime.RiderRuntime;
 
 /**
  * Small boundary around Spell Power. Class code never needs to know the
@@ -21,6 +22,7 @@ public final class SpellPowerRuntime {
     public static double soulBase(ServerPlayerEntity player) { return Math.max(0.0D, SpellPower.getSpellPower(SpellSchools.SOUL, player).baseValue()); }
 
     public static float scaled(SpellSchool school, ServerPlayerEntity player, double multiplier) {
-        return (float) Math.max(0.0D, SpellPower.getSpellPower(school, player).randomValue() * multiplier);
+        float value = (float) Math.max(0.0D, SpellPower.getSpellPower(school, player).randomValue() * multiplier);
+        return value * RiderRuntime.mountedDamageMultiplier(player);
     }
 }

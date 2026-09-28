@@ -6,6 +6,9 @@
     "description": {
       "translate": "text.skills.riderPath.description"
     },
+    "extra_description": {
+      "translate": "text.skills.riderPath.extra_description"
+    },
     "size": 1.4,
     "frame": {
       "type": "texture",

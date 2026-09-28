@@ -254,6 +254,7 @@ public final class SmoothClassesClient implements ClientModInitializer {
         EntityRendererRegistry.register(SmoothEntities.DREADGLARE, DreadglareRenderer::new);
         EntityRendererRegistry.register(SmoothEntities.GREATER_DREADGLARE, GreaterDreadglareRenderer::new);
         EntityRendererRegistry.register(SmoothEntities.WRAITH, WraithRenderer::new);
+        EntityRendererRegistry.register(SmoothEntities.LANCER_IMPALE, org.marj4n.smooth_classes.client.renderer.LancerImpaleRenderer::new);
         EntityRendererRegistry.register(SmoothEntities.RIDER_HORSE, HorseEntityRenderer::new);
         EntityRendererRegistry.register(SmoothEntities.RIDER_DREAD_STEED, RiderDreadSteedRenderer::new);
         EntityRendererRegistry.register(SmoothEntities.RIDER_HIPPOGRYPH, RiderHippogryphRenderer::new);

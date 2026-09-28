@@ -43,6 +43,7 @@ import java.util.UUID;
 /** Server-owned Rider mount and signature runtime. Puffish Skills remains authoritative for unlocks. */
 public final class RiderRuntime {
     private static final Identifier SUMMON_COOLDOWN = SmoothClasses.id("rider_mount_summon");
+    private static final UUID MOUNT_ATTACK_MODIFIER = UUID.fromString("7a62ea1a-c747-4ea1-b56f-0d3859de01ad");
 
     public static int summonCooldownTicks(ServerPlayerEntity player) {
         return Math.max(1, SmoothBalance.Rider.summonCooldown * 20);
@@ -55,6 +56,16 @@ public final class RiderRuntime {
     public static boolean hasActiveMount(ServerPlayerEntity player) {
         MountSession session = MOUNTS.get(player.getUuid());
         return session != null && valid(session.mount);
+    }
+
+    public static boolean isMountedDamageBoostActive(ServerPlayerEntity player) {
+        if (!AbilityRuntime.isClass(player, RiderClass.ID)) return false;
+        MountSession session = MOUNTS.get(player.getUuid());
+        return session != null && valid(session.mount) && player.getVehicle() == session.mount;
+    }
+
+    public static float mountedDamageMultiplier(ServerPlayerEntity player) {
+        return isMountedDamageBoostActive(player) ? 2.0F : 1.0F;
     }
 
     private static final Map<UUID, MountSession> MOUNTS = new HashMap<>();
@@ -179,10 +190,15 @@ public final class RiderRuntime {
         }
 
         boolean riding = player.getVehicle() == s.mount;
-        if (riding) s.everMounted = true;
-        else if (s.everMounted) {
-            cleanup(player.getUuid(), true);
-            return;
+        if (riding) {
+            s.everMounted = true;
+            applyMountedDamageBuff(player);
+        } else {
+            removeMountedDamageBuff(player);
+            if (s.everMounted) {
+                cleanup(player.getUuid(), true);
+                return;
+            }
         }
 
         if (player.age % 20 == 0) {
@@ -444,6 +460,23 @@ public final class RiderRuntime {
         }
     }
 
+    private static void applyMountedDamageBuff(ServerPlayerEntity player) {
+        EntityAttributeInstance attack = player.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE);
+        if (attack == null) return;
+        attack.removeModifier(MOUNT_ATTACK_MODIFIER);
+        attack.addTemporaryModifier(new net.minecraft.entity.attribute.EntityAttributeModifier(
+                MOUNT_ATTACK_MODIFIER,
+                "Smooth Classes Rider Mounted Damage",
+                1.0D,
+                net.minecraft.entity.attribute.EntityAttributeModifier.Operation.MULTIPLY_TOTAL
+        ));
+    }
+
+    private static void removeMountedDamageBuff(ServerPlayerEntity player) {
+        EntityAttributeInstance attack = player.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE);
+        if (attack != null) attack.removeModifier(MOUNT_ATTACK_MODIFIER);
+    }
+
     private static boolean ally(ServerPlayerEntity owner, LivingEntity e) {
         if (e == owner || e == MOUNTS.getOrDefault(owner.getUuid(), MountSession.EMPTY).mount) return true;
         if (owner.isTeammate(e)) return true;
@@ -512,20 +545,30 @@ public final class RiderRuntime {
         MountSession s = MOUNTS.remove(owner);
         if (s == null) return;
         endCharge(s);
+        ServerPlayerEntity player = null;
+        if (s.mount != null && s.mount.getServer() != null) {
+            player = s.mount.getServer().getPlayerManager().getPlayer(owner);
+        }
+        if (player != null) removeMountedDamageBuff(player);
         if (valid(s.mount)) {
             if (particles && s.mount.getWorld() instanceof ServerWorld world) puff(world, s.mount.getPos(), true);
             s.mount.discard();
         }
     }
 
+
     private static void puff(ServerWorld world, Vec3d pos, boolean vanish) {
-        world.spawnParticles(ParticleTypes.POOF, pos.x, pos.y + .7D, pos.z, vanish ? 24 : 18, .65D, .45D, .65D, .055D);
-        world.spawnParticles(ParticleTypes.CLOUD, pos.x, pos.y + .35D, pos.z, vanish ? 10 : 7, .5D, .25D, .5D, .025D);
+        world.spawnParticles(ParticleTypes.POOF, pos.x, pos.y + .7D, pos.z,
+                vanish ? 24 : 18, .65D, .45D, .65D, .055D);
+        world.spawnParticles(ParticleTypes.CLOUD, pos.x, pos.y + .35D, pos.z,
+                vanish ? 10 : 7, .5D, .25D, .5D, .025D);
     }
 
     private static void wind(ServerWorld world, Vec3d pos) {
-        world.spawnParticles(ParticleTypes.CLOUD, pos.x, pos.y + .55D, pos.z, 5, .35D, .3D, .35D, .06D);
-        world.spawnParticles(ParticleTypes.SWEEP_ATTACK, pos.x, pos.y + .8D, pos.z, 1, .15D, .15D, .15D, 0D);
+        world.spawnParticles(ParticleTypes.CLOUD, pos.x, pos.y + .55D, pos.z,
+                5, .35D, .3D, .35D, .06D);
+        world.spawnParticles(ParticleTypes.SWEEP_ATTACK, pos.x, pos.y + .8D, pos.z,
+                1, .15D, .15D, .15D, 0D);
     }
 
     private static final class MountSession {

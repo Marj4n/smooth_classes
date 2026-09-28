@@ -6,6 +6,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import org.marj4n.smooth_classes.runtime.CombatEventRuntime;
 import org.marj4n.smooth_classes.runtime.base.BasePathRuntime;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
@@ -15,6 +16,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ServerPlayerEntity.class)
 public abstract class ServerPlayerEntityMixin {
+    @Unique private boolean smooth_classes$lancerPrepared;
+    @Unique private float smooth_classes$lancerHealthBefore;
+    @Unique private float smooth_classes$lancerAbsorptionBefore;
+    @Unique private int smooth_classes$lancerTargetId = Integer.MIN_VALUE;
+
 
     @Inject(method="tickFallStartPos", at=@At("HEAD"))
     private void smooth_classes$fallTick(CallbackInfo ci) {
@@ -46,7 +52,29 @@ public abstract class ServerPlayerEntityMixin {
 
     @Inject(method="attack", at=@At("HEAD"))
     private void smooth_classes$attack(Entity target, CallbackInfo ci) {
-        CombatEventRuntime.onMeleeAttack((ServerPlayerEntity)(Object)this, target);
+        ServerPlayerEntity player=(ServerPlayerEntity)(Object)this;
+        smooth_classes$lancerPrepared=org.marj4n.smooth_classes.content.lancer.runtime.LancerRuntime.prepareDirectSpearAttack(player);
+        if(target instanceof net.minecraft.entity.LivingEntity living){
+            smooth_classes$lancerTargetId=target.getId();
+            smooth_classes$lancerHealthBefore=living.getHealth();
+            smooth_classes$lancerAbsorptionBefore=living.getAbsorptionAmount();
+        }else smooth_classes$lancerTargetId=Integer.MIN_VALUE;
+        CombatEventRuntime.onMeleeAttack(player, target);
+    }
+
+    @Inject(method="attack", at=@At("RETURN"))
+    private void smooth_classes$afterAttack(Entity target, CallbackInfo ci) {
+        boolean landed=false;
+        if(smooth_classes$lancerPrepared && target instanceof net.minecraft.entity.LivingEntity living
+                && target.getId()==smooth_classes$lancerTargetId){
+            landed=living.getHealth()<smooth_classes$lancerHealthBefore
+                    || living.getAbsorptionAmount()<smooth_classes$lancerAbsorptionBefore
+                    || !living.isAlive();
+        }
+        org.marj4n.smooth_classes.content.lancer.runtime.LancerRuntime.finishDirectSpearAttack(
+                (ServerPlayerEntity)(Object)this, smooth_classes$lancerPrepared, landed);
+        smooth_classes$lancerPrepared=false;
+        smooth_classes$lancerTargetId=Integer.MIN_VALUE;
     }
 
 
