@@ -54,16 +54,16 @@ public final class AscendancyRuntime {
         if (!unlocked(p,ability)) return ExecutionResult.failure(ability+" is not unlocked in Puffish Ascendancy.");
         int pts=points(p);
         return switch (ability) {
-            case "righteous_hammers" -> effect(p,SmoothEffects.RIGHTEOUS_HAMMERS,500,5,ability);
-            case "bone_armor" -> effect(p,SmoothEffects.BONE_ARMOR,400,AscendancyBalance.boneCharges(pts)-1,ability);
+            case "righteous_hammers" -> righteousHammers(p,pts);
+            case "bone_armor" -> effect(p,SmoothEffects.BONE_ARMOR,pts>=60?600:400,AscendancyBalance.boneCharges(pts)-1,ability);
             case "cyclonic_cleave" -> cyclonicCleave(p);
             case "magic_circle" -> BloodRainRuntime.cast(p,pts);
             case "arcane_slash" -> arcaneSlash(p,pts);
             case "agony" -> WhenOnHighRuntime.cast(p,pts);
-            case "torment" -> TormentRuntime.cast(p);
+            case "torment" -> TormentRuntime.cast(p,pts);
             case "rapidfire" -> rapidfire(p,pts);
             case "cataclysm" -> cataclysm(p);
-            case "ghostwalk" -> ghostwalk(p);
+            case "ghostwalk" -> ghostwalk(p,pts);
             case "skyward_sunder" -> effect(p,SmoothEffects.SKYWARD_SUNDER,45,0,ability);
             case "righteous_shield" -> righteousShield(p);
             case "chainbreaker" -> chainbreaker(p,pts);
@@ -76,6 +76,12 @@ public final class AscendancyRuntime {
         return ExecutionResult.success(1,name);
     }
 
+    private static ExecutionResult righteousHammers(ServerPlayerEntity p,int pts){
+        int count=pts>=60?12:pts>=30?8:6;
+        int duration=pts>=60?700:pts>=30?600:500;
+        return effect(p,SmoothEffects.RIGHTEOUS_HAMMERS,duration,count-1,"righteous_hammers");
+    }
+
     private static ExecutionResult rapidfire(ServerPlayerEntity p,int pts){
         if(!(p.getMainHandStack().getItem() instanceof net.minecraft.item.BowItem)
                 && !(p.getMainHandStack().getItem() instanceof net.minecraft.item.CrossbowItem))
@@ -85,9 +91,14 @@ public final class AscendancyRuntime {
     public static void boneArmorHit(ServerPlayerEntity p){
         var fx=p.getStatusEffect(SmoothEffects.BONE_ARMOR);
         if(fx==null)return;
+        int pts=points(p);
         boolean last=fx.getAmplifier()==0;
         decrement(p,SmoothEffects.BONE_ARMOR,1);
-        if(last&&points(p)>=30){
+        if(pts>=60)p.heal(p.getMaxHealth()*.04F);
+        if(last&&pts>=60){
+            p.addStatusEffect(new StatusEffectInstance(SmoothEffects.BARRIER,100,2,false,false,true));
+            p.addStatusEffect(new StatusEffectInstance(net.minecraft.entity.effect.StatusEffects.REGENERATION,120,3,false,false,true));
+        }else if(last&&pts>=30){
             p.addStatusEffect(new StatusEffectInstance(SmoothEffects.BARRIER,60,0,false,false,true));
             p.addStatusEffect(new StatusEffectInstance(net.minecraft.entity.effect.StatusEffects.REGENERATION,80,1,false,false,true));
         }
@@ -137,9 +148,10 @@ public final class AscendancyRuntime {
         return cast?ExecutionResult.success(1,"cataclysm"):ExecutionResult.failure("Cataclysm spell unavailable.");
     }
 
-    private static ExecutionResult ghostwalk(ServerPlayerEntity p){
-        p.addStatusEffect(new StatusEffectInstance(SmoothEffects.GHOSTWALK,120,0,false,false,true));
-        p.addStatusEffect(new StatusEffectInstance(net.minecraft.entity.effect.StatusEffects.SPEED,120,2,false,false,true));
+    private static ExecutionResult ghostwalk(ServerPlayerEntity p,int pts){
+        int duration=pts>=60?200:120;
+        p.addStatusEffect(new StatusEffectInstance(SmoothEffects.GHOSTWALK,duration,0,false,false,true));
+        p.addStatusEffect(new StatusEffectInstance(net.minecraft.entity.effect.StatusEffects.SPEED,duration,pts>=60?3:2,false,false,true));
         return ExecutionResult.success(1,"ghostwalk");
     }
 
@@ -155,9 +167,17 @@ public final class AscendancyRuntime {
         for(StatusEffectInstance e:p.getStatusEffects())
             if(e.getEffectType().getCategory()==StatusEffectCategory.HARMFUL)remove.add(e.getEffectType());
         remove.forEach(p::removeStatusEffect);
-        increment(p,SmoothEffects.MIGHT,160,1+AscendancyBalance.points(pts)/10,19);
-        increment(p,SmoothEffects.MARKSMANSHIP,160,1+AscendancyBalance.points(pts)/10,19);
-        if(pts>=30){
+        int stacks=pts>=60?10:1+AscendancyBalance.points(pts)/10;
+        increment(p,SmoothEffects.MIGHT,160,stacks,19);
+        increment(p,SmoothEffects.MARKSMANSHIP,160,stacks,19);
+        if(pts>=60){
+            p.addStatusEffect(new StatusEffectInstance(net.minecraft.entity.effect.StatusEffects.RESISTANCE,160,2,false,false,true));
+            p.addStatusEffect(new StatusEffectInstance(net.minecraft.entity.effect.StatusEffects.STRENGTH,160,2,false,false,true));
+            p.addStatusEffect(new StatusEffectInstance(net.minecraft.entity.effect.StatusEffects.HASTE,160,2,false,false,true));
+            p.addStatusEffect(new StatusEffectInstance(net.minecraft.entity.effect.StatusEffects.SPEED,160,2,false,false,true));
+            p.addStatusEffect(new StatusEffectInstance(net.minecraft.entity.effect.StatusEffects.ABSORPTION,160,3,false,false,true));
+            p.addStatusEffect(new StatusEffectInstance(SmoothEffects.BARRIER,100,2,false,false,true));
+        }else if(pts>=30){
             p.addStatusEffect(new StatusEffectInstance(net.minecraft.entity.effect.StatusEffects.RESISTANCE,80,1,false,false,true));
             p.addStatusEffect(new StatusEffectInstance(SmoothEffects.BARRIER,60,0,false,false,true));
         }
@@ -192,17 +212,20 @@ public final class AscendancyRuntime {
         }
     }
 
-    /** >29 ascendancy points grants one Golden Aegis stack every 200 ticks. */
+    /** 30+ passively regenerates Aegis; 60+ accelerates it to one stack every 2 seconds. */
     public static void serverTick(ServerPlayerEntity p){
-        if (p.age % 200 != 0 || !unlocked(p,"righteous_shield")) return;
-        int points = points(p);
-        if (points > 29) increment(p,SmoothEffects.GOLDEN_AEGIS,2400,1,15+points/10);
+        if(!unlocked(p,"righteous_shield"))return;
+        int pts=points(p);
+        if(pts<30)return;
+        int interval=pts>=60?40:200;
+        if(p.age%interval!=0)return;
+        increment(p,SmoothEffects.GOLDEN_AEGIS,2400,1,pts>=60?30:15+pts/10);
     }
 
     public static void shieldHit(ServerPlayerEntity p){
         if (!unlocked(p,"righteous_shield")) return;
-        int points = points(p);
-        increment(p,SmoothEffects.GOLDEN_AEGIS,2400,1,15+points/10);
+        int pts=points(p);
+        increment(p,SmoothEffects.GOLDEN_AEGIS,2400,1,pts>=60?30:15+pts/10);
     }
 
     private static float highestSpellPower(ServerPlayerEntity p){

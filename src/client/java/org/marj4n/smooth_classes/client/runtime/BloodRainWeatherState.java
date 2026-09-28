@@ -26,7 +26,7 @@ public final class BloodRainWeatherState {
         refresh(world);
 
         for (BloodRainEntity storm : ACTIVE_STORMS) {
-            if (!storm.isRemoved() && BloodRainEntity.inside(x - storm.getX(), z - storm.getZ())) {
+            if (!storm.isRemoved() && storm.inside(x - storm.getX(), z - storm.getZ())) {
                 return true;
             }
         }

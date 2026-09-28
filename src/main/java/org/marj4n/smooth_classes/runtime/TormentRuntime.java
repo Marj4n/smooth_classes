@@ -36,7 +36,7 @@ public final class TormentRuntime {
         if(damage<=0)return;
         target.damage(new TormentDamageSource(world,caster),damage);
     }
-    public static ExecutionResult cast(ServerPlayerEntity p) {
+    public static ExecutionResult cast(ServerPlayerEntity p,int points) {
         var world=p.getServerWorld();
         Vec3d eye=p.getEyePos(), end=eye.add(p.getRotationVec(1).multiply(24));
         var hit=world.raycast(new RaycastContext(eye,end,RaycastContext.ShapeType.COLLIDER,RaycastContext.FluidHandling.NONE,p));
@@ -54,7 +54,14 @@ public final class TormentRuntime {
         var field=SmoothEntities.TORMENT_FIELD.create(world);
         if(field==null)return ExecutionResult.failure("Cannot summon Torment here.");
         field.setPosition(floor.getPos().add(0,.04,0));
-        field.configure(p.getUuid(),now(world),scaledDamage(net.spell_power.api.SpellPower.getSpellPower(net.spell_power.api.SpellSchools.FIRE,p).baseValue(),BURN_COEFFICIENT),scaledDamage(net.spell_power.api.SpellPower.getSpellPower(net.spell_power.api.SpellSchools.FIRE,p).baseValue(),BLAST_COEFFICIENT));
+        float burnCoefficient=points>=60?.30F:points>=30?.18F:BURN_COEFFICIENT;
+        float blastCoefficient=points>=60?1.80F:points>=30?1.20F:BLAST_COEFFICIENT;
+        int blasts=points>=60?7:points>=30?5:3;
+        double radius=points>=60?5.0D:points>=30?3.5D:2.5D;
+        int duration=points>=60?4800:DURATION;
+        double base=net.spell_power.api.SpellPower.getSpellPower(net.spell_power.api.SpellSchools.FIRE,p).baseValue();
+        field.configure(p.getUuid(),now(world),scaledDamage(base,burnCoefficient),scaledDamage(base,blastCoefficient),
+                burnCoefficient,blastCoefficient,blasts,radius,duration,points>=60);
         if(!world.spawnEntity(field))return ExecutionResult.failure("Cannot summon Torment here.");
         return ExecutionResult.success(1,"torment");
     }

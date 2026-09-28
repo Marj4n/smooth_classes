@@ -29,10 +29,11 @@ public final class WhenOnHighRuntime {
         final Vec3d origin;
         final boolean oldGravity,oldInvulnerable;
         final int width;
+        final int points;
         final HighCastSequence sequence=new HighCastSequence();
         Vec3d impact;
         HighBeamEntity beam;
-        Cast(ServerPlayerEntity p,LivingEntity t,int points){caster=p;world=p.getServerWorld();target=t;origin=p.getPos();impact=t.getPos();oldGravity=p.hasNoGravity();oldInvulnerable=p.isInvulnerable();width=points>=30?3:1;}
+        Cast(ServerPlayerEntity p,LivingEntity t,int points){caster=p;world=p.getServerWorld();target=t;origin=p.getPos();impact=t.getPos();oldGravity=p.hasNoGravity();oldInvulnerable=p.isInvulnerable();this.points=points;width=points>=60?7:points>=30?3:1;}
     }
     public static boolean active(ServerPlayerEntity p){return ACTIVE.containsKey(p.getUuid());}
     public static boolean ownsBeam(HighBeamEntity beam){var cast=ACTIVE.get(beam.owner);return cast!=null&&cast.beam==beam;}
@@ -82,7 +83,7 @@ public final class WhenOnHighRuntime {
                 if(!cast.world.spawnEntity(cast.beam)){finish(cast,true);return;}
             }
             cast.beam.setPosition(cast.impact);
-            if(cast.sequence.pulse())pulse(cast);
+            if(cast.sequence.pulse()||(cast.points>=60&&cast.sequence.beamTicks%2==0))pulse(cast);
             if(cast.sequence.beamTicks%20==0)cast.world.playSound(null,BlockPos.ofFloored(cast.impact),SoundEvents.BLOCK_BEACON_AMBIENT,SoundCategory.PLAYERS,1.1F,1.6F);
         }else if(cast.beam!=null){cast.beam.discard();cast.beam=null;}
         if(cast.sequence.phase==HighCastSequence.Phase.DONE)finish(cast,true);
@@ -107,7 +108,8 @@ public final class WhenOnHighRuntime {
                 try {
                     if(school.damageType==null||cast.world.getRegistryManager().get(RegistryKeys.DAMAGE_TYPE).getOrEmpty(school.damageType).isEmpty())continue;
                     var power=SpellPower.getSpellPower(school,p);
-                    float damage=(float)(power.randomValue(SpellPower.getVulnerability(target,school))*PULSE_COEFFICIENT*schoolScale);
+                    float coefficient=cast.points>=60?PULSE_COEFFICIENT*2F:PULSE_COEFFICIENT;
+                    float damage=(float)(power.randomValue(SpellPower.getVulnerability(target,school))*coefficient*schoolScale);
                     if(!Float.isFinite(damage)||damage<=0)continue;
                     int previousImmunity=target.timeUntilRegen;
                     try{target.timeUntilRegen=0;hit|=target.damage(SpellDamageSource.create(school,p),damage);}

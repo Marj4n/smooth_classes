@@ -40,17 +40,21 @@ public final class RighteousHammerChargeRuntime {
         if (!HITS_THIS_TICK.add(new HitKey(owner.getUuid(),target.getUuid()))) return;
         StatusEffectInstance active=owner.getStatusEffect(SmoothEffects.RIGHTEOUS_HAMMERS);
         if (active==null) return;
-        int remaining=active.getAmplifier();
-        boolean launched;
+        int total=active.getAmplifier()+1;
+        int pts=AscendancyRuntime.points(owner);
+        int wanted=pts>=60?2:1;
+        float multiplier=pts>=60?1.50F:pts>=30?1.25F:1.0F;
+        int launchedCount=0;
         LAUNCHING.set(true);
         try {
-            var before=owner.getWorld().getEntitiesByClass(SpellProjectile.class,
-                    owner.getBoundingBox().expand(6), p->p.getOwner()==owner).stream()
-                    .map(net.minecraft.entity.Entity::getUuid).collect(java.util.stream.Collectors.toSet());
-            launched=InternalSpellRuntime.target(owner,"smooth_classes:righteous_hammer_projectile",target,1F);
-            if (launched) {
-                int index=5-remaining;
-                double angle=Math.toRadians(owner.getWorld().getTime()*9.0-45.0+index*(360.0/(remaining+1)));
+            for(int j=0;j<Math.min(wanted,total);j++){
+                var before=owner.getWorld().getEntitiesByClass(SpellProjectile.class,
+                        owner.getBoundingBox().expand(6), p->p.getOwner()==owner).stream()
+                        .map(net.minecraft.entity.Entity::getUuid).collect(java.util.stream.Collectors.toSet());
+                boolean launched=InternalSpellRuntime.target(owner,"smooth_classes:righteous_hammer_projectile",target,multiplier);
+                if(!launched)break;
+                launchedCount++;
+                double angle=Math.toRadians(owner.getWorld().getTime()*9.0-45.0+j*(360.0/Math.max(1,total)));
                 double x=owner.getX()-Math.sin(angle)*3.0;
                 double y=owner.getY()+owner.getHeight()*0.5;
                 double z=owner.getZ()-Math.cos(angle)*3.0;
@@ -62,14 +66,15 @@ public final class RighteousHammerChargeRuntime {
                     projectile.teleport(x,y,z);
                     projectile.setFollowedTarget(target);
                     var direction=target.getEyePos().subtract(x,y,z).normalize();
-                    projectile.setVelocity(direction.multiply(1.2));
+                    projectile.setVelocity(direction.multiply(pts>=60?1.8:pts>=30?1.5:1.2));
                     projectile.velocityModified=true;
                 }
             }
         } finally { LAUNCHING.set(false); }
-        if (!launched) return;
+        if (launchedCount<=0) return;
+        int left=total-launchedCount;
         owner.removeStatusEffect(SmoothEffects.RIGHTEOUS_HAMMERS);
-        if (remaining>0) owner.addStatusEffect(new StatusEffectInstance(SmoothEffects.RIGHTEOUS_HAMMERS,
-                active.getDuration(),remaining-1,false,false,true));
+        if(left>0)owner.addStatusEffect(new StatusEffectInstance(SmoothEffects.RIGHTEOUS_HAMMERS,
+                active.getDuration(),left-1,false,false,true));
     }
 }
