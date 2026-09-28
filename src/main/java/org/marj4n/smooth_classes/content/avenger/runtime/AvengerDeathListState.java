@@ -5,6 +5,7 @@ import net.minecraft.nbt.NbtElement;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.PersistentState;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -189,8 +190,8 @@ public final class AvengerDeathListState extends PersistentState {
         private final Map<String, Integer> souls = new HashMap<>();
 
         public boolean awakened() { return awakened; }
-        public Map<String, Integer> kills() { return Map.copyOf(kills); }
-        public Map<String, Integer> souls() { return Map.copyOf(souls); }
+        public Map<String, Integer> kills() { return Collections.unmodifiableMap(kills); }
+        public Map<String, Integer> souls() { return Collections.unmodifiableMap(souls); }
         public int charges() { return charges; }
         public long nextChargeAtMillis() { return nextChargeAtMillis; }
     }

@@ -1,5 +1,6 @@
 package org.marj4n.smooth_classes.integration;
 
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
@@ -15,6 +16,10 @@ import java.util.UUID;
 
 /** Thin integration boundary. Puffish Skills remains authoritative for tree UI, points and unlock state. */
 public final class PuffishSkillsIntegration {
+    /** Optional integration: when Smooth Progression is installed it owns stage progression. */
+    private static final boolean SMOOTH_PROGRESSION_LOADED =
+            FabricLoader.getInstance().isModLoaded("smooth_progression");
+
     public static final Identifier TREE = id("tree");
     public static final Identifier ASCENDANCY = id("ascendancy");
     public static final Identifier AVENGER = id("avenger");
@@ -84,10 +89,15 @@ public final class PuffishSkillsIntegration {
     /** parity: Ascendancy becomes visible/unlocked after more than 40
      * unlocked skills in the base tree category. */
     public static void ensureAscendancyUnlocked(ServerPlayerEntity player) {
-        Optional<Category> tree=category(TREE);
-        Optional<Category> asc=category(ASCENDANCY);
-        if(tree.isEmpty() || asc.isEmpty() || asc.get().isUnlocked(player)) return;
-        if(tree.get().streamUnlockedSkills(player).count()>40) asc.get().unlock(player);
+        // Smooth Progression owns the Tree -> Class -> Ascendancy stage gate when present.
+        // Do not auto-unlock Ascendancy here or it could become available before
+        // the selected Smooth Classes class has actually been completed.
+        if (SMOOTH_PROGRESSION_LOADED) return;
+
+        Optional<Category> tree = category(TREE);
+        Optional<Category> asc = category(ASCENDANCY);
+        if (tree.isEmpty() || asc.isEmpty() || asc.get().isUnlocked(player)) return;
+        if (tree.get().streamUnlockedSkills(player).count() > 40) asc.get().unlock(player);
     }
 
     public static Optional<Category> selectedClass(ServerPlayerEntity player) {

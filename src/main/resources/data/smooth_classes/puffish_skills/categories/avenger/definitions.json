@@ -29,7 +29,10 @@
           "passive_skill": "avengerDeathList"
         }
       }
-    ]
+    ],
+    "extra_description": {
+      "translate": "text.skills.avengerDeathList.extra_description"
+    }
   },
   "avengerCurtainCall": {
     "title": {

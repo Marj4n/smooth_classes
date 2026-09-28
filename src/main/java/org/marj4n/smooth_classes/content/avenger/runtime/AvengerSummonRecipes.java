@@ -5,6 +5,7 @@ import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -13,6 +14,8 @@ import java.util.Map;
 /** Vanilla summon ingredients shown by the Death List. */
 public final class AvengerSummonRecipes {
     private static final Map<String, Recipe> RECIPES = new LinkedHashMap<>();
+    private static final Map<String, List<Recipe>> BY_MAIN_ITEM = new HashMap<>();
+    private static final Map<String, String> FRIENDLY_NAMES = new HashMap<>();
 
     static {
         // Passive / utility mobs
@@ -100,6 +103,11 @@ public final class AvengerSummonRecipes {
         // ingredients alone are useless until the Avenger has actually killed one.
         r("wither", "nether_star", "soul_sand");
         r("ender_dragon", "dragon_breath", "end_crystal");
+
+        for (Recipe recipe : RECIPES.values()) {
+            BY_MAIN_ITEM.computeIfAbsent(recipe.mainItemId(), ignored -> new ArrayList<>()).add(recipe);
+        }
+        BY_MAIN_ITEM.replaceAll((ignored, recipes) -> List.copyOf(recipes));
     }
 
     private AvengerSummonRecipes() {}
@@ -112,7 +120,6 @@ public final class AvengerSummonRecipes {
 
     public static Recipe recipe(String entityId) { return RECIPES.get(entityId); }
     public static boolean supported(String entityId) { return RECIPES.containsKey(entityId); }
-    public static List<Recipe> all() { return List.copyOf(RECIPES.values()); }
 
     /**
      * Exact off-hand fusion recipes take precedence. If the off-hand does not form
@@ -121,15 +128,23 @@ public final class AvengerSummonRecipes {
      */
     public static List<Recipe> matching(ItemStack main, ItemStack offhand) {
         String mainId = itemId(main);
+        List<Recipe> candidates = BY_MAIN_ITEM.get(mainId);
+        if (candidates == null || candidates.isEmpty()) return List.of();
+
         String offId = itemId(offhand);
-        List<Recipe> fusion = new ArrayList<>();
-        List<Recipe> mainOnly = new ArrayList<>();
-        for (Recipe recipe : RECIPES.values()) {
-            if (!recipe.mainItemId.equals(mainId)) continue;
-            if (recipe.offhandItemId == null) mainOnly.add(recipe);
-            else if (recipe.offhandItemId.equals(offId)) fusion.add(recipe);
+        List<Recipe> fusion = null;
+        List<Recipe> mainOnly = null;
+        for (Recipe recipe : candidates) {
+            if (recipe.offhandItemId() == null) {
+                if (mainOnly == null) mainOnly = new ArrayList<>(2);
+                mainOnly.add(recipe);
+            } else if (recipe.offhandItemId().equals(offId)) {
+                if (fusion == null) fusion = new ArrayList<>(2);
+                fusion.add(recipe);
+            }
         }
-        return fusion.isEmpty() ? mainOnly : fusion;
+        if (fusion != null && !fusion.isEmpty()) return fusion;
+        return mainOnly == null ? List.of() : mainOnly;
     }
 
     public static String itemId(ItemStack stack) {
@@ -138,14 +153,18 @@ public final class AvengerSummonRecipes {
     }
 
     public static String friendlyEntityName(String entityId) {
-        int colon = entityId.indexOf(':');
-        return titleCase(colon >= 0 ? entityId.substring(colon + 1) : entityId);
+        if (entityId == null || entityId.isBlank()) return "Unknown";
+        return FRIENDLY_NAMES.computeIfAbsent("entity|" + entityId, ignored -> friendlyName(entityId));
     }
 
     public static String friendlyItemName(String itemId) {
-        if (itemId == null || itemId.isBlank()) return "Empty";
-        int colon = itemId.indexOf(':');
-        return titleCase(colon >= 0 ? itemId.substring(colon + 1) : itemId);
+        if (itemId == null || itemId.isBlank()) return "Not required";
+        return FRIENDLY_NAMES.computeIfAbsent("item|" + itemId, ignored -> friendlyName(itemId));
+    }
+
+    private static String friendlyName(String id) {
+        int colon = id.indexOf(':');
+        return titleCase(colon >= 0 ? id.substring(colon + 1) : id);
     }
 
     private static String titleCase(String path) {
@@ -161,12 +180,6 @@ public final class AvengerSummonRecipes {
     }
 
     public record Recipe(String entityId, String mainItemId, String offhandItemId) {
-        public boolean fusion() { return offhandItemId != null; }
-        public String displayRecipe() {
-            return "Main: " + friendlyItemName(mainItemId)
-                    + (offhandItemId == null ? "\nOff: Not required" : "\nOff: " + friendlyItemName(offhandItemId));
-        }
-
         public Identifier entityIdentifier() { return new Identifier(entityId); }
     }
 }
