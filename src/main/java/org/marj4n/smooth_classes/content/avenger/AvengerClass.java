@@ -10,12 +10,12 @@ public final class AvengerClass implements PlayerClass {
     public static final Identifier ID = SmoothClasses.id("avenger");
     @Override public Identifier id() { return ID; }
     @Override public String name() { return "Avenger"; }
-    @Override public String description() { return "Summoned allies, soul magic, and necromancy."; }
+    @Override public String description() { return "From corpses we arise: persistent Death List souls, vanilla summons, and soul magic."; }
 
 
     @Override
     public List<Identifier> abilityIds() {
-        return List.of(AvengerContent.SUMMONING_RITUAL.id());
+        return List.of(AvengerContent.CURTAIN_CALL.id(), AvengerContent.ENDLESS_DEVOUR.id());
     }
 
     @Override

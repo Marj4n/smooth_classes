@@ -1,7 +1,9 @@
 package org.marj4n.smooth_classes.mixin;
 
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import org.marj4n.smooth_classes.runtime.CombatEventRuntime;
@@ -31,4 +33,25 @@ public abstract class PlayerEntityMixin {
             AscendancyRuntime.shieldHit(player);
         }
     }
+    @Inject(method="dropItem(Lnet/minecraft/item/ItemStack;ZZ)Lnet/minecraft/entity/ItemEntity;", at=@At("HEAD"), cancellable=true)
+    private void smooth_classes$keepDeathList(ItemStack stack, boolean throwRandomly, boolean retainOwnership,
+                                               CallbackInfoReturnable<ItemEntity> cir) {
+        if (org.marj4n.smooth_classes.content.avenger.runtime.AvengerReworkRuntime.isDeathList(stack)) {
+            cir.setReturnValue(null);
+        }
+    }
+
+    @Inject(method="dropInventory", at=@At("HEAD"))
+    private void smooth_classes$keepDeathListOnDeath(CallbackInfo ci) {
+        PlayerEntity player = (PlayerEntity) (Object) this;
+        for (int slot = 0; slot < player.getInventory().size(); slot++) {
+            ItemStack stack = player.getInventory().getStack(slot);
+            if (org.marj4n.smooth_classes.content.avenger.runtime.AvengerReworkRuntime.isDeathList(stack)) {
+                // The permanent ledger lives in PersistentState. Removing only the physical
+                // book here prevents a duplicate item entity; it is recreated after respawn.
+                player.getInventory().setStack(slot, ItemStack.EMPTY);
+            }
+        }
+    }
+
 }

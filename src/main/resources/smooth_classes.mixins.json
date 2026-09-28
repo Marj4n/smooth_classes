@@ -14,7 +14,10 @@
     "SacredBannerBuffMixin",
     "TormentBurnMixin",
     "WhenOnHighInvulnerabilityMixin",
-    "WhenOnHighEffectGuardMixin"
+    "WhenOnHighEffectGuardMixin",
+    "MobEntityTargetMixin",
+    "VillagerHostilesSensorMixin",
+    "WardenEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1

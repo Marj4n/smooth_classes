@@ -92,7 +92,7 @@ public final class SmoothClassesClient implements ClientModInitializer {
         ascendancy = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "key.smooth_classes.ascendancy", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_R, "key.category.smooth_classes"));
         riderMount = KeyBindingHelper.registerKeyBinding(new KeyBinding(
-                "key.smooth_classes.rider_mount", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_H, "key.category.smooth_classes"));
+                "key.smooth_classes.class_special", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_H, "key.category.smooth_classes"));
 
         ClientPlayNetworking.registerGlobalReceiver(SmoothClassesNetworking.SYNC_ABILITY_STATE,
                 (client, handler, buf, responseSender) -> {
@@ -109,12 +109,19 @@ public final class SmoothClassesClient implements ClientModInitializer {
                     boolean riderMountActive=buf.readBoolean();
                     int riderMountTotal=buf.readInt();
                     long riderMountRemaining=buf.readLong();
+                    boolean avengerSummonVisible=buf.readBoolean();
+                    int avengerSummonCharges=buf.readInt();
+                    int avengerSummonMaxCharges=buf.readInt();
+                    int avengerSummonTotal=buf.readInt();
+                    long avengerSummonRemaining=buf.readLong();
                     client.execute(() -> {
                         AbilityHudState.sync(sig,sigTotal,sigRemaining,asc,ascTotal,ascRemaining);
                         AbilityHudState.bannerActive=bannerActive;
                         AbilityHudState.bloodRainActive=bloodRainActive;
                         AbilityHudState.whenOnHighActive=whenOnHighActive;
                         AbilityHudState.syncRiderMount(riderMountVisible, riderMountActive, riderMountTotal, riderMountRemaining);
+                        AbilityHudState.syncAvengerSummon(avengerSummonVisible, avengerSummonCharges,
+                                avengerSummonMaxCharges, avengerSummonTotal, avengerSummonRemaining);
                     });
                 });
 
@@ -138,6 +145,12 @@ public final class SmoothClassesClient implements ClientModInitializer {
             while (signature.wasPressed()) cast(client, false);
             while (riderMount.wasPressed()) {
                 if (client.player == null) continue;
+                if (AbilityHudState.avengerSummonVisible) {
+                    if (ClientPlayNetworking.canSend(SmoothClassesNetworking.AVENGER_SUMMON)) {
+                        ClientPlayNetworking.send(SmoothClassesNetworking.AVENGER_SUMMON, PacketByteBufs.empty());
+                    }
+                    continue;
+                }
                 if (AbilityHudState.riderMountActive || isLocalRiderMount(client)) {
                     client.player.sendMessage(Text.literal("Rider mount is already active."), true);
                     client.player.getWorld().playSound(client.player, client.player.getBlockPos(),
