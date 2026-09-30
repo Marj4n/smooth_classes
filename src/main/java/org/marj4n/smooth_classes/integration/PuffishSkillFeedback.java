@@ -24,6 +24,7 @@ public final class PuffishSkillFeedback {
             playUnlockSound(player);
             syncJunctions(player, categoryId, skillId);
             PuffishSkillsIntegration.invalidateRuntimeCache(player);
+            org.marj4n.smooth_classes.runtime.AbilityRuntime.invalidateRuntimeCache(player);
             PuffishSkillsIntegration.ensureAscendancyUnlocked(player);
             SmoothClassesNetworking.sendAbilityState(player);
         });

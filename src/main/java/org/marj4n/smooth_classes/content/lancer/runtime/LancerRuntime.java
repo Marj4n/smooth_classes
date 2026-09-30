@@ -72,9 +72,9 @@ public final class LancerRuntime {
 
     public static void register() {
         ServerTickEvents.END_SERVER_TICK.register(server -> {
-            tickThrusts();
-            tickStorms();
-            tickImpales();
+            if (!THRUSTS.isEmpty()) tickThrusts();
+            if (!STORMS.isEmpty()) tickStorms();
+            if (!IMPALES.isEmpty()) tickImpales();
             if ((server.getTicks() % 10) == 0) {
                 for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) tickPassiveAttributes(player);
             }
@@ -188,8 +188,9 @@ public final class LancerRuntime {
         if (!AbilityRuntime.isClass(player, LancerClass.ID) || !isSpear(player.getMainHandStack())) return false;
         EntityAttributeInstance attack = player.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE);
         if (attack == null) return false;
-        double bonus = momentumPercent(player) / 100.0D;
-        if (momentumPercent(player) >= MAX_MOMENTUM_PERCENT && has(player, LancerContent.PERFECT_MOMENTUM)) bonus += 0.10D;
+        int momentum = momentumPercent(player);
+        double bonus = momentum / 100.0D;
+        if (momentum >= MAX_MOMENTUM_PERCENT && has(player, LancerContent.PERFECT_MOMENTUM)) bonus += 0.10D;
         attack.addTemporaryModifier(new EntityAttributeModifier(
                 ATTACK_DAMAGE_MODIFIER, "Smooth Classes Lancer Momentum", bonus,
                 EntityAttributeModifier.Operation.MULTIPLY_TOTAL));
@@ -258,18 +259,28 @@ public final class LancerRuntime {
 
         EntityAttributeInstance move = player.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED);
         if (move != null) {
-            move.removeModifier(MOVE_SPEED_MODIFIER);
             double amount = has(player, LancerContent.FLEET_II) ? 0.10D : has(player, LancerContent.FLEET_I) ? 0.05D : 0D;
-            if (amount > 0D) move.addTemporaryModifier(new EntityAttributeModifier(
-                    MOVE_SPEED_MODIFIER, "Smooth Classes Fleet Lancer", amount,
-                    EntityAttributeModifier.Operation.MULTIPLY_TOTAL));
+            EntityAttributeModifier current = move.getModifier(MOVE_SPEED_MODIFIER);
+            if (amount <= 0D) {
+                if (current != null) move.removeModifier(MOVE_SPEED_MODIFIER);
+            } else if (current == null || Math.abs(current.getValue() - amount) > 1.0E-6D) {
+                if (current != null) move.removeModifier(MOVE_SPEED_MODIFIER);
+                move.addTemporaryModifier(new EntityAttributeModifier(
+                        MOVE_SPEED_MODIFIER, "Smooth Classes Fleet Lancer", amount,
+                        EntityAttributeModifier.Operation.MULTIPLY_TOTAL));
+            }
         }
         EntityAttributeInstance knockback = player.getAttributeInstance(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE);
         if (knockback != null) {
-            knockback.removeModifier(KNOCKBACK_MODIFIER);
-            if (has(player, LancerContent.IRON_GRIP)) knockback.addTemporaryModifier(new EntityAttributeModifier(
-                    KNOCKBACK_MODIFIER, "Smooth Classes Iron Grip", 0.20D,
-                    EntityAttributeModifier.Operation.ADDITION));
+            boolean wanted = has(player, LancerContent.IRON_GRIP);
+            EntityAttributeModifier current = knockback.getModifier(KNOCKBACK_MODIFIER);
+            if (wanted && current == null) {
+                knockback.addTemporaryModifier(new EntityAttributeModifier(
+                        KNOCKBACK_MODIFIER, "Smooth Classes Iron Grip", 0.20D,
+                        EntityAttributeModifier.Operation.ADDITION));
+            } else if (!wanted && current != null) {
+                knockback.removeModifier(KNOCKBACK_MODIFIER);
+            }
         }
     }
 
@@ -339,8 +350,17 @@ public final class LancerRuntime {
     }
 
     private static LivingEntity nearestEnemy(ServerPlayerEntity player, double range) {
-        return player.getServerWorld().getEntitiesByClass(LivingEntity.class, player.getBoundingBox().expand(range), e -> enemy(player, e))
-                .stream().min(Comparator.comparingDouble(player::squaredDistanceTo)).orElse(null);
+        LivingEntity nearest = null;
+        double best = Double.MAX_VALUE;
+        for (LivingEntity candidate : player.getServerWorld().getEntitiesByClass(
+                LivingEntity.class, player.getBoundingBox().expand(range), e -> enemy(player, e))) {
+            double distance = player.squaredDistanceTo(candidate);
+            if (distance < best) {
+                best = distance;
+                nearest = candidate;
+            }
+        }
+        return nearest;
     }
 
     private static void spawnSixImpales(ServerPlayerEntity player, LivingEntity target) {

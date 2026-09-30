@@ -82,7 +82,7 @@ public final class AbilityHudState {
                 case "evasion" -> "rogue_signature_evasion";
                 case "preparation" -> "rogue_signature_preparation";
                 case "siphoning_strikes" -> "rogue_signature_siphoning_strikes";
-                case "disengage" -> "ranger_signature_disengage";
+                case "unlimited_blade_works" -> "unlimited_blade_works";
                 case "arrow_rain" -> "ranger_signature_arrow_rain";
                 case "elemental_arrows" -> "ranger_signature_elemental_arrows";
                 case "elemental_surge" -> "spellblade_signature_elemental_surge";

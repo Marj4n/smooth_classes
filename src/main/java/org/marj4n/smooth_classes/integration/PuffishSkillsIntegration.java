@@ -37,32 +37,74 @@ public final class PuffishSkillsIntegration {
             AVENGER, FOREIGNER, CASTER, BERSERKER, ARCHER, ASSASSIN, SABER, RULER, RIDER, LANCER
     );
 
+    /** Category objects are registry-stable after datapack/mod bootstrap. Cache only successful lookups. */
+    private static final Map<Identifier, Category> CATEGORY_CACHE = new HashMap<>();
+
+    /**
+     * Unlock state is queried from many class/effect hooks in the same game tick.
+     * Puffish stays authoritative; this cache only deduplicates repeated reads during
+     * a short five-tick window and is explicitly invalidated by skill feedback/network cleanup.
+     */
+    private static final int RUNTIME_CACHE_WINDOW_TICKS = 5;
+
+    private static final class TickStateCache {
+        int tickBucket = Integer.MIN_VALUE;
+        final Map<Identifier, Boolean> categories = new HashMap<>();
+        final Map<Identifier, Map<String, Boolean>> skills = new HashMap<>();
+
+        void reset(int bucket) {
+            tickBucket = bucket;
+            categories.clear();
+            skills.clear();
+        }
+    }
+    private static final Map<UUID, TickStateCache> TICK_STATE_CACHE = new HashMap<>();
+
+    /** Ascendancy tree count is more expensive and does not need per-tick rescanning. */
+    private record AscendancyCountCache(long tickBucket, int count) {}
+    private static final Map<UUID, AscendancyCountCache> ASCENDANCY_COUNT_CACHE = new HashMap<>();
+
     private PuffishSkillsIntegration() {}
     private static Identifier id(String path) { return new Identifier("smooth_classes", path); }
 
-    public static Optional<Category> category(Identifier id) { return SkillsAPI.getCategory(id); }
+    public static Optional<Category> category(Identifier id) {
+        Category cached = CATEGORY_CACHE.get(id);
+        if (cached != null) return Optional.of(cached);
+        Optional<Category> resolved = SkillsAPI.getCategory(id);
+        resolved.ifPresent(category -> CATEGORY_CACHE.put(id, category));
+        return resolved;
+    }
+
+    private static TickStateCache tickState(ServerPlayerEntity player) {
+        TickStateCache cache = TICK_STATE_CACHE.computeIfAbsent(player.getUuid(), ignored -> new TickStateCache());
+        int bucket = player.age / RUNTIME_CACHE_WINDOW_TICKS;
+        if (cache.tickBucket != bucket) cache.reset(bucket);
+        return cache;
+    }
 
     public static boolean isCategoryUnlocked(Identifier categoryId, LivingEntity entity) {
         if (!(entity instanceof ServerPlayerEntity player)) return false;
-        return category(categoryId).map(c -> c.isUnlocked(player)).orElse(false);
+        TickStateCache cache = tickState(player);
+        Boolean cached = cache.categories.get(categoryId);
+        if (cached != null) return cached;
+        boolean unlocked = category(categoryId).map(c -> c.isUnlocked(player)).orElse(false);
+        cache.categories.put(categoryId, unlocked);
+        return unlocked;
     }
 
     public static boolean isSkillUnlocked(Identifier categoryId, String skillId, LivingEntity entity) {
         if (!(entity instanceof ServerPlayerEntity player)) return false;
-        return category(categoryId)
+        TickStateCache cache = tickState(player);
+        Map<String, Boolean> categorySkills = cache.skills.computeIfAbsent(categoryId, ignored -> new HashMap<>());
+        Boolean cached = categorySkills.get(skillId);
+        if (cached != null) return cached;
+        boolean unlocked = category(categoryId)
                 .flatMap(c -> c.getSkill(skillId))
                 .map(s -> s.getState(player) == Skill.State.UNLOCKED)
                 .orElse(false);
+        categorySkills.put(skillId, unlocked);
+        return unlocked;
     }
-
-
-    /**
-     * Ascendancy point count is read frequently by channelled effects. Keep a
-     * one-second server-side cache so those effects do not rescan the Puffish
-     * category every game tick. Skill unlock feedback invalidates it immediately.
-     */
-    private record AscendancyCountCache(long tickBucket, int count) {}
-    private static final Map<UUID, AscendancyCountCache> ASCENDANCY_COUNT_CACHE = new HashMap<>();
 
     public static int countUnlockedSkills(Identifier categoryId, ServerPlayerEntity player) {
         if (!ASCENDANCY.equals(categoryId)) return 0;
@@ -79,15 +121,18 @@ public final class PuffishSkillsIntegration {
     }
 
     public static void invalidateRuntimeCache(ServerPlayerEntity player) {
-        ASCENDANCY_COUNT_CACHE.remove(player.getUuid());
+        UUID id = player.getUuid();
+        ASCENDANCY_COUNT_CACHE.remove(id);
+        TICK_STATE_CACHE.remove(id);
     }
 
     public static void clearRuntimeCaches() {
         ASCENDANCY_COUNT_CACHE.clear();
+        TICK_STATE_CACHE.clear();
+        CATEGORY_CACHE.clear();
     }
 
-    /** parity: Ascendancy becomes visible/unlocked after more than 40
-     * unlocked skills in the base tree category. */
+    /** parity: Ascendancy becomes visible/unlocked after more than 40 unlocked skills in the base tree category. */
     public static void ensureAscendancyUnlocked(ServerPlayerEntity player) {
         // Smooth Progression owns the Tree -> Class -> Ascendancy stage gate when present.
         // Do not auto-unlock Ascendancy here or it could become available before
@@ -97,13 +142,22 @@ public final class PuffishSkillsIntegration {
         Optional<Category> tree = category(TREE);
         Optional<Category> asc = category(ASCENDANCY);
         if (tree.isEmpty() || asc.isEmpty() || asc.get().isUnlocked(player)) return;
-        if (tree.get().streamUnlockedSkills(player).count() > 40) asc.get().unlock(player);
+        if (tree.get().streamUnlockedSkills(player).count() > 40) {
+            asc.get().unlock(player);
+            invalidateRuntimeCache(player);
+        }
     }
 
     public static Optional<Category> selectedClass(ServerPlayerEntity player) {
-        List<Category> unlocked = CLASS_CATEGORIES.stream()
-                .map(SkillsAPI::getCategory).flatMap(Optional::stream)
-                .filter(c -> c.isUnlocked(player)).toList();
-        return unlocked.size() == 1 ? Optional.of(unlocked.get(0)) : Optional.empty();
+        Category selected = null;
+        int unlockedCount = 0;
+        for (Identifier id : CLASS_CATEGORIES) {
+            if (!isCategoryUnlocked(id, player)) continue;
+            Optional<Category> resolved = category(id);
+            if (resolved.isEmpty()) continue;
+            selected = resolved.get();
+            if (++unlockedCount > 1) return Optional.empty();
+        }
+        return unlockedCount == 1 ? Optional.of(selected) : Optional.empty();
     }
 }

@@ -829,17 +829,10 @@
     "icon": {
       "type": "texture",
       "data": {
-        "texture": "smooth_classes:textures/icons/alternate_reduced/ranger_signature_disengage.png"
+        "texture": "smooth_classes:textures/icons/alternate_reduced/unlimited_blade_works.png"
       }
     },
-    "rewards": [
-      {
-        "type": "puffish_skills:passive_skill",
-        "data": {
-          "passive_skill": "rangerSignatureDisengage"
-        }
-      }
-    ]
+    "rewards": []
   },
   "rangerSignatureDisengageRecuperate": {
     "title": {
@@ -1288,5 +1281,370 @@
         }
       }
     ]
+  },
+  "blade_reach": {
+    "title": {
+      "translate": "text.skills.blade_reach.title"
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/unlimited_blade_works.png"
+      }
+    },
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "rewards": [],
+    "description": {
+      "translate": "text.skills.blade_reach.description"
+    }
+  },
+  "blade_power_i": {
+    "title": {
+      "translate": "text.skills.blade_power_i.title"
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/unlimited_blade_works.png"
+      }
+    },
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "rewards": [],
+    "description": {
+      "translate": "text.skills.blade_power_i.description"
+    }
+  },
+  "blade_power_ii": {
+    "title": {
+      "translate": "text.skills.blade_power_ii.title"
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/unlimited_blade_works.png"
+      }
+    },
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "rewards": [],
+    "description": {
+      "translate": "text.skills.blade_power_ii.description"
+    }
+  },
+  "blade_power_iii": {
+    "title": {
+      "translate": "text.skills.blade_power_iii.title"
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/unlimited_blade_works.png"
+      }
+    },
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "rewards": [],
+    "description": {
+      "translate": "text.skills.blade_power_iii.description"
+    }
+  },
+  "blade_duration_i": {
+    "title": {
+      "translate": "text.skills.blade_duration_i.title"
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/unlimited_blade_works.png"
+      }
+    },
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "rewards": [],
+    "description": {
+      "translate": "text.skills.blade_duration_i.description"
+    }
+  },
+  "blade_duration_ii": {
+    "title": {
+      "translate": "text.skills.blade_duration_ii.title"
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/unlimited_blade_works.png"
+      }
+    },
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "rewards": [],
+    "description": {
+      "translate": "text.skills.blade_duration_ii.description"
+    }
+  },
+  "blade_duration_iii": {
+    "title": {
+      "translate": "text.skills.blade_duration_iii.title"
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/unlimited_blade_works.png"
+      }
+    },
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "rewards": [],
+    "description": {
+      "translate": "text.skills.blade_duration_iii.description"
+    }
+  },
+  "blade_edge": {
+    "title": {
+      "translate": "text.skills.blade_edge.title"
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/unlimited_blade_works.png"
+      }
+    },
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "rewards": [],
+    "description": {
+      "translate": "text.skills.blade_edge.description"
+    }
+  },
+  "blade_horizon": {
+    "title": {
+      "translate": "text.skills.blade_horizon.title"
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/unlimited_blade_works.png"
+      }
+    },
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "rewards": [],
+    "description": {
+      "translate": "text.skills.blade_horizon.description"
+    }
+  },
+  "blade_rapid": {
+    "title": {
+      "translate": "text.skills.blade_rapid.title"
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/unlimited_blade_works.png"
+      }
+    },
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "rewards": [],
+    "description": {
+      "translate": "text.skills.blade_rapid.description"
+    }
+  },
+  "blade_endless": {
+    "title": {
+      "translate": "text.skills.blade_endless.title"
+    },
+    "description": {
+      "translate": "text.skills.blade_endless.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/unlimited_blade_works.png"
+      }
+    },
+    "rewards": []
+  },
+  "blade_pierce": {
+    "title": {
+      "translate": "text.skills.blade_pierce.title"
+    },
+    "description": {
+      "translate": "text.skills.blade_pierce.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/unlimited_blade_works.png"
+      }
+    },
+    "rewards": []
+  },
+  "blade_focus": {
+    "title": {
+      "translate": "text.skills.blade_focus.title"
+    },
+    "description": {
+      "translate": "text.skills.blade_focus.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/unlimited_blade_works.png"
+      }
+    },
+    "rewards": []
+  },
+  "blade_left_portal": {
+    "title": {
+      "translate": "text.skills.blade_left_portal.title"
+    },
+    "description": {
+      "translate": "text.skills.blade_left_portal.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/unlimited_blade_works.png"
+      }
+    },
+    "rewards": []
+  },
+  "blade_right_portal": {
+    "title": {
+      "translate": "text.skills.blade_right_portal.title"
+    },
+    "description": {
+      "translate": "text.skills.blade_right_portal.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/unlimited_blade_works.png"
+      }
+    },
+    "rewards": []
   }
 }

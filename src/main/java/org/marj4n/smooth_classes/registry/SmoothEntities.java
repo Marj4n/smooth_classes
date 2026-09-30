@@ -65,6 +65,12 @@ public final class SmoothEntities {
                     .trackRangeBlocks(128)
                     .trackedUpdateRate(1)
                     .build());
+    public static final EntityType<BladePortalEntity> BLADE_PORTAL = Registry.register(Registries.ENTITY_TYPE,
+            SmoothClasses.id("blade_portal"), FabricEntityTypeBuilder.create(SpawnGroup.MISC, BladePortalEntity::new)
+                    .dimensions(EntityDimensions.fixed(2.8F, 2.8F)).trackRangeBlocks(64).trackedUpdateRate(1).build());
+    public static final EntityType<ProjectedDaggerEntity> PROJECTED_DAGGER = Registry.register(Registries.ENTITY_TYPE,
+            SmoothClasses.id("projected_dagger"), FabricEntityTypeBuilder.<ProjectedDaggerEntity>create(SpawnGroup.MISC, ProjectedDaggerEntity::new)
+                    .dimensions(EntityDimensions.fixed(.2F, .2F)).trackRangeBlocks(80).trackedUpdateRate(2).build());
     public static void register() {
         FabricDefaultAttributeRegistry.register(DREADGLARE, DreadglareEntity.createAttributes());
         FabricDefaultAttributeRegistry.register(GREATER_DREADGLARE, GreaterDreadglareEntity.createAttributes());

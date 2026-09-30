@@ -13,7 +13,7 @@ public final class ArcherContent {
     private ArcherContent() {}
 
     public static final Ability ARROW_RAIN = ability("arrow_rain", "Arrow Rain", 14 * 20);
-    public static final Ability DISENGAGE = ability("disengage", "Disengage", 15 * 20);
+    public static final Ability UNLIMITED_BLADE_WORKS = ability("unlimited_blade_works", "Portal of Sovereignty", 30 * 20);
     public static final Ability ELEMENTAL_ARROWS = ability("elemental_arrows", "Elemental Arrows", 40 * 20);
 
     public static final Talent REVEAL = talent("reveal", "Reveal");
@@ -26,9 +26,9 @@ public final class ArcherContent {
     public static final Talent ARROW_RAIN_EXPLOSIVE = talent("arrow_rain_explosive", "Arrow Rain Explosive");
     public static final Talent ARROW_RAIN_VOLLEY = talent("arrow_rain_volley", "Arrow Rain Volley");
     public static final Talent ARROW_RAIN_RADIUS = talent("arrow_rain_radius", "Arrow Rain Radius");
-    public static final Talent DISENGAGE_RECUPERATE = talent("disengage_recuperate", "Disengage Recuperate");
-    public static final Talent DISENGAGE_EXPLOITATION = talent("disengage_exploitation", "Disengage Exploitation");
-    public static final Talent DISENGAGE_MARKSMAN = talent("disengage_marksman", "Disengage Marksman");
+    public static final Talent DISENGAGE_RECUPERATE = talent("disengage_recuperate", "Endless Arsenal");
+    public static final Talent DISENGAGE_EXPLOITATION = talent("disengage_exploitation", "Piercing Blades");
+    public static final Talent DISENGAGE_MARKSMAN = talent("disengage_marksman", "Perfect Projection");
     public static final Talent ELEMENTAL_ARROWS_FROST_ATTUNED = talent("elemental_arrows_frost_attuned", "Elemental Arrows Frost Attuned");
     public static final Talent ELEMENTAL_ARROWS_FIRE_ATTUNED = talent("elemental_arrows_fire_attuned", "Elemental Arrows Fire Attuned");
     public static final Talent ELEMENTAL_ARROWS_LIGHTNING_ATTUNED = talent("elemental_arrows_lightning_attuned", "Elemental Arrows Lightning Attuned");
@@ -36,7 +36,7 @@ public final class ArcherContent {
     public static final Talent ELEMENTAL_ARROWS_STACKS = talent("elemental_arrows_stacks", "Elemental Arrows Stacks");
     public static final Talent ELEMENTAL_ARROWS_RENEWAL = talent("elemental_arrows_renewal", "Elemental Arrows Renewal");
 
-    private static final List<Ability> ABILITIES = List.of(ARROW_RAIN, DISENGAGE, ELEMENTAL_ARROWS);
+    private static final List<Ability> ABILITIES = List.of(ARROW_RAIN, UNLIMITED_BLADE_WORKS, ELEMENTAL_ARROWS);
     private static final List<Talent> TALENTS = List.of(REVEAL, TAMER, BONDED, TRAINED, INCOGNITO, ARROW_RAIN_ELEMENTAL, ARROW_RAIN_ELEMENTAL_ARTILLERY, ARROW_RAIN_EXPLOSIVE, ARROW_RAIN_VOLLEY, ARROW_RAIN_RADIUS, DISENGAGE_RECUPERATE, DISENGAGE_EXPLOITATION, DISENGAGE_MARKSMAN, ELEMENTAL_ARROWS_FROST_ATTUNED, ELEMENTAL_ARROWS_FIRE_ATTUNED, ELEMENTAL_ARROWS_LIGHTNING_ATTUNED, ELEMENTAL_ARROWS_RADIUS, ELEMENTAL_ARROWS_STACKS, ELEMENTAL_ARROWS_RENEWAL);
 
     public static void register() {

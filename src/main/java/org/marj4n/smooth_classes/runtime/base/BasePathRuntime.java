@@ -33,6 +33,11 @@ public final class BasePathRuntime {
     private BasePathRuntime() {}
 
     private static final Map<UUID, Float> EARTHSHAKER_FALL = new HashMap<>();
+    private static final StatusEffect[] ATTUNEMENTS = {
+            SmoothEffects.ARCANE_ATTUNEMENT, SmoothEffects.SOUL_ATTUNEMENT,
+            SmoothEffects.HOLY_ATTUNEMENT, SmoothEffects.FIRE_ATTUNEMENT,
+            SmoothEffects.FROST_ATTUNEMENT, SmoothEffects.LIGHTNING_ATTUNEMENT
+    };
 
     public static void register() {
         ServerTickEvents.END_SERVER_TICK.register(server -> {
@@ -47,6 +52,14 @@ public final class BasePathRuntime {
     private static void tick(ServerPlayerEntity p) {
         int age = p.age;
         tickEarthshaker(p);
+
+        // Everything below is scheduled on a multiple of five ticks. Keep the
+        // stealth render flag responsive each tick, but avoid tree probes on 4/5 ticks.
+        if ((age % 5) != 0) {
+            syncStealthVisibility(p);
+            return;
+        }
+
         tickAttuned(p);
 
         // MAGIC (Initiate)
@@ -57,14 +70,12 @@ public final class BasePathRuntime {
         if (age % 40 == 0 && p.hasStatusEffect(SmoothEffects.SOULSHOCK)
                 && has(p, SkillNodeIds.initiateLightningRod))
             lightningRodPulse(p);
-        if (has(p, SkillNodeIds.wizardPath)) frail(p);
+        if (age % 20 == 0 && has(p, SkillNodeIds.wizardPath)) frail(p);
 
         // AGILITY (Wayfarer)
         if (age % 10 == 0 && p.isSneaking() && !p.hasStatusEffect(SmoothEffects.REVEALED)
                 && has(p,SkillNodeIds.wayfarerStealth) && !targeted(p,20))
             p.addStatusEffect(new StatusEffectInstance(SmoothEffects.STEALTH,20,0,false,false,true));
-        if (p.hasStatusEffect(SmoothEffects.STEALTH)) p.setInvisible(true);
-        else if (!p.hasStatusEffect(StatusEffects.INVISIBILITY)) p.setInvisible(false);
         if (age % 10 == 0 && p.isSneaking() && has(p,SkillNodeIds.wayfarerSneak)) {
             p.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED,15,2,false,false,true));
             if (p.hasStatusEffect(SmoothEffects.STEALTH)) inc(p,SmoothEffects.MIGHT,15,1,22);
@@ -78,6 +89,13 @@ public final class BasePathRuntime {
         if (age % 20 == 0 && has(p,SkillNodeIds.warriorDeathDefy)) deathDefy(p);
         if (age % 15 == 0 && has(p,SkillNodeIds.warriorCarnage)) carnage(p);
         if (age % 10 == 0 && has(p,SkillNodeIds.bulwarkShieldMastery)) shieldMastery(p);
+
+        syncStealthVisibility(p);
+    }
+
+    private static void syncStealthVisibility(ServerPlayerEntity p) {
+        if (p.hasStatusEffect(SmoothEffects.STEALTH)) p.setInvisible(true);
+        else if (!p.hasStatusEffect(StatusEffects.INVISIBILITY)) p.setInvisible(false);
     }
 
     public static void onMeleeHit(ServerPlayerEntity p, LivingEntity target) {
@@ -200,10 +218,7 @@ public final class BasePathRuntime {
 
     private static void tickAttuned(ServerPlayerEntity p) {
         if (p.age%20!=0 || !has(p,SkillNodeIds.initiateAttuned)) return;
-        StatusEffect[] attunements={SmoothEffects.ARCANE_ATTUNEMENT,SmoothEffects.SOUL_ATTUNEMENT,
-                SmoothEffects.HOLY_ATTUNEMENT,SmoothEffects.FIRE_ATTUNEMENT,
-                SmoothEffects.FROST_ATTUNEMENT,SmoothEffects.LIGHTNING_ATTUNEMENT};
-        for(StatusEffect fx:attunements){
+        for(StatusEffect fx:ATTUNEMENTS){
             StatusEffectInstance x=p.getStatusEffect(fx);
             if(x!=null && x.getAmplifier()>4){inc(p,SmoothEffects.PRECISION,150,1,15);dec(p,fx);break;}
         }
@@ -229,7 +244,10 @@ public final class BasePathRuntime {
     }
 
     private static void tickEarthshaker(ServerPlayerEntity p) {
-        if(!p.hasStatusEffect(SmoothEffects.EARTHSHAKER)){EARTHSHAKER_FALL.remove(p.getUuid());return;}
+        if(!p.hasStatusEffect(SmoothEffects.EARTHSHAKER)){
+            if(!EARTHSHAKER_FALL.isEmpty()) EARTHSHAKER_FALL.remove(p.getUuid());
+            return;
+        }
         if(!p.isOnGround()){
             EARTHSHAKER_FALL.merge(p.getUuid(),p.fallDistance,Math::max);
             return;

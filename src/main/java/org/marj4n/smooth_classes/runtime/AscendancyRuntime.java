@@ -13,7 +13,6 @@ import org.marj4n.smooth_classes.integration.PuffishSkillsIntegration;
 import org.marj4n.smooth_classes.integration.SkillNodeIds;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 /** Ascendancy gameplay, isolated from optional compatibility mods. */
@@ -214,11 +213,13 @@ public final class AscendancyRuntime {
 
     /** 30+ passively regenerates Aegis; 60+ accelerates it to one stack every 2 seconds. */
     public static void serverTick(ServerPlayerEntity p){
+        // Fastest regeneration cadence is 40 ticks. Do not touch Puffish on the
+        // other 39 ticks; 30-59 point players are further gated to 200 ticks.
+        if((p.age % 40) != 0)return;
         if(!unlocked(p,"righteous_shield"))return;
         int pts=points(p);
         if(pts<30)return;
-        int interval=pts>=60?40:200;
-        if(p.age%interval!=0)return;
+        if(pts<60 && (p.age % 200) != 0)return;
         increment(p,SmoothEffects.GOLDEN_AEGIS,2400,1,pts>=60?30:15+pts/10);
     }
 
@@ -235,8 +236,13 @@ public final class AscendancyRuntime {
     }
 
     private static LivingEntity nearestEnemy(ServerPlayerEntity p,double radius){
-        return CombatRuntime.nearbyEnemies(p,radius).stream()
-                .min(Comparator.comparingDouble(p::squaredDistanceTo)).orElse(null);
+        LivingEntity nearest=null;
+        double best=Double.MAX_VALUE;
+        for(LivingEntity candidate:CombatRuntime.nearbyEnemies(p,radius)){
+            double distance=p.squaredDistanceTo(candidate);
+            if(distance<best){best=distance;nearest=candidate;}
+        }
+        return nearest;
     }
 
     private static void increment(LivingEntity e,StatusEffect fx,int duration,int amount,int max){

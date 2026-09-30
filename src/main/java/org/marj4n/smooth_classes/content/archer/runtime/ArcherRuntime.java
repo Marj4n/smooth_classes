@@ -109,10 +109,6 @@ public final class ArcherRuntime {
 
     public record ArrowRainPlan(boolean elemental, boolean artillery, boolean explosive, boolean volley, boolean radius) {}
     public static ArrowRainPlan arrowRain(ServerPlayerEntity player) { require(player); return new ArrowRainPlan(has(player, ArcherContent.ARROW_RAIN_ELEMENTAL.id()), has(player, ArcherContent.ARROW_RAIN_ELEMENTAL_ARTILLERY.id()), has(player, ArcherContent.ARROW_RAIN_EXPLOSIVE.id()), has(player, ArcherContent.ARROW_RAIN_VOLLEY.id()), has(player, ArcherContent.ARROW_RAIN_RADIUS.id())); }
-    public record DisengagePlan(boolean recuperate, boolean exploitation, boolean marksman) {}
-    public static DisengagePlan disengage(ServerPlayerEntity player) { require(player); return new DisengagePlan(has(player, ArcherContent.DISENGAGE_RECUPERATE.id()), has(player, ArcherContent.DISENGAGE_EXPLOITATION.id()), has(player, ArcherContent.DISENGAGE_MARKSMAN.id())); }
-
-
     public static ExecutionResult executeArrowRain(ServerPlayerEntity player) {
         require(player);
         ClassEffectRuntime.apply(player, SmoothEffects.ARROW_RAIN, 600, 0);
@@ -144,8 +140,14 @@ public final class ArcherRuntime {
 
         ServerWorld world=player.getServerWorld();
         int limiter=0;
-        boolean pointBlank = CombatRuntime.nearbyEnemies(player,3).stream().anyMatch(e ->
-                e.getPos().subtract(player.getPos()).dotProduct(player.getRotationVec(1F)) > 0);
+        boolean pointBlank = false;
+        Vec3d forward = player.getRotationVec(1F);
+        for (LivingEntity enemy : CombatRuntime.nearbyEnemies(player,3)) {
+            if (enemy.getPos().subtract(player.getPos()).dotProduct(forward) > 0) {
+                pointBlank = true;
+                break;
+            }
+        }
         int elementalCap=pointBlank?4:30;
         for(int x=-radius+1;x<=radius;x++)for(int z=-radius+1;z<=radius;z++)for(int i=0;i<volleys;i++){
             if(player.getRandom().nextInt(100)>=density)continue;
@@ -181,27 +183,9 @@ public final class ArcherRuntime {
         return true;
     }
 
-    public static ExecutionResult executeDisengage(ServerPlayerEntity player) {
-        DisengagePlan plan = disengage(player);
-        for (LivingEntity target : CombatRuntime.nearbyEnemies(player, 6))
-            target.addStatusEffect(new net.minecraft.entity.effect.StatusEffectInstance(StatusEffects.SLOWNESS,250,3,false,false,true));
-        CombatRuntime.launchBackward(player, 3.0, 1.0);
-        CombatRuntime.buff(player, StatusEffects.SLOW_FALLING,80,0);
-        if (plan.recuperate()) {
-            for (LivingEntity e : player.getWorld().getEntitiesByClass(LivingEntity.class, player.getBoundingBox().expand(18),
-                    e -> e instanceof TameableEntity t && t.isOwner(player))) e.heal(e.getMaxHealth());
-        }
-        if (plan.exploitation()) {
-            for (LivingEntity e : player.getWorld().getEntitiesByClass(LivingEntity.class, player.getBoundingBox().expand(18),
-                    e -> e instanceof TameableEntity t && t.isOwner(player)))
-                e.addStatusEffect(new net.minecraft.entity.effect.StatusEffectInstance(
-                        SmoothEffects.IMMOBILIZING_AURA,120,0,false,false,true));
-        }
-        if (plan.marksman()) {
-            if (player.getMainHandStack().getItem() instanceof BowItem) ClassEffectRuntime.apply(player,SmoothEffects.MARKSMAN,200,0);
-            else ClassEffectRuntime.apply(player,SmoothEffects.BARRIER,200,0);
-        }
-        return ExecutionResult.success(1, "disengage");
+    public static ExecutionResult executeUnlimitedBladeWorks(ServerPlayerEntity player) {
+        require(player);
+        return UnlimitedBladeWorksRuntime.cast(player);
     }
 
     public static ExecutionResult executeElementalArrows(ServerPlayerEntity player) {

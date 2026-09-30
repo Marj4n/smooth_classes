@@ -33,7 +33,13 @@ public abstract class TormentBurnMixin implements TormentBurnAccess {
         if(e.age%4==0)world.spawnParticles(SmoothParticles.BLACK_FLAME,e.getX(),e.getY()+e.getHeight()*.45,e.getZ(),8,e.getWidth()*.5,e.getHeight()*.4,e.getWidth()*.5,.02);
         if(e.age%20==0){
             // Overlapping casts retain independent expiry; only the strongest live burn deals damage.
-            var strongest=smooth$burns.values().stream().max(Comparator.comparingDouble(n->n.getFloat("Damage"))).orElseThrow();
+            NbtCompound strongest=null;
+            float strongestDamage=Float.NEGATIVE_INFINITY;
+            for(NbtCompound burn:smooth$burns.values()){
+                float damage=burn.getFloat("Damage");
+                if(damage>strongestDamage){strongestDamage=damage;strongest=burn;}
+            }
+            if(strongest==null)return;
             float coefficient=strongest.contains("Coefficient")?strongest.getFloat("Coefficient"):TormentRuntime.BURN_COEFFICIENT;
             TormentRuntime.hurt(e,strongest.containsUuid("Owner")?strongest.getUuid("Owner"):null,strongest.getFloat("Damage"),coefficient);
         }

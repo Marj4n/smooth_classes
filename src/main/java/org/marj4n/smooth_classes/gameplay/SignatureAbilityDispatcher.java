@@ -45,7 +45,7 @@ public final class SignatureAbilityDispatcher {
                 if (skill(player,"assassin","a3ns9xl58ixdg2lo")) return result(player, "siphoning_strikes", () -> AssassinRuntime.executeSiphoningStrikes(player));
             }
             if (clazz(player, "archer")) {
-                if (skill(player,"archer","is053f9imz801s57")) return result(player, "disengage", () -> ArcherRuntime.executeDisengage(player));
+                if (skill(player,"archer","is053f9imz801s57")) return result(player, "unlimited_blade_works", () -> ArcherRuntime.executeUnlimitedBladeWorks(player));
                 if (skill(player,"archer","a3ns9xl58ixdg2lo")) return result(player, "arrow_rain", () -> ArcherRuntime.executeArrowRain(player));
                 if (skill(player,"archer","kp8uei8ppni71b5x")) return result(player, "elemental_arrows", () -> ArcherRuntime.executeElementalArrows(player));
             }
@@ -107,7 +107,7 @@ public final class SignatureAbilityDispatcher {
                 case "preparation" -> unlocked(player,"assassin","kp8uei8ppni71b5x",a,()->AssassinRuntime.executePreparation(player));
                 case "siphoning_strikes" -> unlocked(player,"assassin","a3ns9xl58ixdg2lo",a,()->AssassinRuntime.executeSiphoningStrikes(player));
 
-                case "disengage" -> unlocked(player,"archer","is053f9imz801s57",a,()->ArcherRuntime.executeDisengage(player));
+                case "unlimited_blade_works" -> unlocked(player,"archer","is053f9imz801s57",a,()->ArcherRuntime.executeUnlimitedBladeWorks(player));
                 case "arrow_rain" -> unlocked(player,"archer","a3ns9xl58ixdg2lo",a,()->ArcherRuntime.executeArrowRain(player));
                 case "elemental_arrows" -> unlocked(player,"archer","kp8uei8ppni71b5x",a,()->ArcherRuntime.executeElementalArrows(player));
 
@@ -160,7 +160,7 @@ public final class SignatureAbilityDispatcher {
             {"caster","is053f9imz801s57","meteor_shower"},{"caster","kp8uei8ppni71b5x","ice_comet"},{"caster","a3ns9xl58ixdg2lo","static_discharge"},{"caster","7peocg44cggilh9z","arcane_bolt"},
             {"berserker","kp8uei8ppni71b5x","rampage"},{"berserker","a3ns9xl58ixdg2lo","bloodthirsty"},{"berserker","is053f9imz801s57","berserking"},
             {"assassin","is053f9imz801s57","evasion"},{"assassin","kp8uei8ppni71b5x","preparation"},{"assassin","a3ns9xl58ixdg2lo","siphoning_strikes"},
-            {"archer","is053f9imz801s57","disengage"},{"archer","a3ns9xl58ixdg2lo","arrow_rain"},{"archer","kp8uei8ppni71b5x","elemental_arrows"},
+            {"archer","is053f9imz801s57","unlimited_blade_works"},{"archer","a3ns9xl58ixdg2lo","arrow_rain"},{"archer","kp8uei8ppni71b5x","elemental_arrows"},
             {"foreigner","a3ns9xl58ixdg2lo","elemental_surge"},{"foreigner","kp8uei8ppni71b5x","elemental_impact"},{"foreigner","is053f9imz801s57","spellweaver"},
             {"saber","is053f9imz801s57","consecration"},{"saber","kp8uei8ppni71b5x","sacred_onslaught"},{"saber","a3ns9xl58ixdg2lo","heavensmiths_call"},
             {"ruler","is053f9imz801s57","sacred_orb"},{"ruler","a3ns9xl58ixdg2lo","divine_intervention"},{"ruler","kp8uei8ppni71b5x","anoint_weapon"},
@@ -189,8 +189,8 @@ public final class SignatureAbilityDispatcher {
         if (remaining > 0) return DispatchResult.fail(ability + " cooldown " + formatSeconds(remaining) + "s");
         ExecutionResult r = action.run();
         if (!r.success()) return DispatchResult.fail(r.detail());
-        OptionalCompatRuntime.onSignatureAbility(player);
-        if (!"sacred_orb".equals(ability))
+        if (!"unlimited_blade_works".equals(ability)) OptionalCompatRuntime.onSignatureAbility(player);
+        if (!"sacred_orb".equals(ability) && !"unlimited_blade_works".equals(ability))
             AbilityCooldowns.start(player, abilityId, AbilityCooldowns.adjustedTicks(player,
                     OptionalCompatRuntime.signatureCooldown(player, SignatureCooldowns.ticks(ability))));
         return new DispatchResult(true, ability, r.detail() + " affected=" + r.affectedTargets());
