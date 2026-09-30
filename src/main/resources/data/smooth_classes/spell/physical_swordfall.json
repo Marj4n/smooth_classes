@@ -86,7 +86,7 @@
                   "model_id": "smooth_classes:spell_projectile/swordfall",
                   "scale": 1.0
                 },
-                "orientation": "ALONG_MOTION"
+                "orientation": "TOWARDS_MOTION"
               }
             ]
           }

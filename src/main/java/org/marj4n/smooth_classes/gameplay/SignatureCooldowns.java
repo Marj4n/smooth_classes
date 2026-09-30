@@ -15,7 +15,7 @@ public final class SignatureCooldowns {
             case "bloodthirsty" -> SmoothBalance.Berserker.bloodthirstyCooldown;
             case "berserking" -> SmoothBalance.Berserker.berserkingCooldown;
             case "evasion" -> SmoothBalance.Assassin.evasionCooldown;
-            case "preparation" -> 30;
+            case "preparation" -> SmoothBalance.Assassin.preparationCooldown;
             case "siphoning_strikes" -> SmoothBalance.Assassin.siphoningCooldown;
             case "unlimited_blade_works" -> SmoothBalance.Archer.portalOfSovereigntyCooldown;
             case "arrow_rain" -> SmoothBalance.Archer.arrowRainCooldown;
@@ -26,7 +26,7 @@ public final class SignatureCooldowns {
             case "consecration" -> SmoothBalance.Saber.consecrationCooldown;
             case "sacred_onslaught" -> SmoothBalance.Saber.sacredOnslaughtCooldown;
             case "heavensmiths_call" -> SmoothBalance.Saber.heavensmithCooldown;
-            case "sacred_orb" -> 120*20;
+            case "sacred_orb" -> SmoothBalance.Ruler.sacredOrbCooldown;
             case "divine_intervention" -> SmoothBalance.Ruler.divineInterventionCooldown;
             case "anoint_weapon" -> SmoothBalance.Ruler.anointWeaponCooldown;
             case "curtain_call" -> SmoothBalance.Avenger.curtainCallCooldown;

@@ -530,7 +530,7 @@ public final class RiderRuntime {
 
     private static String describeTier(int tier) {
         return switch (tier) {
-            case 3 -> "White Hippogryph";
+            case 3 -> "Hippogryph";
             case 2 -> "Dread Steed";
             default -> "Rider mount";
         };

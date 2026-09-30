@@ -1,5 +1,7 @@
 package org.marj4n.smooth_classes.runtime.classpass;
 
+import org.marj4n.smooth_classes.config.SmoothBalance;
+
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
@@ -300,7 +302,7 @@ public final class ClassPassiveRuntime {
         // Weapon Expert is actually a spell-cast passive in this runtime.
         if(has(p,PuffishSkillsIntegration.FOREIGNER,SkillNodeIds.spellbladeWeaponExpert)) {
             inc(p,SmoothEffects.MIGHT,60,1,3);
-            if(p.getRandom().nextInt(100)>5)inc(p,SmoothEffects.SPELLFORGED,80,1,3);
+            if(p.getRandom().nextInt(100)<SmoothBalance.Foreigner.weaponExpertSpellforgedChance)inc(p,SmoothEffects.SPELLFORGED,80,1,3);
         }
 
         if(school==SpellSchools.HEALING) {

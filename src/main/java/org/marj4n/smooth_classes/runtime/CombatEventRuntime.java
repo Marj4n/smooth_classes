@@ -17,7 +17,6 @@ import org.marj4n.smooth_classes.content.ruler.runtime.RulerRuntime;
 import org.marj4n.smooth_classes.integration.PuffishSkillsIntegration;
 import org.marj4n.smooth_classes.integration.SkillNodeIds;
 import org.marj4n.smooth_classes.integration.OptionalCompatRuntime;
-import org.marj4n.smooth_classes.content.avenger.AvengerClass;
 
 /**
  * Chapter 5 event router. One authoritative entry point per combat event keeps
@@ -52,11 +51,14 @@ public final class CombatEventRuntime {
         ClassPassiveRuntime.onMeleeHit(player, living);
         RulerRuntime.onAnointedMeleeHit(player);
 
-        // Elemental Surge Renewal extends the active surge by 3 ticks per melee hit.
+        // Renewal is intentionally proc-based: 15% per melee hit for +3 seconds.
         if (has(player, PuffishSkillsIntegration.FOREIGNER, SkillNodeIds.spellbladeSpecialisationElementalSurgeRenewal)
-                && player.hasStatusEffect(SmoothEffects.ELEMENTAL_SURGE)) {
-            int duration = player.getStatusEffect(SmoothEffects.ELEMENTAL_SURGE).getDuration();
-            player.addStatusEffect(new StatusEffectInstance(SmoothEffects.ELEMENTAL_SURGE, duration + 3, 0, false, false, true));
+                && player.hasStatusEffect(SmoothEffects.ELEMENTAL_SURGE)
+                && player.getRandom().nextInt(100) < SmoothBalance.Foreigner.elementalSurgeRenewalChance) {
+            StatusEffectInstance surge = player.getStatusEffect(SmoothEffects.ELEMENTAL_SURGE);
+            player.addStatusEffect(new StatusEffectInstance(SmoothEffects.ELEMENTAL_SURGE,
+                    surge.getDuration() + SmoothBalance.Foreigner.elementalSurgeRenewalTicks,
+                    surge.getAmplifier(), false, false, true));
         }
         // Bloodthirsty modifiers are melee-event procs.
         if (player.hasStatusEffect(SmoothEffects.BLOODTHIRSTY)) {
@@ -99,7 +101,10 @@ public final class CombatEventRuntime {
     }
 
     public static void afterIncomingDamage(ServerPlayerEntity player, DamageSource source, float amount) {
-        if(amount>0)AscendancyRuntime.boneArmorHit(player);
+        if(amount>0) {
+            AscendancyRuntime.boneArmorHit(player);
+            org.marj4n.smooth_classes.content.berserker.runtime.BerserkerRuntime.onRampageDamaged(player);
+        }
         // Berserker path gains one Rage stack whenever real damage lands.
         if (has(player, PuffishSkillsIntegration.TREE, SkillNodeIds.berserkerPath))
             increment(player, SmoothEffects.RAGE, 300, 1, 99);

@@ -2,9 +2,7 @@ package org.marj4n.smooth_classes.runtime;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.item.SwordItem;
 import net.minecraft.particle.DustParticleEffect;
-import net.minecraft.registry.tag.ItemTags;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.hit.HitResult;
@@ -19,11 +17,6 @@ public final class ArcaneSlashVisuals {
     private static final DustParticleEffect CORE =
             new DustParticleEffect(new Vector3f(0.94F, 0.72F, 1F), 1.8F);
     private ArcaneSlashVisuals() {}
-
-    public static boolean hasSword(ServerPlayerEntity player) {
-        var stack = player.getMainHandStack();
-        return stack.getItem() instanceof SwordItem || stack.isIn(ItemTags.SWORDS);
-    }
 
     public static void charge(ServerPlayerEntity player, int remaining) {
         ServerWorld world = player.getServerWorld();

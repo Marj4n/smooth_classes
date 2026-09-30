@@ -52,7 +52,7 @@ public final class RighteousHammerChargeRuntime {
                         owner.getBoundingBox().expand(6), p->p.getOwner()==owner);
                 var before=new java.util.HashSet<java.util.UUID>(Math.max(16,existing.size()*2));
                 for(SpellProjectile projectile:existing) before.add(projectile.getUuid());
-                boolean launched=InternalSpellRuntime.target(owner,"smooth_classes:righteous_hammer_projectile",target,multiplier);
+                boolean launched=InternalSpellRuntime.targetUniversal(owner,"smooth_classes:righteous_hammer_projectile",target,multiplier);
                 if(!launched)break;
                 launchedCount++;
                 double angle=Math.toRadians(owner.getWorld().getTime()*9.0-45.0+j*(360.0/Math.max(1,total)));

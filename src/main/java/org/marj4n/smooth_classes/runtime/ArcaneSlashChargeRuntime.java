@@ -43,8 +43,7 @@ public final class ArcaneSlashChargeRuntime {
 
     public static boolean canContinue(ServerPlayerEntity player) {
         return CHARGING.contains(player.getUuid()) && isHeld(player)
-                && player.isAlive() && !player.isSpectator()
-                && ArcaneSlashVisuals.hasSword(player);
+                && player.isAlive() && !player.isSpectator();
     }
 
     public static void finish(ServerPlayerEntity player) {

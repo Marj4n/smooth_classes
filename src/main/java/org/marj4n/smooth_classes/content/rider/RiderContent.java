@@ -27,7 +27,7 @@ public final class RiderContent {
 
     public static final Talent WATER_STRIDE = talent("water_stride", "Water Stride");
     public static final Talent DREAD_STEED = talent("dread_steed", "Dread Steed");
-    public static final Talent HIPPOGRYPH = talent("hippogryph", "White Hippogryph");
+    public static final Talent HIPPOGRYPH = talent("hippogryph", "Hippogryph");
 
     public static final Talent HEALTH_I = talent("health_i", "Mount Vitality I");
     public static final Talent HEALTH_II = talent("health_ii", "Mount Vitality II");

@@ -166,9 +166,9 @@ public final class SmoothClassesNetworking {
 
         int sigTotal = "preparation".equals(sig)
                 ? org.marj4n.smooth_classes.content.assassin.runtime.ShadowTechniqueRuntime.cooldownHudTicks(player)
-                : "sacred_orb".equals(sig) ? 2400 : sig.isBlank() ? 1
+                : "sacred_orb".equals(sig) ? SignatureCooldowns.ticks("sacred_orb") : sig.isBlank() ? 1
                 : AbilityCooldowns.adjustedTicks(player, SignatureCooldowns.ticks(sig));
-        int ascTotal = "agony".equals(asc) ? 600 : "magic_circle".equals(asc) ? 1200 : "torment".equals(asc) ? 800 : asc.isBlank() ? 1 : AscendancyAbilityDispatcher.effectiveCooldownTicks(player,asc);
+        int ascTotal = asc.isBlank() ? 1 : AscendancyAbilityDispatcher.effectiveCooldownTicks(player, asc);
         long sigRemain = sig.isBlank() ? 0 : AbilityCooldowns.remainingTicks(player, new Identifier(SmoothClasses.MOD_ID, sig));
         long ascRemain = asc.isBlank() ? 0 : AbilityCooldowns.remainingTicks(player, new Identifier(SmoothClasses.MOD_ID, "ascendancy_" + asc));
 

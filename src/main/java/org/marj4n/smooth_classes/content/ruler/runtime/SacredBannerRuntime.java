@@ -9,13 +9,13 @@ import net.minecraft.entity.effect.*;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.particle.DustParticleEffect;
-import net.minecraft.util.math.Box;
 import org.joml.Vector3f;
 import org.marj4n.smooth_classes.entity.SacredBannerEntity;
 import org.marj4n.smooth_classes.registry.SmoothEntities;
 import org.marj4n.smooth_classes.integration.PuffishSkillsIntegration;
 import org.marj4n.smooth_classes.integration.SkillNodeIds;
 import org.marj4n.smooth_classes.runtime.ExecutionResult;
+import org.marj4n.smooth_classes.gameplay.SignatureCooldowns;
 import java.util.*;
 
 public final class SacredBannerRuntime {
@@ -34,12 +34,17 @@ public final class SacredBannerRuntime {
         }
     }
     public static void ended(SacredBannerEntity banner) {
-        if (banner.owner==null || !BANNERS.remove(banner.owner,banner)) return;
-        var p=banner.getServer().getPlayerManager().getPlayer(banner.owner);
-        if(p!=null) {
-            org.marj4n.smooth_classes.runtime.AbilityCooldowns.start(p,
-                    org.marj4n.smooth_classes.SmoothClasses.id("sacred_orb"),2400);
-            org.marj4n.smooth_classes.network.SmoothClassesNetworking.sendAbilityState(p);
+        ended(banner, null);
+    }
+
+    private static void ended(SacredBannerEntity banner, ServerPlayerEntity fallbackPlayer) {
+        if (banner.owner == null || !BANNERS.remove(banner.owner, banner)) return;
+        ServerPlayerEntity player = banner.getServer().getPlayerManager().getPlayer(banner.owner);
+        if (player == null) player = fallbackPlayer;
+        if (player != null) {
+            org.marj4n.smooth_classes.runtime.AbilityCooldowns.start(player,
+                    org.marj4n.smooth_classes.SmoothClasses.id("sacred_orb"), SignatureCooldowns.ticks("sacred_orb"));
+            org.marj4n.smooth_classes.network.SmoothClassesNetworking.sendAbilityState(player);
         }
     }
     private static void validateBanners() {
@@ -68,10 +73,8 @@ public final class SacredBannerRuntime {
         });
         net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents.DISCONNECT.register((handler,server) -> {
             var banner=BANNERS.get(handler.player.getUuid());
-            if(banner!=null) {
-                ended(banner);
-                org.marj4n.smooth_classes.runtime.AbilityCooldowns.start(handler.player,
-                        org.marj4n.smooth_classes.SmoothClasses.id("sacred_orb"),2400);
+            if (banner != null) {
+                ended(banner, handler.player);
                 banner.discard();
             }
         });

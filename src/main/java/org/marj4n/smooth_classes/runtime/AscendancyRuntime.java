@@ -4,9 +4,7 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffectCategory;
-import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.math.Vec3d;
 import org.marj4n.smooth_classes.effects.SmoothEffects;
 import org.marj4n.smooth_classes.effects.SourceStatusEffectInstance;
 import org.marj4n.smooth_classes.integration.PuffishSkillsIntegration;
@@ -82,9 +80,9 @@ public final class AscendancyRuntime {
     }
 
     private static ExecutionResult rapidfire(ServerPlayerEntity p,int pts){
-        if(!(p.getMainHandStack().getItem() instanceof net.minecraft.item.BowItem)
-                && !(p.getMainHandStack().getItem() instanceof net.minecraft.item.CrossbowItem))
-            return ExecutionResult.failure("Rapidfire requires a bow or crossbow.");
+        var item=p.getMainHandStack().getItem();
+        if(!(item instanceof net.minecraft.item.BowItem) && !(item instanceof net.minecraft.item.CrossbowItem))
+            return ExecutionResult.failure("Rapidfire requires a Bow or Crossbow in your main hand.");
         return effect(p,SmoothEffects.RAPIDFIRE,AscendancyBalance.rapidfireDuration(pts),0,"rapidfire");
     }
     public static void boneArmorHit(ServerPlayerEntity p){
@@ -102,25 +100,17 @@ public final class AscendancyRuntime {
             p.addStatusEffect(new StatusEffectInstance(net.minecraft.entity.effect.StatusEffects.REGENERATION,80,1,false,false,true));
         }
     }
-    private static ExecutionResult magicCircle(ServerPlayerEntity p,int pts){
-        p.addStatusEffect(new StatusEffectInstance(SmoothEffects.MAGIC_CIRCLE,240+pts,0,false,false,true));
-        p.addStatusEffect(new StatusEffectInstance(SmoothEffects.IMMOBILIZE,25,0,false,false,true));
-        return ExecutionResult.success(1,"magic_circle");
-    }
-
     private static ExecutionResult cyclonicCleave(ServerPlayerEntity p){
-        boolean cast=InternalSpellRuntime.target(p,"smooth_classes:cyclonic_cleave",p,1F);
+        boolean cast=InternalSpellRuntime.targetUniversal(p,"smooth_classes:cyclonic_cleave",p,1F);
         return cast?ExecutionResult.success(1,"cyclonic_cleave"):ExecutionResult.failure("Cyclonic Cleave spell unavailable.");
     }
 
     private static ExecutionResult arcaneSlash(ServerPlayerEntity p,int pts){
-        if (!ArcaneSlashVisuals.hasSword(p))
-            return ExecutionResult.failure("Arcane Slash requires a sword in your main hand.");
         if (p.hasStatusEffect(SmoothEffects.ARCANE_SLASH))
             return ExecutionResult.failure("Arcane Slash is already charging.");
         if (!ArcaneSlashChargeRuntime.isHeld(p))
             return ExecutionResult.failure("Hold the Ascendancy key until Arcane Slash is released.");
-        boolean cast=InternalSpellRuntime.target(p,"smooth_classes:arcane_slash",p,1F);
+        boolean cast=InternalSpellRuntime.targetUniversal(p,"smooth_classes:arcane_slash",p,1F);
         if(cast){
             ArcaneSlashChargeRuntime.begin(p);
             if(pts>9) increment(p,SmoothEffects.ARCANE_ATTUNEMENT,60,1+pts/10,19);
@@ -129,20 +119,8 @@ public final class AscendancyRuntime {
                 : ExecutionResult.failure("Arcane Slash spell unavailable.");
     }
 
-    private static ExecutionResult curse(ServerPlayerEntity p,StatusEffect fx,int duration,String name,int pts){
-        LivingEntity target=nearestEnemy(p,10);
-        if(target==null)return ExecutionResult.failure("No valid target within 10 blocks.");
-        target.addStatusEffect(new SourceStatusEffectInstance(fx,duration,0,false,false,true,p));
-        SkillFx.sound(p,"magic_shamanic_spell_04",0.2F,1F);
-        if(fx==SmoothEffects.TORMENT)
-            SkillFx.beam(p,target,net.minecraft.particle.ParticleTypes.SMOKE,20);
-        if(fx==SmoothEffects.TORMENT && pts>29)
-            target.addStatusEffect(new SourceStatusEffectInstance(SmoothEffects.TAUNTED,duration,0,false,false,true,p));
-        return ExecutionResult.success(1,name);
-    }
-
     private static ExecutionResult cataclysm(ServerPlayerEntity p){
-        boolean cast=InternalSpellRuntime.target(p,"smooth_classes:cataclysm",p,1F);
+        boolean cast=InternalSpellRuntime.targetUniversal(p,"smooth_classes:cataclysm",p,1F);
         if(cast)SkillFx.sound(p,"energy_charge",0.3F,1F);
         return cast?ExecutionResult.success(1,"cataclysm"):ExecutionResult.failure("Cataclysm spell unavailable.");
     }
@@ -157,7 +135,7 @@ public final class AscendancyRuntime {
     private static ExecutionResult righteousShield(ServerPlayerEntity p){
         if(!p.hasStatusEffect(SmoothEffects.GOLDEN_AEGIS))
             return ExecutionResult.failure("Righteous Shield requires Golden Aegis.");
-        boolean cast=InternalSpellRuntime.target(p,"smooth_classes:righteous_shield",p,1F);
+        boolean cast=InternalSpellRuntime.targetUniversal(p,"smooth_classes:righteous_shield",p,1F);
         return cast?ExecutionResult.success(1,"righteous_shield"):ExecutionResult.failure("Righteous Shield spell unavailable.");
     }
 
@@ -169,6 +147,7 @@ public final class AscendancyRuntime {
         int stacks=pts>=60?10:1+AscendancyBalance.points(pts)/10;
         increment(p,SmoothEffects.MIGHT,160,stacks,19);
         increment(p,SmoothEffects.MARKSMANSHIP,160,stacks,19);
+        increment(p,SmoothEffects.SPELLFORGED,160,stacks,19);
         if(pts>=60){
             p.addStatusEffect(new StatusEffectInstance(net.minecraft.entity.effect.StatusEffects.RESISTANCE,160,2,false,false,true));
             p.addStatusEffect(new StatusEffectInstance(net.minecraft.entity.effect.StatusEffects.STRENGTH,160,2,false,false,true));
@@ -204,45 +183,27 @@ public final class AscendancyRuntime {
         if(target.getStatusEffect(SmoothEffects.AGONY) instanceof SourceStatusEffectInstance agony){
             target.timeUntilRegen=0;
             target.damage(owner.getDamageSources().indirectMagic(owner,owner),
-                    Math.max(1F,highestSpellPower(owner)*0.1F));
+                    Math.max(1F,SpellPowerRuntime.strongest(owner,0.1)));
             target.timeUntilRegen=0;
             if(agony.getSourceEntity() instanceof ServerPlayerEntity sourcePlayer && points(sourcePlayer)>29)
                 owner.heal(Math.max(1F,SpellPowerRuntime.healing(sourcePlayer,0.1)));
         }
     }
 
-    /** 30+ passively regenerates Aegis; 60+ accelerates it to one stack every 2 seconds. */
+    /** Righteous Shield is class-agnostic: blocking accelerates Aegis, but is never mandatory. */
     public static void serverTick(ServerPlayerEntity p){
-        // Fastest regeneration cadence is 40 ticks. Do not touch Puffish on the
-        // other 39 ticks; 30-59 point players are further gated to 200 ticks.
-        if((p.age % 40) != 0)return;
         if(!unlocked(p,"righteous_shield"))return;
         int pts=points(p);
-        if(pts<30)return;
-        if(pts<60 && (p.age % 200) != 0)return;
-        increment(p,SmoothEffects.GOLDEN_AEGIS,2400,1,pts>=60?30:15+pts/10);
+        int interval=pts>=60?40:pts>=30?200:300;
+        if((p.age % interval)!=0)return;
+        int cap=pts>=60?30:pts>=30?15+pts/10:5+AscendancyBalance.points(pts)/10;
+        increment(p,SmoothEffects.GOLDEN_AEGIS,2400,1,cap);
     }
 
     public static void shieldHit(ServerPlayerEntity p){
         if (!unlocked(p,"righteous_shield")) return;
         int pts=points(p);
         increment(p,SmoothEffects.GOLDEN_AEGIS,2400,1,pts>=60?30:15+pts/10);
-    }
-
-    private static float highestSpellPower(ServerPlayerEntity p){
-        return Math.max(SpellPowerRuntime.arcane(p,1),Math.max(SpellPowerRuntime.fire(p,1),
-                Math.max(SpellPowerRuntime.frost(p,1),Math.max(SpellPowerRuntime.lightning(p,1),
-                        Math.max(SpellPowerRuntime.soul(p,1),SpellPowerRuntime.healing(p,1))))));
-    }
-
-    private static LivingEntity nearestEnemy(ServerPlayerEntity p,double radius){
-        LivingEntity nearest=null;
-        double best=Double.MAX_VALUE;
-        for(LivingEntity candidate:CombatRuntime.nearbyEnemies(p,radius)){
-            double distance=p.squaredDistanceTo(candidate);
-            if(distance<best){best=distance;nearest=candidate;}
-        }
-        return nearest;
     }
 
     private static void increment(LivingEntity e,StatusEffect fx,int duration,int amount,int max){
