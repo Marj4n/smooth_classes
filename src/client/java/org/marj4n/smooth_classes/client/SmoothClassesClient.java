@@ -44,6 +44,7 @@ public final class SmoothClassesClient implements ClientModInitializer {
     private static int arcaneHoldTicks;
     private static boolean riderFlightWasMounted;
     private static boolean shadowWasDown;
+    private static boolean deathListComboWasDown;
     private static boolean riderFlightLastAscend;
     private static boolean riderFlightLastDescend;
     private static boolean riderFlightLastBoost;
@@ -148,6 +149,7 @@ public final class SmoothClassesClient implements ClientModInitializer {
                 (handler, client) -> {
                     org.marj4n.smooth_classes.client.charge.ChargeHudState.reset();
                     ShadowAimClient.reset();
+                    deathListComboWasDown = false;
                 });
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
@@ -158,6 +160,24 @@ public final class SmoothClassesClient implements ClientModInitializer {
                 client.player.extinguish();
                 client.player.setFireTicks(0);
             }
+
+            // Ctrl+H is a fixed Death List shortcut, independent of the shared H keybind
+            // and independent of HUD sync. The server remains authoritative and ignores
+            // the request when the player is not an Avenger. This avoids losing Ctrl+H
+            // when another mod/keybind owns H or the Avenger HUD state has not synced yet.
+            boolean deathListComboDown = false;
+            if (client.player != null && client.getNetworkHandler() != null
+                    && client.currentScreen == null && client.isWindowFocused()) {
+                long window = client.getWindow().getHandle();
+                boolean control = InputUtil.isKeyPressed(window, GLFW.GLFW_KEY_LEFT_CONTROL)
+                        || InputUtil.isKeyPressed(window, GLFW.GLFW_KEY_RIGHT_CONTROL);
+                deathListComboDown = control && InputUtil.isKeyPressed(window, GLFW.GLFW_KEY_H);
+                if (deathListComboDown && !deathListComboWasDown
+                        && ClientPlayNetworking.canSend(SmoothClassesNetworking.OPEN_DEATH_LIST)) {
+                    ClientPlayNetworking.send(SmoothClassesNetworking.OPEN_DEATH_LIST, PacketByteBufs.empty());
+                }
+            }
+            deathListComboWasDown = deathListComboDown;
             boolean preparationSelected = "preparation".equals(AbilityHudState.signatureAbility);
             boolean shadowDown = preparationSelected && client.player != null && client.getNetworkHandler() != null
                     && client.currentScreen == null && client.isWindowFocused() && signature.isPressed();
@@ -207,13 +227,14 @@ public final class SmoothClassesClient implements ClientModInitializer {
             }
             while (riderMount.wasPressed()) {
                 if (client.player == null) continue;
+                long window = client.getWindow().getHandle();
+                boolean control = InputUtil.isKeyPressed(window, GLFW.GLFW_KEY_LEFT_CONTROL)
+                        || InputUtil.isKeyPressed(window, GLFW.GLFW_KEY_RIGHT_CONTROL);
+                // Raw Ctrl+H above owns this combination. Do not also summon/recall
+                // or trigger a Rider mount on the same press.
+                if (control) continue;
                 if (AbilityHudState.avengerSummonVisible) {
-                    long window = client.getWindow().getHandle();
-                    boolean control = InputUtil.isKeyPressed(window, GLFW.GLFW_KEY_LEFT_CONTROL)
-                            || InputUtil.isKeyPressed(window, GLFW.GLFW_KEY_RIGHT_CONTROL);
-                    if (control && ClientPlayNetworking.canSend(SmoothClassesNetworking.OPEN_DEATH_LIST)) {
-                        ClientPlayNetworking.send(SmoothClassesNetworking.OPEN_DEATH_LIST, PacketByteBufs.empty());
-                    } else if (ClientPlayNetworking.canSend(SmoothClassesNetworking.AVENGER_SUMMON)) {
+                    if (ClientPlayNetworking.canSend(SmoothClassesNetworking.AVENGER_SUMMON)) {
                         ClientPlayNetworking.send(SmoothClassesNetworking.AVENGER_SUMMON, PacketByteBufs.empty());
                     }
                     continue;

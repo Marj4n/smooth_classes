@@ -92,9 +92,18 @@ public final class DeathListBookClient {
             registerCommand.invoke(api, "smooth_death_max_charges", (Function<Object, String>) ignored -> Integer.toString(maxCharges));
             registerCommand.invoke(api, "smooth_death_recharge", (Function<Object, String>) ignored -> rechargeText());
 
+            // Keep scalar ledger values on the same function path used by the
+            // Soul Stock entries. Patchouli 1.20.x reliably resolves registered
+            // functions here, while a few long custom command names can remain
+            // literal depending on parser/registration order.
+            registerFunction.invoke(api, "smooth_death_meta",
+                    (BiFunction<String, Object, String>) (key, ignored) -> ledgerMeta(key));
+
             registerFunction.invoke(api, "smooth_death_stock_name", (BiFunction<String, Object, String>) (slot, ignored) -> stockName(slot));
             registerFunction.invoke(api, "smooth_death_stock_mark", (BiFunction<String, Object, String>) (slot, ignored) -> stockMark(slot));
             registerFunction.invoke(api, "smooth_death_stock_count", (BiFunction<String, Object, String>) (slot, ignored) -> stockCount(slot));
+            registerFunction.invoke(api, "smooth_death_stock_main", (BiFunction<String, Object, String>) (slot, ignored) -> stockMain(slot));
+            registerFunction.invoke(api, "smooth_death_stock_off", (BiFunction<String, Object, String>) (slot, ignored) -> stockOff(slot));
 
             registerFunction.invoke(api, "smooth_death_name", (BiFunction<String, Object, String>) (id, ignored) -> soulName(id));
             registerFunction.invoke(api, "smooth_death_status", (BiFunction<String, Object, String>) (id, ignored) -> soulStatus(id));
@@ -109,6 +118,19 @@ public final class DeathListBookClient {
         } catch (ReflectiveOperationException | LinkageError ex) {
             SmoothClasses.LOGGER.warn("Patchouli Death List functions could not be registered; vanilla fallback remains available.", ex);
         }
+    }
+
+    private static String ledgerMeta(String rawKey) {
+        String key = rawKey == null ? "" : rawKey.trim();
+        return switch (key) {
+            case "total" -> Integer.toString(totalSouls);
+            case "discovered" -> Integer.toString(discovered);
+            case "recipes" -> Integer.toString(recipeCount);
+            case "charges" -> Integer.toString(charges);
+            case "max_charges" -> Integer.toString(maxCharges);
+            case "recharge" -> rechargeText();
+            default -> "?";
+        };
     }
 
     private static String rechargeText() {
@@ -144,6 +166,19 @@ public final class DeathListBookClient {
     private static String stockCount(String slot) {
         AvengerSummonRecipes.Recipe recipe = stockRecipe(slot);
         return recipe == null ? "" : Integer.toString(SOULS.getOrDefault(recipe.entityId(), 0));
+    }
+
+    private static String stockMain(String slot) {
+        AvengerSummonRecipes.Recipe recipe = stockRecipe(slot);
+        return recipe == null ? "" : "Main: " + AvengerSummonRecipes.friendlyItemName(recipe.mainItemId());
+    }
+
+    private static String stockOff(String slot) {
+        AvengerSummonRecipes.Recipe recipe = stockRecipe(slot);
+        if (recipe == null) return "";
+        return "Off: " + (recipe.offhandItemId() == null
+                ? "Not required"
+                : AvengerSummonRecipes.friendlyItemName(recipe.offhandItemId()));
     }
 
     private static String normalizedSoulId(String rawId) {
@@ -202,20 +237,48 @@ public final class DeathListBookClient {
         try {
             if (!patchouliHooksRegistered) registerPatchouliHooks();
             Object api = patchouliApi();
+
+            // Prefer the ledger entry. Patchouli can silently ignore a GUI open when
+            // a book/entry failed to load, so verify the actually-open book instead
+            // of treating a successful reflective invocation as success.
             Method openEntry = findMethod(api, "openBookEntry", 3);
             if (openEntry != null) {
-                openEntry.invoke(api, BOOK_ID, LEDGER_ENTRY, 0);
-                return true;
+                try {
+                    openEntry.invoke(api, BOOK_ID, LEDGER_ENTRY, 0);
+                    if (isPatchouliDeathListOpen(api)) return true;
+                } catch (ReflectiveOperationException | IllegalArgumentException ex) {
+                    SmoothClasses.LOGGER.warn("Could not open the Death List ledger entry; trying the book landing page.", ex);
+                }
             }
+
             Method openBook = findMethod(api, "openBookGUI", 1);
             if (openBook != null) {
-                openBook.invoke(api, BOOK_ID);
-                return true;
+                try {
+                    openBook.invoke(api, BOOK_ID);
+                    if (isPatchouliDeathListOpen(api)) return true;
+                } catch (ReflectiveOperationException | IllegalArgumentException ex) {
+                    SmoothClasses.LOGGER.warn("Could not open the Death List book GUI.", ex);
+                }
             }
         } catch (ReflectiveOperationException | LinkageError | IllegalArgumentException ex) {
-            SmoothClasses.LOGGER.warn("Could not open the Patchouli Death List; using vanilla fallback.", ex);
+            SmoothClasses.LOGGER.warn("Could not access Patchouli Death List integration; using vanilla fallback.", ex);
         }
         return false;
+    }
+
+    private static boolean isPatchouliDeathListOpen(Object api) {
+        try {
+            Method getOpenBook = findMethod(api, "getOpenBookGui", 0);
+            if (getOpenBook == null) {
+                // Older compatible Patchouli builds may not expose the query helper.
+                // In that case preserve the old behavior after invoking openBook*.
+                return true;
+            }
+            Object open = getOpenBook.invoke(api);
+            return BOOK_ID.equals(open);
+        } catch (ReflectiveOperationException | LinkageError | IllegalArgumentException ex) {
+            return false;
+        }
     }
 
     private static Object patchouliApi() throws ReflectiveOperationException {
