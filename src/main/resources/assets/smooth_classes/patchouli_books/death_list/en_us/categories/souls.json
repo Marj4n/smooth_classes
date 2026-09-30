@@ -1,5 +1,5 @@
 {
-  "name": "Soul Commands",
-  "description": "Binding, recalling and releasing souls.",
+  "name": "Death List",
+  "description": "Your bound soul stock and the hand recipe for each discovered soul.",
   "icon": "minecraft:soul_lantern"
 }
