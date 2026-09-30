@@ -98,8 +98,6 @@ public final class ProjectileEntityRuntime {
                 p.discard();
             }
         }
-        if(spell.contains("rapidfire") && p.getFollowedTarget()==null)
-            nearest(p,owner,16,true).ifPresent(p::setFollowedTarget);
         if(smooth && spell.equals("passive_throw") && p.getFollowedTarget()==null)
             nearest(p,owner,12,true).ifPresent(p::setFollowedTarget);
     }

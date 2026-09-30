@@ -11,7 +11,6 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.hit.HitResult;
 import org.marj4n.smooth_classes.SmoothClasses;
 import org.marj4n.smooth_classes.entity.BloodRainEntity;
 import org.marj4n.smooth_classes.registry.SmoothEntities;
@@ -53,11 +52,20 @@ public final class BloodRainRuntime {
     }
     public static boolean active(ServerPlayerEntity p){return ACTIVE.containsKey(p.getUuid());}
     public static void track(BloodRainEntity e){if(e.owner!=null){var old=ACTIVE.putIfAbsent(e.owner,e);if(old!=null&&old!=e)e.discard();}}
-    public static void ended(BloodRainEntity e){
-        if(e.owner==null||!ACTIVE.remove(e.owner,e))return;
+    public static void ended(BloodRainEntity e) {
+        ended(e, null);
+    }
+
+    private static void ended(BloodRainEntity e, ServerPlayerEntity fallbackPlayer) {
+        if (e.owner == null || !ACTIVE.remove(e.owner, e)) return;
         HIT_COUNTS.remove(e.owner);
-        var p=e.getServer().getPlayerManager().getPlayer(e.owner);
-        if(p!=null){AbilityCooldowns.start(p,SmoothClasses.id("ascendancy_magic_circle"),1200);SmoothClassesNetworking.sendAbilityState(p);}
+        ServerPlayerEntity player = e.getServer().getPlayerManager().getPlayer(e.owner);
+        if (player == null) player = fallbackPlayer;
+        if (player != null) {
+            AbilityCooldowns.start(player, SmoothClasses.id("ascendancy_magic_circle"),
+                    AscendancyBalance.cooldownTicks("magic_circle"));
+            SmoothClassesNetworking.sendAbilityState(player);
+        }
     }
     public static void register(){
         ServerTickEvents.END_SERVER_TICK.register(s->{
@@ -86,7 +94,7 @@ public final class BloodRainRuntime {
                 }
             }
         });
-        ServerPlayConnectionEvents.DISCONNECT.register((h,s)->{var e=ACTIVE.get(h.player.getUuid());if(e!=null){ended(e);AbilityCooldowns.start(h.player,SmoothClasses.id("ascendancy_magic_circle"),1200);e.discard();}});
+        ServerPlayConnectionEvents.DISCONNECT.register((h,s)->{var e=ACTIVE.get(h.player.getUuid());if(e!=null){ended(e,h.player);e.discard();}});
         ServerLifecycleEvents.SERVER_STOPPING.register(s->{for(var e:new ArrayList<>(ACTIVE.values())){ended(e);e.discard();}});
         ServerLifecycleEvents.SERVER_STOPPED.register(s->{ACTIVE.clear(); HIT_COUNTS.clear();});
     }

@@ -70,7 +70,7 @@
           "composite_model": {
             "models": [
               {
-                "orientation": "ALONG_MOTION",
+                "orientation": "TOWARDS_MOTION",
                 "fx": {
                   "model_id": "smooth_classes:spell_projectile/arrow",
                   "scale": 0.9

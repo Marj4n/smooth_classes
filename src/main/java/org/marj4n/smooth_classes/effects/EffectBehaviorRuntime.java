@@ -15,6 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.spell_engine.fx.SpellEngineParticles;
 import net.minecraft.item.BowItem;
+import net.minecraft.item.CrossbowItem;
 import net.spell_engine.entity.SpellProjectile;
 import org.marj4n.smooth_classes.integration.OptionalCompatRuntime;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -55,7 +56,7 @@ public final class EffectBehaviorRuntime {
                  "spellbreaking", "raging_javelin", "agony", "torment", "taunted",
                  "vitality_bond", "anointed", "shadow_aura", "static_charge",
                  "fanofblades", "frost_volley", "arcane_volley", "meteoric_wrath",
-                 "barrier", "bone_armor", "undying", "rampage" -> true;
+                 "barrier", "bone_armor", "undying" -> true;
             default -> false;
         };
     }
@@ -132,7 +133,6 @@ public final class EffectBehaviorRuntime {
             case "leapslam" -> leapSlam(entity);
             case "earthshaker" -> earthshaker(entity);
             case "disenchantment" -> disenchantment(entity);
-            case "magic_circle" -> magicCircle(entity);
             case "righteous_hammers" -> righteousHammers(entity, amplifier);
             case "cyclonic_cleave" -> cyclonicCleave(entity);
             case "arcane_slash" -> arcaneSlash(entity);
@@ -155,7 +155,6 @@ public final class EffectBehaviorRuntime {
             case "barrier" -> statusAura(entity, ParticleTypes.REVERSE_PORTAL, 0.85);
             case "bone_armor" -> boneArmorParticles(entity, amplifier);
             case "undying" -> { statusAura(entity, ParticleTypes.SOUL, 0.9); undyingWarning(entity); }
-            case "rampage" -> rampage(entity);
             // Marker/state effects are consumed by combat, signature, projectile
             // and ascendancy hooks exactly where consumes them.
             default -> { }
@@ -299,18 +298,7 @@ public final class EffectBehaviorRuntime {
                 org.marj4n.smooth_classes.integration.SkillNodeIds.wizardSpecialisationMeteorShowerRenewingWrathTwo, player)) renewal = 25;
         else if (AbilityRuntime.hasTalent(player,
                 org.marj4n.smooth_classes.content.caster.CasterContent.METEOR_SHOWER_RENEWING_WRATH.id())) renewal = 10;
-        if (player.getRandom().nextInt(100) > renewal) decrement(player, SmoothEffects.METEORIC_WRATH, 1);
-    }
-
-    private static void rampage(LivingEntity bearer) {
-        if (!(bearer instanceof ServerPlayerEntity player)) return;
-        StatusEffect random = switch (player.getRandom().nextInt(4)) {
-            case 0 -> StatusEffects.STRENGTH;
-            case 1 -> StatusEffects.SPEED;
-            case 2 -> StatusEffects.RESISTANCE;
-            default -> StatusEffects.HASTE;
-        };
-        increment(player, random, 150, 1, 3);
+        if (player.getRandom().nextInt(100) >= renewal) decrement(player, SmoothEffects.METEORIC_WRATH, 1);
     }
 
     private static void undyingWarning(LivingEntity bearer) {
@@ -521,9 +509,6 @@ public final class EffectBehaviorRuntime {
         remove.forEach(e::removeStatusEffect);
     }
 
-    private static void magicCircle(LivingEntity e) {
-        if(e.age%20==0)e.addStatusEffect(new StatusEffectInstance(SmoothEffects.IMMOBILIZE,25,0,false,false,true));
-    }
     private static void righteousHammers(LivingEntity e,int amp){
         if (!(e instanceof ServerPlayerEntity p) || p.age % 10 != 0) return;
         int count=amp+1;
@@ -538,7 +523,7 @@ public final class EffectBehaviorRuntime {
         }
         int pts=PuffishSkillsIntegration.countUnlockedSkills(PuffishSkillsIntegration.ASCENDANCY,p);
         float coefficient=pts>=60?1.00F:pts>=30?.75F:.55F;
-        float damage=(float)Math.max(p.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE),SpellPowerRuntime.healing(p,1))*coefficient;
+        float damage=SpellPowerRuntime.strongest(p,coefficient);
         for (LivingEntity target:nearbyHostiles(p,4.5)) {
             if (target instanceof net.minecraft.entity.passive.TameableEntity tame && tame.isOwner(p)) continue;
             var box=target.getBoundingBox();
@@ -567,8 +552,7 @@ public final class EffectBehaviorRuntime {
             SkillFx.plane(p, pts>=30?ParticleTypes.PORTAL:ParticleTypes.CLOUD, p.getBlockPos(), pts>=60?4:2, 0, 0.2, 0);
             double base=(0.75D+0.015D*AscendancyBalance.points(pts));
             if(pts>=60)base*=1.75D;
-            float damage=(float)(Math.max(p.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE),
-                    Math.max(SpellPowerRuntime.arcane(p,1),Math.max(SpellPowerRuntime.fire(p,1),SpellPowerRuntime.frost(p,1))))*base);
+            float damage=SpellPowerRuntime.strongest(p,base);
             double radius=pts>=60?4.5:2.5;
             for(LivingEntity target:nearbyHostiles(p,radius)){
                 if(pts>=30) pullToward(p,target,pts>=60?10:6);
@@ -576,8 +560,7 @@ public final class EffectBehaviorRuntime {
                 target.timeUntilRegen=0;target.damage(p.getDamageSources().playerAttack(p),damage);target.timeUntilRegen=0;
             }
             if(pts>=60&&dur==5){
-                float shock=(float)(Math.max(p.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE),
-                        Math.max(SpellPowerRuntime.arcane(p,1),Math.max(SpellPowerRuntime.fire(p,1),SpellPowerRuntime.frost(p,1))))*2.5D);
+                float shock=SpellPowerRuntime.strongest(p,2.5D);
                 for(LivingEntity target:nearbyHostiles(p,7)){
                     target.timeUntilRegen=0;target.damage(p.getDamageSources().playerAttack(p),shock);target.timeUntilRegen=0;
                     Vec3d away=target.getPos().subtract(p.getPos());
@@ -605,27 +588,27 @@ public final class EffectBehaviorRuntime {
                     : pts >= 30 ? "smooth_classes:arcane_slash_projectile_2"
                     : "smooth_classes:arcane_slash_projectile";
             p.swingHand(net.minecraft.util.Hand.MAIN_HAND);
-            if (InternalSpellRuntime.dumbFire(p, spell, 3F))
+            if (InternalSpellRuntime.dumbFireUniversal(p, spell, 3F))
                 ArcaneSlashChargeRuntime.finish(p);
             // Natural status removal cancels if projectile delivery failed.
         }
     }
     private static void rapidfire(LivingEntity e){
         if(!(e instanceof ServerPlayerEntity p))return;
-        if(!(p.getMainHandStack().getItem() instanceof BowItem)
-                && !(p.getMainHandStack().getItem() instanceof net.minecraft.item.CrossbowItem)){
-            p.removeStatusEffect(SmoothEffects.RAPIDFIRE);return;
-        }
         var fx=p.getStatusEffect(SmoothEffects.RAPIDFIRE);if(fx==null)return;
+        var weapon=p.getMainHandStack().getItem();
+        if(!(weapon instanceof BowItem) && !(weapon instanceof CrossbowItem)){
+            p.removeStatusEffect(SmoothEffects.RAPIDFIRE);
+            RAPIDFIRE_ARROW_COUNT.remove(p.getUuid());
+            return;
+        }
         int dur=fx.getDuration(),pts=PuffishSkillsIntegration.countUnlockedSkills(PuffishSkillsIntegration.ASCENDANCY,p);
-        if(dur%20==0)InternalSpellRuntime.target(p,p.getMainHandStack().getItem() instanceof net.minecraft.item.CrossbowItem?
-                "smooth_classes:rapidfire_crossbow":"smooth_classes:rapidfire",p,1F);
-        int interval=pts>=60?2:5;
+        if(dur%20==0)InternalSpellRuntime.targetUniversal(p,
+                weapon instanceof CrossbowItem ? "smooth_classes:rapidfire_crossbow" : "smooth_classes:rapidfire",p,1F);
+        int interval=AscendancyBalance.rapidfireInterval(pts);
         if(dur%interval!=0)return;
-        LivingEntity target=lookTarget(p,pts>=60?48:32);
-        float multiplier=pts>=60?2.0F:1.5F;
-        boolean fired=target!=null?InternalSpellRuntime.target(p,"smooth_classes:rapidfire_projectile",target,multiplier)
-                :InternalSpellRuntime.dumbFire(p,"smooth_classes:rapidfire_projectile",multiplier);
+        float multiplier=AscendancyBalance.rapidfireCastMultiplier(pts);
+        boolean fired=InternalSpellRuntime.dumbFireUniversal(p,"smooth_classes:rapidfire_projectile",multiplier);
         if(fired){
             int count=RAPIDFIRE_ARROW_COUNT.merge(p.getUuid(),1,Integer::sum);
             if(pts>=60&&count%2==0)increment(p,SmoothEffects.MARKSMANSHIP,80,1,12);
@@ -647,12 +630,13 @@ public final class EffectBehaviorRuntime {
         SkillFx.sound(p,"spell_energy",.5F,pts>=60?1.35F:1.1F);
         boolean launched;
         if(pts>=60){
-            boolean a=InternalSpellRuntime.atPosition(p,"smooth_classes:cataclysm_meteor",center,1.25F);
-            boolean b=InternalSpellRuntime.atPosition(p,"smooth_classes:cataclysm_comet",center,1.25F);
+            float multiplier=AscendancyBalance.cataclysmCastMultiplier(pts);
+            boolean a=InternalSpellRuntime.atPositionUniversal(p,"smooth_classes:cataclysm_meteor",center,multiplier);
+            boolean b=InternalSpellRuntime.atPositionUniversal(p,"smooth_classes:cataclysm_comet",center,multiplier);
             launched=a||b;
         }else{
             String spell=fire>=frost?"smooth_classes:cataclysm_meteor":"smooth_classes:cataclysm_comet";
-            launched=InternalSpellRuntime.atPosition(p,spell,center,1F);
+            launched=InternalSpellRuntime.atPositionUniversal(p,spell,center,1F);
         }
         if(launched&&pts>=60)increment(p,SmoothEffects.SPELLFORGED,100,2,10);
         else if(launched&&pts>=30)increment(p,SmoothEffects.SPELLFORGED,60,1,5);
@@ -675,7 +659,7 @@ public final class EffectBehaviorRuntime {
             p.setVelocity(look.x*forward,lift,look.z*forward);
             p.setNoGravity(true);p.velocityModified=true;
         }
-        int interval=pts>=60?5:10;
+        int interval=AscendancyBalance.ghostwalkInterval(pts);
         if(dur%interval==0){
             double radius=pts>=60?18:10;
             int limit=pts>=60?2:1;
@@ -693,9 +677,8 @@ public final class EffectBehaviorRuntime {
             LivingEntity[] targets=limit>1?new LivingEntity[]{first,second}:new LivingEntity[]{first};
             for(LivingEntity target:targets){
                 if(target==null)continue;
-                double coefficient=(.35+.0075*AscendancyBalance.points(pts))*(pts>=60?1.75:1.0);
-                float damage=(float)(Math.max(p.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE),
-                        Math.max(SpellPowerRuntime.soul(p,1),SpellPowerRuntime.arcane(p,1)))*coefficient);
+                double coefficient=AscendancyBalance.ghostwalkCoefficient(pts);
+                float damage=SpellPowerRuntime.strongest(p,coefficient);
                 int previous=target.timeUntilRegen;boolean hit;
                 try{target.timeUntilRegen=0;hit=target.damage(p.getDamageSources().playerAttack(p),damage);}finally{target.timeUntilRegen=previous;}
                 SkillFx.beam(p,target,ParticleTypes.SOUL,pts>=60?36:24);
@@ -729,8 +712,7 @@ public final class EffectBehaviorRuntime {
         if(dur==15){p.setVelocity(0,-1.2,0);p.velocityModified=true;}
         boolean slash=dur==1||dur==15||dur==30;
         if(slash){
-            float damage=(float)(Math.max(p.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE),
-                    Math.max(SpellPowerRuntime.arcane(p,1),Math.max(SpellPowerRuntime.fire(p,1),SpellPowerRuntime.frost(p,1))))*damageModifier);
+            float damage=SpellPowerRuntime.strongest(p,damageModifier);
             for(LivingEntity target:nearbyHostiles(p,pts>=60?5:2)){
                 if(pts>=60)target.addStatusEffect(new StatusEffectInstance(SmoothEffects.DEATH_MARK,120,0,false,false,true));
                 target.timeUntilRegen=0;target.damage(p.getDamageSources().playerAttack(p),damage);target.timeUntilRegen=0;
@@ -841,8 +823,8 @@ public final class EffectBehaviorRuntime {
         else if(tier==2){spell="righteous_shield_projectile_2";consume=5;}
         else {spell="righteous_shield_projectile";consume=stacks+1;}
         float multiplier=pts>=60?1.25F:1F;
-        if(!InternalSpellRuntime.target(p,"smooth_classes:"+spell,p,multiplier))return;
-        if(pts>=60)InternalSpellRuntime.target(p,"smooth_classes:"+spell,p,multiplier);
+        if(!InternalSpellRuntime.targetUniversal(p,"smooth_classes:"+spell,p,multiplier))return;
+        if(pts>=60)InternalSpellRuntime.targetUniversal(p,"smooth_classes:"+spell,p,multiplier);
         if(pts>=60)consume=Math.max(1,(consume+1)/2);
         int remaining=(stacks+1)-consume;
         p.removeStatusEffect(SmoothEffects.GOLDEN_AEGIS);

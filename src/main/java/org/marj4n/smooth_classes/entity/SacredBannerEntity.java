@@ -14,7 +14,7 @@ public final class SacredBannerEntity extends Entity {
     public SacredBannerEntity(EntityType<?> type, World world) { super(type, world); setNoGravity(true); }
     public void configure(UUID owner, int buffs) {
         this.owner = owner; this.buffs = buffs;
-        expiresAt = getWorld().getTime() + 3000;
+        expiresAt = getWorld().getTime() + 1200;
     }
     public boolean expired() { return getWorld().getTime() >= expiresAt; }
     @Override public void remove(RemovalReason reason) {

@@ -5,6 +5,8 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.WardenEntity;
+import net.minecraft.entity.projectile.PersistentProjectileEntity;
+import net.minecraft.server.network.ServerPlayerEntity;
 import org.marj4n.smooth_classes.effects.SmoothEffects;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -17,7 +19,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class LivingEntityGameplayMixin {
     @org.spongepowered.asm.mixin.injection.ModifyVariable(method = "damage", at = @At("HEAD"), argsOnly = true)
     private float smooth_classes$shadowDamage(float amount, DamageSource source, float original) {
-        return org.marj4n.smooth_classes.content.assassin.runtime.ShadowTechniqueRuntime.empower(source, amount);
+        amount = org.marj4n.smooth_classes.content.assassin.runtime.ShadowTechniqueRuntime.empower(source, amount);
+        if (source.getSource() instanceof PersistentProjectileEntity
+                && source.getAttacker() instanceof ServerPlayerEntity attacker
+                && attacker.hasStatusEffect(SmoothEffects.MARKSMANSHIP)) {
+            StatusEffectInstance marksmanship = attacker.getStatusEffect(SmoothEffects.MARKSMANSHIP);
+            if (marksmanship != null) amount *= 1.0F + 0.10F * (marksmanship.getAmplifier() + 1);
+        }
+        return amount;
     }
     @Inject(method = "damage", at = @At("RETURN"))
     private void smooth_classes$confirmedHit(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {

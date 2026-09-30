@@ -28,7 +28,7 @@ public final class AscendancyAbilityDispatcher {
         if(remaining>0)return DispatchResult.fail(ability+" cooldown "+String.format(Locale.ROOT,"%.1f",remaining/20D)+"s");
         ExecutionResult r=AscendancyRuntime.cast(p,ability);
         if(!r.success())return DispatchResult.fail(r.detail());
-        if(!"magic_circle".equals(ability)&&!"agony".equals(ability)) AbilityCooldowns.start(p,id,"torment".equals(ability) ? 800 : effectiveCooldownTicks(p,ability));
+        if(!"magic_circle".equals(ability)&&!"agony".equals(ability)) AbilityCooldowns.start(p, id, effectiveCooldownTicks(p, ability));
         return new DispatchResult(true,ability,r.detail());
     }
 

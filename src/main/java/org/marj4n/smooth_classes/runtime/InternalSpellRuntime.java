@@ -1,6 +1,7 @@
 package org.marj4n.smooth_classes.runtime;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
@@ -16,6 +17,7 @@ import net.spell_engine.internals.target.SpellIntents;
 import net.spell_engine.internals.target.SpellTarget;
 import net.spell_engine.utils.RegistryHelper;
 import net.spell_power.api.SpellPower;
+import net.spell_power.api.SpellSchools;
 
 import java.util.List;
 
@@ -28,12 +30,44 @@ public final class InternalSpellRuntime {
     }
 
     public static boolean cast(PlayerEntity p, String id, List<Entity> targets, float multiplier) {
+        return cast(p, id, targets, multiplier, false);
+    }
+
+    public static boolean castUniversal(PlayerEntity p, String id, List<Entity> targets, float multiplier) {
+        return cast(p, id, targets, multiplier, true);
+    }
+
+    private static boolean cast(PlayerEntity p, String id, List<Entity> targets, float multiplier, boolean universalPower) {
         if (p.getWorld().isClient) return false;
         RegistryEntry<Spell> e=entry(p,new Identifier(id));
         if(e==null)return false;
         Spell spell=e.value();
+        var power=SpellPower.getSpellPower(spell.school,p);
+        if (universalPower) {
+            double best=Math.max(0.0D,p.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE));
+            double critChance=power.criticalChance();
+            double critDamage=power.criticalDamage();
+            if (power.baseValue()>best) best=power.baseValue();
+            for (var school : SpellSchools.all()) {
+                try {
+                    var candidate=SpellPower.getSpellPower(school,p);
+                    double base=candidate.baseValue();
+                    if (Double.isFinite(base) && base>best) {
+                        best=base;
+                        critChance=candidate.criticalChance();
+                        critDamage=candidate.criticalDamage();
+                    }
+                } catch (RuntimeException ignored) {
+                    // Optional schools may not expose a usable power source for every player.
+                }
+            }
+            // Keep the delivered spell's school/damage identity while borrowing the
+            // strongest offensive magnitude. Vanilla Attack Damage is a real fallback,
+            // so a pure melee build can use every offensive Ascendancy as advertised.
+            power=new SpellPower.Result(spell.school,best,critChance,critDamage);
+        }
         SpellExecution.ImpactContext context=new SpellExecution.ImpactContext(
-                multiplier,1F,null, SpellPower.getSpellPower(spell.school,p), SpellIntents.focusMode(spell),0);
+                multiplier,1F,null,power,SpellIntents.focusMode(spell),0);
         boolean delivered=SpellDelivery.resolveAndDeliver(p.getWorld(),p,e,SpellTarget.SearchResult.of(targets),context,null);
         if(delivered){
             ReleaseFx.send(p.getWorld(),p,e,1F);
@@ -61,13 +95,21 @@ public final class InternalSpellRuntime {
 
     public static boolean dumbFire(PlayerEntity p,String id,float multiplier){return cast(p,id,List.of(),multiplier);}
     public static boolean target(PlayerEntity p,String id,Entity target,float multiplier){return cast(p,id,List.of(target),multiplier);}
+    public static boolean dumbFireUniversal(PlayerEntity p,String id,float multiplier){return castUniversal(p,id,List.of(),multiplier);}
+    public static boolean targetUniversal(PlayerEntity p,String id,Entity target,float multiplier){return castUniversal(p,id,List.of(target),multiplier);}
     public static boolean atPosition(PlayerEntity p,String id,net.minecraft.util.math.Vec3d position,float multiplier){
+        return atPosition(p,id,position,multiplier,false);
+    }
+    public static boolean atPositionUniversal(PlayerEntity p,String id,net.minecraft.util.math.Vec3d position,float multiplier){
+        return atPosition(p,id,position,multiplier,true);
+    }
+    private static boolean atPosition(PlayerEntity p,String id,net.minecraft.util.math.Vec3d position,float multiplier,boolean universalPower){
         if (!(p.getWorld() instanceof net.minecraft.server.world.ServerWorld world)) return false;
         var marker=new org.marj4n.smooth_classes.entity.SpellTargetEntity(
                 org.marj4n.smooth_classes.registry.SmoothEntities.SPELL_TARGET, world);
         marker.refreshPositionAndAngles(position.x,position.y,position.z,0,0);
         if (!world.spawnEntity(marker)) return false;
-        boolean cast=target(p,id,marker,multiplier);
+        boolean cast=universalPower?targetUniversal(p,id,marker,multiplier):target(p,id,marker,multiplier);
         if (!cast) marker.discard();
         return cast;
     }

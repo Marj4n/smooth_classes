@@ -3,14 +3,15 @@ package org.marj4n.smooth_classes.content.berserker.runtime;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.marj4n.smooth_classes.runtime.SkillFx;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.util.Identifier;
 import org.marj4n.smooth_classes.content.berserker.BerserkerClass;
 import org.marj4n.smooth_classes.content.berserker.BerserkerContent;
 import org.marj4n.smooth_classes.runtime.AbilityRuntime;
-import org.marj4n.smooth_classes.runtime.CombatRuntime;
 import org.marj4n.smooth_classes.runtime.ExecutionResult;
 import org.marj4n.smooth_classes.runtime.ClassEffectRuntime;
 import org.marj4n.smooth_classes.effects.SmoothEffects;
+import org.marj4n.smooth_classes.config.SmoothBalance;
 
 /** Talent-aware runtime plan builder for Berserker. Actual Minecraft effects are executed by hooks/integrations. */
 public final class BerserkerRuntime {
@@ -30,7 +31,7 @@ public final class BerserkerRuntime {
 
     public static ExecutionResult executeRampage(ServerPlayerEntity player) {
         RampagePlan plan = rampage(player);
-        ClassEffectRuntime.apply(player, SmoothEffects.RAMPAGE, 250, 0);
+        ClassEffectRuntime.apply(player, SmoothEffects.RAMPAGE, SmoothBalance.Berserker.rampageDuration, 0);
         if (plan.bloodlust()) {
             ClassEffectRuntime.apply(player, SmoothEffects.BULLRUSH, 20, 0);
             SkillFx.sound(player, "soundeffect_15", 0.5F, 1.1F);
@@ -40,8 +41,8 @@ public final class BerserkerRuntime {
 
     public static ExecutionResult executeBloodthirsty(ServerPlayerEntity player) {
         BloodthirstyPlan plan = bloodthirsty(player);
-        ClassEffectRuntime.apply(player, SmoothEffects.BLOODTHIRSTY, 400, 0);
-        if (plan.heal()) ClassEffectRuntime.apply(player, SmoothEffects.MIGHT, 400, 0);
+        ClassEffectRuntime.apply(player, SmoothEffects.BLOODTHIRSTY, SmoothBalance.Berserker.bloodthirstyDuration, 0);
+        if (plan.heal()) ClassEffectRuntime.apply(player, SmoothEffects.MIGHT, SmoothBalance.Berserker.bloodthirstyDuration, 0);
         return ExecutionResult.success(1, "bloodthirsty");
     }
 
@@ -55,6 +56,20 @@ public final class BerserkerRuntime {
             SkillFx.sound(player, "soundeffect_15", 0.5F, 1.1F);
         }
         return ExecutionResult.success(1, "berserking");
+    }
+
+    /** Rampage rewards taking real damage, not merely existing for another server tick. */
+    public static void onRampageDamaged(ServerPlayerEntity player) {
+        if (!player.hasStatusEffect(SmoothEffects.RAMPAGE)) return;
+        var random = switch (player.getRandom().nextInt(4)) {
+            case 0 -> StatusEffects.STRENGTH;
+            case 1 -> StatusEffects.SPEED;
+            case 2 -> StatusEffects.RESISTANCE;
+            default -> StatusEffects.HASTE;
+        };
+        StatusEffectInstance current = player.getStatusEffect(random);
+        int amplifier = current == null ? 0 : Math.min(2, current.getAmplifier() + 1);
+        player.addStatusEffect(new StatusEffectInstance(random, 150, amplifier, false, false, true));
     }
 
 }

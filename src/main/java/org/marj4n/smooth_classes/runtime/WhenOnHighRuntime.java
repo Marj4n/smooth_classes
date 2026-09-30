@@ -123,6 +123,18 @@ public final class WhenOnHighRuntime {
                 }
                 if(!target.isAlive())break;
             }
+            double effectiveMagic=highest+.25D*Math.max(0D,sum-highest);
+            double universal=SpellPowerRuntime.strongestBase(p);
+            double missing=Math.max(0D,universal-effectiveMagic);
+            if(missing>0D){
+                float coefficient=cast.points>=60?PULSE_COEFFICIENT*2F:PULSE_COEFFICIENT;
+                float fallback=(float)(missing*coefficient);
+                if(Float.isFinite(fallback)&&fallback>0F){
+                    int previousImmunity=target.timeUntilRegen;
+                    try{target.timeUntilRegen=0;hit|=target.damage(p.getDamageSources().indirectMagic(p,p),fallback);}
+                    finally{target.timeUntilRegen=previousImmunity;}
+                }
+            }
             if(hit){
                 double y=target.getY()+target.getHeight()*.55;
                 cast.world.spawnParticles(net.minecraft.particle.ParticleTypes.END_ROD,target.getX(),y,target.getZ(),24,target.getWidth()*.6,target.getHeight()*.35,target.getWidth()*.6,.16);
@@ -137,7 +149,7 @@ public final class WhenOnHighRuntime {
         if(cast.beam!=null)cast.beam.discard();
         if(p.getWorld()==cast.world&&p.isAlive())p.requestTeleport(cast.origin.x,cast.origin.y,cast.origin.z);
         p.setNoGravity(cast.oldGravity);p.setInvulnerable(cast.oldInvulnerable);p.setVelocity(Vec3d.ZERO);p.fallDistance=0;
-        AbilityCooldowns.start(p,SmoothClasses.id("ascendancy_agony"),600);
+        AbilityCooldowns.start(p, SmoothClasses.id("ascendancy_agony"), AscendancyBalance.cooldownTicks("agony"));
         if(sync)SmoothClassesNetworking.sendAbilityState(p);
     }
 }
