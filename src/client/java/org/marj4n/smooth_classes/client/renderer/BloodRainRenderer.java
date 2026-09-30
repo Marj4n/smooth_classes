@@ -52,10 +52,10 @@ public final class BloodRainRenderer extends EntityRenderer<BloodRainEntity> {
         for(int x=-cloudRadius;x<cloudRadius;x+=8)for(int z=-cloudRadius;z<cloudRadius;z+=8){
             if(!e.inside(x+4,z+4))continue;
             float u=(x+cloudRadius)/cloudSize,v=(z+cloudRadius)/cloudSize;
-            vertex(cloud,entry,x,cloudY,z,u,v,62,20,28,210);
-            vertex(cloud,entry,x+8,cloudY,z,u+du,v,62,20,28,210);
-            vertex(cloud,entry,x+8,cloudY,z+8,u+du,v+du,62,20,28,210);
-            vertex(cloud,entry,x,cloudY,z+8,u,v+du,62,20,28,210);
+            vertex(cloud,entry,x,cloudY,z,u,v,38,4,8,230);
+            vertex(cloud,entry,x+8,cloudY,z,u+du,v,38,4,8,230);
+            vertex(cloud,entry,x+8,cloudY,z+8,u+du,v+du,38,4,8,230);
+            vertex(cloud,entry,x,cloudY,z+8,u,v+du,38,4,8,230);
         }
     }
     private static void vertex(VertexConsumer b,MatrixStack.Entry m,float x,float y,float z,float u,float v,int r,int g,int blue,int a){

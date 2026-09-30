@@ -48,7 +48,13 @@ public final class AbilityHud {
         RenderSystem.defaultBlendFunc();
         context.getMatrices().push();
         context.getMatrices().translate(0, 0, 300);
-        if (("sacred_orb".equals(ability) && AbilityHudState.bannerActive)
+        if ("preparation".equals(ability) && AbilityHudState.shadowActive) {
+            long shadowRemaining = AbilityHudState.shadowRemainingMs();
+            int secs = Math.max(0, (int)Math.ceil(shadowRemaining / 1000D));
+            // Same bottom-right extra-number language as Avenger charges. Keep the
+            // Shadow icon unobscured: this number is anchor lifetime, not cooldown.
+            context.drawTextWithShadow(client.textRenderer, Text.literal(Integer.toString(secs)), x + 21, y + 20, 0xDDA0FF);
+        } else if (("sacred_orb".equals(ability) && AbilityHudState.bannerActive)
                 || ("magic_circle".equals(ability) && AbilityHudState.bloodRainActive)
                 || ("agony".equals(ability) && AbilityHudState.whenOnHighActive)
                 || ("rider_mount".equals(ability) && (AbilityHudState.riderMountActive

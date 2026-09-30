@@ -31,7 +31,7 @@ public abstract class ChargeCastingFovMixin {
         MinecraftClient client = MinecraftClient.getInstance();
         boolean heavyCharge = client.player != null && (
                 client.player.hasStatusEffect(SmoothEffects.ARCANE_SLASH)
-                        || ChargeHudState.active(ChargeHudState.UNLIMITED_BLADE_WORKS)
+                        || ChargeHudState.active(ChargeHudState.PORTAL_OF_SOVEREIGNTY)
         );
 
         double target = heavyCharge ? CHARGE_FOV_MULTIPLIER : NORMAL_FOV_MULTIPLIER;

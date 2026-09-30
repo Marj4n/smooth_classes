@@ -1,0 +1,323 @@
+{
+  "name": "Soul Recipes",
+  "category": "smooth_classes:souls",
+  "icon": "minecraft:bone",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:allay)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:allay)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:allay)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:allay)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:allay)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:allay)$()$(br2)$(8)$(smooth_death_note:minecraft:allay)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:axolotl)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:axolotl)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:axolotl)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:axolotl)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:axolotl)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:axolotl)$()$(br2)$(8)$(smooth_death_note:minecraft:axolotl)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:bat)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:bat)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:bat)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:bat)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:bat)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:bat)$()$(br2)$(8)$(smooth_death_note:minecraft:bat)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:bee)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:bee)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:bee)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:bee)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:bee)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:bee)$()$(br2)$(8)$(smooth_death_note:minecraft:bee)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:camel)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:camel)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:camel)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:camel)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:camel)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:camel)$()$(br2)$(8)$(smooth_death_note:minecraft:camel)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:cat)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:cat)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:cat)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:cat)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:cat)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:cat)$()$(br2)$(8)$(smooth_death_note:minecraft:cat)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:chicken)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:chicken)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:chicken)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:chicken)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:chicken)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:chicken)$()$(br2)$(8)$(smooth_death_note:minecraft:chicken)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:cod)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:cod)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:cod)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:cod)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:cod)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:cod)$()$(br2)$(8)$(smooth_death_note:minecraft:cod)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:cow)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:cow)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:cow)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:cow)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:cow)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:cow)$()$(br2)$(8)$(smooth_death_note:minecraft:cow)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:dolphin)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:dolphin)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:dolphin)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:dolphin)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:dolphin)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:dolphin)$()$(br2)$(8)$(smooth_death_note:minecraft:dolphin)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:donkey)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:donkey)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:donkey)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:donkey)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:donkey)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:donkey)$()$(br2)$(8)$(smooth_death_note:minecraft:donkey)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:fox)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:fox)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:fox)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:fox)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:fox)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:fox)$()$(br2)$(8)$(smooth_death_note:minecraft:fox)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:frog)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:frog)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:frog)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:frog)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:frog)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:frog)$()$(br2)$(8)$(smooth_death_note:minecraft:frog)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:glow_squid)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:glow_squid)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:glow_squid)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:glow_squid)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:glow_squid)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:glow_squid)$()$(br2)$(8)$(smooth_death_note:minecraft:glow_squid)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:goat)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:goat)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:goat)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:goat)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:goat)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:goat)$()$(br2)$(8)$(smooth_death_note:minecraft:goat)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:horse)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:horse)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:horse)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:horse)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:horse)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:horse)$()$(br2)$(8)$(smooth_death_note:minecraft:horse)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:iron_golem)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:iron_golem)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:iron_golem)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:iron_golem)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:iron_golem)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:iron_golem)$()$(br2)$(8)$(smooth_death_note:minecraft:iron_golem)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:llama)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:llama)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:llama)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:llama)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:llama)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:llama)$()$(br2)$(8)$(smooth_death_note:minecraft:llama)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:mooshroom)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:mooshroom)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:mooshroom)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:mooshroom)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:mooshroom)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:mooshroom)$()$(br2)$(8)$(smooth_death_note:minecraft:mooshroom)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:mule)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:mule)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:mule)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:mule)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:mule)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:mule)$()$(br2)$(8)$(smooth_death_note:minecraft:mule)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:ocelot)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:ocelot)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:ocelot)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:ocelot)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:ocelot)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:ocelot)$()$(br2)$(8)$(smooth_death_note:minecraft:ocelot)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:panda)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:panda)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:panda)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:panda)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:panda)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:panda)$()$(br2)$(8)$(smooth_death_note:minecraft:panda)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:parrot)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:parrot)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:parrot)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:parrot)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:parrot)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:parrot)$()$(br2)$(8)$(smooth_death_note:minecraft:parrot)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:pig)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:pig)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:pig)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:pig)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:pig)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:pig)$()$(br2)$(8)$(smooth_death_note:minecraft:pig)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:polar_bear)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:polar_bear)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:polar_bear)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:polar_bear)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:polar_bear)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:polar_bear)$()$(br2)$(8)$(smooth_death_note:minecraft:polar_bear)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:pufferfish)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:pufferfish)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:pufferfish)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:pufferfish)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:pufferfish)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:pufferfish)$()$(br2)$(8)$(smooth_death_note:minecraft:pufferfish)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:rabbit)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:rabbit)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:rabbit)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:rabbit)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:rabbit)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:rabbit)$()$(br2)$(8)$(smooth_death_note:minecraft:rabbit)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:salmon)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:salmon)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:salmon)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:salmon)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:salmon)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:salmon)$()$(br2)$(8)$(smooth_death_note:minecraft:salmon)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:sheep)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:sheep)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:sheep)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:sheep)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:sheep)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:sheep)$()$(br2)$(8)$(smooth_death_note:minecraft:sheep)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:sniffer)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:sniffer)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:sniffer)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:sniffer)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:sniffer)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:sniffer)$()$(br2)$(8)$(smooth_death_note:minecraft:sniffer)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:snow_golem)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:snow_golem)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:snow_golem)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:snow_golem)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:snow_golem)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:snow_golem)$()$(br2)$(8)$(smooth_death_note:minecraft:snow_golem)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:squid)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:squid)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:squid)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:squid)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:squid)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:squid)$()$(br2)$(8)$(smooth_death_note:minecraft:squid)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:strider)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:strider)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:strider)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:strider)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:strider)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:strider)$()$(br2)$(8)$(smooth_death_note:minecraft:strider)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:tadpole)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:tadpole)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:tadpole)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:tadpole)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:tadpole)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:tadpole)$()$(br2)$(8)$(smooth_death_note:minecraft:tadpole)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:trader_llama)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:trader_llama)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:trader_llama)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:trader_llama)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:trader_llama)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:trader_llama)$()$(br2)$(8)$(smooth_death_note:minecraft:trader_llama)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:tropical_fish)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:tropical_fish)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:tropical_fish)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:tropical_fish)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:tropical_fish)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:tropical_fish)$()$(br2)$(8)$(smooth_death_note:minecraft:tropical_fish)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:turtle)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:turtle)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:turtle)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:turtle)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:turtle)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:turtle)$()$(br2)$(8)$(smooth_death_note:minecraft:turtle)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:villager)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:villager)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:villager)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:villager)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:villager)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:villager)$()$(br2)$(8)$(smooth_death_note:minecraft:villager)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:wandering_trader)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:wandering_trader)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:wandering_trader)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:wandering_trader)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:wandering_trader)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:wandering_trader)$()$(br2)$(8)$(smooth_death_note:minecraft:wandering_trader)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:wolf)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:wolf)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:wolf)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:wolf)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:wolf)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:wolf)$()$(br2)$(8)$(smooth_death_note:minecraft:wolf)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:blaze)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:blaze)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:blaze)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:blaze)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:blaze)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:blaze)$()$(br2)$(8)$(smooth_death_note:minecraft:blaze)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:cave_spider)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:cave_spider)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:cave_spider)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:cave_spider)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:cave_spider)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:cave_spider)$()$(br2)$(8)$(smooth_death_note:minecraft:cave_spider)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:creeper)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:creeper)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:creeper)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:creeper)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:creeper)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:creeper)$()$(br2)$(8)$(smooth_death_note:minecraft:creeper)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:drowned)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:drowned)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:drowned)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:drowned)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:drowned)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:drowned)$()$(br2)$(8)$(smooth_death_note:minecraft:drowned)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:elder_guardian)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:elder_guardian)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:elder_guardian)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:elder_guardian)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:elder_guardian)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:elder_guardian)$()$(br2)$(8)$(smooth_death_note:minecraft:elder_guardian)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:enderman)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:enderman)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:enderman)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:enderman)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:enderman)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:enderman)$()$(br2)$(8)$(smooth_death_note:minecraft:enderman)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:endermite)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:endermite)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:endermite)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:endermite)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:endermite)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:endermite)$()$(br2)$(8)$(smooth_death_note:minecraft:endermite)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:evoker)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:evoker)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:evoker)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:evoker)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:evoker)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:evoker)$()$(br2)$(8)$(smooth_death_note:minecraft:evoker)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:ghast)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:ghast)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:ghast)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:ghast)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:ghast)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:ghast)$()$(br2)$(8)$(smooth_death_note:minecraft:ghast)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:giant)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:giant)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:giant)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:giant)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:giant)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:giant)$()$(br2)$(8)$(smooth_death_note:minecraft:giant)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:guardian)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:guardian)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:guardian)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:guardian)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:guardian)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:guardian)$()$(br2)$(8)$(smooth_death_note:minecraft:guardian)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:hoglin)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:hoglin)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:hoglin)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:hoglin)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:hoglin)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:hoglin)$()$(br2)$(8)$(smooth_death_note:minecraft:hoglin)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:husk)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:husk)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:husk)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:husk)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:husk)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:husk)$()$(br2)$(8)$(smooth_death_note:minecraft:husk)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:illusioner)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:illusioner)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:illusioner)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:illusioner)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:illusioner)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:illusioner)$()$(br2)$(8)$(smooth_death_note:minecraft:illusioner)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:magma_cube)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:magma_cube)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:magma_cube)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:magma_cube)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:magma_cube)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:magma_cube)$()$(br2)$(8)$(smooth_death_note:minecraft:magma_cube)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:phantom)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:phantom)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:phantom)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:phantom)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:phantom)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:phantom)$()$(br2)$(8)$(smooth_death_note:minecraft:phantom)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:piglin)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:piglin)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:piglin)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:piglin)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:piglin)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:piglin)$()$(br2)$(8)$(smooth_death_note:minecraft:piglin)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:piglin_brute)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:piglin_brute)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:piglin_brute)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:piglin_brute)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:piglin_brute)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:piglin_brute)$()$(br2)$(8)$(smooth_death_note:minecraft:piglin_brute)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:pillager)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:pillager)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:pillager)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:pillager)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:pillager)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:pillager)$()$(br2)$(8)$(smooth_death_note:minecraft:pillager)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:ravager)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:ravager)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:ravager)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:ravager)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:ravager)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:ravager)$()$(br2)$(8)$(smooth_death_note:minecraft:ravager)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:shulker)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:shulker)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:shulker)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:shulker)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:shulker)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:shulker)$()$(br2)$(8)$(smooth_death_note:minecraft:shulker)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:silverfish)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:silverfish)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:silverfish)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:silverfish)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:silverfish)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:silverfish)$()$(br2)$(8)$(smooth_death_note:minecraft:silverfish)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:skeleton)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:skeleton)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:skeleton)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:skeleton)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:skeleton)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:skeleton)$()$(br2)$(8)$(smooth_death_note:minecraft:skeleton)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:skeleton_horse)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:skeleton_horse)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:skeleton_horse)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:skeleton_horse)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:skeleton_horse)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:skeleton_horse)$()$(br2)$(8)$(smooth_death_note:minecraft:skeleton_horse)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:slime)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:slime)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:slime)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:slime)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:slime)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:slime)$()$(br2)$(8)$(smooth_death_note:minecraft:slime)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:spider)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:spider)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:spider)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:spider)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:spider)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:spider)$()$(br2)$(8)$(smooth_death_note:minecraft:spider)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:stray)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:stray)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:stray)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:stray)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:stray)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:stray)$()$(br2)$(8)$(smooth_death_note:minecraft:stray)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:vex)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:vex)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:vex)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:vex)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:vex)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:vex)$()$(br2)$(8)$(smooth_death_note:minecraft:vex)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:vindicator)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:vindicator)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:vindicator)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:vindicator)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:vindicator)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:vindicator)$()$(br2)$(8)$(smooth_death_note:minecraft:vindicator)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:warden)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:warden)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:warden)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:warden)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:warden)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:warden)$()$(br2)$(8)$(smooth_death_note:minecraft:warden)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:witch)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:witch)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:witch)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:witch)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:witch)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:witch)$()$(br2)$(8)$(smooth_death_note:minecraft:witch)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:wither_skeleton)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:wither_skeleton)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:wither_skeleton)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:wither_skeleton)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:wither_skeleton)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:wither_skeleton)$()$(br2)$(8)$(smooth_death_note:minecraft:wither_skeleton)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:zoglin)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:zoglin)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:zoglin)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:zoglin)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:zoglin)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:zoglin)$()$(br2)$(8)$(smooth_death_note:minecraft:zoglin)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:zombie)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:zombie)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:zombie)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:zombie)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:zombie)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:zombie)$()$(br2)$(8)$(smooth_death_note:minecraft:zombie)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:zombie_horse)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:zombie_horse)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:zombie_horse)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:zombie_horse)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:zombie_horse)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:zombie_horse)$()$(br2)$(8)$(smooth_death_note:minecraft:zombie_horse)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:zombie_villager)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:zombie_villager)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:zombie_villager)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:zombie_villager)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:zombie_villager)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:zombie_villager)$()$(br2)$(8)$(smooth_death_note:minecraft:zombie_villager)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:zombified_piglin)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:zombified_piglin)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:zombified_piglin)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:zombified_piglin)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:zombified_piglin)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:zombified_piglin)$()$(br2)$(8)$(smooth_death_note:minecraft:zombified_piglin)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:wither)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:wither)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:wither)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:wither)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:wither)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:wither)$()$(br2)$(8)$(smooth_death_note:minecraft:wither)$()"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(5)$(l)$(smooth_death_name:minecraft:ender_dragon)$()$(br2)$(8)STATUS$()  $(d)$(smooth_death_status:minecraft:ender_dragon)$()$(br)$(6)SOULS$()  $(b)$(smooth_death_soul_count:minecraft:ender_dragon)$()   $(8)SLAIN$()  $(e)$(smooth_death_slain:minecraft:ender_dragon)$()$(br2)$(a)MAIN$()  $(f)$(smooth_death_main:minecraft:ender_dragon)$()$(br)$(9)OFF$()   $(f)$(smooth_death_off:minecraft:ender_dragon)$()$(br2)$(8)$(smooth_death_note:minecraft:ender_dragon)$()"
+    }
+  ]
+}

@@ -15,7 +15,8 @@ public abstract class MobEntityTargetMixin {
     private void smooth_classes$filterAvengerSummonTarget(LivingEntity target, CallbackInfo ci) {
         if (target == null) return;
         MobEntity self = (MobEntity) (Object) this;
-        if (AvengerReworkRuntime.shouldIgnoreSummonTarget(self, target)) {
+        if (org.marj4n.smooth_classes.content.assassin.runtime.ShadowTechniqueRuntime.blinded(self)
+                || AvengerReworkRuntime.shouldIgnoreSummonTarget(self, target)) {
             self.getNavigation().stop();
             ci.cancel();
         }

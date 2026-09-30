@@ -71,6 +71,9 @@ public final class SmoothEntities {
     public static final EntityType<ProjectedDaggerEntity> PROJECTED_DAGGER = Registry.register(Registries.ENTITY_TYPE,
             SmoothClasses.id("projected_dagger"), FabricEntityTypeBuilder.<ProjectedDaggerEntity>create(SpawnGroup.MISC, ProjectedDaggerEntity::new)
                     .dimensions(EntityDimensions.fixed(.2F, .2F)).trackRangeBlocks(80).trackedUpdateRate(2).build());
+    public static final EntityType<ShadowAnchorEntity> SHADOW_ANCHOR = Registry.register(Registries.ENTITY_TYPE,
+            SmoothClasses.id("shadow_anchor"), FabricEntityTypeBuilder.create(SpawnGroup.MISC, ShadowAnchorEntity::new)
+                    .dimensions(EntityDimensions.fixed(.6F,1.8F)).trackRangeBlocks(64).build());
     public static void register() {
         FabricDefaultAttributeRegistry.register(DREADGLARE, DreadglareEntity.createAttributes());
         FabricDefaultAttributeRegistry.register(GREATER_DREADGLARE, GreaterDreadglareEntity.createAttributes());

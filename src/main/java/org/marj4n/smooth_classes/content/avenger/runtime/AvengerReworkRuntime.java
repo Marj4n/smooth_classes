@@ -18,7 +18,6 @@ import net.minecraft.entity.passive.AbstractHorseEntity;
 import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
@@ -70,7 +69,6 @@ public final class AvengerReworkRuntime {
     private static final Map<UUID, DevourChannel> DEVOURS = new HashMap<>();
     private static final Set<UUID> CURTAIN_BYPASS = new HashSet<>();
     private static final Set<UUID> MANUAL_CAPTURED = new HashSet<>();
-    private static final Set<UUID> DEATH_LIST_READY = new HashSet<>();
     private static final Map<Entity, UUID> SUMMON_OWNER_CACHE = new WeakHashMap<>();
 
     private AvengerReworkRuntime() {}
@@ -87,13 +85,11 @@ public final class AvengerReworkRuntime {
         ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
             UUID playerId = handler.player.getUuid();
             DEVOURS.remove(playerId);
-            DEATH_LIST_READY.remove(playerId);
         });
         ServerLifecycleEvents.SERVER_STOPPED.register(server -> {
             DEVOURS.clear();
             CURTAIN_BYPASS.clear();
             MANUAL_CAPTURED.clear();
-            DEATH_LIST_READY.clear();
             SUMMON_OWNER_CACHE.clear();
         });
     }
@@ -104,25 +100,21 @@ public final class AvengerReworkRuntime {
 
         UUID playerId = player.getUuid();
         boolean avenger = AbilityRuntime.isClass(player, AvengerClass.ID);
-        boolean bookTick = (player.age % 20) == 0;
-        boolean summonTick = avenger && (player.age % 5) == 0;
-        boolean firstAvengerCheck = avenger && !DEATH_LIST_READY.contains(playerId);
+        boolean cleanupTick = (player.age % 20) == 0;
 
-        // Persistent-state lookup + inventory validation is unnecessary on idle ticks.
-        // New Avenger players still initialize immediately; old Death Lists refresh at 1 Hz.
-        if (!bookTick && !summonTick && !firstAvengerCheck && player.age >= 5) return;
+        // Non-Avengers only need a once-per-second legacy-book cleanup check.
+        // Current Avengers still run summon ownership/AI at 4 Hz.
+        if (!avenger && !cleanupTick) return;
 
         AvengerDeathListState state = AvengerDeathListState.get(server);
         if (avenger) state.awaken(playerId);
 
-        if (state.hasAwakened(playerId)) {
-            boolean firstCheck = DEATH_LIST_READY.add(playerId);
-            if (firstCheck || bookTick) ensureDeathList(player, state);
-        }
+        // Death List is virtual now. Old physical/Patchouli copies are quietly removed
+        // so upgraded worlds do not keep duplicate permanent books in inventories.
+        if (cleanupTick && state.hasAwakened(playerId)) purgeLegacyDeathLists(player);
 
-        // The 96-block summon ownership/AI sweep is expensive; 4 Hz is responsive
-        // enough for retarget/follow behavior and cuts those world scans by 80%.
-        if (summonTick) tickOwnedSummons(player);
+        // The 96-block summon ownership/AI sweep runs at 4 Hz.
+        if (avenger) tickOwnedSummons(player);
     }
 
     // ---------------------------------------------------------------------
@@ -177,122 +169,110 @@ public final class AvengerReworkRuntime {
         refreshDeathListNow(player, state);
     }
 
+    /** Recognizes old physical Death Lists so they can be removed after upgrading. */
     public static boolean isDeathList(ItemStack stack) {
-        return stack != null && !stack.isEmpty() && stack.isOf(Items.WRITTEN_BOOK)
-                && stack.hasNbt() && stack.getNbt().getBoolean(DEATH_LIST_MARKER);
+        if (stack == null || stack.isEmpty() || !stack.hasNbt()) return false;
+        NbtCompound nbt = stack.getNbt();
+        return nbt.getBoolean(DEATH_LIST_MARKER)
+                || "smooth_classes:death_list".equals(nbt.getString("patchouli:book"));
     }
 
-    private static void ensureDeathList(ServerPlayerEntity player, AvengerDeathListState state) {
-        ItemStack book = null;
-        int firstSlot = -1;
-        for (int i = 0; i < player.getInventory().size(); i++) {
-            ItemStack stack = player.getInventory().getStack(i);
-            if (!isDeathList(stack)) continue;
-            if (book == null) {
-                book = stack;
-                firstSlot = i;
-            } else {
-                player.getInventory().setStack(i, ItemStack.EMPTY);
+    private static void purgeLegacyDeathLists(ServerPlayerEntity player) {
+        boolean changed = false;
+        for (int slot = 0; slot < player.getInventory().size(); slot++) {
+            if (isDeathList(player.getInventory().getStack(slot))) {
+                player.getInventory().setStack(slot, ItemStack.EMPTY);
+                changed = true;
             }
         }
-
-        if (book == null) {
-            book = createDeathListBook(player, state);
-            if (!player.getInventory().insertStack(book)) return;
-        } else {
-            writeDeathListPages(book, player, state);
-            if (firstSlot >= 0) player.getInventory().markDirty();
+        if (changed) {
+            player.getInventory().markDirty();
+            player.currentScreenHandler.sendContentUpdates();
         }
-        player.currentScreenHandler.sendContentUpdates();
     }
 
+    /**
+     * The ledger itself lives in PersistentState, so gameplay events no longer rewrite
+     * an inventory book. Ability state is still refreshed immediately for the HUD.
+     */
     private static void refreshDeathListNow(ServerPlayerEntity player, AvengerDeathListState state) {
-        for (int i = 0; i < player.getInventory().size(); i++) {
-            ItemStack stack = player.getInventory().getStack(i);
-            if (isDeathList(stack)) {
-                writeDeathListPages(stack, player, state);
-                player.getInventory().markDirty();
-                player.currentScreenHandler.sendContentUpdates();
-                return;
-            }
-        }
+        if (player != null) SmoothClassesNetworking.sendAbilityState(player);
     }
 
-    private static ItemStack createDeathListBook(ServerPlayerEntity player, AvengerDeathListState state) {
-        ItemStack book = new ItemStack(Items.WRITTEN_BOOK);
-        book.setCustomName(Text.literal("Death List").formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
-        writeDeathListPages(book, player, state);
-        return book;
-    }
+    /** Builds the Ctrl+H virtual Death List. Nothing is inserted into the inventory. */
+    public static NbtCompound deathListBookNbt(ServerPlayerEntity player) {
+        AvengerDeathListState state = AvengerDeathListState.get(player.getServer());
+        state.awaken(player.getUuid());
 
-    private static void writeDeathListPages(ItemStack book, ServerPlayerEntity player, AvengerDeathListState state) {
-        NbtCompound nbt = book.getOrCreateNbt();
-        nbt.putBoolean(DEATH_LIST_MARKER, true);
+        NbtCompound nbt = new NbtCompound();
         nbt.putString("title", "Death List");
         nbt.putString("author", "The Avenger");
         nbt.putBoolean("resolved", true);
         nbt.putInt("generation", 0);
+        writeDeathListPages(nbt, player, state);
+        return nbt;
+    }
 
+    private static void writeDeathListPages(NbtCompound nbt, ServerPlayerEntity player, AvengerDeathListState state) {
         UUID playerId = player.getUuid();
         AvengerDeathListState.PlayerLedger ledger = state.ledger(playerId);
         AvengerDeathListState.ChargeSnapshot charges = state.refreshCharges(playerId, System.currentTimeMillis());
-        List<Text> pages = new ArrayList<>();
-        pages.add(deathListCover(charges));
 
-        List<Map.Entry<String, Integer>> entries = new ArrayList<>(ledger.kills().entrySet());
-        entries.removeIf(entry -> !AvengerSummonRecipes.supported(entry.getKey()));
-        entries.sort(Comparator.comparing(entry -> AvengerSummonRecipes.friendlyEntityName(entry.getKey())));
+        List<AvengerSummonRecipes.Recipe> recipes = new ArrayList<>(AvengerSummonRecipes.allRecipes());
+        recipes.sort(Comparator.comparing(recipe -> AvengerSummonRecipes.friendlyEntityName(recipe.entityId())));
 
-        if (entries.isEmpty()) {
-            pages.add(Text.empty()
-                    .append(Text.literal("NO SOULS RECORDED\n\n").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
-                    .append(Text.literal("Defeat a supported creature to bind its soul to this book.\n\n")
-                            .formatted(Formatting.GRAY))
-                    .append(Text.literal("Kills made by your bound summons and creatures consumed by Endless Devour also count.")
-                            .formatted(Formatting.DARK_GRAY, Formatting.ITALIC)));
-        } else {
-            var page = Text.empty();
-            int onPage = 0;
-            int pageIndex = 1;
-            for (Map.Entry<String, Integer> entry : entries) {
-                if (onPage == 0) {
-                    page.append(Text.literal("SOUL RECORDS " + pageIndex + "\n")
-                            .formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
-                    page.append(Text.literal("----------------\n").formatted(Formatting.DARK_GRAY));
-                }
-
-                appendSoulRecord(page, playerId, state, entry.getKey(), entry.getValue());
-                onPage++;
-
-                // Two records per page keeps recipes readable on the narrow written-book UI.
-                if (onPage >= 2) {
-                    pages.add(page);
-                    page = Text.empty();
-                    onPage = 0;
-                    pageIndex++;
-                }
-            }
-            if (onPage > 0) pages.add(page);
+        int totalSouls = ledger.souls().values().stream().mapToInt(Integer::intValue).sum();
+        int discovered = 0;
+        NbtCompound soulCounts = new NbtCompound();
+        NbtCompound killCounts = new NbtCompound();
+        for (AvengerSummonRecipes.Recipe recipe : recipes) {
+            int kills = ledger.kills().getOrDefault(recipe.entityId(), 0);
+            int souls = state.available(playerId, recipe.entityId());
+            if (kills > 0) discovered++;
+            soulCounts.putInt(recipe.entityId(), souls);
+            killCounts.putInt(recipe.entityId(), kills);
         }
+
+        // Raw ledger snapshot for the virtual Patchouli UI. The written-book pages
+        // below remain as a dependency-free fallback if Patchouli is unavailable.
+        nbt.putInt("SmoothDeathTotalSouls", totalSouls);
+        nbt.putInt("SmoothDeathDiscovered", discovered);
+        nbt.putInt("SmoothDeathRecipeCount", recipes.size());
+        nbt.putInt("SmoothDeathCharges", charges.charges());
+        nbt.putInt("SmoothDeathMaxCharges", AvengerDeathListState.MAX_SUMMON_CHARGES);
+        nbt.putLong("SmoothDeathRechargeMillis", Math.max(0L, charges.remainingMillis()));
+        nbt.put("SmoothDeathSoulCounts", soulCounts);
+        nbt.put("SmoothDeathKillCounts", killCounts);
+
+        List<Text> pages = new ArrayList<>();
+        pages.add(deathListCover(charges, totalSouls, discovered, recipes.size()));
+        appendSoulStockPages(pages, playerId, state, ledger, recipes);
+        appendRecipePages(pages, playerId, state, ledger, recipes);
 
         NbtList list = new NbtList();
         for (Text page : pages) list.add(NbtString.of(Text.Serializer.toJson(page)));
         nbt.put("pages", list);
     }
 
-    private static Text deathListCover(AvengerDeathListState.ChargeSnapshot charges) {
+    private static Text deathListCover(AvengerDeathListState.ChargeSnapshot charges, int totalSouls,
+                                       int discovered, int recipeCount) {
         var page = Text.empty();
         page.append(Text.literal("DEATH LIST\n").formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
         page.append(Text.literal("From Corpses We Arise\n\n").formatted(Formatting.GRAY, Formatting.ITALIC));
 
-        page.append(Text.literal("[H] ").formatted(Formatting.GOLD, Formatting.BOLD));
-        page.append(Text.literal("Soul Command\n").formatted(Formatting.DARK_GRAY));
-        page.append(Text.literal("Summon ").formatted(Formatting.GREEN));
-        page.append(Text.literal("hold the listed recipe\n").formatted(Formatting.GRAY));
-        page.append(Text.literal("Recall ").formatted(Formatting.AQUA));
-        page.append(Text.literal("aim at your summon\n\n").formatted(Formatting.GRAY));
+        page.append(Text.literal("TOTAL SOULS  ").formatted(Formatting.GOLD, Formatting.BOLD));
+        page.append(Text.literal(totalSouls + "\n").formatted(Formatting.AQUA, Formatting.BOLD));
+        page.append(Text.literal("DISCOVERED    ").formatted(Formatting.DARK_GRAY));
+        page.append(Text.literal(discovered + "/" + recipeCount + "\n\n").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
 
-        page.append(Text.literal("Charges  ").formatted(Formatting.GOLD));
+        page.append(Text.literal("[H] ").formatted(Formatting.GOLD, Formatting.BOLD));
+        page.append(Text.literal("Summon / Recall\n").formatted(Formatting.GRAY));
+        page.append(Text.literal("[Ctrl+H] ").formatted(Formatting.AQUA, Formatting.BOLD));
+        page.append(Text.literal("Open Death List\n").formatted(Formatting.GRAY));
+        page.append(Text.literal("[Shift+H] ").formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
+        page.append(Text.literal("Unbind aimed soul\n\n").formatted(Formatting.GRAY));
+
+        page.append(Text.literal("CHARGES  ").formatted(Formatting.GOLD, Formatting.BOLD));
         page.append(Text.literal(charges.charges() + "/" + AvengerDeathListState.MAX_SUMMON_CHARGES + "\n")
                 .formatted(Formatting.GREEN, Formatting.BOLD));
         if (charges.remainingMillis() > 0) {
@@ -300,35 +280,95 @@ public final class AvengerReworkRuntime {
             page.append(Text.literal("Next charge  ").formatted(Formatting.DARK_GRAY));
             page.append(Text.literal(seconds + "s\n").formatted(Formatting.AQUA));
         }
-
-        page.append(Text.literal("\nRULE\n").formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
-        page.append(Text.literal("Kill it first. ").formatted(Formatting.RED));
-        page.append(Text.literal("Ingredients cannot summon a soul that has never entered your Death List.")
-                .formatted(Formatting.GRAY));
         return page;
     }
 
-    private static void appendSoulRecord(net.minecraft.text.MutableText page, UUID playerId,
-                                         AvengerDeathListState state, String entityId, int slain) {
-        AvengerSummonRecipes.Recipe recipe = AvengerSummonRecipes.recipe(entityId);
-        if (recipe == null) return;
-
-        page.append(Text.literal("\n" + AvengerSummonRecipes.friendlyEntityName(entityId) + "\n")
-                .formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
-        page.append(Text.literal("Souls ").formatted(Formatting.DARK_GRAY));
-        page.append(Text.literal(String.valueOf(state.available(playerId, entityId))).formatted(Formatting.AQUA, Formatting.BOLD));
-        page.append(Text.literal("   Slain ").formatted(Formatting.DARK_GRAY));
-        page.append(Text.literal(String.valueOf(slain) + "\n").formatted(Formatting.GOLD));
-
-        page.append(Text.literal("Main  ").formatted(Formatting.GREEN, Formatting.BOLD));
-        page.append(Text.literal(AvengerSummonRecipes.friendlyItemName(recipe.mainItemId()) + "\n").formatted(Formatting.GRAY));
-        page.append(Text.literal("Off   ").formatted(Formatting.BLUE, Formatting.BOLD));
-        if (recipe.offhandItemId() == null) {
-            page.append(Text.literal("Not required\n").formatted(Formatting.DARK_GRAY, Formatting.ITALIC));
-        } else {
-            page.append(Text.literal(AvengerSummonRecipes.friendlyItemName(recipe.offhandItemId()) + "\n")
-                    .formatted(Formatting.GRAY));
+    private static void appendSoulStockPages(List<Text> pages, UUID playerId, AvengerDeathListState state,
+                                             AvengerDeathListState.PlayerLedger ledger,
+                                             List<AvengerSummonRecipes.Recipe> recipes) {
+        var page = Text.empty();
+        int onPage = 0;
+        int pageIndex = 1;
+        boolean any = false;
+        for (AvengerSummonRecipes.Recipe recipe : recipes) {
+            int slain = ledger.kills().getOrDefault(recipe.entityId(), 0);
+            if (slain <= 0) continue;
+            if (onPage == 0) {
+                page.append(Text.literal("SOUL STOCK " + pageIndex + "\n")
+                        .formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
+                page.append(Text.literal("----------------\n").formatted(Formatting.DARK_GRAY));
+            }
+            String name = AvengerSummonRecipes.friendlyEntityName(recipe.entityId());
+            int souls = state.available(playerId, recipe.entityId());
+            page.append(Text.literal(name + "  ").formatted(Formatting.WHITE));
+            page.append(Text.literal("x" + souls + "\n")
+                    .formatted(souls > 0 ? Formatting.AQUA : Formatting.DARK_GRAY, Formatting.BOLD));
+            any = true;
+            if (++onPage >= 8) {
+                pages.add(page);
+                page = Text.empty();
+                onPage = 0;
+                pageIndex++;
+            }
         }
+        if (onPage > 0) pages.add(page);
+        if (!any) {
+            pages.add(Text.empty()
+                    .append(Text.literal("SOUL STOCK\n\n").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
+                    .append(Text.literal("No souls discovered yet.\n\n").formatted(Formatting.GRAY))
+                    .append(Text.literal("Kill a supported creature to reveal its soul and recipe.")
+                            .formatted(Formatting.DARK_GRAY, Formatting.ITALIC)));
+        }
+    }
+
+    private static void appendRecipePages(List<Text> pages, UUID playerId, AvengerDeathListState state,
+                                          AvengerDeathListState.PlayerLedger ledger,
+                                          List<AvengerSummonRecipes.Recipe> recipes) {
+        var page = Text.empty();
+        int onPage = 0;
+        int pageIndex = 1;
+        for (AvengerSummonRecipes.Recipe recipe : recipes) {
+            if (onPage == 0) {
+                page.append(Text.literal("SOUL RECIPES " + pageIndex + "\n")
+                        .formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
+                page.append(Text.literal("----------------\n").formatted(Formatting.DARK_GRAY));
+            }
+            int slain = ledger.kills().getOrDefault(recipe.entityId(), 0);
+            if (slain > 0) appendSoulRecord(page, playerId, state, recipe, slain);
+            else appendUndiscoveredRecord(page, recipe);
+            if (++onPage >= 2) {
+                pages.add(page);
+                page = Text.empty();
+                onPage = 0;
+                pageIndex++;
+            }
+        }
+        if (onPage > 0) pages.add(page);
+    }
+
+    private static void appendSoulRecord(net.minecraft.text.MutableText page, UUID playerId,
+                                         AvengerDeathListState state, AvengerSummonRecipes.Recipe recipe, int slain) {
+        String entityId = recipe.entityId();
+        page.append(Text.literal("\n" + AvengerSummonRecipes.friendlyEntityName(entityId) + "\n")
+                .formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        page.append(Text.literal("SOULS ").formatted(Formatting.GOLD, Formatting.BOLD));
+        page.append(Text.literal(String.valueOf(state.available(playerId, entityId))).formatted(Formatting.AQUA, Formatting.BOLD));
+        page.append(Text.literal("   SLAIN ").formatted(Formatting.DARK_GRAY));
+        page.append(Text.literal(String.valueOf(slain) + "\n").formatted(Formatting.YELLOW, Formatting.BOLD));
+
+        page.append(Text.literal("MAIN  ").formatted(Formatting.GREEN, Formatting.BOLD));
+        page.append(Text.literal(AvengerSummonRecipes.friendlyItemName(recipe.mainItemId()) + "\n").formatted(Formatting.WHITE));
+        page.append(Text.literal("OFF   ").formatted(Formatting.BLUE, Formatting.BOLD));
+        page.append(Text.literal(recipe.offhandItemId() == null
+                        ? "Not required\n" : AvengerSummonRecipes.friendlyItemName(recipe.offhandItemId()) + "\n")
+                .formatted(recipe.offhandItemId() == null ? Formatting.DARK_GRAY : Formatting.WHITE));
+    }
+
+    private static void appendUndiscoveredRecord(net.minecraft.text.MutableText page, AvengerSummonRecipes.Recipe recipe) {
+        page.append(Text.literal("\n" + AvengerSummonRecipes.friendlyEntityName(recipe.entityId()) + "\n")
+                .formatted(Formatting.DARK_GRAY, Formatting.BOLD));
+        page.append(Text.literal("UNDISCOVERED\n").formatted(Formatting.RED, Formatting.BOLD));
+        page.append(Text.literal("Recipe hidden until first kill.\n").formatted(Formatting.GRAY, Formatting.ITALIC));
     }
 
     // ---------------------------------------------------------------------
@@ -346,7 +386,9 @@ public final class AvengerReworkRuntime {
         // player's own bound summons, return that summon to the Death List first.
         // Recall never consumes a summon charge and does not require ingredients.
         LivingEntity recalled = aimedLiving(player, 32D, entity -> isOwnedSummon(player, entity));
-        if (recalled != null) return recallSummon(player, state, recalled);
+        if (recalled != null) return player.isSneaking()
+                ? unbindSummon(player, state, recalled) : recallSummon(player, state, recalled);
+        if (player.isSneaking()) return ExecutionResult.failure("Aim at your own bound soul to unbind it.");
 
         AvengerDeathListState.ChargeSnapshot charge = state.refreshCharges(player.getUuid(), System.currentTimeMillis());
         if (charge.charges() <= 0) {
@@ -531,13 +573,68 @@ public final class AvengerReworkRuntime {
                 + " to the Death List. Soul and summon ingredients restored.");
     }
 
+    private static ExecutionResult unbindSummon(ServerPlayerEntity player, AvengerDeathListState state, LivingEntity summon) {
+        // A manifested soul was already consumed from the ledger. Unbinding never
+        // refunds it or erases other captured souls of the same species.
+        summon.removeScoreboardTag(SUMMON_TAG);
+        for (String tag : new HashSet<>(summon.getCommandTags())) {
+            if (tag.startsWith(OWNER_TAG_PREFIX)) summon.removeScoreboardTag(tag);
+        }
+        SUMMON_OWNER_CACHE.remove(summon);
+        if (summon instanceof TameableEntity tameable) {
+            tameable.setOwnerUuid(null);
+            tameable.setTamed(false);
+            tameable.setSitting(false);
+            tameable.setInSittingPose(false);
+        }
+        if (summon instanceof AbstractHorseEntity horse) {
+            horse.setOwnerUuid(null);
+            horse.setTame(false);
+        }
+        if (summon instanceof MobEntity mob) {
+            mob.setTarget(null);
+            mob.getNavigation().stop();
+        }
+        summon.setAttacker(null);
+        if (summon instanceof Angerable angerable) angerable.stopAnger();
+        player.getServerWorld().spawnParticles(ParticleTypes.SOUL, summon.getX(), summon.getBodyY(.5), summon.getZ(),
+                20, .4, .5, .4, .02);
+        refreshDeathListNow(player, state);
+        return ExecutionResult.success(1, "Soul unbound. Its normal AI is restored.");
+    }
+
     private static void refundRecipeItem(ServerPlayerEntity player, String itemId) {
         if (itemId == null || itemId.isBlank()) return;
         Identifier id = new Identifier(itemId);
         if (!Registries.ITEM.containsId(id)) return;
-        Item item = Registries.ITEM.get(id);
-        ItemStack refund = new ItemStack(item, 1);
-        if (!player.getInventory().insertStack(refund)) player.dropItem(refund, false);
+
+        ItemStack refund = new ItemStack(Registries.ITEM.get(id), 1);
+
+        // Inventory#insertStack may choose an empty slot before coalescing a stack in
+        // some modded inventory setups. Recall should feel exactly like returning the
+        // ingredient the player just spent, so merge compatible stacks ourselves first.
+        ItemStack mainHand = player.getMainHandStack();
+        mergeRefundStack(mainHand, refund);
+        for (int slot = 0; slot < player.getInventory().size() && !refund.isEmpty(); slot++) {
+            ItemStack existing = player.getInventory().getStack(slot);
+            if (existing == mainHand) continue;
+            mergeRefundStack(existing, refund);
+        }
+
+        if (!refund.isEmpty() && !player.getInventory().insertStack(refund)) {
+            player.dropItem(refund, false);
+        }
+        player.getInventory().markDirty();
+        player.currentScreenHandler.sendContentUpdates();
+    }
+
+    private static void mergeRefundStack(ItemStack existing, ItemStack refund) {
+        if (existing == null || existing.isEmpty() || refund.isEmpty() || !ItemStack.canCombine(existing, refund)) return;
+        int room = existing.getMaxCount() - existing.getCount();
+        if (room <= 0) return;
+        int moved = Math.min(room, refund.getCount());
+        existing.increment(moved);
+        refund.decrement(moved);
     }
 
     public static int summonCharges(ServerPlayerEntity player) {

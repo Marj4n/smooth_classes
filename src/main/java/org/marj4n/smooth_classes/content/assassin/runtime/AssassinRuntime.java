@@ -43,40 +43,8 @@ public final class AssassinRuntime {
     }
 
     public static ExecutionResult executePreparation(ServerPlayerEntity player) {
-        PreparationPlan plan = preparation(player);
-        ClassEffectRuntime.apply(player, SmoothEffects.STEALTH, 80, 0);
-        CombatRuntime.buff(player, StatusEffects.SPEED, 80, 2);
-        SkillFx.sound(player, "soundeffect_39", 0.6F, 1.6F);
-        if (has(player, AssassinContent.PREPARATION_SHADOWSTRIKE_SHIELD.id())) {
-            ClassEffectRuntime.apply(player, SmoothEffects.BARRIER, 20, 0);
-            player.removeStatusEffect(SmoothEffects.REVEALED);
-        }
-        if (plan.shadowstrike()) {
-            int dashRange=8;
-            Vec3d start=player.getPos();
-            Vec3d look=player.getRotationVec(1F).normalize();
-            Vec3d end=start.add(look.multiply(dashRange));
-            Box corridor=new Box(start,end).expand(3);
-            float damage=(float)player.getAttributeValue(
-                    net.minecraft.entity.attribute.EntityAttributes.GENERIC_ATTACK_DAMAGE)*3F;
-            for(LivingEntity target:player.getWorld().getEntitiesByClass(
-                    LivingEntity.class,corridor,e->e!=player&&e.isAlive())){
-                if(target instanceof PlayerEntity other && !player.shouldDamagePlayer(other))continue;
-                if(target.isTeammate(player))continue;
-                target.timeUntilRegen=0;
-                target.damage(player.getDamageSources().playerAttack(player),damage);
-                target.timeUntilRegen=0;
-                if(has(player,AssassinContent.PREPARATION_SHADOWSTRIKE_VAMPIRE.id()))
-                    target.addStatusEffect(new net.minecraft.entity.effect.StatusEffectInstance(
-                            SmoothEffects.DEATH_MARK,120,0,false,false,true));
-            }
-            double actualRange=player.isOnGround()?dashRange:dashRange/5.0D;
-            Vec3d velocity=look.multiply(actualRange);
-            player.setVelocity(velocity.x,0,velocity.z);
-            player.velocityModified=true;
-            SkillFx.sound(player,"soundeffect_15",0.6F,1.3F);
-        }
-        return ExecutionResult.success(1, "preparation");
+        require(player);
+        return ShadowTechniqueRuntime.cast(player);
     }
 
     public static ExecutionResult executeSiphoningStrikes(ServerPlayerEntity player) {

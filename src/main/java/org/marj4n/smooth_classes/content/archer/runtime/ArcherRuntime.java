@@ -183,9 +183,9 @@ public final class ArcherRuntime {
         return true;
     }
 
-    public static ExecutionResult executeUnlimitedBladeWorks(ServerPlayerEntity player) {
+    public static ExecutionResult executePortalOfSovereignty(ServerPlayerEntity player) {
         require(player);
-        return UnlimitedBladeWorksRuntime.cast(player);
+        return PortalOfSovereigntyRuntime.cast(player);
     }
 
     public static ExecutionResult executeElementalArrows(ServerPlayerEntity player) {

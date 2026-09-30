@@ -28,10 +28,12 @@ public final class ArcaneSlashVisuals {
     public static void charge(ServerPlayerEntity player, int remaining) {
         ServerWorld world = player.getServerWorld();
         Vec3d forward = player.getRotationVec(1F);
-        Vec3d hand = player.getEyePos().add(forward.multiply(0.8)).add(0, -0.35, 0);
-        world.spawnParticles(CORE, hand.x, hand.y, hand.z, 3, 0.12, 0.22, 0.12, 0);
+        Vec3d right = new Vec3d(-forward.z, 0, forward.x).normalize();
+        Vec3d hand = player.getEyePos().add(forward.multiply(0.65)).add(right.multiply(0.65)).add(0, -0.65, 0);
+        world.spawnParticles(new DustParticleEffect(new Vector3f(.8F, .4F, 1F), .65F),
+                hand.x, hand.y, hand.z, 2, .04, .08, .04, 0);
         world.spawnParticles(SmoothParticles.ARCANE_FLAME, hand.x, hand.y, hand.z,
-                2, 0.08, 0.18, 0.08, 0.02);
+                1, 0.03, 0.06, 0.03, 0.005);
         // Charge stays cosmetic: never ignite the caster's feet.
     }
 

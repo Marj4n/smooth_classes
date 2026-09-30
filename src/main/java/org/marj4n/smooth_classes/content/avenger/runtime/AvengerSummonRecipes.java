@@ -120,6 +120,7 @@ public final class AvengerSummonRecipes {
 
     public static Recipe recipe(String entityId) { return RECIPES.get(entityId); }
     public static boolean supported(String entityId) { return RECIPES.containsKey(entityId); }
+    public static List<Recipe> allRecipes() { return List.copyOf(RECIPES.values()); }
 
     /**
      * Exact off-hand fusion recipes take precedence. If the off-hand does not form
