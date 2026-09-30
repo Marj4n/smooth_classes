@@ -43,6 +43,7 @@ public final class SmoothClassesClient implements ClientModInitializer {
     private static boolean arcaneWasDown;
     private static int arcaneHoldTicks;
     private static boolean riderFlightWasMounted;
+    private static boolean shadowWasDown;
     private static boolean riderFlightLastAscend;
     private static boolean riderFlightLastDescend;
     private static boolean riderFlightLastBoost;
@@ -56,6 +57,7 @@ public final class SmoothClassesClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+        DeathListBookClient.register();
         ModelRegistry.registerModels();
         net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap.INSTANCE.putBlock(
                 org.marj4n.smooth_classes.registry.SmoothBlocks.ARCANE_FIRE,
@@ -71,6 +73,7 @@ public final class SmoothClassesClient implements ClientModInitializer {
         // The local player entity is not rendered in first person, so render its
         // orbit in world space after entities using camera-relative coordinates.
         WorldRenderEvents.AFTER_ENTITIES.register(context -> {
+            ShadowAimClient.render(context);
             var client=net.minecraft.client.MinecraftClient.getInstance();
             var player=client.player;
             if (player==null || !client.options.getPerspective().isFirstPerson()
@@ -116,6 +119,9 @@ public final class SmoothClassesClient implements ClientModInitializer {
                     int avengerSummonMaxCharges=buf.readInt();
                     int avengerSummonTotal=buf.readInt();
                     long avengerSummonRemaining=buf.readLong();
+                    boolean shadowActive=buf.readBoolean();
+                    long shadowRemaining=buf.readLong();
+                    int shadowRange=buf.readInt();
                     client.execute(() -> {
                         AbilityHudState.sync(sig,sigTotal,sigRemaining,asc,ascTotal,ascRemaining);
                         AbilityHudState.bannerActive=bannerActive;
@@ -124,6 +130,7 @@ public final class SmoothClassesClient implements ClientModInitializer {
                         AbilityHudState.syncRiderMount(riderMountVisible, riderMountActive, riderMountTotal, riderMountRemaining);
                         AbilityHudState.syncAvengerSummon(avengerSummonVisible, avengerSummonCharges,
                                 avengerSummonMaxCharges, avengerSummonTotal, avengerSummonRemaining);
+                        AbilityHudState.syncShadow(shadowActive, shadowRemaining, shadowRange);
                     });
                 });
 
@@ -138,9 +145,32 @@ public final class SmoothClassesClient implements ClientModInitializer {
                             active, completed, ability, elapsed, total));
                 });
         net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents.DISCONNECT.register(
-                (handler, client) -> org.marj4n.smooth_classes.client.charge.ChargeHudState.reset());
+                (handler, client) -> {
+                    org.marj4n.smooth_classes.client.charge.ChargeHudState.reset();
+                    ShadowAimClient.reset();
+                });
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
+            if (client.player != null && client.world != null
+                    && org.marj4n.smooth_classes.client.runtime.BloodRainWeatherState.isInsideStorm(
+                    client.world, client.player.getX(), client.player.getZ())) {
+                // Remove the local fire overlay immediately as well as the server fire state.
+                client.player.extinguish();
+                client.player.setFireTicks(0);
+            }
+            boolean preparationSelected = "preparation".equals(AbilityHudState.signatureAbility);
+            boolean shadowDown = preparationSelected && client.player != null && client.getNetworkHandler() != null
+                    && client.currentScreen == null && client.isWindowFocused() && signature.isPressed();
+            boolean freshShadowPress = shadowDown && !shadowWasDown;
+            boolean releasedShadow = !shadowDown && shadowWasDown;
+            shadowWasDown = shadowDown;
+            if (freshShadowPress && (AbilityHudState.shadowActive || AbilityHudState.signatureRemainingMs() <= 0L)) {
+                ShadowAimClient.begin(client);
+            }
+            if (shadowDown && ShadowAimClient.isAiming()) ShadowAimClient.update(client);
+            if (releasedShadow && ShadowAimClient.isAiming()) ShadowAimClient.release(client);
+            if (!preparationSelected && ShadowAimClient.isAiming()) ShadowAimClient.reset();
+
             boolean holdingArcane = client.player != null && client.currentScreen == null
                     && client.isWindowFocused() && ascendancy.isPressed()
                     && "arcane_slash".equals(AbilityHudState.ascendancyAbility);
@@ -168,13 +198,22 @@ public final class SmoothClassesClient implements ClientModInitializer {
             }
             syncRiderFlightInput(client);
             while (signature.wasPressed()) {
+                if (preparationSelected) {
+                    // Shadow Technique casts on key release using the live mob/block aim preview.
+                    continue;
+                }
                 if (!bladeSelected) cast(client, false);
                 else if (freshBladePress) { cast(client, false); freshBladePress = false; }
             }
             while (riderMount.wasPressed()) {
                 if (client.player == null) continue;
                 if (AbilityHudState.avengerSummonVisible) {
-                    if (ClientPlayNetworking.canSend(SmoothClassesNetworking.AVENGER_SUMMON)) {
+                    long window = client.getWindow().getHandle();
+                    boolean control = InputUtil.isKeyPressed(window, GLFW.GLFW_KEY_LEFT_CONTROL)
+                            || InputUtil.isKeyPressed(window, GLFW.GLFW_KEY_RIGHT_CONTROL);
+                    if (control && ClientPlayNetworking.canSend(SmoothClassesNetworking.OPEN_DEATH_LIST)) {
+                        ClientPlayNetworking.send(SmoothClassesNetworking.OPEN_DEATH_LIST, PacketByteBufs.empty());
+                    } else if (ClientPlayNetworking.canSend(SmoothClassesNetworking.AVENGER_SUMMON)) {
                         ClientPlayNetworking.send(SmoothClassesNetworking.AVENGER_SUMMON, PacketByteBufs.empty());
                     }
                     continue;
@@ -197,7 +236,7 @@ public final class SmoothClassesClient implements ClientModInitializer {
                 }
             }
             if (client.player != null && (client.player.hasStatusEffect(SmoothEffects.ARCANE_SLASH)
-                    || org.marj4n.smooth_classes.client.charge.ChargeHudState.active(org.marj4n.smooth_classes.client.charge.ChargeHudState.UNLIMITED_BLADE_WORKS)))
+                    || org.marj4n.smooth_classes.client.charge.ChargeHudState.active(org.marj4n.smooth_classes.client.charge.ChargeHudState.PORTAL_OF_SOVEREIGNTY)))
                 client.player.setSprinting(false);
         });
         HudRenderCallback.EVENT.register((context, tickDelta) -> HUD.render(context, tickDelta));
@@ -296,6 +335,7 @@ public final class SmoothClassesClient implements ClientModInitializer {
 
     private static void registerEntities() {
         EntityRendererRegistry.register(SmoothEntities.TORMENT_FIELD, org.marj4n.smooth_classes.client.renderer.TormentFieldRenderer::new);
+        EntityRendererRegistry.register(SmoothEntities.SHADOW_ANCHOR, org.marj4n.smooth_classes.client.renderer.ShadowAnchorRenderer::new);
         EntityRendererRegistry.register(SmoothEntities.BLOOD_RAIN, org.marj4n.smooth_classes.client.renderer.BloodRainRenderer::new);
         EntityRendererRegistry.register(SmoothEntities.HIGH_BEAM, org.marj4n.smooth_classes.client.renderer.HighBeamRenderer::new);
         EntityRendererRegistry.register(SmoothEntities.SACRED_BANNER, SacredBannerRenderer::new);

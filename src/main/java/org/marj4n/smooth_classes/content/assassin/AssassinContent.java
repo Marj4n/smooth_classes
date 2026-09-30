@@ -13,7 +13,7 @@ public final class AssassinContent {
     private AssassinContent() {}
 
     public static final Ability EVASION = ability("evasion", "Evasion", 25 * 20);
-    public static final Ability PREPARATION = ability("preparation", "Preparation", 15 * 20);
+    public static final Ability PREPARATION = ability("preparation", "Shadow Technique", 30 * 20);
     public static final Ability SIPHONING_STRIKES = ability("siphoning_strikes", "Siphoning Strikes", 25 * 20);
 
     public static final Talent BACKSTAB = talent("backstab", "Backstab");

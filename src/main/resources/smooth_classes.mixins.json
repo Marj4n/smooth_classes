@@ -18,7 +18,8 @@
     "MobEntityTargetMixin",
     "VillagerHostilesSensorMixin",
     "WardenEntityMixin",
-    "BladeLootingMixin"
+    "BladeLootingMixin",
+    "BloodRainSunlightMixin"
   ],
   "injectors": {
     "defaultRequire": 1
@@ -39,6 +40,8 @@
     "client.RiderFireRenderMixin",
     "client.RiderFlightFovMixin",
     "client.ChargeCastingFovMixin",
-    "client.ChargeExperienceBarMixin"
+    "client.ChargeExperienceBarMixin",
+    "client.BloodRainClientWorldMixin",
+    "client.BloodRainSkyMixin"
   ]
 }

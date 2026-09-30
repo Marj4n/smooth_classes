@@ -1,0 +1,7 @@
+{
+  "name": "Death List",
+  "landing_text": "$(5)Death List$() is your virtual Avenger soul ledger. Press $(b)Ctrl+H$() to open it at the live Soul Ledger. $(br2)$(6)H$(): summon / recall. $(br)$(5)Shift+H$(): unbind aimed soul. $(br2)Soul counts, kills, charges, and discovered recipes are synced from the server each time you open it.",
+  "version": 1,
+  "use_resource_pack": true,
+  "show_progress": false
+}

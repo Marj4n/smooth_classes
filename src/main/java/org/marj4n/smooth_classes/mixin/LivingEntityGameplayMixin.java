@@ -15,6 +15,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 /** Core rules that belong to every living entity, including nonplayers. */
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityGameplayMixin {
+    @org.spongepowered.asm.mixin.injection.ModifyVariable(method = "damage", at = @At("HEAD"), argsOnly = true)
+    private float smooth_classes$shadowDamage(float amount, DamageSource source, float original) {
+        return org.marj4n.smooth_classes.content.assassin.runtime.ShadowTechniqueRuntime.empower(source, amount);
+    }
+    @Inject(method = "damage", at = @At("RETURN"))
+    private void smooth_classes$confirmedHit(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+        if (!cir.getReturnValueZ() || amount <= 0) return;
+        org.marj4n.smooth_classes.content.assassin.runtime.ShadowTechniqueRuntime.confirmedHit(source);
+        org.marj4n.smooth_classes.runtime.BloodRainRuntime.confirmedHit((LivingEntity)(Object)this, source);
+    }
+
     @Inject(method = "canTarget(Lnet/minecraft/entity/LivingEntity;)Z", at = @At("HEAD"), cancellable = true)
     private void smooth_classes$filterTargets(LivingEntity target, CallbackInfoReturnable<Boolean> cir) {
         LivingEntity self = (LivingEntity) (Object) this;

@@ -106,6 +106,7 @@ public final class CombatEventRuntime {
     }
 
     public static void onKilledOther(ServerPlayerEntity player, ServerWorld world, LivingEntity victim) {
+        org.marj4n.smooth_classes.content.assassin.runtime.ShadowTechniqueRuntime.onKill(player);
         org.marj4n.smooth_classes.content.avenger.runtime.AvengerReworkRuntime.onKilledOther(player, victim);
         org.marj4n.smooth_classes.content.lancer.runtime.LancerRuntime.onKill(player, victim);
         // Renewal effects are intentionally event-based, matching the

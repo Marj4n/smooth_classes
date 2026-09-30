@@ -30,7 +30,7 @@ import org.marj4n.smooth_classes.runtime.ExecutionResult;
  * Portal of Sovereignty: a dense rear-gate barrage built from short-lived random
  * portal pulses. Charging is character-only; gates are created only after release.
  */
-public final class UnlimitedBladeWorksRuntime {
+public final class PortalOfSovereigntyRuntime {
     private static final Map<UUID, Session> ACTIVE = new HashMap<>();
     public static final int CHARGE_TICKS = 16;
     private static final int DISSIPATE_TICKS = 30;
@@ -99,6 +99,7 @@ public final class UnlimitedBladeWorksRuntime {
         final boolean rapid;
         final int activePortalLimit;
         final List<PortalPulse> pulses = new ArrayList<>();
+        final List<ProjectedDaggerEntity> projectiles = new ArrayList<>();
         int chargeTicks;
         boolean released;
         int nextPortalIn;
@@ -155,7 +156,7 @@ public final class UnlimitedBladeWorksRuntime {
         org.marj4n.smooth_classes.network.SmoothClassesNetworking.sendAbilityState(s.player);
     }
 
-    private UnlimitedBladeWorksRuntime() {}
+    private PortalOfSovereigntyRuntime() {}
 
     public static void register() {
         ServerTickEvents.END_SERVER_TICK.register(server -> { if (!ACTIVE.isEmpty()) tick(); });
@@ -170,7 +171,7 @@ public final class UnlimitedBladeWorksRuntime {
             HELD_AT.remove(handler.player.getUuid());
         });
         ServerLifecycleEvents.SERVER_STOPPING.register(server -> {
-            ACTIVE.values().forEach(UnlimitedBladeWorksRuntime::discardSession);
+            ACTIVE.values().forEach(PortalOfSovereigntyRuntime::discardSession);
             ACTIVE.clear();
             HELD_AT.clear();
         });
@@ -259,6 +260,8 @@ public final class UnlimitedBladeWorksRuntime {
     private static void discardSession(Session s) {
         for (PortalPulse pulse : s.pulses) pulse.portal.discard();
         s.pulses.clear();
+        for (ProjectedDaggerEntity dagger : s.projectiles) dagger.discard();
+        s.projectiles.clear();
     }
 
     private static double portalRadius(float scale) {
@@ -398,8 +401,7 @@ public final class UnlimitedBladeWorksRuntime {
         dagger.setVelocity(target.subtract(start).normalize().multiply(s.focused ? 2.1D : 1.45D));
         dagger.faceVelocity();
         if (s.world.spawnEntity(dagger)) {
-            s.world.spawnParticles(net.minecraft.particle.ParticleTypes.SNOWFLAKE,
-                    portalPlane.x, portalPlane.y, portalPlane.z, 2, .08D, .08D, .08D, .015D);
+            s.projectiles.add(dagger);
             s.world.playSound(null, p.getBlockPos(), SoundEvents.ENTITY_ARROW_SHOOT,
                     SoundCategory.PLAYERS, .18F, 1.48F + p.getRandom().nextFloat() * .20F);
         }
@@ -410,6 +412,7 @@ public final class UnlimitedBladeWorksRuntime {
         Iterator<Session> iterator = ACTIVE.values().iterator();
         while (iterator.hasNext()) {
             Session s = iterator.next();
+            s.projectiles.removeIf(net.minecraft.entity.Entity::isRemoved);
             ServerPlayerEntity p = s.player;
             boolean invalid = !p.isAlive() || p.isRemoved() || p.isSpectator() || p.getServerWorld() != s.world
                     || !AbilityRuntime.isClass(p, ArcherClass.ID) || !has(p, "is053f9imz801s57")

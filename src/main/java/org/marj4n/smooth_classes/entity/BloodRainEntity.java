@@ -23,6 +23,7 @@ public final class BloodRainEntity extends Entity {
     private long expires;
     private boolean empowered;
     private boolean transcendent;
+    public boolean transcendent() { return transcendent; }
 
     public BloodRainEntity(EntityType<?> type, World world) {
         super(type, world);
@@ -127,7 +128,7 @@ public final class BloodRainEntity extends Entity {
         }
     }
 
-    private boolean isOwnedByCaster(LivingEntity e) {
+    public boolean isOwnedByCaster(LivingEntity e) {
         if (owner == null) return false;
         if (AvengerReworkRuntime.isOwnedSummon(owner, e)) return true;
         if (e instanceof net.minecraft.entity.passive.TameableEntity tame

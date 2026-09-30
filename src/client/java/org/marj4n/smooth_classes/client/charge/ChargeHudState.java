@@ -9,7 +9,7 @@ import net.minecraft.util.math.MathHelper;
  * the progress shown over the vanilla XP bar; it never changes player XP.
  */
 public final class ChargeHudState {
-    public static final String UNLIMITED_BLADE_WORKS = "unlimited_blade_works";
+    public static final String PORTAL_OF_SOVEREIGNTY = "unlimited_blade_works";
     public static final String ARCANE_SLASH = "arcane_slash";
 
     private static boolean active;
@@ -66,10 +66,10 @@ public final class ChargeHudState {
     }
 
     public static int tint() {
-        return UNLIMITED_BLADE_WORKS.equals(ability) ? 0xF4D27C : 0xB784FF;
+        return PORTAL_OF_SOVEREIGNTY.equals(ability) ? 0xF4D27C : 0xB784FF;
     }
 
     public static String label() {
-        return UNLIMITED_BLADE_WORKS.equals(ability) ? "Portal of Sovereignty" : "Arcane Slash";
+        return PORTAL_OF_SOVEREIGNTY.equals(ability) ? "Portal of Sovereignty" : "Arcane Slash";
     }
 }

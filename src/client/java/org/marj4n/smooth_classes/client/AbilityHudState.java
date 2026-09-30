@@ -28,6 +28,10 @@ public final class AbilityHudState {
     public static int avengerSummonRechargeMs = 20000;
     public static long avengerSummonReadyAtMs = 0L;
 
+    public static boolean shadowActive;
+    public static long shadowExpiresAtMs = 0L;
+    public static int shadowRange = 10;
+
     public static void sync(String signature, int signatureTotalTicks, long signatureRemainingTicks,
                             String ascendancy, int ascendancyTotalTicks, long ascendancyRemainingTicks) {
         signatureAbility = signature == null ? "" : signature;
@@ -59,6 +63,14 @@ public final class AbilityHudState {
     }
 
     public static long avengerSummonRemainingMs() { return Math.max(0L, avengerSummonReadyAtMs - System.currentTimeMillis()); }
+
+    public static void syncShadow(boolean active, long remainingTicks, int range) {
+        shadowActive = active;
+        shadowExpiresAtMs = System.currentTimeMillis() + Math.max(0L, remainingTicks) * 50L;
+        shadowRange = Math.max(1, range);
+    }
+
+    public static long shadowRemainingMs() { return shadowActive ? Math.max(0L, shadowExpiresAtMs - System.currentTimeMillis()) : 0L; }
 
     public static Identifier signatureIcon() { return icon(signatureAbility, false); }
     public static Identifier ascendancyIcon() { return icon(ascendancyAbility, true); }
