@@ -1,0 +1,71 @@
+{
+  "name": "blade_release",
+  "author": "Smooth Classes",
+  "description": "Unlimited Blade Works arm-only casting animation",
+  "emote": {
+    "isLoop": "false",
+    "returnTick": 1,
+    "beginTick": 1,
+    "endTick": 22,
+    "stopTick": 23,
+    "degrees": false,
+    "moves": [
+      {
+        "tick": 1,
+        "easing": "EASEOUTQUAD",
+        "rightArm": {
+          "pitch": -1.55,
+          "yaw": -0.25,
+          "roll": -0.45
+        },
+        "leftArm": {
+          "pitch": -1.35,
+          "yaw": 0.25,
+          "roll": 0.45
+        }
+      },
+      {
+        "tick": 4,
+        "easing": "EASEOUTQUAD",
+        "rightArm": {
+          "pitch": -1.65,
+          "yaw": -0.05,
+          "roll": -0.12
+        },
+        "leftArm": {
+          "pitch": -1.6,
+          "yaw": 0.05,
+          "roll": 0.12
+        }
+      },
+      {
+        "tick": 10,
+        "easing": "EASEOUTQUAD",
+        "rightArm": {
+          "pitch": -1.65,
+          "yaw": -0.05,
+          "roll": -0.12
+        },
+        "leftArm": {
+          "pitch": -1.6,
+          "yaw": 0.05,
+          "roll": 0.12
+        }
+      },
+      {
+        "tick": 22,
+        "easing": "EASEOUTQUAD",
+        "rightArm": {
+          "pitch": 0,
+          "yaw": 0,
+          "roll": 0
+        },
+        "leftArm": {
+          "pitch": 0,
+          "yaw": 0,
+          "roll": 0
+        }
+      }
+    ]
+  }
+}

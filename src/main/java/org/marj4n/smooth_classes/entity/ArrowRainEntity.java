@@ -20,6 +20,7 @@ public final class ArrowRainEntity extends ArrowEntity {
         if(getWorld().isClient)return;
         if(inGround){
             if(++groundLife>=600){discard();return;}
+            if((groundLife&1)!=0)return; // proximity scan at 10 Hz; max 50 ms detonation delay
             if(getOwner() instanceof ServerPlayerEntity owner && AbilityRuntime.hasTalent(owner,ArcherContent.ARROW_RAIN_EXPLOSIVE.id())){
                 for(LivingEntity target:getWorld().getEntitiesByClass(LivingEntity.class,getBoundingBox().expand(1),
                         x->x!=owner&&x.isAlive()&&!x.isTeammate(owner))){

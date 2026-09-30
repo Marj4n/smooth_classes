@@ -75,6 +75,7 @@ public final class RiderRuntime {
 
     public static void register() {
         ServerTickEvents.END_SERVER_TICK.register(server -> {
+            if (MOUNTS.isEmpty()) return;
             for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) tickPlayer(player);
         });
         ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> cleanup(handler.player.getUuid(), true));
@@ -453,17 +454,19 @@ public final class RiderRuntime {
                 || has(player, RiderContent.HIPPOGRYPH);
 
         if (lavaStride) {
-            player.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 30, 0, false, false, false));
-            mount.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 30, 0, false, false, false));
-            player.extinguish();
-            mount.extinguish();
+            // A 30-tick protection effect only needs a 10-tick refresh.
+            if (player.age % 10 == 0) {
+                player.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 30, 0, false, false, false));
+                mount.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 30, 0, false, false, false));
+            }
+            if (player.isOnFire()) player.extinguish();
+            if (mount.isOnFire()) mount.extinguish();
         }
     }
 
     private static void applyMountedDamageBuff(ServerPlayerEntity player) {
         EntityAttributeInstance attack = player.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE);
-        if (attack == null) return;
-        attack.removeModifier(MOUNT_ATTACK_MODIFIER);
+        if (attack == null || attack.getModifier(MOUNT_ATTACK_MODIFIER) != null) return;
         attack.addTemporaryModifier(new net.minecraft.entity.attribute.EntityAttributeModifier(
                 MOUNT_ATTACK_MODIFIER,
                 "Smooth Classes Rider Mounted Damage",
@@ -474,7 +477,9 @@ public final class RiderRuntime {
 
     private static void removeMountedDamageBuff(ServerPlayerEntity player) {
         EntityAttributeInstance attack = player.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE);
-        if (attack != null) attack.removeModifier(MOUNT_ATTACK_MODIFIER);
+        if (attack != null && attack.getModifier(MOUNT_ATTACK_MODIFIER) != null) {
+            attack.removeModifier(MOUNT_ATTACK_MODIFIER);
+        }
     }
 
     private static boolean ally(ServerPlayerEntity owner, LivingEntity e) {

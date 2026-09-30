@@ -383,11 +383,18 @@ public final class EffectBehaviorRuntime {
 
     private static void elementalSurge(LivingEntity e) {
         if (!(e instanceof ServerPlayerEntity p) || p.age % 20 != 0) return;
-        List<Float> powers=new ArrayList<>();
-        if (!AbilityRuntime.hasTalent(p,ForeignerContent.ELEMENTAL_SURGE_NO_FROST.id())) powers.add(SpellPowerRuntime.frost(p,1.0));
-        if (!AbilityRuntime.hasTalent(p,ForeignerContent.ELEMENTAL_SURGE_NO_FIRE.id())) powers.add(SpellPowerRuntime.fire(p,1.0));
-        if (!AbilityRuntime.hasTalent(p,ForeignerContent.ELEMENTAL_SURGE_NO_LIGHTNING.id())) powers.add(SpellPowerRuntime.lightning(p,1.0));
-        float damage=powers.isEmpty()?SpellPowerRuntime.arcane(p,1.0):powers.get(p.getRandom().nextInt(powers.size()));
+        boolean frost=!AbilityRuntime.hasTalent(p,ForeignerContent.ELEMENTAL_SURGE_NO_FROST.id());
+        boolean fire=!AbilityRuntime.hasTalent(p,ForeignerContent.ELEMENTAL_SURGE_NO_FIRE.id());
+        boolean lightning=!AbilityRuntime.hasTalent(p,ForeignerContent.ELEMENTAL_SURGE_NO_LIGHTNING.id());
+        int enabled=(frost?1:0)+(fire?1:0)+(lightning?1:0);
+        float damage;
+        if(enabled==0) damage=SpellPowerRuntime.arcane(p,1.0);
+        else {
+            int pick=p.getRandom().nextInt(enabled);
+            if(frost && pick--==0) damage=SpellPowerRuntime.frost(p,1.0);
+            else if(fire && pick--==0) damage=SpellPowerRuntime.fire(p,1.0);
+            else damage=SpellPowerRuntime.lightning(p,1.0);
+        }
         CombatRuntime.damageNearby(p,3,damage);
     }
 
@@ -410,6 +417,9 @@ public final class EffectBehaviorRuntime {
     private static void consecration(LivingEntity e) {
         if (!(e instanceof ServerPlayerEntity p) || !p.isOnGround() || p.age%18!=0) return;
         float power=Math.max(1F,SpellPowerRuntime.healing(p,1.9));
+        boolean taunt=AbilityRuntime.hasTalent(p,SaberContent.CONSECRATION_TAUNT.id());
+        boolean mighty=AbilityRuntime.hasTalent(p,SaberContent.CONSECRATION_MIGHTY.id());
+        boolean spellforged=AbilityRuntime.hasTalent(p,SaberContent.CONSECRATION_SPELLFORGED.id());
         p.heal(power/5F);
         SkillFx.plane(p, SpellEngineParticles.magic_holy.type(), p.getBlockPos(), 6, 0, 0.4, 0);
         SkillFx.plane(p, SpellEngineParticles.magic_holy.type(), p.getBlockPos(), 6, 0, 0.2, 0);
@@ -418,13 +428,13 @@ public final class EffectBehaviorRuntime {
             target.timeUntilRegen=0;
             target.damage(p.getDamageSources().indirectMagic(p,p),power);
             target.timeUntilRegen=1;
-            if(AbilityRuntime.hasTalent(p,SaberContent.CONSECRATION_TAUNT.id()) && target instanceof MobEntity mob) mob.setTarget(p);
+            if(taunt && target instanceof MobEntity mob) mob.setTarget(p);
         }
         for(LivingEntity ally:p.getWorld().getEntitiesByClass(LivingEntity.class,p.getBoundingBox().expand(6),
                 x->x!=p&&x.isAlive()&&p.isTeammate(x))) {
             ally.heal(power/4F);
-            if(AbilityRuntime.hasTalent(p,SaberContent.CONSECRATION_MIGHTY.id())) increment(ally,SmoothEffects.MIGHT,19,1,5);
-            if(AbilityRuntime.hasTalent(p,SaberContent.CONSECRATION_SPELLFORGED.id())) increment(ally,SmoothEffects.SPELLFORGED,19,1,3);
+            if(mighty) increment(ally,SmoothEffects.MIGHT,19,1,5);
+            if(spellforged) increment(ally,SmoothEffects.SPELLFORGED,19,1,3);
         }
     }
 
@@ -519,20 +529,26 @@ public final class EffectBehaviorRuntime {
         int count=amp+1;
         double angleBase=Math.toRadians(p.getWorld().getTime()*9.0-45.0);
         double hammerY=p.getY()+p.getHeight()*0.5;
+        double[] hammerX=new double[count];
+        double[] hammerZ=new double[count];
+        for(int i=0;i<count;i++){
+            double a=angleBase+(Math.PI*2*i/count);
+            hammerX[i]=p.getX()-Math.sin(a)*3.0;
+            hammerZ[i]=p.getZ()-Math.cos(a)*3.0;
+        }
+        int pts=PuffishSkillsIntegration.countUnlockedSkills(PuffishSkillsIntegration.ASCENDANCY,p);
+        float coefficient=pts>=60?1.00F:pts>=30?.75F:.55F;
+        float damage=(float)Math.max(p.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE),SpellPowerRuntime.healing(p,1))*coefficient;
         for (LivingEntity target:nearbyHostiles(p,4.5)) {
             if (target instanceof net.minecraft.entity.passive.TameableEntity tame && tame.isOwner(p)) continue;
-            if (target.getBoundingBox().maxY < hammerY-0.7 || target.getBoundingBox().minY > hammerY+0.7) continue;
+            var box=target.getBoundingBox();
+            if (box.maxY < hammerY-0.7 || box.minY > hammerY+0.7) continue;
             for (int i=0;i<count;i++) {
-                double a=angleBase+(Math.PI*2*i/count);
-                double hx=p.getX()-Math.sin(a)*3.0;
-                double hz=p.getZ()-Math.cos(a)*3.0;
-                double dx=Math.max(target.getBoundingBox().minX-hx,Math.max(0,hx-target.getBoundingBox().maxX));
-                double dz=Math.max(target.getBoundingBox().minZ-hz,Math.max(0,hz-target.getBoundingBox().maxZ));
+                double hx=hammerX[i],hz=hammerZ[i];
+                double dx=Math.max(box.minX-hx,Math.max(0,hx-box.maxX));
+                double dz=Math.max(box.minZ-hz,Math.max(0,hz-box.maxZ));
                 if (dx*dx+dz*dz > 0.75*0.75) continue;
-                int pts=PuffishSkillsIntegration.countUnlockedSkills(PuffishSkillsIntegration.ASCENDANCY,p);
-                float coefficient=pts>=60?1.00F:pts>=30?.75F:.55F;
-                org.marj4n.smooth_classes.runtime.RighteousHammerChargeRuntime.passiveHit(p,target,
-                        (float)Math.max(p.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE),SpellPowerRuntime.healing(p,1))*coefficient);
+                org.marj4n.smooth_classes.runtime.RighteousHammerChargeRuntime.passiveHit(p,target,damage);
                 break;
             }
         }
@@ -663,8 +679,20 @@ public final class EffectBehaviorRuntime {
         if(dur%interval==0){
             double radius=pts>=60?18:10;
             int limit=pts>=60?2:1;
-            var targets=nearbyHostiles(p,radius).stream().sorted(java.util.Comparator.comparingDouble(p::squaredDistanceTo)).limit(limit).toList();
+            LivingEntity first=null,second=null;
+            double firstDistance=Double.MAX_VALUE,secondDistance=Double.MAX_VALUE;
+            for(LivingEntity candidate:nearbyHostiles(p,radius)){
+                double distance=p.squaredDistanceTo(candidate);
+                if(distance<firstDistance){
+                    second=first;secondDistance=firstDistance;
+                    first=candidate;firstDistance=distance;
+                } else if(distance<secondDistance){
+                    second=candidate;secondDistance=distance;
+                }
+            }
+            LivingEntity[] targets=limit>1?new LivingEntity[]{first,second}:new LivingEntity[]{first};
             for(LivingEntity target:targets){
+                if(target==null)continue;
                 double coefficient=(.35+.0075*AscendancyBalance.points(pts))*(pts>=60?1.75:1.0);
                 float damage=(float)(Math.max(p.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE),
                         Math.max(SpellPowerRuntime.soul(p,1),SpellPowerRuntime.arcane(p,1)))*coefficient);
@@ -728,11 +756,16 @@ public final class EffectBehaviorRuntime {
             increment(owner,StatusEffects.MINING_FATIGUE,15,1,3);
         }
         if(AbilityRuntime.hasTalent(owner,RulerContent.SACRED_ORB_DEBUFFS.id())){
-            for(StatusEffectInstance x:new ArrayList<>(e.getStatusEffects()))if(!x.getEffectType().isBeneficial()){
-                owner.addStatusEffect(new StatusEffectInstance(x)); e.removeStatusEffect(x.getEffectType()); break;}
+            StatusEffectInstance transfer=null;
+            for(StatusEffectInstance x:e.getStatusEffects()) if(!x.getEffectType().isBeneficial()){transfer=x;break;}
+            if(transfer!=null){
+                owner.addStatusEffect(new StatusEffectInstance(transfer));
+                e.removeStatusEffect(transfer.getEffectType());
+            }
         }
         if(AbilityRuntime.hasTalent(owner,RulerContent.SACRED_ORB_BUFFS.id())){
-            for(StatusEffectInstance x:new ArrayList<>(owner.getStatusEffects()))if(x.getEffectType().isBeneficial()&&x.getEffectType()!=SmoothEffects.VITALITY_BOND)
+            // Owner effects are only read in this loop, so no defensive copy is needed.
+            for(StatusEffectInstance x:owner.getStatusEffects())if(x.getEffectType().isBeneficial()&&x.getEffectType()!=SmoothEffects.VITALITY_BOND)
                 e.addStatusEffect(new StatusEffectInstance(x));
         }
         float ep=e.getHealth()/e.getMaxHealth()*100F,op=owner.getHealth()/owner.getMaxHealth()*100F;

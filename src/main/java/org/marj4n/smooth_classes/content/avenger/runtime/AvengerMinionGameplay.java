@@ -3,7 +3,6 @@ package org.marj4n.smooth_classes.content.avenger.runtime;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.PassiveEntity;
-import java.util.Comparator;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.attribute.EntityAttribute;
@@ -175,18 +174,20 @@ public final class AvengerMinionGameplay {
         if (minion instanceof WraithEntity) {
             // Wraith does not use melee target goals. Every pulse it independently
             // finds the nearest non-passive valid living target in a 16 block box.
-            Entity nearest=minion.getWorld().getOtherEntities(
-                            minion,
-                            minion.getBoundingBox().expand(16),
-                            e -> e instanceof LivingEntity living
-                                    && living.isAlive()
-                                    && e != owner
-                                    && !(e instanceof PassiveEntity)
-                                    && !(e instanceof TameableEntity tame && tame.isTamed()
-                                    && owner.getUuid().equals(tame.getOwnerUuid()))
-                    ).stream()
-                    .min(Comparator.comparingDouble((Entity e) -> e.squaredDistanceTo(minion)))
-                    .orElse(null);
+            Entity nearest=null;
+            double nearestDistance=Double.MAX_VALUE;
+            for(Entity candidate:minion.getWorld().getOtherEntities(
+                    minion,
+                    minion.getBoundingBox().expand(16),
+                    e -> e instanceof LivingEntity living
+                            && living.isAlive()
+                            && e != owner
+                            && !(e instanceof PassiveEntity)
+                            && !(e instanceof TameableEntity tame && tame.isTamed()
+                            && owner.getUuid().equals(tame.getOwnerUuid())))) {
+                double distance=candidate.squaredDistanceTo(minion);
+                if(distance<nearestDistance){nearestDistance=distance;nearest=candidate;}
+            }
             if (!(nearest instanceof LivingEntity found) || !org.marj4n.smooth_classes.integration.OptionalCompatRuntime.canHarm(owner,found)) return false;
             target=found;
             // Wraiths are ranged casters rather than ordinary melee summons.
@@ -338,15 +339,16 @@ public final class AvengerMinionGameplay {
     }
 
     private static void transferHarmfulStack(LivingEntity from, LivingEntity to) {
-        for (StatusEffectInstance effect : new ArrayList<>(from.getStatusEffects())) {
-            if (effect.getEffectType().isBeneficial()) continue;
-            StatusEffectInstance existing = to.getStatusEffect(effect.getEffectType());
-            int amplifier = existing == null ? 0 : Math.min(effect.getAmplifier(), existing.getAmplifier() + 1);
-            to.addStatusEffect(new StatusEffectInstance(effect.getEffectType(), effect.getDuration(), amplifier, false, false, true));
-            if (effect.getAmplifier() == 0) from.removeStatusEffect(effect.getEffectType());
-            else from.addStatusEffect(new StatusEffectInstance(effect.getEffectType(), effect.getDuration(), effect.getAmplifier() - 1, false, false, true));
-            return;
+        StatusEffectInstance selected=null;
+        for(StatusEffectInstance effect:from.getStatusEffects()) {
+            if(!effect.getEffectType().isBeneficial()){selected=effect;break;}
         }
+        if(selected==null)return;
+        StatusEffectInstance existing=to.getStatusEffect(selected.getEffectType());
+        int amplifier=existing==null?0:Math.min(selected.getAmplifier(),existing.getAmplifier()+1);
+        to.addStatusEffect(new StatusEffectInstance(selected.getEffectType(),selected.getDuration(),amplifier,false,false,true));
+        if(selected.getAmplifier()==0)from.removeStatusEffect(selected.getEffectType());
+        else from.addStatusEffect(new StatusEffectInstance(selected.getEffectType(),selected.getDuration(),selected.getAmplifier()-1,false,false,true));
     }
 
     public static void tickMinion(
@@ -382,7 +384,7 @@ public final class AvengerMinionGameplay {
         // Plague: periodically transfer one harmful effect from the Avenger
         // to a random owned summon.
         if (AbilityRuntime.hasTalent(owner, AvengerContent.PLAGUE.id())
-                && owner.getStatusEffects().stream().anyMatch(effect -> !effect.getEffectType().isBeneficial())
+                && hasHarmfulEffect(owner)
                 && !minions.isEmpty()) {
             AvengerMinionEntity recipient = minions.get(owner.getRandom().nextInt(minions.size()));
             transferHarmfulStack(owner, recipient);
@@ -521,11 +523,17 @@ public final class AvengerMinionGameplay {
         entity.addStatusEffect(new StatusEffectInstance(effect, duration, amplifier, false, false, true));
     }
 
+    private static boolean hasHarmfulEffect(LivingEntity entity) {
+        for(StatusEffectInstance effect:entity.getStatusEffects())
+            if(!effect.getEffectType().isBeneficial())return true;
+        return false;
+    }
+
     private static int countHarmfulEffects(LivingEntity entity) {
-        return (int) entity.getStatusEffects()
-                .stream()
-                .filter(effect -> !effect.getEffectType().isBeneficial())
-                .count();
+        int count=0;
+        for(StatusEffectInstance effect:entity.getStatusEffects())
+            if(!effect.getEffectType().isBeneficial())count++;
+        return count;
     }
 
     private static void shadowCombust(

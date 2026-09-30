@@ -17,18 +17,22 @@ import org.marj4n.smooth_classes.integration.PuffishSkillsIntegration;
 import org.marj4n.smooth_classes.integration.SkillNodeIds;
 import org.marj4n.smooth_classes.content.saber.runtime.SaberRuntime;
 
-import java.util.Comparator;
 
 /** Chapter 7: special projectile lifecycle layered on Spell Engine projectiles. */
 public final class ProjectileEntityRuntime {
+    private static final Identifier FROST_ARROW_HOMING = new Identifier("smooth_classes", "frost_arrow_homing");
+    private static final Identifier FIRE_ARROW_HOMING = new Identifier("smooth_classes", "fire_arrow_homing");
+    private static final Identifier LIGHTNING_ARROW_HOMING = new Identifier("smooth_classes", "lightning_arrow_homing");
+    private static final Identifier LIGHTNING_LESSER = new Identifier("smooth_classes", "lightning_lesser");
     private ProjectileEntityRuntime(){}
 
     public static void tickSpellProjectile(ServerPlayerEntity owner, SpellProjectile p, Identifier id){
         if(id==null)return;
-        String spell=id.toString();
+        String spell=id.getPath();
+        boolean smooth="smooth_classes".equals(id.getNamespace());
 
         // Sacred Orb: after its initial travel, acquire a nearby ally.
-        if(spell.equals("smooth_classes:sacred_orb") && p.age>20 && p.getFollowedTarget()==null){
+        if(smooth && spell.equals("sacred_orb") && p.age>20 && p.getFollowedTarget()==null){
             nearest(p,owner,6,false).ifPresent(p::setFollowedTarget);
         }
 
@@ -47,8 +51,12 @@ public final class ProjectileEntityRuntime {
         // a random elemental homing child exactly on 12-tick cadence.
         if(spell.contains("arrow_rain") && p.age>30 && p.age%12==0
                 && has(owner,PuffishSkillsIntegration.ARCHER, SkillNodeIds.rangerSpecialisationArrowRainElementalArtillery)){
-            spawnChild(owner,p,new Identifier("smooth_classes", switch(owner.getRandom().nextInt(3)){
-                case 0 -> "frost_arrow_homing"; case 1 -> "fire_arrow_homing"; default -> "lightning_arrow_homing";}),20,35);
+            Identifier childId=switch(owner.getRandom().nextInt(3)){
+                case 0 -> FROST_ARROW_HOMING;
+                case 1 -> FIRE_ARROW_HOMING;
+                default -> LIGHTNING_ARROW_HOMING;
+            };
+            spawnChild(owner,p,childId,20,35);
         }
 
         // Static Discharge Lightning Ball: emit lesser homing projectiles every 5 ticks.
@@ -56,7 +64,7 @@ public final class ProjectileEntityRuntime {
                 && p.age>5 && p.age%5==0 && has(owner,PuffishSkillsIntegration.CASTER,
                 SkillNodeIds.wizardSpecialisationStaticDischargeLightningBall)){
             p.mutablePerks().pierce = 132;
-            spawnChild(owner,p,new Identifier("smooth_classes","lightning_lesser"),5,5);
+            spawnChild(owner,p,LIGHTNING_LESSER,5,5);
         }
 
         // Ascendancy projectile states use their real spell assets already shipped in
@@ -92,20 +100,21 @@ public final class ProjectileEntityRuntime {
         }
         if(spell.contains("rapidfire") && p.getFollowedTarget()==null)
             nearest(p,owner,16,true).ifPresent(p::setFollowedTarget);
-        if(spell.equals("smooth_classes:passive_throw") && p.getFollowedTarget()==null)
+        if(smooth && spell.equals("passive_throw") && p.getFollowedTarget()==null)
             nearest(p,owner,12,true).ifPresent(p::setFollowedTarget);
     }
 
     public static void onSpellProjectileHit(ServerPlayerEntity owner,SpellProjectile p,Identifier id,LivingEntity target){
         if(id==null)return;
-        String spell=id.toString();
+        String spell=id.getPath();
+        boolean smooth="smooth_classes".equals(id.getNamespace());
 
-        if(spell.equals("smooth_classes:physical_heavensmiths_call")) SaberRuntime.onHeavensmithImpact(owner,target);
-        if(spell.equals("smooth_classes:lightning_ball") || spell.equals("smooth_classes:lightning_lesser"))
+        if(smooth && spell.equals("physical_heavensmiths_call")) SaberRuntime.onHeavensmithImpact(owner,target);
+        if(smooth && (spell.equals("lightning_ball") || spell.equals("lightning_lesser")))
             org.marj4n.smooth_classes.content.caster.runtime.CasterRuntime.onStaticChargeHit(owner,target);
 
         // Sacred Orb impact establishes the gameplay bond on both sides.
-        if(spell.equals("smooth_classes:sacred_orb")){
+        if(smooth && spell.equals("sacred_orb")){
             target.addStatusEffect(new SourceStatusEffectInstance(SmoothEffects.VITALITY_BOND,500,0,false,false,true,owner));
             owner.addStatusEffect(new SourceStatusEffectInstance(SmoothEffects.VITALITY_BOND,500,0,false,false,true,owner));
         }
@@ -118,18 +127,24 @@ public final class ProjectileEntityRuntime {
 
     public static boolean ignoreBlockHit(Identifier id){
         if(id==null)return false;
-        String s=id.toString();
+        String s=id.getPath();
         return s.contains("lightning_ball_homing") || s.contains("physical_dagger_homing")
                 || s.contains("sacred_orb_lesser") || s.contains("righteous_hammer_projectile");
     }
 
     private static java.util.Optional<LivingEntity> nearest(Entity center,ServerPlayerEntity owner,double radius,boolean hostile){
         Box box=center.getBoundingBox().expand(radius);
-        return center.getWorld().getEntitiesByClass(LivingEntity.class,box,e->{
+        LivingEntity nearest=null;
+        double best=Double.MAX_VALUE;
+        for(LivingEntity candidate:center.getWorld().getEntitiesByClass(LivingEntity.class,box,e->{
             if(!e.isAlive()||e==owner)return false;
             boolean ally=e.isTeammate(owner);
             return hostile?!ally:ally;
-        }).stream().min(Comparator.comparingDouble(center::squaredDistanceTo));
+        })){
+            double distance=center.squaredDistanceTo(candidate);
+            if(distance<best){best=distance;nearest=candidate;}
+        }
+        return java.util.Optional.ofNullable(nearest);
     }
 
     private static void spawnChild(ServerPlayerEntity owner,SpellProjectile parent,Identifier spellId,double radius,int chance){

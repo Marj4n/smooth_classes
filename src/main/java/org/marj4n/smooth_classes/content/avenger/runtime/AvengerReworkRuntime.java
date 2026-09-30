@@ -77,10 +77,12 @@ public final class AvengerReworkRuntime {
 
     public static void register() {
         ServerTickEvents.END_SERVER_TICK.register(server -> {
+            // Avenger maintenance has no behavior faster than five ticks. Keep the
+            // player's own age phase so scheduled 20-tick work still lands correctly.
             for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
-                tickPlayer(player);
+                if ((player.age % 5) == 0) tickPlayer(player);
             }
-            tickDevours(server);
+            if (!DEVOURS.isEmpty()) tickDevours(server);
         });
         ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
             UUID playerId = handler.player.getUuid();
@@ -101,19 +103,26 @@ public final class AvengerReworkRuntime {
         if (server == null) return;
 
         UUID playerId = player.getUuid();
-        AvengerDeathListState state = AvengerDeathListState.get(server);
         boolean avenger = AbilityRuntime.isClass(player, AvengerClass.ID);
+        boolean bookTick = (player.age % 20) == 0;
+        boolean summonTick = avenger && (player.age % 5) == 0;
+        boolean firstAvengerCheck = avenger && !DEATH_LIST_READY.contains(playerId);
+
+        // Persistent-state lookup + inventory validation is unnecessary on idle ticks.
+        // New Avenger players still initialize immediately; old Death Lists refresh at 1 Hz.
+        if (!bookTick && !summonTick && !firstAvengerCheck && player.age >= 5) return;
+
+        AvengerDeathListState state = AvengerDeathListState.get(server);
         if (avenger) state.awaken(playerId);
 
-        // The book is persistent, so a full inventory scan and page rebuild does not
-        // need to happen 20 times per second. We refresh immediately on first sight,
-        // then once per second; gameplay events still call refreshDeathListNow().
         if (state.hasAwakened(playerId)) {
             boolean firstCheck = DEATH_LIST_READY.add(playerId);
-            if (firstCheck || (player.age % 20) == 0) ensureDeathList(player, state);
+            if (firstCheck || bookTick) ensureDeathList(player, state);
         }
 
-        if (avenger && (player.age % 5) == 0) tickOwnedSummons(player);
+        // The 96-block summon ownership/AI sweep is expensive; 4 Hz is responsive
+        // enough for retarget/follow behavior and cuts those world scans by 80%.
+        if (summonTick) tickOwnedSummons(player);
     }
 
     // ---------------------------------------------------------------------
@@ -663,7 +672,7 @@ public final class AvengerReworkRuntime {
             owner.removeStatusEffect(StatusEffects.DARKNESS);
         }
 
-        Set<UUID> alliedSummonIds = new HashSet<>();
+        Set<UUID> alliedSummonIds = new HashSet<>(Math.max(16, summons.size() * 2));
         for (LivingEntity summon : summons) alliedSummonIds.add(summon.getUuid());
 
         LivingEntity ownerTarget = owner.getAttacking();
@@ -731,12 +740,14 @@ public final class AvengerReworkRuntime {
                     mob.setTarget(ownerTarget);
                 }
             } else {
-                String id = Registries.ENTITY_TYPE.getId(summon.getType()).toString();
-                boolean dangerousBoss = id.equals("minecraft:warden") || id.equals("minecraft:wither") || id.equals("minecraft:ender_dragon");
+                boolean dangerousBoss = summon instanceof WardenEntity
+                        || summon.getType() == EntityType.WITHER
+                        || summon.getType() == EntityType.ENDER_DRAGON;
                 if (dangerousBoss) mob.setTarget(null);
-                if (summon.squaredDistanceTo(owner) > 64D * 64D) {
+                double ownerDistanceSq = summon.squaredDistanceTo(owner);
+                if (ownerDistanceSq > 64D * 64D) {
                     summon.requestTeleport(owner.getX() + 1.5D, owner.getY(), owner.getZ() + 1.5D);
-                } else if (!dangerousBoss && summon.squaredDistanceTo(owner) > 8D * 8D && mob.getTarget() == null) {
+                } else if (!dangerousBoss && ownerDistanceSq > 8D * 8D && mob.getTarget() == null) {
                     mob.getNavigation().startMovingTo(owner, 1.15D);
                 }
             }

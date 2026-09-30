@@ -17,7 +17,8 @@
     "WhenOnHighEffectGuardMixin",
     "MobEntityTargetMixin",
     "VillagerHostilesSensorMixin",
-    "WardenEntityMixin"
+    "WardenEntityMixin",
+    "BladeLootingMixin"
   ],
   "injectors": {
     "defaultRequire": 1
@@ -36,6 +37,8 @@
     "client.SacredBannerSpriteMixin",
     "client.RiderHorseSurfaceAnimationMixin",
     "client.RiderFireRenderMixin",
-    "client.RiderFlightFovMixin"
+    "client.RiderFlightFovMixin",
+    "client.ChargeCastingFovMixin",
+    "client.ChargeExperienceBarMixin"
   ]
 }

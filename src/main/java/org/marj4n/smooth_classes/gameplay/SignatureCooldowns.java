@@ -17,7 +17,7 @@ public final class SignatureCooldowns {
             case "evasion" -> SmoothBalance.Assassin.evasionCooldown;
             case "preparation" -> SmoothBalance.Assassin.preparationCooldown;
             case "siphoning_strikes" -> SmoothBalance.Assassin.siphoningCooldown;
-            case "disengage" -> SmoothBalance.Archer.disengageCooldown;
+            case "unlimited_blade_works" -> SmoothBalance.Archer.unlimitedBladeWorksCooldown;
             case "arrow_rain" -> SmoothBalance.Archer.arrowRainCooldown;
             case "elemental_arrows" -> SmoothBalance.Archer.elementalArrowsCooldown;
             case "elemental_surge" -> SmoothBalance.Foreigner.elementalSurgeCooldown;

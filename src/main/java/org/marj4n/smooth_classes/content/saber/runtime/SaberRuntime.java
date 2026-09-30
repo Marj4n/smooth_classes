@@ -52,8 +52,12 @@ public final class SaberRuntime {
 
     public static ExecutionResult executeHeavensmithsCall(ServerPlayerEntity player) {
         HeavensmithPlan plan=heavensmithsCall(player);
-        LivingEntity target=CombatRuntime.nearbyEnemies(player,20).stream()
-                .min(java.util.Comparator.comparingDouble(player::squaredDistanceTo)).orElse(null);
+        LivingEntity target=null;
+        double best=Double.MAX_VALUE;
+        for(LivingEntity candidate:CombatRuntime.nearbyEnemies(player,20)){
+            double distance=player.squaredDistanceTo(candidate);
+            if(distance<best){best=distance;target=candidate;}
+        }
         if(target==null)return ExecutionResult.failure("No valid Heavensmith target within 20 blocks.");
         if(plan.effect())ClassEffectRuntime.apply(player,SmoothEffects.DIVINE_ADJUDICATION,400,0);
         boolean cast=InternalSpellRuntime.target(player,"smooth_classes:physical_heavensmiths_call",target,1F);

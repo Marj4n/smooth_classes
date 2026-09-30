@@ -23,15 +23,22 @@ import java.util.UUID;
 public final class SmoothClassesNetworking {
     public static final Identifier CAST_SIGNATURE = SmoothClasses.id("cast_signature");
     public static final Identifier CAST_ASCENDANCY = SmoothClasses.id("cast_ascendancy");
+    public static final Identifier BLADE_WORKS_HOLD = SmoothClasses.id("blade_works_hold");
     public static final Identifier ARCANE_SLASH_HOLD = SmoothClasses.id("arcane_slash_hold");
     public static final Identifier RIDER_SUMMON_MOUNT = SmoothClasses.id("rider_summon_mount");
     public static final Identifier RIDER_FLIGHT_INPUT = SmoothClasses.id("rider_flight_input");
     public static final Identifier AVENGER_SUMMON = SmoothClasses.id("avenger_summon");
     public static final Identifier SYNC_ABILITY_STATE = SmoothClasses.id("sync_ability_state");
+    public static final Identifier SYNC_CHARGE_STATE = SmoothClasses.id("sync_charge_state");
     private static final Map<UUID,String> LAST_SELECTION = new HashMap<>();
     private SmoothClassesNetworking() {}
 
     public static void registerServer() {
+        ServerPlayNetworking.registerGlobalReceiver(BLADE_WORKS_HOLD,
+                (server, player, handler, buf, responseSender) -> {
+                    boolean held = buf.readBoolean();
+                    server.execute(() -> org.marj4n.smooth_classes.content.archer.runtime.UnlimitedBladeWorksRuntime.hold(player, held));
+                });
         ServerPlayNetworking.registerGlobalReceiver(ARCANE_SLASH_HOLD,
                 (server, player, handler, buf, responseSender) -> {
                     boolean held = buf.readBoolean();
@@ -64,11 +71,13 @@ public final class SmoothClassesNetworking {
             org.marj4n.smooth_classes.runtime.ArcaneSlashChargeRuntime.disconnect(handler.player);
             LAST_SELECTION.remove(handler.player.getUuid());
             PuffishSkillsIntegration.invalidateRuntimeCache(handler.player);
+            org.marj4n.smooth_classes.runtime.AbilityRuntime.invalidateRuntimeCache(handler.player);
         });
         net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents.SERVER_STOPPED.register(server -> {
             org.marj4n.smooth_classes.runtime.ArcaneSlashChargeRuntime.clear();
             LAST_SELECTION.clear();
             PuffishSkillsIntegration.clearRuntimeCaches();
+            org.marj4n.smooth_classes.runtime.AbilityRuntime.clearRuntimeCaches();
         });
         ServerPlayNetworking.registerGlobalReceiver(CAST_SIGNATURE, (server, player, handler, buf, responseSender) ->
                 server.execute(() -> {
@@ -105,6 +114,18 @@ public final class SmoothClassesNetworking {
                 if (!selection.equals(LAST_SELECTION.get(player.getUuid()))) sendAbilityState(player);
             }
         });
+    }
+
+    /** Sends the render-only hold-charge state. Gameplay remains server-owned by each runtime. */
+    public static void sendChargeState(ServerPlayerEntity player, boolean active, boolean completed,
+                                       String ability, int elapsedTicks, int totalTicks) {
+        PacketByteBuf out = PacketByteBufs.create();
+        out.writeBoolean(active);
+        out.writeBoolean(completed);
+        out.writeString(ability == null ? "" : ability);
+        out.writeInt(Math.max(0, elapsedTicks));
+        out.writeInt(Math.max(1, totalTicks));
+        ServerPlayNetworking.send(player, SYNC_CHARGE_STATE, out);
     }
 
     public static void sendAbilityState(ServerPlayerEntity player) {

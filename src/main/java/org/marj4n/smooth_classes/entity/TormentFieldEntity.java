@@ -45,6 +45,8 @@ public final class TormentFieldEntity extends Entity {
             for(int x=-r;x<=r;x++)for(int z=-r;z<=r;z++)if(x*x+z*z<=radius*radius)
                 world.spawnParticles(SmoothParticles.BLACK_FLAME,getX()+x,getY()+.15,getZ()+z,transcendent?5:3,.28,.12,.28,.02);
         }
+        // Explosion stays exact; persistent contact checks run at 10 Hz.
+        if(explode || (age&1)==0) {
         // No owner/team exemption: caster and allies can also catch the black flame.
         for(var target:world.getEntitiesByClass(LivingEntity.class,new Box(getX()-radius,getY()-.3,getZ()-radius,getX()+radius,getY()+2.5,getZ()+radius),e->e.isAlive()&&!e.isSpectator())) {
             double dx=Math.max(0,Math.abs(target.getX()-getX())-target.getWidth()/2),dz=Math.max(0,Math.abs(target.getZ()-getZ())-target.getWidth()/2);
@@ -55,6 +57,7 @@ public final class TormentFieldEntity extends Entity {
                 target.addStatusEffect(new net.minecraft.entity.effect.StatusEffectInstance(net.minecraft.entity.effect.StatusEffects.SLOWNESS,30,1,false,false,true));
             }
             if(explode)TormentRuntime.hurt(target,owner,blastDamage,blastCoefficient);
+        }
         }
     }
     @Override protected void initDataTracker(){}

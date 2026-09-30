@@ -48,9 +48,10 @@ public final class RighteousHammerChargeRuntime {
         LAUNCHING.set(true);
         try {
             for(int j=0;j<Math.min(wanted,total);j++){
-                var before=owner.getWorld().getEntitiesByClass(SpellProjectile.class,
-                        owner.getBoundingBox().expand(6), p->p.getOwner()==owner).stream()
-                        .map(net.minecraft.entity.Entity::getUuid).collect(java.util.stream.Collectors.toSet());
+                var existing=owner.getWorld().getEntitiesByClass(SpellProjectile.class,
+                        owner.getBoundingBox().expand(6), p->p.getOwner()==owner);
+                var before=new java.util.HashSet<java.util.UUID>(Math.max(16,existing.size()*2));
+                for(SpellProjectile projectile:existing) before.add(projectile.getUuid());
                 boolean launched=InternalSpellRuntime.target(owner,"smooth_classes:righteous_hammer_projectile",target,multiplier);
                 if(!launched)break;
                 launchedCount++;

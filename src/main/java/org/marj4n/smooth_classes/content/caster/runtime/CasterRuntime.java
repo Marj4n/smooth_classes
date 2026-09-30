@@ -34,9 +34,13 @@ public final class CasterRuntime {
     public static ExecutionResult executeMeteorShower(ServerPlayerEntity player) {
         MeteorPlan plan=meteorShower(player);
         var center=aim(player,120);
-        LivingEntity target=player.getWorld().getEntitiesByClass(LivingEntity.class,
+        LivingEntity target=null;
+        for (LivingEntity candidate : player.getWorld().getEntitiesByClass(LivingEntity.class,
                 new net.minecraft.util.math.Box(center,center).expand(8),
-                e->e!=player&&e.isAlive()&&OptionalCompatRuntime.canHarm(player,e)).stream().findFirst().orElse(null);
+                e->e!=player&&e.isAlive()&&OptionalCompatRuntime.canHarm(player,e))) {
+            target=candidate;
+            break;
+        }
         if(target==null)return ExecutionResult.failure("No Meteor Shower target near the aimed position.");
         if(plan.explosive()) org.marj4n.smooth_classes.runtime.ClassEffectRuntime.apply(player,
                 org.marj4n.smooth_classes.effects.SmoothEffects.METEORIC_WRATH,800,9);
@@ -54,9 +58,13 @@ public final class CasterRuntime {
         if(plan.frozen()) org.marj4n.smooth_classes.runtime.ClassEffectRuntime.apply(player,
                 org.marj4n.smooth_classes.effects.SmoothEffects.FROST_VOLLEY,400,6);
         var center=aim(player,120);
-        LivingEntity target=player.getWorld().getEntitiesByClass(LivingEntity.class,
+        LivingEntity target=null;
+        for (LivingEntity candidate : player.getWorld().getEntitiesByClass(LivingEntity.class,
                 new net.minecraft.util.math.Box(center,center).expand(3),
-                e->e!=player&&e.isAlive()&&OptionalCompatRuntime.canHarm(player,e)).stream().findFirst().orElse(null);
+                e->e!=player&&e.isAlive()&&OptionalCompatRuntime.canHarm(player,e))) {
+            target=candidate;
+            break;
+        }
         String spell="ice_comet";
         if(PuffishSkillsIntegration.isSkillUnlocked(PuffishSkillsIntegration.CASTER,
                 SkillNodeIds.wizardSpecialisationIceCometDamageThree,player))spell="ice_comet_large_three";

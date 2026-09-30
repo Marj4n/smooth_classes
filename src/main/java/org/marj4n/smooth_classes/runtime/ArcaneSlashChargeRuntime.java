@@ -13,6 +13,8 @@ import java.util.UUID;
 
 /** Server-owned hold state. A release cannot shorten a completed cast's cooldown. */
 public final class ArcaneSlashChargeRuntime {
+    public static final int CHARGE_TICKS = 16;
+    private static final String HUD_ABILITY = "arcane_slash";
     private static final Identifier ID = SmoothClasses.id("ascendancy_arcane_slash");
     private static final Map<UUID, Integer> HELD_AT = new HashMap<>();
     private static final Set<UUID> CHARGING = new HashSet<>();
@@ -35,6 +37,8 @@ public final class ArcaneSlashChargeRuntime {
     public static void begin(ServerPlayerEntity player) {
         CHARGING.add(player.getUuid());
         player.setSprinting(false);
+        SmoothClassesNetworking.sendChargeState(player, true, false, HUD_ABILITY, 0, CHARGE_TICKS);
+        SkillFx.sound(player, "magic_shamanic_power_12", 0.28F, 1.22F);
     }
 
     public static boolean canContinue(ServerPlayerEntity player) {
@@ -45,12 +49,14 @@ public final class ArcaneSlashChargeRuntime {
 
     public static void finish(ServerPlayerEntity player) {
         if (!CHARGING.remove(player.getUuid())) return;
+        SmoothClassesNetworking.sendChargeState(player, false, true, HUD_ABILITY, CHARGE_TICKS, CHARGE_TICKS);
         AbilityCooldowns.start(player, ID, org.marj4n.smooth_classes.gameplay.AscendancyAbilityDispatcher.effectiveCooldownTicks(player,"arcane_slash"));
         SmoothClassesNetworking.sendAbilityState(player);
     }
 
     public static void removed(ServerPlayerEntity player) {
         if (!CHARGING.remove(player.getUuid())) return;
+        SmoothClassesNetworking.sendChargeState(player, false, false, HUD_ABILITY, 0, CHARGE_TICKS);
         // Cancellation is exactly four seconds, without haste reduction.
         AbilityCooldowns.start(player, ID, 80);
         SmoothClassesNetworking.sendAbilityState(player);

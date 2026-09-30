@@ -56,8 +56,14 @@ public final class SacredBannerRuntime {
 
     public static void register() {
         ServerTickEvents.END_SERVER_TICK.register(server -> {
-            validateBanners();
-            for (var banner : BANNERS.values()) collect(banner);
+            if (BANNERS.isEmpty() && ACTIVE.isEmpty()) return;
+            // Aura leases are 30 ticks long. Updating at 10 Hz keeps the effect
+            // continuous while cutting banner radius scans/reconciliation in half.
+            if ((server.getTicks() & 1) != 0) return;
+            if (!BANNERS.isEmpty()) {
+                validateBanners();
+                for (var banner : BANNERS.values()) collect(banner);
+            }
             reconcile();
         });
         net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents.DISCONNECT.register((handler,server) -> {
@@ -108,9 +114,9 @@ public final class SacredBannerRuntime {
                 e -> e.isAlive() && !e.isSpectator() && e.squaredDistanceTo(banner) <= RADIUS*RADIUS)) {
             if (eligible(e,banner.owner)) WANTED.merge(e,banner.buffs,(a,b)->a|b);
         }
-        if (banner.age % 10 == 0) {
-            for (int i=0;i<128;i++) {
-                double a=i*Math.PI*2/128;
+        if ((banner.age % 10) < 2) {
+            for (int i=0;i<64;i++) {
+                double a=i*Math.PI*2/64;
                 world.spawnParticles(BORDER,banner.getX()+Math.cos(a)*RADIUS,
                         banner.getY()+.12,banner.getZ()+Math.sin(a)*RADIUS,1,0,0,0,0);
             }
@@ -128,18 +134,39 @@ public final class SacredBannerRuntime {
         return false;
     }
     private static void reconcile() {
-        Set<LivingEntity> entities = new HashSet<>(ACTIVE.keySet());
-        entities.addAll(WANTED.keySet());
-        for (LivingEntity e : entities) {
-            int mask = e.isRemoved() || !e.isAlive() ? -1 : WANTED.getOrDefault(e,-1);
-            var leases = ACTIVE.computeIfAbsent(e,k->new HashMap<>());
+        // Apply/update entities currently covered by at least one banner.
+        for (var wanted : WANTED.entrySet()) {
+            LivingEntity e = wanted.getKey();
+            int mask = e.isRemoved() || !e.isAlive() ? -1 : wanted.getValue();
+            var leases = ACTIVE.get(e);
+            if (mask >= 0 && leases == null) {
+                leases = new HashMap<>();
+                ACTIVE.put(e, leases);
+            }
+            if (leases == null) continue;
             update(e,leases,StatusEffects.REGENERATION,mask>=0,false);
             update(e,leases,StatusEffects.STRENGTH,mask>=0&&(mask&1)!=0,true);
             update(e,leases,StatusEffects.RESISTANCE,mask>=0&&(mask&2)!=0,true);
             update(e,leases,StatusEffects.HASTE,mask>=0&&(mask&4)!=0,true);
-            // Vanilla regeneration excludes undead; summoned undead still receive healing.
-            if (mask>=0 && e.isUndead() && e.age%12==0) e.heal(1F);
-            if (leases.isEmpty()) ACTIVE.remove(e);
+            if (mask>=0 && e.isUndead() && (e.age%12)<2) e.heal(1F);
+        }
+
+        // Restore/remove leases that are no longer wanted without allocating a
+        // temporary union HashSet every server tick.
+        Iterator<Map.Entry<LivingEntity,Map<StatusEffect,Lease>>> active = ACTIVE.entrySet().iterator();
+        while (active.hasNext()) {
+            var entry = active.next();
+            LivingEntity e = entry.getKey();
+            if (WANTED.containsKey(e)) {
+                if (entry.getValue().isEmpty()) active.remove();
+                continue;
+            }
+            var leases = entry.getValue();
+            update(e,leases,StatusEffects.REGENERATION,false,false);
+            update(e,leases,StatusEffects.STRENGTH,false,true);
+            update(e,leases,StatusEffects.RESISTANCE,false,true);
+            update(e,leases,StatusEffects.HASTE,false,true);
+            if (leases.isEmpty()) active.remove();
         }
         WANTED.clear();
     }

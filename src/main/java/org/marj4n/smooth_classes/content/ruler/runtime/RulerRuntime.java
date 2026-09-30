@@ -53,9 +53,13 @@ public final class RulerRuntime {
                 net.minecraft.world.RaycastContext.ShapeType.COLLIDER,
                 net.minecraft.world.RaycastContext.FluidHandling.NONE,player));
         var center=aimed!=null?aimed.getPos():hit.getType()==net.minecraft.util.hit.HitResult.Type.MISS?end:hit.getPos();
-        LivingEntity target=player.getWorld().getEntitiesByClass(LivingEntity.class,
+        LivingEntity target=null;
+        for (LivingEntity candidate : player.getWorld().getEntitiesByClass(LivingEntity.class,
                 new net.minecraft.util.math.Box(center,center).expand(3),
-                e->e!=player&&e.isAlive()&&isAlly(e,player)).stream().findFirst().orElse(null);
+                e->e!=player&&e.isAlive()&&isAlly(e,player))) {
+            target=candidate;
+            break;
+        }
         if(target==null)return ExecutionResult.failure("No allied Divine Intervention target at the aimed position.");
         boolean cast=InternalSpellRuntime.target(player,"smooth_classes:divine_intervention",target,1F);
         if(!cast)return ExecutionResult.failure("Divine Intervention spell unavailable.");

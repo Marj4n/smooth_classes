@@ -1,0 +1,47 @@
+{
+  "name": "blade_charge",
+  "author": "Smooth Classes",
+  "description": "Portal of Sovereignty charge pose: raise dagger, then point it forward.",
+  "emote": {
+    "isLoop": "false",
+    "returnTick": 1,
+    "beginTick": 1,
+    "endTick": 16,
+    "stopTick": 17,
+    "degrees": false,
+    "moves": [
+      {
+        "tick": 1,
+        "easing": "EASEOUTQUAD",
+        "head": { "pitch": 0.0, "yaw": 0.0, "roll": 0.0 },
+        "torso": { "pitch": 0.0, "yaw": 0.0, "roll": 0.0 },
+        "rightArm": { "pitch": -0.15, "yaw": -0.10, "roll": -0.20 },
+        "leftArm": { "pitch": 0.10, "yaw": 0.12, "roll": 0.16 }
+      },
+      {
+        "tick": 5,
+        "easing": "EASEOUTQUAD",
+        "head": { "pitch": -0.08, "yaw": 0.0, "roll": 0.0 },
+        "torso": { "pitch": -0.08, "yaw": 0.0, "roll": 0.0 },
+        "rightArm": { "pitch": -1.95, "yaw": -0.22, "roll": -0.10 },
+        "leftArm": { "pitch": -0.45, "yaw": 0.22, "roll": 0.54 }
+      },
+      {
+        "tick": 10,
+        "easing": "EASEOUTQUAD",
+        "head": { "pitch": -0.10, "yaw": 0.0, "roll": 0.0 },
+        "torso": { "pitch": -0.14, "yaw": 0.0, "roll": 0.0 },
+        "rightArm": { "pitch": -2.35, "yaw": -0.08, "roll": 0.02 },
+        "leftArm": { "pitch": -0.92, "yaw": 0.16, "roll": 0.62 }
+      },
+      {
+        "tick": 16,
+        "easing": "EASEOUTQUAD",
+        "head": { "pitch": -0.06, "yaw": 0.0, "roll": 0.0 },
+        "torso": { "pitch": -0.18, "yaw": 0.0, "roll": 0.0 },
+        "rightArm": { "pitch": -1.28, "yaw": -0.03, "roll": 0.02 },
+        "leftArm": { "pitch": -1.08, "yaw": 0.12, "roll": 0.28 }
+      }
+    ]
+  }
+}

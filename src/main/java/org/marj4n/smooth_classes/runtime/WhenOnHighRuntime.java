@@ -38,9 +38,12 @@ public final class WhenOnHighRuntime {
     public static boolean active(ServerPlayerEntity p){return ACTIVE.containsKey(p.getUuid());}
     public static boolean ownsBeam(HighBeamEntity beam){var cast=ACTIVE.get(beam.owner);return cast!=null&&cast.beam==beam;}
     public static void register(){
-        ServerTickEvents.END_SERVER_TICK.register(server->{for(var cast:new ArrayList<>(ACTIVE.values())){
-            try{tick(cast);}catch(RuntimeException failure){finish(cast,true);SmoothClasses.LOGGER.error("When On High channel interrupted",failure);}
-        }});
+        ServerTickEvents.END_SERVER_TICK.register(server->{
+            if(ACTIVE.isEmpty())return;
+            for(var cast:new ArrayList<>(ACTIVE.values())){
+                try{tick(cast);}catch(RuntimeException failure){finish(cast,true);SmoothClasses.LOGGER.error("When On High channel interrupted",failure);}
+            }
+        });
         ServerPlayConnectionEvents.DISCONNECT.register((h,s)->finish(ACTIVE.get(h.player.getUuid()),false));
         ServerLifecycleEvents.SERVER_STOPPING.register(s->{for(var cast:new ArrayList<>(ACTIVE.values()))finish(cast,false);});
         ServerLifecycleEvents.SERVER_STOPPED.register(s->{ACTIVE.clear();WARNED_SCHOOLS.clear();});

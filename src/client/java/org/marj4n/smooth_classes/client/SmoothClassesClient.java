@@ -37,6 +37,8 @@ public final class SmoothClassesClient implements ClientModInitializer {
     private static KeyBinding signature;
     private static KeyBinding ascendancy;
     private static KeyBinding riderMount;
+    private static boolean bladeHoldSent, bladeWasDown;
+    private static int bladeHoldTicks;
     private static boolean arcaneHoldSent;
     private static boolean arcaneWasDown;
     private static int arcaneHoldTicks;
@@ -125,6 +127,19 @@ public final class SmoothClassesClient implements ClientModInitializer {
                     });
                 });
 
+        ClientPlayNetworking.registerGlobalReceiver(SmoothClassesNetworking.SYNC_CHARGE_STATE,
+                (client, handler, buf, responseSender) -> {
+                    boolean active = buf.readBoolean();
+                    boolean completed = buf.readBoolean();
+                    String ability = buf.readString();
+                    int elapsed = buf.readInt();
+                    int total = buf.readInt();
+                    client.execute(() -> org.marj4n.smooth_classes.client.charge.ChargeHudState.sync(
+                            active, completed, ability, elapsed, total));
+                });
+        net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents.DISCONNECT.register(
+                (handler, client) -> org.marj4n.smooth_classes.client.charge.ChargeHudState.reset());
+
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             boolean holdingArcane = client.player != null && client.currentScreen == null
                     && client.isWindowFocused() && ascendancy.isPressed()
@@ -141,8 +156,21 @@ public final class SmoothClassesClient implements ClientModInitializer {
                 arcaneHoldSent = false;
                 arcaneHoldTicks = 0;
             }
+            boolean bladeSelected = "unlimited_blade_works".equals(AbilityHudState.signatureAbility);
+            boolean bladeDown = client.player != null && client.getNetworkHandler() != null
+                    && client.currentScreen == null && client.isWindowFocused() && signature.isPressed() && bladeSelected;
+            boolean freshBladePress = bladeDown && !bladeWasDown;
+            bladeWasDown = bladeDown;
+            if (bladeDown && (!bladeHoldSent || ++bladeHoldTicks >= 2)) {
+                sendBladeHold(true); bladeHoldSent = true; bladeHoldTicks = 0;
+            } else if (!bladeDown && bladeHoldSent) {
+                sendBladeHold(false); bladeHoldSent = false; bladeHoldTicks = 0;
+            }
             syncRiderFlightInput(client);
-            while (signature.wasPressed()) cast(client, false);
+            while (signature.wasPressed()) {
+                if (!bladeSelected) cast(client, false);
+                else if (freshBladePress) { cast(client, false); freshBladePress = false; }
+            }
             while (riderMount.wasPressed()) {
                 if (client.player == null) continue;
                 if (AbilityHudState.avengerSummonVisible) {
@@ -168,7 +196,8 @@ public final class SmoothClassesClient implements ClientModInitializer {
                     freshArcanePress = false;
                 }
             }
-            if (client.player != null && client.player.hasStatusEffect(SmoothEffects.ARCANE_SLASH))
+            if (client.player != null && (client.player.hasStatusEffect(SmoothEffects.ARCANE_SLASH)
+                    || org.marj4n.smooth_classes.client.charge.ChargeHudState.active(org.marj4n.smooth_classes.client.charge.ChargeHudState.UNLIMITED_BLADE_WORKS)))
                 client.player.setSprinting(false);
         });
         HudRenderCallback.EVENT.register((context, tickDelta) -> HUD.render(context, tickDelta));
@@ -219,6 +248,13 @@ public final class SmoothClassesClient implements ClientModInitializer {
         riderFlightLastBoost = boost;
     }
 
+    private static void sendBladeHold(boolean held) {
+        if (net.minecraft.client.MinecraftClient.getInstance().getNetworkHandler() == null) return;
+        if (!ClientPlayNetworking.canSend(SmoothClassesNetworking.BLADE_WORKS_HOLD)) return;
+        var packet = PacketByteBufs.create(); packet.writeBoolean(held);
+        ClientPlayNetworking.send(SmoothClassesNetworking.BLADE_WORKS_HOLD, packet);
+    }
+
     private static void sendArcaneHold(boolean held) {
         if (net.minecraft.client.MinecraftClient.getInstance().getNetworkHandler() == null) return;
         if (!ClientPlayNetworking.canSend(SmoothClassesNetworking.ARCANE_SLASH_HOLD)) return;
@@ -267,6 +303,8 @@ public final class SmoothClassesClient implements ClientModInitializer {
         EntityRendererRegistry.register(SmoothEntities.DREADGLARE, DreadglareRenderer::new);
         EntityRendererRegistry.register(SmoothEntities.GREATER_DREADGLARE, GreaterDreadglareRenderer::new);
         EntityRendererRegistry.register(SmoothEntities.WRAITH, WraithRenderer::new);
+        EntityRendererRegistry.register(SmoothEntities.BLADE_PORTAL, org.marj4n.smooth_classes.client.renderer.BladePortalRenderer::new);
+        EntityRendererRegistry.register(SmoothEntities.PROJECTED_DAGGER, org.marj4n.smooth_classes.client.renderer.ProjectedDaggerRenderer::new);
         EntityRendererRegistry.register(SmoothEntities.LANCER_IMPALE, org.marj4n.smooth_classes.client.renderer.LancerImpaleRenderer::new);
         EntityRendererRegistry.register(SmoothEntities.RIDER_HORSE, HorseEntityRenderer::new);
         EntityRendererRegistry.register(SmoothEntities.RIDER_DREAD_STEED, RiderDreadSteedRenderer::new);

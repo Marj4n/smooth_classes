@@ -23,7 +23,10 @@ public final class BloodRainRuntime {
         if(p!=null){AbilityCooldowns.start(p,SmoothClasses.id("ascendancy_magic_circle"),1200);SmoothClassesNetworking.sendAbilityState(p);}
     }
     public static void register(){
-        ServerTickEvents.END_SERVER_TICK.register(s->{for(var e:new ArrayList<>(ACTIVE.values()))if(e.isRemoved()||!e.valid()){ended(e);e.discard();}});
+        ServerTickEvents.END_SERVER_TICK.register(s->{
+            if(ACTIVE.isEmpty())return;
+            for(var e:new ArrayList<>(ACTIVE.values()))if(e.isRemoved()||!e.valid()){ended(e);e.discard();}
+        });
         ServerPlayConnectionEvents.DISCONNECT.register((h,s)->{var e=ACTIVE.get(h.player.getUuid());if(e!=null){ended(e);AbilityCooldowns.start(h.player,SmoothClasses.id("ascendancy_magic_circle"),1200);e.discard();}});
         ServerLifecycleEvents.SERVER_STOPPING.register(s->{for(var e:new ArrayList<>(ACTIVE.values())){ended(e);e.discard();}});
         ServerLifecycleEvents.SERVER_STOPPED.register(s->ACTIVE.clear());

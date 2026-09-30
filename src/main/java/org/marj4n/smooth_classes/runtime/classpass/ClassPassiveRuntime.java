@@ -24,6 +24,12 @@ import org.marj4n.smooth_classes.content.saber.runtime.SaberRuntime;
 import org.marj4n.smooth_classes.runtime.SkillFx;
 import org.marj4n.smooth_classes.runtime.InternalSpellRuntime;
 import org.marj4n.smooth_classes.runtime.AbilityRuntime;
+import org.marj4n.smooth_classes.content.berserker.BerserkerClass;
+import org.marj4n.smooth_classes.content.assassin.AssassinClass;
+import org.marj4n.smooth_classes.content.archer.ArcherClass;
+import org.marj4n.smooth_classes.content.saber.SaberClass;
+import org.marj4n.smooth_classes.content.ruler.RulerClass;
+import org.marj4n.smooth_classes.content.caster.CasterClass;
 import org.marj4n.smooth_classes.content.foreigner.ForeignerContent;
 
 import java.util.List;
@@ -34,11 +40,26 @@ import java.util.List;
  * Puffish Skills remains authoritative for every unlock.
  */
 public final class ClassPassiveRuntime {
+    private static final String[] SPELLWEAVING_BASIC = {
+            "frost_arrow", "fire_arrow", "lightning_arrow", "arcane_bolt",
+            "arcane_bolt_lesser", "ice_comet", "fire_meteor_small", "static_discharge"
+    };
+    private static final String[] SPELLWEAVING_ENHANCED = {
+            "frost_arrow", "fire_arrow", "lightning_arrow", "arcane_bolt",
+            "arcane_bolt_lesser", "ice_comet", "fire_meteor_small", "static_discharge",
+            "physical_swordrain", "arcane_slash_projectile", "righteous_hammer_projectile",
+            "lightning_ball_homing", "fire_meteor_large"
+    };
+
     private ClassPassiveRuntime() {}
 
     public static void register() {
         ServerTickEvents.END_SERVER_TICK.register(server -> {
-            for (ServerPlayerEntity p : server.getPlayerManager().getPlayerList()) if (p.isAlive()) tick(p);
+            for (ServerPlayerEntity p : server.getPlayerManager().getPlayerList()) {
+                // Every periodic class passive is 5 ticks or slower. Routing at 4 Hz
+                // avoids probing every tree for every player on all 20 server ticks.
+                if (p.isAlive() && (p.age % 5) == 0) tick(p);
+            }
         });
     }
 
@@ -48,14 +69,20 @@ public final class ClassPassiveRuntime {
 
     private static void tick(ServerPlayerEntity p) {
         OptionalCompatRuntime.tick(p);
-        berserkerTick(p);
-        assassinTick(p);
-        archerTick(p);
-        saberTick(p);
-        SaberRuntime.tick(p);
+
+        // Only enter the active class runtime. Before this pass each player probed
+        // all class categories even though Puffish only selects one class path.
+        if (AbilityRuntime.isClass(p, BerserkerClass.ID)) berserkerTick(p);
+        else if (AbilityRuntime.isClass(p, AssassinClass.ID)) assassinTick(p);
+        else if (AbilityRuntime.isClass(p, ArcherClass.ID)) archerTick(p);
+        else if (AbilityRuntime.isClass(p, SaberClass.ID)) {
+            saberTick(p);
+            SaberRuntime.tick(p);
+        }
+        else if (AbilityRuntime.isClass(p, RulerClass.ID)) rulerTick(p);
+        else if (AbilityRuntime.isClass(p, CasterClass.ID)) casterTick(p);
+
         AscendancyRuntime.serverTick(p);
-        rulerTick(p);
-        casterTick(p);
     }
 
     // ------------------------------------------------------------
@@ -252,13 +279,7 @@ public final class ClassPassiveRuntime {
         if(has(p,PuffishSkillsIntegration.FOREIGNER,SkillNodeIds.spellbladeSpellweaving)) {
             boolean enhanced=p.hasStatusEffect(SmoothEffects.SPELLWEAVER);
             if(p.getRandom().nextInt(100)<(enhanced?30:15)) {
-                String[] spells=enhanced
-                        ? new String[]{"frost_arrow","fire_arrow","lightning_arrow","arcane_bolt",
-                        "arcane_bolt_lesser","ice_comet","fire_meteor_small","static_discharge",
-                        "physical_swordrain","arcane_slash_projectile","righteous_hammer_projectile",
-                        "lightning_ball_homing","fire_meteor_large"}
-                        : new String[]{"frost_arrow","fire_arrow","lightning_arrow","arcane_bolt",
-                        "arcane_bolt_lesser","ice_comet","fire_meteor_small","static_discharge"};
+                String[] spells = enhanced ? SPELLWEAVING_ENHANCED : SPELLWEAVING_BASIC;
                 InternalSpellRuntime.target(p,"smooth_classes:"+spells[p.getRandom().nextInt(spells.length)],target,1F);
                 if(AbilityRuntime.hasTalent(p,ForeignerContent.SPELLWEAVER_HASTE.id()))
                     inc(p,StatusEffects.HASTE,100,1,5);
