@@ -106,6 +106,26 @@ public final class SmoothEffects {
     public static final StatusEffect RAGING_JAVELIN = register("raging_javelin", StatusEffectCategory.BENEFICIAL, 0x2FA5AF);
     public static final StatusEffect CONSECRATION = register("consecration", StatusEffectCategory.BENEFICIAL, 0x2FA5AF);
     public static final StatusEffect SACRED_ONSLAUGHT = register("sacred_onslaught", StatusEffectCategory.BENEFICIAL, 0x2FA5AF);
+    public static final StatusEffect CRIMSON_REVENANT_CHARGE = register("crimson_revenant_charge", StatusEffectCategory.BENEFICIAL, 0xA30000)
+            .addAttributeModifier(EntityAttributes.GENERIC_MOVEMENT_SPEED,
+                    "4c20a5c0-b508-4181-9ef2-4f2537db4ec4", -0.65D,
+                    EntityAttributeModifier.Operation.MULTIPLY_TOTAL);
+    public static final StatusEffect CRIMSON_REVENANT = register("crimson_revenant", StatusEffectCategory.BENEFICIAL, 0xC40000)
+            .addAttributeModifier(EntityAttributes.GENERIC_MAX_HEALTH,
+                    "9c7b47ca-4bea-46d1-b44f-23e3c58d08cb", 0.40D,
+                    EntityAttributeModifier.Operation.MULTIPLY_BASE)
+            .addAttributeModifier(EntityAttributes.GENERIC_ATTACK_DAMAGE,
+                    "3db610ff-2da8-48dd-88e6-75cbf59dd3c4", 6.0D,
+                    EntityAttributeModifier.Operation.ADDITION)
+            .addAttributeModifier(EntityAttributes.GENERIC_MOVEMENT_SPEED,
+                    "83d09c1f-4498-4e9c-b0c2-102558a78611", 0.28D,
+                    EntityAttributeModifier.Operation.MULTIPLY_TOTAL)
+            .addAttributeModifier(EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE,
+                    "19366da4-2425-43ae-b4b0-28c4f55fdb0f", 0.75D,
+                    EntityAttributeModifier.Operation.ADDITION)
+            .addAttributeModifier(EntityAttributes.GENERIC_ARMOR,
+                    "0e6d25b3-526f-4610-bb96-df7e18d2f77e", 6.0D,
+                    EntityAttributeModifier.Operation.ADDITION);
 
 
     private static StatusEffect attunement(String id, net.minecraft.entity.attribute.EntityAttribute attribute, String uuid) {

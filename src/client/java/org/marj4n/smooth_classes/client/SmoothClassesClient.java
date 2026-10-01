@@ -45,6 +45,9 @@ public final class SmoothClassesClient implements ClientModInitializer {
     private static boolean riderFlightWasMounted;
     private static boolean shadowWasDown;
     private static boolean deathListComboWasDown;
+    private static boolean classSpecialHoldSent;
+    private static boolean classSpecialWasDown;
+    private static int classSpecialHoldTicks;
     private static boolean riderFlightLastAscend;
     private static boolean riderFlightLastDescend;
     private static boolean riderFlightLastBoost;
@@ -71,25 +74,33 @@ public final class SmoothClassesClient implements ClientModInitializer {
                 org.marj4n.smooth_classes.client.effects.ArcaneFlameFactory::new);
         registerVisualEffects();
         registerEntities();
-        // The local player entity is not rendered in first person, so render its
-        // orbit in world space after entities using camera-relative coordinates.
+        // Render large class visuals directly in world space. This avoids relying on
+        // player feature-renderer hooks, which some animation/culling mods can replace.
         WorldRenderEvents.AFTER_ENTITIES.register(context -> {
             ShadowAimClient.render(context);
-            var client=net.minecraft.client.MinecraftClient.getInstance();
-            var player=client.player;
-            if (player==null || !client.options.getPerspective().isFirstPerson()
-                    || context.matrixStack()==null || context.consumers()==null) return;
-            var status=player.getStatusEffect(SmoothEffects.RIGHTEOUS_HAMMERS);
-            if (status==null) return;
-            float delta=context.tickDelta();
-            var camera=context.camera().getPos();
-            var matrices=context.matrixStack();
+            var client = net.minecraft.client.MinecraftClient.getInstance();
+            if (client.world == null || context.matrixStack() == null || context.consumers() == null) return;
+
+            float delta = context.tickDelta();
+            var camera = context.camera().getPos();
+            var matrices = context.matrixStack();
+
+            // Crimson Revenant now uses particles + first-person vision overlay instead
+            // of a rigid model, so there is no special world-space model rendering here.
+
+            // The local player entity itself is not rendered in first person, so keep
+            // the existing world-space hammer fallback for that one effect.
+            var player = client.player;
+            if (player == null || !client.options.getPerspective().isFirstPerson()) return;
+            var status = player.getStatusEffect(SmoothEffects.RIGHTEOUS_HAMMERS);
+            if (status == null) return;
             matrices.push();
-            matrices.translate(MathHelper.lerp(delta,player.prevX,player.getX())-camera.x,
-                    MathHelper.lerp(delta,player.prevY,player.getY())-camera.y,
-                    MathHelper.lerp(delta,player.prevZ,player.getZ())-camera.z);
-            if (status!=null) HAMMER_RENDERER.renderEffect(0L,status.getAmplifier(),player,delta,
-                    matrices,context.consumers(),0xF000F0);
+            matrices.translate(
+                    MathHelper.lerp(delta, player.prevX, player.getX()) - camera.x,
+                    MathHelper.lerp(delta, player.prevY, player.getY()) - camera.y,
+                    MathHelper.lerp(delta, player.prevZ, player.getZ()) - camera.z);
+            HAMMER_RENDERER.renderEffect(0L, status.getAmplifier(), player, delta,
+                    matrices, context.consumers(), 0xF000F0);
             matrices.pop();
         });
 
@@ -120,6 +131,11 @@ public final class SmoothClassesClient implements ClientModInitializer {
                     int avengerSummonMaxCharges=buf.readInt();
                     int avengerSummonTotal=buf.readInt();
                     long avengerSummonRemaining=buf.readLong();
+                    boolean berserkerSpecialVisible=buf.readBoolean();
+                    boolean berserkerSpecialCharging=buf.readBoolean();
+                    boolean berserkerSpecialActive=buf.readBoolean();
+                    int berserkerSpecialTotal=buf.readInt();
+                    long berserkerSpecialRemaining=buf.readLong();
                     boolean shadowActive=buf.readBoolean();
                     long shadowRemaining=buf.readLong();
                     int shadowRange=buf.readInt();
@@ -131,6 +147,9 @@ public final class SmoothClassesClient implements ClientModInitializer {
                         AbilityHudState.syncRiderMount(riderMountVisible, riderMountActive, riderMountTotal, riderMountRemaining);
                         AbilityHudState.syncAvengerSummon(avengerSummonVisible, avengerSummonCharges,
                                 avengerSummonMaxCharges, avengerSummonTotal, avengerSummonRemaining);
+                        AbilityHudState.syncBerserkerSpecial(berserkerSpecialVisible,
+                                berserkerSpecialCharging, berserkerSpecialActive,
+                                berserkerSpecialTotal, berserkerSpecialRemaining);
                         AbilityHudState.syncShadow(shadowActive, shadowRemaining, shadowRange);
                     });
                 });
@@ -150,6 +169,9 @@ public final class SmoothClassesClient implements ClientModInitializer {
                     org.marj4n.smooth_classes.client.charge.ChargeHudState.reset();
                     ShadowAimClient.reset();
                     deathListComboWasDown = false;
+                    classSpecialHoldSent = false;
+                    classSpecialWasDown = false;
+                    classSpecialHoldTicks = 0;
                 });
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
@@ -216,6 +238,31 @@ public final class SmoothClassesClient implements ClientModInitializer {
             } else if (!bladeDown && bladeHoldSent) {
                 sendBladeHold(false); bladeHoldSent = false; bladeHoldTicks = 0;
             }
+
+            // Berserker H is a real hold-to-charge class special, matching the
+            // Arcane Slash / Portal of Sovereignty charge UX. Heartbeats keep
+            // the server authoritative and releasing early triggers the 4s fail CD.
+            boolean classSpecialDown = AbilityHudState.berserkerSpecialVisible
+                    && client.player != null && client.getNetworkHandler() != null
+                    && client.currentScreen == null && client.isWindowFocused()
+                    && riderMount.isPressed();
+            boolean freshClassSpecialPress = classSpecialDown && !classSpecialWasDown;
+            classSpecialWasDown = classSpecialDown;
+            if (classSpecialDown && (!classSpecialHoldSent || ++classSpecialHoldTicks >= 2)) {
+                sendClassSpecialHold(true);
+                classSpecialHoldSent = true;
+                classSpecialHoldTicks = 0;
+            } else if (!classSpecialDown && classSpecialHoldSent) {
+                sendClassSpecialHold(false);
+                classSpecialHoldSent = false;
+                classSpecialHoldTicks = 0;
+            }
+            if (freshClassSpecialPress && ClientPlayNetworking.canSend(SmoothClassesNetworking.CLASS_SPECIAL)) {
+                // Hold packet is queued first on the same connection, so the server
+                // sees H as held before it validates the charge start.
+                ClientPlayNetworking.send(SmoothClassesNetworking.CLASS_SPECIAL, PacketByteBufs.empty());
+            }
+
             syncRiderFlightInput(client);
             while (signature.wasPressed()) {
                 if (preparationSelected) {
@@ -227,11 +274,10 @@ public final class SmoothClassesClient implements ClientModInitializer {
             }
             while (riderMount.wasPressed()) {
                 if (client.player == null) continue;
+                if (AbilityHudState.berserkerSpecialVisible) continue;
                 long window = client.getWindow().getHandle();
                 boolean control = InputUtil.isKeyPressed(window, GLFW.GLFW_KEY_LEFT_CONTROL)
                         || InputUtil.isKeyPressed(window, GLFW.GLFW_KEY_RIGHT_CONTROL);
-                // Raw Ctrl+H above owns this combination. Do not also summon/recall
-                // or trigger a Rider mount on the same press.
                 if (control) continue;
                 if (AbilityHudState.avengerSummonVisible) {
                     if (ClientPlayNetworking.canSend(SmoothClassesNetworking.AVENGER_SUMMON)) {
@@ -239,14 +285,17 @@ public final class SmoothClassesClient implements ClientModInitializer {
                     }
                     continue;
                 }
-                if (AbilityHudState.riderMountActive || isLocalRiderMount(client)) {
-                    client.player.sendMessage(Text.literal("Rider mount is already active."), true);
-                    client.player.getWorld().playSound(client.player, client.player.getBlockPos(),
-                            SmoothSounds.ABILITY_BLOCKED, SoundCategory.PLAYERS, 0.1F, 1.5F);
+                if (AbilityHudState.riderMountVisible) {
+                    if (AbilityHudState.riderMountActive || isLocalRiderMount(client)) {
+                        client.player.sendMessage(Text.literal("Rider mount is already active."), true);
+                        client.player.getWorld().playSound(client.player, client.player.getBlockPos(),
+                                SmoothSounds.ABILITY_BLOCKED, SoundCategory.PLAYERS, 0.1F, 1.5F);
+                        continue;
+                    }
+                    if (ClientPlayNetworking.canSend(SmoothClassesNetworking.RIDER_SUMMON_MOUNT)) {
+                        ClientPlayNetworking.send(SmoothClassesNetworking.RIDER_SUMMON_MOUNT, PacketByteBufs.empty());
+                    }
                     continue;
-                }
-                if (ClientPlayNetworking.canSend(SmoothClassesNetworking.RIDER_SUMMON_MOUNT)) {
-                    ClientPlayNetworking.send(SmoothClassesNetworking.RIDER_SUMMON_MOUNT, PacketByteBufs.empty());
                 }
             }
             while (ascendancy.wasPressed()) {
@@ -260,7 +309,10 @@ public final class SmoothClassesClient implements ClientModInitializer {
                     || org.marj4n.smooth_classes.client.charge.ChargeHudState.active(org.marj4n.smooth_classes.client.charge.ChargeHudState.PORTAL_OF_SOVEREIGNTY)))
                 client.player.setSprinting(false);
         });
-        HudRenderCallback.EVENT.register((context, tickDelta) -> HUD.render(context, tickDelta));
+        HudRenderCallback.EVENT.register((context, tickDelta) -> {
+            HUD.render(context, tickDelta);
+            CrimsonRevenantVisionOverlay.render(context, tickDelta);
+        });
     }
 
     private static void syncRiderFlightInput(net.minecraft.client.MinecraftClient client) {
@@ -321,6 +373,14 @@ public final class SmoothClassesClient implements ClientModInitializer {
         var packet = PacketByteBufs.create();
         packet.writeBoolean(held);
         ClientPlayNetworking.send(SmoothClassesNetworking.ARCANE_SLASH_HOLD, packet);
+    }
+
+    private static void sendClassSpecialHold(boolean held) {
+        if (net.minecraft.client.MinecraftClient.getInstance().getNetworkHandler() == null) return;
+        if (!ClientPlayNetworking.canSend(SmoothClassesNetworking.CLASS_SPECIAL_HOLD)) return;
+        var packet = PacketByteBufs.create();
+        packet.writeBoolean(held);
+        ClientPlayNetworking.send(SmoothClassesNetworking.CLASS_SPECIAL_HOLD, packet);
     }
 
     private static void cast(net.minecraft.client.MinecraftClient client, boolean asc) {

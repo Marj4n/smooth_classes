@@ -1,0 +1,25 @@
+{
+  "credit": "Generated for Smooth Classes Crimson Revenant",
+  "textures": {
+    "0": "smooth_classes:item/effect/crimson_revenant_skull",
+    "particle": "smooth_classes:item/effect/crimson_revenant_skull"
+  },
+  "elements": [
+    {
+      "from": [0, 16, 7.5],
+      "to": [16, 32, 8.5],
+      "faces": {
+        "north": {"uv": [0, 0, 16, 16], "texture": "#0"},
+        "south": {"uv": [16, 0, 0, 16], "texture": "#0"}
+      }
+    },
+    {
+      "from": [7.5, 16, 0],
+      "to": [8.5, 32, 16],
+      "faces": {
+        "west": {"uv": [0, 0, 16, 16], "texture": "#0"},
+        "east": {"uv": [16, 0, 0, 16], "texture": "#0"}
+      }
+    }
+  ]
+}

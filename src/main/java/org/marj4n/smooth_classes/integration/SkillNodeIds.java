@@ -215,6 +215,9 @@ public final class SkillNodeIds {
     public static final String berserkerSpecialisationBerserkingLeap = "sistiph4u2wuydzp";
     public static final String berserkerSpecialisationBerserkingLeapImmob = "cdbv71rvffagxjvo";
     public static final String berserkerSpecialisationBerserkingLeapPull = "9d9t6hnhyc248jy0";
+    public static final String berserkerCrimsonRevenantEnduring = "berserker_crimson_revenant_enduring";
+    public static final String berserkerCrimsonRevenantFortress = "berserker_crimson_revenant_fortress";
+    public static final String berserkerCrimsonRevenantMassacre = "berserker_crimson_revenant_massacre";
     public static final String necromancerSpecialisationSummoningRitual = "yl0wtsb5m85wmvfa";
     public static final String necromancerSpecialisationNecroticFortification = "2kqygy3kszdq0vyj";
     public static final String necromancerSpecialisationUndeadLegion1 = "rjtn8vayhhdlded0";

@@ -13,6 +13,7 @@ import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.Angerable;
 import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.entity.mob.VexEntity;
 import net.minecraft.entity.mob.WardenEntity;
 import net.minecraft.entity.passive.AbstractHorseEntity;
 import net.minecraft.entity.passive.TameableEntity;
@@ -664,7 +665,7 @@ public final class AvengerReworkRuntime {
     }
 
     public static boolean isAvengerSummon(Entity entity) {
-        return entity != null && entity.getCommandTags().contains(SUMMON_TAG) && summonOwnerUuid(entity) != null;
+        return entity != null && summonOwnerUuid(entity) != null;
     }
 
     public static boolean isOwnedSummon(ServerPlayerEntity owner, Entity entity) {
@@ -677,7 +678,17 @@ public final class AvengerReworkRuntime {
     }
 
     public static UUID summonOwnerUuid(Entity entity) {
-        if (entity == null || !entity.getCommandTags().contains(SUMMON_TAG)) return null;
+        if (entity == null) return null;
+
+        if (entity instanceof VexEntity vex && vex.getOwner() != null) {
+            UUID indirectOwner = summonOwnerUuid(vex.getOwner());
+            if (indirectOwner != null) {
+                SUMMON_OWNER_CACHE.put(entity, indirectOwner);
+                return indirectOwner;
+            }
+        }
+
+        if (!entity.getCommandTags().contains(SUMMON_TAG)) return null;
         UUID cached = SUMMON_OWNER_CACHE.get(entity);
         if (cached != null) return cached;
 
