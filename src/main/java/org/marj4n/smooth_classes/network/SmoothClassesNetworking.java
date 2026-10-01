@@ -28,6 +28,8 @@ public final class SmoothClassesNetworking {
     public static final Identifier RIDER_SUMMON_MOUNT = SmoothClasses.id("rider_summon_mount");
     public static final Identifier RIDER_FLIGHT_INPUT = SmoothClasses.id("rider_flight_input");
     public static final Identifier AVENGER_SUMMON = SmoothClasses.id("avenger_summon");
+    public static final Identifier CLASS_SPECIAL = SmoothClasses.id("class_special");
+    public static final Identifier CLASS_SPECIAL_HOLD = SmoothClasses.id("class_special_hold");
     public static final Identifier OPEN_DEATH_LIST = SmoothClasses.id("open_death_list");
     public static final Identifier SYNC_DEATH_LIST = SmoothClasses.id("sync_death_list");
     public static final Identifier SHADOW_AIM_CAST = SmoothClasses.id("shadow_aim_cast");
@@ -59,6 +61,17 @@ public final class SmoothClassesNetworking {
                     if (!result.success()) player.sendMessage(Text.literal("[Smooth Classes] " + result.detail()), true);
                     sendAbilityState(player);
                 }));
+        ServerPlayNetworking.registerGlobalReceiver(CLASS_SPECIAL,
+                (server, player, handler, buf, responseSender) -> server.execute(() -> {
+                    var result = org.marj4n.smooth_classes.content.berserker.runtime.BerserkerSpecialRuntime.activate(player);
+                    if (!result.success()) player.sendMessage(Text.literal("[Smooth Classes] " + result.detail()), true);
+                    sendAbilityState(player);
+                }));
+        ServerPlayNetworking.registerGlobalReceiver(CLASS_SPECIAL_HOLD,
+                (server, player, handler, buf, responseSender) -> {
+                    boolean held = buf.readBoolean();
+                    server.execute(() -> org.marj4n.smooth_classes.content.berserker.runtime.BerserkerSpecialRuntime.hold(player, held));
+                });
         ServerPlayNetworking.registerGlobalReceiver(OPEN_DEATH_LIST,
                 (server, player, handler, buf, responseSender) -> server.execute(() -> {
                     if (!org.marj4n.smooth_classes.runtime.AbilityRuntime.isClass(
@@ -97,12 +110,14 @@ public final class SmoothClassesNetworking {
                 });
         ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
             org.marj4n.smooth_classes.runtime.ArcaneSlashChargeRuntime.disconnect(handler.player);
+            org.marj4n.smooth_classes.content.berserker.runtime.BerserkerSpecialRuntime.disconnect(handler.player);
             LAST_SELECTION.remove(handler.player.getUuid());
             PuffishSkillsIntegration.invalidateRuntimeCache(handler.player);
             org.marj4n.smooth_classes.runtime.AbilityRuntime.invalidateRuntimeCache(handler.player);
         });
         net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents.SERVER_STOPPED.register(server -> {
             org.marj4n.smooth_classes.runtime.ArcaneSlashChargeRuntime.clear();
+            org.marj4n.smooth_classes.content.berserker.runtime.BerserkerSpecialRuntime.clear();
             LAST_SELECTION.clear();
             PuffishSkillsIntegration.clearRuntimeCaches();
             org.marj4n.smooth_classes.runtime.AbilityRuntime.clearRuntimeCaches();
@@ -137,10 +152,20 @@ public final class SmoothClassesNetworking {
                         ? org.marj4n.smooth_classes.content.avenger.runtime.AvengerReworkRuntime.summonRechargeRemainingTicks(player) : 0L;
                 boolean shadowActive = org.marj4n.smooth_classes.content.assassin.runtime.ShadowTechniqueRuntime.active(player);
                 long shadowRemaining = org.marj4n.smooth_classes.content.assassin.runtime.ShadowTechniqueRuntime.remainingTicks(player);
+                boolean berserker = org.marj4n.smooth_classes.runtime.AbilityRuntime.isClass(
+                        player, org.marj4n.smooth_classes.content.berserker.BerserkerClass.ID);
+                boolean crimsonCharging = berserker
+                        && org.marj4n.smooth_classes.content.berserker.runtime.BerserkerSpecialRuntime.isCharging(player);
+                boolean crimsonActive = berserker
+                        && org.marj4n.smooth_classes.content.berserker.runtime.BerserkerSpecialRuntime.isActive(player);
+                long crimsonRemaining = berserker
+                        ? org.marj4n.smooth_classes.content.berserker.runtime.BerserkerSpecialRuntime.cooldownRemainingTicks(player) : 0L;
                 String selection = SignatureAbilityDispatcher.selectedAbility(player) + "|"
                         + AscendancyAbilityDispatcher.selectedAbility(player) + "|rider=" + rider
                         + "|mount=" + riderMountActive + "|avenger=" + avenger
                         + "|avc=" + avengerCharges + "|avr=" + (avengerRemaining / 20L)
+                        + "|berserker=" + berserker + "|crimsonCharge=" + crimsonCharging
+                        + "|crimsonActive=" + crimsonActive + "|crimsonCd=" + (crimsonRemaining / 20L)
                         + "|shadow=" + shadowActive + "|shr=" + (shadowRemaining / 20L);
                 if (!selection.equals(LAST_SELECTION.get(player.getUuid()))) sendAbilityState(player);
             }
@@ -200,6 +225,21 @@ public final class SmoothClassesNetworking {
         out.writeInt(org.marj4n.smooth_classes.content.avenger.runtime.AvengerReworkRuntime.maxSummonCharges());
         out.writeInt(org.marj4n.smooth_classes.content.avenger.runtime.AvengerReworkRuntime.summonRechargeTotalTicks());
         out.writeLong(avengerRemaining);
+        boolean berserkerSpecialVisible = org.marj4n.smooth_classes.runtime.AbilityRuntime.isClass(
+                player, org.marj4n.smooth_classes.content.berserker.BerserkerClass.ID);
+        boolean berserkerSpecialCharging = berserkerSpecialVisible
+                && org.marj4n.smooth_classes.content.berserker.runtime.BerserkerSpecialRuntime.isCharging(player);
+        boolean berserkerSpecialActive = berserkerSpecialVisible
+                && org.marj4n.smooth_classes.content.berserker.runtime.BerserkerSpecialRuntime.isActive(player);
+        int berserkerSpecialTotal = berserkerSpecialVisible
+                ? org.marj4n.smooth_classes.content.berserker.runtime.BerserkerSpecialRuntime.hudCooldownTotalTicks(player) : 1;
+        long berserkerSpecialRemaining = berserkerSpecialVisible
+                ? org.marj4n.smooth_classes.content.berserker.runtime.BerserkerSpecialRuntime.cooldownRemainingTicks(player) : 0L;
+        out.writeBoolean(berserkerSpecialVisible);
+        out.writeBoolean(berserkerSpecialCharging);
+        out.writeBoolean(berserkerSpecialActive);
+        out.writeInt(berserkerSpecialTotal);
+        out.writeLong(berserkerSpecialRemaining);
         boolean shadowActive = org.marj4n.smooth_classes.content.assassin.runtime.ShadowTechniqueRuntime.active(player);
         long shadowRemaining = org.marj4n.smooth_classes.content.assassin.runtime.ShadowTechniqueRuntime.remainingTicks(player);
         out.writeBoolean(shadowActive);
@@ -209,6 +249,8 @@ public final class SmoothClassesNetworking {
         LAST_SELECTION.put(player.getUuid(), sig + "|" + asc + "|rider=" + riderMountVisible
                 + "|mount=" + riderMountActive + "|avenger=" + avengerSummonVisible
                 + "|avc=" + avengerCharges + "|avr=" + (avengerRemaining / 20L)
+                + "|berserker=" + berserkerSpecialVisible + "|crimsonCharge=" + berserkerSpecialCharging
+                + "|crimsonActive=" + berserkerSpecialActive + "|crimsonCd=" + (berserkerSpecialRemaining / 20L)
                 + "|shadow=" + shadowActive + "|shr=" + (shadowRemaining / 20L));
     }
 }

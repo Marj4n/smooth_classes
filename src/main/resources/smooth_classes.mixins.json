@@ -42,6 +42,7 @@
     "client.ChargeCastingFovMixin",
     "client.ChargeExperienceBarMixin",
     "client.BloodRainClientWorldMixin",
-    "client.BloodRainSkyMixin"
+    "client.BloodRainSkyMixin",
+    "client.BerserkerControlLockMixin"
   ]
 }

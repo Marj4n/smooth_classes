@@ -794,5 +794,101 @@
         }
       }
     ]
+  },
+  "berserkerCrimsonRevenantEnduring": {
+    "title": {
+      "translate": "text.skills.berserkerCrimsonRevenantEnduring.title"
+    },
+    "description": {
+      "translate": "text.skills.berserkerCrimsonRevenantEnduring.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/berserker_signature_berserking.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "crimson_revenant_enduring"
+        }
+      }
+    ]
+  },
+  "berserkerCrimsonRevenantFortress": {
+    "title": {
+      "translate": "text.skills.berserkerCrimsonRevenantFortress.title"
+    },
+    "description": {
+      "translate": "text.skills.berserkerCrimsonRevenantFortress.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/berserker_ignore_pain_skilled.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "crimson_revenant_fortress"
+        }
+      }
+    ]
+  },
+  "berserkerCrimsonRevenantMassacre": {
+    "title": {
+      "translate": "text.skills.berserkerCrimsonRevenantMassacre.title"
+    },
+    "description": {
+      "translate": "text.skills.berserkerCrimsonRevenantMassacre.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/berserker_challenge.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "crimson_revenant_massacre"
+        }
+      }
+    ]
   }
 }

@@ -28,6 +28,12 @@ public final class AbilityHudState {
     public static int avengerSummonRechargeMs = 20000;
     public static long avengerSummonReadyAtMs = 0L;
 
+    public static boolean berserkerSpecialVisible;
+    public static boolean berserkerSpecialCharging;
+    public static boolean berserkerSpecialActive;
+    public static int berserkerSpecialCooldownMs = 90000;
+    public static long berserkerSpecialReadyAtMs = 0L;
+
     public static boolean shadowActive;
     public static long shadowExpiresAtMs = 0L;
     public static int shadowRange = 10;
@@ -64,6 +70,19 @@ public final class AbilityHudState {
 
     public static long avengerSummonRemainingMs() { return Math.max(0L, avengerSummonReadyAtMs - System.currentTimeMillis()); }
 
+    public static void syncBerserkerSpecial(boolean visible, boolean charging, boolean active,
+                                            int totalTicks, long remainingTicks) {
+        berserkerSpecialVisible = visible;
+        berserkerSpecialCharging = charging;
+        berserkerSpecialActive = active;
+        berserkerSpecialCooldownMs = Math.max(1, totalTicks * 50);
+        berserkerSpecialReadyAtMs = System.currentTimeMillis() + Math.max(0L, remainingTicks) * 50L;
+    }
+
+    public static long berserkerSpecialRemainingMs() {
+        return Math.max(0L, berserkerSpecialReadyAtMs - System.currentTimeMillis());
+    }
+
     public static void syncShadow(boolean active, long remainingTicks, int range) {
         shadowActive = active;
         shadowExpiresAtMs = System.currentTimeMillis() + Math.max(0L, remainingTicks) * 50L;
@@ -76,6 +95,7 @@ public final class AbilityHudState {
     public static Identifier ascendancyIcon() { return icon(ascendancyAbility, true); }
     public static Identifier riderMountIcon() { return SmoothClasses.id("textures/icons/alternate_reduced/rider_path.png"); }
     public static Identifier avengerSummonIcon() { return SmoothClasses.id("textures/icons/alternate_reduced/necromancer_signature_summoning_ritual.png"); }
+    public static Identifier berserkerSpecialIcon() { return SmoothClasses.id("textures/gui/berserker_class_special.png"); }
 
     private static Identifier icon(String ability, boolean ascendancy) {
         if (ability == null || ability.isBlank()) return SmoothClasses.id("textures/gui/cooldown_overlay.png");

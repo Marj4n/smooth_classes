@@ -10,6 +10,7 @@ import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.particle.DustParticleEffect;
 import net.minecraft.particle.ItemStackParticleEffect;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -20,6 +21,7 @@ import net.spell_engine.entity.SpellProjectile;
 import org.marj4n.smooth_classes.integration.OptionalCompatRuntime;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.Vec3d;
+import org.joml.Vector3f;
 import org.marj4n.smooth_classes.content.assassin.AssassinContent;
 import org.marj4n.smooth_classes.content.foreigner.ForeignerContent;
 import org.marj4n.smooth_classes.content.saber.SaberContent;
@@ -56,7 +58,7 @@ public final class EffectBehaviorRuntime {
                  "spellbreaking", "raging_javelin", "agony", "torment", "taunted",
                  "vitality_bond", "anointed", "shadow_aura", "static_charge",
                  "fanofblades", "frost_volley", "arcane_volley", "meteoric_wrath",
-                 "barrier", "bone_armor", "undying" -> true;
+                 "barrier", "bone_armor", "undying", "crimson_revenant_charge", "crimson_revenant" -> true;
             default -> false;
         };
     }
@@ -86,6 +88,10 @@ public final class EffectBehaviorRuntime {
     public static void removed(String id, LivingEntity entity, int amplifier) {
         if ("arcane_slash".equals(id) && entity instanceof ServerPlayerEntity player)
             ArcaneSlashChargeRuntime.removed(player);
+        if ("crimson_revenant_charge".equals(id) && entity instanceof ServerPlayerEntity player)
+            org.marj4n.smooth_classes.content.berserker.runtime.BerserkerSpecialRuntime.chargeEffectRemoved(player);
+        if ("crimson_revenant".equals(id) && entity instanceof ServerPlayerEntity player)
+            org.marj4n.smooth_classes.content.berserker.runtime.BerserkerSpecialRuntime.activeEffectRemoved(player);
         if (entity instanceof ServerPlayerEntity player && switch (id) {
             case "sacred_onslaught", "arcane_slash", "rapidfire", "cataclysm",
                  "ghostwalk", "bullrush", "cyclonic_cleave", "skyward_sunder" -> true;
@@ -155,9 +161,105 @@ public final class EffectBehaviorRuntime {
             case "barrier" -> statusAura(entity, ParticleTypes.REVERSE_PORTAL, 0.85);
             case "bone_armor" -> boneArmorParticles(entity, amplifier);
             case "undying" -> { statusAura(entity, ParticleTypes.SOUL, 0.9); undyingWarning(entity); }
+            case "crimson_revenant_charge" -> {
+                crimsonRevenantChargeAura(entity);
+                if (entity instanceof ServerPlayerEntity p) {
+                    org.marj4n.smooth_classes.content.berserker.runtime.BerserkerSpecialRuntime.tickCharge(p);
+                }
+            }
+            case "crimson_revenant" -> {
+                crimsonRevenantAura(entity, amplifier);
+                if (entity instanceof ServerPlayerEntity p) {
+                    org.marj4n.smooth_classes.content.berserker.runtime.BerserkerSpecialRuntime.tickFrenzy(p);
+                }
+            }
             // Marker/state effects are consumed by combat, signature, projectile
             // and ascendancy hooks exactly where consumes them.
             default -> { }
+        }
+    }
+
+
+    private static final DustParticleEffect CRIMSON_DUST = new DustParticleEffect(new Vector3f(1.0F, 0.15F, 0.15F), 1.45F);
+    private static final DustParticleEffect CRIMSON_DUST_LARGE = new DustParticleEffect(new Vector3f(0.88F, 0.03F, 0.03F), 2.1F);
+    private static final DustParticleEffect CRIMSON_MIST = new DustParticleEffect(new Vector3f(0.62F, 0.01F, 0.01F), 2.65F);
+    private static final DustParticleEffect CRIMSON_MIST_SOFT = new DustParticleEffect(new Vector3f(0.78F, 0.04F, 0.04F), 2.15F);
+
+    private static void crimsonRevenantChargeAura(LivingEntity entity) {
+        if (!(entity.getWorld() instanceof net.minecraft.server.world.ServerWorld world)) return;
+        if (entity.age % 2 != 0) return;
+
+        // Keep body particles very light so third-person view stays readable.
+        if (entity.age % 6 == 0) {
+            double emberRadius = 0.22D;
+            for (int i = 0; i < 2; i++) {
+                double angle = entity.age * 0.18D + i * Math.PI;
+                double x = entity.getX() + Math.cos(angle) * emberRadius;
+                double z = entity.getZ() + Math.sin(angle) * emberRadius;
+                double y = entity.getBodyY(0.42D + i * 0.16D);
+                world.spawnParticles(CRIMSON_DUST, x, y, z, 1, 0.008D, 0.012D, 0.008D, 0.0D);
+            }
+        }
+
+        // Red foot mist / dust like a crimson Earthshaker.
+        crimsonRevenantFootMist(entity, world, true);
+    }
+
+    private static void crimsonRevenantAura(LivingEntity entity, int amplifier) {
+        if (!(entity.getWorld() instanceof net.minecraft.server.world.ServerWorld world)) return;
+        if (entity.age % 2 != 0) return;
+
+        // Subtle body embers only, to avoid covering the player model in third person.
+        if (entity.age % 6 == 0) {
+            for (int i = 0; i < 3; i++) {
+                double angle = entity.age * 0.11D + i * (Math.PI * 2.0D / 3.0D);
+                double x = entity.getX() + Math.cos(angle) * 0.26D;
+                double z = entity.getZ() + Math.sin(angle) * 0.26D;
+                double y = entity.getBodyY(0.20D + i * 0.12D);
+                world.spawnParticles((i == 1) ? CRIMSON_DUST_LARGE : CRIMSON_DUST, x, y, z,
+                        1, 0.008D, 0.015D, 0.008D, 0.0D);
+            }
+        }
+
+        // Main visual presence is low ground fog around the feet.
+        crimsonRevenantFootMist(entity, world, false);
+
+        if (entity.age % 10 == 0) {
+            world.spawnParticles(CRIMSON_DUST, entity.getX(), entity.getBodyY(0.58D), entity.getZ(),
+                    2, 0.10D, 0.18D, 0.10D, 0.0D);
+        }
+    }
+
+    private static void crimsonRevenantFootMist(LivingEntity entity, net.minecraft.server.world.ServerWorld world, boolean charging) {
+        double radius = charging ? 1.05D : 1.28D;
+        int count = charging ? 8 : 12;
+
+        // Full-red ground mist: no vanilla grey smoke particles here.
+        for (int i = 0; i < count; i++) {
+            double angle = entity.age * 0.10D + i * (Math.PI * 2.0D / count);
+            double wave = 0.10D * Math.sin(entity.age * 0.18D + i * 0.8D);
+            double ringRadius = radius + wave;
+            double x = entity.getX() + Math.cos(angle) * ringRadius;
+            double z = entity.getZ() + Math.sin(angle) * ringRadius;
+            double y = entity.getY() + 0.035D + (i % 3) * 0.018D;
+
+            world.spawnParticles((i & 1) == 0 ? CRIMSON_MIST : CRIMSON_MIST_SOFT,
+                    x, y, z, 1, 0.055D, 0.018D, 0.055D, 0.0D);
+
+            if (i % 3 == 0) {
+                world.spawnParticles(CRIMSON_DUST, x, y + 0.03D, z,
+                        1, 0.025D, 0.012D, 0.025D, 0.0D);
+            }
+        }
+
+        // Dense red dust burst hugs the floor, similar to Tremor/Earthshaker dust.
+        if (entity.age % 4 == 0) {
+            world.spawnParticles(CRIMSON_MIST, entity.getX(), entity.getY() + 0.035D, entity.getZ(),
+                    charging ? 4 : 7,
+                    radius * 0.48D, 0.025D, radius * 0.48D, 0.0D);
+            world.spawnParticles(CRIMSON_DUST_LARGE, entity.getX(), entity.getY() + 0.065D, entity.getZ(),
+                    charging ? 3 : 5,
+                    radius * 0.38D, 0.045D, radius * 0.38D, 0.0D);
         }
     }
 

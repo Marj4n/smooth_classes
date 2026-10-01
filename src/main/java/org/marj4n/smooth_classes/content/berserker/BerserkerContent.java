@@ -37,9 +37,20 @@ public final class BerserkerContent {
     public static final Talent BERSERKING_LEAP = talent("berserking_leap", "Berserking Leap");
     public static final Talent BERSERKING_LEAP_IMMOBILIZE = talent("berserking_leap_immobilize", "Berserking Leap Immobilize");
     public static final Talent BERSERKING_LEAP_PULL = talent("berserking_leap_pull", "Berserking Leap Pull");
+    public static final Talent CRIMSON_REVENANT_ENDURING = talent("crimson_revenant_enduring", "Crimson Revenant Enduring");
+    public static final Talent CRIMSON_REVENANT_FORTRESS = talent("crimson_revenant_fortress", "Crimson Revenant Fortress");
+    public static final Talent CRIMSON_REVENANT_MASSACRE = talent("crimson_revenant_massacre", "Crimson Revenant Massacre");
 
     private static final List<Ability> ABILITIES = List.of(RAMPAGE, BLOODTHIRSTY, BERSERKING);
-    private static final List<Talent> TALENTS = List.of(SWORD_MASTERY, SWORD_MASTERY_PROFICIENT, SWORD_MASTERY_SKILLED, AXE_MASTERY, AXE_MASTERY_PROFICIENT, AXE_MASTERY_SKILLED, IGNORE_PAIN, IGNORE_PAIN_PROFICIENT, IGNORE_PAIN_SKILLED, RECKLESSNESS, CHALLENGE, EXPLOIT, RAMPAGE_CHARGE, RAMPAGE_CHARGE_RELENTLESS, RAMPAGE_CHARGE_IMMOBILIZE, BLOODTHIRSTY_MIGHTY, BLOODTHIRSTY_TIRELESS, BLOODTHIRSTY_TREMOR, BERSERKING_LEAP, BERSERKING_LEAP_IMMOBILIZE, BERSERKING_LEAP_PULL);
+    private static final List<Talent> TALENTS = List.of(
+            SWORD_MASTERY, SWORD_MASTERY_PROFICIENT, SWORD_MASTERY_SKILLED,
+            AXE_MASTERY, AXE_MASTERY_PROFICIENT, AXE_MASTERY_SKILLED,
+            IGNORE_PAIN, IGNORE_PAIN_PROFICIENT, IGNORE_PAIN_SKILLED,
+            RECKLESSNESS, CHALLENGE, EXPLOIT,
+            RAMPAGE_CHARGE, RAMPAGE_CHARGE_RELENTLESS, RAMPAGE_CHARGE_IMMOBILIZE,
+            BLOODTHIRSTY_MIGHTY, BLOODTHIRSTY_TIRELESS, BLOODTHIRSTY_TREMOR,
+            BERSERKING_LEAP, BERSERKING_LEAP_IMMOBILIZE, BERSERKING_LEAP_PULL,
+            CRIMSON_REVENANT_ENDURING, CRIMSON_REVENANT_FORTRESS, CRIMSON_REVENANT_MASSACRE);
 
     public static void register() {
         ABILITIES.forEach(AbilityRegistry::register);

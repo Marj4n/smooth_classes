@@ -11,6 +11,7 @@ import net.minecraft.util.math.MathHelper;
 public final class ChargeHudState {
     public static final String PORTAL_OF_SOVEREIGNTY = "unlimited_blade_works";
     public static final String ARCANE_SLASH = "arcane_slash";
+    public static final String CRIMSON_REVENANT = "crimson_revenant";
 
     private static boolean active;
     private static String ability = "";
@@ -66,10 +67,14 @@ public final class ChargeHudState {
     }
 
     public static int tint() {
-        return PORTAL_OF_SOVEREIGNTY.equals(ability) ? 0xF4D27C : 0xB784FF;
+        if (PORTAL_OF_SOVEREIGNTY.equals(ability)) return 0xF4D27C;
+        if (CRIMSON_REVENANT.equals(ability)) return 0xE53935;
+        return 0xB784FF;
     }
 
     public static String label() {
-        return PORTAL_OF_SOVEREIGNTY.equals(ability) ? "Portal of Sovereignty" : "Arcane Slash";
+        if (PORTAL_OF_SOVEREIGNTY.equals(ability)) return "Portal of Sovereignty";
+        if (CRIMSON_REVENANT.equals(ability)) return "Crimson Revenant";
+        return "Arcane Slash";
     }
 }

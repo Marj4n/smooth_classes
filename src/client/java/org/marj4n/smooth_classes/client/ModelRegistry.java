@@ -40,6 +40,8 @@ public final class ModelRegistry {
             // Custom status/effect models
             id("effect/barrier"),
             id("effect/curse"),
+            id("effect/crimson_revenant_skull"),
+            id("effect/crimson_revenant_avatar"),
             id("effect/death_mark"),
             id("effect/immobilize"),
             id("effect/magic_circle"),

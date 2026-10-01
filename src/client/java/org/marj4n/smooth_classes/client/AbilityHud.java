@@ -8,7 +8,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.marj4n.smooth_classes.SmoothClasses;
 
-/** Ability HUD: signature (V), ascendancy (R), plus Rider mount summon (H) when applicable. */
+/** Ability HUD: signature (V), ascendancy (R), plus the current class-special H slot. */
 public final class AbilityHud {
     private static final Identifier FRAME = new Identifier("minecraft", "textures/gui/widgets.png");
     private static final Identifier COOLDOWN = SmoothClasses.id("textures/gui/cooldown_overlay.png");
@@ -28,6 +28,9 @@ public final class AbilityHud {
         } else if (AbilityHudState.riderMountVisible) {
             renderSlot(context, client, x + 44, y, "rider_mount", AbilityHudState.riderMountIcon(),
                     AbilityHudState.riderMountCooldownMs, AbilityHudState.riderMountRemainingMs(), SmoothClassesClient.riderMountKey());
+        } else if (AbilityHudState.berserkerSpecialVisible) {
+            renderSlot(context, client, x + 44, y, "crimson_revenant", AbilityHudState.berserkerSpecialIcon(),
+                    AbilityHudState.berserkerSpecialCooldownMs, AbilityHudState.berserkerSpecialRemainingMs(), SmoothClassesClient.riderMountKey());
         }
     }
 
@@ -58,7 +61,9 @@ public final class AbilityHud {
                 || ("magic_circle".equals(ability) && AbilityHudState.bloodRainActive)
                 || ("agony".equals(ability) && AbilityHudState.whenOnHighActive)
                 || ("rider_mount".equals(ability) && (AbilityHudState.riderMountActive
-                || isLocalRiderMount(client)))) {
+                || isLocalRiderMount(client)))
+                || ("crimson_revenant".equals(ability) && (AbilityHudState.berserkerSpecialCharging
+                || AbilityHudState.berserkerSpecialActive))) {
             context.fill(x+10,y+10,x+26,y+26,0xB0000000);
             context.drawCenteredTextWithShadow(client.textRenderer,Text.literal("X"),x+18,y+14,0xFF5555);
         } else if (remainingMs > 0) {
