@@ -25,12 +25,8 @@ public final class AbilityHud {
                 AbilityHudState.ascendancyCooldownMs, AbilityHudState.ascendancyRemainingMs(), SmoothClassesClient.ascendancyKey());
         if (AbilityHudState.avengerSummonVisible) {
             renderAvengerSummonSlot(context, client, x + 44, y);
-        } else if (AbilityHudState.riderMountVisible) {
-            renderSlot(context, client, x + 44, y, "rider_mount", AbilityHudState.riderMountIcon(),
-                    AbilityHudState.riderMountCooldownMs, AbilityHudState.riderMountRemainingMs(), SmoothClassesClient.riderMountKey());
-        } else if (AbilityHudState.berserkerSpecialVisible) {
-            renderSlot(context, client, x + 44, y, "crimson_revenant", AbilityHudState.berserkerSpecialIcon(),
-                    AbilityHudState.berserkerSpecialCooldownMs, AbilityHudState.berserkerSpecialRemainingMs(), SmoothClassesClient.riderMountKey());
+        } else if (AbilityHudState.classSpecialVisible) {
+            renderClassSpecialSlot(context, client, x + 44, y);
         }
     }
 
@@ -59,11 +55,7 @@ public final class AbilityHud {
             context.drawTextWithShadow(client.textRenderer, Text.literal(Integer.toString(secs)), x + 21, y + 20, 0xDDA0FF);
         } else if (("sacred_orb".equals(ability) && AbilityHudState.bannerActive)
                 || ("magic_circle".equals(ability) && AbilityHudState.bloodRainActive)
-                || ("agony".equals(ability) && AbilityHudState.whenOnHighActive)
-                || ("rider_mount".equals(ability) && (AbilityHudState.riderMountActive
-                || isLocalRiderMount(client)))
-                || ("crimson_revenant".equals(ability) && (AbilityHudState.berserkerSpecialCharging
-                || AbilityHudState.berserkerSpecialActive))) {
+                || ("agony".equals(ability) && AbilityHudState.whenOnHighActive)) {
             context.fill(x+10,y+10,x+26,y+26,0xB0000000);
             context.drawCenteredTextWithShadow(client.textRenderer,Text.literal("X"),x+18,y+14,0xFF5555);
         } else if (remainingMs > 0) {
@@ -74,6 +66,56 @@ public final class AbilityHud {
             context.drawCenteredTextWithShadow(client.textRenderer, Text.literal(Integer.toString(secs)), x + 18, y + 14, 0xFFFFFF);
         }
         context.drawCenteredTextWithShadow(client.textRenderer, key.getBoundKeyLocalizedText(), x + 18, y, 0xFFFFFF);
+        context.draw();
+        context.getMatrices().pop();
+        RenderSystem.disableBlend();
+    }
+
+    private void renderClassSpecialSlot(DrawContext context, MinecraftClient client, int x, int y) {
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        context.drawTexture(FRAME, x + 5, y + 6, 58, 22, 24, 24, 256, 256);
+        Identifier specialIcon = AbilityHudState.classSpecialIcon();
+        if (client.getResourceManager().getResource(specialIcon).isEmpty()) {
+            specialIcon = AbilityHudState.classSpecialFallbackIcon();
+        }
+        context.drawTexture(specialIcon, x + 10, y + 10, 0, 0, 16, 16, 16, 16);
+        context.draw();
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        context.getMatrices().push();
+        context.getMatrices().translate(0, 0, 300);
+
+        long remaining = AbilityHudState.classSpecialRemainingMs();
+        if (AbilityHudState.classSpecialActive) {
+            context.fill(x + 10, y + 10, x + 26, y + 26, 0xB0000000);
+            context.drawCenteredTextWithShadow(client.textRenderer, Text.literal("X"), x + 18, y + 14, 0xFF5555);
+        } else if (remaining > 0) {
+            int overlayHeight = Math.max(1, Math.min(16, (int)(16F * (remaining / (float)Math.max(1, AbilityHudState.classSpecialCooldownMs)))));
+            int overlayY = y + 10 + (16 - overlayHeight);
+            context.drawTexture(COOLDOWN, x + 10, overlayY, 0, 16 - overlayHeight, 16, overlayHeight, 16, 16);
+            int secs = (int)Math.ceil(remaining / 1000D);
+            context.drawCenteredTextWithShadow(client.textRenderer, Text.literal(Integer.toString(secs)), x + 18, y + 14, 0xFFFFFF);
+        }
+
+        // Duration numbers use the same unobtrusive language as Shadow Technique:
+        // gold = H-mode lifetime, aqua = current projected armament lifetime.
+        long modeRemaining = AbilityHudState.classSpecialModeRemainingMs();
+        long secondaryRemaining = AbilityHudState.classSpecialSecondaryRemainingMs();
+        if (modeRemaining > 0L) {
+            int secs = Math.max(0, (int)Math.ceil(modeRemaining / 1000D));
+            context.drawTextWithShadow(client.textRenderer, Text.literal(Integer.toString(secs)), x + 21, y + 20, 0xFFE066);
+        }
+        if (secondaryRemaining > 0L) {
+            int secs = Math.max(0, (int)Math.ceil(secondaryRemaining / 1000D));
+            context.drawTextWithShadow(client.textRenderer, Text.literal(Integer.toString(secs)), x + 5, y + 20, 0x66E6FF);
+        }
+
+        String badge = AbilityHudState.classSpecialBadge();
+        if (!badge.isBlank() && modeRemaining <= 0L && secondaryRemaining <= 0L) {
+            context.drawTextWithShadow(client.textRenderer, Text.literal(badge), x + 21, y + 20, 0xFFE066);
+        }
+        context.drawCenteredTextWithShadow(client.textRenderer, SmoothClassesClient.classSpecialKey().getBoundKeyLocalizedText(), x + 18, y, 0xFFFFFF);
         context.draw();
         context.getMatrices().pop();
         RenderSystem.disableBlend();
@@ -104,18 +146,10 @@ public final class AbilityHud {
         // Charge badge remains visible while a recharge is running, so 1-2 stored casts are obvious.
         context.drawTextWithShadow(client.textRenderer, Text.literal(Integer.toString(charges)), x + 21, y + 20,
                 charges > 0 ? 0xFFE066 : 0xFF5555);
-        context.drawCenteredTextWithShadow(client.textRenderer, SmoothClassesClient.riderMountKey().getBoundKeyLocalizedText(), x + 18, y, 0xFFFFFF);
+        context.drawCenteredTextWithShadow(client.textRenderer, SmoothClassesClient.classSpecialKey().getBoundKeyLocalizedText(), x + 18, y, 0xFFFFFF);
         context.draw();
         context.getMatrices().pop();
         RenderSystem.disableBlend();
-    }
-
-    private static boolean isLocalRiderMount(MinecraftClient client) {
-        if (client.player == null) return false;
-        var vehicle = client.player.getVehicle();
-        return vehicle instanceof org.marj4n.smooth_classes.entity.RiderHorseEntity
-                || vehicle instanceof org.marj4n.smooth_classes.entity.RiderDreadSteedEntity
-                || vehicle instanceof org.marj4n.smooth_classes.entity.RiderHippogryphEntity;
     }
 
 }

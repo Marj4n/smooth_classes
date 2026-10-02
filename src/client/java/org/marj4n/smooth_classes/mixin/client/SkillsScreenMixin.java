@@ -34,6 +34,8 @@ public abstract class SkillsScreenMixin {
     @Unique
     private static final int EYE_SHEET_WIDTH = EYE_FRAME_COUNT * EYE_FRAME_SIZE;
     @Unique
+    private static final int EYE_MIN_GAP = 36;
+    @Unique
     private final Identifier cloudsTexture1 = new Identifier("smooth_classes", "textures/backgrounds/decor/clouds.png");
     @Unique
     private final Identifier cloudsTexture2 = new Identifier("smooth_classes", "textures/backgrounds/decor/clouds_2.png");
@@ -148,25 +150,54 @@ public abstract class SkillsScreenMixin {
 
         ThreadLocalRandom random = ThreadLocalRandom.current();
         int capacity = 3 - activeEyes.size();
-        int burstMax = Math.min(capacity, activeEyes.isEmpty() ? 3 : 2);
+        int burstMax = Math.min(capacity, 2);
         int burst = random.nextInt(1, burstMax + 1);
 
         for (int i = 0; i < burst; i++) {
-            float scale = random.nextFloat(1.2F, 2.15F);
+            // Previous eyes were 1.2x-2.15x a 64px frame, making them dominate the
+            // entire skill screen. Keep them ominous but background-sized instead.
+            float scale = random.nextFloat(0.55F, 0.96F);
             int renderSize = Math.round(EYE_FRAME_SIZE * scale);
-            int minX = bounds.min().x + 16;
-            int maxX = Math.max(minX, bounds.max().x - renderSize - 16);
-            int minY = bounds.min().y + 8;
-            int maxY = Math.max(minY, bounds.max().y - renderSize - 8);
-            int x = random.nextInt(minX, maxX + 1);
-            int y = random.nextInt(minY, maxY + 1);
-            long delay = i == 0 ? 0L : random.nextLong(90L, 260L);
+            int minX = bounds.min().x + 20;
+            int maxX = Math.max(minX, bounds.max().x - renderSize - 20);
+            int minY = bounds.min().y + 14;
+            int maxY = Math.max(minY, bounds.max().y - renderSize - 14);
+
+            int x = minX;
+            int y = minY;
+            boolean placed = false;
+            for (int attempt = 0; attempt < 28; attempt++) {
+                int candidateX = random.nextInt(minX, maxX + 1);
+                int candidateY = random.nextInt(minY, maxY + 1);
+                if (eyeHasRoom(candidateX, candidateY, renderSize)) {
+                    x = candidateX;
+                    y = candidateY;
+                    placed = true;
+                    break;
+                }
+            }
+            if (!placed) continue;
+
+            long delay = i == 0 ? 0L : random.nextLong(140L, 320L);
             long spawnAt = currentTime + delay;
             long life = random.nextLong(1800L, 3600L);
             activeEyes.add(new EyeManifestation(x, y, scale, spawnAt, life));
         }
 
-        nextEyeSpawnAt = currentTime + random.nextLong(activeEyes.isEmpty() ? 600L : 1200L, 3200L);
+        nextEyeSpawnAt = currentTime + random.nextLong(activeEyes.isEmpty() ? 900L : 1500L, 3600L);
+    }
+
+    @Unique
+    private boolean eyeHasRoom(int x, int y, int size) {
+        for (EyeManifestation eye : activeEyes) {
+            int otherSize = Math.round(EYE_FRAME_SIZE * eye.scale());
+            boolean separated = x + size + EYE_MIN_GAP <= eye.x()
+                    || eye.x() + otherSize + EYE_MIN_GAP <= x
+                    || y + size + EYE_MIN_GAP <= eye.y()
+                    || eye.y() + otherSize + EYE_MIN_GAP <= y;
+            if (!separated) return false;
+        }
+        return true;
     }
 
     @Unique

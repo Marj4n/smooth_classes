@@ -333,7 +333,8 @@ public final class EffectBehaviorRuntime {
                 charged.getBoundingBox().expand(9), e -> e != charged && e.isAlive()
                         && OptionalCompatRuntime.canHarm(owner, e))) {
             if (target.getRandom().nextInt(100) >= 30) continue;
-            InternalSpellRuntime.target(owner, "smooth_classes:static_charge", target, 3F);
+            InternalSpellRuntime.targetUsingPowerSchool(owner, "smooth_classes:static_charge", target, 3F,
+                    org.marj4n.smooth_classes.content.caster.runtime.CasterSpecialRuntime.selectedSchool(owner));
             SkillFx.beam(charged, target, SpellEngineParticles.lightning_arc_A.type(), 6);
             target.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS, 80, 0, false, false, true));
             int remaining = effect.getAmplifier() - 1;
@@ -383,8 +384,9 @@ public final class EffectBehaviorRuntime {
                 : org.marj4n.smooth_classes.content.caster.CasterContent.ARCANE_BOLT_VOLLEY.id();
         if (!AbilityRuntime.hasTalent(player, talent)) return;
         LivingEntity target = lookTarget(player, 120);
-        if (target == null) InternalSpellRuntime.dumbFire(player, "smooth_classes:" + spell, 1F);
-        else InternalSpellRuntime.target(player, "smooth_classes:" + spell, target, 1F);
+        var school = org.marj4n.smooth_classes.content.caster.runtime.CasterSpecialRuntime.selectedSchool(player);
+        if (target == null) InternalSpellRuntime.dumbFireUsingPowerSchool(player, "smooth_classes:" + spell, 1F, school);
+        else InternalSpellRuntime.targetUsingPowerSchool(player, "smooth_classes:" + spell, target, 1F, school);
         decrement(player, spell.equals("frost_arrow") ? SmoothEffects.FROST_VOLLEY : SmoothEffects.ARCANE_VOLLEY, 1);
     }
 
@@ -392,7 +394,8 @@ public final class EffectBehaviorRuntime {
         if (!(bearer instanceof ServerPlayerEntity player) || player.age % 15 != 0
                 || !AbilityRuntime.hasTalent(player,
                 org.marj4n.smooth_classes.content.caster.CasterContent.METEOR_SHOWER_WRATH.id())) return;
-        if (!InternalSpellRuntime.aoe(player, "smooth_classes:fire_meteor_small", 12, 35, true, false, 1F)) return;
+        if (!InternalSpellRuntime.aoeUsingPowerSchool(player, "smooth_classes:fire_meteor_small", 12, 35, true, false, 1F,
+                org.marj4n.smooth_classes.content.caster.runtime.CasterSpecialRuntime.selectedSchool(player))) return;
         int renewal = 0;
         if (PuffishSkillsIntegration.isSkillUnlocked(PuffishSkillsIntegration.CASTER,
                 org.marj4n.smooth_classes.integration.SkillNodeIds.wizardSpecialisationMeteorShowerRenewingWrathThree, player)) renewal = 40;
@@ -472,20 +475,22 @@ public final class EffectBehaviorRuntime {
     }
 
     private static void elementalSurge(LivingEntity e) {
-        if (!(e instanceof ServerPlayerEntity p) || p.age % 20 != 0) return;
-        boolean frost=!AbilityRuntime.hasTalent(p,ForeignerContent.ELEMENTAL_SURGE_NO_FROST.id());
-        boolean fire=!AbilityRuntime.hasTalent(p,ForeignerContent.ELEMENTAL_SURGE_NO_FIRE.id());
-        boolean lightning=!AbilityRuntime.hasTalent(p,ForeignerContent.ELEMENTAL_SURGE_NO_LIGHTNING.id());
-        int enabled=(frost?1:0)+(fire?1:0)+(lightning?1:0);
-        float damage;
-        if(enabled==0) damage=SpellPowerRuntime.arcane(p,1.0);
-        else {
-            int pick=p.getRandom().nextInt(enabled);
-            if(frost && pick--==0) damage=SpellPowerRuntime.frost(p,1.0);
-            else if(fire && pick--==0) damage=SpellPowerRuntime.fire(p,1.0);
-            else damage=SpellPowerRuntime.lightning(p,1.0);
+        if (!(e instanceof ServerPlayerEntity p)) return;
+        boolean fast = AbilityRuntime.hasTalent(p,ForeignerContent.ELEMENTAL_SURGE_FREQUENCY.id());
+        int interval = fast ? 15 : 20;
+        if (p.age % interval != 0) return;
+
+        var imprint = org.marj4n.smooth_classes.content.foreigner.runtime.ForeignerSpecialRuntime.activeSchool(p);
+        double coefficient = AbilityRuntime.hasTalent(p,ForeignerContent.ELEMENTAL_SURGE_POWER.id()) ? 1.00D : 0.80D;
+        float damage = imprint != null ? SpellPowerRuntime.scaled(imprint,p,coefficient)
+                : SpellPowerRuntime.strongestMagic(p,coefficient);
+        double radius = AbilityRuntime.hasTalent(p,ForeignerContent.ELEMENTAL_SURGE_RADIUS.id()) ? 4.5D : 3.0D;
+        CombatRuntime.damageNearby(p,radius,damage);
+        if (imprint != null && p.getWorld() instanceof net.minecraft.server.world.ServerWorld world) {
+            int index = org.marj4n.smooth_classes.runtime.SpellSchoolSelection.index(imprint);
+            if (index >= 0) world.spawnParticles(org.marj4n.smooth_classes.runtime.SpellSchoolSelection.particle(index),
+                    p.getX(), p.getBodyY(.45D), p.getZ(), 14, radius * .35D, .25D, radius * .35D, .04D);
         }
-        CombatRuntime.damageNearby(p,3,damage);
     }
 
     private static void elementalImpact(LivingEntity e) {
@@ -493,7 +498,8 @@ public final class EffectBehaviorRuntime {
         Vec3d look=p.getRotationVec(1).normalize();
         p.setVelocity(look.x*2,0,look.z*2);
         p.velocityModified=true;
-        float damage=Math.max(SpellPowerRuntime.fire(p,1.0),Math.max(SpellPowerRuntime.frost(p,1.0),SpellPowerRuntime.lightning(p,1.0)));
+        var imprint=org.marj4n.smooth_classes.content.foreigner.runtime.ForeignerSpecialRuntime.activeSchool(p);
+        float damage=imprint!=null?SpellPowerRuntime.scaled(imprint,p,1.0):SpellPowerRuntime.strongestMagic(p,1.0);
         CombatRuntime.damageNearby(p,3,damage);
         if (AbilityRuntime.hasTalent(p,ForeignerContent.ELEMENTAL_IMPACT_MAGNET.id())) {
             for(LivingEntity target:CombatRuntime.nearbyEnemies(p,6)) {

@@ -37,17 +37,30 @@ public final class LancerImpaleRenderer extends EntityRenderer<LancerImpaleEntit
 
         matrices.push();
 
+        if (entity.isGroundSpike()) {
+            // Rise from below the ground, linger briefly, then get pulled back down instead of popping away.
+            float age = entity.age + tickDelta;
+            float rise = Math.min(1.0F, age / 6.0F);
+            float sink = age <= 22.0F ? 0.0F : Math.min(1.0F, (age - 22.0F) / 12.0F);
+            float riseEase = 1.0F - (1.0F - rise) * (1.0F - rise);
+            float sinkEase = sink * sink;
+            // Peak center sits ~0.75 block above the surface; a normal spear model then
+            // reaches roughly 1.5 blocks above the ground instead of barely peeking out.
+            float height = -0.55F + (riseEase * 2.35F) - (sinkEase * 2.35F);
+            matrices.translate(0.0D, height, 0.0D);
+        }
+
         // Match projectile-style orientation first, then use the item's own baked model.
         // This keeps custom spear/lance geometry recognisable while aiming the shaft into the victim.
         matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(entity.getYaw() - 90.0F));
         matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(entity.getPitch() + 90.0F));
         matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(90.0F));
-        matrices.scale(1.45F, 1.45F, 1.45F);
+        matrices.scale(1.00F, 1.00F, 1.00F);
 
         itemRenderer.renderItem(
                 stack,
                 ModelTransformationMode.FIXED,
-                light,
+                entity.isGroundSpike() ? 0xF000F0 : light,
                 OverlayTexture.DEFAULT_UV,
                 matrices,
                 vertexConsumers,

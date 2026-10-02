@@ -1,94 +1,4 @@
 {
-  "spell_fire_damage_multi+1%": {
-    "title": {
-      "translate": "text.skills.spell_fire_damage_multi+1%.title"
-    },
-    "icon": {
-      "type": "texture",
-      "data": {
-        "texture": "smooth_classes:textures/icons/alternate_reduced/fire_up.png"
-      }
-    },
-    "frame": {
-      "type": "texture",
-      "data": {
-        "unlocked": "smooth_classes:textures/frames/unlocked.png",
-        "available": "smooth_classes:textures/frames/available.png",
-        "locked": "smooth_classes:textures/frames/locked.png",
-        "excluded": "smooth_classes:textures/frames/excluded.png"
-      }
-    },
-    "rewards": [
-      {
-        "type": "puffish_skills:attribute",
-        "data": {
-          "attribute": "spell_power:fire",
-          "value": 0.05,
-          "operation": "multiply_base"
-        }
-      }
-    ]
-  },
-  "spell_frost_damage_multi+1%": {
-    "title": {
-      "translate": "text.skills.spell_frost_damage_multi+1%.title"
-    },
-    "icon": {
-      "type": "texture",
-      "data": {
-        "texture": "smooth_classes:textures/icons/alternate_reduced/frost_up.png"
-      }
-    },
-    "frame": {
-      "type": "texture",
-      "data": {
-        "unlocked": "smooth_classes:textures/frames/unlocked.png",
-        "available": "smooth_classes:textures/frames/available.png",
-        "locked": "smooth_classes:textures/frames/locked.png",
-        "excluded": "smooth_classes:textures/frames/excluded.png"
-      }
-    },
-    "rewards": [
-      {
-        "type": "puffish_skills:attribute",
-        "data": {
-          "attribute": "spell_power:frost",
-          "value": 0.05,
-          "operation": "multiply_base"
-        }
-      }
-    ]
-  },
-  "spell_lightning_damage_multi+1%": {
-    "title": {
-      "translate": "text.skills.spell_lightning_damage_multi+1%.title"
-    },
-    "icon": {
-      "type": "texture",
-      "data": {
-        "texture": "smooth_classes:textures/icons/alternate_reduced/lightning_up.png"
-      }
-    },
-    "frame": {
-      "type": "texture",
-      "data": {
-        "unlocked": "smooth_classes:textures/frames/unlocked.png",
-        "available": "smooth_classes:textures/frames/available.png",
-        "locked": "smooth_classes:textures/frames/locked.png",
-        "excluded": "smooth_classes:textures/frames/excluded.png"
-      }
-    },
-    "rewards": [
-      {
-        "type": "puffish_skills:attribute",
-        "data": {
-          "attribute": "spell_power:lightning",
-          "value": 0.05,
-          "operation": "multiply_base"
-        }
-      }
-    ]
-  },
   "spell_crit_chance_multi+1%": {
     "title": {
       "translate": "text.skills.spell_crit_chance_multi+1%.title"
@@ -325,166 +235,6 @@
           "attribute": "puffish_skills:player.jump",
           "value": 0.05,
           "operation": "multiply_base"
-        }
-      }
-    ]
-  },
-  "rangerReveal": {
-    "title": {
-      "translate": "text.skills.rangerReveal.title"
-    },
-    "description": {
-      "translate": "text.skills.rangerReveal.description"
-    },
-    "size": 1.1,
-    "frame": {
-      "type": "texture",
-      "data": {
-        "unlocked": "smooth_classes:textures/frames/unlocked.png",
-        "available": "smooth_classes:textures/frames/available.png",
-        "locked": "smooth_classes:textures/frames/locked.png",
-        "excluded": "smooth_classes:textures/frames/excluded.png"
-      }
-    },
-    "icon": {
-      "type": "texture",
-      "data": {
-        "texture": "smooth_classes:textures/icons/alternate_reduced/ranger_reveal.png"
-      }
-    },
-    "rewards": [
-      {
-        "type": "puffish_skills:passive_skill",
-        "data": {
-          "passive_skill": "rangerReveal"
-        }
-      }
-    ]
-  },
-  "rangerTamer": {
-    "title": {
-      "translate": "text.skills.rangerTamer.title"
-    },
-    "description": {
-      "translate": "text.skills.rangerTamer.description"
-    },
-    "size": 1.1,
-    "frame": {
-      "type": "texture",
-      "data": {
-        "unlocked": "smooth_classes:textures/frames/unlocked.png",
-        "available": "smooth_classes:textures/frames/available.png",
-        "locked": "smooth_classes:textures/frames/locked.png",
-        "excluded": "smooth_classes:textures/frames/excluded.png"
-      }
-    },
-    "icon": {
-      "type": "texture",
-      "data": {
-        "texture": "smooth_classes:textures/icons/alternate_reduced/ranger_tamer.png"
-      }
-    },
-    "rewards": [
-      {
-        "type": "puffish_skills:passive_skill",
-        "data": {
-          "passive_skill": "rangerTamer"
-        }
-      }
-    ]
-  },
-  "rangerBonded": {
-    "title": {
-      "translate": "text.skills.rangerBonded.title"
-    },
-    "description": {
-      "translate": "text.skills.rangerBonded.description"
-    },
-    "size": 1.1,
-    "frame": {
-      "type": "texture",
-      "data": {
-        "unlocked": "smooth_classes:textures/frames/unlocked.png",
-        "available": "smooth_classes:textures/frames/available.png",
-        "locked": "smooth_classes:textures/frames/locked.png",
-        "excluded": "smooth_classes:textures/frames/excluded.png"
-      }
-    },
-    "icon": {
-      "type": "texture",
-      "data": {
-        "texture": "smooth_classes:textures/icons/alternate_reduced/ranger_bonded.png"
-      }
-    },
-    "rewards": [
-      {
-        "type": "puffish_skills:passive_skill",
-        "data": {
-          "passive_skill": "rangerBonded"
-        }
-      }
-    ]
-  },
-  "rangerTrained": {
-    "title": {
-      "translate": "text.skills.rangerTrained.title"
-    },
-    "description": {
-      "translate": "text.skills.rangerTrained.description"
-    },
-    "size": 1.1,
-    "frame": {
-      "type": "texture",
-      "data": {
-        "unlocked": "smooth_classes:textures/frames/unlocked.png",
-        "available": "smooth_classes:textures/frames/available.png",
-        "locked": "smooth_classes:textures/frames/locked.png",
-        "excluded": "smooth_classes:textures/frames/excluded.png"
-      }
-    },
-    "icon": {
-      "type": "texture",
-      "data": {
-        "texture": "smooth_classes:textures/icons/alternate_reduced/ranger_trained.png"
-      }
-    },
-    "rewards": [
-      {
-        "type": "puffish_skills:passive_skill",
-        "data": {
-          "passive_skill": "rangerTrained"
-        }
-      }
-    ]
-  },
-  "rangerIncognito": {
-    "title": {
-      "translate": "text.skills.rangerIncognito.title"
-    },
-    "description": {
-      "translate": "text.skills.rangerIncognito.description"
-    },
-    "size": 1.1,
-    "frame": {
-      "type": "texture",
-      "data": {
-        "unlocked": "smooth_classes:textures/frames/unlocked.png",
-        "available": "smooth_classes:textures/frames/available.png",
-        "locked": "smooth_classes:textures/frames/locked.png",
-        "excluded": "smooth_classes:textures/frames/excluded.png"
-      }
-    },
-    "icon": {
-      "type": "texture",
-      "data": {
-        "texture": "smooth_classes:textures/icons/alternate_reduced/ranger_incognito.png"
-      }
-    },
-    "rewards": [
-      {
-        "type": "puffish_skills:passive_skill",
-        "data": {
-          "passive_skill": "rangerIncognito"
         }
       }
     ]
@@ -809,127 +559,6 @@
       }
     ]
   },
-  "rangerSignatureDisengage": {
-    "title": {
-      "translate": "text.skills.rangerSignatureDisengage.title"
-    },
-    "description": {
-      "translate": "text.skills.rangerSignatureDisengage.description"
-    },
-    "size": 1.1,
-    "frame": {
-      "type": "texture",
-      "data": {
-        "unlocked": "smooth_classes:textures/frames/unlocked.png",
-        "available": "smooth_classes:textures/frames/available.png",
-        "locked": "smooth_classes:textures/frames/locked.png",
-        "excluded": "smooth_classes:textures/frames/excluded.png"
-      }
-    },
-    "icon": {
-      "type": "texture",
-      "data": {
-        "texture": "smooth_classes:textures/icons/alternate_reduced/unlimited_blade_works.png"
-      }
-    },
-    "rewards": []
-  },
-  "rangerSignatureDisengageRecuperate": {
-    "title": {
-      "translate": "text.skills.rangerSignatureDisengageRecuperate.title"
-    },
-    "description": {
-      "translate": "text.skills.rangerSignatureDisengageRecuperate.description"
-    },
-    "size": 1.1,
-    "frame": {
-      "type": "texture",
-      "data": {
-        "unlocked": "smooth_classes:textures/frames/unlocked.png",
-        "available": "smooth_classes:textures/frames/available.png",
-        "locked": "smooth_classes:textures/frames/locked.png",
-        "excluded": "smooth_classes:textures/frames/excluded.png"
-      }
-    },
-    "icon": {
-      "type": "texture",
-      "data": {
-        "texture": "smooth_classes:textures/icons/alternate_reduced/ranger_signature_disengage.png"
-      }
-    },
-    "rewards": [
-      {
-        "type": "puffish_skills:passive_skill",
-        "data": {
-          "passive_skill": "rangerSignatureDisengageRecuperate"
-        }
-      }
-    ]
-  },
-  "rangerSignatureDisengageExploitation": {
-    "title": {
-      "translate": "text.skills.rangerSignatureDisengageExploitation.title"
-    },
-    "description": {
-      "translate": "text.skills.rangerSignatureDisengageExploitation.description"
-    },
-    "size": 1.1,
-    "frame": {
-      "type": "texture",
-      "data": {
-        "unlocked": "smooth_classes:textures/frames/unlocked.png",
-        "available": "smooth_classes:textures/frames/available.png",
-        "locked": "smooth_classes:textures/frames/locked.png",
-        "excluded": "smooth_classes:textures/frames/excluded.png"
-      }
-    },
-    "icon": {
-      "type": "texture",
-      "data": {
-        "texture": "smooth_classes:textures/icons/alternate_reduced/ranger_signature_disengage.png"
-      }
-    },
-    "rewards": [
-      {
-        "type": "puffish_skills:passive_skill",
-        "data": {
-          "passive_skill": "rangerSignatureDisengageExploitation"
-        }
-      }
-    ]
-  },
-  "rangerSignatureDisengageMarksman": {
-    "title": {
-      "translate": "text.skills.rangerSignatureDisengageMarksman.title"
-    },
-    "description": {
-      "translate": "text.skills.rangerSignatureDisengageMarksman.description"
-    },
-    "size": 1.1,
-    "frame": {
-      "type": "texture",
-      "data": {
-        "unlocked": "smooth_classes:textures/frames/unlocked.png",
-        "available": "smooth_classes:textures/frames/available.png",
-        "locked": "smooth_classes:textures/frames/locked.png",
-        "excluded": "smooth_classes:textures/frames/excluded.png"
-      }
-    },
-    "icon": {
-      "type": "texture",
-      "data": {
-        "texture": "smooth_classes:textures/icons/alternate_reduced/ranger_signature_disengage.png"
-      }
-    },
-    "rewards": [
-      {
-        "type": "puffish_skills:passive_skill",
-        "data": {
-          "passive_skill": "rangerSignatureDisengageMarksman"
-        }
-      }
-    ]
-  },
   "rangerSignatureElementalArrows": {
     "title": {
       "translate": "text.skills.rangerSignatureElementalArrows.title"
@@ -958,102 +587,6 @@
         "type": "puffish_skills:passive_skill",
         "data": {
           "passive_skill": "rangerSignatureElementalArrows"
-        }
-      }
-    ]
-  },
-  "rangerSignatureElementalArrowsFrostAttuned": {
-    "title": {
-      "translate": "text.skills.rangerSignatureElementalArrowsFrostAttuned.title"
-    },
-    "description": {
-      "translate": "text.skills.rangerSignatureElementalArrowsFrostAttuned.description"
-    },
-    "size": 1.1,
-    "frame": {
-      "type": "texture",
-      "data": {
-        "unlocked": "smooth_classes:textures/frames/unlocked.png",
-        "available": "smooth_classes:textures/frames/available.png",
-        "locked": "smooth_classes:textures/frames/locked.png",
-        "excluded": "smooth_classes:textures/frames/excluded.png"
-      }
-    },
-    "icon": {
-      "type": "texture",
-      "data": {
-        "texture": "smooth_classes:textures/icons/alternate_reduced/ranger_signature_elemental_arrows_frost.png"
-      }
-    },
-    "rewards": [
-      {
-        "type": "puffish_skills:passive_skill",
-        "data": {
-          "passive_skill": "rangerSignatureElementalArrowsFrostAttuned"
-        }
-      }
-    ]
-  },
-  "rangerSignatureElementalArrowsFireAttuned": {
-    "title": {
-      "translate": "text.skills.rangerSignatureElementalArrowsFireAttuned.title"
-    },
-    "description": {
-      "translate": "text.skills.rangerSignatureElementalArrowsFireAttuned.description"
-    },
-    "size": 1.1,
-    "frame": {
-      "type": "texture",
-      "data": {
-        "unlocked": "smooth_classes:textures/frames/unlocked.png",
-        "available": "smooth_classes:textures/frames/available.png",
-        "locked": "smooth_classes:textures/frames/locked.png",
-        "excluded": "smooth_classes:textures/frames/excluded.png"
-      }
-    },
-    "icon": {
-      "type": "texture",
-      "data": {
-        "texture": "smooth_classes:textures/icons/alternate_reduced/ranger_signature_elemental_arrows_fire.png"
-      }
-    },
-    "rewards": [
-      {
-        "type": "puffish_skills:passive_skill",
-        "data": {
-          "passive_skill": "rangerSignatureElementalArrowsFireAttuned"
-        }
-      }
-    ]
-  },
-  "rangerSignatureElementalArrowsLightningAttuned": {
-    "title": {
-      "translate": "text.skills.rangerSignatureElementalArrowsLightningAttuned.title"
-    },
-    "description": {
-      "translate": "text.skills.rangerSignatureElementalArrowsLightningAttuned.description"
-    },
-    "size": 1.1,
-    "frame": {
-      "type": "texture",
-      "data": {
-        "unlocked": "smooth_classes:textures/frames/unlocked.png",
-        "available": "smooth_classes:textures/frames/available.png",
-        "locked": "smooth_classes:textures/frames/locked.png",
-        "excluded": "smooth_classes:textures/frames/excluded.png"
-      }
-    },
-    "icon": {
-      "type": "texture",
-      "data": {
-        "texture": "smooth_classes:textures/icons/alternate_reduced/ranger_signature_elemental_arrows_lightning.png"
-      }
-    },
-    "rewards": [
-      {
-        "type": "puffish_skills:passive_skill",
-        "data": {
-          "passive_skill": "rangerSignatureElementalArrowsLightningAttuned"
         }
       }
     ]
@@ -1646,5 +1179,382 @@
       }
     },
     "rewards": []
+  },
+  "rangerTreasuryExpansionI": {
+    "title": {
+      "translate": "text.skills.rangerTreasuryExpansionI.title"
+    },
+    "description": {
+      "translate": "text.skills.rangerTreasuryExpansionI.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/ranged_up.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "rangerTreasuryExpansionI"
+        }
+      }
+    ]
+  },
+  "rangerTreasuryExpansionII": {
+    "title": {
+      "translate": "text.skills.rangerTreasuryExpansionII.title"
+    },
+    "description": {
+      "translate": "text.skills.rangerTreasuryExpansionII.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/ranged_up.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "rangerTreasuryExpansionII"
+        }
+      }
+    ]
+  },
+  "rangerTreasuryExpansionIII": {
+    "title": {
+      "translate": "text.skills.rangerTreasuryExpansionIII.title"
+    },
+    "description": {
+      "translate": "text.skills.rangerTreasuryExpansionIII.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/ranger_signature_portal_of_sovereignty.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "rangerTreasuryExpansionIII"
+        }
+      }
+    ]
+  },
+  "rangerTreasuryExpansionIV": {
+    "title": {
+      "translate": "text.skills.rangerTreasuryExpansionIV.title"
+    },
+    "description": {
+      "translate": "text.skills.rangerTreasuryExpansionIV.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/ranger_signature_portal_of_sovereignty.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "rangerTreasuryExpansionIV"
+        }
+      }
+    ]
+  },
+  "rangerRoyalDraw": {
+    "title": {
+      "translate": "text.skills.rangerRoyalDraw.title"
+    },
+    "description": {
+      "translate": "text.skills.rangerRoyalDraw.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/ranged_up.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "rangerRoyalDraw"
+        }
+      }
+    ]
+  },
+  "rangerSignaturePortalOfSovereignty": {
+    "title": {
+      "translate": "text.skills.rangerSignaturePortalOfSovereignty.title"
+    },
+    "description": {
+      "translate": "text.skills.rangerSignaturePortalOfSovereignty.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/unlimited_blade_works.png"
+      }
+    },
+    "rewards": []
+  },
+  "rangerSignaturePortalEndlessArsenal": {
+    "title": {
+      "translate": "text.skills.rangerSignaturePortalEndlessArsenal.title"
+    },
+    "description": {
+      "translate": "text.skills.rangerSignaturePortalEndlessArsenal.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/ranger_signature_portal_of_sovereignty.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "rangerSignaturePortalEndlessArsenal"
+        }
+      }
+    ]
+  },
+  "rangerSignaturePortalPiercingBlades": {
+    "title": {
+      "translate": "text.skills.rangerSignaturePortalPiercingBlades.title"
+    },
+    "description": {
+      "translate": "text.skills.rangerSignaturePortalPiercingBlades.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/ranger_signature_portal_of_sovereignty.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "rangerSignaturePortalPiercingBlades"
+        }
+      }
+    ]
+  },
+  "rangerSignaturePortalPerfectProjection": {
+    "title": {
+      "translate": "text.skills.rangerSignaturePortalPerfectProjection.title"
+    },
+    "description": {
+      "translate": "text.skills.rangerSignaturePortalPerfectProjection.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/ranger_signature_portal_of_sovereignty.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "rangerSignaturePortalPerfectProjection"
+        }
+      }
+    ]
+  },
+  "rangerSignatureElementalArrowsConvergence": {
+    "title": {
+      "translate": "text.skills.rangerSignatureElementalArrowsConvergence.title"
+    },
+    "description": {
+      "translate": "text.skills.rangerSignatureElementalArrowsConvergence.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/ranger_signature_elemental_arrows.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "rangerSignatureElementalArrowsConvergence"
+        }
+      }
+    ]
+  },
+  "rangerSignatureElementalArrowsOvercharge": {
+    "title": {
+      "translate": "text.skills.rangerSignatureElementalArrowsOvercharge.title"
+    },
+    "description": {
+      "translate": "text.skills.rangerSignatureElementalArrowsOvercharge.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/ranged_up.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "rangerSignatureElementalArrowsOvercharge"
+        }
+      }
+    ]
+  },
+  "rangerSignatureElementalArrowsSplitVolley": {
+    "title": {
+      "translate": "text.skills.rangerSignatureElementalArrowsSplitVolley.title"
+    },
+    "description": {
+      "translate": "text.skills.rangerSignatureElementalArrowsSplitVolley.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/ranger_signature_arrow_rain_elemental_artillery.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "rangerSignatureElementalArrowsSplitVolley"
+        }
+      }
+    ]
   }
 }

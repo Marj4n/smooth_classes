@@ -1,7 +1,6 @@
 package org.marj4n.smooth_classes.client.effects;
 
 import net.minecraft.client.render.RenderLayer;
-import net.minecraft.client.texture.SpriteAtlasTexture;
 import net.minecraft.util.Identifier;
 import net.spell_engine.api.render.CustomLayers;
 import net.spell_engine.api.render.LightEmission;

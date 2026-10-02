@@ -236,6 +236,12 @@ public final class LancerRuntime {
         return BASE_KILL_GAIN + (has(player, LancerContent.EXECUTION_RHYTHM) ? 5 : 0);
     }
 
+    /** Grants Momentum from class-special actions without exposing the internal map. */
+    public static void grantSpecialMomentum(ServerPlayerEntity player, int amount) {
+        if (!AbilityRuntime.isClass(player, LancerClass.ID)) return;
+        addMomentum(player, Math.max(0, amount), "Class Special");
+    }
+
     private static void addMomentum(ServerPlayerEntity player, int amount, String reason) {
         int old = momentumPercent(player);
         int next = Math.min(MAX_MOMENTUM_PERCENT, old + Math.max(0, amount));

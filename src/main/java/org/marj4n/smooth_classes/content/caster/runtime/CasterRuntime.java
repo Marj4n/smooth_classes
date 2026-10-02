@@ -11,7 +11,6 @@ import org.marj4n.smooth_classes.integration.SkillNodeIds;
 import org.marj4n.smooth_classes.runtime.AbilityRuntime;
 import org.marj4n.smooth_classes.runtime.CombatRuntime;
 import org.marj4n.smooth_classes.runtime.ExecutionResult;
-import org.marj4n.smooth_classes.runtime.SpellPowerRuntime;
 import org.marj4n.smooth_classes.runtime.InternalSpellRuntime;
 import org.marj4n.smooth_classes.integration.OptionalCompatRuntime;
 
@@ -44,8 +43,9 @@ public final class CasterRuntime {
         if(target==null)return ExecutionResult.failure("No Meteor Shower target near the aimed position.");
         if(plan.explosive()) org.marj4n.smooth_classes.runtime.ClassEffectRuntime.apply(player,
                 org.marj4n.smooth_classes.effects.SmoothEffects.METEORIC_WRATH,800,9);
-        boolean cast=InternalSpellRuntime.target(player,
-                plan.scorching()?"smooth_classes:fire_meteor_large":"smooth_classes:fire_meteor",target,1F);
+        boolean cast=InternalSpellRuntime.targetUsingPowerSchool(player,
+                plan.scorching()?"smooth_classes:fire_meteor_large":"smooth_classes:fire_meteor",target,1F,
+                CasterSpecialRuntime.selectedSchool(player));
         return cast?ExecutionResult.success(1,"meteor_shower"):ExecutionResult.failure("Meteor Shower spell unavailable.");
     }
 
@@ -71,15 +71,18 @@ public final class CasterRuntime {
         else if(PuffishSkillsIntegration.isSkillUnlocked(PuffishSkillsIntegration.CASTER,
                 SkillNodeIds.wizardSpecialisationIceCometDamageTwo,player))spell="ice_comet_large_two";
         else if(plan.impact())spell="ice_comet_large";
-        boolean cast=target!=null?InternalSpellRuntime.target(player,"smooth_classes:"+spell,target,1F)
-                :InternalSpellRuntime.dumbFire(player,"smooth_classes:"+spell,1F);
+        boolean cast=target!=null?InternalSpellRuntime.targetUsingPowerSchool(player,"smooth_classes:"+spell,target,1F,
+                CasterSpecialRuntime.selectedSchool(player))
+                :InternalSpellRuntime.dumbFireUsingPowerSchool(player,"smooth_classes:"+spell,1F,
+                CasterSpecialRuntime.selectedSchool(player));
         return cast?ExecutionResult.success(target==null?0:1,"ice_comet"):ExecutionResult.failure("Ice Comet spell unavailable.");
     }
 
     public static ExecutionResult executeStaticDischarge(ServerPlayerEntity player) {
         require(player);
         if(has(player,CasterContent.STATIC_DISCHARGE_LIGHTNING_BALL.id())){
-            boolean cast=org.marj4n.smooth_classes.runtime.InternalSpellRuntime.dumbFire(player,"smooth_classes:lightning_ball",3F);
+            boolean cast=org.marj4n.smooth_classes.runtime.InternalSpellRuntime.dumbFireUsingPowerSchool(player,"smooth_classes:lightning_ball",3F,
+                    CasterSpecialRuntime.selectedSchool(player));
             return ExecutionResult.success(cast?1:0,"static_discharge");
         }
         LivingEntity target=null; double best=Double.MAX_VALUE;
@@ -89,7 +92,8 @@ public final class CasterRuntime {
             if(dist<=0||look.dotProduct(to.normalize())<0.94)continue; if(dist<best){best=dist;target=e;}
         }
         if(target==null)return ExecutionResult.success(0,"static_discharge");
-        boolean cast=org.marj4n.smooth_classes.runtime.InternalSpellRuntime.target(player,"smooth_classes:static_discharge",target,3F);
+        boolean cast=org.marj4n.smooth_classes.runtime.InternalSpellRuntime.targetUsingPowerSchool(player,"smooth_classes:static_discharge",target,3F,
+                CasterSpecialRuntime.selectedSchool(player));
         if(cast&&has(player,CasterContent.STATIC_DISCHARGE_LEAP.id())){
             int amp=12;
             if(PuffishSkillsIntegration.isSkillUnlocked(PuffishSkillsIntegration.CASTER, SkillNodeIds.wizardSpecialisationStaticDischargeLeapTwo,player))amp+=20;
@@ -125,8 +129,8 @@ public final class CasterRuntime {
         }
         if (has(owner, CasterContent.STATIC_DISCHARGE_LIGHTNING_ORB.id())
                 && owner.getRandom().nextInt(100) < chance / 2)
-            org.marj4n.smooth_classes.runtime.InternalSpellRuntime.target(owner,
-                    "smooth_classes:lightning_ball_homing", target, 3F);
+            org.marj4n.smooth_classes.runtime.InternalSpellRuntime.targetUsingPowerSchool(owner,
+                    "smooth_classes:lightning_ball_homing", target, 3F, CasterSpecialRuntime.selectedSchool(owner));
     }
 
     public static ExecutionResult executeArcaneBolt(ServerPlayerEntity player) {
@@ -137,8 +141,10 @@ public final class CasterRuntime {
         String spell=has(player,CasterContent.ARCANE_BOLT_LESSER.id())?"arcane_bolt_expanding"
                 :has(player,CasterContent.ARCANE_BOLT_GREATER.id())?"arcane_bolt_greater":"arcane_bolt";
         LivingEntity target=aimedEnemy(player,120);
-        boolean cast=target!=null?InternalSpellRuntime.target(player,"smooth_classes:"+spell,target,1F)
-                :InternalSpellRuntime.dumbFire(player,"smooth_classes:"+spell,1F);
+        boolean cast=target!=null?InternalSpellRuntime.targetUsingPowerSchool(player,"smooth_classes:"+spell,target,1F,
+                CasterSpecialRuntime.selectedSchool(player))
+                :InternalSpellRuntime.dumbFireUsingPowerSchool(player,"smooth_classes:"+spell,1F,
+                CasterSpecialRuntime.selectedSchool(player));
         return cast?ExecutionResult.success(target==null?0:1,"arcane_bolt"):ExecutionResult.failure("Arcane Bolt spell unavailable.");
     }
 

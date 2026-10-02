@@ -9,6 +9,7 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import org.marj4n.smooth_classes.content.archer.runtime.ArcherSpecialRuntime;
 import org.marj4n.smooth_classes.content.archer.runtime.PortalOfSovereigntyRuntime;
 
 /** Non-collidable anchor entity for Portal of Sovereignty gates. */
@@ -86,7 +87,7 @@ public final class BladePortalEntity extends Entity {
         followCaster();
         if (!getWorld().isClient) {
             if (caster() == null || !caster().isAlive() || age > 100
-                    || !PortalOfSovereigntyRuntime.owns(this)) discard();
+                    || (!PortalOfSovereigntyRuntime.owns(this) && !ArcherSpecialRuntime.ownsPortal(this))) discard();
             return;
         }
     }

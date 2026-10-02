@@ -22,7 +22,7 @@ public final class RulerContent {
     public static final Talent SACRED_ORB_SPEED = talent("sacred_orb_speed", "Banner Strength");
     public static final Talent SACRED_ORB_DEBUFFS = talent("sacred_orb_debuffs", "Banner Resistance");
     public static final Talent SACRED_ORB_BUFFS = talent("sacred_orb_buffs", "Banner Haste");
-    public static final Talent DIVINE_INTERVENTION_FIRE_RESISTANCE = talent("divine_intervention_fire_resistance", "Divine Intervention Fire Resistance");
+    public static final Talent DIVINE_INTERVENTION_SANCTUARY = talent("divine_intervention_sanctuary", "Divine Intervention Sanctuary");
     public static final Talent DIVINE_INTERVENTION_MIGHT = talent("divine_intervention_might", "Divine Intervention Might");
     public static final Talent DIVINE_INTERVENTION_SPELLFORGED = talent("divine_intervention_spellforged", "Divine Intervention Spellforged");
     public static final Talent ANOINT_WEAPON_RESISTANCE = talent("anoint_weapon_resistance", "Anoint Weapon Resistance");
@@ -30,7 +30,7 @@ public final class RulerContent {
     public static final Talent ANOINT_WEAPON_CLEANSE = talent("anoint_weapon_cleanse", "Anoint Weapon Cleanse");
 
     private static final List<Ability> ABILITIES = List.of(SACRED_ORB, DIVINE_INTERVENTION, ANOINT_WEAPON);
-    private static final List<Talent> TALENTS = List.of(ALTRUISM, MUTUAL_MENDING, HEALING_WARD, SACRED_ORB_SPEED, SACRED_ORB_DEBUFFS, SACRED_ORB_BUFFS, DIVINE_INTERVENTION_FIRE_RESISTANCE, DIVINE_INTERVENTION_MIGHT, DIVINE_INTERVENTION_SPELLFORGED, ANOINT_WEAPON_RESISTANCE, ANOINT_WEAPON_UNDYING, ANOINT_WEAPON_CLEANSE);
+    private static final List<Talent> TALENTS = List.of(ALTRUISM, MUTUAL_MENDING, HEALING_WARD, SACRED_ORB_SPEED, SACRED_ORB_DEBUFFS, SACRED_ORB_BUFFS, DIVINE_INTERVENTION_SANCTUARY, DIVINE_INTERVENTION_MIGHT, DIVINE_INTERVENTION_SPELLFORGED, ANOINT_WEAPON_RESISTANCE, ANOINT_WEAPON_UNDYING, ANOINT_WEAPON_CLEANSE);
 
     public static void register() {
         ABILITIES.forEach(AbilityRegistry::register);

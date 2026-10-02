@@ -10,6 +10,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.marj4n.smooth_classes.SmoothClasses;
 import org.marj4n.smooth_classes.gameplay.AscendancyAbilityDispatcher;
+import org.marj4n.smooth_classes.gameplay.ClassSpecialDispatcher;
 import org.marj4n.smooth_classes.gameplay.SignatureAbilityDispatcher;
 import org.marj4n.smooth_classes.gameplay.SignatureCooldowns;
 import org.marj4n.smooth_classes.runtime.AbilityCooldowns;
@@ -25,16 +26,16 @@ public final class SmoothClassesNetworking {
     public static final Identifier CAST_ASCENDANCY = SmoothClasses.id("cast_ascendancy");
     public static final Identifier BLADE_WORKS_HOLD = SmoothClasses.id("blade_works_hold");
     public static final Identifier ARCANE_SLASH_HOLD = SmoothClasses.id("arcane_slash_hold");
-    public static final Identifier RIDER_SUMMON_MOUNT = SmoothClasses.id("rider_summon_mount");
     public static final Identifier RIDER_FLIGHT_INPUT = SmoothClasses.id("rider_flight_input");
-    public static final Identifier AVENGER_SUMMON = SmoothClasses.id("avenger_summon");
     public static final Identifier CLASS_SPECIAL = SmoothClasses.id("class_special");
     public static final Identifier CLASS_SPECIAL_HOLD = SmoothClasses.id("class_special_hold");
+    public static final Identifier CLASS_SPECIAL_SELECT = SmoothClasses.id("class_special_select");
     public static final Identifier OPEN_DEATH_LIST = SmoothClasses.id("open_death_list");
     public static final Identifier SYNC_DEATH_LIST = SmoothClasses.id("sync_death_list");
     public static final Identifier SHADOW_AIM_CAST = SmoothClasses.id("shadow_aim_cast");
     public static final Identifier SYNC_ABILITY_STATE = SmoothClasses.id("sync_ability_state");
     public static final Identifier SYNC_CHARGE_STATE = SmoothClasses.id("sync_charge_state");
+    public static final Identifier FORCE_HOTBAR_SLOT = SmoothClasses.id("force_hotbar_slot");
     private static final Map<UUID,String> LAST_SELECTION = new HashMap<>();
     private SmoothClassesNetworking() {}
 
@@ -49,28 +50,28 @@ public final class SmoothClassesNetworking {
                     boolean held = buf.readBoolean();
                     server.execute(() -> org.marj4n.smooth_classes.runtime.ArcaneSlashChargeRuntime.hold(player, held));
                 });
-        ServerPlayNetworking.registerGlobalReceiver(RIDER_SUMMON_MOUNT,
-                (server, player, handler, buf, responseSender) -> server.execute(() -> {
-                    var result = org.marj4n.smooth_classes.content.rider.runtime.RiderRuntime.summonMount(player);
-                    if (!result.success()) player.sendMessage(Text.literal("[Smooth Classes] " + result.detail()), true);
-                    sendAbilityState(player);
-                }));
-        ServerPlayNetworking.registerGlobalReceiver(AVENGER_SUMMON,
-                (server, player, handler, buf, responseSender) -> server.execute(() -> {
-                    var result = org.marj4n.smooth_classes.content.avenger.runtime.AvengerReworkRuntime.summonFromHands(player);
-                    if (!result.success()) player.sendMessage(Text.literal("[Smooth Classes] " + result.detail()), true);
-                    sendAbilityState(player);
-                }));
         ServerPlayNetworking.registerGlobalReceiver(CLASS_SPECIAL,
-                (server, player, handler, buf, responseSender) -> server.execute(() -> {
-                    var result = org.marj4n.smooth_classes.content.berserker.runtime.BerserkerSpecialRuntime.activate(player);
-                    if (!result.success()) player.sendMessage(Text.literal("[Smooth Classes] " + result.detail()), true);
-                    sendAbilityState(player);
-                }));
+                (server, player, handler, buf, responseSender) -> {
+                    boolean alternate = buf.isReadable() && buf.readBoolean();
+                    server.execute(() -> {
+                        var result = ClassSpecialDispatcher.activate(player, alternate);
+                        if (!result.success()) player.sendMessage(Text.literal("[Smooth Classes] " + result.detail()), true);
+                        sendAbilityState(player);
+                    });
+                });
+        ServerPlayNetworking.registerGlobalReceiver(CLASS_SPECIAL_SELECT,
+                (server, player, handler, buf, responseSender) -> {
+                    int selection = buf.readVarInt();
+                    server.execute(() -> {
+                        var result = ClassSpecialDispatcher.select(player, selection);
+                        if (!result.success()) player.sendMessage(Text.literal("[Smooth Classes] " + result.detail()), true);
+                        sendAbilityState(player);
+                    });
+                });
         ServerPlayNetworking.registerGlobalReceiver(CLASS_SPECIAL_HOLD,
                 (server, player, handler, buf, responseSender) -> {
                     boolean held = buf.readBoolean();
-                    server.execute(() -> org.marj4n.smooth_classes.content.berserker.runtime.BerserkerSpecialRuntime.hold(player, held));
+                    server.execute(() -> ClassSpecialDispatcher.hold(player, held));
                 });
         ServerPlayNetworking.registerGlobalReceiver(OPEN_DEATH_LIST,
                 (server, player, handler, buf, responseSender) -> server.execute(() -> {
@@ -110,14 +111,14 @@ public final class SmoothClassesNetworking {
                 });
         ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
             org.marj4n.smooth_classes.runtime.ArcaneSlashChargeRuntime.disconnect(handler.player);
-            org.marj4n.smooth_classes.content.berserker.runtime.BerserkerSpecialRuntime.disconnect(handler.player);
+            ClassSpecialDispatcher.cleanup(handler.player);
             LAST_SELECTION.remove(handler.player.getUuid());
             PuffishSkillsIntegration.invalidateRuntimeCache(handler.player);
             org.marj4n.smooth_classes.runtime.AbilityRuntime.invalidateRuntimeCache(handler.player);
         });
         net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents.SERVER_STOPPED.register(server -> {
             org.marj4n.smooth_classes.runtime.ArcaneSlashChargeRuntime.clear();
-            org.marj4n.smooth_classes.content.berserker.runtime.BerserkerSpecialRuntime.clear();
+            ClassSpecialDispatcher.clear();
             LAST_SELECTION.clear();
             PuffishSkillsIntegration.clearRuntimeCaches();
             org.marj4n.smooth_classes.runtime.AbilityRuntime.clearRuntimeCaches();
@@ -141,9 +142,6 @@ public final class SmoothClassesNetworking {
         ServerTickEvents.END_SERVER_TICK.register(server -> {
             if ((server.getTicks() % 20) != 0) return;
             for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
-                boolean rider = org.marj4n.smooth_classes.runtime.AbilityRuntime.isClass(
-                        player, org.marj4n.smooth_classes.content.rider.RiderClass.ID);
-                boolean riderMountActive = org.marj4n.smooth_classes.content.rider.runtime.RiderRuntime.hasActiveMount(player);
                 boolean avenger = org.marj4n.smooth_classes.runtime.AbilityRuntime.isClass(
                         player, org.marj4n.smooth_classes.content.avenger.AvengerClass.ID);
                 int avengerCharges = avenger
@@ -152,21 +150,15 @@ public final class SmoothClassesNetworking {
                         ? org.marj4n.smooth_classes.content.avenger.runtime.AvengerReworkRuntime.summonRechargeRemainingTicks(player) : 0L;
                 boolean shadowActive = org.marj4n.smooth_classes.content.assassin.runtime.ShadowTechniqueRuntime.active(player);
                 long shadowRemaining = org.marj4n.smooth_classes.content.assassin.runtime.ShadowTechniqueRuntime.remainingTicks(player);
-                boolean berserker = org.marj4n.smooth_classes.runtime.AbilityRuntime.isClass(
-                        player, org.marj4n.smooth_classes.content.berserker.BerserkerClass.ID);
-                boolean crimsonCharging = berserker
-                        && org.marj4n.smooth_classes.content.berserker.runtime.BerserkerSpecialRuntime.isCharging(player);
-                boolean crimsonActive = berserker
-                        && org.marj4n.smooth_classes.content.berserker.runtime.BerserkerSpecialRuntime.isActive(player);
-                long crimsonRemaining = berserker
-                        ? org.marj4n.smooth_classes.content.berserker.runtime.BerserkerSpecialRuntime.cooldownRemainingTicks(player) : 0L;
+                var classSpecial = ClassSpecialDispatcher.hudState(player);
                 String selection = SignatureAbilityDispatcher.selectedAbility(player) + "|"
-                        + AscendancyAbilityDispatcher.selectedAbility(player) + "|rider=" + rider
-                        + "|mount=" + riderMountActive + "|avenger=" + avenger
-                        + "|avc=" + avengerCharges + "|avr=" + (avengerRemaining / 20L)
-                        + "|berserker=" + berserker + "|crimsonCharge=" + crimsonCharging
-                        + "|crimsonActive=" + crimsonActive + "|crimsonCd=" + (crimsonRemaining / 20L)
-                        + "|shadow=" + shadowActive + "|shr=" + (shadowRemaining / 20L);
+                        + AscendancyAbilityDispatcher.selectedAbility(player)
+                        + "|avenger=" + avenger + "|avc=" + avengerCharges + "|avr=" + (avengerRemaining / 20L)
+                        + "|shadow=" + shadowActive + "|shr=" + (shadowRemaining / 20L)
+                        + "|h=" + classSpecial.id() + "|hcd=" + (classSpecial.remainingTicks() / 20L)
+                        + "|ha=" + classSpecial.blockedActive() + "|hv=" + classSpecial.variant()
+                        + "|hm=" + (classSpecial.modeRemainingTicks() / 20L)
+                        + "|hs=" + (classSpecial.secondaryRemainingTicks() / 20L);
                 if (!selection.equals(LAST_SELECTION.get(player.getUuid()))) sendAbilityState(player);
             }
         });
@@ -207,13 +199,6 @@ public final class SmoothClassesNetworking {
         out.writeBoolean(org.marj4n.smooth_classes.content.ruler.runtime.SacredBannerRuntime.isActive(player));
         out.writeBoolean(org.marj4n.smooth_classes.runtime.BloodRainRuntime.active(player));
         out.writeBoolean(org.marj4n.smooth_classes.runtime.WhenOnHighRuntime.active(player));
-        boolean riderMountVisible = org.marj4n.smooth_classes.runtime.AbilityRuntime.isClass(
-                player, org.marj4n.smooth_classes.content.rider.RiderClass.ID);
-        out.writeBoolean(riderMountVisible);
-        boolean riderMountActive = org.marj4n.smooth_classes.content.rider.runtime.RiderRuntime.hasActiveMount(player);
-        out.writeBoolean(riderMountActive);
-        out.writeInt(org.marj4n.smooth_classes.content.rider.runtime.RiderRuntime.summonCooldownTicks(player));
-        out.writeLong(org.marj4n.smooth_classes.content.rider.runtime.RiderRuntime.summonRemainingTicks(player));
         boolean avengerSummonVisible = org.marj4n.smooth_classes.runtime.AbilityRuntime.isClass(
                 player, org.marj4n.smooth_classes.content.avenger.AvengerClass.ID);
         int avengerCharges = avengerSummonVisible
@@ -225,32 +210,41 @@ public final class SmoothClassesNetworking {
         out.writeInt(org.marj4n.smooth_classes.content.avenger.runtime.AvengerReworkRuntime.maxSummonCharges());
         out.writeInt(org.marj4n.smooth_classes.content.avenger.runtime.AvengerReworkRuntime.summonRechargeTotalTicks());
         out.writeLong(avengerRemaining);
-        boolean berserkerSpecialVisible = org.marj4n.smooth_classes.runtime.AbilityRuntime.isClass(
-                player, org.marj4n.smooth_classes.content.berserker.BerserkerClass.ID);
-        boolean berserkerSpecialCharging = berserkerSpecialVisible
-                && org.marj4n.smooth_classes.content.berserker.runtime.BerserkerSpecialRuntime.isCharging(player);
-        boolean berserkerSpecialActive = berserkerSpecialVisible
-                && org.marj4n.smooth_classes.content.berserker.runtime.BerserkerSpecialRuntime.isActive(player);
-        int berserkerSpecialTotal = berserkerSpecialVisible
-                ? org.marj4n.smooth_classes.content.berserker.runtime.BerserkerSpecialRuntime.hudCooldownTotalTicks(player) : 1;
-        long berserkerSpecialRemaining = berserkerSpecialVisible
-                ? org.marj4n.smooth_classes.content.berserker.runtime.BerserkerSpecialRuntime.cooldownRemainingTicks(player) : 0L;
-        out.writeBoolean(berserkerSpecialVisible);
-        out.writeBoolean(berserkerSpecialCharging);
-        out.writeBoolean(berserkerSpecialActive);
-        out.writeInt(berserkerSpecialTotal);
-        out.writeLong(berserkerSpecialRemaining);
         boolean shadowActive = org.marj4n.smooth_classes.content.assassin.runtime.ShadowTechniqueRuntime.active(player);
         long shadowRemaining = org.marj4n.smooth_classes.content.assassin.runtime.ShadowTechniqueRuntime.remainingTicks(player);
         out.writeBoolean(shadowActive);
         out.writeLong(shadowRemaining);
         out.writeInt(org.marj4n.smooth_classes.content.assassin.runtime.ShadowTechniqueRuntime.range(player));
+        var classSpecial = ClassSpecialDispatcher.hudState(player);
+        out.writeString(classSpecial.id());
+        out.writeInt(classSpecial.totalTicks());
+        out.writeLong(classSpecial.remainingTicks());
+        out.writeBoolean(classSpecial.blockedActive());
+        out.writeInt(classSpecial.variant());
+        out.writeInt(classSpecial.modeTotalTicks());
+        out.writeLong(classSpecial.modeRemainingTicks());
+        out.writeInt(classSpecial.secondaryTotalTicks());
+        out.writeLong(classSpecial.secondaryRemainingTicks());
+        int treasuryCapacity = org.marj4n.smooth_classes.content.archer.runtime.ArcherSpecialRuntime.treasuryCapacity(player);
+        out.writeVarInt(treasuryCapacity);
+        var treasurySlots = org.marj4n.smooth_classes.content.archer.runtime.ArcherSpecialRuntime.treasurySlots(player);
+        for (int i = 0; i < org.marj4n.smooth_classes.content.archer.runtime.ArcherTreasuryState.MAX_SLOT_COUNT; i++) {
+            out.writeItemStack(treasurySlots[i]);
+        }
         ServerPlayNetworking.send(player, SYNC_ABILITY_STATE, out);
-        LAST_SELECTION.put(player.getUuid(), sig + "|" + asc + "|rider=" + riderMountVisible
-                + "|mount=" + riderMountActive + "|avenger=" + avengerSummonVisible
-                + "|avc=" + avengerCharges + "|avr=" + (avengerRemaining / 20L)
-                + "|berserker=" + berserkerSpecialVisible + "|crimsonCharge=" + berserkerSpecialCharging
-                + "|crimsonActive=" + berserkerSpecialActive + "|crimsonCd=" + (berserkerSpecialRemaining / 20L)
-                + "|shadow=" + shadowActive + "|shr=" + (shadowRemaining / 20L));
+        LAST_SELECTION.put(player.getUuid(), sig + "|" + asc
+                + "|avenger=" + avengerSummonVisible + "|avc=" + avengerCharges + "|avr=" + (avengerRemaining / 20L)
+                + "|shadow=" + shadowActive + "|shr=" + (shadowRemaining / 20L)
+                + "|h=" + classSpecial.id() + "|hcd=" + (classSpecial.remainingTicks() / 20L)
+                + "|ha=" + classSpecial.blockedActive() + "|hv=" + classSpecial.variant()
+                + "|hm=" + (classSpecial.modeRemainingTicks() / 20L)
+                + "|hs=" + (classSpecial.secondaryRemainingTicks() / 20L));
+    }
+
+    /** Server-authoritative short hotbar lock used by the Archer Treasury draw animation. */
+    public static void forceHotbarSlot(ServerPlayerEntity player, int slot) {
+        PacketByteBuf out = PacketByteBufs.create();
+        out.writeVarInt(Math.max(0, Math.min(8, slot)));
+        ServerPlayNetworking.send(player, FORCE_HOTBAR_SLOT, out);
     }
 }

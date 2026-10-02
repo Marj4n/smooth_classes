@@ -2,7 +2,6 @@ package org.marj4n.smooth_classes.runtime;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Box;
@@ -15,7 +14,6 @@ import org.marj4n.smooth_classes.effects.SmoothEffects;
 import org.marj4n.smooth_classes.effects.SourceStatusEffectInstance;
 import org.marj4n.smooth_classes.integration.PuffishSkillsIntegration;
 import org.marj4n.smooth_classes.integration.SkillNodeIds;
-import org.marj4n.smooth_classes.content.saber.runtime.SaberRuntime;
 
 
 /** Chapter 7: special projectile lifecycle layered on Spell Engine projectiles. */
@@ -107,7 +105,6 @@ public final class ProjectileEntityRuntime {
         String spell=id.getPath();
         boolean smooth="smooth_classes".equals(id.getNamespace());
 
-        if(smooth && spell.equals("physical_heavensmiths_call")) SaberRuntime.onHeavensmithImpact(owner,target);
         if(smooth && (spell.equals("lightning_ball") || spell.equals("lightning_lesser")))
             org.marj4n.smooth_classes.content.caster.runtime.CasterRuntime.onStaticChargeHit(owner,target);
 

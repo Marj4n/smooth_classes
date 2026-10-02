@@ -1,0 +1,57 @@
+{
+  "name": "treasury_store",
+  "author": "Smooth Classes",
+  "description": "Archer carries the held weapon back into the right-rear Treasury portal and releases it inside.",
+  "emote": {
+    "isLoop": "false",
+    "returnTick": 1,
+    "beginTick": 1,
+    "endTick": 18,
+    "stopTick": 20,
+    "degrees": false,
+    "moves": [
+      {
+        "tick": 1,
+        "easing": "EASEOUTQUAD",
+        "torso": { "yaw": -0.08, "roll": -0.02 },
+        "head": { "yaw": -0.04 },
+        "rightArm": { "x": -5.0, "y": 2.0, "z": -1.2, "pitch": -0.76, "yaw": -0.16, "roll": 0.08 }
+      },
+      {
+        "tick": 5,
+        "easing": "EASEINOUTQUAD",
+        "torso": { "yaw": -0.30, "roll": -0.06 },
+        "head": { "yaw": -0.12 },
+        "rightArm": { "x": -5.9, "y": 1.6, "z": 0.8, "pitch": -1.05, "yaw": -0.72, "roll": 0.42 }
+      },
+      {
+        "tick": 9,
+        "easing": "EASEINOUTQUAD",
+        "torso": { "yaw": -0.56, "roll": -0.10 },
+        "head": { "yaw": -0.20 },
+        "rightArm": { "x": -7.1, "y": 1.15, "z": 3.9, "pitch": -1.62, "yaw": -1.50, "roll": 0.94 }
+      },
+      {
+        "tick": 12,
+        "easing": "EASEOUTQUAD",
+        "torso": { "yaw": -0.58, "roll": -0.11 },
+        "head": { "yaw": -0.22 },
+        "rightArm": { "x": -7.3, "y": 1.1, "z": 4.2, "pitch": -1.72, "yaw": -1.58, "roll": 1.02 }
+      },
+      {
+        "tick": 15,
+        "easing": "EASEOUTQUAD",
+        "torso": { "yaw": -0.22, "roll": -0.04 },
+        "head": { "yaw": -0.06 },
+        "rightArm": { "x": -5.4, "y": 1.85, "z": 0.9, "pitch": -0.72, "yaw": -0.42, "roll": 0.24 }
+      },
+      {
+        "tick": 18,
+        "easing": "EASEOUTQUAD",
+        "torso": { "yaw": 0, "roll": 0 },
+        "head": { "yaw": 0 },
+        "rightArm": { "x": -5.0, "y": 2.0, "z": 0.0, "pitch": 0, "yaw": 0, "roll": 0 }
+      }
+    ]
+  }
+}

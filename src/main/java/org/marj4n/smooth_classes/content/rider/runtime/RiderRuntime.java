@@ -332,7 +332,7 @@ public final class RiderRuntime {
         }
         if (player.age % 4 != 0) return;
         double radius = s.fireRadius ? 1.85D : 1.25D;
-        float damage = SpellPowerRuntime.fire(player, s.fireDamage ? 1.25D : .75D);
+        float damage = SpellPowerRuntime.strongest(player, s.fireDamage ? 0.95D : 0.70D);
         for (LivingEntity target : world.getEntitiesByClass(LivingEntity.class, mount.getBoundingBox().expand(radius),
                 e -> e.isAlive() && e != player && e != mount && !ally(player, e))) {
             target.damage(player.getDamageSources().playerAttack(player), Math.max(1F, damage));

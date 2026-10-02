@@ -597,12 +597,12 @@
       }
     ]
   },
-  "crusaderSignatureHeavensmithsCall": {
+  "crusaderSignatureDivineAdjudication": {
     "title": {
-      "translate": "text.skills.crusaderSignatureHeavensmithsCall.title"
+      "translate": "text.skills.crusaderSignatureDivineAdjudication.title"
     },
     "description": {
-      "translate": "text.skills.crusaderSignatureHeavensmithsCall.description"
+      "translate": "text.skills.crusaderSignatureDivineAdjudication.description"
     },
     "size": 1.1,
     "frame": {
@@ -617,24 +617,24 @@
     "icon": {
       "type": "texture",
       "data": {
-        "texture": "smooth_classes:textures/icons/alternate_reduced/crusader_signature_heavensmiths_call.png"
+        "texture": "smooth_classes:textures/icons/alternate_reduced/crusader_signature_divine_adjudication.png"
       }
     },
     "rewards": [
       {
         "type": "puffish_skills:passive_skill",
         "data": {
-          "passive_skill": "crusaderSignatureHeavensmithsCall"
+          "passive_skill": "crusaderSignatureDivineAdjudication"
         }
       }
     ]
   },
-  "crusaderSignatureHeavensmithsCallTaunt": {
+  "crusaderSignatureDivineAdjudicationTaunt": {
     "title": {
-      "translate": "text.skills.crusaderSignatureHeavensmithsCallTaunt.title"
+      "translate": "text.skills.crusaderSignatureDivineAdjudicationTaunt.title"
     },
     "description": {
-      "translate": "text.skills.crusaderSignatureHeavensmithsCallTaunt.description"
+      "translate": "text.skills.crusaderSignatureDivineAdjudicationTaunt.description"
     },
     "size": 1.1,
     "frame": {
@@ -649,24 +649,24 @@
     "icon": {
       "type": "texture",
       "data": {
-        "texture": "smooth_classes:textures/icons/alternate_reduced/crusader_signature_heavensmiths_call.png"
+        "texture": "smooth_classes:textures/icons/alternate_reduced/crusader_signature_divine_adjudication.png"
       }
     },
     "rewards": [
       {
         "type": "puffish_skills:passive_skill",
         "data": {
-          "passive_skill": "crusaderSignatureHeavensmithsCallTaunt"
+          "passive_skill": "crusaderSignatureDivineAdjudicationTaunt"
         }
       }
     ]
   },
-  "crusaderSignatureHeavensmithsCallMark": {
+  "crusaderSignatureDivineAdjudicationMark": {
     "title": {
-      "translate": "text.skills.crusaderSignatureHeavensmithsCallMark.title"
+      "translate": "text.skills.crusaderSignatureDivineAdjudicationMark.title"
     },
     "description": {
-      "translate": "text.skills.crusaderSignatureHeavensmithsCallMark.description"
+      "translate": "text.skills.crusaderSignatureDivineAdjudicationMark.description"
     },
     "size": 1.1,
     "frame": {
@@ -681,24 +681,24 @@
     "icon": {
       "type": "texture",
       "data": {
-        "texture": "smooth_classes:textures/icons/alternate_reduced/crusader_signature_heavensmiths_call.png"
+        "texture": "smooth_classes:textures/icons/alternate_reduced/crusader_signature_divine_adjudication.png"
       }
     },
     "rewards": [
       {
         "type": "puffish_skills:passive_skill",
         "data": {
-          "passive_skill": "crusaderSignatureHeavensmithsCallMark"
+          "passive_skill": "crusaderSignatureDivineAdjudicationMark"
         }
       }
     ]
   },
-  "crusaderSignatureHeavensmithsCallEffect": {
+  "crusaderSignatureDivineAdjudicationChain": {
     "title": {
-      "translate": "text.skills.crusaderSignatureHeavensmithsCallEffect.title"
+      "translate": "text.skills.crusaderSignatureDivineAdjudicationChain.title"
     },
     "description": {
-      "translate": "text.skills.crusaderSignatureHeavensmithsCallEffect.description"
+      "translate": "text.skills.crusaderSignatureDivineAdjudicationChain.description"
     },
     "size": 1.1,
     "frame": {
@@ -713,24 +713,24 @@
     "icon": {
       "type": "texture",
       "data": {
-        "texture": "smooth_classes:textures/icons/alternate_reduced/crusader_signature_heavensmiths_call.png"
+        "texture": "smooth_classes:textures/icons/alternate_reduced/crusader_signature_divine_adjudication.png"
       }
     },
     "rewards": [
       {
         "type": "puffish_skills:passive_skill",
         "data": {
-          "passive_skill": "crusaderSignatureHeavensmithsCallEffect"
+          "passive_skill": "crusaderSignatureDivineAdjudicationChain"
         }
       }
     ]
   },
-  "crusaderSignatureHeavensmithsCallEffectExhaust": {
+  "crusaderSignatureDivineAdjudicationRecuperate": {
     "title": {
-      "translate": "text.skills.crusaderSignatureHeavensmithsCallEffectExhaust.title"
+      "translate": "text.skills.crusaderSignatureDivineAdjudicationRecuperate.title"
     },
     "description": {
-      "translate": "text.skills.crusaderSignatureHeavensmithsCallEffectExhaust.description"
+      "translate": "text.skills.crusaderSignatureDivineAdjudicationRecuperate.description"
     },
     "size": 1.1,
     "frame": {
@@ -745,24 +745,24 @@
     "icon": {
       "type": "texture",
       "data": {
-        "texture": "smooth_classes:textures/icons/alternate_reduced/crusader_signature_heavensmiths_call.png"
+        "texture": "smooth_classes:textures/icons/alternate_reduced/crusader_signature_divine_adjudication.png"
       }
     },
     "rewards": [
       {
         "type": "puffish_skills:passive_skill",
         "data": {
-          "passive_skill": "crusaderSignatureHeavensmithsCallEffectExhaust"
+          "passive_skill": "crusaderSignatureDivineAdjudicationRecuperate"
         }
       }
     ]
   },
-  "crusaderSignatureHeavensmithsCallEffectMighty": {
+  "crusaderSignatureDivineAdjudicationMighty": {
     "title": {
-      "translate": "text.skills.crusaderSignatureHeavensmithsCallEffectMighty.title"
+      "translate": "text.skills.crusaderSignatureDivineAdjudicationMighty.title"
     },
     "description": {
-      "translate": "text.skills.crusaderSignatureHeavensmithsCallEffectMighty.description"
+      "translate": "text.skills.crusaderSignatureDivineAdjudicationMighty.description"
     },
     "size": 1.1,
     "frame": {
@@ -777,14 +777,14 @@
     "icon": {
       "type": "texture",
       "data": {
-        "texture": "smooth_classes:textures/icons/alternate_reduced/crusader_signature_heavensmiths_call.png"
+        "texture": "smooth_classes:textures/icons/alternate_reduced/crusader_signature_divine_adjudication.png"
       }
     },
     "rewards": [
       {
         "type": "puffish_skills:passive_skill",
         "data": {
-          "passive_skill": "crusaderSignatureHeavensmithsCallEffectMighty"
+          "passive_skill": "crusaderSignatureDivineAdjudicationMighty"
         }
       }
     ]

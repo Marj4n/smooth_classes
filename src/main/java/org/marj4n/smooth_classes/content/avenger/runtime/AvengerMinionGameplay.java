@@ -20,7 +20,6 @@ import org.marj4n.smooth_classes.content.avenger.AvengerContent;
 import org.marj4n.smooth_classes.effects.SmoothEffects;
 import org.marj4n.smooth_classes.effects.SourceStatusEffectInstance;
 import org.marj4n.smooth_classes.entity.AvengerMinionEntity;
-import org.marj4n.smooth_classes.entity.DreadglareEntity;
 import org.marj4n.smooth_classes.entity.GreaterDreadglareEntity;
 import org.marj4n.smooth_classes.entity.WraithEntity;
 import org.marj4n.smooth_classes.registry.SmoothEntities;
@@ -30,7 +29,6 @@ import org.marj4n.smooth_classes.runtime.SkillFx;
 import net.spell_power.api.SpellPower;
 import net.spell_power.api.SpellSchools;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

@@ -8,8 +8,6 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.item.BowItem;
-import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Identifier;
 import org.marj4n.smooth_classes.content.archer.ArcherClass;
@@ -32,19 +30,17 @@ public final class ArcherRuntime {
     }
     private static boolean has(ServerPlayerEntity player, Identifier talent) { return AbilityRuntime.hasTalent(player, talent); }
 
-    /** Bow release consumes one Elemental Arrows stack and fires the selected element. */
+    /** Bow release consumes one Elemental Arrows stack. The school always rotates freely; upgrades improve the shot instead of locking an element. */
     public static boolean fireElementalArrows(ServerPlayerEntity player) {
         if (!player.hasStatusEffect(SmoothEffects.ELEMENTAL_ARROWS)) return false;
-        String spell = "frost_arrow_rain";
-        if (has(player, ArcherContent.ELEMENTAL_ARROWS_FIRE_ATTUNED.id())) spell = "fire_arrow_rain";
-        else if (has(player, ArcherContent.ELEMENTAL_ARROWS_LIGHTNING_ATTUNED.id())) spell = "lightning_arrow_rain";
-        else if (!has(player, ArcherContent.ELEMENTAL_ARROWS_FROST_ATTUNED.id())) {
-            spell = switch (player.getRandom().nextInt(3)) {
-                case 0 -> "fire_arrow_rain";
-                case 1 -> "lightning_arrow_rain";
-                default -> "frost_arrow_rain";
-            };
-        }
+        String spell = switch (player.getRandom().nextInt(3)) {
+            case 0 -> "fire_arrow_rain";
+            case 1 -> "lightning_arrow_rain";
+            default -> "frost_arrow_rain";
+        };
+        float power = has(player, ArcherContent.ELEMENTAL_ARROWS_OVERCHARGE.id()) ? 1.10F : 1.0F;
+        boolean convergence = has(player, ArcherContent.ELEMENTAL_ARROWS_CONVERGENCE.id());
+        boolean split = has(player, ArcherContent.ELEMENTAL_ARROWS_SPLIT_VOLLEY.id());
         int radius = 4;
         if (PuffishSkillsIntegration.isSkillUnlocked(PuffishSkillsIntegration.ARCHER,
                 SkillNodeIds.rangerSpecialisationElementalArrowsRadiusThree, player)) radius += 6;
@@ -56,10 +52,14 @@ public final class ArcherRuntime {
         var box = new net.minecraft.util.math.Box(center, center).expand(radius);
         var targets = player.getWorld().getEntitiesByClass(LivingEntity.class, box,
                 e -> e.isAlive() && e != player && OptionalCompatRuntime.canHarm(player, e));
-        int count = targets.size() == 1 ? 6 : 1;
-        for (LivingEntity target : targets) for (int i = 0; i < count; i++)
-            InternalSpellRuntime.target(player, "smooth_classes:" + spell, target, 1F);
-        if (targets.isEmpty()) InternalSpellRuntime.dumbFire(player, "smooth_classes:" + spell, 1F);
+        int count = targets.size() == 1 ? (convergence ? 7 : 6) : 1;
+        for (LivingEntity target : targets) {
+            for (int i = 0; i < count; i++)
+                InternalSpellRuntime.target(player, "smooth_classes:" + spell, target, power);
+            if (targets.size() > 1 && split)
+                InternalSpellRuntime.target(player, "smooth_classes:" + spell, target, power * 0.55F);
+        }
+        if (targets.isEmpty()) InternalSpellRuntime.dumbFire(player, "smooth_classes:" + spell, power);
         consume(player, SmoothEffects.ELEMENTAL_ARROWS);
         return true;
     }

@@ -25,7 +25,6 @@ public final class BerserkerContent {
     public static final Talent IGNORE_PAIN = talent("ignore_pain", "Ignore Pain");
     public static final Talent IGNORE_PAIN_PROFICIENT = talent("ignore_pain_proficient", "Ignore Pain Proficient");
     public static final Talent IGNORE_PAIN_SKILLED = talent("ignore_pain_skilled", "Ignore Pain Skilled");
-    public static final Talent RECKLESSNESS = talent("recklessness", "Recklessness");
     public static final Talent CHALLENGE = talent("challenge", "Challenge");
     public static final Talent EXPLOIT = talent("exploit", "Exploit");
     public static final Talent RAMPAGE_CHARGE = talent("rampage_charge", "Rampage Charge");
@@ -46,7 +45,7 @@ public final class BerserkerContent {
             SWORD_MASTERY, SWORD_MASTERY_PROFICIENT, SWORD_MASTERY_SKILLED,
             AXE_MASTERY, AXE_MASTERY_PROFICIENT, AXE_MASTERY_SKILLED,
             IGNORE_PAIN, IGNORE_PAIN_PROFICIENT, IGNORE_PAIN_SKILLED,
-            RECKLESSNESS, CHALLENGE, EXPLOIT,
+            CHALLENGE, EXPLOIT,
             RAMPAGE_CHARGE, RAMPAGE_CHARGE_RELENTLESS, RAMPAGE_CHARGE_IMMOBILIZE,
             BLOODTHIRSTY_MIGHTY, BLOODTHIRSTY_TIRELESS, BLOODTHIRSTY_TREMOR,
             BERSERKING_LEAP, BERSERKING_LEAP_IMMOBILIZE, BERSERKING_LEAP_PULL,
