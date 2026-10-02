@@ -14,7 +14,7 @@ public final class SaberContent {
 
     public static final Ability CONSECRATION = ability("consecration", "Consecration", 30 * 20);
     public static final Ability SACRED_ONSLAUGHT = ability("sacred_onslaught", "Sacred Onslaught", 15 * 20);
-    public static final Ability HEAVENSMITHS_CALL = ability("heavensmiths_call", "Heavensmiths Call", 55 * 20);
+    public static final Ability DIVINE_ADJUDICATION = ability("heavensmiths_call", "Divine Adjudication", 40 * 20);
 
     public static final Talent AEGIS = talent("aegis", "Aegis");
     public static final Talent RETRIBUTION = talent("retribution", "Retribution");
@@ -28,14 +28,14 @@ public final class SaberContent {
     public static final Talent SACRED_ONSLAUGHT_DEFEND = talent("sacred_onslaught_defend", "Sacred Onslaught Defend");
     public static final Talent SACRED_ONSLAUGHT_MIGHTY = talent("sacred_onslaught_mighty", "Sacred Onslaught Mighty");
     public static final Talent SACRED_ONSLAUGHT_STUN = talent("sacred_onslaught_stun", "Sacred Onslaught Stun");
-    public static final Talent HEAVENSMITHS_CALL_TAUNT = talent("heavensmiths_call_taunt", "Heavensmiths Call Taunt");
-    public static final Talent HEAVENSMITHS_CALL_MARK = talent("heavensmiths_call_mark", "Heavensmiths Call Mark");
-    public static final Talent HEAVENSMITHS_CALL_EFFECT = talent("heavensmiths_call_effect", "Heavensmiths Call Effect");
-    public static final Talent HEAVENSMITHS_CALL_EXHAUST = talent("heavensmiths_call_exhaust", "Heavensmiths Call Exhaust");
-    public static final Talent HEAVENSMITHS_CALL_MIGHTY = talent("heavensmiths_call_mighty", "Heavensmiths Call Mighty");
+    public static final Talent DIVINE_ADJUDICATION_TAUNT = talent("heavensmiths_call_taunt", "Divine Adjudication Taunt");
+    public static final Talent DIVINE_ADJUDICATION_MARK = talent("heavensmiths_call_mark", "Divine Adjudication Mark");
+    public static final Talent DIVINE_ADJUDICATION_CHAIN = talent("heavensmiths_call_effect", "Divine Adjudication Chain");
+    public static final Talent DIVINE_ADJUDICATION_RECUPERATE = talent("heavensmiths_call_exhaust", "Divine Adjudication Recuperate");
+    public static final Talent DIVINE_ADJUDICATION_MIGHTY = talent("heavensmiths_call_mighty", "Divine Adjudication Mighty");
 
-    private static final List<Ability> ABILITIES = List.of(CONSECRATION, SACRED_ONSLAUGHT, HEAVENSMITHS_CALL);
-    private static final List<Talent> TALENTS = List.of(AEGIS, RETRIBUTION, EXHAUSTIVE_RECOVERY, CONSECRATION_DURATION, CONSECRATION_WARD, CONSECRATION_TAUNT, CONSECRATION_MIGHTY, CONSECRATION_SPELLFORGED, SACRED_ONSLAUGHT_HEAL, SACRED_ONSLAUGHT_DEFEND, SACRED_ONSLAUGHT_MIGHTY, SACRED_ONSLAUGHT_STUN, HEAVENSMITHS_CALL_TAUNT, HEAVENSMITHS_CALL_MARK, HEAVENSMITHS_CALL_EFFECT, HEAVENSMITHS_CALL_EXHAUST, HEAVENSMITHS_CALL_MIGHTY);
+    private static final List<Ability> ABILITIES = List.of(CONSECRATION, SACRED_ONSLAUGHT, DIVINE_ADJUDICATION);
+    private static final List<Talent> TALENTS = List.of(AEGIS, RETRIBUTION, EXHAUSTIVE_RECOVERY, CONSECRATION_DURATION, CONSECRATION_WARD, CONSECRATION_TAUNT, CONSECRATION_MIGHTY, CONSECRATION_SPELLFORGED, SACRED_ONSLAUGHT_HEAL, SACRED_ONSLAUGHT_DEFEND, SACRED_ONSLAUGHT_MIGHTY, SACRED_ONSLAUGHT_STUN, DIVINE_ADJUDICATION_TAUNT, DIVINE_ADJUDICATION_MARK, DIVINE_ADJUDICATION_CHAIN, DIVINE_ADJUDICATION_RECUPERATE, DIVINE_ADJUDICATION_MIGHTY);
 
     public static void register() {
         ABILITIES.forEach(AbilityRegistry::register);

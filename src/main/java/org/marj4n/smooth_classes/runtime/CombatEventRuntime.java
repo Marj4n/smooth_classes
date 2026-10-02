@@ -47,8 +47,10 @@ public final class CombatEventRuntime {
     public static void onMeleeAttack(ServerPlayerEntity player, Entity target) {
         if (!player.isAlive() || !target.isAttackable() || !(target instanceof LivingEntity living)) return;
         RighteousHammerChargeRuntime.onTriggeredHit(player,living);
-        BasePathRuntime.onMeleeHit(player, living);
+        // Class passives inspect the pre-hit state (notably Assassin Stealth)
+        // before the base path consumes Stealth on attack.
         ClassPassiveRuntime.onMeleeHit(player, living);
+        BasePathRuntime.onMeleeHit(player, living);
         RulerRuntime.onAnointedMeleeHit(player);
 
         // Renewal is intentionally proc-based: 15% per melee hit for +3 seconds.
@@ -69,6 +71,11 @@ public final class CombatEventRuntime {
                     && player.getRandom().nextInt(100) < SmoothBalance.Berserker.bloodthirstyTirelessChance)
                 decrement(player, SmoothEffects.EXHAUSTION, 1);
         }
+    }
+
+    /** Called after vanilla melee damage is confirmed to have landed. */
+    public static void afterMeleeAttack(ServerPlayerEntity player, LivingEntity target) {
+        org.marj4n.smooth_classes.gameplay.ClassSpecialDispatcher.afterMeleeHit(player, target);
     }
 
     /** @return false when the incoming hit is consumed/cancelled. */
@@ -129,6 +136,7 @@ public final class CombatEventRuntime {
 
     public static void onDeath(ServerPlayerEntity player, DamageSource source) {
         org.marj4n.smooth_classes.content.lancer.runtime.LancerRuntime.onDeath(player);
+        org.marj4n.smooth_classes.gameplay.ClassSpecialDispatcher.cleanup(player);
         player.setInvisible(false);
     }
 

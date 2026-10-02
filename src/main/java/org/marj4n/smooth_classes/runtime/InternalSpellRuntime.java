@@ -30,20 +30,28 @@ public final class InternalSpellRuntime {
     }
 
     public static boolean cast(PlayerEntity p, String id, List<Entity> targets, float multiplier) {
-        return cast(p, id, targets, multiplier, false);
+        return cast(p, id, targets, multiplier, false, null);
     }
 
     public static boolean castUniversal(PlayerEntity p, String id, List<Entity> targets, float multiplier) {
-        return cast(p, id, targets, multiplier, true);
+        return cast(p, id, targets, multiplier, true, null);
     }
 
-    private static boolean cast(PlayerEntity p, String id, List<Entity> targets, float multiplier, boolean universalPower) {
+    public static boolean castUsingPowerSchool(PlayerEntity p, String id, List<Entity> targets,
+                                               float multiplier, net.spell_power.api.SpellSchool powerSchool) {
+        return cast(p, id, targets, multiplier, false, powerSchool);
+    }
+
+    private static boolean cast(PlayerEntity p, String id, List<Entity> targets, float multiplier, boolean universalPower, net.spell_power.api.SpellSchool powerSchool) {
         if (p.getWorld().isClient) return false;
         RegistryEntry<Spell> e=entry(p,new Identifier(id));
         if(e==null)return false;
         Spell spell=e.value();
         var power=SpellPower.getSpellPower(spell.school,p);
-        if (universalPower) {
+        if (powerSchool != null) {
+            var selected = SpellPower.getSpellPower(powerSchool, p);
+            power = new SpellPower.Result(spell.school, selected.baseValue(), selected.criticalChance(), selected.criticalDamage());
+        } else if (universalPower) {
             double best=Math.max(0.0D,p.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE));
             double critChance=power.criticalChance();
             double critDamage=power.criticalDamage();
@@ -80,6 +88,12 @@ public final class InternalSpellRuntime {
     }
     public static boolean aoe(PlayerEntity p,String id,double radius,int chance,
                               boolean hostile,boolean friendly,float multiplier){
+        return aoeUsingPowerSchool(p,id,radius,chance,hostile,friendly,multiplier,null);
+    }
+
+    public static boolean aoeUsingPowerSchool(PlayerEntity p,String id,double radius,int chance,
+                                               boolean hostile,boolean friendly,float multiplier,
+                                               net.spell_power.api.SpellSchool powerSchool){
         java.util.ArrayList<Entity> targets=new java.util.ArrayList<>();
         var box=p.getBoundingBox().expand(radius);
         for(var entity:p.getWorld().getEntitiesByClass(net.minecraft.entity.LivingEntity.class,box,
@@ -90,13 +104,19 @@ public final class InternalSpellRuntime {
             }
         }
         if(targets.isEmpty())return false;
-        return cast(p,id,targets,multiplier);
+        return powerSchool==null?cast(p,id,targets,multiplier):castUsingPowerSchool(p,id,targets,multiplier,powerSchool);
     }
 
     public static boolean dumbFire(PlayerEntity p,String id,float multiplier){return cast(p,id,List.of(),multiplier);}
     public static boolean target(PlayerEntity p,String id,Entity target,float multiplier){return cast(p,id,List.of(target),multiplier);}
     public static boolean dumbFireUniversal(PlayerEntity p,String id,float multiplier){return castUniversal(p,id,List.of(),multiplier);}
     public static boolean targetUniversal(PlayerEntity p,String id,Entity target,float multiplier){return castUniversal(p,id,List.of(target),multiplier);}
+    public static boolean dumbFireUsingPowerSchool(PlayerEntity p,String id,float multiplier,net.spell_power.api.SpellSchool school){
+        return castUsingPowerSchool(p,id,List.of(),multiplier,school);
+    }
+    public static boolean targetUsingPowerSchool(PlayerEntity p,String id,Entity target,float multiplier,net.spell_power.api.SpellSchool school){
+        return castUsingPowerSchool(p,id,List.of(target),multiplier,school);
+    }
     public static boolean atPosition(PlayerEntity p,String id,net.minecraft.util.math.Vec3d position,float multiplier){
         return atPosition(p,id,position,multiplier,false);
     }

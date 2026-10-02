@@ -9,7 +9,7 @@ public final class RiderClass implements PlayerClass {
     public static final Identifier ID = SmoothClasses.id("rider");
     @Override public Identifier id() { return ID; }
     @Override public String name() { return "Rider"; }
-    @Override public String description() { return "Mounted combat, conjured steeds, charges, auras, and blazing hoofprints."; }
+    @Override public String description() { return "Mounted combat, conjured steeds, charges, auras, and Hippogryph flight."; }
     @Override public List<Identifier> abilityIds() { return RiderContent.abilities().stream().map(a -> a.id()).toList(); }
     @Override public List<Identifier> talentIds() { return RiderContent.talents().stream().map(t -> t.id()).toList(); }
 }

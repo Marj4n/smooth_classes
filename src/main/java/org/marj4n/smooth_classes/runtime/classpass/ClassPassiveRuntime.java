@@ -8,7 +8,6 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.entity.passive.TameableEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.AxeItem;
 import net.minecraft.item.SwordItem;
@@ -28,7 +27,6 @@ import org.marj4n.smooth_classes.runtime.InternalSpellRuntime;
 import org.marj4n.smooth_classes.runtime.AbilityRuntime;
 import org.marj4n.smooth_classes.content.berserker.BerserkerClass;
 import org.marj4n.smooth_classes.content.assassin.AssassinClass;
-import org.marj4n.smooth_classes.content.archer.ArcherClass;
 import org.marj4n.smooth_classes.content.saber.SaberClass;
 import org.marj4n.smooth_classes.content.ruler.RulerClass;
 import org.marj4n.smooth_classes.content.caster.CasterClass;
@@ -76,7 +74,6 @@ public final class ClassPassiveRuntime {
         // all class categories even though Puffish only selects one class path.
         if (AbilityRuntime.isClass(p, BerserkerClass.ID)) berserkerTick(p);
         else if (AbilityRuntime.isClass(p, AssassinClass.ID)) assassinTick(p);
-        else if (AbilityRuntime.isClass(p, ArcherClass.ID)) archerTick(p);
         else if (AbilityRuntime.isClass(p, SaberClass.ID)) {
             saberTick(p);
             SaberRuntime.tick(p);
@@ -92,12 +89,18 @@ public final class ClassPassiveRuntime {
     // ------------------------------------------------------------
     private static void casterTick(ServerPlayerEntity p) {
         if(p.age%40!=0)return;
-        if(!has(p,PuffishSkillsIntegration.CASTER,SkillNodeIds.wizardSpecialisationStaticDischargeLightningOrb))return;
+        if(!has(p,PuffishSkillsIntegration.CASTER,SkillNodeIds.wizardSpecialisationStaticDischargeLightningOrb)) {
+            org.marj4n.smooth_classes.content.caster.runtime.CasterSpecialRuntime.applyOrbResonance(p,0);
+            return;
+        }
         int count=0;
         net.minecraft.util.math.Box box=new net.minecraft.util.math.Box(p.getX()+15,p.getY()+45,p.getZ()+15,p.getX()-15,p.getY()-45,p.getZ()-15);
-        for(net.spell_engine.entity.SpellProjectile projectile:p.getWorld().getEntitiesByClass(net.spell_engine.entity.SpellProjectile.class,box,q->q.getOwner()==p))
-            if(p.getRandom().nextInt(100)<35)count++;
-        if(count>0)inc(p,SmoothEffects.SOULSHOCK,45,count,count);
+        for(net.spell_engine.entity.SpellProjectile projectile:p.getWorld().getEntitiesByClass(
+                net.spell_engine.entity.SpellProjectile.class,box,q->q.getOwner()==p)) {
+            if (projectile.getSpellEntry()!=null && projectile.getSpellEntry().getKey()
+                    .map(k -> k.getValue().getPath().contains("lightning_ball_homing")).orElse(false)) count++;
+        }
+        org.marj4n.smooth_classes.content.caster.runtime.CasterSpecialRuntime.applyOrbResonance(p,count);
     }
 
     // ------------------------------------------------------------
@@ -130,12 +133,6 @@ public final class ClassPassiveRuntime {
             p.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE,25,mastery,false,false,true));
         }
 
-        // contains the Recklessness method even though its current call site is absent.
-        // Smooth Classes wires the intended passive so the unlocked node is not dead.
-        if (has(p,PuffishSkillsIntegration.BERSERKER,SkillNodeIds.berserkerRecklessness)
-                && p.getHealth() >= p.getMaxHealth()*0.70F)
-            p.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS,25,0,false,false,true));
-
         if (has(p,PuffishSkillsIntegration.BERSERKER,SkillNodeIds.berserkerChallenge)) {
             int count=Math.min(5,enemies(p,2).size());
             if(count>1)p.addStatusEffect(new StatusEffectInstance(StatusEffects.HASTE,25,count-1,false,false,true));
@@ -158,55 +155,6 @@ public final class ClassPassiveRuntime {
         }
 
         // Stealth upkeep and Bladestorm hits run once in EffectBehaviorRuntime.
-    }
-
-    // ------------------------------------------------------------
-    // ARCHER / RANGER
-    // ------------------------------------------------------------
-    private static void archerTick(ServerPlayerEntity p) {
-        int age = p.age;
-        if (age % 10 != 0) return;
-
-        boolean every80 = age % 80 == 0;
-        boolean every20 = age % 20 == 0;
-
-        if (every80 && has(p,PuffishSkillsIntegration.ARCHER,SkillNodeIds.rangerReveal)) {
-            for(LivingEntity e:enemies(p,12)) if(e.hasStatusEffect(SmoothEffects.STEALTH)) {
-                e.removeStatusEffect(SmoothEffects.STEALTH);
-                e.addStatusEffect(new StatusEffectInstance(SmoothEffects.REVEALED,180,1,false,false,true));
-            }
-        }
-
-        boolean tamer = every80 && has(p,PuffishSkillsIntegration.ARCHER,SkillNodeIds.rangerTamer);
-        boolean bonded = has(p,PuffishSkillsIntegration.ARCHER,SkillNodeIds.rangerBonded);
-        boolean trained = every80 && has(p,PuffishSkillsIntegration.ARCHER,SkillNodeIds.rangerTrained);
-        boolean incognito = every20 && p.hasStatusEffect(SmoothEffects.STEALTH)
-                && has(p,PuffishSkillsIntegration.ARCHER,SkillNodeIds.rangerIncognito);
-        if (!tamer && !bonded && !trained && !incognito) return;
-
-        // One nearby-pet query serves every Archer passive due on this tick.
-        List<LivingEntity> pets = pets(p,12);
-        if (tamer) pets.forEach(e -> {
-            e.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION,85,1,false,false,true));
-            e.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE,85,2,false,false,true));
-        });
-
-        if (bonded) {
-            for(LivingEntity e:pets) {
-                float petPct=e.getHealth()/e.getMaxHealth()*100F, playerPct=p.getHealth()/p.getMaxHealth()*100F;
-                if(petPct>playerPct && petPct>30F) { e.setHealth(Math.max(1F,e.getHealth()-1F)); p.heal(1F); }
-            }
-        }
-
-        if (trained) pets.forEach(e -> {
-            if(e.getHealth()/e.getMaxHealth()*100F>70F) {
-                e.addStatusEffect(new StatusEffectInstance(StatusEffects.STRENGTH,85,1,false,false,true));
-                e.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED,85,1,false,false,true));
-            }
-        });
-
-        if (incognito)
-            pets.forEach(e -> e.addStatusEffect(new StatusEffectInstance(StatusEffects.INVISIBILITY,25,0,false,false,true)));
     }
 
     // ------------------------------------------------------------
@@ -252,7 +200,8 @@ public final class ClassPassiveRuntime {
         if(has(p,PuffishSkillsIntegration.ASSASSIN,SkillNodeIds.rogueBackstab) && behind(p,target))
             target.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS,60,0,false,false,true));
 
-        if(has(p,PuffishSkillsIntegration.ASSASSIN,SkillNodeIds.rogueOpportunisticMastery)) {
+        if(p.hasStatusEffect(SmoothEffects.STEALTH)
+                && has(p,PuffishSkillsIntegration.ASSASSIN,SkillNodeIds.rogueOpportunisticMastery)) {
             int duration=80;
             if(has(p,PuffishSkillsIntegration.ASSASSIN,SkillNodeIds.rogueOpportunisticMasterySkilled))duration+=160;
             else if(has(p,PuffishSkillsIntegration.ASSASSIN,SkillNodeIds.rogueOpportunisticMasteryProficient))duration+=80;
@@ -294,10 +243,17 @@ public final class ClassPassiveRuntime {
 
     /** Spell Engine cast hook. */
     public static void onSpellCast(ServerPlayerEntity p, List<Entity> targets, SpellSchool school) {
-        // Wizard Spell Echo: uses a 15% random echo when a cast has targets.
+        // Spell Echo repeats a compact bolt using the Caster's current Attunement power,
+        // so the passive remains useful for Arcane, Fire, Frost, Wind, Water and Earth builds.
         if(has(p,PuffishSkillsIntegration.CASTER,SkillNodeIds.wizardSpellEcho)
-                && targets!=null && !targets.isEmpty() && p.getRandom().nextInt(100)<15)
-            inc(p,SmoothEffects.ARCANE_VOLLEY,80,1,3);
+                && targets!=null && !targets.isEmpty()
+                && p.getRandom().nextInt(100)<SmoothBalance.Caster.spellEchoChance) {
+            Entity first = targets.get(0);
+            var attuned = org.marj4n.smooth_classes.content.caster.runtime.CasterSpecialRuntime.selectedSchool(p);
+            if (first instanceof LivingEntity target)
+                InternalSpellRuntime.targetUsingPowerSchool(p,"smooth_classes:arcane_bolt_lesser",target,0.55F,
+                        attuned != null ? attuned : school);
+        }
 
         // Weapon Expert is actually a spell-cast passive in this runtime.
         if(has(p,PuffishSkillsIntegration.FOREIGNER,SkillNodeIds.spellbladeWeaponExpert)) {
@@ -393,10 +349,6 @@ public final class ClassPassiveRuntime {
                         && (!(e instanceof PlayerEntity other)||p.shouldDamagePlayer(other)));
     }
 
-    private static List<LivingEntity> pets(ServerPlayerEntity p,double radius) {
-        return p.getWorld().getEntitiesByClass(LivingEntity.class,p.getBoundingBox().expand(radius),
-                e->e instanceof TameableEntity tame && tame.isOwner(p));
-    }
 
     private static boolean behind(ServerPlayerEntity p,LivingEntity target) {
         Vec3d toPlayer=p.getPos().subtract(target.getPos()).normalize();

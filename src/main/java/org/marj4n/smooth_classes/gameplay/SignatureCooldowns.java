@@ -25,7 +25,7 @@ public final class SignatureCooldowns {
             case "spellweaver" -> SmoothBalance.Foreigner.spellweaverCooldown;
             case "consecration" -> SmoothBalance.Saber.consecrationCooldown;
             case "sacred_onslaught" -> SmoothBalance.Saber.sacredOnslaughtCooldown;
-            case "heavensmiths_call" -> SmoothBalance.Saber.heavensmithCooldown;
+            case "heavensmiths_call" -> SmoothBalance.Saber.divineAdjudicationCooldown;
             case "sacred_orb" -> SmoothBalance.Ruler.sacredOrbCooldown;
             case "divine_intervention" -> SmoothBalance.Ruler.divineInterventionCooldown;
             case "anoint_weapon" -> SmoothBalance.Ruler.anointWeaponCooldown;

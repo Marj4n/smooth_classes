@@ -19,6 +19,8 @@ import net.minecraft.world.World;
 public final class LancerImpaleEntity extends Entity {
     private static final TrackedData<ItemStack> STACK =
             DataTracker.registerData(LancerImpaleEntity.class, TrackedDataHandlerRegistry.ITEM_STACK);
+    private static final TrackedData<Boolean> GROUND_SPIKE =
+            DataTracker.registerData(LancerImpaleEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
 
     public LancerImpaleEntity(EntityType<?> type, World world) {
         super(type, world);
@@ -28,6 +30,7 @@ public final class LancerImpaleEntity extends Entity {
     @Override
     protected void initDataTracker() {
         dataTracker.startTracking(STACK, ItemStack.EMPTY);
+        dataTracker.startTracking(GROUND_SPIKE, false);
     }
 
     public ItemStack getVisualStack() {
@@ -40,12 +43,15 @@ public final class LancerImpaleEntity extends Entity {
         dataTracker.set(STACK, visual);
     }
 
+    public void setGroundSpike(boolean groundSpike) { dataTracker.set(GROUND_SPIKE, groundSpike); }
+    public boolean isGroundSpike() { return dataTracker.get(GROUND_SPIKE); }
+
     @Override
     public void tick() {
         super.tick();
         setNoGravity(true);
         setVelocity(Vec3d.ZERO);
-        if (!getWorld().isClient && age > 40) discard();
+        if (!getWorld().isClient && age > (isGroundSpike() ? 34 : 40)) discard();
     }
 
     @Override

@@ -6,7 +6,7 @@
     "root": false
   },
   "is053f9imz801s57": {
-    "definition": "rangerSignatureDisengage",
+    "definition": "rangerSignaturePortalOfSovereignty",
     "x": 32,
     "y": 0,
     "root": false
@@ -78,37 +78,37 @@
     "root": false
   },
   "ov9mp25y08ouk5jj": {
-    "definition": "spell_fire_damage_multi+1%",
+    "definition": "ranged_damage_multi+2%",
     "x": -96,
     "y": -64,
     "root": false
   },
   "6bycgdo9shmo7et7": {
-    "definition": "rangerSignatureElementalArrowsFireAttuned",
+    "definition": "rangerSignatureElementalArrowsOvercharge",
     "x": -128,
     "y": -64,
     "root": false
   },
   "f4xxv7jkv3jznaxd": {
-    "definition": "spell_frost_damage_multi+1%",
+    "definition": "ranged_damage_multi+2%",
     "x": -128,
     "y": 0,
     "root": false
   },
   "ivyp2p1jp6ip5w0q": {
-    "definition": "rangerSignatureElementalArrowsFrostAttuned",
+    "definition": "rangerSignatureElementalArrowsConvergence",
     "x": -160,
     "y": 0,
     "root": false
   },
   "qsxd036xrayyrfz7": {
-    "definition": "spell_lightning_damage_multi+1%",
+    "definition": "ranged_damage_multi+2%",
     "x": -96,
     "y": 64,
     "root": false
   },
   "7747tky4ka5hid0r": {
-    "definition": "rangerSignatureElementalArrowsLightningAttuned",
+    "definition": "rangerSignatureElementalArrowsSplitVolley",
     "x": -128,
     "y": 64,
     "root": false
@@ -252,31 +252,31 @@
     "root": true
   },
   "fv9u51en0gnr42sg": {
-    "definition": "rangerReveal",
+    "definition": "rangerTreasuryExpansionI",
     "x": -64,
     "y": 128,
     "root": false
   },
   "8qujpjd26hnzorvc": {
-    "definition": "rangerTamer",
+    "definition": "rangerTreasuryExpansionII",
     "x": -32,
     "y": 128,
     "root": false
   },
   "p3nyz0ovok45zgdd": {
-    "definition": "rangerBonded",
+    "definition": "rangerTreasuryExpansionIII",
     "x": 0,
     "y": 128,
     "root": false
   },
   "kp8fomkuvt4mo5rx": {
-    "definition": "rangerTrained",
+    "definition": "rangerTreasuryExpansionIV",
     "x": 32,
     "y": 128,
     "root": false
   },
   "yx0lq81aedw5u765": {
-    "definition": "rangerIncognito",
+    "definition": "rangerRoyalDraw",
     "x": 64,
     "y": 128,
     "root": false

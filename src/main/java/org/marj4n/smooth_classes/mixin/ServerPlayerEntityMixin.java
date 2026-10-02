@@ -65,14 +65,18 @@ public abstract class ServerPlayerEntityMixin {
     @Inject(method="attack", at=@At("RETURN"))
     private void smooth_classes$afterAttack(Entity target, CallbackInfo ci) {
         boolean landed=false;
-        if(smooth_classes$lancerPrepared && target instanceof net.minecraft.entity.LivingEntity living
+        net.minecraft.entity.LivingEntity landedTarget=null;
+        if(target instanceof net.minecraft.entity.LivingEntity living
                 && target.getId()==smooth_classes$lancerTargetId){
             landed=living.getHealth()<smooth_classes$lancerHealthBefore
                     || living.getAbsorptionAmount()<smooth_classes$lancerAbsorptionBefore
                     || !living.isAlive();
+            if (landed) landedTarget=living;
         }
+        ServerPlayerEntity player=(ServerPlayerEntity)(Object)this;
         org.marj4n.smooth_classes.content.lancer.runtime.LancerRuntime.finishDirectSpearAttack(
-                (ServerPlayerEntity)(Object)this, smooth_classes$lancerPrepared, landed);
+                player, smooth_classes$lancerPrepared, smooth_classes$lancerPrepared && landed);
+        if (landedTarget != null) CombatEventRuntime.afterMeleeAttack(player, landedTarget);
         smooth_classes$lancerPrepared=false;
         smooth_classes$lancerTargetId=Integer.MIN_VALUE;
     }

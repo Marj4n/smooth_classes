@@ -43,6 +43,21 @@ public final class SpellPowerRuntime {
         return (float) Math.max(0.0D, strongest * multiplier);
     }
 
+
+    public static float strongestMagic(ServerPlayerEntity player, double multiplier) {
+        double strongest = 0.0D;
+        for (SpellSchool school : SpellSchools.all()) {
+            if (school.archetype != SpellSchool.Archetype.MAGIC) continue;
+            try {
+                double value = SpellPower.getSpellPower(school, player).randomValue();
+                if (Double.isFinite(value)) strongest = Math.max(strongest, value);
+            } catch (RuntimeException ignored) {
+                // Optional schools may exist without a usable player attribute.
+            }
+        }
+        return (float) Math.max(0.0D, strongest * multiplier * RiderRuntime.mountedDamageMultiplier(player));
+    }
+
     public static double strongestBase(ServerPlayerEntity player) {
         double strongest = Math.max(0.0D, player.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE));
         float mounted = RiderRuntime.mountedDamageMultiplier(player);

@@ -13,7 +13,6 @@ import net.minecraft.util.Identifier;
 import org.marj4n.smooth_classes.content.ruler.RulerClass;
 import org.marj4n.smooth_classes.content.ruler.RulerContent;
 import org.marj4n.smooth_classes.runtime.AbilityRuntime;
-import org.marj4n.smooth_classes.runtime.CombatRuntime;
 import org.marj4n.smooth_classes.runtime.ExecutionResult;
 import org.marj4n.smooth_classes.runtime.ClassEffectRuntime;
 import org.marj4n.smooth_classes.effects.SmoothEffects;
@@ -28,8 +27,8 @@ public final class RulerRuntime {
 
     public record SacredOrbPlan(boolean speed, boolean debuffs, boolean buffs) {}
     public static SacredOrbPlan sacredOrb(ServerPlayerEntity player) { require(player); return new SacredOrbPlan(has(player, RulerContent.SACRED_ORB_SPEED.id()), has(player, RulerContent.SACRED_ORB_DEBUFFS.id()), has(player, RulerContent.SACRED_ORB_BUFFS.id())); }
-    public record DivinePlan(boolean fireResistance, boolean might, boolean spellforged) {}
-    public static DivinePlan divineIntervention(ServerPlayerEntity player) { require(player); return new DivinePlan(has(player, RulerContent.DIVINE_INTERVENTION_FIRE_RESISTANCE.id()), has(player, RulerContent.DIVINE_INTERVENTION_MIGHT.id()), has(player, RulerContent.DIVINE_INTERVENTION_SPELLFORGED.id())); }
+    public record DivinePlan(boolean sanctuary, boolean might, boolean spellforged) {}
+    public static DivinePlan divineIntervention(ServerPlayerEntity player) { require(player); return new DivinePlan(has(player, RulerContent.DIVINE_INTERVENTION_SANCTUARY.id()), has(player, RulerContent.DIVINE_INTERVENTION_MIGHT.id()), has(player, RulerContent.DIVINE_INTERVENTION_SPELLFORGED.id())); }
     public record AnointPlan(boolean resistance, boolean undying, boolean cleanse) {}
     public static AnointPlan anointWeapon(ServerPlayerEntity player) { require(player); return new AnointPlan(has(player, RulerContent.ANOINT_WEAPON_RESISTANCE.id()), has(player, RulerContent.ANOINT_WEAPON_UNDYING.id()), has(player, RulerContent.ANOINT_WEAPON_CLEANSE.id())); }
 
@@ -63,7 +62,7 @@ public final class RulerRuntime {
         if(target==null)return ExecutionResult.failure("No allied Divine Intervention target at the aimed position.");
         boolean cast=InternalSpellRuntime.target(player,"smooth_classes:divine_intervention",target,1F);
         if(!cast)return ExecutionResult.failure("Divine Intervention spell unavailable.");
-        if(plan.fireResistance())stack(target,StatusEffects.FIRE_RESISTANCE,240,1,5);
+        if(plan.sanctuary()) stack(target,StatusEffects.RESISTANCE,240,2,4);
         if(plan.might())stack(target,SmoothEffects.MIGHT,240,3,10);
         if(plan.spellforged())stack(target,SmoothEffects.SPELLFORGED,240,3,10);
         target.addStatusEffect(new StatusEffectInstance(SmoothEffects.DIVINE_RAY,30,0,false,false,false));

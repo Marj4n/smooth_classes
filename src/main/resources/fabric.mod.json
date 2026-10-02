@@ -37,6 +37,9 @@
     "immersive_melodies": "*",
     "openpartiesandclaims": "*",
     "smooth_progression": "*",
-    "patchouli": "*"
+    "patchouli": "*",
+    "wizards": "*",
+    "elemental_wizards_rpg": "*",
+    "more_rpg_classes": "*"
   }
 }

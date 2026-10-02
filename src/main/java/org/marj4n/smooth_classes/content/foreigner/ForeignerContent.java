@@ -18,17 +18,17 @@ public final class ForeignerContent {
 
     public static final Talent WEAPON_EXPERT = talent("weapon_expert", "Weapon Expert");
     public static final Talent SPELLWEAVING = talent("spellweaving", "Spellweaving");
-    public static final Talent ELEMENTAL_SURGE_NO_FROST = talent("elemental_surge_no_frost", "Elemental Surge No Frost");
-    public static final Talent ELEMENTAL_SURGE_NO_FIRE = talent("elemental_surge_no_fire", "Elemental Surge No Fire");
+    public static final Talent ELEMENTAL_SURGE_RADIUS = talent("elemental_surge_radius", "Expanded Surge");
+    public static final Talent ELEMENTAL_SURGE_FREQUENCY = talent("elemental_surge_frequency", "Accelerated Surge");
     public static final Talent ELEMENTAL_SURGE_RENEWAL = talent("elemental_surge_renewal", "Elemental Surge Renewal");
-    public static final Talent ELEMENTAL_SURGE_NO_LIGHTNING = talent("elemental_surge_no_lightning", "Elemental Surge No Lightning");
+    public static final Talent ELEMENTAL_SURGE_POWER = talent("elemental_surge_power", "Amplified Surge");
     public static final Talent ELEMENTAL_IMPACT_MAGNET = talent("elemental_impact_magnet", "Elemental Impact Magnet");
     public static final Talent ELEMENTAL_IMPACT_RESISTANCE = talent("elemental_impact_resistance", "Elemental Impact Resistance");
     public static final Talent SPELLWEAVER_HASTE = talent("spellweaver_haste", "Spellweaver Haste");
     public static final Talent SPELLWEAVER_REGENERATION = talent("spellweaver_regeneration", "Spellweaver Regeneration");
 
     private static final List<Ability> ABILITIES = List.of(ELEMENTAL_SURGE, ELEMENTAL_IMPACT, SPELLWEAVER);
-    private static final List<Talent> TALENTS = List.of(WEAPON_EXPERT, SPELLWEAVING, ELEMENTAL_SURGE_NO_FROST, ELEMENTAL_SURGE_NO_FIRE, ELEMENTAL_SURGE_RENEWAL, ELEMENTAL_SURGE_NO_LIGHTNING, ELEMENTAL_IMPACT_MAGNET, ELEMENTAL_IMPACT_RESISTANCE, SPELLWEAVER_HASTE, SPELLWEAVER_REGENERATION);
+    private static final List<Talent> TALENTS = List.of(WEAPON_EXPERT, SPELLWEAVING, ELEMENTAL_SURGE_RADIUS, ELEMENTAL_SURGE_FREQUENCY, ELEMENTAL_SURGE_RENEWAL, ELEMENTAL_SURGE_POWER, ELEMENTAL_IMPACT_MAGNET, ELEMENTAL_IMPACT_RESISTANCE, SPELLWEAVER_HASTE, SPELLWEAVER_REGENERATION);
 
     public static void register() {
         ABILITIES.forEach(AbilityRegistry::register);

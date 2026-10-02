@@ -6,7 +6,6 @@ import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import org.marj4n.smooth_classes.runtime.InternalSpellRuntime;
 import org.marj4n.smooth_classes.runtime.SkillFx;
-import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.util.Identifier;
 import org.marj4n.smooth_classes.content.saber.SaberClass;
 import org.marj4n.smooth_classes.content.saber.SaberContent;
@@ -28,8 +27,8 @@ public final class SaberRuntime {
     public static ConsecrationPlan consecration(ServerPlayerEntity player) { require(player); return new ConsecrationPlan(has(player, SaberContent.CONSECRATION_DURATION.id()), has(player, SaberContent.CONSECRATION_WARD.id()), has(player, SaberContent.CONSECRATION_TAUNT.id()), has(player, SaberContent.CONSECRATION_MIGHTY.id()), has(player, SaberContent.CONSECRATION_SPELLFORGED.id())); }
     public record OnslaughtPlan(boolean heal, boolean defend, boolean mighty, boolean stun) {}
     public static OnslaughtPlan sacredOnslaught(ServerPlayerEntity player) { require(player); return new OnslaughtPlan(has(player, SaberContent.SACRED_ONSLAUGHT_HEAL.id()), has(player, SaberContent.SACRED_ONSLAUGHT_DEFEND.id()), has(player, SaberContent.SACRED_ONSLAUGHT_MIGHTY.id()), has(player, SaberContent.SACRED_ONSLAUGHT_STUN.id())); }
-    public record HeavensmithPlan(boolean taunt, boolean mark, boolean effect, boolean exhaust, boolean mighty) {}
-    public static HeavensmithPlan heavensmithsCall(ServerPlayerEntity player) { require(player); return new HeavensmithPlan(has(player, SaberContent.HEAVENSMITHS_CALL_TAUNT.id()), has(player, SaberContent.HEAVENSMITHS_CALL_MARK.id()), has(player, SaberContent.HEAVENSMITHS_CALL_EFFECT.id()), has(player, SaberContent.HEAVENSMITHS_CALL_EXHAUST.id()), has(player, SaberContent.HEAVENSMITHS_CALL_MIGHTY.id())); }
+    public record AdjudicationPlan(boolean taunt, boolean mark, boolean effect, boolean exhaust, boolean mighty) {}
+    public static AdjudicationPlan divineAdjudication(ServerPlayerEntity player) { require(player); return new AdjudicationPlan(has(player, SaberContent.DIVINE_ADJUDICATION_TAUNT.id()), has(player, SaberContent.DIVINE_ADJUDICATION_MARK.id()), has(player, SaberContent.DIVINE_ADJUDICATION_CHAIN.id()), has(player, SaberContent.DIVINE_ADJUDICATION_RECUPERATE.id()), has(player, SaberContent.DIVINE_ADJUDICATION_MIGHTY.id())); }
 
 
     public static ExecutionResult executeConsecration(ServerPlayerEntity player) {
@@ -50,36 +49,31 @@ public final class SaberRuntime {
         return ExecutionResult.success(1, "sacred_onslaught");
     }
 
-    public static ExecutionResult executeHeavensmithsCall(ServerPlayerEntity player) {
-        HeavensmithPlan plan=heavensmithsCall(player);
-        LivingEntity target=null;
-        double best=Double.MAX_VALUE;
-        for(LivingEntity candidate:CombatRuntime.nearbyEnemies(player,20)){
-            double distance=player.squaredDistanceTo(candidate);
-            if(distance<best){best=distance;target=candidate;}
-        }
-        if(target==null)return ExecutionResult.failure("No valid Heavensmith target within 20 blocks.");
-        if(plan.effect())ClassEffectRuntime.apply(player,SmoothEffects.DIVINE_ADJUDICATION,400,0);
-        boolean cast=InternalSpellRuntime.target(player,"smooth_classes:physical_heavensmiths_call",target,1F);
-        return ExecutionResult.success(cast?1:0,"heavensmiths_call");
-    }
+    public static ExecutionResult executeDivineAdjudication(ServerPlayerEntity player) {
+        AdjudicationPlan plan=divineAdjudication(player);
+        java.util.List<LivingEntity> enemies=CombatRuntime.nearbyEnemies(player,8.0D);
+        if(enemies.isEmpty()) return ExecutionResult.failure("No hostile target within 8 blocks.");
 
-    /** impact callback: Mark/Taunt are applied around the actual spell impact. */
-    public static void onHeavensmithImpact(ServerPlayerEntity player, LivingEntity impact) {
-        HeavensmithPlan plan=heavensmithsCall(player);
-        for(LivingEntity target:impact.getWorld().getEntitiesByClass(LivingEntity.class,
-                impact.getBoundingBox().expand(3),e->e.isAlive()&&e!=player&&!e.isTeammate(player))){
-            if(plan.mark())target.addStatusEffect(new StatusEffectInstance(SmoothEffects.DEATH_MARK,350,0,false,false,true));
+        LivingEntity guaranteed=enemies.stream()
+                .min(java.util.Comparator.comparingDouble(player::squaredDistanceTo)).orElse(enemies.get(0));
+        int hits=0;
+        for(LivingEntity target:enemies){
+            boolean chosen=target==guaranteed || player.getRandom().nextInt(100)<35;
+            if(!chosen) continue;
+            if(InternalSpellRuntime.target(player,"smooth_classes:paladins_judgement",target,0.85F)) hits++;
+            if(plan.mark()) target.addStatusEffect(new StatusEffectInstance(SmoothEffects.DEATH_MARK,240,0,false,false,true));
             if(plan.taunt()&&target instanceof MobEntity)
                 target.addStatusEffect(new org.marj4n.smooth_classes.effects.SourceStatusEffectInstance(
-                        SmoothEffects.TAUNTED,350,0,false,false,true,player));
+                        SmoothEffects.TAUNTED,240,0,false,false,true,player));
         }
+        if(plan.effect()) ClassEffectRuntime.apply(player,SmoothEffects.DIVINE_ADJUDICATION,400,0);
+        return ExecutionResult.success(hits,"divine_adjudication");
     }
 
     /** Divine Adjudication: periodic AOE judgement, chance rolled per hostile. */
     public static void tick(ServerPlayerEntity player) {
         if(!player.hasStatusEffect(SmoothEffects.DIVINE_ADJUDICATION)||player.age%5!=0)return;
-        HeavensmithPlan plan=heavensmithsCall(player);
+        AdjudicationPlan plan=divineAdjudication(player);
         boolean delivered=false;
         for(LivingEntity target:org.marj4n.smooth_classes.runtime.CombatRuntime.nearbyEnemies(player,5)) {
             if(player.getRandom().nextInt(100)<10) {

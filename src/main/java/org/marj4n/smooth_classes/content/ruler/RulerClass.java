@@ -9,7 +9,7 @@ public final class RulerClass implements PlayerClass {
     public static final Identifier ID = SmoothClasses.id("ruler");
     @Override public Identifier id() { return ID; }
     @Override public String name() { return "Ruler"; }
-    @Override public String description() { return "Healing, protective auras, and battlefield support."; }
+    @Override public String description() { return "Healing, battlefield support, and Divine Edicts of protection or condemnation."; }
 
     @Override public List<Identifier> abilityIds() { return RulerContent.abilities().stream().map(a -> a.id()).toList(); }
     @Override public List<Identifier> talentIds() { return RulerContent.talents().stream().map(t -> t.id()).toList(); }

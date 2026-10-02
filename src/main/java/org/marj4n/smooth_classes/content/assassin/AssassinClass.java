@@ -9,7 +9,7 @@ public final class AssassinClass implements PlayerClass {
     public static final Identifier ID = SmoothClasses.id("assassin");
     @Override public Identifier id() { return ID; }
     @Override public String name() { return "Assassin"; }
-    @Override public String description() { return "Stealth, evasive movement, and opportunistic strikes."; }
+    @Override public String description() { return "Stealth, evasive movement, Vanish, and opportunistic strikes."; }
 
     @Override public List<Identifier> abilityIds() { return AssassinContent.abilities().stream().map(a -> a.id()).toList(); }
     @Override public List<Identifier> talentIds() { return AssassinContent.talents().stream().map(t -> t.id()).toList(); }

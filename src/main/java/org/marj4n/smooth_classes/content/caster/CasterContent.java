@@ -12,10 +12,10 @@ import org.marj4n.smooth_classes.registry.TalentRegistry;
 public final class CasterContent {
     private CasterContent() {}
 
-    public static final Ability METEOR_SHOWER = ability("meteor_shower", "Meteor Shower", 40 * 20);
-    public static final Ability ICE_COMET = ability("ice_comet", "Ice Comet", 30 * 20);
-    public static final Ability STATIC_DISCHARGE = ability("static_discharge", "Static Discharge", 16 * 20);
-    public static final Ability ARCANE_BOLT = ability("arcane_bolt", "Arcane Bolt", 35 * 20);
+    public static final Ability METEOR_SHOWER = ability("meteor_shower", "Meteor Shower", 36 * 20);
+    public static final Ability ICE_COMET = ability("ice_comet", "Ice Comet", 28 * 20);
+    public static final Ability STATIC_DISCHARGE = ability("static_discharge", "Static Discharge", 18 * 20);
+    public static final Ability ARCANE_BOLT = ability("arcane_bolt", "Arcane Bolt", 24 * 20);
 
     public static final Talent SPELL_ECHO = talent("spell_echo", "Spell Echo");
     public static final Talent METEOR_SHOWER_GREATER = talent("meteor_shower_greater", "Meteor Shower Greater");

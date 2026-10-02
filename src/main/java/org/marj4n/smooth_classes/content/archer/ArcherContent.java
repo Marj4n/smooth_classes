@@ -16,28 +16,28 @@ public final class ArcherContent {
     public static final Ability PORTAL_OF_SOVEREIGNTY = ability("unlimited_blade_works", "Portal of Sovereignty", 30 * 20);
     public static final Ability ELEMENTAL_ARROWS = ability("elemental_arrows", "Elemental Arrows", 40 * 20);
 
-    public static final Talent REVEAL = talent("reveal", "Reveal");
-    public static final Talent TAMER = talent("tamer", "Tamer");
-    public static final Talent BONDED = talent("bonded", "Bonded");
-    public static final Talent TRAINED = talent("trained", "Trained");
-    public static final Talent INCOGNITO = talent("incognito", "Incognito");
+    public static final Talent TREASURY_EXPANSION_I = talent("treasury_expansion_i", "Treasury Expansion I");
+    public static final Talent TREASURY_EXPANSION_II = talent("treasury_expansion_ii", "Treasury Expansion II");
+    public static final Talent TREASURY_EXPANSION_III = talent("treasury_expansion_iii", "Treasury Expansion III");
+    public static final Talent TREASURY_EXPANSION_IV = talent("treasury_expansion_iv", "Treasury Expansion IV");
+    public static final Talent ROYAL_DRAW = talent("royal_draw", "Royal Draw");
     public static final Talent ARROW_RAIN_ELEMENTAL = talent("arrow_rain_elemental", "Arrow Rain Elemental");
     public static final Talent ARROW_RAIN_ELEMENTAL_ARTILLERY = talent("arrow_rain_elemental_artillery", "Arrow Rain Elemental Artillery");
     public static final Talent ARROW_RAIN_EXPLOSIVE = talent("arrow_rain_explosive", "Arrow Rain Explosive");
     public static final Talent ARROW_RAIN_VOLLEY = talent("arrow_rain_volley", "Arrow Rain Volley");
     public static final Talent ARROW_RAIN_RADIUS = talent("arrow_rain_radius", "Arrow Rain Radius");
-    public static final Talent DISENGAGE_RECUPERATE = talent("disengage_recuperate", "Endless Arsenal");
-    public static final Talent DISENGAGE_EXPLOITATION = talent("disengage_exploitation", "Piercing Blades");
-    public static final Talent DISENGAGE_MARKSMAN = talent("disengage_marksman", "Perfect Projection");
-    public static final Talent ELEMENTAL_ARROWS_FROST_ATTUNED = talent("elemental_arrows_frost_attuned", "Elemental Arrows Frost Attuned");
-    public static final Talent ELEMENTAL_ARROWS_FIRE_ATTUNED = talent("elemental_arrows_fire_attuned", "Elemental Arrows Fire Attuned");
-    public static final Talent ELEMENTAL_ARROWS_LIGHTNING_ATTUNED = talent("elemental_arrows_lightning_attuned", "Elemental Arrows Lightning Attuned");
+    public static final Talent PORTAL_ENDLESS_ARSENAL = talent("portal_endless_arsenal", "Endless Arsenal");
+    public static final Talent PORTAL_PIERCING_BLADES = talent("portal_piercing_blades", "Piercing Blades");
+    public static final Talent PORTAL_PERFECT_PROJECTION = talent("portal_perfect_projection", "Perfect Projection");
+    public static final Talent ELEMENTAL_ARROWS_CONVERGENCE = talent("elemental_arrows_convergence", "Convergence");
+    public static final Talent ELEMENTAL_ARROWS_OVERCHARGE = talent("elemental_arrows_overcharge", "Overcharged Fletching");
+    public static final Talent ELEMENTAL_ARROWS_SPLIT_VOLLEY = talent("elemental_arrows_split_volley", "Split Trajectory");
     public static final Talent ELEMENTAL_ARROWS_RADIUS = talent("elemental_arrows_radius", "Elemental Arrows Radius");
     public static final Talent ELEMENTAL_ARROWS_STACKS = talent("elemental_arrows_stacks", "Elemental Arrows Stacks");
     public static final Talent ELEMENTAL_ARROWS_RENEWAL = talent("elemental_arrows_renewal", "Elemental Arrows Renewal");
 
     private static final List<Ability> ABILITIES = List.of(ARROW_RAIN, PORTAL_OF_SOVEREIGNTY, ELEMENTAL_ARROWS);
-    private static final List<Talent> TALENTS = List.of(REVEAL, TAMER, BONDED, TRAINED, INCOGNITO, ARROW_RAIN_ELEMENTAL, ARROW_RAIN_ELEMENTAL_ARTILLERY, ARROW_RAIN_EXPLOSIVE, ARROW_RAIN_VOLLEY, ARROW_RAIN_RADIUS, DISENGAGE_RECUPERATE, DISENGAGE_EXPLOITATION, DISENGAGE_MARKSMAN, ELEMENTAL_ARROWS_FROST_ATTUNED, ELEMENTAL_ARROWS_FIRE_ATTUNED, ELEMENTAL_ARROWS_LIGHTNING_ATTUNED, ELEMENTAL_ARROWS_RADIUS, ELEMENTAL_ARROWS_STACKS, ELEMENTAL_ARROWS_RENEWAL);
+    private static final List<Talent> TALENTS = List.of(TREASURY_EXPANSION_I, TREASURY_EXPANSION_II, TREASURY_EXPANSION_III, TREASURY_EXPANSION_IV, ROYAL_DRAW, ARROW_RAIN_ELEMENTAL, ARROW_RAIN_ELEMENTAL_ARTILLERY, ARROW_RAIN_EXPLOSIVE, ARROW_RAIN_VOLLEY, ARROW_RAIN_RADIUS, PORTAL_ENDLESS_ARSENAL, PORTAL_PIERCING_BLADES, PORTAL_PERFECT_PROJECTION, ELEMENTAL_ARROWS_CONVERGENCE, ELEMENTAL_ARROWS_OVERCHARGE, ELEMENTAL_ARROWS_SPLIT_VOLLEY, ELEMENTAL_ARROWS_RADIUS, ELEMENTAL_ARROWS_STACKS, ELEMENTAL_ARROWS_RENEWAL);
 
     public static void register() {
         ABILITIES.forEach(AbilityRegistry::register);

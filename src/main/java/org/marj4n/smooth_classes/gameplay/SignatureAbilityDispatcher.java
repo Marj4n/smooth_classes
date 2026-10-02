@@ -57,7 +57,7 @@ public final class SignatureAbilityDispatcher {
             if (clazz(player, "saber")) {
                 if (skill(player,"saber","is053f9imz801s57")) return result(player, "consecration", () -> SaberRuntime.executeConsecration(player));
                 if (skill(player,"saber","kp8uei8ppni71b5x")) return result(player, "sacred_onslaught", () -> SaberRuntime.executeSacredOnslaught(player));
-                if (skill(player,"saber","a3ns9xl58ixdg2lo")) return result(player, "heavensmiths_call", () -> SaberRuntime.executeHeavensmithsCall(player));
+                if (skill(player,"saber","a3ns9xl58ixdg2lo")) return result(player, "heavensmiths_call", () -> SaberRuntime.executeDivineAdjudication(player));
             }
             if (clazz(player, "ruler")) {
                 if (skill(player,"ruler","is053f9imz801s57")) return result(player, "sacred_orb", () -> RulerRuntime.executeSacredOrb(player));
@@ -117,7 +117,7 @@ public final class SignatureAbilityDispatcher {
 
                 case "consecration" -> unlocked(player,"saber","is053f9imz801s57",a,()->SaberRuntime.executeConsecration(player));
                 case "sacred_onslaught" -> unlocked(player,"saber","kp8uei8ppni71b5x",a,()->SaberRuntime.executeSacredOnslaught(player));
-                case "heavensmiths_call" -> unlocked(player,"saber","a3ns9xl58ixdg2lo",a,()->SaberRuntime.executeHeavensmithsCall(player));
+                case "heavensmiths_call" -> unlocked(player,"saber","a3ns9xl58ixdg2lo",a,()->SaberRuntime.executeDivineAdjudication(player));
 
                 case "sacred_orb" -> unlocked(player,"ruler","is053f9imz801s57",a,()->RulerRuntime.executeSacredOrb(player));
                 case "divine_intervention" -> unlocked(player,"ruler","a3ns9xl58ixdg2lo",a,()->RulerRuntime.executeDivineIntervention(player));

@@ -10,7 +10,6 @@ import org.marj4n.smooth_classes.runtime.CombatRuntime;
 import org.marj4n.smooth_classes.runtime.ExecutionResult;
 import org.marj4n.smooth_classes.runtime.ClassEffectRuntime;
 import org.marj4n.smooth_classes.effects.SmoothEffects;
-import org.marj4n.smooth_classes.runtime.SpellPowerRuntime;
 
 /** Talent-aware runtime plan builder for Foreigner. Actual Minecraft effects are executed by hooks/integrations. */
 public final class ForeignerRuntime {
@@ -20,10 +19,13 @@ public final class ForeignerRuntime {
     }
     private static boolean has(ServerPlayerEntity player, Identifier talent) { return AbilityRuntime.hasTalent(player, talent); }
 
-    public record SurgePlan(boolean frost, boolean fire, boolean lightning, boolean renewal) {}
+    public record SurgePlan(boolean radius, boolean frequency, boolean power, boolean renewal) {}
     public static SurgePlan elementalSurge(ServerPlayerEntity player) {
         require(player);
-        return new SurgePlan(!has(player, ForeignerContent.ELEMENTAL_SURGE_NO_FROST.id()), !has(player, ForeignerContent.ELEMENTAL_SURGE_NO_FIRE.id()), !has(player, ForeignerContent.ELEMENTAL_SURGE_NO_LIGHTNING.id()), has(player, ForeignerContent.ELEMENTAL_SURGE_RENEWAL.id()));
+        return new SurgePlan(has(player, ForeignerContent.ELEMENTAL_SURGE_RADIUS.id()),
+                has(player, ForeignerContent.ELEMENTAL_SURGE_FREQUENCY.id()),
+                has(player, ForeignerContent.ELEMENTAL_SURGE_POWER.id()),
+                has(player, ForeignerContent.ELEMENTAL_SURGE_RENEWAL.id()));
     }
     public record ImpactPlan(boolean magnet, boolean resistance) {}
     public static ImpactPlan elementalImpact(ServerPlayerEntity player) { require(player); return new ImpactPlan(has(player, ForeignerContent.ELEMENTAL_IMPACT_MAGNET.id()), has(player, ForeignerContent.ELEMENTAL_IMPACT_RESISTANCE.id())); }

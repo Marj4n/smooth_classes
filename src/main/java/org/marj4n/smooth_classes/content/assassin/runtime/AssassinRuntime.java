@@ -1,17 +1,10 @@
 package org.marj4n.smooth_classes.content.assassin.runtime;
 
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.util.math.Box;
-import net.minecraft.util.math.Vec3d;
-import org.marj4n.smooth_classes.runtime.SkillFx;
-import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.util.Identifier;
 import org.marj4n.smooth_classes.content.assassin.AssassinClass;
 import org.marj4n.smooth_classes.content.assassin.AssassinContent;
 import org.marj4n.smooth_classes.runtime.AbilityRuntime;
-import org.marj4n.smooth_classes.runtime.CombatRuntime;
 import org.marj4n.smooth_classes.runtime.ExecutionResult;
 import org.marj4n.smooth_classes.runtime.ClassEffectRuntime;
 import org.marj4n.smooth_classes.effects.SmoothEffects;

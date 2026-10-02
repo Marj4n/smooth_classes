@@ -36,7 +36,7 @@ public final class SmoothClassesClient implements ClientModInitializer {
     public static final EntityModelLayer RIDER_HIPPOGRYPH_MODEL = new EntityModelLayer(SmoothClasses.id("rider_hippogryph"), "main");
     private static KeyBinding signature;
     private static KeyBinding ascendancy;
-    private static KeyBinding riderMount;
+    private static KeyBinding classSpecial;
     private static boolean bladeHoldSent, bladeWasDown;
     private static int bladeHoldTicks;
     private static boolean arcaneHoldSent;
@@ -57,7 +57,7 @@ public final class SmoothClassesClient implements ClientModInitializer {
 
     public static KeyBinding signatureKey() { return signature; }
     public static KeyBinding ascendancyKey() { return ascendancy; }
-    public static KeyBinding riderMountKey() { return riderMount; }
+    public static KeyBinding classSpecialKey() { return classSpecial; }
 
     @Override
     public void onInitializeClient() {
@@ -108,7 +108,7 @@ public final class SmoothClassesClient implements ClientModInitializer {
                 "key.smooth_classes.signature", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_V, "key.category.smooth_classes"));
         ascendancy = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "key.smooth_classes.ascendancy", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_R, "key.category.smooth_classes"));
-        riderMount = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+        classSpecial = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "key.smooth_classes.class_special", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_H, "key.category.smooth_classes"));
 
         ClientPlayNetworking.registerGlobalReceiver(SmoothClassesNetworking.SYNC_ABILITY_STATE,
@@ -122,35 +122,46 @@ public final class SmoothClassesClient implements ClientModInitializer {
                     boolean bannerActive=buf.readBoolean();
                     boolean bloodRainActive=buf.readBoolean();
                     boolean whenOnHighActive=buf.readBoolean();
-                    boolean riderMountVisible=buf.readBoolean();
-                    boolean riderMountActive=buf.readBoolean();
-                    int riderMountTotal=buf.readInt();
-                    long riderMountRemaining=buf.readLong();
                     boolean avengerSummonVisible=buf.readBoolean();
                     int avengerSummonCharges=buf.readInt();
                     int avengerSummonMaxCharges=buf.readInt();
                     int avengerSummonTotal=buf.readInt();
                     long avengerSummonRemaining=buf.readLong();
-                    boolean berserkerSpecialVisible=buf.readBoolean();
-                    boolean berserkerSpecialCharging=buf.readBoolean();
-                    boolean berserkerSpecialActive=buf.readBoolean();
-                    int berserkerSpecialTotal=buf.readInt();
-                    long berserkerSpecialRemaining=buf.readLong();
                     boolean shadowActive=buf.readBoolean();
                     long shadowRemaining=buf.readLong();
                     int shadowRange=buf.readInt();
+                    String classSpecialId=buf.readString();
+                    int classSpecialTotal=buf.readInt();
+                    long classSpecialRemaining=buf.readLong();
+                    boolean classSpecialActive=buf.readBoolean();
+                    int classSpecialVariant=buf.readInt();
+                    int classSpecialModeTotal=buf.readInt();
+                    long classSpecialModeRemaining=buf.readLong();
+                    int classSpecialSecondaryTotal=buf.readInt();
+                    long classSpecialSecondaryRemaining=buf.readLong();
+                    int treasuryCapacity = buf.readVarInt();
+                    net.minecraft.item.ItemStack[] treasurySlots = new net.minecraft.item.ItemStack[8];
+                    for (int i = 0; i < treasurySlots.length; i++) treasurySlots[i] = buf.readItemStack();
                     client.execute(() -> {
                         AbilityHudState.sync(sig,sigTotal,sigRemaining,asc,ascTotal,ascRemaining);
                         AbilityHudState.bannerActive=bannerActive;
                         AbilityHudState.bloodRainActive=bloodRainActive;
                         AbilityHudState.whenOnHighActive=whenOnHighActive;
-                        AbilityHudState.syncRiderMount(riderMountVisible, riderMountActive, riderMountTotal, riderMountRemaining);
                         AbilityHudState.syncAvengerSummon(avengerSummonVisible, avengerSummonCharges,
                                 avengerSummonMaxCharges, avengerSummonTotal, avengerSummonRemaining);
-                        AbilityHudState.syncBerserkerSpecial(berserkerSpecialVisible,
-                                berserkerSpecialCharging, berserkerSpecialActive,
-                                berserkerSpecialTotal, berserkerSpecialRemaining);
                         AbilityHudState.syncShadow(shadowActive, shadowRemaining, shadowRange);
+                        AbilityHudState.syncClassSpecial(classSpecialId, classSpecialTotal, classSpecialRemaining,
+                                classSpecialActive, classSpecialVariant, classSpecialModeTotal, classSpecialModeRemaining,
+                                classSpecialSecondaryTotal, classSpecialSecondaryRemaining);
+                        AbilityHudState.syncTreasury(treasuryCapacity, treasurySlots);
+                    });
+                });
+
+        ClientPlayNetworking.registerGlobalReceiver(SmoothClassesNetworking.FORCE_HOTBAR_SLOT,
+                (client, handler, buf, responseSender) -> {
+                    int slot = buf.readVarInt();
+                    client.execute(() -> {
+                        if (client.player != null) client.player.getInventory().selectedSlot = Math.max(0, Math.min(8, slot));
                     });
                 });
 
@@ -167,6 +178,7 @@ public final class SmoothClassesClient implements ClientModInitializer {
         net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents.DISCONNECT.register(
                 (handler, client) -> {
                     org.marj4n.smooth_classes.client.charge.ChargeHudState.reset();
+                    AbilityHudState.reset();
                     ShadowAimClient.reset();
                     deathListComboWasDown = false;
                     classSpecialHoldSent = false;
@@ -242,10 +254,10 @@ public final class SmoothClassesClient implements ClientModInitializer {
             // Berserker H is a real hold-to-charge class special, matching the
             // Arcane Slash / Portal of Sovereignty charge UX. Heartbeats keep
             // the server authoritative and releasing early triggers the 4s fail CD.
-            boolean classSpecialDown = AbilityHudState.berserkerSpecialVisible
+            boolean classSpecialDown = "crimson_revenant".equals(AbilityHudState.classSpecialId)
                     && client.player != null && client.getNetworkHandler() != null
                     && client.currentScreen == null && client.isWindowFocused()
-                    && riderMount.isPressed();
+                    && classSpecial.isPressed();
             boolean freshClassSpecialPress = classSpecialDown && !classSpecialWasDown;
             classSpecialWasDown = classSpecialDown;
             if (classSpecialDown && (!classSpecialHoldSent || ++classSpecialHoldTicks >= 2)) {
@@ -257,10 +269,10 @@ public final class SmoothClassesClient implements ClientModInitializer {
                 classSpecialHoldSent = false;
                 classSpecialHoldTicks = 0;
             }
-            if (freshClassSpecialPress && ClientPlayNetworking.canSend(SmoothClassesNetworking.CLASS_SPECIAL)) {
+            if (freshClassSpecialPress) {
                 // Hold packet is queued first on the same connection, so the server
-                // sees H as held before it validates the charge start.
-                ClientPlayNetworking.send(SmoothClassesNetworking.CLASS_SPECIAL, PacketByteBufs.empty());
+                // sees H as held before it validates the Berserker charge start.
+                sendClassSpecial(false);
             }
 
             syncRiderFlightInput(client);
@@ -272,31 +284,36 @@ public final class SmoothClassesClient implements ClientModInitializer {
                 if (!bladeSelected) cast(client, false);
                 else if (freshBladePress) { cast(client, false); freshBladePress = false; }
             }
-            while (riderMount.wasPressed()) {
+            while (classSpecial.wasPressed()) {
                 if (client.player == null) continue;
-                if (AbilityHudState.berserkerSpecialVisible) continue;
-                long window = client.getWindow().getHandle();
-                boolean control = InputUtil.isKeyPressed(window, GLFW.GLFW_KEY_LEFT_CONTROL)
-                        || InputUtil.isKeyPressed(window, GLFW.GLFW_KEY_RIGHT_CONTROL);
-                if (control) continue;
-                if (AbilityHudState.avengerSummonVisible) {
-                    if (ClientPlayNetworking.canSend(SmoothClassesNetworking.AVENGER_SUMMON)) {
-                        ClientPlayNetworking.send(SmoothClassesNetworking.AVENGER_SUMMON, PacketByteBufs.empty());
+                if ("crimson_revenant".equals(AbilityHudState.classSpecialId)) continue;
+                if (!AbilityHudState.classSpecialVisible) continue;
+
+                // Treasury H has two context-sensitive actions:
+                // held item -> store it; empty selected hotbar slot -> hold-H selector to withdraw.
+                if ("treasury_key".equals(AbilityHudState.classSpecialId)) {
+                    if (AbilityHudState.classSpecialActive || AbilityHudState.classSpecialRemainingMs() > 0L) continue;
+                    if (!client.player.getMainHandStack().isEmpty()) {
+                        sendClassSpecial(false);
+                    } else if (AbilityHudState.treasuryHasAny() && client.currentScreen == null) {
+                        client.setScreen(new ClassSpecialRadialScreen("treasury_key", 0));
+                    } else {
+                        client.player.sendMessage(Text.literal("Treasury is empty."), true);
                     }
                     continue;
                 }
-                if (AbilityHudState.riderMountVisible) {
-                    if (AbilityHudState.riderMountActive || isLocalRiderMount(client)) {
-                        client.player.sendMessage(Text.literal("Rider mount is already active."), true);
-                        client.player.getWorld().playSound(client.player, client.player.getBlockPos(),
-                                SmoothSounds.ABILITY_BLOCKED, SoundCategory.PLAYERS, 0.1F, 1.5F);
-                        continue;
-                    }
-                    if (ClientPlayNetworking.canSend(SmoothClassesNetworking.RIDER_SUMMON_MOUNT)) {
-                        ClientPlayNetworking.send(SmoothClassesNetworking.RIDER_SUMMON_MOUNT, PacketByteBufs.empty());
+
+                // Caster and Foreigner use the same hold-H radial interaction.
+                if (ClassSpecialRadialScreen.supports(AbilityHudState.classSpecialId)) {
+                    if (AbilityHudState.classSpecialActive || AbilityHudState.classSpecialRemainingMs() > 0L) continue;
+                    if (client.currentScreen == null) {
+                        client.setScreen(new ClassSpecialRadialScreen(
+                                AbilityHudState.classSpecialId, AbilityHudState.classSpecialVariant));
                     }
                     continue;
                 }
+
+                sendClassSpecial(false);
             }
             while (ascendancy.wasPressed()) {
                 if (!"arcane_slash".equals(AbilityHudState.ascendancyAbility)) cast(client, true);
@@ -375,7 +392,23 @@ public final class SmoothClassesClient implements ClientModInitializer {
         ClientPlayNetworking.send(SmoothClassesNetworking.ARCANE_SLASH_HOLD, packet);
     }
 
-    private static void sendClassSpecialHold(boolean held) {
+    private static void sendClassSpecial(boolean alternate) {
+        if (net.minecraft.client.MinecraftClient.getInstance().getNetworkHandler() == null) return;
+        if (!ClientPlayNetworking.canSend(SmoothClassesNetworking.CLASS_SPECIAL)) return;
+        var packet = PacketByteBufs.create();
+        packet.writeBoolean(alternate);
+        ClientPlayNetworking.send(SmoothClassesNetworking.CLASS_SPECIAL, packet);
+    }
+
+    public static void sendClassSpecialSelection(int selection) {
+        if (net.minecraft.client.MinecraftClient.getInstance().getNetworkHandler() == null) return;
+        if (!ClientPlayNetworking.canSend(SmoothClassesNetworking.CLASS_SPECIAL_SELECT)) return;
+        var packet = PacketByteBufs.create();
+        packet.writeVarInt(Math.max(0, selection));
+        ClientPlayNetworking.send(SmoothClassesNetworking.CLASS_SPECIAL_SELECT, packet);
+    }
+
+    public static void sendClassSpecialHold(boolean held) {
         if (net.minecraft.client.MinecraftClient.getInstance().getNetworkHandler() == null) return;
         if (!ClientPlayNetworking.canSend(SmoothClassesNetworking.CLASS_SPECIAL_HOLD)) return;
         var packet = PacketByteBufs.create();
@@ -454,14 +487,6 @@ public final class SmoothClassesClient implements ClientModInitializer {
         CustomModelStatusEffect.register(SmoothEffects.MAGIC_CIRCLE, new MagicCircleRenderer());
         CustomModelStatusEffect.register(SmoothEffects.AGONY, new CurseRenderer());
         CustomModelStatusEffect.register(SmoothEffects.TORMENT, new CurseRenderer());
-    }
-
-    private static boolean isLocalRiderMount(net.minecraft.client.MinecraftClient client) {
-        if (client.player == null) return false;
-        var vehicle = client.player.getVehicle();
-        return vehicle instanceof org.marj4n.smooth_classes.entity.RiderHorseEntity
-                || vehicle instanceof org.marj4n.smooth_classes.entity.RiderDreadSteedEntity
-                || vehicle instanceof org.marj4n.smooth_classes.entity.RiderHippogryphEntity;
     }
 
 }
