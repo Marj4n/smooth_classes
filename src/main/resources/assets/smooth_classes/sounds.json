@@ -122,8 +122,8 @@
   "soundeffect_26": {
     "sounds": [
       "smooth_classes:soundeffect_26"
-  ]
-},
+    ]
+  },
   "soundeffect_27": {
     "sounds": [
       "smooth_classes:soundeffect_27"
@@ -437,6 +437,16 @@
   "activate_plinth_01": {
     "sounds": [
       "smooth_classes:activate_plinth_01"
+    ]
+  },
+  "origin_vampire_bite": {
+    "sounds": [
+      "smooth_classes:origin/vampire/bite"
+    ]
+  },
+  "origin_vampire_feeding": {
+    "sounds": [
+      "smooth_classes:origin/vampire/feeding"
     ]
   }
 }

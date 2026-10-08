@@ -1,0 +1,210 @@
+{
+  "origin_base": {
+    "title": {
+      "text": "Vampire"
+    },
+    "description": {
+      "text": "Blood Hunger, Night Vision and a 15-health predator body. Mortal food is rejected."
+    },
+    "cost": 0,
+    "size": 1.25,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:fermented_spider_eye"
+      }
+    },
+    "rewards": []
+  },
+  "bat_form": {
+    "title": {
+      "text": "Bat Form"
+    },
+    "description": {
+      "text": "Kill 10 bats, fill Blood once and survive a full night. Unlocks a true tiny Bat travel form with flight; combat and item use are disabled while transformed."
+    },
+    "cost": 1,
+    "size": 1.05,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:phantom_membrane"
+      }
+    },
+    "rewards": []
+  },
+  "man_bat": {
+    "title": {
+      "text": "Man-Bat"
+    },
+    "description": {
+      "text": "Drink 100 Humanoid Blood and score 20 night kills. Unlocks Dark Form: brutal armor and damage, rapid Blood healing, air-jumps, gliding and beast-strength mining. Armor stays equipped."
+    },
+    "cost": 1,
+    "size": 1.05,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:leather_chestplate"
+      }
+    },
+    "rewards": []
+  },
+  "blood_sense": {
+    "title": {
+      "text": "Blood Sense"
+    },
+    "description": {
+      "text": "Study 4 blood categories and drink 300 lifetime Blood. Wounded living targets become visible through darkness."
+    },
+    "cost": 1,
+    "size": 1.05,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:spider_eye"
+      }
+    },
+    "rewards": []
+  },
+  "blood_flask": {
+    "title": {
+      "text": "Blood Flask"
+    },
+    "description": {
+      "text": "Drink 400 lifetime Blood. Sneak-use a Glass Bottle to store 30 Blood; drink the flask later to restore it."
+    },
+    "cost": 1,
+    "size": 1.05,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:glass_bottle"
+      }
+    },
+    "rewards": []
+  },
+  "nobility": {
+    "title": {
+      "text": "Crimson Nobility"
+    },
+    "description": {
+      "text": "Taste all 5 blood categories and drink 500 lifetime Blood. Blood capacity increases to 150."
+    },
+    "cost": 1,
+    "size": 1.05,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:redstone"
+      }
+    },
+    "rewards": []
+  },
+  "sun_tolerance": {
+    "title": {
+      "text": "Sun Tolerance"
+    },
+    "description": {
+      "text": "Prove yourself through 50 night kills. Sunlight penalties build later and burning ticks slower."
+    },
+    "cost": 1,
+    "size": 1.05,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:sunflower"
+      }
+    },
+    "rewards": []
+  },
+  "final": {
+    "title": {
+      "text": "Vampire Lord"
+    },
+    "description": {
+      "text": "Drink 1000 lifetime Blood and complete the bloodline. Vampire Lord has 18 health and a 200 Blood reservoir."
+    },
+    "cost": 1,
+    "size": 1.25,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:nether_star"
+      }
+    },
+    "rewards": []
+  }
+}

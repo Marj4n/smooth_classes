@@ -1,0 +1,42 @@
+{
+  "normal": {
+    "bidirectional": [
+      [
+        "origin_base",
+        "soul_eater"
+      ],
+      [
+        "soul_eater",
+        "bone_growth"
+      ],
+      [
+        "soul_eater",
+        "soul_storage"
+      ],
+      [
+        "bone_growth",
+        "gravebound"
+      ],
+      [
+        "soul_storage",
+        "gravebound"
+      ],
+      [
+        "gravebound",
+        "carbon"
+      ],
+      [
+        "gravebound",
+        "ribcage"
+      ],
+      [
+        "carbon",
+        "final"
+      ],
+      [
+        "ribcage",
+        "final"
+      ]
+    ]
+  }
+}

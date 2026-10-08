@@ -4,9 +4,12 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.option.KeyBinding;
+import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.marj4n.smooth_classes.SmoothClasses;
+import org.marj4n.smooth_classes.client.origin.OriginAbilityHud;
+import org.marj4n.smooth_classes.client.origin.OriginClientState;
 
 /** Ability HUD: signature (V), ascendancy (R), plus the current class-special H slot. */
 public final class AbilityHud {
@@ -19,6 +22,16 @@ public final class AbilityHud {
 
         int x = (client.getWindow().getScaledWidth() / 2) + 86;
         int y = client.getWindow().getScaledHeight() - 29;
+
+        if (AbilityPageState.isOriginPage() && !OriginClientState.originId.isBlank()) {
+            renderPageLabel(context, client, x, y, true);
+            renderOriginSlot(context, client, x, y, 0, SmoothClassesClient.signatureKey());
+            renderOriginSlot(context, client, x + 22, y, 1, SmoothClassesClient.ascendancyKey());
+            renderOriginSlot(context, client, x + 44, y, 2, SmoothClassesClient.classSpecialKey());
+            return;
+        }
+
+        renderPageLabel(context, client, x, y, false);
         renderSlot(context, client, x, y, AbilityHudState.signatureAbility, AbilityHudState.signatureIcon(),
                 AbilityHudState.signatureCooldownMs, AbilityHudState.signatureRemainingMs(), SmoothClassesClient.signatureKey());
         renderSlot(context, client, x + 22, y, AbilityHudState.ascendancyAbility, AbilityHudState.ascendancyIcon(),
@@ -28,6 +41,44 @@ public final class AbilityHud {
         } else if (AbilityHudState.classSpecialVisible) {
             renderClassSpecialSlot(context, client, x + 44, y);
         }
+    }
+
+
+    private void renderPageLabel(DrawContext context, MinecraftClient client, int x, int y, boolean originPage) {
+        String label = originPage ? "CLASS | > ORIGIN <" : "> CLASS < | ORIGIN";
+        String toggle = SmoothClassesClient.abilityPageKey() == null ? ""
+                : "  [" + SmoothClassesClient.abilityPageKey().getBoundKeyLocalizedText().getString() + "]";
+        context.drawTextWithShadow(client.textRenderer, Text.literal(label + toggle), x + 4, y - 10,
+                originPage ? 0xFFE59A : 0xF1F1F1);
+    }
+
+    private void renderOriginSlot(DrawContext context, MinecraftClient client, int x, int y, int slot, KeyBinding key) {
+        var data = OriginAbilityHud.slot(slot);
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        context.drawTexture(FRAME, x + 5, y + 6, 58, 22, 24, 24, 256, 256);
+        context.drawItem(new ItemStack(data.icon()), x + 10, y + 10);
+        context.draw();
+        context.getMatrices().push();
+        context.getMatrices().translate(0, 0, 300);
+        long originCooldownMs = 0L;
+        int originCooldownTotalMs = 0;
+        if (slot == 0 && org.marj4n.smooth_classes.origin.OriginType.VAMPIRE.id().equals(OriginClientState.originId)) {
+            originCooldownMs = OriginClientState.vampireBatCooldownRemainingMs();
+            originCooldownTotalMs = 10_000;
+        }
+        if (originCooldownMs > 0L) {
+            int overlayHeight = Math.max(1, Math.min(16,
+                    (int)(16F * (originCooldownMs / (float)Math.max(1, originCooldownTotalMs)))));
+            int overlayY = y + 10 + (16 - overlayHeight);
+            context.drawTexture(COOLDOWN, x + 10, overlayY, 0, 16 - overlayHeight, 16, overlayHeight, 16, 16);
+            int secs = (int)Math.ceil(originCooldownMs / 1000D);
+            context.drawCenteredTextWithShadow(client.textRenderer, Text.literal(Integer.toString(secs)), x + 18, y + 14, 0xFFFFFF);
+        }
+        context.drawCenteredTextWithShadow(client.textRenderer, key.getBoundKeyLocalizedText(), x + 18, y, 0xFFFFFF);
+        context.draw();
+        context.getMatrices().pop();
+        RenderSystem.disableBlend();
     }
 
     private void renderSlot(DrawContext context, MinecraftClient client, int x, int y, String ability, Identifier icon,

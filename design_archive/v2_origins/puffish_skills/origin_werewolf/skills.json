@@ -1,0 +1,50 @@
+{
+  "origin_base": {
+    "definition": "origin_base",
+    "x": 0,
+    "y": 128,
+    "root": true
+  },
+  "night_wolf": {
+    "definition": "night_wolf",
+    "x": -56,
+    "y": 72,
+    "root": false
+  },
+  "lycan": {
+    "definition": "lycan",
+    "x": 0,
+    "y": 16,
+    "root": false
+  },
+  "predator": {
+    "definition": "predator",
+    "x": -72,
+    "y": -48,
+    "root": false
+  },
+  "blood_scent": {
+    "definition": "blood_scent",
+    "x": 72,
+    "y": -48,
+    "root": false
+  },
+  "moonbound": {
+    "definition": "moonbound",
+    "x": 0,
+    "y": -112,
+    "root": false
+  },
+  "pack_howl": {
+    "definition": "pack_howl",
+    "x": -72,
+    "y": -176,
+    "root": false
+  },
+  "final": {
+    "definition": "final",
+    "x": 0,
+    "y": -224,
+    "root": false
+  }
+}

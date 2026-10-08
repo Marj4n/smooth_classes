@@ -1,0 +1,210 @@
+{
+  "origin_base": {
+    "title": {
+      "text": "Spriggan"
+    },
+    "description": {
+      "text": "16 health. Living bark body. Fire can destroy Living Mass and reduce maximum health."
+    },
+    "cost": 0,
+    "size": 1.25,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:oak_sapling"
+      }
+    },
+    "rewards": []
+  },
+  "green_thumb": {
+    "title": {
+      "text": "Green Thumb"
+    },
+    "description": {
+      "text": "Personally grow many tree and crop families. Natural vegetation stops impeding you."
+    },
+    "cost": 1,
+    "size": 1.05,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:bone_meal"
+      }
+    },
+    "rewards": []
+  },
+  "living_mass": {
+    "title": {
+      "text": "Living Mass"
+    },
+    "description": {
+      "text": "Absorb trees to physically grow health, armor and weight."
+    },
+    "cost": 1,
+    "size": 1.05,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:oak_log"
+      }
+    },
+    "rewards": []
+  },
+  "shelter": {
+    "title": {
+      "text": "Living Shelter"
+    },
+    "description": {
+      "text": "Grow a single living tree home instead of constructing one by hand."
+    },
+    "cost": 1,
+    "size": 1.05,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:oak_door"
+      }
+    },
+    "rewards": []
+  },
+  "communion": {
+    "title": {
+      "text": "Forest Communion"
+    },
+    "description": {
+      "text": "Carry roots through several ecosystems and restore a barren area."
+    },
+    "cost": 1,
+    "size": 1.05,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:moss_block"
+      }
+    },
+    "rewards": []
+  },
+  "bark": {
+    "title": {
+      "text": "Ancient Bark"
+    },
+    "description": {
+      "text": "Living Mass hardens into extreme armor and knockback resistance."
+    },
+    "cost": 1,
+    "size": 1.05,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:dark_oak_log"
+      }
+    },
+    "rewards": []
+  },
+  "heartwood": {
+    "title": {
+      "text": "Heartwood"
+    },
+    "description": {
+      "text": "Trees restore burned-away body mass that ordinary healing cannot replace."
+    },
+    "cost": 1,
+    "size": 1.05,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:apple"
+      }
+    },
+    "rewards": []
+  },
+  "final": {
+    "title": {
+      "text": "Worldroot"
+    },
+    "description": {
+      "text": "Protect the growing Worldroot for two full Minecraft days and become a walking ancient tree."
+    },
+    "cost": 1,
+    "size": 1.25,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:nether_star"
+      }
+    },
+    "rewards": []
+  }
+}

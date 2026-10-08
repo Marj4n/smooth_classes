@@ -1,0 +1,210 @@
+{
+  "origin_base": {
+    "title": {
+      "text": "Homunculus"
+    },
+    "description": {
+      "text": "10 health. An unfinished artificial body built for equipment layering and alchemical reconstruction."
+    },
+    "cost": 0,
+    "size": 1.25,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:brewing_stand"
+      }
+    },
+    "rewards": []
+  },
+  "weapon_assimilation": {
+    "title": {
+      "text": "Weapon Assimilation"
+    },
+    "description": {
+      "text": "Absorb three weapon archetypes and manifest them through the right arm."
+    },
+    "cost": 1,
+    "size": 1.05,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:iron_sword"
+      }
+    },
+    "rewards": []
+  },
+  "modular": {
+    "title": {
+      "text": "Modular Anatomy"
+    },
+    "description": {
+      "text": "Collect metal, organic, arcane and mineral body materials, then reconstruct yourself."
+    },
+    "cost": 1,
+    "size": 1.05,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:anvil"
+      }
+    },
+    "rewards": []
+  },
+  "skin": {
+    "title": {
+      "text": "Skin Module"
+    },
+    "description": {
+      "text": "Bind defensive material into an artificial skin layer."
+    },
+    "cost": 1,
+    "size": 1.05,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:iron_chestplate"
+      }
+    },
+    "rewards": []
+  },
+  "arms": {
+    "title": {
+      "text": "Arm Module"
+    },
+    "description": {
+      "text": "Expand manifested equipment support."
+    },
+    "cost": 1,
+    "size": 1.05,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:crossbow"
+      }
+    },
+    "rewards": []
+  },
+  "alchemy": {
+    "title": {
+      "text": "Alchemical Core"
+    },
+    "description": {
+      "text": "Brew many unique potion effects and survive compound negative effects."
+    },
+    "cost": 1,
+    "size": 1.05,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:potion"
+      }
+    },
+    "rewards": []
+  },
+  "core": {
+    "title": {
+      "text": "Core Module"
+    },
+    "description": {
+      "text": "Install utility and alchemical functions directly into the body."
+    },
+    "cost": 1,
+    "size": 1.05,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:beacon"
+      }
+    },
+    "rewards": []
+  },
+  "final": {
+    "title": {
+      "text": "Perfect Homunculus"
+    },
+    "description": {
+      "text": "Assemble the Philosopher's Core and reconstruct the body at the edge of death."
+    },
+    "cost": 1,
+    "size": 1.25,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:nether_star"
+      }
+    },
+    "rewards": []
+  }
+}

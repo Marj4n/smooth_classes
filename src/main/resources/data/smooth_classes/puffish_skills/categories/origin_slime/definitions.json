@@ -1,0 +1,210 @@
+{
+  "origin_base": {
+    "title": {
+      "text": "Slime"
+    },
+    "description": {
+      "text": "16 health. Pure elastic slime body with bounce and no natural fixed shape."
+    },
+    "cost": 0,
+    "size": 1.25,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:slime_ball"
+      }
+    },
+    "rewards": []
+  },
+  "humanoid": {
+    "title": {
+      "text": "Humanoid Form"
+    },
+    "description": {
+      "text": "Absorb 20 humanoid residue, study 4 humanoid species and observe them for 10 minutes. Toggle between true Slime and Humanoid Form."
+    },
+    "cost": 1,
+    "size": 1.05,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:player_head"
+      }
+    },
+    "rewards": []
+  },
+  "elastic_core": {
+    "title": {
+      "text": "Elastic Core"
+    },
+    "description": {
+      "text": "Defeat 20 Slimes, 3 Large Slimes and spend 5 minutes airborne/bouncing. Deepens the elastic body."
+    },
+    "cost": 1,
+    "size": 1.05,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:slime_block"
+      }
+    },
+    "rewards": []
+  },
+  "squeeze": {
+    "title": {
+      "text": "Squeeze"
+    },
+    "description": {
+      "text": "Spend 2 minutes compressed after Elastic Core. Unlocks a half-block squeeze body."
+    },
+    "cost": 1,
+    "size": 1.05,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:piston"
+      }
+    },
+    "rewards": []
+  },
+  "fragment": {
+    "title": {
+      "text": "Fragmentation"
+    },
+    "description": {
+      "text": "Defeat 8 Large Slimes. Critical health can trigger a regenerative Fragmentation state; it can also be activated manually."
+    },
+    "cost": 1,
+    "size": 1.05,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:slime_ball"
+      }
+    },
+    "rewards": []
+  },
+  "perfect_gel": {
+    "title": {
+      "text": "Perfect Gel"
+    },
+    "description": {
+      "text": "Master both Squeeze and Fragmentation and spend 10 minutes airborne/bouncing."
+    },
+    "cost": 1,
+    "size": 1.05,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:honey_block"
+      }
+    },
+    "rewards": []
+  },
+  "size_control": {
+    "title": {
+      "text": "Size Control"
+    },
+    "description": {
+      "text": "Defeat 50 Slimes after Perfect Gel. Cycle Small, Normal and Large slime bodies with matching hitboxes."
+    },
+    "cost": 1,
+    "size": 1.05,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:magma_cream"
+      }
+    },
+    "rewards": []
+  },
+  "final": {
+    "title": {
+      "text": "Slime Sovereign"
+    },
+    "description": {
+      "text": "Defeat 15 Large Slimes after mastering Size Control. Become the Slime Sovereign."
+    },
+    "cost": 1,
+    "size": 1.25,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:nether_star"
+      }
+    },
+    "rewards": []
+  }
+}

@@ -1364,5 +1364,21 @@
   "text.skills.crusaderSignatureDivineAdjudicationMighty.description": "§7Lingering Judgement grants you Might when it triggers.",
   "text.skills.spell_fire_damage_multi+1%.title": "§c+5% [+] Fire Spell Damage",
   "text.skills.spell_frost_damage_multi+1%.title": "§b+5% [+] Frost Spell Damage",
-  "text.skills.spell_lightning_damage_multi+1%.title": "§e+5% [+] Lightning Spell Damage"
+  "text.skills.spell_lightning_damage_multi+1%.title": "§e+5% [+] Lightning Spell Damage",
+  "text.skills.origin_category.title": "Origin",
+  "text.skills.origin_human_category.description": "Human — The Unbroken Will.",
+  "text.skills.origin_vampire_category.description": "Vampire — Blood Hunger, Night Vision and a 15-health predator body.",
+  "text.skills.origin_werewolf_category.description": "Werewolf — Human by day, moon-powered hunter by night.",
+  "text.skills.origin_mermaid_category.description": "Mermaid — 16 health.",
+  "text.skills.origin_demon_category.description": "Demon — 20 health.",
+  "text.skills.origin_angel_category.description": "Angel — 16 health.",
+  "text.skills.origin_slime_category.description": "Slime — 16 health.",
+  "text.skills.origin_homunculus_category.description": "Homunculus — 10 health.",
+  "text.skills.origin_void_category.description": "Void — 14 health.",
+  "text.skills.origin_undead_category.description": "Undead — 12 health.",
+  "text.skills.origin_spriggan_category.description": "Spriggan — 16 health.",
+  "text.skills.origin_doppelganger_category.description": "Doppelganger — 18 health.",
+  "key.smooth_classes.ability_page": "Switch Class / Origin Ability Page",
+  "item.smooth_classes.blood_bottle": "Blood Bottle",
+  "block.smooth_classes.vampire_coffin": "Vampire Coffin"
 }

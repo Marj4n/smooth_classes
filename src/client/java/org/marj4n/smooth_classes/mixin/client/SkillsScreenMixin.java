@@ -2,11 +2,19 @@ package org.marj4n.smooth_classes.mixin.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.text.OrderedText;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.puffish.skillsmod.client.data.ClientCategoryData;
 import net.puffish.skillsmod.client.gui.SkillsScreen;
+import org.marj4n.smooth_classes.client.AbilityPageState;
+import org.marj4n.smooth_classes.client.origin.OriginClientState;
+import org.marj4n.smooth_classes.client.origin.OriginProgressDisplay;
+import org.marj4n.smooth_classes.origin.OriginType;
 import net.puffish.skillsmod.util.Bounds2i;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -108,6 +116,104 @@ public abstract class SkillsScreenMixin {
 
         context.drawTexture(texture, newX, newY, u, v, newTextureWidth, newTextureHeight, newTextureWidth, newTextureHeight);
     }*/
+
+    /** Origin categories are milestone trees, not point-buy trees. */
+    @Inject(method = "drawWindowWithCategory(Lnet/minecraft/client/gui/DrawContext;DDLnet/puffish/skillsmod/client/data/ClientCategoryData;)V",
+            at = @At("HEAD"), cancellable = true)
+    private void smoothClasses$hideOriginPoints(DrawContext context, double mouseX, double mouseY,
+                                                ClientCategoryData activeCategoryData, CallbackInfo ci) {
+        if (smoothClasses$isOriginCategory(activeCategoryData)) ci.cancel();
+    }
+
+    /** Adds live checklist counters directly to the Origin tree and its hovered nodes. */
+    @Inject(method = "drawContentWithCategory(Lnet/minecraft/client/gui/DrawContext;DDLnet/puffish/skillsmod/client/data/ClientCategoryData;)V",
+            at = @At("TAIL"))
+    private void smoothClasses$drawOriginProgress(DrawContext context, double mouseX, double mouseY,
+                                                  ClientCategoryData activeCategoryData, CallbackInfo ci) {
+        // The tree tab is also the ability-HUD page selector: close the GUI after
+        // viewing Origin and the same three bound keys now operate Origin slots.
+        if (smoothClasses$isOriginCategory(activeCategoryData)) AbilityPageState.setOriginPage();
+        else AbilityPageState.setClassPage();
+
+        OriginType origin = smoothClasses$originFor(activeCategoryData);
+        if (origin == null) return;
+
+        MinecraftClient client = MinecraftClient.getInstance();
+        if (client.player == null) return;
+
+        // Compact always-visible tracker: the player can see counters changing without
+        // leaving the skill tree or hovering a node.
+        List<Text> panelLines = OriginProgressDisplay.compactPanel(origin);
+        int panelWidth = 196;
+        int panelX = Math.max(22, client.getWindow().getScaledWidth() - 17 - panelWidth - 7);
+        int panelY = 58;
+        int panelHeight = 8 + panelLines.size() * 10;
+        context.fill(panelX, panelY, panelX + panelWidth, panelY + panelHeight, 0xC0121218);
+        context.drawBorder(panelX, panelY, panelWidth, panelHeight, 0xFF5D5140);
+        int lineY = panelY + 5;
+        for (int i = 0; i < panelLines.size(); i++) {
+            Text line = panelLines.get(i);
+            int color = i == 0 ? 0xFFFFD66B : 0xFFE7E7E7;
+            context.drawTextWithShadow(client.textRenderer, line, panelX + 6, lineY, color);
+            lineY += 10;
+        }
+
+        // Override Puffish's static tooltip when an Origin node is hovered.  The
+        // original title/description stay intact; live requirement rows are appended.
+        var category = activeCategoryData.getConfig();
+        double scale = activeCategoryData.getScale();
+        int transformedMouseX = (int) Math.round((mouseX - activeCategoryData.getX() - client.getWindow().getScaledWidth() / 2.0D) / scale);
+        int transformedMouseY = (int) Math.round((mouseY - activeCategoryData.getY() - client.getWindow().getScaledHeight() / 2.0D) / scale);
+
+        for (var skill : category.skills().values()) {
+            var definition = category.getDefinitionById(skill.definitionId()).orElse(null);
+            if (definition == null) continue;
+            int halfSize = Math.round(13.0F * definition.size());
+            boolean hovered = transformedMouseX >= skill.x() - halfSize && transformedMouseX < skill.x() + halfSize
+                    && transformedMouseY >= skill.y() - halfSize && transformedMouseY < skill.y() + halfSize;
+            if (!hovered) continue;
+
+            List<OrderedText> tooltip = new ArrayList<>();
+            tooltip.add(definition.title().asOrderedText());
+
+            // Root node = permanent Origin recap. This mirrors the selection popup so
+            // players can re-read their biology, buffs and drawbacks at any time.
+            if ("origin_base".equals(skill.id())) {
+                for (Text line : OriginProgressDisplay.overviewLines(origin)) {
+                    if (line.getString().isEmpty()) tooltip.add(Text.empty().asOrderedText());
+                    else tooltip.addAll(client.textRenderer.wrapLines(line, 300));
+                }
+                ((SkillsScreen) (Object) this).setTooltip(tooltip);
+                return;
+            }
+
+            List<Text> live = OriginProgressDisplay.nodeLines(origin, skill.id());
+            if (live.isEmpty()) return;
+            tooltip.addAll(client.textRenderer.wrapLines(definition.description().copy().formatted(Formatting.GRAY), 300));
+            tooltip.add(Text.empty().asOrderedText());
+            tooltip.add(Text.literal("Live Requirements").formatted(Formatting.GOLD).asOrderedText());
+            for (Text line : live) tooltip.addAll(client.textRenderer.wrapLines(line, 300));
+            ((SkillsScreen) (Object) this).setTooltip(tooltip);
+            return;
+        }
+    }
+
+    @Unique
+    private boolean smoothClasses$isOriginCategory(ClientCategoryData data) {
+        return data != null && data.getConfig().id().getPath().startsWith("origin_");
+    }
+
+    @Unique
+    private OriginType smoothClasses$originFor(ClientCategoryData data) {
+        if (!smoothClasses$isOriginCategory(data)) return null;
+        String path = data.getConfig().id().getPath();
+        String id = path.substring("origin_".length());
+        OriginType type = OriginType.byId(id).orElse(null);
+        if (type == null) return null;
+        // The server unlocks only the selected Origin category, but keep this guard
+        // so a stale client tab can never show another Origin's personal counters.
+        return OriginClientState.originId.isBlank() || OriginClientState.originId.equals(type.id()) ? type : null;
+    }
 
     // MAIN
     @Inject(method = "drawContentWithCategory(Lnet/minecraft/client/gui/DrawContext;DDLnet/puffish/skillsmod/client/data/ClientCategoryData;)V",

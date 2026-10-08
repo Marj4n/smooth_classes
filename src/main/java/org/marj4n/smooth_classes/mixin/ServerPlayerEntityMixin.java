@@ -42,6 +42,15 @@ public abstract class ServerPlayerEntityMixin {
     @Inject(method="damage", at=@At("HEAD"), cancellable=true)
     private void smooth_classes$damage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         ServerPlayerEntity player=(ServerPlayerEntity)(Object)this;
+        var originState = org.marj4n.smooth_classes.origin.OriginRuntime.state(player);
+        if (originState.origin() == org.marj4n.smooth_classes.origin.OriginType.VAMPIRE
+                && originState.hasFlag("vampire.form.bat")
+                && source.isOf(net.minecraft.entity.damage.DamageTypes.IN_WALL)) {
+            // Tight-space travel form: the bat must never die just because a resize or
+            // high-speed edge contact briefly overlaps a solid collision shape.
+            cir.setReturnValue(false);
+            return;
+        }
         if (!CombatEventRuntime.onIncomingDamage(player, source, amount)) cir.setReturnValue(false);
     }
 
@@ -50,9 +59,13 @@ public abstract class ServerPlayerEntityMixin {
         if (cir.getReturnValueZ()) CombatEventRuntime.afterIncomingDamage((ServerPlayerEntity)(Object)this, source, amount);
     }
 
-    @Inject(method="attack", at=@At("HEAD"))
+    @Inject(method="attack", at=@At("HEAD"), cancellable=true)
     private void smooth_classes$attack(Entity target, CallbackInfo ci) {
         ServerPlayerEntity player=(ServerPlayerEntity)(Object)this;
+        if (org.marj4n.smooth_classes.origin.OriginSkillRuntime.blockVampireCombat(player)) {
+            ci.cancel();
+            return;
+        }
         smooth_classes$lancerPrepared=org.marj4n.smooth_classes.content.lancer.runtime.LancerRuntime.prepareDirectSpearAttack(player);
         if(target instanceof net.minecraft.entity.LivingEntity living){
             smooth_classes$lancerTargetId=target.getId();
@@ -86,4 +99,12 @@ public abstract class ServerPlayerEntityMixin {
     private void smooth_classes$death(DamageSource source, CallbackInfo ci) {
         CombatEventRuntime.onDeath((ServerPlayerEntity)(Object)this, source);
     }
+    @Inject(method="copyFrom", at=@At("TAIL"))
+    private void smooth_classes$copyOrigin(ServerPlayerEntity oldPlayer, boolean alive, CallbackInfo ci) {
+        var self = (ServerPlayerEntity)(Object)this;
+        var from = ((org.marj4n.smooth_classes.origin.OriginDataHolder) oldPlayer).smooth_classes$getOriginState();
+        var to = ((org.marj4n.smooth_classes.origin.OriginDataHolder) self).smooth_classes$getOriginState();
+        to.copyFrom(from);
+    }
+
 }

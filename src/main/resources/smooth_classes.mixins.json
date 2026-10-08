@@ -5,6 +5,7 @@
   "mixins": [
     "ServerPlayerEntityMixin",
     "PlayerEntityMixin",
+    "BatCameraRaycastMixin",
     "BowItemMixin",
     "CrossbowItemMixin",
     "SpellProjectileMixin",
@@ -43,6 +44,14 @@
     "client.ChargeExperienceBarMixin",
     "client.BloodRainClientWorldMixin",
     "client.BloodRainSkyMixin",
-    "client.BerserkerControlLockMixin"
+    "client.BerserkerControlLockMixin",
+    "client.PlayerOriginAppearanceRendererMixin",
+    "client.OriginHeldItemRendererMixin",
+    "client.OriginHeldItemFeatureMixin",
+    "client.BatStuckArrowsFeatureMixin",
+    "client.VampireCameraMixin",
+    "client.BatInWallOverlayMixin",
+    "client.VampireHungerHudMixin",
+    "client.VampireCrosshairMixin"
   ]
 }
