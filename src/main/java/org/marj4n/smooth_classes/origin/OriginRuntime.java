@@ -1,6 +1,7 @@
 package org.marj4n.smooth_classes.origin;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
@@ -55,6 +56,19 @@ public final class OriginRuntime {
                 SmoothClassesNetworking.openOriginSelection(player);
             }
         }));
+
+        // Respawn creates a new PlayerEntity with the same UUID. Re-apply Origin
+        // biology on the new entity and broadcast its cleared form to all clients.
+        ServerPlayerEvents.AFTER_RESPAWN.register((previous, respawned, alive) -> {
+            OriginState restored = state(respawned);
+            if (!alive) VampireFormRespawnRuntime.clear(restored);
+            if (restored.origin() != null) {
+                applyAttributes(respawned, restored.origin());
+                respawned.calculateDimensions();
+                ensureSelectedCategory(respawned);
+            }
+            SmoothClassesNetworking.sendOriginState(respawned);
+        });
 
         ServerTickEvents.END_SERVER_TICK.register(server -> {
             for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
@@ -163,6 +177,10 @@ public final class OriginRuntime {
     }
 
     public static void setOrigin(ServerPlayerEntity player, OriginType origin) {
+        if (state(player).hasFlag("vampire.form.bat")) {
+            state(player).unflag("vampire.form.bat");
+            VampireBatHealthRuntime.exit(player, state(player));
+        }
         lockOriginCategories(player);
         state(player).setOrigin(origin);
         if (!player.isCreative()) player.setInvulnerable(false);
@@ -177,6 +195,10 @@ public final class OriginRuntime {
     }
 
     public static void clearOrigin(ServerPlayerEntity player) {
+        if (state(player).hasFlag("vampire.form.bat")) {
+            state(player).unflag("vampire.form.bat");
+            VampireBatHealthRuntime.exit(player, state(player));
+        }
         lockOriginCategories(player);
         state(player).clear();
         if (!player.isCreative()) player.setInvulnerable(true);
@@ -207,6 +229,16 @@ public final class OriginRuntime {
         OriginState state = state(player);
         OriginType origin = state.origin();
         if (origin == null) return true;
+
+        // Backup protection for newly connected/respawned Vampires whose hidden
+        // vanilla food value may still be 0 before the first Origin tick.
+        // Blood low/empty penalties are handled separately by tickVampire().
+        if (origin == OriginType.VAMPIRE
+                && source.isOf(net.minecraft.entity.damage.DamageTypes.STARVE)) {
+            // Vanilla hunger never drives Vampire starvation. Only an empty
+            // Blood reservoir allows a starvation damage source to apply.
+            return state.blood() <= 0;
+        }
 
         if (origin == OriginType.DEMON && source.isIn(DamageTypeTags.IS_FIRE)) {
             if (player.isInLava() && state.lavaGraceTicks() > 0) return false;
@@ -249,6 +281,13 @@ public final class OriginRuntime {
     }
 
     private static void tickVampire(ServerPlayerEntity player, OriginState state) {
+        // Blood is the Vampire's nutrition; vanilla HungerManager.update is
+        // suppressed by VampireHungerManagerMixin, including vanilla passive
+        // food/saturation healing and vanilla starvation. Keep the hidden value
+        // full only for save/packet compatibility when returning to other Origins.
+        if (player.getHungerManager().getFoodLevel() != 20) {
+            player.getHungerManager().setFoodLevel(20);
+        }
         player.addStatusEffect(new StatusEffectInstance(StatusEffects.NIGHT_VISION, 240, 0, false, false, false));
 
         long coffinUntil = state.longProgress("vampire.coffin_rest_until");
@@ -271,6 +310,7 @@ public final class OriginRuntime {
             }
         }
         boolean batForm = state.hasFlag("vampire.form.bat");
+        boolean manBatForm = state.hasFlag("vampire.form.man_bat");
 
         // Keep the authoritative bounding box compact for the entire Bat Form.
         // A recalculation every few ticks prevents stale humanoid dimensions after
@@ -305,9 +345,9 @@ public final class OriginRuntime {
         }
 
         if (lord) {
-            // The evolved bloodline no longer catches fire from sunlight.
-            // Direct sunlight still weakens and slows the lord, even in Man-Bat.
-            // Tiny Bat keeps its existing travel immunity.
+            // Only Vampire Lord has royal sunlight tolerance in humanoid/Man-Bat.
+            // Ordinary Man-Bat follows the same accumulating burn as normal Vampire.
+            // Tiny Bat retains its existing travel-form protection.
             if (exposed) {
                 player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 30, 0, false, false, true));
                 player.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS, 30, 0, false, false, true));
@@ -327,6 +367,26 @@ public final class OriginRuntime {
             if (state.blood() == 0) {
                 player.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS, 220, 0, false, false, true));
             }
+        }
+
+        // Blood is the starvation source as well as the recovery source.
+        // No hidden vanilla hunger timer may drain HP. Apply only when Blood
+        // is truly empty, at vanilla's 80-tick starvation cadence. Like vanilla
+        // survival starvation, Easy won't reduce health below 5 hearts and
+        // Normal won't reduce it below half a heart; Hard can be fatal.
+        if (state.blood() == 0 && player.age % 80 == 0
+                && VampireBloodMetabolism.canStarve(state.blood(),
+                        player.getWorld().getDifficulty(), player.getHealth())) {
+            player.damage(player.getDamageSources().starve(), 1.0F);
+        }
+
+        // Base Vampire recovery uses Blood rather than the invisible vanilla
+        // food/saturation bar. Man-Bat has its own faster Blood-powered recovery;
+        // don't add another heal on top of its existing regeneration.
+        if (!manBatForm && state.blood() > 0
+                && player.getWorld().getGameRules().getBoolean(net.minecraft.world.GameRules.NATURAL_REGENERATION)
+                && player.getHealth() < player.getMaxHealth() && player.age % 80 == 0) {
+            player.heal(1.0F);
         }
     }
 
@@ -459,6 +519,11 @@ public final class OriginRuntime {
                 applyAttributes(player, OriginType.SPRIGGAN);
             }
         }
+    }
+
+    /** Apply the current vampire form health cap immediately during morph transitions. */
+    static void refreshVampireAttributes(ServerPlayerEntity player) {
+        if (state(player).origin() == OriginType.VAMPIRE) applyAttributes(player, OriginType.VAMPIRE);
     }
 
     private static void applyAttributes(ServerPlayerEntity player, OriginType origin) {

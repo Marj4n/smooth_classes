@@ -19,6 +19,7 @@ import net.minecraft.util.math.MathHelper;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.lang.ref.WeakReference;
 
 /**
  * Thin, public-facing adapter for the direct VSB Blockbench mesh/animation
@@ -32,11 +33,24 @@ public final class ManBatFormModel<T extends PlayerEntity> extends EntityModel<T
     private static final Map<UUID, Float> SMOOTH_HEAD_YAW = new HashMap<>();
     private static final Map<UUID, Float> SMOOTH_HEAD_PITCH = new HashMap<>();
     private static final Map<UUID, VsbFiguraAvatarRenderer.Pose> EQUIPMENT_POSES = new HashMap<>();
+    private static final Map<UUID, WeakReference<PlayerEntity>> TRACKED_ENTITIES = new HashMap<>();
     private static final Map<UUID, Float> WING_OPEN = new HashMap<>();
     private VsbFiguraAvatarRenderer.Pose pose = VsbFiguraAvatarRenderer.Pose.rest();
 
     public ManBatFormModel(ModelPart unusedLayerPart) {
         // ModelPart cannot store the exact per-face Figura texture rectangles.
+    }
+
+    /** A player with the same UUID after death is NOT the same animated entity. */
+    public static void clearPoseCache(UUID playerId) {
+        FIRST_RENDER_AGE.remove(playerId);
+        PREVIOUS_ON_GROUND.remove(playerId);
+        LAST_LANDED_AGE.remove(playerId);
+        SMOOTH_HEAD_YAW.remove(playerId);
+        SMOOTH_HEAD_PITCH.remove(playerId);
+        EQUIPMENT_POSES.remove(playerId);
+        WING_OPEN.remove(playerId);
+        TRACKED_ENTITIES.remove(playerId);
     }
 
     public static TexturedModelData createData() {
@@ -60,6 +74,11 @@ public final class ManBatFormModel<T extends PlayerEntity> extends EntityModel<T
                         float limbAngle, float limbDistance, float animationProgress,
                         float headYaw, float headPitch) {
         UUID id = player.getUuid();
+        WeakReference<PlayerEntity> previousEntity = TRACKED_ENTITIES.get(id);
+        if (previousEntity == null || previousEntity.get() != player) {
+            clearPoseCache(id);
+            TRACKED_ENTITIES.put(id, new WeakReference<>(player));
+        }
         // The supplied Figura head has a permanent -10 degree resting pitch.
         // Adding the full +/-60 degree player camera pitch on top of that bends
         // the Man-Bat neck unnaturally (particularly when looking down in flight).

@@ -44,10 +44,13 @@ public abstract class ServerPlayerEntityMixin {
         ServerPlayerEntity player=(ServerPlayerEntity)(Object)this;
         var originState = org.marj4n.smooth_classes.origin.OriginRuntime.state(player);
         if (originState.origin() == org.marj4n.smooth_classes.origin.OriginType.VAMPIRE
-                && originState.hasFlag("vampire.form.bat")
+                && (originState.hasFlag("vampire.form.bat")
+                    || originState.hasFlag("vampire.form.man_bat"))
                 && source.isOf(net.minecraft.entity.damage.DamageTypes.IN_WALL)) {
-            // Tight-space travel form: the bat must never die just because a resize or
-            // high-speed edge contact briefly overlaps a solid collision shape.
+            // Both morphs can have a collision box higher/different than the
+            // humanoid they replaced (Man-Bat is 2.1875 blocks tall). Prevent
+            // false periodic suffocation from a nearby ceiling during resizing;
+            // real attacks and other hazards still inflict damage.
             cir.setReturnValue(false);
             return;
         }
@@ -97,7 +100,12 @@ public abstract class ServerPlayerEntityMixin {
 
     @Inject(method="onDeath", at=@At("HEAD"))
     private void smooth_classes$death(DamageSource source, CallbackInfo ci) {
-        CombatEventRuntime.onDeath((ServerPlayerEntity)(Object)this, source);
+        ServerPlayerEntity player = (ServerPlayerEntity)(Object)this;
+        var originState = org.marj4n.smooth_classes.origin.OriginRuntime.state(player);
+        // Dead entities must not carry active Bat/Man-Bat morphs across respawn.
+        // Unlocks, lifetime progress and Blood resource are deliberately preserved.
+        org.marj4n.smooth_classes.origin.VampireFormRespawnRuntime.clear(originState);
+        CombatEventRuntime.onDeath(player, source);
     }
     @Inject(method="copyFrom", at=@At("TAIL"))
     private void smooth_classes$copyOrigin(ServerPlayerEntity oldPlayer, boolean alive, CallbackInfo ci) {
@@ -105,6 +113,10 @@ public abstract class ServerPlayerEntityMixin {
         var from = ((org.marj4n.smooth_classes.origin.OriginDataHolder) oldPlayer).smooth_classes$getOriginState();
         var to = ((org.marj4n.smooth_classes.origin.OriginDataHolder) self).smooth_classes$getOriginState();
         to.copyFrom(from);
+        if (!alive) {
+            org.marj4n.smooth_classes.origin.VampireFormRespawnRuntime.clear(to);
+            self.calculateDimensions();
+        }
     }
 
 }

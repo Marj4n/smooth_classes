@@ -173,9 +173,17 @@ public final class SmoothClassesClient implements ClientModInitializer {
                         if (client.world != null) {
                             var target = client.world.getPlayerByUuid(playerId);
                             if (target != null) {
+                                boolean wasManBat = org.marj4n.smooth_classes.origin.OriginRuntime.state(target)
+                                        .hasFlag("vampire.form.man_bat");
                                 org.marj4n.smooth_classes.origin.OriginRuntime.state(target).sync(
                                         origin, blood, sun, wetness, wing, instability, soul, bone, carbon, living,
                                         lastFeed, progress, flags);
+                                boolean isManBat = org.marj4n.smooth_classes.origin.OriginRuntime.state(target)
+                                        .hasFlag("vampire.form.man_bat");
+                                if (wasManBat != isManBat) {
+                                    org.marj4n.smooth_classes.client.origin.appearance.ManBatFormModel
+                                            .clearPoseCache(playerId);
+                                }
                                 // Form/size flags alter dimensions too (Bat Form, Slime sizes), not just Origin ID.
                                 // Recalculate on every authoritative Origin sync so client camera/collision follows server state.
                                 target.calculateDimensions();

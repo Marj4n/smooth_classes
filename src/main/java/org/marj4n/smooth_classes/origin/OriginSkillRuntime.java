@@ -174,6 +174,7 @@ public final class OriginSkillRuntime {
         boolean wasBat = state.hasFlag("vampire.form.bat");
         state.unflag("vampire.form.bat");
         state.unflag("vampire.form.man_bat");
+        if (wasBat) VampireBatHealthRuntime.exit(player, state);
         if (wasManBat) VampireManBatRuntime.onExit(player, state);
         if (!player.isCreative() && !player.isSpectator()) {
             player.getAbilities().flying = false;
