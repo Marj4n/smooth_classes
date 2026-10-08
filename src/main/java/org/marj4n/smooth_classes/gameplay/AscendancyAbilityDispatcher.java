@@ -20,6 +20,7 @@ public final class AscendancyAbilityDispatcher {
     }
 
     public static DispatchResult castNamed(ServerPlayerEntity p,String raw){
+        if (org.marj4n.smooth_classes.origin.VampireBatAbilityLock.isLocked(p)) return DispatchResult.fail("Return from Bat Form to use class abilities.");
         if(org.marj4n.smooth_classes.runtime.WhenOnHighRuntime.active(p))return DispatchResult.fail("When On High is still channeling.");
         String ability=raw.toLowerCase(Locale.ROOT);
         if(!AscendancyRuntime.unlocked(p,ability))return DispatchResult.fail(ability+" is not unlocked in Puffish Ascendancy.");

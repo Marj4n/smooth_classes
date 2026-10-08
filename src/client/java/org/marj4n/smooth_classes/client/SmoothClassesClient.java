@@ -91,6 +91,9 @@ public final class SmoothClassesClient implements ClientModInitializer {
         net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry.getInstance().register(
                 org.marj4n.smooth_classes.registry.SmoothParticles.BLACK_FLAME,
                 org.marj4n.smooth_classes.client.effects.ArcaneFlameFactory::new);
+        net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry.getInstance().register(
+                org.marj4n.smooth_classes.registry.SmoothParticles.VAMPIRE_BAT_SWARM,
+                org.marj4n.smooth_classes.client.effects.VampireBatParticle.Factory::new);
         registerVisualEffects();
         registerEntities();
         EntityModelLayerRegistry.registerModelLayer(ORIGIN_COSMETICS_MODEL, OriginCosmeticModel::createTexturedModelData);
@@ -182,6 +185,8 @@ public final class SmoothClassesClient implements ClientModInitializer {
                             org.marj4n.smooth_classes.client.origin.OriginClientState.sync(
                                     origin, blood, bloodCapacity, sun, wetness, wing, instability, soul, bone, carbon, living, progress, flags);
                             if (origin == null || origin.isBlank()) AbilityPageState.setClassPage();
+                            else if ("vampire".equals(origin) && flags.contains("vampire.form.bat"))
+                                AbilityPageState.setOriginPage(); // Never strand the player behind a locked Class page.
                         }
                     });
                 });
@@ -269,18 +274,10 @@ public final class SmoothClassesClient implements ClientModInitializer {
             org.marj4n.smooth_classes.client.origin.OriginMorphState.tick(client);
             org.marj4n.smooth_classes.client.origin.VampireFeedClient.tick(client);
 
-            // Nycto Dark Form air-jump: send only the rising edge while airborne.
-            boolean manBatJumpDown = client.player != null && client.currentScreen == null
-                    && client.options.jumpKey.isPressed()
-                    && org.marj4n.smooth_classes.client.origin.OriginClientState.hasFlag("vampire.form.man_bat")
-                    && !client.player.isOnGround();
-            boolean manBatJumpPulse = manBatJumpDown && (!manBatJumpWasDown || ++manBatJumpHeartbeat >= 5);
-            if (manBatJumpPulse && ClientPlayNetworking.canSend(SmoothClassesNetworking.VAMPIRE_MAN_BAT_JUMP)) {
-                ClientPlayNetworking.send(SmoothClassesNetworking.VAMPIRE_MAN_BAT_JUMP, PacketByteBufs.empty());
-                manBatJumpHeartbeat = 0;
-            }
-            if (!manBatJumpDown) manBatJumpHeartbeat = 0;
-            manBatJumpWasDown = manBatJumpDown;
+            // Man-Bat now uses vanilla double-space creative-style flight.
+            // No jump packets: the old heartbeat turned one held jump into flight.
+            manBatJumpWasDown = false;
+            manBatJumpHeartbeat = 0;
             if (client.player != null && client.world != null
                     && org.marj4n.smooth_classes.client.runtime.BloodRainWeatherState.isInsideStorm(
                     client.world, client.player.getX(), client.player.getZ())) {
@@ -290,6 +287,11 @@ public final class SmoothClassesClient implements ClientModInitializer {
             }
 
             while (abilityPage.wasPressed()) {
+                if ("vampire".equals(org.marj4n.smooth_classes.client.origin.OriginClientState.originId)
+                        && org.marj4n.smooth_classes.client.origin.OriginClientState.hasFlag("vampire.form.bat")) {
+                    AbilityPageState.setOriginPage(); // Dismissal key must remain available.
+                    continue;
+                }
                 if (!org.marj4n.smooth_classes.client.origin.OriginClientState.originId.isBlank()) {
                     AbilityPageState.toggle();
                     if (client.player != null) {
@@ -299,6 +301,8 @@ public final class SmoothClassesClient implements ClientModInitializer {
                 }
             }
             boolean classPage = AbilityPageState.isClassPage();
+            boolean tinyBatLocked = org.marj4n.smooth_classes.client.origin.OriginClientState.hasFlag("vampire.form.bat")
+                    && "vampire".equals(org.marj4n.smooth_classes.client.origin.OriginClientState.originId);
 
             // Ctrl+H is a fixed Death List shortcut, independent of the shared H keybind
             // and independent of HUD sync. The server remains authoritative and ignores
@@ -317,7 +321,7 @@ public final class SmoothClassesClient implements ClientModInitializer {
                 }
             }
             deathListComboWasDown = deathListComboDown;
-            boolean preparationSelected = classPage && "preparation".equals(AbilityHudState.signatureAbility);
+            boolean preparationSelected = classPage && !tinyBatLocked && "preparation".equals(AbilityHudState.signatureAbility);
             boolean shadowDown = preparationSelected && client.player != null && client.getNetworkHandler() != null
                     && client.currentScreen == null && client.isWindowFocused() && signature.isPressed();
             boolean freshShadowPress = shadowDown && !shadowWasDown;
@@ -330,7 +334,7 @@ public final class SmoothClassesClient implements ClientModInitializer {
             if (releasedShadow && ShadowAimClient.isAiming()) ShadowAimClient.release(client);
             if (!preparationSelected && ShadowAimClient.isAiming()) ShadowAimClient.reset();
 
-            boolean holdingArcane = classPage && client.player != null && client.currentScreen == null
+            boolean holdingArcane = classPage && !tinyBatLocked && client.player != null && client.currentScreen == null
                     && client.isWindowFocused() && ascendancy.isPressed()
                     && "arcane_slash".equals(AbilityHudState.ascendancyAbility);
             boolean freshArcanePress = holdingArcane && !arcaneWasDown;
@@ -345,7 +349,7 @@ public final class SmoothClassesClient implements ClientModInitializer {
                 arcaneHoldSent = false;
                 arcaneHoldTicks = 0;
             }
-            boolean bladeSelected = classPage && "unlimited_blade_works".equals(AbilityHudState.signatureAbility);
+            boolean bladeSelected = classPage && !tinyBatLocked && "unlimited_blade_works".equals(AbilityHudState.signatureAbility);
             boolean bladeDown = classPage && client.player != null && client.getNetworkHandler() != null
                     && client.currentScreen == null && client.isWindowFocused() && signature.isPressed() && bladeSelected;
             boolean freshBladePress = bladeDown && !bladeWasDown;
@@ -359,7 +363,7 @@ public final class SmoothClassesClient implements ClientModInitializer {
             // Berserker H is a real hold-to-charge class special, matching the
             // Arcane Slash / Portal of Sovereignty charge UX. Heartbeats keep
             // the server authoritative and releasing early triggers the 4s fail CD.
-            boolean classSpecialDown = classPage && "crimson_revenant".equals(AbilityHudState.classSpecialId)
+            boolean classSpecialDown = classPage && !tinyBatLocked && "crimson_revenant".equals(AbilityHudState.classSpecialId)
                     && client.player != null && client.getNetworkHandler() != null
                     && client.currentScreen == null && client.isWindowFocused()
                     && classSpecial.isPressed();
@@ -383,6 +387,7 @@ public final class SmoothClassesClient implements ClientModInitializer {
             syncRiderFlightInput(client);
             while (signature.wasPressed()) {
                 if (!classPage) { sendOriginAbility(0); continue; }
+                if (tinyBatLocked) continue;
                 if (preparationSelected) {
                     // Shadow Technique casts on key release using the live mob/block aim preview.
                     continue;
@@ -391,7 +396,8 @@ public final class SmoothClassesClient implements ClientModInitializer {
                 else if (freshBladePress) { cast(client, false); freshBladePress = false; }
             }
             while (classSpecial.wasPressed()) {
-                if (!classPage) { sendOriginAbility(2); continue; }
+                if (!classPage) { if (!tinyBatLocked) sendOriginAbility(2); continue; }
+                if (tinyBatLocked) continue;
                 if (client.player == null) continue;
                 if ("crimson_revenant".equals(AbilityHudState.classSpecialId)) continue;
                 if (!AbilityHudState.classSpecialVisible) continue;
@@ -423,7 +429,8 @@ public final class SmoothClassesClient implements ClientModInitializer {
                 sendClassSpecial(false);
             }
             while (ascendancy.wasPressed()) {
-                if (!classPage) { sendOriginAbility(1); continue; }
+                if (!classPage) { if (!tinyBatLocked) sendOriginAbility(1); continue; }
+                if (tinyBatLocked) continue;
                 if (!"arcane_slash".equals(AbilityHudState.ascendancyAbility)) cast(client, true);
                 else if (freshArcanePress) {
                     cast(client, true);
@@ -438,6 +445,7 @@ public final class SmoothClassesClient implements ClientModInitializer {
             HUD.render(context, tickDelta);
             org.marj4n.smooth_classes.client.origin.VampireHudRenderer.render(context, tickDelta);
             CrimsonRevenantVisionOverlay.render(context, tickDelta);
+            org.marj4n.smooth_classes.client.origin.VampireBatHotbarHud.render(context, tickDelta);
         });
     }
 

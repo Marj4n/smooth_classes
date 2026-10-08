@@ -35,6 +35,7 @@ public final class OriginProgressTracker {
             case VAMPIRE -> {
                 if (victim instanceof BatEntity) state.addProgress("vampire.bats_killed", 1);
                 if (player.getWorld().isNight()) state.addProgress("vampire.night_kills", 1);
+                VampireLordTrial.onKill(player, state, victim);
             }
             case WEREWOLF -> {
                 state.addProgress("werewolf.prey_kills", 1);
@@ -94,7 +95,8 @@ public final class OriginProgressTracker {
         if (state.origin() != OriginType.VAMPIRE) return;
         state.addProgress("vampire.lifetime_blood", Math.max(0, bloodGain));
         if (isHumanoid(victim)) state.addProgress("vampire.humanoid_blood", Math.max(0, bloodGain));
-        state.flag("vampire.blood_category." + bloodCategory(victim));
+        VampireBloodDiet.migrateLegacy(state);
+        state.flag(VampireBloodDiet.DISCOVERY_PREFIX + VampireBloodDiet.type(victim).key());
         if (state.blood() >= 100) state.flag("vampire.filled_blood_once");
     }
 
@@ -125,6 +127,7 @@ public final class OriginProgressTracker {
             case VAMPIRE -> {
                 if (player.getWorld().isNight()) state.addProgress("vampire.night_ticks", 20);
                 if (state.progress("vampire.night_ticks") >= 10_000) state.flag("vampire.full_night_survived");
+                VampireLordTrial.onVisit(player, state);
             }
             case MERMAID -> {
                 if (player.isSubmergedInWater()) state.addProgress("mermaid.submerged_ticks", 20);
@@ -205,13 +208,4 @@ public final class OriginProgressTracker {
                 || path.contains("player");
     }
 
-    private static String bloodCategory(LivingEntity entity) {
-        Identifier id = Registries.ENTITY_TYPE.getId(entity.getType());
-        String path = id.getPath();
-        if (isHumanoid(entity)) return "humanoid";
-        if (entity instanceof HostileEntity) return "hostile";
-        if (entity.getMaxHealth() >= 80.0F) return "elite";
-        if (path.contains("fish") || path.contains("squid") || path.contains("dolphin")) return "aquatic";
-        return "animal";
-    }
 }

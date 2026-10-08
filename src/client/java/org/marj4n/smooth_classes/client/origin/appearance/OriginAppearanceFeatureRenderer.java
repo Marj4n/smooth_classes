@@ -34,7 +34,10 @@ public final class OriginAppearanceFeatureRenderer
     private static final Identifier SPRIGGAN = SmoothClasses.id("textures/entity/origin/spriggan_player.png");
     private static final Identifier SLIME = new Identifier("minecraft", "textures/entity/slime/slime.png");
     private static final Identifier VAMPIRE = SmoothClasses.id("textures/entity/origin/vampire_nycto.png");
-    private static final Identifier MAN_BAT = SmoothClasses.id("textures/entity/origin/man_bat_nycto.png");
+    private static final Identifier MAN_BAT = SmoothClasses.id("textures/entity/origin/vsb_vampire.png");
+    private static final Identifier MAN_BAT_EMISSIVE = SmoothClasses.id("textures/entity/origin/vsb_vampire_e.png");
+    private static final Identifier LORD_MAN_BAT = SmoothClasses.id("textures/entity/origin/vsb_vampire_lord.png");
+    private static final Identifier LORD_MAN_BAT_EMISSIVE = SmoothClasses.id("textures/entity/origin/vsb_vampire_lord_e.png");
     private static final Identifier BAT = new Identifier("minecraft", "textures/entity/bat.png");
     private static final Identifier VAMPIRE_EYES = SmoothClasses.id("textures/entity/origin/vampire_eyes_nycto.png");
     private static final Identifier[] UNDEAD = new Identifier[]{
@@ -85,7 +88,8 @@ public final class OriginAppearanceFeatureRenderer
 
         switch (origin) {
             case HUMAN -> { }
-            case VAMPIRE -> renderVampireState(state, parent, matrices, vertexConsumers, light, player, limbAngle, limbDistance);
+            case VAMPIRE -> renderVampireState(state, parent, matrices, vertexConsumers, light,
+                    player, limbAngle, limbDistance, animationProgress, headYaw, headPitch);
             case WEREWOLF -> {
                 // Werewolf stays visually normal here. The dedicated wolf-form
                 // implementation is intentionally left to the Werewolves-style runtime.
@@ -152,18 +156,31 @@ public final class OriginAppearanceFeatureRenderer
 
     private void renderVampireState(OriginState state, PlayerEntityModel<AbstractClientPlayerEntity> parent,
                                     MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light,
-                                    AbstractClientPlayerEntity player, float limbAngle, float limbDistance) {
+                                    AbstractClientPlayerEntity player, float limbAngle, float limbDistance,
+                                    float animationProgress, float headYaw, float headPitch) {
         if (state.hasFlag("vampire.form.man_bat")) {
-            // Dark Form/Man-Bat uses the Nycto beast silhouette and texture instead of
-            // stretching a humanoid player model. Armor is intentionally left enabled
-            // by ArmorStealthRendererMixin, which is the one Smooth Classes difference.
-            manBat.prepare(player, limbAngle, limbDistance, player.age + 0.5F, player.getYaw() - player.bodyYaw, player.getPitch());
+            // During first-person Player Animator weapon attacks, the vanilla
+            // humanoid rig becomes the animation carrier. Do not draw VSB on
+            // top of that camera-space pass; TPV remains the exact VSB mesh.
+            if (ManBatFormModel.useVanillaFirstPersonCombat(player)) return;
+            // Man-Bat currently uses the user-supplied Vampires Strike Back Figura vampire
+            // avatar as a native Smooth Classes reference port. Gameplay remains Smooth Classes.
+            // Armor is intentionally left enabled by ArmorStealthRendererMixin.
+            manBat.prepare(player, parent, limbAngle, limbDistance, animationProgress, headYaw, headPitch);
             matrices.push();
-            // The reference mesh is authored as a tall ~2.75 block creature. Align feet
-            // with the player origin; do not reuse Bat Form's render anchors.
-            matrices.translate(0.0D, -0.02D, 0.0D);
-            VertexConsumer beast = vertexConsumers.getBuffer(RenderLayer.getEntityCutoutNoCull(MAN_BAT));
+            // Exact source coordinates are mapped from Figura Y-up to vanilla
+            // model-space Y-down by VsbFiguraAvatarRenderer itself.
+            boolean lord = state.hasFlag("vampire.evolution.lord");
+            VertexConsumer beast = vertexConsumers.getBuffer(RenderLayer.getEntityCutoutNoCull(lord ? LORD_MAN_BAT : MAN_BAT));
             manBat.render(matrices, beast, light, OverlayTexture.DEFAULT_UV, 1, 1, 1, 1);
+            // Lord uses the same UV layout, with wine-red emissive eyes.
+            VertexConsumer emissive = vertexConsumers.getBuffer(RenderLayer.getEyes(
+                    lord ? LORD_MAN_BAT_EMISSIVE : MAN_BAT_EMISSIVE));
+            manBat.render(matrices, emissive, 0xF000F0, OverlayTexture.DEFAULT_UV, 1, 1, 1, 1);
+            // Items are intentionally rendered by Minecraft's regular
+            // HeldItemFeatureRenderer after the body layer, using the same
+            // PlayerEntityModel pose as Better Combat. Never re-render items
+            // at Figura's separate wrists: that rotates swords backwards.
             matrices.pop();
         } else if (state.hasFlag("vampire.form.bat")) {
             float flightBlend = org.marj4n.smooth_classes.client.origin.OriginMorphState.batFlight(player);
@@ -189,7 +206,13 @@ public final class OriginAppearanceFeatureRenderer
             matrices.scale(batScale, batScale, batScale);
 
             VertexConsumer batConsumer = vertexConsumers.getBuffer(RenderLayer.getEntityTranslucent(BAT));
-            bat.render(matrices, batConsumer, light, OverlayTexture.DEFAULT_UV, 1, 1, 1, 1);
+            if (state.hasFlag("vampire.evolution.lord")) {
+                // Preserve vanilla Bat geometry and animation; only tint the Lord palette.
+                bat.render(matrices, batConsumer, light, OverlayTexture.DEFAULT_UV,
+                        0.76F, 0.46F, 0.67F, 1.0F);
+            } else {
+                bat.render(matrices, batConsumer, light, OverlayTexture.DEFAULT_UV, 1, 1, 1, 1);
+            }
             matrices.pop();
         }
     }
@@ -202,7 +225,9 @@ public final class OriginAppearanceFeatureRenderer
         return switch (origin) {
             case VOID, UNDEAD, HOMUNCULUS, SPRIGGAN -> true;
             case SLIME -> !state.hasFlag("slime.form.humanoid");
-            case VAMPIRE -> state.hasFlag("vampire.form.man_bat") || state.hasFlag("vampire.form.bat");
+            case VAMPIRE -> state.hasFlag("vampire.form.bat") ||
+                    (state.hasFlag("vampire.form.man_bat")
+                            && !ManBatFormModel.useVanillaFirstPersonCombat(player));
             default -> false;
         };
     }

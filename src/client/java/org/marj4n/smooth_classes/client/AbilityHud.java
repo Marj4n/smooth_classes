@@ -24,14 +24,14 @@ public final class AbilityHud {
         int y = client.getWindow().getScaledHeight() - 29;
 
         if (AbilityPageState.isOriginPage() && !OriginClientState.originId.isBlank()) {
-            renderPageLabel(context, client, x, y, true);
+            renderPageToggle(context, client, x + 81, y);
             renderOriginSlot(context, client, x, y, 0, SmoothClassesClient.signatureKey());
             renderOriginSlot(context, client, x + 22, y, 1, SmoothClassesClient.ascendancyKey());
             renderOriginSlot(context, client, x + 44, y, 2, SmoothClassesClient.classSpecialKey());
             return;
         }
 
-        renderPageLabel(context, client, x, y, false);
+        renderPageToggle(context, client, x + 81, y);
         renderSlot(context, client, x, y, AbilityHudState.signatureAbility, AbilityHudState.signatureIcon(),
                 AbilityHudState.signatureCooldownMs, AbilityHudState.signatureRemainingMs(), SmoothClassesClient.signatureKey());
         renderSlot(context, client, x + 22, y, AbilityHudState.ascendancyAbility, AbilityHudState.ascendancyIcon(),
@@ -44,12 +44,33 @@ public final class AbilityHud {
     }
 
 
-    private void renderPageLabel(DrawContext context, MinecraftClient client, int x, int y, boolean originPage) {
-        String label = originPage ? "CLASS | > ORIGIN <" : "> CLASS < | ORIGIN";
-        String toggle = SmoothClassesClient.abilityPageKey() == null ? ""
-                : "  [" + SmoothClassesClient.abilityPageKey().getBoundKeyLocalizedText().getString() + "]";
-        context.drawTextWithShadow(client.textRenderer, Text.literal(label + toggle), x + 4, y - 10,
-                originPage ? 0xFFE59A : 0xF1F1F1);
+    /** A compact keycap after H; never overlaps neighboring ability slots. */
+    private void renderPageToggle(DrawContext context, MinecraftClient client, int x, int y) {
+        String binding = SmoothClassesClient.abilityPageKey() == null ? "Tab"
+                : SmoothClassesClient.abilityPageKey().getBoundKeyLocalizedText().getString();
+        // Display the actual configured key, while keeping the UI free of class/origin labels.
+        String text = binding.equalsIgnoreCase("key.keyboard.tab") ? "Tab" : binding;
+        int width = Math.max(24, client.textRenderer.getWidth(text) + 12);
+        int top = y + 9;
+        int left = x;
+        int border = AbilityPageState.isOriginPage() ? 0xFFE89ADB : 0xFF91B9DA;
+        context.fill(left + 1, top + 2, left + width + 2, top + 19, 0x60000000);
+        context.fill(left, top, left + width, top + 17, border);
+        context.fill(left + 1, top + 1, left + width - 1, top + 16, 0xE7191826);
+        context.fill(left + 4, top + 3, left + width - 4, top + 4, border);
+        context.drawCenteredTextWithShadow(client.textRenderer, Text.literal(text),
+                left + width / 2, top + 6, 0xFFF7F3FF);
+    }
+
+    /** Tiny Vampire Bat Form cannot cast other skills. Matches Sacred Banner's X overlay. */
+    private boolean tinyBatLocked() {
+        return org.marj4n.smooth_classes.origin.OriginType.VAMPIRE.id().equals(OriginClientState.originId)
+                && OriginClientState.hasFlag("vampire.form.bat");
+    }
+
+    private void renderBatLockedOverlay(DrawContext context, MinecraftClient client, int x, int y) {
+        context.fill(x + 10, y + 10, x + 26, y + 26, 0xB0000000);
+        context.drawCenteredTextWithShadow(client.textRenderer, Text.literal("X"), x + 18, y + 14, 0xFF5555);
     }
 
     private void renderOriginSlot(DrawContext context, MinecraftClient client, int x, int y, int slot, KeyBinding key) {
@@ -61,11 +82,36 @@ public final class AbilityHud {
         context.draw();
         context.getMatrices().push();
         context.getMatrices().translate(0, 0, 300);
+        if (tinyBatLocked() && slot != 0) {
+            // Only Origin slot 0 returns the Bat to a humanoid form.
+            // The other two Origin slots are locked.
+            renderBatLockedOverlay(context, client, x, y);
+            context.drawCenteredTextWithShadow(client.textRenderer, key.getBoundKeyLocalizedText(), x + 18, y, 0xFFFFFF);
+            context.draw();
+            context.getMatrices().pop();
+            RenderSystem.disableBlend();
+            return;
+        }
         long originCooldownMs = 0L;
         int originCooldownTotalMs = 0;
         if (slot == 0 && org.marj4n.smooth_classes.origin.OriginType.VAMPIRE.id().equals(OriginClientState.originId)) {
             originCooldownMs = OriginClientState.vampireBatCooldownRemainingMs();
             originCooldownTotalMs = 10_000;
+        }
+        if (slot == 1 && org.marj4n.smooth_classes.origin.OriginType.VAMPIRE.id().equals(OriginClientState.originId)) {
+            if (OriginClientState.hasFlag("vampire.form.man_bat")) {
+                long remaining = OriginClientState.manBatDurationRemainingMs();
+                int seconds = (int)Math.ceil(remaining / 1000D);
+                // Centered exactly like a cooldown countdown; pink means the form is active.
+                renderActiveDuration(context, client, x, y, seconds);
+            } else {
+                originCooldownMs = OriginClientState.manBatCooldownRemainingMs();
+                originCooldownTotalMs = 30_000;
+            }
+        }
+        if (slot == 2 && org.marj4n.smooth_classes.origin.OriginType.VAMPIRE.id().equals(OriginClientState.originId)) {
+            originCooldownMs = OriginClientState.bloodSenseCooldownRemainingMs();
+            originCooldownTotalMs = 20_000;
         }
         if (originCooldownMs > 0L) {
             int overlayHeight = Math.max(1, Math.min(16,
@@ -98,12 +144,13 @@ public final class AbilityHud {
         RenderSystem.defaultBlendFunc();
         context.getMatrices().push();
         context.getMatrices().translate(0, 0, 300);
-        if ("preparation".equals(ability) && AbilityHudState.shadowActive) {
+        if (tinyBatLocked()) {
+            renderBatLockedOverlay(context, client, x, y);
+        } else if ("preparation".equals(ability) && AbilityHudState.shadowActive) {
             long shadowRemaining = AbilityHudState.shadowRemainingMs();
             int secs = Math.max(0, (int)Math.ceil(shadowRemaining / 1000D));
-            // Same bottom-right extra-number language as Avenger charges. Keep the
-            // Shadow icon unobscured: this number is anchor lifetime, not cooldown.
-            context.drawTextWithShadow(client.textRenderer, Text.literal(Integer.toString(secs)), x + 21, y + 20, 0xDDA0FF);
+            // Active duration uses the same centered alignment as regular cooldowns.
+            renderActiveDuration(context, client, x, y, secs);
         } else if (("sacred_orb".equals(ability) && AbilityHudState.bannerActive)
                 || ("magic_circle".equals(ability) && AbilityHudState.bloodRainActive)
                 || ("agony".equals(ability) && AbilityHudState.whenOnHighActive)) {
@@ -122,6 +169,12 @@ public final class AbilityHud {
         RenderSystem.disableBlend();
     }
 
+    /** Shared timer alignment: white = cooldown, pink = skill/form active duration. */
+    private void renderActiveDuration(DrawContext context, MinecraftClient client, int x, int y, int seconds) {
+        context.drawCenteredTextWithShadow(client.textRenderer,
+                Text.literal(Integer.toString(Math.max(0, seconds))), x + 18, y + 14, 0xDDA0FF);
+    }
+
     private void renderClassSpecialSlot(DrawContext context, MinecraftClient client, int x, int y) {
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
@@ -138,7 +191,9 @@ public final class AbilityHud {
         context.getMatrices().translate(0, 0, 300);
 
         long remaining = AbilityHudState.classSpecialRemainingMs();
-        if (AbilityHudState.classSpecialActive) {
+        if (tinyBatLocked()) {
+            renderBatLockedOverlay(context, client, x, y);
+        } else if (AbilityHudState.classSpecialActive) {
             context.fill(x + 10, y + 10, x + 26, y + 26, 0xB0000000);
             context.drawCenteredTextWithShadow(client.textRenderer, Text.literal("X"), x + 18, y + 14, 0xFF5555);
         } else if (remaining > 0) {
@@ -153,17 +208,17 @@ public final class AbilityHud {
         // gold = H-mode lifetime, aqua = current projected armament lifetime.
         long modeRemaining = AbilityHudState.classSpecialModeRemainingMs();
         long secondaryRemaining = AbilityHudState.classSpecialSecondaryRemainingMs();
-        if (modeRemaining > 0L) {
+        if (!tinyBatLocked() && modeRemaining > 0L) {
             int secs = Math.max(0, (int)Math.ceil(modeRemaining / 1000D));
             context.drawTextWithShadow(client.textRenderer, Text.literal(Integer.toString(secs)), x + 21, y + 20, 0xFFE066);
         }
-        if (secondaryRemaining > 0L) {
+        if (!tinyBatLocked() && secondaryRemaining > 0L) {
             int secs = Math.max(0, (int)Math.ceil(secondaryRemaining / 1000D));
             context.drawTextWithShadow(client.textRenderer, Text.literal(Integer.toString(secs)), x + 5, y + 20, 0x66E6FF);
         }
 
         String badge = AbilityHudState.classSpecialBadge();
-        if (!badge.isBlank() && modeRemaining <= 0L && secondaryRemaining <= 0L) {
+        if (!tinyBatLocked() && !badge.isBlank() && modeRemaining <= 0L && secondaryRemaining <= 0L) {
             context.drawTextWithShadow(client.textRenderer, Text.literal(badge), x + 21, y + 20, 0xFFE066);
         }
         context.drawCenteredTextWithShadow(client.textRenderer, SmoothClassesClient.classSpecialKey().getBoundKeyLocalizedText(), x + 18, y, 0xFFFFFF);
@@ -185,7 +240,9 @@ public final class AbilityHud {
 
         long remaining = AbilityHudState.avengerSummonRemainingMs();
         int charges = AbilityHudState.avengerSummonCharges;
-        if (charges < AbilityHudState.avengerSummonMaxCharges && remaining > 0) {
+        if (tinyBatLocked()) {
+            renderBatLockedOverlay(context, client, x, y);
+        } else if (charges < AbilityHudState.avengerSummonMaxCharges && remaining > 0) {
             int overlayHeight = Math.max(1, Math.min(16, (int)(16F * (remaining / (float)Math.max(1, AbilityHudState.avengerSummonRechargeMs)))));
             int overlayY = y + 10 + (16 - overlayHeight);
             context.drawTexture(COOLDOWN, x + 10, overlayY, 0, 16 - overlayHeight, 16, overlayHeight, 16, 16);
@@ -195,7 +252,7 @@ public final class AbilityHud {
             }
         }
         // Charge badge remains visible while a recharge is running, so 1-2 stored casts are obvious.
-        context.drawTextWithShadow(client.textRenderer, Text.literal(Integer.toString(charges)), x + 21, y + 20,
+        if (!tinyBatLocked()) context.drawTextWithShadow(client.textRenderer, Text.literal(Integer.toString(charges)), x + 21, y + 20,
                 charges > 0 ? 0xFFE066 : 0xFF5555);
         context.drawCenteredTextWithShadow(client.textRenderer, SmoothClassesClient.classSpecialKey().getBoundKeyLocalizedText(), x + 18, y, 0xFFFFFF);
         context.draw();

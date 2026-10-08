@@ -70,7 +70,7 @@ public final class VampireHudRenderer {
         if (!client.player.getMainHandStack().isEmpty()) return;
         if (!(client.crosshairTarget instanceof EntityHitResult hit)) return;
         if (!(hit.getEntity() instanceof LivingEntity living) || !living.isAlive() || living == client.player) return;
-        if (!(living instanceof VillagerEntity) && !(living instanceof AnimalEntity)) return;
+        if (!org.marj4n.smooth_classes.origin.VampireBloodReserve.isFeedable(living)) return;
         if (client.player.squaredDistanceTo(living) > 12.25D) return;
 
         int width = context.getScaledWindowWidth();
@@ -91,9 +91,9 @@ public final class VampireHudRenderer {
         RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
         RenderSystem.disableBlend();
 
-        // Target Blood is represented as five pips. Feeding drains one pip at a time.
-        int pips = Math.max(0, Math.min(5,
-                (int)Math.ceil((living.getHealth() / Math.max(1.0F, living.getMaxHealth())) * 5.0F)));
+        // Show the mob's SERVER-TRACKED blood reserve, not health-based fake pips.
+        // DataTracker delivers updates to nearby clients whenever feeding consumes a portion.
+        int pips = org.marj4n.smooth_classes.origin.VampireBloodReserve.available(living);
         int startX = width / 2 - 22;
         int py = height / 2 + 11;
         for (int i = 0; i < 5; i++) {

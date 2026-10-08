@@ -1,0 +1,28 @@
+{
+  "parent": "smooth_classes:origins/human/root",
+  "display": {
+    "icon": {
+      "item": "minecraft:nether_star"
+    },
+    "title": {
+      "text": "Awakened Human"
+    },
+    "description": {
+      "text": "The Unbroken Will awakens."
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": true
+  },
+  "criteria": {
+    "earned": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "earned"
+    ]
+  ]
+}

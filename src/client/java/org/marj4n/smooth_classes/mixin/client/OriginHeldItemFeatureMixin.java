@@ -12,7 +12,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-/** Third-person item suppression for bodies that do not have human hands. */
+/** Only suppress held items for handless Slime and tiny Bat Form.
+ * Man-Bat needs vanilla HeldItemFeatureRenderer for Better Combat parity. */
 @Mixin(HeldItemFeatureRenderer.class)
 public abstract class OriginHeldItemFeatureMixin {
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
@@ -23,7 +24,7 @@ public abstract class OriginHeldItemFeatureMixin {
         if (!(entity instanceof PlayerEntity player)) return;
         var state = OriginRuntime.state(player);
         if ((state.origin() == OriginType.SLIME && !state.hasFlag("slime.form.humanoid"))
-                || (state.origin() == OriginType.VAMPIRE && (state.hasFlag("vampire.form.bat") || state.hasFlag("vampire.form.man_bat")))) {
+                || (state.origin() == OriginType.VAMPIRE && state.hasFlag("vampire.form.bat"))) {
             ci.cancel();
         }
     }

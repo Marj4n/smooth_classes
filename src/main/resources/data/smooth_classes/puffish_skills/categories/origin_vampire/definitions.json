@@ -4,7 +4,7 @@
       "text": "Vampire"
     },
     "description": {
-      "text": "Blood Hunger, Night Vision and a 15-health predator body. Mortal food is rejected."
+      "text": "Blood Hunger and Night Vision. Feed on living non-hostile mobs to survive; explore the four Blood Diet quality tiers in this node."
     },
     "cost": 0,
     "size": 1.25,
@@ -56,7 +56,7 @@
       "text": "Man-Bat"
     },
     "description": {
-      "text": "Drink 100 Humanoid Blood and score 20 night kills. Unlocks Dark Form: brutal armor and damage, rapid Blood healing, air-jumps, gliding and beast-strength mining. Armor stays equipped."
+      "text": "Drink 100 Humanoid Blood and score 20 night kills. Unlocks Man-Bat: armored combat form, strong Blood healing and slow, heavy bat flight. Lasts 60s; 30s cooldown. Armor stays equipped."
     },
     "cost": 1,
     "size": 1.05,
@@ -82,7 +82,7 @@
       "text": "Blood Sense"
     },
     "description": {
-      "text": "Study 4 blood categories and drink 300 lifetime Blood. Wounded living targets become visible through darkness."
+      "text": "Taste all 4 Blood Types and drink 300 lifetime Blood. Activate to reveal nearby mobs within 20 blocks for 10s, even through walls. 20s cooldown."
     },
     "cost": 1,
     "size": 1.05,
@@ -134,7 +134,7 @@
       "text": "Crimson Nobility"
     },
     "description": {
-      "text": "Taste all 5 blood categories and drink 500 lifetime Blood. Blood capacity increases to 150."
+      "text": "Taste all 4 Blood Types and drink 500 lifetime Blood. Blood capacity increases to 150."
     },
     "cost": 1,
     "size": 1.05,
@@ -186,7 +186,7 @@
       "text": "Vampire Lord"
     },
     "description": {
-      "text": "Drink 1000 lifetime Blood and complete the bloodline. Vampire Lord has 18 health and a 200 Blood reservoir."
+      "text": "Vampire Lord trial: drink 1000 lifetime Blood, unlock Crimson Nobility and Sun Tolerance, discover Alex's Caves Forlorn Hollows, and personally defeat 5 Vespers and 2 Forsaken INSIDE that cave. Vespers are the giant hostile bats; Forsaken are the terrifying ritual-born predators of the Forlorn Hollows. Reward: Man-Bat has 2x damage, movement and flight speed, and a 15s cooldown (60s duration). Blood Sense: 40-block radius, 20s reveal, 10s cooldown. Sunlight slows and weakens instead of burning. Royal plum/wine-violet Man-Bat and Bat palette; tiny Bat speed and cooldown stay unchanged."
     },
     "cost": 1,
     "size": 1.25,

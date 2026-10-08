@@ -1,0 +1,28 @@
+{
+  "parent": "smooth_classes:origins/slime/root",
+  "display": {
+    "icon": {
+      "item": "minecraft:player_head"
+    },
+    "title": {
+      "text": "Humanoid Form"
+    },
+    "description": {
+      "text": "Origin milestone unlocked: Humanoid Form."
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": true
+  },
+  "criteria": {
+    "earned": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "earned"
+    ]
+  ]
+}

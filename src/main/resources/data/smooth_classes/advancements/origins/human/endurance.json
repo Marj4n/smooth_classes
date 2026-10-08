@@ -1,0 +1,28 @@
+{
+  "parent": "smooth_classes:origins/human/root",
+  "display": {
+    "icon": {
+      "item": "minecraft:golden_apple"
+    },
+    "title": {
+      "text": "Endurance"
+    },
+    "description": {
+      "text": "Origin milestone unlocked: Endurance."
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": true
+  },
+  "criteria": {
+    "earned": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "earned"
+    ]
+  ]
+}

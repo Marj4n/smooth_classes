@@ -68,7 +68,7 @@ public final class OriginRuntime {
             if (state.origin() != OriginType.VAMPIRE || !(entity instanceof LivingEntity living)) return ActionResult.PASS;
             if (!living.isAlive() || living == serverPlayer) return ActionResult.PASS;
             boolean transformed = state.hasFlag("vampire.form.bat") || state.hasFlag("vampire.form.man_bat");
-            boolean biteable = living instanceof VillagerEntity || living instanceof AnimalEntity;
+            boolean biteable = VampireBloodReserve.isFeedable(living);
             if (transformed || !biteable) return ActionResult.PASS;
 
             // Direct bottle collection stays on sneak-right-click. Normal feeding is hold-to-feed
@@ -83,11 +83,13 @@ public final class OriginRuntime {
                 return ActionResult.PASS;
             }
 
+            if (!VampireBloodReserve.consume(living, serverPlayer)) {
+                serverPlayer.sendMessage(Text.literal("This creature needs time to replenish its blood."), true);
+                return ActionResult.SUCCESS;
+            }
             if (!serverPlayer.isCreative()) held.decrement(1);
             ItemStack bottle = createBloodFlask();
             if (!serverPlayer.getInventory().insertStack(bottle)) serverPlayer.dropItem(bottle, false);
-            float bloodPerPip = Math.max(1.0F, living.getMaxHealth() / 5.0F);
-            smooth_classes$drainTargetBlood(serverPlayer, living, bloodPerPip);
             state.lastFeedTick(serverPlayer.age);
             OriginProgressTracker.onVampireFeed(serverPlayer, living, 30);
             serverPlayer.getWorld().playSound(null, serverPlayer.getBlockPos(),
@@ -107,10 +109,10 @@ public final class OriginRuntime {
             OriginType origin = originState.origin();
 
             if (origin == OriginType.VAMPIRE
-                    && (originState.hasFlag("vampire.form.bat") || originState.hasFlag("vampire.form.man_bat"))
+                    && originState.hasFlag("vampire.form.bat")
                     && !stack.isEmpty()) {
-                // Bat and Dark Form do not use tools/items. Man-Bat armor remains equipped
-                // because armor slots are intentionally not touched by this rule.
+                // The tiny Bat still has no usable hands. Man-Bat uses the
+                // source avatar's actual claw/item pivots and may use items.
                 return TypedActionResult.fail(stack);
             }
 
@@ -152,16 +154,6 @@ public final class OriginRuntime {
         });
     }
 
-    private static void smooth_classes$drainTargetBlood(ServerPlayerEntity vampire, LivingEntity target, float amount) {
-        float next = target.getHealth() - amount;
-        if (next <= 0.01F) {
-            target.damage(vampire.getDamageSources().playerAttack(vampire), Float.MAX_VALUE);
-        } else {
-            target.setHealth(next);
-            target.timeUntilRegen = 0;
-        }
-    }
-
     public static OriginState state(ServerPlayerEntity player) {
         return ((OriginDataHolder) player).smooth_classes$getOriginState();
     }
@@ -176,6 +168,7 @@ public final class OriginRuntime {
         if (!player.isCreative()) player.setInvulnerable(false);
         if (origin != OriginType.ANGEL) setAngelFlight(player, false);
         unlockOriginCategory(player, origin);
+        OriginAdvancementNotices.onOriginSelected(player, origin);
         applyAttributes(player, origin);
         player.calculateDimensions();
         SmoothClassesNetworking.sendOriginState(player);
@@ -295,23 +288,39 @@ public final class OriginRuntime {
         }
 
         boolean exposed = !batForm && player.getWorld().isDay() && player.getWorld().isSkyVisible(player.getBlockPos());
+        boolean lord = OriginSkillRuntime.unlocked(player, OriginType.VAMPIRE, "final");
         if (batForm) {
             // Travel-form protection: daylight does not burn the vampire while transformed.
             state.sunExposure(0);
             player.extinguish();
+        } else if (lord) {
+            // Clear existing sunlight fire once when evolution takes effect.
+            // Do not extinguish ordinary lava/fire repeatedly: Lord is not fireproof.
+            if (state.sunExposure() > 0) player.extinguish();
+            state.sunExposure(0);
         } else if (exposed) {
             if (player.age % 5 == 0) state.sunExposure(state.sunExposure() + 1);
         } else if (player.age % 4 == 0) {
             state.sunExposure(state.sunExposure() - 1);
         }
 
-        int sun = state.sunExposure();
-        boolean tolerant = OriginSkillRuntime.unlocked(player, OriginType.VAMPIRE, "sun_tolerance");
-        int slowAt = tolerant ? 70 : 50;
-        int weakAt = tolerant ? 90 : 75;
-        if (sun >= slowAt) player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 30, 0, false, false, true));
-        if (sun >= weakAt) player.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS, 30, 0, false, false, true));
-        if (sun >= 100 && player.age % (tolerant ? 40 : 20) == 0) player.setOnFireFor(1);
+        if (lord) {
+            // The evolved bloodline no longer catches fire from sunlight.
+            // Direct sunlight still weakens and slows the lord, even in Man-Bat.
+            // Tiny Bat keeps its existing travel immunity.
+            if (exposed) {
+                player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 30, 0, false, false, true));
+                player.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS, 30, 0, false, false, true));
+            }
+        } else {
+            int sun = state.sunExposure();
+            boolean tolerant = OriginSkillRuntime.unlocked(player, OriginType.VAMPIRE, "sun_tolerance");
+            int slowAt = tolerant ? 70 : 50;
+            int weakAt = tolerant ? 90 : 75;
+            if (sun >= slowAt) player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 30, 0, false, false, true));
+            if (sun >= weakAt) player.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS, 30, 0, false, false, true));
+            if (sun >= 100 && player.age % (tolerant ? 40 : 20) == 0) player.setOnFireFor(1);
+        }
 
         if (player.age % 200 == 0) {
             state.blood(state.blood() - 1);

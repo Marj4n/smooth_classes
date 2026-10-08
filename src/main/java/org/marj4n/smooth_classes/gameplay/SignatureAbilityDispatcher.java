@@ -26,6 +26,7 @@ public final class SignatureAbilityDispatcher {
     }
 
     public static DispatchResult cast(ServerPlayerEntity player) {
+        if (org.marj4n.smooth_classes.origin.VampireBatAbilityLock.isLocked(player)) return DispatchResult.fail("Return from Bat Form to use class abilities.");
         if(org.marj4n.smooth_classes.runtime.WhenOnHighRuntime.active(player))return DispatchResult.fail("When On High is still channeling.");
         try {
             if (clazz(player, "caster")) {
@@ -89,6 +90,7 @@ public final class SignatureAbilityDispatcher {
 
     /** Playtest entrypoint: cast one exact ability while still enforcing Puffish unlock + cooldown. */
     public static DispatchResult castNamed(ServerPlayerEntity player, String ability) {
+        if (org.marj4n.smooth_classes.origin.VampireBatAbilityLock.isLocked(player)) return DispatchResult.fail("Return from Bat Form to use class abilities.");
         if(org.marj4n.smooth_classes.runtime.WhenOnHighRuntime.active(player))return DispatchResult.fail("When On High is still channeling.");
         String a = ability.toLowerCase(java.util.Locale.ROOT);
 

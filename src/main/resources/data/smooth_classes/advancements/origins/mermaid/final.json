@@ -1,0 +1,28 @@
+{
+  "parent": "smooth_classes:origins/mermaid/root",
+  "display": {
+    "icon": {
+      "item": "minecraft:nether_star"
+    },
+    "title": {
+      "text": "Mermaid Queen"
+    },
+    "description": {
+      "text": "Claim the title of Mermaid Queen."
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": true
+  },
+  "criteria": {
+    "earned": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "earned"
+    ]
+  ]
+}

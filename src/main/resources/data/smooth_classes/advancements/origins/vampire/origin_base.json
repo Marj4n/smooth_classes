@@ -1,0 +1,28 @@
+{
+  "parent": "smooth_classes:origins/vampire/root",
+  "display": {
+    "icon": {
+      "item": "minecraft:fermented_spider_eye"
+    },
+    "title": {
+      "text": "Vampire"
+    },
+    "description": {
+      "text": "Begin your Vampire origin."
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": true
+  },
+  "criteria": {
+    "earned": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "earned"
+    ]
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "parent": "smooth_classes:origins/slime/root",
+  "display": {
+    "icon": {
+      "item": "minecraft:honey_block"
+    },
+    "title": {
+      "text": "Perfect Gel"
+    },
+    "description": {
+      "text": "Origin milestone unlocked: Perfect Gel."
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": true
+  },
+  "criteria": {
+    "earned": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "earned"
+    ]
+  ]
+}

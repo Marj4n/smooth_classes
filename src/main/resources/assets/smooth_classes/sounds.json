@@ -448,5 +448,15 @@
     "sounds": [
       "smooth_classes:origin/vampire/feeding"
     ]
+  },
+  "origin_vampire_transform_in": {
+    "sounds": [
+      "smooth_classes:origin/vampire/transform_in"
+    ]
+  },
+  "origin_vampire_transform_out": {
+    "sounds": [
+      "smooth_classes:origin/vampire/transform_out"
+    ]
   }
 }

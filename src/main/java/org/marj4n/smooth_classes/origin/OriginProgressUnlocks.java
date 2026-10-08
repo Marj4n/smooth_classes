@@ -1,9 +1,6 @@
 package org.marj4n.smooth_classes.origin;
 
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 import net.puffish.skillsmod.api.Skill;
 import org.marj4n.smooth_classes.integration.PuffishSkillsIntegration;
 
@@ -45,6 +42,7 @@ public final class OriginProgressUnlocks {
     }
 
     private static void syncVampire(ServerPlayerEntity player, OriginState state) {
+        VampireBloodDiet.migrateLegacy(state);
         unlockIf(player, OriginType.VAMPIRE, "bat_form",
                 state.progress("vampire.bats_killed") >= 10
                         && state.hasFlag("vampire.filled_blood_once")
@@ -57,7 +55,7 @@ public final class OriginProgressUnlocks {
 
         if (isUnlocked(player, OriginType.VAMPIRE, "man_bat")) {
             boolean bloodStudy = state.progress("vampire.lifetime_blood") >= 300
-                    && state.countFlags("vampire.blood_category.") >= 4;
+                    && VampireBloodDiet.discovered(state) >= VampireBloodDiet.DISTINCT_TYPES;
             unlockIf(player, OriginType.VAMPIRE, "blood_sense", bloodStudy);
             unlockIf(player, OriginType.VAMPIRE, "blood_flask",
                     state.progress("vampire.lifetime_blood") >= 400);
@@ -67,7 +65,7 @@ public final class OriginProgressUnlocks {
                 isUnlocked(player, OriginType.VAMPIRE, "blood_sense")
                         && isUnlocked(player, OriginType.VAMPIRE, "blood_flask")
                         && state.progress("vampire.lifetime_blood") >= 500
-                        && state.countFlags("vampire.blood_category.") >= 5);
+                        && VampireBloodDiet.discovered(state) >= VampireBloodDiet.DISTINCT_TYPES);
         unlockIf(player, OriginType.VAMPIRE, "sun_tolerance",
                 isUnlocked(player, OriginType.VAMPIRE, "nobility")
                         && state.hasFlag("vampire.full_night_survived")
@@ -75,7 +73,8 @@ public final class OriginProgressUnlocks {
         unlockIf(player, OriginType.VAMPIRE, "final",
                 isUnlocked(player, OriginType.VAMPIRE, "nobility")
                         && isUnlocked(player, OriginType.VAMPIRE, "sun_tolerance")
-                        && state.progress("vampire.lifetime_blood") >= 1000);
+                        && state.progress("vampire.lifetime_blood") >= 1000
+                        && VampireLordTrial.completed(state));
     }
 
     private static void syncMermaid(ServerPlayerEntity player, OriginState state) {
@@ -150,19 +149,10 @@ public final class OriginProgressUnlocks {
                     if (skill.getState(player) == Skill.State.UNLOCKED) return;
                     skill.unlock(player);
                     PuffishSkillsIntegration.invalidateRuntimeCache(player);
-                    player.sendMessage(Text.literal("Origin Milestone Unlocked: ")
-                                    .formatted(Formatting.GOLD)
-                                    .append(skillIdToTitle(skillId).formatted(Formatting.YELLOW)), true);
+                    // Use Minecraft's built-in achievement toast (task / challenge)
+                    // instead of a competing action-bar message.
+                    OriginAdvancementNotices.onMilestoneUnlocked(player, origin, skillId);
                 }));
     }
 
-    private static MutableText skillIdToTitle(String skillId) {
-        StringBuilder out = new StringBuilder();
-        for (String part : skillId.split("_")) {
-            if (part.isEmpty()) continue;
-            if (!out.isEmpty()) out.append(' ');
-            out.append(Character.toUpperCase(part.charAt(0))).append(part.substring(1));
-        }
-        return Text.literal(out.toString());
-    }
 }
