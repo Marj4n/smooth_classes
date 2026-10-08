@@ -41,6 +41,7 @@
     "wizards": "*",
     "elemental_wizards_rpg": "*",
     "more_rpg_classes": "*",
-    "icarus": "*"
+    "icarus": "*",
+    "armor_model_api": "*"
   }
 }

@@ -30,7 +30,7 @@
       "text": "Bat Form"
     },
     "description": {
-      "text": "Kill 10 bats, fill Blood once and survive a full night. Unlocks a true tiny Bat travel form with flight; combat and item use are disabled while transformed."
+      "text": "Kill 20 bats, fill Blood once and survive a full night. Unlocks the tiny Bat travel form with flight; combat and item use are disabled while transformed."
     },
     "cost": 1,
     "size": 1.05,
@@ -56,7 +56,7 @@
       "text": "Man-Bat"
     },
     "description": {
-      "text": "Drink 100 Humanoid Blood and score 20 night kills. Unlocks Man-Bat: armored combat form, strong Blood healing and slow, heavy bat flight. Lasts 60s; 30s cooldown. Armor stays equipped."
+      "text": "Drink 200 Humanoid Blood and score 50 night kills. Unlocks Man-Bat: armored combat form, strong Blood healing and slow, heavy bat flight. Lasts 60s; 30s cooldown."
     },
     "cost": 1,
     "size": 1.05,
@@ -82,7 +82,7 @@
       "text": "Blood Sense"
     },
     "description": {
-      "text": "Taste all 4 Blood Types and drink 300 lifetime Blood. Activate to reveal nearby mobs within 20 blocks for 10s, even through walls. 20s cooldown."
+      "text": "Taste all 4 Blood Types and drink 750 lifetime Blood. Reveal nearby mobs within 20 blocks for 10s, even through walls. 20s cooldown."
     },
     "cost": 1,
     "size": 1.05,
@@ -108,7 +108,7 @@
       "text": "Blood Flask"
     },
     "description": {
-      "text": "Drink 400 lifetime Blood. Sneak-use a Glass Bottle to store 30 Blood; drink the flask later to restore it."
+      "text": "Drink 1000 lifetime Blood. Sneak-use a Glass Bottle to store 30 Blood; drink it later to restore Blood."
     },
     "cost": 1,
     "size": 1.05,
@@ -134,7 +134,7 @@
       "text": "Crimson Nobility"
     },
     "description": {
-      "text": "Taste all 4 Blood Types and drink 500 lifetime Blood. Blood capacity increases to 150."
+      "text": "Taste all 4 Blood Types and drink 1500 lifetime Blood. Blood capacity increases to 150."
     },
     "cost": 1,
     "size": 1.05,
@@ -160,7 +160,7 @@
       "text": "Sun Tolerance"
     },
     "description": {
-      "text": "Prove yourself through 50 night kills. Sunlight penalties build later and burning ticks slower."
+      "text": "Prove yourself through 125 night kills. Sunlight penalties build later and burning ticks slower."
     },
     "cost": 1,
     "size": 1.05,
@@ -186,7 +186,7 @@
       "text": "Vampire Lord"
     },
     "description": {
-      "text": "Vampire Lord trial: drink 1000 lifetime Blood, unlock Crimson Nobility and Sun Tolerance, discover Alex's Caves Forlorn Hollows, and personally defeat 5 Vespers and 2 Forsaken INSIDE that cave. Vespers are the giant hostile bats; Forsaken are the terrifying ritual-born predators of the Forlorn Hollows. Reward: Man-Bat has 2x damage, movement and flight speed, and a 15s cooldown (60s duration). Blood Sense: 40-block radius, 20s reveal, 10s cooldown. Sunlight slows and weakens instead of burning. Royal plum/wine-violet Man-Bat and Bat palette; tiny Bat speed and cooldown stay unchanged."
+      "text": "Vampire Lord trial: drink 3000 lifetime Blood, unlock Crimson Nobility and Sun Tolerance, discover Alex's Caves Forlorn Hollows, and personally defeat 5 Vespers and 2 Forsaken INSIDE that cave. Vespers are the giant hostile bats; Forsaken are the terrifying ritual-born predators of the Forlorn Hollows. Reward: Man-Bat has 2x damage, movement and flight speed, normal attack speed, and a 15s cooldown (60s duration). Blood Sense: 40-block radius, 20s reveal, 10s cooldown. Sunlight slows and weakens instead of burning. Royal plum/wine-violet Man-Bat and Bat palette; tiny Bat speed and cooldown stay unchanged."
     },
     "cost": 1,
     "size": 1.25,

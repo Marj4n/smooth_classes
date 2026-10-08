@@ -66,8 +66,12 @@ public final class OriginDebugLevels {
             if (category.getSkill(steps.get(i)).isEmpty()) return false;
         }
         for (int i = 0; i < target; i++) {
-            category.getSkill(steps.get(i)).ifPresent(skill -> {
-                if (skill.getState(player) != Skill.State.UNLOCKED) skill.unlock(player);
+            String milestone = steps.get(i);
+            category.getSkill(milestone).ifPresent(skill -> {
+                if (skill.getState(player) != Skill.State.UNLOCKED) {
+                    skill.unlock(player);
+                    OriginAdvancementNotices.onMilestoneUnlocked(player, origin, milestone);
+                }
             });
         }
         PuffishSkillsIntegration.invalidateRuntimeCache(player);

@@ -4,6 +4,7 @@ import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import org.marj4n.smooth_classes.origin.OriginType;
+import org.marj4n.smooth_classes.origin.VampireProgressionRequirements;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,8 +80,8 @@ public final class OriginProgressDisplay {
         int bats = OriginClientState.progress("vampire.bats_killed");
         boolean filled = OriginClientState.hasFlag("vampire.filled_blood_once");
         boolean night = OriginClientState.hasFlag("vampire.full_night_survived");
-        if (bats < 10 || !filled || !night) {
-            lines.add(count("Bats killed", bats, 10));
+        if (bats < VampireProgressionRequirements.BAT_KILLS || !filled || !night) {
+            lines.add(count("Bats killed", bats, VampireProgressionRequirements.BAT_KILLS));
             lines.add(check("Blood reservoir filled", filled));
             lines.add(check("Full night survived", night));
             return;
@@ -88,41 +89,41 @@ public final class OriginProgressDisplay {
 
         int humanoid = OriginClientState.progress("vampire.humanoid_blood");
         int nightKills = OriginClientState.progress("vampire.night_kills");
-        if (humanoid < 100 || nightKills < 20) {
+        if (humanoid < VampireProgressionRequirements.MAN_BAT_HUMANOID_BLOOD || nightKills < VampireProgressionRequirements.MAN_BAT_NIGHT_KILLS) {
             lines.add(Text.literal("Next: Man-Bat").formatted(Formatting.LIGHT_PURPLE));
-            lines.add(count("Humanoid Blood", humanoid, 100));
-            lines.add(count("Night kills", nightKills, 20));
+            lines.add(count("Humanoid Blood", humanoid, VampireProgressionRequirements.MAN_BAT_HUMANOID_BLOOD));
+            lines.add(count("Night kills", nightKills, VampireProgressionRequirements.MAN_BAT_NIGHT_KILLS));
             return;
         }
 
         int lifetime = OriginClientState.progress("vampire.lifetime_blood");
         int categories = OriginClientState.countFlags("vampire.blood_type.");
-        if (lifetime < 400 || categories < 4) {
+        if (lifetime < VampireProgressionRequirements.BLOOD_FLASK_LIFETIME || categories < 4) {
             lines.add(Text.literal("Next: Blood Arts").formatted(Formatting.LIGHT_PURPLE));
-            lines.add(count("Lifetime Blood", lifetime, 400));
+            lines.add(count("Lifetime Blood", lifetime, VampireProgressionRequirements.BLOOD_FLASK_LIFETIME));
             lines.add(count("Blood Types Tasted", categories, 4));
             return;
         }
 
-        if (lifetime < 500 || categories < 4) {
+        if (lifetime < VampireProgressionRequirements.NOBILITY_LIFETIME || categories < 4) {
             lines.add(Text.literal("Next: Nobility").formatted(Formatting.LIGHT_PURPLE));
-            lines.add(count("Lifetime Blood", lifetime, 500));
+            lines.add(count("Lifetime Blood", lifetime, VampireProgressionRequirements.NOBILITY_LIFETIME));
             lines.add(count("Blood Types Tasted", categories, 4));
             return;
         }
 
-        if (nightKills < 50 || !night) {
+        if (nightKills < VampireProgressionRequirements.SUN_TOLERANCE_NIGHT_KILLS || !night) {
             lines.add(Text.literal("Next: Sun Tolerance").formatted(Formatting.LIGHT_PURPLE));
-            lines.add(count("Night kills", nightKills, 50));
+            lines.add(count("Night kills", nightKills, VampireProgressionRequirements.SUN_TOLERANCE_NIGHT_KILLS));
             lines.add(check("Full night survived", night));
             return;
         }
 
-        if (lifetime < 1000 || !OriginClientState.hasFlag("vampire.found_forlorn_hollows")
+        if (lifetime < VampireProgressionRequirements.LORD_LIFETIME || !OriginClientState.hasFlag("vampire.found_forlorn_hollows")
                 || OriginClientState.progress("vampire.forlorn_vesper_kills") < 5
                 || OriginClientState.progress("vampire.forlorn_forsaken_kills") < 2) {
             lines.add(Text.literal("Next: Vampire Lord").formatted(Formatting.LIGHT_PURPLE));
-            lines.add(count("Lifetime Blood", lifetime, 1000));
+            lines.add(count("Lifetime Blood", lifetime, VampireProgressionRequirements.LORD_LIFETIME));
             lines.add(check("Find Forlorn Hollows", OriginClientState.hasFlag("vampire.found_forlorn_hollows")));
             lines.add(count("Vespers defeated in cave", OriginClientState.progress("vampire.forlorn_vesper_kills"), 5));
             lines.add(count("Forsaken defeated in cave", OriginClientState.progress("vampire.forlorn_forsaken_kills"), 2));
@@ -220,39 +221,39 @@ public final class OriginProgressDisplay {
     private static void vampire(String id, List<Text> out) {
         switch (id) {
             case "bat_form" -> {
-                out.add(count("Bats killed", OriginClientState.progress("vampire.bats_killed"), 10));
+                out.add(count("Bats killed", OriginClientState.progress("vampire.bats_killed"), VampireProgressionRequirements.BAT_KILLS));
                 out.add(check("Fill Blood Reservoir once", OriginClientState.hasFlag("vampire.filled_blood_once")));
                 out.add(check("Survive a full night", OriginClientState.hasFlag("vampire.full_night_survived")));
                 out.add(Text.literal("Reward: true Bat travel form + flight").formatted(Formatting.AQUA));
             }
             case "man_bat" -> {
-                out.add(count("Humanoid Blood", OriginClientState.progress("vampire.humanoid_blood"), 100));
-                out.add(count("Night kills", OriginClientState.progress("vampire.night_kills"), 20));
+                out.add(count("Humanoid Blood", OriginClientState.progress("vampire.humanoid_blood"), VampireProgressionRequirements.MAN_BAT_HUMANOID_BLOOD));
+                out.add(count("Night kills", OriginClientState.progress("vampire.night_kills"), VampireProgressionRequirements.MAN_BAT_NIGHT_KILLS));
                 out.add(Text.literal("Reward: combat Man-Bat transformation").formatted(Formatting.AQUA));
             }
             case "blood_sense" -> {
-                out.add(count("Lifetime Blood", OriginClientState.progress("vampire.lifetime_blood"), 300));
+                out.add(count("Lifetime Blood", OriginClientState.progress("vampire.lifetime_blood"), VampireProgressionRequirements.BLOOD_SENSE_LIFETIME));
                 out.add(count("Blood Types Tasted", OriginClientState.countFlags("vampire.blood_type."), 4));
                 out.add(Text.literal("Reward: reveal nearby mobs for 10s (20-block radius)").formatted(Formatting.AQUA));
             }
-            case "blood_flask" -> out.add(count("Lifetime Blood", OriginClientState.progress("vampire.lifetime_blood"), 400));
+            case "blood_flask" -> out.add(count("Lifetime Blood", OriginClientState.progress("vampire.lifetime_blood"), VampireProgressionRequirements.BLOOD_FLASK_LIFETIME));
             case "nobility" -> {
-                out.add(count("Lifetime Blood", OriginClientState.progress("vampire.lifetime_blood"), 500));
+                out.add(count("Lifetime Blood", OriginClientState.progress("vampire.lifetime_blood"), VampireProgressionRequirements.NOBILITY_LIFETIME));
                 out.add(count("Blood Types Tasted", OriginClientState.countFlags("vampire.blood_type."), 4));
             }
             case "sun_tolerance" -> {
-                out.add(count("Night kills", OriginClientState.progress("vampire.night_kills"), 50));
+                out.add(count("Night kills", OriginClientState.progress("vampire.night_kills"), VampireProgressionRequirements.SUN_TOLERANCE_NIGHT_KILLS));
                 out.add(check("Full night survived", OriginClientState.hasFlag("vampire.full_night_survived")));
             }
             case "final" -> {
-                out.add(count("Lifetime Blood", OriginClientState.progress("vampire.lifetime_blood"), 1000));
+                out.add(count("Lifetime Blood", OriginClientState.progress("vampire.lifetime_blood"), VampireProgressionRequirements.LORD_LIFETIME));
                 out.add(check("Discover Alex's Caves: Forlorn Hollows",
                         OriginClientState.hasFlag("vampire.found_forlorn_hollows")));
                 out.add(count("Vespers slain inside Forlorn Hollows",
                         OriginClientState.progress("vampire.forlorn_vesper_kills"), 5));
                 out.add(count("Forsaken slain inside Forlorn Hollows",
                         OriginClientState.progress("vampire.forlorn_forsaken_kills"), 2));
-                out.add(Text.literal("Reward: 2x Man-Bat damage/movement/flight, 15s cooldown").formatted(Formatting.LIGHT_PURPLE));
+                out.add(Text.literal("Reward: 2x Man-Bat damage/movement/flight, normal attack speed, 15s cooldown").formatted(Formatting.LIGHT_PURPLE));
                 out.add(Text.literal("Blood Sense: 40 blocks, 20s reveal, 10s cooldown").formatted(Formatting.AQUA));
                 out.add(Text.literal("Royal form colors; sunlight Slowness + Weakness, no burning").formatted(Formatting.GRAY));
             }

@@ -79,6 +79,7 @@ public final class OriginAbilityDispatcher {
             if (!state.hasFlag("vampire.form.bat") && player.getWorld().getTime() < ready) return Result.fail("Bat Form is recovering.");
             if (state.hasFlag("vampire.form.bat")) {
                 state.unflag("vampire.form.bat");
+                VampireBatHealthRuntime.exit(player, state);
                 state.longProgress("vampire.bat_form_ready_at", player.getWorld().getTime() + 200L); // Nycto-like 10s cooldown
                 if (!player.isCreative() && !player.isSpectator()) {
                     player.getAbilities().flying = false;
@@ -99,6 +100,7 @@ public final class OriginAbilityDispatcher {
                 VampireManBatRuntime.onExit(player, state);
             }
             state.flag("vampire.form.bat");
+            VampireBatHealthRuntime.enter(player, state);
             if (!player.isCreative() && !player.isSpectator()) {
                 // Airborne transform should feel seamless: if the player jumps/falls and
                 // transforms mid-air, enter Bat flight immediately instead of requiring
@@ -132,8 +134,10 @@ public final class OriginAbilityDispatcher {
             if (state.blood() < 3) return Result.fail("You need at least 3 Blood.");
 
             state.blood(state.blood() - 3);
-            // Forms are exclusive. Man-Bat takes over slower creative-style flight.
+            // Forms are exclusive. Preserve Bat Form's temporarily clipped HP.
+            boolean exitingBat = state.hasFlag("vampire.form.bat");
             state.unflag("vampire.form.bat");
+            if (exitingBat) VampireBatHealthRuntime.exit(player, state);
             state.flag("vampire.form.man_bat");
             VampireManBatRuntime.onEnter(player, state);
             player.calculateDimensions();

@@ -54,6 +54,12 @@ public final class VampireManBatRuntime {
     }
 
     public static void onEnter(ServerPlayerEntity player, OriginState state) {
+        // Only Lord is immune to sunlight burning. Regular Man-Bat inherits
+        // the ordinary Vampire exposure and fire instead of resetting it here.
+        if (lord(player)) {
+            if (state.sunExposure() > 0) player.extinguish();
+            state.sunExposure(0);
+        }
         long now = player.getWorld().getTime();
         state.longProgress("vampire.man_bat_next_drain", now + 300L);
         state.longProgress("vampire.man_bat_end_at", now + MAX_DURATION_TICKS);
@@ -163,7 +169,15 @@ public final class VampireManBatRuntime {
         set(player, EntityAttributes.GENERIC_ARMOR, ARMOR, "Man-Bat Armor", 20.0D, EntityAttributeModifier.Operation.ADDITION);
         set(player, EntityAttributes.GENERIC_ARMOR_TOUGHNESS, TOUGHNESS, "Man-Bat Toughness", 8.0D, EntityAttributeModifier.Operation.ADDITION);
         set(player, EntityAttributes.GENERIC_ATTACK_DAMAGE, DAMAGE, "Man-Bat Damage", 10.0D, EntityAttributeModifier.Operation.ADDITION);
-        set(player, EntityAttributes.GENERIC_ATTACK_SPEED, ATTACK_SPEED, "Man-Bat Attack Speed", -0.50D, EntityAttributeModifier.Operation.MULTIPLY_TOTAL);
+        // Only regular Man-Bat attacks feel heavy. Vampire Lord restores normal
+        // weapon-based attack speed (including heavy-weapon penalties, if any).
+        // Remove the exact same UUID so a newly earned Lord evolution also
+        // clears an active Man-Bat penalty on the next server tick.
+        if (lord(player)) {
+            remove(player, EntityAttributes.GENERIC_ATTACK_SPEED, ATTACK_SPEED);
+        } else {
+            set(player, EntityAttributes.GENERIC_ATTACK_SPEED, ATTACK_SPEED, "Man-Bat Attack Speed", -0.50D, EntityAttributeModifier.Operation.MULTIPLY_TOTAL);
+        }
         set(player, EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, KNOCKBACK, "Man-Bat Knockback Resistance", 0.70D, EntityAttributeModifier.Operation.ADDITION);
         // 2x final damage AFTER weapon/base/normal Man-Bat modifiers, including heavy swords.
         // 2x ground movement speed; flying speed is synchronized separately above.

@@ -44,36 +44,36 @@ public final class OriginProgressUnlocks {
     private static void syncVampire(ServerPlayerEntity player, OriginState state) {
         VampireBloodDiet.migrateLegacy(state);
         unlockIf(player, OriginType.VAMPIRE, "bat_form",
-                state.progress("vampire.bats_killed") >= 10
+                state.progress("vampire.bats_killed") >= VampireProgressionRequirements.BAT_KILLS
                         && state.hasFlag("vampire.filled_blood_once")
                         && state.hasFlag("vampire.full_night_survived"));
 
         unlockIf(player, OriginType.VAMPIRE, "man_bat",
                 isUnlocked(player, OriginType.VAMPIRE, "bat_form")
-                        && state.progress("vampire.humanoid_blood") >= 100
-                        && state.progress("vampire.night_kills") >= 20);
+                        && state.progress("vampire.humanoid_blood") >= VampireProgressionRequirements.MAN_BAT_HUMANOID_BLOOD
+                        && state.progress("vampire.night_kills") >= VampireProgressionRequirements.MAN_BAT_NIGHT_KILLS);
 
         if (isUnlocked(player, OriginType.VAMPIRE, "man_bat")) {
-            boolean bloodStudy = state.progress("vampire.lifetime_blood") >= 300
+            boolean bloodStudy = state.progress("vampire.lifetime_blood") >= VampireProgressionRequirements.BLOOD_SENSE_LIFETIME
                     && VampireBloodDiet.discovered(state) >= VampireBloodDiet.DISTINCT_TYPES;
             unlockIf(player, OriginType.VAMPIRE, "blood_sense", bloodStudy);
             unlockIf(player, OriginType.VAMPIRE, "blood_flask",
-                    state.progress("vampire.lifetime_blood") >= 400);
+                    state.progress("vampire.lifetime_blood") >= VampireProgressionRequirements.BLOOD_FLASK_LIFETIME);
         }
 
         unlockIf(player, OriginType.VAMPIRE, "nobility",
                 isUnlocked(player, OriginType.VAMPIRE, "blood_sense")
                         && isUnlocked(player, OriginType.VAMPIRE, "blood_flask")
-                        && state.progress("vampire.lifetime_blood") >= 500
+                        && state.progress("vampire.lifetime_blood") >= VampireProgressionRequirements.NOBILITY_LIFETIME
                         && VampireBloodDiet.discovered(state) >= VampireBloodDiet.DISTINCT_TYPES);
         unlockIf(player, OriginType.VAMPIRE, "sun_tolerance",
                 isUnlocked(player, OriginType.VAMPIRE, "nobility")
                         && state.hasFlag("vampire.full_night_survived")
-                        && state.progress("vampire.night_kills") >= 50);
+                        && state.progress("vampire.night_kills") >= VampireProgressionRequirements.SUN_TOLERANCE_NIGHT_KILLS);
         unlockIf(player, OriginType.VAMPIRE, "final",
                 isUnlocked(player, OriginType.VAMPIRE, "nobility")
                         && isUnlocked(player, OriginType.VAMPIRE, "sun_tolerance")
-                        && state.progress("vampire.lifetime_blood") >= 1000
+                        && state.progress("vampire.lifetime_blood") >= VampireProgressionRequirements.LORD_LIFETIME
                         && VampireLordTrial.completed(state));
     }
 
