@@ -1,0 +1,28 @@
+{
+  "parent": "smooth_classes:origins/human/root",
+  "display": {
+    "icon": {
+      "item": "minecraft:rabbit_foot"
+    },
+    "title": {
+      "text": "Second Wind"
+    },
+    "description": {
+      "text": "Origin milestone unlocked: Second Wind."
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": true
+  },
+  "criteria": {
+    "earned": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "earned"
+    ]
+  ]
+}

@@ -133,12 +133,6 @@ public final class OriginSkillRuntime {
             if (!bat) player.addStatusEffect(new StatusEffectInstance(StatusEffects.STRENGTH, 30, 0, false, false, false));
         }
 
-        if (unlocked(player, OriginType.VAMPIRE, "blood_sense") && player.age % 10 == 0) {
-            for (LivingEntity living : player.getWorld().getEntitiesByClass(LivingEntity.class,
-                    player.getBoundingBox().expand(24.0D), e -> e != player && e.isAlive() && e.getHealth() < e.getMaxHealth())) {
-                living.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, 16, 0, false, false, false));
-            }
-        }
     }
 
     private static void tickMermaid(ServerPlayerEntity player, OriginState state) {
@@ -177,6 +171,7 @@ public final class OriginSkillRuntime {
 
     public static void exitVampireForms(ServerPlayerEntity player, OriginState state) {
         boolean wasManBat = state.hasFlag("vampire.form.man_bat");
+        boolean wasBat = state.hasFlag("vampire.form.bat");
         state.unflag("vampire.form.bat");
         state.unflag("vampire.form.man_bat");
         if (wasManBat) VampireManBatRuntime.onExit(player, state);
@@ -186,5 +181,9 @@ public final class OriginSkillRuntime {
             player.sendAbilitiesUpdate();
         }
         player.calculateDimensions();
+        if (wasBat || wasManBat) {
+            VampireTransformationEffects.play(player, false);
+            org.marj4n.smooth_classes.network.SmoothClassesNetworking.sendOriginState(player);
+        }
     }
 }

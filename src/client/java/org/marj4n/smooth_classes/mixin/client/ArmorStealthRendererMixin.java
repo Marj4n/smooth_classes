@@ -11,6 +11,10 @@ import net.minecraft.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.marj4n.smooth_classes.client.origin.appearance.ManBatFormModel;
+import org.marj4n.smooth_classes.client.origin.appearance.VsbArmorRenderScale;
+import org.marj4n.smooth_classes.origin.OriginType;
+import org.marj4n.smooth_classes.origin.OriginRuntime;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /** Armor follows the same stealth state as the player model. */
@@ -20,6 +24,7 @@ public abstract class ArmorStealthRendererMixin {
     private void smooth_classes$renderArmor(MatrixStack matrices, VertexConsumerProvider consumers,
             LivingEntity entity, EquipmentSlot slot, int light, BipedEntityModel<LivingEntity> model,
             CallbackInfo ci) {
+        VsbArmorRenderScale.end();
         if (entity.isInvisible() && StealthVisualState.active(entity)) {
             ci.cancel();
             return;
@@ -31,5 +36,28 @@ public abstract class ArmorStealthRendererMixin {
                 ci.cancel();
             }
         }
+    }
+
+    /** Align the still-vanilla armor meshes to VSB's real bone pivots. */
+    @Inject(method = "renderArmor", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/client/render/entity/feature/ArmorFeatureRenderer;setVisible(Lnet/minecraft/client/render/entity/model/BipedEntityModel;Lnet/minecraft/entity/EquipmentSlot;)V",
+            shift = At.Shift.AFTER), require = 1)
+    private void smooth_classes$alignVsbArmor(MatrixStack matrices, VertexConsumerProvider consumers,
+            LivingEntity entity, EquipmentSlot slot, int light, BipedEntityModel<LivingEntity> model,
+            CallbackInfo ci) {
+        if (entity instanceof net.minecraft.entity.player.PlayerEntity player) {
+            var state = OriginRuntime.state(player);
+            if (state.origin() == OriginType.VAMPIRE && state.hasFlag("vampire.form.man_bat")) {
+                ManBatFormModel.alignArmor(player, slot, model);
+                VsbArmorRenderScale.begin(model, slot);
+            }
+        }
+    }
+
+    @Inject(method = "renderArmor", at = @At("RETURN"))
+    private void smooth_classes$finishArmorSlot(MatrixStack matrices, VertexConsumerProvider consumers,
+            LivingEntity entity, EquipmentSlot slot, int light, BipedEntityModel<LivingEntity> model,
+            CallbackInfo ci) {
+        VsbArmorRenderScale.end();
     }
 }

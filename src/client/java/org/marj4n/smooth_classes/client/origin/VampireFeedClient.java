@@ -49,7 +49,7 @@ public final class VampireFeedClient {
         if (!client.player.getMainHandStack().isEmpty()) return -1;
         if (!(client.crosshairTarget instanceof EntityHitResult hit)) return -1;
         if (!(hit.getEntity() instanceof LivingEntity living) || !living.isAlive() || living == client.player) return -1;
-        if (!(living instanceof VillagerEntity) && !(living instanceof AnimalEntity)) return -1;
+        if (!org.marj4n.smooth_classes.origin.VampireBloodReserve.isFeedable(living)) return -1;
         if (client.player.squaredDistanceTo(living) > 12.25D) return -1;
         return living.getId();
     }

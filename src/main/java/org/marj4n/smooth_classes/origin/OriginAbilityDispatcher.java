@@ -71,6 +71,8 @@ public final class OriginAbilityDispatcher {
     }
 
     private static Result activateVampire(ServerPlayerEntity player, OriginState state, int slot) {
+        if (state.hasFlag("vampire.form.bat") && slot != 0)
+            return Result.fail("Return from Bat Form before casting abilities.");
         if (slot == 0) {
             if (!OriginSkillRuntime.unlocked(player, OriginType.VAMPIRE, "bat_form")) return Result.fail("Bat Form is still locked.");
             long ready = state.longProgress("vampire.bat_form_ready_at");
@@ -94,7 +96,7 @@ public final class OriginAbilityDispatcher {
             player.extinguish();
             if (state.hasFlag("vampire.form.man_bat")) {
                 state.unflag("vampire.form.man_bat");
-                VampireManBatRuntime.removeAttributes(player);
+                VampireManBatRuntime.onExit(player, state);
             }
             state.flag("vampire.form.bat");
             if (!player.isCreative() && !player.isSpectator()) {
@@ -130,8 +132,7 @@ public final class OriginAbilityDispatcher {
             if (state.blood() < 3) return Result.fail("You need at least 3 Blood.");
 
             state.blood(state.blood() - 3);
-            // Forms are exclusive. If Bat Form was flying, strip that creative-flight permission
-            // before entering Dark Form's air-jump/glide movement.
+            // Forms are exclusive. Man-Bat takes over slower creative-style flight.
             state.unflag("vampire.form.bat");
             state.flag("vampire.form.man_bat");
             VampireManBatRuntime.onEnter(player, state);
@@ -142,11 +143,29 @@ public final class OriginAbilityDispatcher {
         }
 
         if (!OriginSkillRuntime.unlocked(player, OriginType.VAMPIRE, "blood_sense")) return Result.fail("Blood Sense is still locked.");
-        for (LivingEntity living : player.getWorld().getEntitiesByClass(LivingEntity.class,
-                player.getBoundingBox().expand(32.0D), e -> e != player && e.isAlive() && e.getHealth() < e.getMaxHealth())) {
-            living.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, 20 * 8, 0, false, false, false));
+        long now = player.getWorld().getTime();
+        long ready = state.longProgress("vampire.blood_sense_ready_at");
+        if (now < ready) return Result.fail("Blood Sense is recovering.");
+        boolean lord = OriginSkillRuntime.unlocked(player, OriginType.VAMPIRE, "final");
+        int detected = 0;
+        // Vampire Lord doubles range and reveal duration, and halves recovery.
+        double radius = lord ? 40.0D : 20.0D;
+        double radiusSquared = radius * radius;
+        int revealTicks = lord ? 20 * 20 : 20 * 10;
+        for (MobEntity living : player.getWorld().getEntitiesByClass(MobEntity.class,
+                player.getBoundingBox().expand(radius), MobEntity::isAlive)) {
+            if (living.squaredDistanceTo(player) > radiusSquared) continue;
+            living.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, revealTicks, 0, false, false, false));
+            detected++;
         }
-        return Result.ok("Blood Sense.");
+        state.longProgress("vampire.blood_sense_ready_at", now + (lord ? 10L : 20L) * 20L);
+        player.getServerWorld().spawnParticles(ParticleTypes.ENCHANT, player.getX(), player.getBodyY(0.8D), player.getZ(),
+                24, 0.48D, 0.65D, 0.48D, 0.04D);
+        player.getServerWorld().playSound(null, player.getBlockPos(),
+                net.minecraft.sound.SoundEvents.ENTITY_WARDEN_HEARTBEAT,
+                net.minecraft.sound.SoundCategory.PLAYERS, 0.45F, 1.45F);
+        SmoothClassesNetworking.sendOriginState(player);
+        return Result.ok("Blood Sense: " + detected + " targets detected.");
     }
 
     private static Result activateMermaid(ServerPlayerEntity player, OriginState state, int slot) {
@@ -232,11 +251,7 @@ public final class OriginAbilityDispatcher {
     }
 
     private static void vampireTransformFx(ServerPlayerEntity player, boolean entering) {
-        var world = player.getServerWorld();
-        world.spawnParticles(ParticleTypes.LARGE_SMOKE, player.getX(), player.getBodyY(0.55D), player.getZ(),
-                entering ? 18 : 10, 0.35D, 0.55D, 0.35D, 0.025D);
-        world.spawnParticles(ParticleTypes.CLOUD, player.getX(), player.getBodyY(0.45D), player.getZ(),
-                entering ? 12 : 7, 0.28D, 0.38D, 0.28D, 0.035D);
+        VampireTransformationEffects.play(player, entering);
     }
 
     private static String title(String value) {

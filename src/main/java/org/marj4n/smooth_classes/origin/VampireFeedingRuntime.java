@@ -2,8 +2,6 @@ package org.marj4n.smooth_classes.origin;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.passive.AnimalEntity;
-import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import org.marj4n.smooth_classes.network.SmoothClassesNetworking;
@@ -60,21 +58,15 @@ public final class VampireFeedingRuntime {
         // Drain one blood pip per second. Keep the loop audio event tied to the
         // actual drain tick so it cannot spam between pips or linger after RMB is released.
         if (feed.ticks % 20 != 0) return;
+        if (!VampireBloodReserve.consume(living, player)) {
+            ACTIVE.remove(player.getUuid());
+            player.sendMessage(net.minecraft.text.Text.literal("This creature needs time to replenish its blood."), true);
+            return;
+        }
         player.getWorld().playSound(null, player.getBlockPos(), net.minecraft.sound.SoundEvents.ENTITY_GENERIC_DRINK,
                 SoundCategory.PLAYERS, 0.28F, 0.86F + player.getRandom().nextFloat() * 0.06F);
         int capacity = OriginRuntime.vampireBloodCapacity(player);
-        int gain = living instanceof VillagerEntity ? 16 : 4;
-        if (living instanceof VillagerEntity && living.isSleeping()) gain += 4;
-
-        float amount = Math.max(1.0F, living.getMaxHealth() / 5.0F);
-        float next = living.getHealth() - amount;
-        if (next <= 0.01F) {
-            living.damage(player.getDamageSources().playerAttack(player), Float.MAX_VALUE);
-            ACTIVE.remove(player.getUuid());
-        } else {
-            living.setHealth(next);
-            living.timeUntilRegen = 0;
-        }
+        int gain = VampireBloodDiet.gain(living);
 
         state.blood(Math.min(capacity, state.blood() + gain));
         state.lastFeedTick(player.age);
@@ -85,7 +77,7 @@ public final class VampireFeedingRuntime {
 
     private static boolean valid(ServerPlayerEntity player, LivingEntity living) {
         if (!living.isAlive() || living == player || player.squaredDistanceTo(living) > 12.25D) return false;
-        return living instanceof VillagerEntity || living instanceof AnimalEntity;
+        return VampireBloodReserve.isFeedable(living);
     }
 
     public static void cleanup(ServerPlayerEntity player) { ACTIVE.remove(player.getUuid()); }

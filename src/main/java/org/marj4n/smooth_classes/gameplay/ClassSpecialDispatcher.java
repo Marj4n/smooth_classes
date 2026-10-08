@@ -46,6 +46,7 @@ public final class ClassSpecialDispatcher {
     }
 
     public static ExecutionResult activate(ServerPlayerEntity player, boolean alternate) {
+        if (org.marj4n.smooth_classes.origin.VampireBatAbilityLock.isLocked(player)) return ExecutionResult.failure("Return from Bat Form to use class abilities.");
         if (AbilityRuntime.isClass(player, ArcherClass.ID)) return ArcherSpecialRuntime.activate(player, alternate);
         if (AbilityRuntime.isClass(player, AssassinClass.ID)) return AssassinSpecialRuntime.activate(player);
         if (AbilityRuntime.isClass(player, AvengerClass.ID)) return AvengerReworkRuntime.summonFromHands(player);
@@ -61,6 +62,7 @@ public final class ClassSpecialDispatcher {
 
 
     public static ExecutionResult select(ServerPlayerEntity player, int selection) {
+        if (org.marj4n.smooth_classes.origin.VampireBatAbilityLock.isLocked(player)) return ExecutionResult.failure("Return from Bat Form to use class abilities.");
         if (AbilityRuntime.isClass(player, ArcherClass.ID)) return ArcherSpecialRuntime.select(player, selection);
         if (AbilityRuntime.isClass(player, CasterClass.ID)) return CasterSpecialRuntime.select(player, selection);
         if (AbilityRuntime.isClass(player, ForeignerClass.ID)) return ForeignerSpecialRuntime.select(player, selection);
@@ -68,6 +70,8 @@ public final class ClassSpecialDispatcher {
     }
 
     public static void hold(ServerPlayerEntity player, boolean held) {
+        // Always accept release packets so a channel started before transforming can end cleanly.
+        if (held && org.marj4n.smooth_classes.origin.VampireBatAbilityLock.isLocked(player)) return;
         if (AbilityRuntime.isClass(player, ArcherClass.ID)) ArcherSpecialRuntime.hold(player, held);
         if (AbilityRuntime.isClass(player, BerserkerClass.ID)) BerserkerSpecialRuntime.hold(player, held);
     }

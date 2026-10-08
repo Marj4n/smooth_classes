@@ -1,0 +1,28 @@
+{
+  "parent": "smooth_classes:origins/slime/root",
+  "display": {
+    "icon": {
+      "item": "minecraft:magma_cream"
+    },
+    "title": {
+      "text": "Size Control"
+    },
+    "description": {
+      "text": "Origin milestone unlocked: Size Control."
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": true
+  },
+  "criteria": {
+    "earned": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "earned"
+    ]
+  ]
+}

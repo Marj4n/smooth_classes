@@ -22,6 +22,9 @@ public final class OriginClientState {
     public static int carbonLayer;
     public static int livingMass;
     private static long vampireBatCooldownUntilMs;
+    private static long manBatDurationUntilMs;
+    private static long manBatCooldownUntilMs;
+    private static long bloodSenseCooldownUntilMs;
 
     private static Map<String, Integer> progress = Map.of();
     private static Set<String> flags = Set.of();
@@ -59,7 +62,11 @@ public final class OriginClientState {
         progress = Collections.unmodifiableMap(new HashMap<>(progressValues == null ? Map.of() : progressValues));
         flags = Collections.unmodifiableSet(new HashSet<>(flagValues == null ? Set.of() : flagValues));
         int batTicks = Math.max(0, progress.getOrDefault("ui.vampire.bat_cooldown_ticks", 0));
-        vampireBatCooldownUntilMs = System.currentTimeMillis() + batTicks * 50L;
+        long nowMs = System.currentTimeMillis();
+        vampireBatCooldownUntilMs = nowMs + batTicks * 50L;
+        manBatDurationUntilMs = nowMs + Math.max(0, progress.getOrDefault("ui.vampire.man_bat_duration_ticks", 0)) * 50L;
+        manBatCooldownUntilMs = nowMs + Math.max(0, progress.getOrDefault("ui.vampire.man_bat_cooldown_ticks", 0)) * 50L;
+        bloodSenseCooldownUntilMs = nowMs + Math.max(0, progress.getOrDefault("ui.vampire.blood_sense_cooldown_ticks", 0)) * 50L;
     }
 
 
@@ -82,6 +89,18 @@ public final class OriginClientState {
 
     public static long vampireBatCooldownRemainingMs() {
         return Math.max(0L, vampireBatCooldownUntilMs - System.currentTimeMillis());
+    }
+
+    public static long bloodSenseCooldownRemainingMs() {
+        return Math.max(0L, bloodSenseCooldownUntilMs - System.currentTimeMillis());
+    }
+
+    public static long manBatDurationRemainingMs() {
+        return Math.max(0L, manBatDurationUntilMs - System.currentTimeMillis());
+    }
+
+    public static long manBatCooldownRemainingMs() {
+        return Math.max(0L, manBatCooldownUntilMs - System.currentTimeMillis());
     }
 
     public static int progress(String key) {
@@ -108,6 +127,9 @@ public final class OriginClientState {
         visualSunLastNanos = 0L;
         bloodCapacity = 100;
         vampireBatCooldownUntilMs = 0L;
+        manBatDurationUntilMs = 0L;
+        manBatCooldownUntilMs = 0L;
+        bloodSenseCooldownUntilMs = 0L;
         progress = Map.of();
         flags = Set.of();
     }

@@ -69,17 +69,24 @@ public final class SmoothClassesNetworking {
         ServerPlayNetworking.registerGlobalReceiver(BLADE_WORKS_HOLD,
                 (server, player, handler, buf, responseSender) -> {
                     boolean held = buf.readBoolean();
-                    server.execute(() -> org.marj4n.smooth_classes.content.archer.runtime.PortalOfSovereigntyRuntime.hold(player, held));
+                    server.execute(() -> {
+                        if (org.marj4n.smooth_classes.origin.VampireBatAbilityLock.isLocked(player) && held) return;
+                        org.marj4n.smooth_classes.content.archer.runtime.PortalOfSovereigntyRuntime.hold(player, held);
+                    });
                 });
         ServerPlayNetworking.registerGlobalReceiver(ARCANE_SLASH_HOLD,
                 (server, player, handler, buf, responseSender) -> {
                     boolean held = buf.readBoolean();
-                    server.execute(() -> org.marj4n.smooth_classes.runtime.ArcaneSlashChargeRuntime.hold(player, held));
+                    server.execute(() -> {
+                        if (org.marj4n.smooth_classes.origin.VampireBatAbilityLock.isLocked(player) && held) return;
+                        org.marj4n.smooth_classes.runtime.ArcaneSlashChargeRuntime.hold(player, held);
+                    });
                 });
         ServerPlayNetworking.registerGlobalReceiver(CLASS_SPECIAL,
                 (server, player, handler, buf, responseSender) -> {
                     boolean alternate = buf.isReadable() && buf.readBoolean();
                     server.execute(() -> {
+                        if (org.marj4n.smooth_classes.origin.VampireBatAbilityLock.isLocked(player)) return;
                         var result = ClassSpecialDispatcher.activate(player, alternate);
                         if (!result.success()) player.sendMessage(Text.literal("[Smooth Classes] " + result.detail()), true);
                         sendAbilityState(player);
@@ -89,6 +96,7 @@ public final class SmoothClassesNetworking {
                 (server, player, handler, buf, responseSender) -> {
                     int selection = buf.readVarInt();
                     server.execute(() -> {
+                        if (org.marj4n.smooth_classes.origin.VampireBatAbilityLock.isLocked(player)) return;
                         var result = ClassSpecialDispatcher.select(player, selection);
                         if (!result.success()) player.sendMessage(Text.literal("[Smooth Classes] " + result.detail()), true);
                         sendAbilityState(player);
@@ -97,10 +105,14 @@ public final class SmoothClassesNetworking {
         ServerPlayNetworking.registerGlobalReceiver(CLASS_SPECIAL_HOLD,
                 (server, player, handler, buf, responseSender) -> {
                     boolean held = buf.readBoolean();
-                    server.execute(() -> ClassSpecialDispatcher.hold(player, held));
+                    server.execute(() -> {
+                        if (org.marj4n.smooth_classes.origin.VampireBatAbilityLock.isLocked(player) && held) return;
+                        ClassSpecialDispatcher.hold(player, held);
+                    });
                 });
         ServerPlayNetworking.registerGlobalReceiver(OPEN_DEATH_LIST,
                 (server, player, handler, buf, responseSender) -> server.execute(() -> {
+                    if (org.marj4n.smooth_classes.origin.VampireBatAbilityLock.isLocked(player)) return;
                     if (!org.marj4n.smooth_classes.runtime.AbilityRuntime.isClass(
                             player, org.marj4n.smooth_classes.content.avenger.AvengerClass.ID)) return;
                     PacketByteBuf out = PacketByteBufs.create();
@@ -118,6 +130,7 @@ public final class SmoothClassesNetworking {
                     final int targetEntityId = entityId;
                     final net.minecraft.util.math.Vec3d targetBlockHit = blockHit;
                     server.execute(() -> {
+                        if (org.marj4n.smooth_classes.origin.VampireBatAbilityLock.isLocked(player)) return;
                         var result = org.marj4n.smooth_classes.content.assassin.runtime.ShadowTechniqueRuntime
                                 .castAimed(player, targetEntityId, targetBlockHit);
                         if (!result.success()) player.sendMessage(Text.literal("[Smooth Classes] " + result.detail()), true);
@@ -130,6 +143,7 @@ public final class SmoothClassesNetworking {
                     boolean descend = buf.readBoolean();
                     boolean boost = buf.readBoolean();
                     server.execute(() -> {
+                        if (org.marj4n.smooth_classes.origin.VampireBatAbilityLock.isLocked(player)) return;
                         if (player.getVehicle() instanceof org.marj4n.smooth_classes.entity.RiderHippogryphEntity hippo) {
                             hippo.acceptRiderFlightInput(player, ascend, descend, boost);
                         }
@@ -138,7 +152,10 @@ public final class SmoothClassesNetworking {
         ServerPlayNetworking.registerGlobalReceiver(VAMPIRE_FEED,
                 (server, player, handler, buf, responseSender) -> {
                     int targetId = buf.readInt();
-                    server.execute(() -> org.marj4n.smooth_classes.origin.VampireFeedingRuntime.setTarget(player, targetId));
+                    server.execute(() -> {
+                        if (org.marj4n.smooth_classes.origin.VampireBatAbilityLock.isLocked(player)) return;
+                        org.marj4n.smooth_classes.origin.VampireFeedingRuntime.setTarget(player, targetId);
+                    });
                 });
         ServerPlayNetworking.registerGlobalReceiver(VAMPIRE_MAN_BAT_JUMP,
                 (server, player, handler, buf, responseSender) ->
@@ -161,12 +178,14 @@ public final class SmoothClassesNetworking {
         });
         ServerPlayNetworking.registerGlobalReceiver(CAST_SIGNATURE, (server, player, handler, buf, responseSender) ->
                 server.execute(() -> {
+                    if (org.marj4n.smooth_classes.origin.VampireBatAbilityLock.isLocked(player)) return;
                     var result = SignatureAbilityDispatcher.cast(player);
                     if (!result.success()) player.sendMessage(Text.literal("[Smooth Classes] " + result.message()), true);
                     sendAbilityState(player);
                 }));
         ServerPlayNetworking.registerGlobalReceiver(CAST_ASCENDANCY, (server, player, handler, buf, responseSender) ->
                 server.execute(() -> {
+                    if (org.marj4n.smooth_classes.origin.VampireBatAbilityLock.isLocked(player)) return;
                     var ability = AscendancyAbilityDispatcher.selectedAbility(player);
                     var result = ability.isBlank()
                             ? AscendancyAbilityDispatcher.DispatchResult.failPublic("No Ascendancy ability unlocked.")
@@ -311,6 +330,14 @@ public final class SmoothClassesNetworking {
             long readyAt = state.longProgress("vampire.bat_form_ready_at");
             long remaining = Math.max(0L, readyAt - player.getWorld().getTime());
             progress.put("ui.vampire.bat_cooldown_ticks", (int)Math.min(Integer.MAX_VALUE, remaining));
+            long now = player.getWorld().getTime();
+            boolean manBat = state.hasFlag("vampire.form.man_bat");
+            long durationRemaining = manBat ? Math.max(0L, state.longProgress("vampire.man_bat_end_at") - now) : 0L;
+            long manBatCooldown = manBat ? 0L : Math.max(0L, state.longProgress("vampire.man_bat_ready_at") - now);
+            progress.put("ui.vampire.man_bat_duration_ticks", (int)Math.min(1200L, durationRemaining));
+            progress.put("ui.vampire.man_bat_cooldown_ticks", (int)Math.min(600L, manBatCooldown));
+            long senseRemaining = Math.max(0L, state.longProgress("vampire.blood_sense_ready_at") - now);
+            progress.put("ui.vampire.blood_sense_cooldown_ticks", (int)Math.min(400L, senseRemaining));
         }
         out.writeVarInt(progress.size());
         for (var entry : progress.entrySet()) {

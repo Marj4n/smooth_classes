@@ -51,6 +51,11 @@ public final class SmoothClasses implements ModInitializer {
         org.marj4n.smooth_classes.gameplay.ClassSpecialDispatcher.register();
         BasePathRuntime.register();
         ClassPassiveRuntime.register();
+        // Spell Engine's official PRE-cast event runs client-side and server-side.
+        // Returning a non-success attempt blocks spells even if a mod bypasses keybinds.
+        SpellEvents.CASTING_ATTEMPT.PRE.register(args ->
+                org.marj4n.smooth_classes.origin.VampireBatAbilityLock.isLocked(args.caster())
+                        ? net.spell_engine.internals.casting.SpellCast.Attempt.none() : null);
         SpellEvents.SPELL_CAST.register(args -> {
             if (args.caster() instanceof ServerPlayerEntity player) {
                 CombatEventRuntime.onSpellCast(player, args.targets(), args.spell().value().school);

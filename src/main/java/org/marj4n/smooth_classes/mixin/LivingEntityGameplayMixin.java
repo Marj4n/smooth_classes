@@ -141,7 +141,9 @@ public abstract class LivingEntityGameplayMixin {
         }
         if (state.origin() == org.marj4n.smooth_classes.origin.OriginType.VAMPIRE
                 && state.hasFlag("vampire.form.man_bat")) {
-            cir.setReturnValue(pose == EntityPose.CROUCHING ? 1.55F : 2.35F);
+            cir.setReturnValue(pose == EntityPose.CROUCHING
+                    ? org.marj4n.smooth_classes.origin.VampireManBatRuntime.CROUCH_EYE_HEIGHT
+                    : org.marj4n.smooth_classes.origin.VampireManBatRuntime.EYE_HEIGHT);
             return;
         }
         if (state.origin() == org.marj4n.smooth_classes.origin.OriginType.VAMPIRE

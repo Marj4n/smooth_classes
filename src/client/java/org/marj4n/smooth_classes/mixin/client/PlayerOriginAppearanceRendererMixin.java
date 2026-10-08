@@ -9,6 +9,7 @@ import net.minecraft.client.render.entity.feature.FeatureRendererContext;
 import net.minecraft.client.render.entity.model.PlayerEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 import org.marj4n.smooth_classes.client.origin.appearance.OriginAppearanceFeatureRenderer;
+import org.marj4n.smooth_classes.client.origin.appearance.ManBatPosePreparerFeatureRenderer;
 import org.marj4n.smooth_classes.origin.OriginRuntime;
 import org.marj4n.smooth_classes.origin.OriginType;
 import org.spongepowered.asm.mixin.Mixin;
@@ -44,6 +45,13 @@ public abstract class PlayerOriginAppearanceRendererMixin
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void smooth_classes$addOriginAppearance(EntityRendererFactory.Context ctx, boolean slim, CallbackInfo ci) {
+        // The vanilla armor feature runs before our custom appearance feature.
+        // Give Man-Bat a renderless first feature to capture the CURRENT
+        // Better Combat rig before armor reads the equipment pose.
+        this.features.add(0, new ManBatPosePreparerFeatureRenderer(
+                (FeatureRendererContext<AbstractClientPlayerEntity, PlayerEntityModel<AbstractClientPlayerEntity>>) this,
+                ctx
+        ));
         this.addFeature(new OriginAppearanceFeatureRenderer(
                 (FeatureRendererContext<AbstractClientPlayerEntity, PlayerEntityModel<AbstractClientPlayerEntity>>) this,
                 ctx
