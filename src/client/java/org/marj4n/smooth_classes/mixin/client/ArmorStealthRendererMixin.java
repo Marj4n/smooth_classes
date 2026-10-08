@@ -20,6 +20,16 @@ public abstract class ArmorStealthRendererMixin {
     private void smooth_classes$renderArmor(MatrixStack matrices, VertexConsumerProvider consumers,
             LivingEntity entity, EquipmentSlot slot, int light, BipedEntityModel<LivingEntity> model,
             CallbackInfo ci) {
-        if (entity.isInvisible() && StealthVisualState.active(entity)) ci.cancel();
+        if (entity.isInvisible() && StealthVisualState.active(entity)) {
+            ci.cancel();
+            return;
+        }
+        if (entity instanceof net.minecraft.entity.player.PlayerEntity player) {
+            var state = org.marj4n.smooth_classes.origin.OriginRuntime.state(player);
+            if (state.origin() == org.marj4n.smooth_classes.origin.OriginType.VAMPIRE
+                    && state.hasFlag("vampire.form.bat")) {
+                ci.cancel();
+            }
+        }
     }
 }

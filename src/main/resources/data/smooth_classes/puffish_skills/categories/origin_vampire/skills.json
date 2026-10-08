@@ -1,0 +1,50 @@
+{
+  "origin_base": {
+    "definition": "origin_base",
+    "x": 0,
+    "y": 128,
+    "root": true
+  },
+  "bat_form": {
+    "definition": "bat_form",
+    "x": 0,
+    "y": 64,
+    "root": false
+  },
+  "man_bat": {
+    "definition": "man_bat",
+    "x": 0,
+    "y": 0,
+    "root": false
+  },
+  "blood_sense": {
+    "definition": "blood_sense",
+    "x": -64,
+    "y": -64,
+    "root": false
+  },
+  "blood_flask": {
+    "definition": "blood_flask",
+    "x": 64,
+    "y": -64,
+    "root": false
+  },
+  "nobility": {
+    "definition": "nobility",
+    "x": 0,
+    "y": -112,
+    "root": false
+  },
+  "sun_tolerance": {
+    "definition": "sun_tolerance",
+    "x": 64,
+    "y": -176,
+    "root": false
+  },
+  "final": {
+    "definition": "final",
+    "x": 0,
+    "y": -224,
+    "root": false
+  }
+}

@@ -1,0 +1,210 @@
+{
+  "origin_base": {
+    "title": {
+      "text": "Undead"
+    },
+    "description": {
+      "text": "12 health. Skeleton body. Souls replace food; bone physically rebuilds the body."
+    },
+    "cost": 0,
+    "size": 1.25,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:bone"
+      }
+    },
+    "rewards": []
+  },
+  "soul_eater": {
+    "title": {
+      "text": "Soul Eater"
+    },
+    "description": {
+      "text": "Consume souls from multiple categories of living creature. Unlock stored Soul Charges."
+    },
+    "cost": 1,
+    "size": 1.05,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:soul_sand"
+      }
+    },
+    "rewards": []
+  },
+  "bone_growth": {
+    "title": {
+      "text": "Bone Growth"
+    },
+    "description": {
+      "text": "Absorb bones and defeat several skeleton species to expand Bone Mass."
+    },
+    "cost": 1,
+    "size": 1.05,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:bone_block"
+      }
+    },
+    "rewards": []
+  },
+  "soul_storage": {
+    "title": {
+      "text": "Soul Storage"
+    },
+    "description": {
+      "text": "Carry more stored life energy for manual healing."
+    },
+    "cost": 1,
+    "size": 1.05,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:soul_lantern"
+      }
+    },
+    "rewards": []
+  },
+  "gravebound": {
+    "title": {
+      "text": "Gravebound"
+    },
+    "description": {
+      "text": "Walk among the dead without attacking them and master undead places."
+    },
+    "cost": 1,
+    "size": 1.05,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:skull_pottery_sherd"
+      }
+    },
+    "rewards": []
+  },
+  "carbon": {
+    "title": {
+      "text": "Carbonized Bones"
+    },
+    "description": {
+      "text": "Layer coal over the skeleton as a consumable defense against fire and lava."
+    },
+    "cost": 1,
+    "size": 1.05,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:coal_block"
+      }
+    },
+    "rewards": []
+  },
+  "ribcage": {
+    "title": {
+      "text": "Reinforced Rib Cage"
+    },
+    "description": {
+      "text": "High Bone Mass grows a slower, much tougher skeleton body."
+    },
+    "cost": 1,
+    "size": 1.05,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:skeleton_skull"
+      }
+    },
+    "rewards": []
+  },
+  "final": {
+    "title": {
+      "text": "Bone Colossus"
+    },
+    "description": {
+      "text": "Reach maximum Bone Mass, fill Carbon and Souls, then defeat a major undead sovereign."
+    },
+    "cost": 1,
+    "size": 1.25,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:nether_star"
+      }
+    },
+    "rewards": []
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "origin_base": {
+    "definition": "origin_base",
+    "x": 0,
+    "y": 96,
+    "root": true
+  },
+  "survivor": {
+    "definition": "survivor",
+    "x": -64,
+    "y": 32,
+    "root": false
+  },
+  "wayfarer": {
+    "definition": "wayfarer",
+    "x": 64,
+    "y": 32,
+    "root": false
+  },
+  "indomitable": {
+    "definition": "indomitable",
+    "x": 0,
+    "y": -32,
+    "root": false
+  },
+  "endurance": {
+    "definition": "endurance",
+    "x": -64,
+    "y": -96,
+    "root": false
+  },
+  "memory": {
+    "definition": "memory",
+    "x": 0,
+    "y": -128,
+    "root": false
+  },
+  "second_wind": {
+    "definition": "second_wind",
+    "x": 64,
+    "y": -96,
+    "root": false
+  },
+  "final": {
+    "definition": "final",
+    "x": 0,
+    "y": -208,
+    "root": false
+  }
+}

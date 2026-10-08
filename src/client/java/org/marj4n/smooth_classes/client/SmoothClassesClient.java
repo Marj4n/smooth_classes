@@ -22,6 +22,13 @@ import net.spell_engine.api.effect.CustomParticleStatusEffect;
 import org.lwjgl.glfw.GLFW;
 import org.marj4n.smooth_classes.SmoothClasses;
 import org.marj4n.smooth_classes.client.effects.*;
+import org.marj4n.smooth_classes.client.origin.appearance.OriginCosmeticModel;
+import org.marj4n.smooth_classes.client.origin.appearance.OriginReplacementModel;
+import org.marj4n.smooth_classes.client.origin.appearance.MermodTailModel;
+import org.marj4n.smooth_classes.client.origin.appearance.SlimeReplacementModel;
+import org.marj4n.smooth_classes.client.origin.appearance.BatFormModel;
+import org.marj4n.smooth_classes.client.origin.appearance.ManBatFormModel;
+import org.marj4n.smooth_classes.client.origin.appearance.HomunculusReplacementModel;
 import org.marj4n.smooth_classes.client.renderer.*;
 import org.marj4n.smooth_classes.client.renderer.model.*;
 import org.marj4n.smooth_classes.effects.SmoothEffects;
@@ -34,9 +41,18 @@ public final class SmoothClassesClient implements ClientModInitializer {
     public static final EntityModelLayer GREATER_DREADGLARE_MODEL = new EntityModelLayer(SmoothClasses.id("greater_dreadglare"), "main");
     public static final EntityModelLayer WRAITH_MODEL = new EntityModelLayer(SmoothClasses.id("wraith"), "main");
     public static final EntityModelLayer RIDER_HIPPOGRYPH_MODEL = new EntityModelLayer(SmoothClasses.id("rider_hippogryph"), "main");
+    public static final EntityModelLayer ORIGIN_COSMETICS_MODEL = new EntityModelLayer(SmoothClasses.id("origin_cosmetics"), "main");
+    public static final EntityModelLayer ORIGIN_REPLACEMENT_MODEL = new EntityModelLayer(SmoothClasses.id("origin_replacement"), "main");
+    public static final EntityModelLayer ORIGIN_UNDEAD_MODEL = new EntityModelLayer(SmoothClasses.id("origin_undead"), "main");
+    public static final EntityModelLayer ORIGIN_MERMOD_TAIL_MODEL = new EntityModelLayer(SmoothClasses.id("origin_mermod_tail"), "main");
+    public static final EntityModelLayer ORIGIN_SLIME_MODEL = new EntityModelLayer(SmoothClasses.id("origin_slime"), "main");
+    public static final EntityModelLayer ORIGIN_BAT_MODEL = new EntityModelLayer(SmoothClasses.id("origin_bat"), "main");
+    public static final EntityModelLayer ORIGIN_MAN_BAT_MODEL = new EntityModelLayer(SmoothClasses.id("origin_man_bat"), "main");
+    public static final EntityModelLayer ORIGIN_HOMUNCULUS_MODEL = new EntityModelLayer(SmoothClasses.id("origin_homunculus"), "main");
     private static KeyBinding signature;
     private static KeyBinding ascendancy;
     private static KeyBinding classSpecial;
+    private static KeyBinding abilityPage;
     private static boolean bladeHoldSent, bladeWasDown;
     private static int bladeHoldTicks;
     private static boolean arcaneHoldSent;
@@ -52,12 +68,15 @@ public final class SmoothClassesClient implements ClientModInitializer {
     private static boolean riderFlightLastDescend;
     private static boolean riderFlightLastBoost;
     private static int riderFlightHeartbeat;
+    private static boolean manBatJumpWasDown;
+    private static int manBatJumpHeartbeat;
     private static final AbilityHud HUD = new AbilityHud();
     private static final RighteousHammersRenderer HAMMER_RENDERER = new RighteousHammersRenderer();
 
     public static KeyBinding signatureKey() { return signature; }
     public static KeyBinding ascendancyKey() { return ascendancy; }
     public static KeyBinding classSpecialKey() { return classSpecial; }
+    public static KeyBinding abilityPageKey() { return abilityPage; }
 
     @Override
     public void onInitializeClient() {
@@ -74,6 +93,14 @@ public final class SmoothClassesClient implements ClientModInitializer {
                 org.marj4n.smooth_classes.client.effects.ArcaneFlameFactory::new);
         registerVisualEffects();
         registerEntities();
+        EntityModelLayerRegistry.registerModelLayer(ORIGIN_COSMETICS_MODEL, OriginCosmeticModel::createTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(ORIGIN_REPLACEMENT_MODEL, OriginReplacementModel::createHumanoidData);
+        EntityModelLayerRegistry.registerModelLayer(ORIGIN_UNDEAD_MODEL, OriginReplacementModel::createRelicSkeletonData);
+        EntityModelLayerRegistry.registerModelLayer(ORIGIN_MERMOD_TAIL_MODEL, MermodTailModel::createData);
+        EntityModelLayerRegistry.registerModelLayer(ORIGIN_SLIME_MODEL, SlimeReplacementModel::createData);
+        EntityModelLayerRegistry.registerModelLayer(ORIGIN_BAT_MODEL, BatFormModel::createData);
+        EntityModelLayerRegistry.registerModelLayer(ORIGIN_MAN_BAT_MODEL, ManBatFormModel::createData);
+        EntityModelLayerRegistry.registerModelLayer(ORIGIN_HOMUNCULUS_MODEL, HomunculusReplacementModel::createData);
         // Render large class visuals directly in world space. This avoids relying on
         // player feature-renderer hooks, which some animation/culling mods can replace.
         WorldRenderEvents.AFTER_ENTITIES.register(context -> {
@@ -110,6 +137,54 @@ public final class SmoothClassesClient implements ClientModInitializer {
                 "key.smooth_classes.ascendancy", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_R, "key.category.smooth_classes"));
         classSpecial = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "key.smooth_classes.class_special", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_H, "key.category.smooth_classes"));
+        abilityPage = KeyBindingHelper.registerKeyBinding(new KeyBinding(
+                "key.smooth_classes.ability_page", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_Z, "key.category.smooth_classes"));
+
+        ClientPlayNetworking.registerGlobalReceiver(SmoothClassesNetworking.OPEN_ORIGIN_SELECTION,
+                (client, handler, buf, responseSender) -> client.execute(() -> {
+                    if (client.player != null) client.setScreen(new org.marj4n.smooth_classes.client.origin.OriginSelectionScreen());
+                }));
+
+        ClientPlayNetworking.registerGlobalReceiver(SmoothClassesNetworking.SYNC_ORIGIN,
+                (client, handler, buf, responseSender) -> {
+                    java.util.UUID playerId = buf.readUuid();
+                    String origin = buf.readString();
+                    int blood = buf.readVarInt();
+                    int bloodCapacity = buf.readVarInt();
+                    int sun = buf.readVarInt();
+                    int wetness = buf.readVarInt();
+                    int wing = buf.readVarInt();
+                    int instability = buf.readVarInt();
+                    int soul = buf.readVarInt();
+                    int bone = buf.readVarInt();
+                    int carbon = buf.readVarInt();
+                    int living = buf.readVarInt();
+                    long lastFeed = buf.readLong();
+                    int progressCount = buf.readVarInt();
+                    java.util.Map<String, Integer> progress = new java.util.HashMap<>();
+                    for (int i = 0; i < progressCount; i++) progress.put(buf.readString(), buf.readVarInt());
+                    int flagCount = buf.readVarInt();
+                    java.util.Set<String> flags = new java.util.HashSet<>();
+                    for (int i = 0; i < flagCount; i++) flags.add(buf.readString());
+                    client.execute(() -> {
+                        if (client.world != null) {
+                            var target = client.world.getPlayerByUuid(playerId);
+                            if (target != null) {
+                                org.marj4n.smooth_classes.origin.OriginRuntime.state(target).sync(
+                                        origin, blood, sun, wetness, wing, instability, soul, bone, carbon, living,
+                                        lastFeed, progress, flags);
+                                // Form/size flags alter dimensions too (Bat Form, Slime sizes), not just Origin ID.
+                                // Recalculate on every authoritative Origin sync so client camera/collision follows server state.
+                                target.calculateDimensions();
+                            }
+                        }
+                        if (client.player != null && client.player.getUuid().equals(playerId)) {
+                            org.marj4n.smooth_classes.client.origin.OriginClientState.sync(
+                                    origin, blood, bloodCapacity, sun, wetness, wing, instability, soul, bone, carbon, living, progress, flags);
+                            if (origin == null || origin.isBlank()) AbilityPageState.setClassPage();
+                        }
+                    });
+                });
 
         ClientPlayNetworking.registerGlobalReceiver(SmoothClassesNetworking.SYNC_ABILITY_STATE,
                 (client, handler, buf, responseSender) -> {
@@ -179,14 +254,33 @@ public final class SmoothClassesClient implements ClientModInitializer {
                 (handler, client) -> {
                     org.marj4n.smooth_classes.client.charge.ChargeHudState.reset();
                     AbilityHudState.reset();
+                    org.marj4n.smooth_classes.client.origin.OriginClientState.reset();
+                    AbilityPageState.reset();
                     ShadowAimClient.reset();
                     deathListComboWasDown = false;
                     classSpecialHoldSent = false;
                     classSpecialWasDown = false;
                     classSpecialHoldTicks = 0;
+                    manBatJumpWasDown = false;
+                    manBatJumpHeartbeat = 0;
                 });
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
+            org.marj4n.smooth_classes.client.origin.OriginMorphState.tick(client);
+            org.marj4n.smooth_classes.client.origin.VampireFeedClient.tick(client);
+
+            // Nycto Dark Form air-jump: send only the rising edge while airborne.
+            boolean manBatJumpDown = client.player != null && client.currentScreen == null
+                    && client.options.jumpKey.isPressed()
+                    && org.marj4n.smooth_classes.client.origin.OriginClientState.hasFlag("vampire.form.man_bat")
+                    && !client.player.isOnGround();
+            boolean manBatJumpPulse = manBatJumpDown && (!manBatJumpWasDown || ++manBatJumpHeartbeat >= 5);
+            if (manBatJumpPulse && ClientPlayNetworking.canSend(SmoothClassesNetworking.VAMPIRE_MAN_BAT_JUMP)) {
+                ClientPlayNetworking.send(SmoothClassesNetworking.VAMPIRE_MAN_BAT_JUMP, PacketByteBufs.empty());
+                manBatJumpHeartbeat = 0;
+            }
+            if (!manBatJumpDown) manBatJumpHeartbeat = 0;
+            manBatJumpWasDown = manBatJumpDown;
             if (client.player != null && client.world != null
                     && org.marj4n.smooth_classes.client.runtime.BloodRainWeatherState.isInsideStorm(
                     client.world, client.player.getX(), client.player.getZ())) {
@@ -195,12 +289,23 @@ public final class SmoothClassesClient implements ClientModInitializer {
                 client.player.setFireTicks(0);
             }
 
+            while (abilityPage.wasPressed()) {
+                if (!org.marj4n.smooth_classes.client.origin.OriginClientState.originId.isBlank()) {
+                    AbilityPageState.toggle();
+                    if (client.player != null) {
+                        client.player.sendMessage(Text.literal(AbilityPageState.isOriginPage()
+                                ? "Ability Page: Origin" : "Ability Page: Class"), true);
+                    }
+                }
+            }
+            boolean classPage = AbilityPageState.isClassPage();
+
             // Ctrl+H is a fixed Death List shortcut, independent of the shared H keybind
             // and independent of HUD sync. The server remains authoritative and ignores
             // the request when the player is not an Avenger. This avoids losing Ctrl+H
             // when another mod/keybind owns H or the Avenger HUD state has not synced yet.
             boolean deathListComboDown = false;
-            if (client.player != null && client.getNetworkHandler() != null
+            if (classPage && client.player != null && client.getNetworkHandler() != null
                     && client.currentScreen == null && client.isWindowFocused()) {
                 long window = client.getWindow().getHandle();
                 boolean control = InputUtil.isKeyPressed(window, GLFW.GLFW_KEY_LEFT_CONTROL)
@@ -212,7 +317,7 @@ public final class SmoothClassesClient implements ClientModInitializer {
                 }
             }
             deathListComboWasDown = deathListComboDown;
-            boolean preparationSelected = "preparation".equals(AbilityHudState.signatureAbility);
+            boolean preparationSelected = classPage && "preparation".equals(AbilityHudState.signatureAbility);
             boolean shadowDown = preparationSelected && client.player != null && client.getNetworkHandler() != null
                     && client.currentScreen == null && client.isWindowFocused() && signature.isPressed();
             boolean freshShadowPress = shadowDown && !shadowWasDown;
@@ -225,7 +330,7 @@ public final class SmoothClassesClient implements ClientModInitializer {
             if (releasedShadow && ShadowAimClient.isAiming()) ShadowAimClient.release(client);
             if (!preparationSelected && ShadowAimClient.isAiming()) ShadowAimClient.reset();
 
-            boolean holdingArcane = client.player != null && client.currentScreen == null
+            boolean holdingArcane = classPage && client.player != null && client.currentScreen == null
                     && client.isWindowFocused() && ascendancy.isPressed()
                     && "arcane_slash".equals(AbilityHudState.ascendancyAbility);
             boolean freshArcanePress = holdingArcane && !arcaneWasDown;
@@ -240,8 +345,8 @@ public final class SmoothClassesClient implements ClientModInitializer {
                 arcaneHoldSent = false;
                 arcaneHoldTicks = 0;
             }
-            boolean bladeSelected = "unlimited_blade_works".equals(AbilityHudState.signatureAbility);
-            boolean bladeDown = client.player != null && client.getNetworkHandler() != null
+            boolean bladeSelected = classPage && "unlimited_blade_works".equals(AbilityHudState.signatureAbility);
+            boolean bladeDown = classPage && client.player != null && client.getNetworkHandler() != null
                     && client.currentScreen == null && client.isWindowFocused() && signature.isPressed() && bladeSelected;
             boolean freshBladePress = bladeDown && !bladeWasDown;
             bladeWasDown = bladeDown;
@@ -254,7 +359,7 @@ public final class SmoothClassesClient implements ClientModInitializer {
             // Berserker H is a real hold-to-charge class special, matching the
             // Arcane Slash / Portal of Sovereignty charge UX. Heartbeats keep
             // the server authoritative and releasing early triggers the 4s fail CD.
-            boolean classSpecialDown = "crimson_revenant".equals(AbilityHudState.classSpecialId)
+            boolean classSpecialDown = classPage && "crimson_revenant".equals(AbilityHudState.classSpecialId)
                     && client.player != null && client.getNetworkHandler() != null
                     && client.currentScreen == null && client.isWindowFocused()
                     && classSpecial.isPressed();
@@ -277,6 +382,7 @@ public final class SmoothClassesClient implements ClientModInitializer {
 
             syncRiderFlightInput(client);
             while (signature.wasPressed()) {
+                if (!classPage) { sendOriginAbility(0); continue; }
                 if (preparationSelected) {
                     // Shadow Technique casts on key release using the live mob/block aim preview.
                     continue;
@@ -285,6 +391,7 @@ public final class SmoothClassesClient implements ClientModInitializer {
                 else if (freshBladePress) { cast(client, false); freshBladePress = false; }
             }
             while (classSpecial.wasPressed()) {
+                if (!classPage) { sendOriginAbility(2); continue; }
                 if (client.player == null) continue;
                 if ("crimson_revenant".equals(AbilityHudState.classSpecialId)) continue;
                 if (!AbilityHudState.classSpecialVisible) continue;
@@ -316,6 +423,7 @@ public final class SmoothClassesClient implements ClientModInitializer {
                 sendClassSpecial(false);
             }
             while (ascendancy.wasPressed()) {
+                if (!classPage) { sendOriginAbility(1); continue; }
                 if (!"arcane_slash".equals(AbilityHudState.ascendancyAbility)) cast(client, true);
                 else if (freshArcanePress) {
                     cast(client, true);
@@ -328,6 +436,7 @@ public final class SmoothClassesClient implements ClientModInitializer {
         });
         HudRenderCallback.EVENT.register((context, tickDelta) -> {
             HUD.render(context, tickDelta);
+            org.marj4n.smooth_classes.client.origin.VampireHudRenderer.render(context, tickDelta);
             CrimsonRevenantVisionOverlay.render(context, tickDelta);
         });
     }
@@ -375,6 +484,19 @@ public final class SmoothClassesClient implements ClientModInitializer {
         riderFlightLastAscend = ascend;
         riderFlightLastDescend = descend;
         riderFlightLastBoost = boost;
+    }
+
+    private static void sendOriginAbility(int slot) {
+        var client = net.minecraft.client.MinecraftClient.getInstance();
+        if (client.player == null || client.getNetworkHandler() == null) return;
+        if (org.marj4n.smooth_classes.client.origin.OriginClientState.originId.isBlank()) {
+            client.player.sendMessage(Text.literal("Choose an Origin first."), true);
+            return;
+        }
+        if (!ClientPlayNetworking.canSend(SmoothClassesNetworking.CAST_ORIGIN_ABILITY)) return;
+        var packet = PacketByteBufs.create();
+        packet.writeVarInt(Math.max(0, Math.min(2, slot)));
+        ClientPlayNetworking.send(SmoothClassesNetworking.CAST_ORIGIN_ABILITY, packet);
     }
 
     private static void sendBladeHold(boolean held) {

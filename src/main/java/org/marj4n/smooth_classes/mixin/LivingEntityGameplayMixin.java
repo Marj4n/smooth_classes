@@ -1,6 +1,9 @@
 package org.marj4n.smooth_classes.mixin;
 
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.EntityDimensions;
+import net.minecraft.entity.EntityPose;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
@@ -25,6 +28,15 @@ public abstract class LivingEntityGameplayMixin {
                 && attacker.hasStatusEffect(SmoothEffects.MARKSMANSHIP)) {
             StatusEffectInstance marksmanship = attacker.getStatusEffect(SmoothEffects.MARKSMANSHIP);
             if (marksmanship != null) amount *= 1.0F + 0.10F * (marksmanship.getAmplifier() + 1);
+        }
+        LivingEntity self = (LivingEntity)(Object)this;
+        if (self instanceof ServerPlayerEntity player) {
+            var state = org.marj4n.smooth_classes.origin.OriginRuntime.state(player);
+            if (state.origin() == org.marj4n.smooth_classes.origin.OriginType.VAMPIRE
+                    && state.hasFlag("vampire.form.man_bat")
+                    && !source.isIn(net.minecraft.registry.tag.DamageTypeTags.BYPASSES_INVULNERABILITY)) {
+                amount *= org.marj4n.smooth_classes.origin.VampireManBatRuntime.DAMAGE_MULTIPLIER;
+            }
         }
         return amount;
     }
@@ -114,4 +126,28 @@ public abstract class LivingEntityGameplayMixin {
                 || effect == StatusEffects.BLINDNESS || effect == StatusEffects.LEVITATION
                 || effect == StatusEffects.MINING_FATIGUE;
     }
+    @Inject(method = "getActiveEyeHeight", at = @At("HEAD"), cancellable = true)
+    private void smooth_classes$originEyeHeight(EntityPose pose, EntityDimensions dimensions,
+                                                 CallbackInfoReturnable<Float> cir) {
+        LivingEntity entity = (LivingEntity)(Object)this;
+        if (!(entity instanceof PlayerEntity player)) return;
+        var state = org.marj4n.smooth_classes.origin.OriginRuntime.state(player);
+        if (state.origin() == org.marj4n.smooth_classes.origin.OriginType.SLIME
+                && !state.hasFlag("slime.form.humanoid")) {
+            if (state.hasFlag("slime.squeeze") || state.hasFlag("slime.size.small")) cir.setReturnValue(0.34F);
+            else if (state.hasFlag("slime.size.large")) cir.setReturnValue(1.30F);
+            else cir.setReturnValue(0.68F);
+            return;
+        }
+        if (state.origin() == org.marj4n.smooth_classes.origin.OriginType.VAMPIRE
+                && state.hasFlag("vampire.form.man_bat")) {
+            cir.setReturnValue(pose == EntityPose.CROUCHING ? 1.55F : 2.35F);
+            return;
+        }
+        if (state.origin() == org.marj4n.smooth_classes.origin.OriginType.VAMPIRE
+                && state.hasFlag("vampire.form.bat")) {
+            cir.setReturnValue(org.marj4n.smooth_classes.origin.OriginBodyGeometry.BAT_EYE_HEIGHT);
+        }
+    }
+
 }

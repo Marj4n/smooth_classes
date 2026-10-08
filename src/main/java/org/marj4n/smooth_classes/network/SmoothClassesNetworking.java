@@ -36,10 +36,36 @@ public final class SmoothClassesNetworking {
     public static final Identifier SYNC_ABILITY_STATE = SmoothClasses.id("sync_ability_state");
     public static final Identifier SYNC_CHARGE_STATE = SmoothClasses.id("sync_charge_state");
     public static final Identifier FORCE_HOTBAR_SLOT = SmoothClasses.id("force_hotbar_slot");
+    public static final Identifier OPEN_ORIGIN_SELECTION = SmoothClasses.id("open_origin_selection");
+    public static final Identifier SELECT_ORIGIN = SmoothClasses.id("select_origin");
+    public static final Identifier SYNC_ORIGIN = SmoothClasses.id("sync_origin");
+    public static final Identifier CAST_ORIGIN_ABILITY = SmoothClasses.id("cast_origin_ability");
+    public static final Identifier VAMPIRE_FEED = SmoothClasses.id("vampire_feed");
+    public static final Identifier VAMPIRE_MAN_BAT_JUMP = SmoothClasses.id("vampire_man_bat_jump");
     private static final Map<UUID,String> LAST_SELECTION = new HashMap<>();
     private SmoothClassesNetworking() {}
 
     public static void registerServer() {
+        ServerPlayNetworking.registerGlobalReceiver(SELECT_ORIGIN,
+                (server, player, handler, buf, responseSender) -> {
+                    String originId = buf.readString(64);
+                    server.execute(() -> {
+                        var state = org.marj4n.smooth_classes.origin.OriginRuntime.state(player);
+                        if (state.hasOrigin()) return;
+                        org.marj4n.smooth_classes.origin.OriginType.byId(originId)
+                                .filter(org.marj4n.smooth_classes.origin.OriginType::isV1Playable)
+                                .ifPresent(origin -> org.marj4n.smooth_classes.origin.OriginRuntime.setOrigin(player, origin));
+                    });
+                });
+        ServerPlayNetworking.registerGlobalReceiver(CAST_ORIGIN_ABILITY,
+                (server, player, handler, buf, responseSender) -> {
+                    int slot = buf.readVarInt();
+                    server.execute(() -> {
+                        var result = org.marj4n.smooth_classes.origin.OriginAbilityDispatcher.activate(player, slot);
+                        if (!result.success()) player.sendMessage(Text.literal("[Origin] " + result.message()), true);
+                        sendOriginState(player);
+                    });
+                });
         ServerPlayNetworking.registerGlobalReceiver(BLADE_WORKS_HOLD,
                 (server, player, handler, buf, responseSender) -> {
                     boolean held = buf.readBoolean();
@@ -109,9 +135,18 @@ public final class SmoothClassesNetworking {
                         }
                     });
                 });
+        ServerPlayNetworking.registerGlobalReceiver(VAMPIRE_FEED,
+                (server, player, handler, buf, responseSender) -> {
+                    int targetId = buf.readInt();
+                    server.execute(() -> org.marj4n.smooth_classes.origin.VampireFeedingRuntime.setTarget(player, targetId));
+                });
+        ServerPlayNetworking.registerGlobalReceiver(VAMPIRE_MAN_BAT_JUMP,
+                (server, player, handler, buf, responseSender) ->
+                        server.execute(() -> org.marj4n.smooth_classes.origin.VampireManBatRuntime.tryAirJump(player)));
         ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
             org.marj4n.smooth_classes.runtime.ArcaneSlashChargeRuntime.disconnect(handler.player);
             ClassSpecialDispatcher.cleanup(handler.player);
+            org.marj4n.smooth_classes.origin.VampireFeedingRuntime.cleanup(handler.player);
             LAST_SELECTION.remove(handler.player.getUuid());
             PuffishSkillsIntegration.invalidateRuntimeCache(handler.player);
             org.marj4n.smooth_classes.runtime.AbilityRuntime.invalidateRuntimeCache(handler.player);
@@ -119,6 +154,7 @@ public final class SmoothClassesNetworking {
         net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents.SERVER_STOPPED.register(server -> {
             org.marj4n.smooth_classes.runtime.ArcaneSlashChargeRuntime.clear();
             ClassSpecialDispatcher.clear();
+            org.marj4n.smooth_classes.origin.VampireFeedingRuntime.clear();
             LAST_SELECTION.clear();
             PuffishSkillsIntegration.clearRuntimeCaches();
             org.marj4n.smooth_classes.runtime.AbilityRuntime.clearRuntimeCaches();
@@ -239,6 +275,52 @@ public final class SmoothClassesNetworking {
                 + "|ha=" + classSpecial.blockedActive() + "|hv=" + classSpecial.variant()
                 + "|hm=" + (classSpecial.modeRemainingTicks() / 20L)
                 + "|hs=" + (classSpecial.secondaryRemainingTicks() / 20L));
+    }
+
+    public static void openOriginSelection(ServerPlayerEntity player) {
+        ServerPlayNetworking.send(player, OPEN_ORIGIN_SELECTION, PacketByteBufs.empty());
+    }
+
+    public static void sendOriginState(ServerPlayerEntity player) {
+        var server = player.getServer();
+        if (server == null) return;
+        for (ServerPlayerEntity receiver : server.getPlayerManager().getPlayerList()) {
+            ServerPlayNetworking.send(receiver, SYNC_ORIGIN, buildOriginStatePacket(player));
+        }
+    }
+
+    private static PacketByteBuf buildOriginStatePacket(ServerPlayerEntity player) {
+        var state = org.marj4n.smooth_classes.origin.OriginRuntime.state(player);
+        PacketByteBuf out = PacketByteBufs.create();
+        out.writeUuid(player.getUuid());
+        out.writeString(state.originId());
+        out.writeVarInt(state.blood());
+        out.writeVarInt(org.marj4n.smooth_classes.origin.OriginRuntime.vampireBloodCapacity(player));
+        out.writeVarInt(state.sunExposure());
+        out.writeVarInt(state.wetnessTicks());
+        out.writeVarInt(state.wingStaminaTicks());
+        out.writeVarInt(state.instability());
+        out.writeVarInt(state.soul());
+        out.writeVarInt(state.boneMass());
+        out.writeVarInt(state.carbonLayer());
+        out.writeVarInt(state.livingMass());
+        out.writeLong(state.lastFeedTick());
+
+        java.util.Map<String, Integer> progress = new java.util.HashMap<>(state.progressSnapshot());
+        if (state.origin() == org.marj4n.smooth_classes.origin.OriginType.VAMPIRE) {
+            long readyAt = state.longProgress("vampire.bat_form_ready_at");
+            long remaining = Math.max(0L, readyAt - player.getWorld().getTime());
+            progress.put("ui.vampire.bat_cooldown_ticks", (int)Math.min(Integer.MAX_VALUE, remaining));
+        }
+        out.writeVarInt(progress.size());
+        for (var entry : progress.entrySet()) {
+            out.writeString(entry.getKey());
+            out.writeVarInt(entry.getValue());
+        }
+        var flags = state.flagsSnapshot();
+        out.writeVarInt(flags.size());
+        for (String flag : flags) out.writeString(flag);
+        return out;
     }
 
     /** Server-authoritative short hotbar lock used by the Archer Treasury draw animation. */

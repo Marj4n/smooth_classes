@@ -1,0 +1,46 @@
+{
+  "normal": {
+    "bidirectional": [
+      [
+        "origin_base",
+        "survivor"
+      ],
+      [
+        "origin_base",
+        "wayfarer"
+      ],
+      [
+        "survivor",
+        "indomitable"
+      ],
+      [
+        "wayfarer",
+        "indomitable"
+      ],
+      [
+        "indomitable",
+        "endurance"
+      ],
+      [
+        "indomitable",
+        "memory"
+      ],
+      [
+        "indomitable",
+        "second_wind"
+      ],
+      [
+        "endurance",
+        "final"
+      ],
+      [
+        "memory",
+        "final"
+      ],
+      [
+        "second_wind",
+        "final"
+      ]
+    ]
+  }
+}

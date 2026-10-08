@@ -40,6 +40,7 @@
     "patchouli": "*",
     "wizards": "*",
     "elemental_wizards_rpg": "*",
-    "more_rpg_classes": "*"
+    "more_rpg_classes": "*",
+    "icarus": "*"
   }
 }
