@@ -211,7 +211,10 @@ public final class OriginAppearanceFeatureRenderer
                 bat.render(matrices, batConsumer, light, OverlayTexture.DEFAULT_UV,
                         0.76F, 0.46F, 0.67F, 1.0F);
             } else {
-                bat.render(matrices, batConsumer, light, OverlayTexture.DEFAULT_UV, 1, 1, 1, 1);
+                // Base Bat Form now uses an albino palette: pale fur, soft pink membrane,
+                // and subtle cool-lavender shadowing while preserving vanilla geometry.
+                bat.render(matrices, batConsumer, light, OverlayTexture.DEFAULT_UV,
+                        1.0F, 0.90F, 0.94F, 1.0F);
             }
             matrices.pop();
         }

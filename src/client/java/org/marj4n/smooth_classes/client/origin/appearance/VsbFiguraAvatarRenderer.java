@@ -84,20 +84,28 @@ final class VsbFiguraAvatarRenderer {
         Group group = AVATAR.byName.get(name);
         if (group == null) return Vec3.ZERO;
         Track track = AVATAR.tracks.getOrDefault(pose.clip, Map.of()).get(group.uuid);
-        Vec3 value = group.rotation.add(track == null ? Vec3.ZERO : track.sample("rotation", pose.clipTime));
-        // Head stays upright like vanilla PlayerEntityModel: look yaw/pitch
-        // without rotating the neck around Z when looking sideways.
-        if (name.equals("head")) value = value.add(new Vec3(pose.pitch, pose.yaw, 0F));
-        // The original oversized ears are now torso-mounted wings. Animate only
-        // their wing bones, never the head or Better Combat / armor skeleton.
-        if (name.equals("rightwing")) {
-            value = new Vec3(-9F - 20F * pose.wingOpen - 8F * pose.wingDive,
-                    20F + 42F * pose.wingOpen,
-                    -18F * pose.wingOpen - 37F * pose.wingBeat);
-        } else if (name.equals("leftwing")) {
-            value = new Vec3(-9F - 20F * pose.wingOpen - 8F * pose.wingDive,
-                    -20F - 42F * pose.wingOpen,
-                    18F * pose.wingOpen + 37F * pose.wingBeat);
+        Vec3 clipRotation = track == null ? Vec3.ZERO : track.sample("rotation", pose.clipTime);
+        Vec3 value = group.rotation.add(clipRotation);
+        if (name.equals("head")) {
+            // The source head has an authored -10 degree rest tilt and
+            // independent clip rotations. Do not stack them on top of vanilla:
+            // arms/legs already work by copying their finished player rig pose.
+            // One source for every clip (idle, walk, attack, inventory, flight).
+            return pose.combatRotations.getOrDefault("head", Vec3.ZERO);
+        }
+        if (name.equals("rightwinganchor") || name.equals("leftwinganchor")) {
+            // VSB's idle animation erroneously animates *leftwinganchor* under
+            // the name "leftear" while rightwinganchor has no matching track.
+            // The wings already animate below, so the left anchor was DOUBLE
+            // rotated. Neutralize both anchors and let mirrored wing bones drive.
+            return group.rotation;
+        }
+        // Mirrored wing math: pitch matches; spread and flap invert for the
+        // opposite side. Do NOT stack the source Figura idle wing tracks.
+        if (name.equals("rightwing") || name.equals("leftwing")) {
+            ManBatWingSymmetry.WingRotation wing = ManBatWingSymmetry.rotation(
+                    name.equals("leftwing"), pose.wingOpen, pose.wingBeat, pose.wingDive);
+            return new Vec3(wing.pitch(), wing.yaw(), wing.roll());
         }
 
         // The live vanilla/Better Combat model supplies finished limb rotations.
@@ -119,8 +127,6 @@ final class VsbFiguraAvatarRenderer {
         final boolean crouching;
         final String clip;
         final float clipTime;
-        final float yaw;
-        final float pitch;
         final float armSwing;
         final Map<String, Vec3> combatRotations;
         final Map<String, Vec3> vanillaArmOffsets;
@@ -129,25 +135,12 @@ final class VsbFiguraAvatarRenderer {
         final float wingDive;
 
         Pose(boolean crouching, String clip, float clipTime,
-             float yaw, float pitch, float armSwing) {
-            this(crouching, clip, clipTime, yaw, pitch, armSwing, Map.of(), Map.of(), .10F, 0F, 0F);
-        }
-
-        Pose(boolean crouching, String clip, float clipTime,
-             float yaw, float pitch, float armSwing, Map<String, Vec3> combatRotations,
-             Map<String, Vec3> vanillaArmOffsets) {
-            this(crouching, clip, clipTime, yaw, pitch, armSwing, combatRotations,
-                    vanillaArmOffsets, .10F, 0F, 0F);
-        }
-
-        Pose(boolean crouching, String clip, float clipTime,
-             float yaw, float pitch, float armSwing, Map<String, Vec3> combatRotations,
-             Map<String, Vec3> vanillaArmOffsets, float wingOpen, float wingBeat, float wingDive) {
+             float armSwing, Map<String, Vec3> combatRotations,
+             Map<String, Vec3> vanillaArmOffsets,
+             float wingOpen, float wingBeat, float wingDive) {
             this.crouching = crouching;
             this.clip = clip;
             this.clipTime = clipTime;
-            this.yaw = yaw;
-            this.pitch = pitch;
             this.armSwing = armSwing;
             this.combatRotations = combatRotations;
             this.vanillaArmOffsets = vanillaArmOffsets;
@@ -157,7 +150,7 @@ final class VsbFiguraAvatarRenderer {
         }
 
         static Pose rest() {
-            return new Pose(false, "idle", 0F, 0F, 0F, 0F);
+            return new Pose(false, "idle", 0F, 0F, Map.of(), Map.of(), .10F, 0F, 0F);
         }
     }
 

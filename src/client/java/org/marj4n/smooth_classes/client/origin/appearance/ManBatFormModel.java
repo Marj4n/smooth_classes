@@ -30,8 +30,6 @@ public final class ManBatFormModel<T extends PlayerEntity> extends EntityModel<T
     private static final Map<UUID, Integer> FIRST_RENDER_AGE = new HashMap<>();
     private static final Map<UUID, Boolean> PREVIOUS_ON_GROUND = new HashMap<>();
     private static final Map<UUID, Integer> LAST_LANDED_AGE = new HashMap<>();
-    private static final Map<UUID, Float> SMOOTH_HEAD_YAW = new HashMap<>();
-    private static final Map<UUID, Float> SMOOTH_HEAD_PITCH = new HashMap<>();
     private static final Map<UUID, VsbFiguraAvatarRenderer.Pose> EQUIPMENT_POSES = new HashMap<>();
     private static final Map<UUID, WeakReference<PlayerEntity>> TRACKED_ENTITIES = new HashMap<>();
     private static final Map<UUID, Float> WING_OPEN = new HashMap<>();
@@ -46,8 +44,6 @@ public final class ManBatFormModel<T extends PlayerEntity> extends EntityModel<T
         FIRST_RENDER_AGE.remove(playerId);
         PREVIOUS_ON_GROUND.remove(playerId);
         LAST_LANDED_AGE.remove(playerId);
-        SMOOTH_HEAD_YAW.remove(playerId);
-        SMOOTH_HEAD_PITCH.remove(playerId);
         EQUIPMENT_POSES.remove(playerId);
         WING_OPEN.remove(playerId);
         TRACKED_ENTITIES.remove(playerId);
@@ -79,26 +75,12 @@ public final class ManBatFormModel<T extends PlayerEntity> extends EntityModel<T
             clearPoseCache(id);
             TRACKED_ENTITIES.put(id, new WeakReference<>(player));
         }
-        // The supplied Figura head has a permanent -10 degree resting pitch.
-        // Adding the full +/-60 degree player camera pitch on top of that bends
-        // the Man-Bat neck unnaturally (particularly when looking down in flight).
-        // Keep the approved mouse-driven inventory preview UNCHANGED; only bound
-        // the actual in-world head pose to an anatomical range.
-        var preview = MinecraftClient.getInstance().currentScreen;
-        boolean inInventory = preview instanceof net.minecraft.client.gui.screen.ingame.InventoryScreen
-                || preview instanceof net.minecraft.client.gui.screen.ingame.CreativeInventoryScreen;
-        boolean flying = player.getAbilities().flying;
-        float clippedYaw = MathHelper.clamp(headYaw,
-                inInventory ? -85.0F : -55.0F, inInventory ? 85.0F : 55.0F);
-        float clippedPitch = MathHelper.clamp(headPitch,
-                inInventory ? -60.0F : (flying ? -16.0F : -23.0F),
-                inInventory ? 60.0F : (flying ? 18.0F : 28.0F));
-        float smYaw = inInventory ? clippedYaw
-                : MathHelper.lerp(.35F, SMOOTH_HEAD_YAW.getOrDefault(id, clippedYaw), clippedYaw);
-        float smPitch = inInventory ? clippedPitch
-                : MathHelper.lerp(.35F, SMOOTH_HEAD_PITCH.getOrDefault(id, clippedPitch), clippedPitch);
-        SMOOTH_HEAD_YAW.put(id, smYaw);
-        SMOOTH_HEAD_PITCH.put(id, smPitch);
+        // Head pose comes from the SAME already-animated vanilla player rig as
+        // arms and legs. No per-clip locks, custom head angle clamps, or
+        // smoothing caches: idle, walk, combat and preview share one authority.
+        // R29.4's forced zero-angle walking head was only a workaround.
+        VsbFiguraAvatarRenderer.Vec3 vanillaHead =
+                VsbVanillaHeadPose.capture(vanillaPose, headYaw, headPitch);
 
         boolean onGround = player.isOnGround();
         boolean previous = PREVIOUS_ON_GROUND.getOrDefault(id, onGround);
@@ -137,6 +119,7 @@ public final class ManBatFormModel<T extends PlayerEntity> extends EntityModel<T
         // Keep the approved R6 arm transforms untouched. Apply the same rig
         // mapping to both legs instead of playing a second VSB walk animation.
         Map<String, VsbFiguraAvatarRenderer.Vec3> rotations = new HashMap<>(rigArms.rotations());
+        rotations.put("head", vanillaHead);
         rotations.putAll(rigLegs.rotations());
         Map<String, VsbFiguraAvatarRenderer.Vec3> offsets = new HashMap<>(rigArms.offsets());
         offsets.putAll(rigLegs.offsets());
@@ -151,10 +134,16 @@ public final class ManBatFormModel<T extends PlayerEntity> extends EntityModel<T
         WING_OPEN.put(id, open);
         float frequency = powered ? .56F : airborne ? (vertical > .05D ? .88F : .36F) : .11F;
         float beat = MathHelper.sin(animationProgress * frequency) * open;
-        if (!airborne) beat *= .14F;
+        if ("idle".equals(animation) && !airborne) {
+            // Both wings now share one visible, subtle breathing/flap cycle.
+            // The wing renderer mirrors the final angle across left and right.
+            beat = MathHelper.sin(animationProgress * .11F) * .12F;
+        } else if (!airborne) {
+            beat *= .14F;
+        }
         float dive = airborne && vertical < -0.06D ? .32F : 0F;
         pose = new VsbFiguraAvatarRenderer.Pose(player.isSneaking(), animation, time,
-                smYaw, smPitch, rigArms.rotations().isEmpty() ? player.handSwingProgress : 0F,
+                rigArms.rotations().isEmpty() ? player.handSwingProgress : 0F,
                 rotations, offsets, open, beat, dive);
         EQUIPMENT_POSES.put(id, pose);
     }
