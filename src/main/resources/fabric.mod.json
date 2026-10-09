@@ -28,7 +28,8 @@
     "spell_power": "*"
   },
   "mixins": [
-    "smooth_classes.mixins.json"
+    "smooth_classes.mixins.json",
+    "smooth_classes.bewitchment.mixins.json"
   ],
   "suggests": {
     "simplyswords": "*",
@@ -42,6 +43,7 @@
     "elemental_wizards_rpg": "*",
     "more_rpg_classes": "*",
     "icarus": "*",
-    "armor_model_api": "*"
+    "armor_model_api": "*",
+    "bewitchment": "*"
   }
 }

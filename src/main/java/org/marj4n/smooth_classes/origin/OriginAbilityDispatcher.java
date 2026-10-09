@@ -163,11 +163,19 @@ public final class OriginAbilityDispatcher {
             detected++;
         }
         state.longProgress("vampire.blood_sense_ready_at", now + (lord ? 10L : 20L) * 20L);
+        player.getServerWorld().spawnParticles(ParticleTypes.CRIMSON_SPORE, player.getX(), player.getBodyY(0.8D), player.getZ(),
+                28, 0.55D, 0.75D, 0.55D, 0.02D);
+        player.getServerWorld().spawnParticles(org.marj4n.smooth_classes.registry.SmoothParticles.VAMPIRE_BAT_SWARM,
+                player.getX(), player.getBodyY(0.8D), player.getZ(),
+                12, 0.40D, 0.55D, 0.40D, 0.08D);
         player.getServerWorld().spawnParticles(ParticleTypes.ENCHANT, player.getX(), player.getBodyY(0.8D), player.getZ(),
-                24, 0.48D, 0.65D, 0.48D, 0.04D);
+                18, 0.42D, 0.60D, 0.42D, 0.04D);
         player.getServerWorld().playSound(null, player.getBlockPos(),
                 net.minecraft.sound.SoundEvents.ENTITY_WARDEN_HEARTBEAT,
                 net.minecraft.sound.SoundCategory.PLAYERS, 0.45F, 1.45F);
+        player.getServerWorld().playSound(null, player.getBlockPos(),
+                net.minecraft.sound.SoundEvents.BLOCK_SCULK_SHRIEKER_SHRIEK,
+                net.minecraft.sound.SoundCategory.PLAYERS, 0.18F, 1.8F);
         SmoothClassesNetworking.sendOriginState(player);
         return Result.ok("Blood Sense: " + detected + " targets detected.");
     }

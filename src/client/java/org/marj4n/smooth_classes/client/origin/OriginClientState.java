@@ -8,6 +8,12 @@ import java.util.Set;
 
 /** Lightweight render/UI mirror of the server-owned Origin state. */
 public final class OriginClientState {
+    private static final long BLOOD_SENSE_BASE_EFFECT_MS = 10_000L;
+    private static final long BLOOD_SENSE_LORD_EFFECT_MS = 20_000L;
+    private static final long BLOOD_SENSE_FLASH_MS = 1_250L;
+    private static final long LORD_EVOLUTION_EFFECT_MS = 6_500L;
+    private static final long LORD_EVOLUTION_FLASH_MS = 1_800L;
+
     public static String originId = "";
     public static int blood;
     public static int bloodCapacity = 100;
@@ -25,6 +31,11 @@ public final class OriginClientState {
     private static long manBatDurationUntilMs;
     private static long manBatCooldownUntilMs;
     private static long bloodSenseCooldownUntilMs;
+    private static long bloodSenseEffectUntilMs;
+    private static long bloodSenseFlashUntilMs;
+    private static long lordEvolutionEffectUntilMs;
+    private static long lordEvolutionFlashUntilMs;
+    private static boolean initialized;
 
     private static Map<String, Integer> progress = Map.of();
     private static Set<String> flags = Set.of();
@@ -36,7 +47,11 @@ public final class OriginClientState {
                             Map<String, Integer> progressValues, Set<String> flagValues) {
         boolean wasBat = flags.contains("vampire.form.bat");
         boolean enteringBat = flagValues != null && flagValues.contains("vampire.form.bat") && !wasBat;
+        boolean wasLord = flags.contains("vampire.evolution.lord");
+        boolean isLord = flagValues != null && flagValues.contains("vampire.evolution.lord");
         int previousSunExposure = sunExposure;
+        long nowMs = System.currentTimeMillis();
+        long previousBloodSenseRemaining = Math.max(0L, bloodSenseCooldownUntilMs - nowMs);
 
         originId = origin == null ? "" : origin;
         blood = bloodValue;
@@ -62,11 +77,26 @@ public final class OriginClientState {
         progress = Collections.unmodifiableMap(new HashMap<>(progressValues == null ? Map.of() : progressValues));
         flags = Collections.unmodifiableSet(new HashSet<>(flagValues == null ? Set.of() : flagValues));
         int batTicks = Math.max(0, progress.getOrDefault("ui.vampire.bat_cooldown_ticks", 0));
-        long nowMs = System.currentTimeMillis();
         vampireBatCooldownUntilMs = nowMs + batTicks * 50L;
         manBatDurationUntilMs = nowMs + Math.max(0, progress.getOrDefault("ui.vampire.man_bat_duration_ticks", 0)) * 50L;
         manBatCooldownUntilMs = nowMs + Math.max(0, progress.getOrDefault("ui.vampire.man_bat_cooldown_ticks", 0)) * 50L;
         bloodSenseCooldownUntilMs = nowMs + Math.max(0, progress.getOrDefault("ui.vampire.blood_sense_cooldown_ticks", 0)) * 50L;
+
+        long newBloodSenseRemaining = Math.max(0L, bloodSenseCooldownUntilMs - nowMs);
+        boolean freshBloodSensePulse = originId.equals("vampire")
+                && newBloodSenseRemaining > previousBloodSenseRemaining + 4_000L
+                && newBloodSenseRemaining >= 8_500L;
+        if (freshBloodSensePulse) {
+            bloodSenseEffectUntilMs = nowMs + (isLord ? BLOOD_SENSE_LORD_EFFECT_MS : BLOOD_SENSE_BASE_EFFECT_MS);
+            bloodSenseFlashUntilMs = nowMs + BLOOD_SENSE_FLASH_MS;
+        }
+
+        // Only play the local lord-evolution reveal when it happens in-session.
+        if (initialized && originId.equals("vampire") && isLord && !wasLord) {
+            lordEvolutionEffectUntilMs = nowMs + LORD_EVOLUTION_EFFECT_MS;
+            lordEvolutionFlashUntilMs = nowMs + LORD_EVOLUTION_FLASH_MS;
+        }
+        initialized = true;
     }
 
 
@@ -93,6 +123,22 @@ public final class OriginClientState {
 
     public static long bloodSenseCooldownRemainingMs() {
         return Math.max(0L, bloodSenseCooldownUntilMs - System.currentTimeMillis());
+    }
+
+    public static long bloodSenseEffectRemainingMs() {
+        return Math.max(0L, bloodSenseEffectUntilMs - System.currentTimeMillis());
+    }
+
+    public static long bloodSenseFlashRemainingMs() {
+        return Math.max(0L, bloodSenseFlashUntilMs - System.currentTimeMillis());
+    }
+
+    public static long lordEvolutionEffectRemainingMs() {
+        return Math.max(0L, lordEvolutionEffectUntilMs - System.currentTimeMillis());
+    }
+
+    public static long lordEvolutionFlashRemainingMs() {
+        return Math.max(0L, lordEvolutionFlashUntilMs - System.currentTimeMillis());
     }
 
     public static long manBatDurationRemainingMs() {
@@ -130,6 +176,11 @@ public final class OriginClientState {
         manBatDurationUntilMs = 0L;
         manBatCooldownUntilMs = 0L;
         bloodSenseCooldownUntilMs = 0L;
+        bloodSenseEffectUntilMs = 0L;
+        bloodSenseFlashUntilMs = 0L;
+        lordEvolutionEffectUntilMs = 0L;
+        lordEvolutionFlashUntilMs = 0L;
+        initialized = false;
         progress = Map.of();
         flags = Set.of();
     }

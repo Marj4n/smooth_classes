@@ -149,6 +149,9 @@ public final class OriginProgressUnlocks {
                     if (skill.getState(player) == Skill.State.UNLOCKED) return;
                     skill.unlock(player);
                     PuffishSkillsIntegration.invalidateRuntimeCache(player);
+                    if (origin == OriginType.VAMPIRE && "final".equals(skillId)) {
+                        VampireTransformationEffects.playLordEvolution(player);
+                    }
                     // Use Minecraft's built-in achievement toast (task / challenge)
                     // instead of a competing action-bar message.
                     OriginAdvancementNotices.onMilestoneUnlocked(player, origin, skillId);

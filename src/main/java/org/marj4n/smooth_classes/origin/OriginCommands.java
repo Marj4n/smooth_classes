@@ -81,6 +81,17 @@ public final class OriginCommands {
                                                     return grantLevels(ctx.getSource(), OriginDebugLevels.maxLevel(
                                                             OriginRuntime.state(player).origin()), true);
                                                 })))
+                                .then(CommandManager.literal("grave")
+                                        .requires(source -> source.hasPermissionLevel(2))
+                                        .then(CommandManager.literal("test").executes(ctx -> {
+                                            ServerPlayerEntity player = ctx.getSource().getPlayerOrThrow();
+                                            if (VampireGraveSpawn.replayForTest(player)) {
+                                                ctx.getSource().sendFeedback(() -> Text.literal("[Origin] Generated Vampire grave test spawn."), false);
+                                                return 1;
+                                            }
+                                            ctx.getSource().sendError(Text.literal("Choose Vampire and stand near natural Overworld terrain to test the grave."));
+                                            return 0;
+                                        })))
                                 .then(CommandManager.literal("clear")
                                         .requires(source -> source.hasPermissionLevel(2))
                                         .executes(ctx -> {

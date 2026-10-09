@@ -189,6 +189,7 @@ public final class OriginRuntime {
         OriginAdvancementNotices.onOriginSelected(player, origin);
         applyAttributes(player, origin);
         player.calculateDimensions();
+        if (origin == OriginType.VAMPIRE) VampireGraveSpawn.awakenOnce(player, state(player));
         SmoothClassesNetworking.sendOriginState(player);
         player.sendMessage(Text.literal("Origin Chosen: " + origin.displayName()), false);
         player.sendMessage(Text.literal(origin.subtitle()), true);

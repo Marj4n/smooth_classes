@@ -43,6 +43,8 @@ dependencies {
     modImplementation "curse.maven:puffish-attributes-991341:${project.puffish_attributes_version}"
     modImplementation "maven.modrinth:spell-power:${project.spellpower_version}-fabric"
     modImplementation "maven.modrinth:spell-engine:${project.spell_engine_version}-fabric"
+    // Only used at compile time by the conditional compatibility mixin. NEVER bundled.
+    modCompileOnly "maven.modrinth:AKbBSvuC:JwA6Nkik" // Bewitchment 1.20-10
 }
 
 processResources {
