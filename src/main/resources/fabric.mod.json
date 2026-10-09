@@ -30,7 +30,8 @@
   },
   "mixins": [
     "smooth_classes.mixins.json",
-    "smooth_classes.bewitchment.mixins.json"
+    "smooth_classes.bewitchment.mixins.json",
+    "smooth_classes.dynamic_bars.mixins.json"
   ],
   "suggests": {
     "simplyswords": "*",

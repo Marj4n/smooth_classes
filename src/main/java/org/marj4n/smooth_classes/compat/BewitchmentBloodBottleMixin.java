@@ -57,8 +57,23 @@ public abstract class BewitchmentBloodBottleMixin {
             }
         }
 
-        // Bewitchment's own item calls this same method to consume the potion
-        // and return a glass bottle. Let it run exactly once, in both sides.
-        cir.setReturnValue(Items.POTION.finishUsing(stack, world, consumer));
+        // Keep animation/use-time handled by Bewitchment, but make inventory
+        // mutation server-authoritative. PotionItem.finishUsing on a foreign
+        // bottle stack can leave an extra client-side replacement/ghost bottle.
+        if (world.isClient || player.isCreative()) {
+            cir.setReturnValue(stack);
+            return;
+        }
+        stack.decrement(1);
+        ItemStack empty = new ItemStack(Items.GLASS_BOTTLE);
+        if (stack.isEmpty()) {
+            // Single bottle: replace held item with the empty bottle.
+            cir.setReturnValue(empty);
+        } else {
+            // Stacked bottle: retain remaining blood bottles, return exactly
+            // one glass bottle to inventory, or drop if inventory is full.
+            if (!player.getInventory().insertStack(empty)) player.dropItem(empty, false);
+            cir.setReturnValue(stack);
+        }
     }
 }
