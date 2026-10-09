@@ -6,6 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.ChestBlock;
+import net.minecraft.block.LanternBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.ChestBlockEntity;
 import net.minecraft.block.enums.BedPart;
@@ -28,11 +29,18 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.Heightmap;
 
-/** One-time Overworld origin introduction. NOT a respawn mechanic. */
+/**
+ * One-time Vampire grave: a compact 5x5 (interior), four-block-high sealed crypt.
+ * The soil above it is an actual digging puzzle. The only teleport happens before
+ * entering the real bed/coffin sleeping pose; waking uses vanilla bed positioning.
+ */
 public final class VampireGraveSpawn {
     public static final String AWAKENED_FLAG = "vampire.grave_awakened";
-    private static final int ROOM_RADIUS = 2; // 5x5 clear interior, 3 blocks tall
-    private static final int SHELL_RADIUS = ROOM_RADIUS + 1;
+    private static final String INTRO_SLEEPING = "vampire.grave_intro_sleeping";
+    private static final int ROOM_RADIUS = 2;  // 5x5 walkable footprint
+    private static final int SHELL_RADIUS = 3; // 7x7 including surrounding stone walls
+    private static final int INTERIOR_HEIGHT = 4;
+
     private VampireGraveSpawn() { }
 
     public static boolean awakenOnce(ServerPlayerEntity player, OriginState state) {
@@ -44,19 +52,59 @@ public final class VampireGraveSpawn {
                     .formatted(Formatting.YELLOW), false);
             return false;
         }
-        // Only mark complete after we have a valid site and before the teleport.
+
+        cancelIntro(player, state);
         build(world, center);
         state.flag(AWAKENED_FLAG);
-        player.teleport(world, center.getX() + 0.5D, center.getY() + 1.0D,
-                center.getZ() + 0.5D, 180.0F, 0.0F);
-        player.setVelocity(0, 0, 0);
-        player.fallDistance = 0;
-        player.networkHandler.sendPacket(new TitleFadeS2CPacket(15, 75, 20));
-        player.networkHandler.sendPacket(new TitleS2CPacket(Text.literal("THE FORGOTTEN GRAVE").formatted(Formatting.DARK_RED)));
-        player.networkHandler.sendPacket(new SubtitleS2CPacket(Text.literal("You awaken beneath the earth...").formatted(Formatting.GRAY)));
-        player.playSound(SoundEvents.BLOCK_WOODEN_DOOR_OPEN, 0.7F, 0.7F);
-        player.sendMessage(Text.literal("Find the chest. Read the book. Use the iron shovel to dig your way out."), false);
+
+        // This is the sole intentional position change: from origin selection to coffin.
+        // Do not teleport again during or after awakening. Let bed/coffin handle waking.
+        BlockPos head = coffinHead(center);
+        player.teleport(world, head.getX() + 0.5D, head.getY() + 0.1D,
+                head.getZ() + 0.5D, 180.0F, 0.0F);
+        player.setVelocity(0.0D, 0.0D, 0.0D);
+        player.fallDistance = 0.0F;
+        player.sleep(head);
+        state.longProgress(INTRO_SLEEPING, 1L);
+        state.sunExposure(0);
+        player.extinguish();
+
+        player.networkHandler.sendPacket(new TitleFadeS2CPacket(12, 55, 18));
+        player.networkHandler.sendPacket(new TitleS2CPacket(
+                Text.literal("THE FORGOTTEN CRYPT").formatted(Formatting.DARK_RED)));
+        player.networkHandler.sendPacket(new SubtitleS2CPacket(
+                Text.literal("Beneath the earth, you awaken.").formatted(Formatting.GRAY)));
+        player.playSound(SoundEvents.BLOCK_WOODEN_DOOR_CLOSE, 0.55F, 0.63F);
         return true;
+    }
+
+    /**
+     * Observe natural sleep/wake only. Never force time-of-day, wake the player on a
+     * timer, or teleport them to the room aisle after leaving the coffin.
+     */
+    public static void tickIntro(ServerPlayerEntity player, OriginState state) {
+        if (state.longProgress(INTRO_SLEEPING) == 0L) return;
+        if (state.origin() != OriginType.VAMPIRE) {
+            cancelIntro(player, state);
+            return;
+        }
+        if (player.isSleeping()) {
+            state.sunExposure(0);
+            player.extinguish();
+            return;
+        }
+        state.longProgress(INTRO_SLEEPING, 0L);
+        state.sunExposure(0);
+        player.extinguish();
+        player.sendMessage(Text.literal(
+                "The earth seals your grave. A shovel and journal rest beside the coffin.")
+                .formatted(Formatting.GRAY), false);
+    }
+
+    public static void cancelIntro(ServerPlayerEntity player, OriginState state) {
+        if (state.longProgress(INTRO_SLEEPING) == 0L) return;
+        state.longProgress(INTRO_SLEEPING, 0L);
+        if (player.isSleeping()) player.wakeUp(true, true);
     }
 
     /** OP-only replay for existing test worlds; never resets the progression tree. */
@@ -71,15 +119,14 @@ public final class VampireGraveSpawn {
     }
 
     private static BlockPos locate(ServerWorld world, BlockPos around) {
-        // Prefer an undisturbed patch away from the exact world-spawn location.
-        // Bounded search: avoid loading a huge area or scanning every chunk.
-        for (int radius = 16; radius <= 112; radius += 8) {
+        // Natural, mostly flat ground only: do not carve into buildings or fluids.
+        for (int radius = 16; radius <= 160; radius += 8) {
             for (int point = 0; point < 12; point++) {
                 double angle = (point / 12.0D) * Math.PI * 2D;
-                int x = around.getX() + (int)Math.round(Math.cos(angle) * radius);
-                int z = around.getZ() + (int)Math.round(Math.sin(angle) * radius);
+                int x = around.getX() + (int) Math.round(Math.cos(angle) * radius);
+                int z = around.getZ() + (int) Math.round(Math.sin(angle) * radius);
                 int top = world.getTopY(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, x, z);
-                BlockPos center = new BlockPos(x, top - 7, z);
+                BlockPos center = new BlockPos(x, top - 8, z);
                 if (safeSite(world, center, top)) return center;
             }
         }
@@ -94,13 +141,18 @@ public final class VampireGraveSpawn {
                 int localTop = world.getTopY(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, x, z);
                 if (Math.abs(localTop - top) > 1) return false;
                 BlockState surface = world.getBlockState(new BlockPos(x, localTop - 1, z));
-                // Don't bulldoze player buildings or structures. The surface must look natural.
                 if (!isNaturalSurface(surface)) return false;
                 for (int y = center.getY(); y < top; y++) {
                     BlockPos p = new BlockPos(x, y, z);
                     BlockState state = world.getBlockState(p);
                     if (world.getBlockEntity(p) != null || !state.getFluidState().isEmpty()) return false;
                     if (y < localTop - 1 && (state.isAir() || !state.isOpaqueFullCube(world, p))) return false;
+                }
+                for (int above = top; above <= top + 3; above++) {
+                    BlockPos p = new BlockPos(x, above, z);
+                    BlockState state = world.getBlockState(p);
+                    if (world.getBlockEntity(p) != null || !state.getFluidState().isEmpty()) return false;
+                    if (!state.isAir() && !state.isReplaceable()) return false;
                 }
             }
         }
@@ -114,67 +166,165 @@ public final class VampireGraveSpawn {
                 || state.isOf(Blocks.SNOW_BLOCK) || state.isOf(Blocks.MUD);
     }
 
+    private static BlockPos coffinHead(BlockPos center) {
+        return center.add(-1, 1, 1);
+    }
+
     private static void build(ServerWorld world, BlockPos center) {
-        // center.y is the floor level. Air cavity y+1 through y+3.
-        // Three layers of diggable dirt cap the ceiling; grass at the surface.
+        // dy=0 floor, dy=1..4 open room, dy=5/6 dirt ceiling, dy=7 natural grave level.
+        // Only the 5x5 central surface is dressed; surrounding terrain stays natural.
         for (int dx = -SHELL_RADIUS; dx <= SHELL_RADIUS; dx++) {
             for (int dz = -SHELL_RADIUS; dz <= SHELL_RADIUS; dz++) {
-                for (int dy = 0; dy <= 6; dy++) {
+                for (int dy = 0; dy <= 7; dy++) {
+                    if (dy == 7 && (Math.abs(dx) > ROOM_RADIUS || Math.abs(dz) > ROOM_RADIUS)) continue;
                     BlockPos p = center.add(dx, dy, dz);
-                    boolean air = Math.abs(dx) <= ROOM_RADIUS && Math.abs(dz) <= ROOM_RADIUS
-                            && dy >= 1 && dy <= 3;
-                    BlockState replacement = air ? Blocks.AIR.getDefaultState()
-                            : dy == 6 ? Blocks.GRASS_BLOCK.getDefaultState()
-                            : dy == 0 ? Blocks.COARSE_DIRT.getDefaultState()
-                            : Blocks.DIRT.getDefaultState();
+                    boolean interior = Math.abs(dx) <= ROOM_RADIUS && Math.abs(dz) <= ROOM_RADIUS;
+                    BlockState replacement;
+                    if (dy == 0) {
+                        replacement = floorMaterial(dx, dz);
+                    } else if (dy <= INTERIOR_HEIGHT) {
+                        replacement = interior ? Blocks.AIR.getDefaultState() : wallMaterial(dx, dy, dz);
+                    } else if (dy == 5) {
+                        // The diggable cap starts directly above the four-high room.
+                        replacement = interior && (dx + dz) % 4 != 0
+                                ? Blocks.ROOTED_DIRT.getDefaultState() : Blocks.DIRT.getDefaultState();
+                    } else if (dy == 6) {
+                        replacement = Blocks.DIRT.getDefaultState();
+                    } else {
+                        replacement = surfaceMaterial(dx, dz);
+                    }
                     world.setBlockState(p, replacement, Block.NOTIFY_ALL);
                 }
             }
         }
 
-        // Vanilla beds and Bewitchment coffins both extend BedBlock and use two halves.
+        // Compact ruined archwork: corner pedestals and old iron reinforcement.
+        for (int x : new int[]{-2, 2}) {
+            for (int z : new int[]{-2, 2}) {
+                world.setBlockState(center.add(x, 1, z),
+                        Blocks.CHISELED_POLISHED_BLACKSTONE.getDefaultState(), Block.NOTIFY_ALL);
+                world.setBlockState(center.add(x, 2, z),
+                        Blocks.POLISHED_BLACKSTONE_BRICKS.getDefaultState(), Block.NOTIFY_ALL);
+            }
+        }
+        for (int z : new int[]{-1, 1}) {
+            world.setBlockState(center.add(-3, 2, z),
+                    Blocks.IRON_BARS.getDefaultState(), Block.NOTIFY_ALL);
+        }
+        // Two low-light wall-side lamps (kept away from the coffin and excavation path).
+        for (int[] pos : new int[][]{{-2, -1}, {2, 1}}) {
+            BlockPos chain = center.add(pos[0], 4, pos[1]);
+            world.setBlockState(chain, Blocks.CHAIN.getDefaultState(), Block.NOTIFY_ALL);
+            world.setBlockState(chain.down(), Blocks.SOUL_LANTERN.getDefaultState()
+                    .with(LanternBlock.HANGING, true), Block.NOTIFY_ALL);
+        }
+        world.setBlockState(center.add(2, 3, -2), Blocks.COBWEB.getDefaultState(), Block.NOTIFY_ALL);
+        world.setBlockState(center.add(-2, 3, 2), Blocks.COBWEB.getDefaultState(), Block.NOTIFY_ALL);
+
+        // Subtle pedestal in the floor, not a raised obstruction to waking.
+        for (int x = -2; x <= 0; x++) {
+            for (int z = 0; z <= 1; z++) {
+                world.setBlockState(center.add(x, 0, z),
+                        ((x + z) & 1) == 0 ? Blocks.POLISHED_BLACKSTONE_BRICKS.getDefaultState()
+                                : Blocks.CHISELED_POLISHED_BLACKSTONE.getDefaultState(), Block.NOTIFY_ALL);
+            }
+        }
+
+        // The real, sleep-capable coffin. The long axis points south.
         Block coffin = coffinOrBed();
         BlockPos foot = center.add(-1, 1, 0);
-        BlockPos head = foot.south();
+        BlockPos head = coffinHead(center);
         BlockState bed = coffin.getDefaultState().with(BedBlock.FACING, Direction.SOUTH);
-        // Skip neighbor shape checks during initial two-block placement.
-        int flags = Block.NOTIFY_LISTENERS | Block.FORCE_STATE;
-        world.setBlockState(head, bed.with(BedBlock.PART, BedPart.HEAD), flags);
-        world.setBlockState(foot, bed.with(BedBlock.PART, BedPart.FOOT), flags);
+        int bedFlags = Block.NOTIFY_LISTENERS | Block.FORCE_STATE;
+        world.setBlockState(head, bed.with(BedBlock.PART, BedPart.HEAD), bedFlags);
+        world.setBlockState(foot, bed.with(BedBlock.PART, BedPart.FOOT), bedFlags);
 
-        BlockPos chestPos = center.add(2, 1, -1);
-        world.setBlockState(chestPos, Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, Direction.WEST), Block.NOTIFY_ALL);
+        // Directly next to the coffin's foot, not on the opposite crypt wall.
+        BlockPos chestPos = center.add(0, 1, 0);
+        world.setBlockState(chestPos, Blocks.CHEST.getDefaultState()
+                .with(ChestBlock.FACING, Direction.SOUTH), Block.NOTIFY_ALL);
         BlockEntity tile = world.getBlockEntity(chestPos);
         if (tile instanceof ChestBlockEntity chest) {
             chest.setStack(0, loreBook());
             chest.setStack(1, new ItemStack(Items.IRON_SHOVEL));
             chest.markDirty();
         }
-        world.setBlockState(center.add(-2, 1, -2), Blocks.TORCH.getDefaultState(), Block.NOTIFY_ALL);
+
+        // No ladder, trapdoor, staircase or prepared escape tunnel. The player
+        // digs through rooted dirt and topsoil above the central aisle.
+
+        // Small 5x5 surface grave: uneven earth mound, cracked headstone, worn
+        // stone border and two quiet blue lamps. No surrounding 9x9 build.
+        for (int x = -1; x <= 0; x++) {
+            for (int z = -1; z <= 1; z++) {
+                world.setBlockState(center.add(x, 7, z), Blocks.PODZOL.getDefaultState(), Block.NOTIFY_ALL);
+                world.setBlockState(center.add(x, 8, z),
+                        (x + z) % 3 == 0 ? Blocks.ROOTED_DIRT.getDefaultState()
+                                : Blocks.COARSE_DIRT.getDefaultState(), Block.NOTIFY_ALL);
+            }
+        }
+        for (int z = -1; z <= 1; z++) {
+            for (int x : new int[]{-2, 1}) {
+                if (z != 0 || x == -2) {
+                    world.setBlockState(center.add(x, 8, z),
+                            Blocks.MOSSY_COBBLESTONE_SLAB.getDefaultState(), Block.NOTIFY_ALL);
+                }
+            }
+        }
+        // Weathered north headstone fits entirely within the 5x5 surface.
+        world.setBlockState(center.add(-1, 8, -2), Blocks.MOSSY_STONE_BRICKS.getDefaultState(), Block.NOTIFY_ALL);
+        world.setBlockState(center.add(-1, 9, -2), Blocks.CHISELED_STONE_BRICKS.getDefaultState(), Block.NOTIFY_ALL);
+        world.setBlockState(center.add(-1, 10, -2), Blocks.STONE_BRICK_SLAB.getDefaultState(), Block.NOTIFY_ALL);
+        world.setBlockState(center.add(1, 8, -2), Blocks.SOUL_LANTERN.getDefaultState(), Block.NOTIFY_ALL);
+        world.setBlockState(center.add(1, 8, 2), Blocks.COBBLESTONE_SLAB.getDefaultState(), Block.NOTIFY_ALL);
+    }
+
+    private static BlockState floorMaterial(int x, int z) {
+        int hash = Math.floorMod(x * 19 + z * 31 + x * z * 7, 13);
+        if (hash < 2) return Blocks.CRACKED_POLISHED_BLACKSTONE_BRICKS.getDefaultState();
+        if (hash == 2) return Blocks.MOSSY_STONE_BRICKS.getDefaultState();
+        return Blocks.POLISHED_BLACKSTONE_BRICKS.getDefaultState();
+    }
+
+    private static BlockState wallMaterial(int x, int y, int z) {
+        int hash = Math.floorMod(x * 13 + y * 23 + z * 11, 11);
+        if (hash == 0) return Blocks.CHISELED_STONE_BRICKS.getDefaultState();
+        if (hash < 3) return Blocks.CRACKED_STONE_BRICKS.getDefaultState();
+        if (hash < 5) return Blocks.MOSSY_STONE_BRICKS.getDefaultState();
+        return Blocks.STONE_BRICKS.getDefaultState();
+    }
+
+    private static BlockState surfaceMaterial(int x, int z) {
+        int hash = Math.floorMod(x * 13 + z * 7 + x * z, 13);
+        if (hash < 2) return Blocks.PODZOL.getDefaultState();
+        if (hash < 4) return Blocks.COARSE_DIRT.getDefaultState();
+        return Blocks.GRASS_BLOCK.getDefaultState();
     }
 
     private static Block coffinOrBed() {
         if (FabricLoader.getInstance().isModLoaded("bewitchment")) {
             Identifier id = new Identifier("bewitchment", "black_coffin");
-            // Registry lookup keeps Bewitchment an OPTIONAL dependency.
-            if (Registries.BLOCK.containsId(id)) return Registries.BLOCK.get(id);
+            if (Registries.BLOCK.containsId(id)) {
+                Block block = Registries.BLOCK.get(id);
+                if (block instanceof BedBlock) return block;
+            }
         }
-        return Blocks.RED_BED;
+        return Blocks.BLACK_BED;
     }
 
     private static ItemStack loreBook() {
         ItemStack book = new ItemStack(Items.WRITTEN_BOOK);
         NbtCompound nbt = book.getOrCreateNbt();
-        nbt.putString("title", "The Forgotten Grave");
-        nbt.putString("author", "Unknown");
+        nbt.putString("title", "The Forgotten Crypt");
+        nbt.putString("author", "The Last Gravedigger");
         nbt.putInt("generation", 0);
         NbtList pages = new NbtList();
         pages.add(net.minecraft.nbt.NbtString.of(Text.Serializer.toJson(Text.literal(
-                "To whoever awakens within this coffin...\n\nYou were not buried because you died.\n\nYou were buried because they feared what you would become."))));
+                "To the one who rises from this coffin...\n\nYou were not buried because you died.\n\nYou were buried because they feared what you would become."))));
         pages.add(net.minecraft.nbt.NbtString.of(Text.Serializer.toJson(Text.literal(
-                "Your name has been erased, and the world has forgotten you.\n\nBut death has refused to claim you. The blood has awakened once more."))));
+                "The stones remember your name, though the living have forgotten it.\n\nThe last light of day cannot reach you here. Wait for the night to answer."))));
         pages.add(net.minecraft.nbt.NbtString.of(Text.Serializer.toJson(Text.literal(
-                "The earth above you is not a prison forever. Take the shovel. Dig your way out.\n\nFind those who buried you.\n\nThe dead do not always stay dead."))));
+                "A shovel rests in the chest beside you. Above the roof lies only soil and an old grave. Dig your way to freedom.\n\nThe dead do not always stay dead."))));
         nbt.put("pages", pages);
         return book;
     }

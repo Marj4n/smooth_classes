@@ -30,10 +30,28 @@ public final class OriginAbilityDispatcher {
         return switch (origin) {
             case HUMAN -> activateHuman(player, state, slot);
             case VAMPIRE -> activateVampire(player, state, slot);
+            case HOMUNCULUS -> activateHomunculus(player, slot);
             case MERMAID -> activateMermaid(player, state, slot);
             case SLIME -> activateSlime(player, state, slot);
             default -> Result.fail("This Origin is archived for V2.");
         };
+    }
+
+    private static Result activateHomunculus(ServerPlayerEntity player, int slot) {
+        if (slot == 0) {
+            var blade = HomunculusAccessories.stack(player, HomunculusAccessories.WEAPON);
+            return blade.isEmpty() ? Result.fail("Equip a sword in Accessories > Weapon Arm first.")
+                    : Result.ok("Weapon Arm: " + blade.getName().getString() + " (spear-style thrust).");
+        }
+        if (slot == 1) {
+            int count = 0;
+            for (String part : new String[]{HomunculusAccessories.HEAD,
+                    HomunculusAccessories.CHEST, HomunculusAccessories.LEGS, HomunculusAccessories.FEET}) {
+                if (HomunculusAccessories.patched(player, part)) count++;
+            }
+            return Result.ok("Body repair: " + count + "/4 inner armor slots filled.");
+        }
+        return Result.fail("Alchemical Core evolution is not yet available in this debugging build.");
     }
 
     private static Result activateHuman(ServerPlayerEntity player, OriginState state, int slot) {

@@ -72,6 +72,7 @@ public final class SmoothClasses implements ModInitializer {
             }
         });
         SmoothClassesNetworking.registerServer();
+        org.marj4n.smooth_classes.origin.HomunculusAccessories.register();
         org.marj4n.smooth_classes.origin.OriginRuntime.register();
         org.marj4n.smooth_classes.origin.OriginCommands.register();
         LOGGER.info("Smooth Classes initialized. Puffish Skills owns class trees and unlock state; {} class definitions registered.",

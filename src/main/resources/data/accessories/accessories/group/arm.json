@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "order": 120,
+  "slots": [
+    "homunculus_weapon_arm"
+  ],
+  "icon": "accessories:gui/group/arm"
+}

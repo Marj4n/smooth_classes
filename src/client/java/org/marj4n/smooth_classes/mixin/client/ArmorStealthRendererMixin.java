@@ -12,6 +12,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.marj4n.smooth_classes.client.origin.appearance.ManBatFormModel;
+import org.marj4n.smooth_classes.client.origin.appearance.HomunculusReplacementModel;
 import org.marj4n.smooth_classes.client.origin.appearance.VsbArmorRenderScale;
 import org.marj4n.smooth_classes.origin.OriginType;
 import org.marj4n.smooth_classes.origin.OriginRuntime;
@@ -31,6 +32,12 @@ public abstract class ArmorStealthRendererMixin {
         }
         if (entity instanceof net.minecraft.entity.player.PlayerEntity player) {
             var state = org.marj4n.smooth_classes.origin.OriginRuntime.state(player);
+            if (state.origin() == OriginType.HOMUNCULUS) {
+                matrices.push();
+                float scale = HomunculusReplacementModel.RENDER_SCALE;
+                matrices.translate(0.0D, 1.8D * (1.0D - scale), 0.0D);
+                matrices.scale(scale, scale, scale);
+            }
             if (state.origin() == org.marj4n.smooth_classes.origin.OriginType.VAMPIRE
                     && state.hasFlag("vampire.form.bat")) {
                 ci.cancel();
@@ -47,6 +54,10 @@ public abstract class ArmorStealthRendererMixin {
             CallbackInfo ci) {
         if (entity instanceof net.minecraft.entity.player.PlayerEntity player) {
             var state = OriginRuntime.state(player);
+            if (state.origin() == OriginType.HOMUNCULUS) {
+                // The approved bbmodel stays close to a humanoid anchor, so vanilla
+                // armor can remain on standard pivots instead of the older temporary rig offsets.
+            }
             if (state.origin() == OriginType.VAMPIRE && state.hasFlag("vampire.form.man_bat")) {
                 ManBatFormModel.alignArmor(player, slot, model);
                 VsbArmorRenderScale.begin(model, slot);
@@ -59,5 +70,9 @@ public abstract class ArmorStealthRendererMixin {
             LivingEntity entity, EquipmentSlot slot, int light, BipedEntityModel<LivingEntity> model,
             CallbackInfo ci) {
         VsbArmorRenderScale.end();
+        if (entity instanceof net.minecraft.entity.player.PlayerEntity player
+                && OriginRuntime.state(player).origin() == OriginType.HOMUNCULUS) {
+            matrices.pop();
+        }
     }
 }

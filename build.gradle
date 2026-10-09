@@ -43,6 +43,9 @@ dependencies {
     modImplementation "curse.maven:puffish-attributes-991341:${project.puffish_attributes_version}"
     modImplementation "maven.modrinth:spell-power:${project.spellpower_version}-fabric"
     modImplementation "maven.modrinth:spell-engine:${project.spell_engine_version}-fabric"
+    // Homunculus body-patch + integrated weapon slots. Accessories is a runtime dependency;
+    // its JAR is downloaded by Gradle and never redistributed in our source archive.
+    modImplementation "maven.modrinth:jtmvUHXj:BmhkZr5J" // Accessories Fabric 1.0.0-beta.47+1.20.1
     // Only used at compile time by the conditional compatibility mixin. NEVER bundled.
     modCompileOnly "maven.modrinth:AKbBSvuC:JwA6Nkik" // Bewitchment 1.20-10
 }

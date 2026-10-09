@@ -126,10 +126,10 @@ public enum OriginType {
     public Identifier categoryId() { return SmoothClasses.id("origin_" + id()); }
 
 
-    private static final OriginType[] V1_PLAYABLE = {HUMAN, VAMPIRE, MERMAID, SLIME};
+    private static final OriginType[] V1_PLAYABLE = {HUMAN, VAMPIRE, HOMUNCULUS};
 
     public boolean isV1Playable() {
-        return this == HUMAN || this == VAMPIRE || this == MERMAID || this == SLIME;
+        return this == HUMAN || this == VAMPIRE || this == HOMUNCULUS;
     }
 
     public static OriginType[] v1PlayableValues() {

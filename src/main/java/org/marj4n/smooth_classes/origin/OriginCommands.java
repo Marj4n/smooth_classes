@@ -30,7 +30,7 @@ public final class OriginCommands {
                                             ServerPlayerEntity player = ctx.getSource().getPlayerOrThrow();
                                             OriginState state = OriginRuntime.state(player);
                                             OriginType type = state.origin();
-                                            if (type == null) {
+                                            if (type == null || !type.isV1Playable()) {
                                                 ctx.getSource().sendFeedback(() -> Text.literal("No Origin selected."), false);
                                             } else {
                                                 ctx.getSource().sendFeedback(() -> Text.literal(
@@ -49,12 +49,12 @@ public final class OriginCommands {
                                         .requires(source -> source.hasPermissionLevel(2))
                                         .then(CommandManager.argument("origin", StringArgumentType.word())
                                                 .suggests((ctx, builder) -> CommandSource.suggestMatching(
-                                                        Arrays.stream(OriginType.values()).map(OriginType::id), builder))
+                                                        Arrays.stream(OriginType.v1PlayableValues()).map(OriginType::id), builder))
                                                 .executes(ctx -> {
                                                     ServerPlayerEntity player = ctx.getSource().getPlayerOrThrow();
                                                     String id = StringArgumentType.getString(ctx, "origin");
                                                     OriginType type = OriginType.byId(id).orElse(null);
-                                                    if (type == null) {
+                                                    if (type == null || !type.isV1Playable()) {
                                                         ctx.getSource().sendError(Text.literal("Unknown Origin: " + id));
                                                         return 0;
                                                     }

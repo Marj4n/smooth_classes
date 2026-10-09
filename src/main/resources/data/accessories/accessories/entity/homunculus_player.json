@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "entities": [
+    "minecraft:player"
+  ],
+  "slots": [
+    "homunculus_head_patch",
+    "homunculus_chest_patch",
+    "homunculus_leg_patch",
+    "homunculus_feet_patch",
+    "homunculus_weapon_arm"
+  ]
+}

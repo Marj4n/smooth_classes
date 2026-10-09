@@ -1380,5 +1380,11 @@
   "text.skills.origin_doppelganger_category.description": "Doppelganger — 18 health.",
   "key.smooth_classes.ability_page": "Switch Class / Origin Ability Page",
   "item.smooth_classes.blood_bottle": "Blood Bottle",
-  "block.smooth_classes.vampire_coffin": "Vampire Coffin"
+  "block.smooth_classes.vampire_coffin": "Vampire Coffin",
+  "accessories.slot.homunculus_head_patch": "Head Patch",
+  "accessories.slot.homunculus_chest_patch": "Chest Patch",
+  "accessories.slot.homunculus_leg_patch": "Leg Patch",
+  "accessories.slot.homunculus_feet_patch": "Feet Patch",
+  "accessories.slot.homunculus_weapon_arm": "Weapon Arm",
+  "accessories.group.homunculus": "Homunculus"
 }
