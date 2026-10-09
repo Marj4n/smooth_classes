@@ -1,6 +1,8 @@
 package org.marj4n.smooth_classes.mixin.client;
 
 import net.minecraft.client.network.AbstractClientPlayerEntity;
+import net.minecraft.client.MinecraftClient;
+import org.marj4n.smooth_classes.client.origin.OriginClientState;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
@@ -10,6 +12,7 @@ import net.minecraft.client.render.entity.model.PlayerEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 import org.marj4n.smooth_classes.client.origin.appearance.OriginAppearanceFeatureRenderer;
 import org.marj4n.smooth_classes.client.origin.appearance.ManBatPosePreparerFeatureRenderer;
+import org.marj4n.smooth_classes.client.origin.appearance.OriginVanillaBodyGuard;
 import org.marj4n.smooth_classes.origin.OriginRuntime;
 import org.marj4n.smooth_classes.origin.OriginType;
 import org.spongepowered.asm.mixin.Mixin;
@@ -58,6 +61,16 @@ public abstract class PlayerOriginAppearanceRendererMixin
         ));
     }
 
+    // Begin at the outer PlayerEntityRenderer so the guard survives all later
+    // animation modifiers and only affects the matching player's draw calls.
+    @Inject(method = "render(Lnet/minecraft/client/network/AbstractClientPlayerEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V",
+            at = @At("HEAD"))
+    private void smooth_classes$enterReplacementRender(AbstractClientPlayerEntity player,
+            float yaw, float tickDelta, MatrixStack matrices,
+            VertexConsumerProvider consumers, int light, CallbackInfo ci) {
+        OriginVanillaBodyGuard.begin(player);
+    }
+
     @Inject(method = "render(Lnet/minecraft/client/network/AbstractClientPlayerEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V",
             at = @At(value = "INVOKE",
                     target = "Lnet/minecraft/client/render/entity/PlayerEntityRenderer;setModelPose(Lnet/minecraft/client/network/AbstractClientPlayerEntity;)V",
@@ -68,6 +81,9 @@ public abstract class PlayerOriginAppearanceRendererMixin
         smooth_classes$visibilityChanged = false;
         if (player == null) return;
         OriginType origin = OriginRuntime.state(player).origin();
+        if (player == MinecraftClient.getInstance().player && "vampire".equals(OriginClientState.originId)) {
+            origin = OriginType.VAMPIRE;
+        }
         if (origin == null) return;
 
         PlayerEntityModel<AbstractClientPlayerEntity> model = this.getModel();
@@ -107,6 +123,7 @@ public abstract class PlayerOriginAppearanceRendererMixin
     private void smooth_classes$restoreBody(AbstractClientPlayerEntity player, float yaw, float tickDelta,
                                              MatrixStack matrices, VertexConsumerProvider consumers, int light,
                                              CallbackInfo ci) {
+        OriginVanillaBodyGuard.end(player);
         if (!smooth_classes$visibilityChanged) return;
         smooth_classes$restoreVisibility(this.getModel());
         smooth_classes$visibilityChanged = false;

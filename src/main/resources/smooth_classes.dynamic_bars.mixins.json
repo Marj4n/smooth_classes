@@ -1,0 +1,12 @@
+{
+  "required": false,
+  "package": "org.marj4n.smooth_classes.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "plugin": "org.marj4n.smooth_classes.compat.DynamicResourceBarsMixinPlugin",
+  "client": [
+    "client.DynamicResourceBarsVampireMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 0
+  }
+}

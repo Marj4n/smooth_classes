@@ -57,6 +57,7 @@
     "client.BloodRainSkyMixin",
     "client.BerserkerControlLockMixin",
     "client.PlayerOriginAppearanceRendererMixin",
+    "client.OriginVanillaModelRenderMixin",
     "client.OriginHeldItemRendererMixin",
     "client.OriginHeldItemFeatureMixin",
     "client.ManBatHeldItemAnchorMixin",

@@ -1,6 +1,8 @@
 package org.marj4n.smooth_classes.client.origin.appearance;
 
 import net.minecraft.client.network.AbstractClientPlayerEntity;
+import net.minecraft.client.MinecraftClient;
+import org.marj4n.smooth_classes.client.origin.OriginClientState;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
@@ -81,6 +83,9 @@ public final class OriginAppearanceFeatureRenderer
 
         OriginState state = OriginRuntime.state(player);
         OriginType origin = state.origin();
+        if (player == MinecraftClient.getInstance().player && "vampire".equals(OriginClientState.originId)) {
+            origin = OriginType.VAMPIRE;
+        }
         if (origin == null) return;
 
         PlayerEntityModel<AbstractClientPlayerEntity> parent = this.getContextModel();
@@ -162,11 +167,18 @@ public final class OriginAppearanceFeatureRenderer
         }
     }
 
+    private static boolean isActiveVampireFlag(AbstractClientPlayerEntity player, OriginState state, String flag) {
+        if (state.hasFlag(flag)) return true;
+        MinecraftClient client = MinecraftClient.getInstance();
+        return player == client.player && "vampire".equals(OriginClientState.originId)
+                && OriginClientState.hasFlag(flag);
+    }
+
     private void renderVampireState(OriginState state, PlayerEntityModel<AbstractClientPlayerEntity> parent,
                                     MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light,
                                     AbstractClientPlayerEntity player, float limbAngle, float limbDistance,
                                     float animationProgress, float headYaw, float headPitch) {
-        if (state.hasFlag("vampire.form.man_bat")) {
+        if (isActiveVampireFlag(player, state, "vampire.form.man_bat")) {
             // During first-person Player Animator weapon attacks, the vanilla
             // humanoid rig becomes the animation carrier. Do not draw VSB on
             // top of that camera-space pass; TPV remains the exact VSB mesh.
@@ -178,7 +190,7 @@ public final class OriginAppearanceFeatureRenderer
             matrices.push();
             // Exact source coordinates are mapped from Figura Y-up to vanilla
             // model-space Y-down by VsbFiguraAvatarRenderer itself.
-            boolean lord = state.hasFlag("vampire.evolution.lord");
+            boolean lord = isActiveVampireFlag(player, state, "vampire.evolution.lord");
             VertexConsumer beast = vertexConsumers.getBuffer(RenderLayer.getEntityCutoutNoCull(lord ? LORD_MAN_BAT : MAN_BAT));
             manBat.render(matrices, beast, light, OverlayTexture.DEFAULT_UV, 1, 1, 1, 1);
             // Lord uses the same UV layout, with wine-red emissive eyes.
@@ -190,7 +202,7 @@ public final class OriginAppearanceFeatureRenderer
             // PlayerEntityModel pose as Better Combat. Never re-render items
             // at Figura's separate wrists: that rotates swords backwards.
             matrices.pop();
-        } else if (state.hasFlag("vampire.form.bat")) {
+        } else if (isActiveVampireFlag(player, state, "vampire.form.bat")) {
             float flightBlend = org.marj4n.smooth_classes.client.origin.OriginMorphState.batFlight(player);
 
             // V1.6.2: always use Minecraft's actual BatEntityModel.  Grounded state is
@@ -214,7 +226,7 @@ public final class OriginAppearanceFeatureRenderer
             matrices.scale(batScale, batScale, batScale);
 
             VertexConsumer batConsumer = vertexConsumers.getBuffer(RenderLayer.getEntityTranslucent(BAT));
-            if (state.hasFlag("vampire.evolution.lord")) {
+            if (isActiveVampireFlag(player, state, "vampire.evolution.lord")) {
                 // Preserve vanilla Bat geometry and animation; only tint the Lord palette.
                 bat.render(matrices, batConsumer, light, OverlayTexture.DEFAULT_UV,
                         0.76F, 0.46F, 0.67F, 1.0F);
@@ -232,12 +244,15 @@ public final class OriginAppearanceFeatureRenderer
         if (player == null) return false;
         OriginState state = OriginRuntime.state(player);
         OriginType origin = state.origin();
+        if (player == MinecraftClient.getInstance().player && "vampire".equals(OriginClientState.originId)) {
+            origin = OriginType.VAMPIRE;
+        }
         if (origin == null) return false;
         return switch (origin) {
             case VOID, UNDEAD, HOMUNCULUS, SPRIGGAN -> true;
             case SLIME -> !state.hasFlag("slime.form.humanoid");
-            case VAMPIRE -> state.hasFlag("vampire.form.bat") ||
-                    (state.hasFlag("vampire.form.man_bat")
+            case VAMPIRE -> isActiveVampireFlag(player, state, "vampire.form.bat") ||
+                    (isActiveVampireFlag(player, state, "vampire.form.man_bat")
                             && !ManBatFormModel.useVanillaFirstPersonCombat(player));
             default -> false;
         };

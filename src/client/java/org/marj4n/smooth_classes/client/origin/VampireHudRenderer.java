@@ -2,6 +2,7 @@ package org.marj4n.smooth_classes.client.origin;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.MobEntity;
@@ -21,6 +22,10 @@ public final class VampireHudRenderer {
     private static final Identifier[][] BLOOD = new Identifier[2][8];
     private static final long BLOOD_SENSE_BASE_MS = 10_000L;
     private static final long BLOOD_SENSE_LORD_MS = 20_000L;
+    private static final long BLOOD_SENSE_FADE_OUT_MS = 1_600L;
+    private static final long BLOOD_SENSE_FADE_IN_MS = 240L;
+    private static final boolean DYNAMIC_BARS = FabricLoader.getInstance().isModLoaded("dynamic_resource_bars");
+    private static final Identifier STAMINA_FRAME = new Identifier("dynamic_resource_bars", "textures/gui/stamina_foreground.png");
     private static final long LORD_EVOLUTION_MS = 6_500L;
 
     static {
@@ -48,7 +53,8 @@ public final class VampireHudRenderer {
             return;
         }
 
-        renderBlood(context, client);
+        if (DYNAMIC_BARS) renderModpackBloodBar(context, client, tickDelta);
+        else renderBlood(context, client);
         renderBiteReticle(context, client);
         renderSunPain(context, client);
     }
@@ -69,6 +75,56 @@ public final class VampireHudRenderer {
             Identifier tex = BLOOD[starving ? 1 : 0][stage];
             context.drawTexture(tex, x, y, 0.0F, 0.0F, 9, 9, 9, 9);
         }
+    }
+
+    /**
+     * Dynamic RPG Resource Bars replaces vanilla hunger with a full-width FOOD stamina bar.
+     * That bar is cancelled for Smooth Classes Vampires by the optional compat mixin.
+     * Match the Smooth Odyssey 1.2.8 right-side bar anchor rather than drawing ten
+     * vanilla-style icons which would overlap the resource-bar UI.
+     */
+    private static void renderModpackBloodBar(DrawContext context, MinecraftClient client, float tickDelta) {
+        int width = context.getScaledWindowWidth();
+        int height = context.getScaledWindowHeight();
+        int capacity = Math.max(1, OriginClientState.bloodCapacity);
+        float percentage = MathHelper.clamp(OriginClientState.blood / (float) capacity, 0.0F, 1.0F);
+        // 1.20.1 Smooth Odyssey config: HUNGER anchor (+91, -40), total (-74, +4).
+        int barX = width / 2 + 16;
+        int barY = height - 37;
+        int filled = Math.round(77.0F * percentage);
+        context.fill(barX - 1, barY - 1, barX + 78, barY + 8, 0xFF10080E);
+        context.fill(barX, barY, barX + 77, barY + 6, 0xFF34171F);
+        if (filled > 0) {
+            context.fill(barX, barY, barX + filled, barY + 6, 0xFF951629);
+            context.fill(barX, barY, barX + filled, barY + 2, 0xFFC74256);
+            context.fill(barX, barY + 5, barX + filled, barY + 6, 0xFF61101B);
+        }
+        // Tiny rising crimson bubbles inside the filled Blood bar. Position and
+        // timing are deterministic from render ticks; no per-frame allocations or
+        // randomness, and never draw above the current blood amount.
+        if (filled > 4) {
+            float ticks = client.player.age + tickDelta;
+            for (int i = 0; i < 15; i++) {
+                float phase = ticks * (0.046F + (i % 4) * 0.015F) + i * 8.83F;
+                float travel = phase - (float)Math.floor(phase);
+                int bubbleX = barX + 1 + (i * 37 + 13) % Math.max(1, filled - 2);
+                int bubbleY = barY + 4 - (int)(travel * 4.0F);
+                int alpha = (int)(MathHelper.clamp(
+                        Math.min(travel * 4.0F, (1.0F - travel) * 4.0F), 0.0F, 1.0F) * 150.0F);
+                if (bubbleX < barX + filled - 1 && bubbleY >= barY + 1 && bubbleY <= barY + 4) {
+                    context.fill(bubbleX, bubbleY, bubbleX + 1, bubbleY + 1,
+                            (alpha << 24) | 0xFFABB8);
+                    if (i % 5 == 0 && bubbleX + 1 < barX + filled - 1) {
+                        context.fill(bubbleX + 1, bubbleY + 1, bubbleX + 2, bubbleY + 2,
+                                ((alpha / 2) << 24) | 0x6C0B23);
+                    }
+                }
+            }
+        }
+        // The user-provided Bars.zip renders this 99x23 frame; preserve its style.
+        RenderSystem.enableBlend();
+        context.drawTexture(STAMINA_FRAME, barX - 9, barY - 9, 0, 0, 99, 23, 99, 23);
+        RenderSystem.disableBlend();
     }
 
     private static void renderBiteReticle(DrawContext context, MinecraftClient client) {
@@ -135,10 +191,16 @@ public final class VampireHudRenderer {
         long duration = OriginClientState.hasFlag("vampire.evolution.lord") ? BLOOD_SENSE_LORD_MS : BLOOD_SENSE_BASE_MS;
         float life = 1.0F - MathHelper.clamp(remaining / (float) duration, 0.0F, 1.0F);
         float pulse = 0.55F + 0.45F * MathHelper.sin((client.player.age + tickDelta) * 0.42F + life * 9.0F);
+        // Ease the overlay out in its final 1.6s, instead of one-frame disappearance.
+        float fadeOut = MathHelper.clamp(remaining / (float) BLOOD_SENSE_FADE_OUT_MS, 0.0F, 1.0F);
+        float fadeIn = MathHelper.clamp((duration - remaining) / (float) BLOOD_SENSE_FADE_IN_MS, 0.0F, 1.0F);
+        fadeOut = fadeOut * fadeOut * (3.0F - 2.0F * fadeOut);
+        fadeIn = fadeIn * fadeIn * (3.0F - 2.0F * fadeIn);
+        float opacity = fadeIn * fadeOut;
 
-        drawFullscreen(context, SUN_GRADIENT, width, height, 0.62F, 0.08F, 0.12F, 0.18F + pulse * 0.10F);
-        drawFullscreen(context, SUN_RAYS, width, height, 0.94F, 0.14F, 0.18F, 0.10F + pulse * 0.10F);
-        drawFullscreen(context, SUN_VEINS, width, height, 0.86F, 0.12F, 0.16F, 0.06F + pulse * 0.08F);
+        drawFullscreen(context, SUN_GRADIENT, width, height, 0.62F, 0.08F, 0.12F, (0.18F + pulse * 0.10F) * opacity);
+        drawFullscreen(context, SUN_RAYS, width, height, 0.94F, 0.14F, 0.18F, (0.10F + pulse * 0.10F) * opacity);
+        drawFullscreen(context, SUN_VEINS, width, height, 0.86F, 0.12F, 0.16F, (0.06F + pulse * 0.08F) * opacity);
 
         long flashRemaining = OriginClientState.bloodSenseFlashRemainingMs();
         if (flashRemaining > 0L) {
@@ -149,10 +211,10 @@ public final class VampireHudRenderer {
 
         MobEntity target = nearestTrackedMob(client, OriginClientState.hasFlag("vampire.evolution.lord") ? 40.0D : 20.0D);
         if (target != null) {
-            drawDirectionTrail(context, client, tickDelta, target, width, height, pulse);
+            drawDirectionTrail(context, client, tickDelta, target, width, height, pulse, opacity);
         }
 
-        int labelAlpha = (int)((0.35F + pulse * 0.35F) * 255.0F);
+        int labelAlpha = (int)((0.35F + pulse * 0.35F) * opacity * 255.0F);
         int color = (labelAlpha << 24) | 0xFF6872;
         String label = "Blood Sense";
         int textWidth = client.textRenderer.getWidth(label);
@@ -211,7 +273,7 @@ public final class VampireHudRenderer {
     }
 
     private static void drawDirectionTrail(DrawContext context, MinecraftClient client, float tickDelta,
-                                           MobEntity target, int width, int height, float pulse) {
+                                           MobEntity target, int width, int height, float pulse, float opacity) {
         Vec3d camera = client.player.getCameraPosVec(tickDelta);
         Vec3d toTarget = target.getPos().add(0.0D, target.getHeight() * 0.55D, 0.0D).subtract(camera);
         double horizontal = Math.sqrt(toTarget.x * toTarget.x + toTarget.z * toTarget.z);
@@ -231,7 +293,7 @@ public final class VampireHudRenderer {
             int px = centerX + Math.round(dirX * (34.0F + i * 22.0F));
             int py = centerY + Math.round(dirY * (22.0F + i * 14.0F));
             int size = 2 + i;
-            int alpha = (int)((0.12F + (1.0F - step) * 0.18F + pulse * 0.10F) * 255.0F);
+            int alpha = (int)((0.12F + (1.0F - step) * 0.18F + pulse * 0.10F) * opacity * 255.0F);
             int color = (alpha << 24) | 0xFF3644;
             context.fill(px - size, py - 1, px + size, py + 1, color);
             context.fill(px - 1, py - size, px + 1, py + size, color);
