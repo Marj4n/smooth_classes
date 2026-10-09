@@ -132,6 +132,10 @@ public abstract class LivingEntityGameplayMixin {
         LivingEntity entity = (LivingEntity)(Object)this;
         if (!(entity instanceof PlayerEntity player)) return;
         var state = org.marj4n.smooth_classes.origin.OriginRuntime.state(player);
+        if (state.origin() == org.marj4n.smooth_classes.origin.OriginType.HOMUNCULUS) {
+            cir.setReturnValue(pose == EntityPose.CROUCHING ? 1.27F : 1.62F);
+            return;
+        }
         if (state.origin() == org.marj4n.smooth_classes.origin.OriginType.SLIME
                 && !state.hasFlag("slime.form.humanoid")) {
             if (state.hasFlag("slime.squeeze") || state.hasFlag("slime.size.small")) cir.setReturnValue(0.34F);

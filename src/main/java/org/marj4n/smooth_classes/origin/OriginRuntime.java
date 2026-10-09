@@ -63,6 +63,7 @@ public final class OriginRuntime {
             OriginState restored = state(respawned);
             if (!alive) VampireFormRespawnRuntime.clear(restored);
             if (restored.origin() != null) {
+                HomunculusAccessories.updateAttributes(respawned);
                 applyAttributes(respawned, restored.origin());
                 respawned.calculateDimensions();
                 ensureSelectedCategory(respawned);
@@ -177,10 +178,13 @@ public final class OriginRuntime {
     }
 
     public static void setOrigin(ServerPlayerEntity player, OriginType origin) {
+        if (origin != OriginType.VAMPIRE) VampireGraveSpawn.cancelIntro(player, state(player));
         if (state(player).hasFlag("vampire.form.bat")) {
             state(player).unflag("vampire.form.bat");
             VampireBatHealthRuntime.exit(player, state(player));
         }
+        // The inner equipment belongs only to Homunculus; return it safely if changing Origins.
+        if (origin != OriginType.HOMUNCULUS) HomunculusAccessories.returnItems(player);
         lockOriginCategories(player);
         state(player).setOrigin(origin);
         if (!player.isCreative()) player.setInvulnerable(false);
@@ -196,10 +200,12 @@ public final class OriginRuntime {
     }
 
     public static void clearOrigin(ServerPlayerEntity player) {
+        VampireGraveSpawn.cancelIntro(player, state(player));
         if (state(player).hasFlag("vampire.form.bat")) {
             state(player).unflag("vampire.form.bat");
             VampireBatHealthRuntime.exit(player, state(player));
         }
+        HomunculusAccessories.returnItems(player);
         lockOriginCategories(player);
         state(player).clear();
         if (!player.isCreative()) player.setInvulnerable(true);
@@ -256,6 +262,7 @@ public final class OriginRuntime {
         if (origin == null) return;
 
         if (player.age % 10 == 0) {
+            HomunculusAccessories.updateAttributes(player);
             applyAttributes(player, origin);
         }
 
@@ -282,6 +289,8 @@ public final class OriginRuntime {
     }
 
     private static void tickVampire(ServerPlayerEntity player, OriginState state) {
+        // Complete the one-time coffin awakening BEFORE normal sunlight checks.
+        VampireGraveSpawn.tickIntro(player, state);
         // Blood is the Vampire's nutrition; vanilla HungerManager.update is
         // suppressed by VampireHungerManagerMixin, including vanilla passive
         // food/saturation healing and vanilla starvation. Keep the hidden value

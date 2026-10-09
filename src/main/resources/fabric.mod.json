@@ -25,7 +25,8 @@
     "puffish_skills": "*",
     "puffish_attributes": "*",
     "spell_engine": "*",
-    "spell_power": "*"
+    "spell_power": "*",
+    "accessories": ">=1.0.0-beta.47"
   },
   "mixins": [
     "smooth_classes.mixins.json",

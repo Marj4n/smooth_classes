@@ -121,9 +121,17 @@ public final class OriginAppearanceFeatureRenderer
                 }
             }
             case HOMUNCULUS -> {
-                homunculus.copyFrom(parent);
+                homunculus.copyFrom(parent, player, limbAngle, limbDistance, animationProgress, headYaw, headPitch);
+                matrices.push();
+                float scale = HomunculusReplacementModel.RENDER_SCALE;
+                matrices.translate(0.0D, 1.8D * (1.0D - scale), 0.0D);
+                matrices.scale(scale, scale, scale);
                 VertexConsumer consumer = vertexConsumers.getBuffer(RenderLayer.getEntityCutoutNoCull(HOMUNCULUS));
                 homunculus.render(matrices, consumer, light, OverlayTexture.DEFAULT_UV, 1, 1, 1, 1);
+                homunculus.renderEyes(matrices, vertexConsumers.getBuffer(RenderLayer.getEyes(HOMUNCULUS)),
+                        OverlayTexture.DEFAULT_UV);
+                homunculus.renderWeaponArm(player, matrices, vertexConsumers, light);
+                matrices.pop();
             }
             case VOID -> {
                 replacement.copyFrom(parent);

@@ -4,7 +4,8 @@
   "compatibilityLevel": "JAVA_17",
   "plugin": "org.marj4n.smooth_classes.compat.BewitchmentMixinPlugin",
   "mixins": [
-    "BewitchmentVampireTransformationMixin"
+    "BewitchmentVampireTransformationMixin",
+    "BewitchmentBloodBottleMixin"
   ],
   "injectors": {
     "defaultRequire": 1

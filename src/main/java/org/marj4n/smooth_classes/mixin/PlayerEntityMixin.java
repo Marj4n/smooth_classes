@@ -7,6 +7,8 @@ import net.minecraft.entity.EntityPose;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import org.marj4n.smooth_classes.runtime.AscendancyRuntime;
@@ -83,6 +85,11 @@ public abstract class PlayerEntityMixin implements org.marj4n.smooth_classes.ori
                     org.marj4n.smooth_classes.origin.OriginBodyGeometry.BAT_HEIGHT));
             return;
         }
+        if (origin == org.marj4n.smooth_classes.origin.OriginType.HOMUNCULUS) {
+            cir.setReturnValue(EntityDimensions.changing(0.60F,
+                    pose == EntityPose.CROUCHING ? 1.50F : 1.80F));
+            return;
+        }
         if (origin == org.marj4n.smooth_classes.origin.OriginType.SLIME && !state.hasFlag("slime.form.humanoid")) {
             if (state.hasFlag("slime.squeeze") || state.hasFlag("slime.size.small")) {
                 cir.setReturnValue(EntityDimensions.changing(0.51F, 0.51F));
@@ -94,6 +101,38 @@ public abstract class PlayerEntityMixin implements org.marj4n.smooth_classes.ori
         }
     }
 
+
+    @Inject(method="attack", at=@At("TAIL"))
+    private void smooth_classes$homunculusWeaponArmFollowup(Entity target, CallbackInfo ci) {
+        if (!((Object)this instanceof ServerPlayerEntity player) || !(target instanceof LivingEntity living)) return;
+        var state = org.marj4n.smooth_classes.origin.OriginRuntime.state(player);
+        if (state.origin() != org.marj4n.smooth_classes.origin.OriginType.HOMUNCULUS) return;
+        if (!org.marj4n.smooth_classes.origin.HomunculusAccessories.shouldUseWeaponArmFollowup(player)) return;
+        if (!living.isAlive() || living.timeUntilRegen <= 0) return;
+
+        long now = player.getWorld().getTime();
+        long readyAt = state.longProgress("homunculus.weapon_arm_followup_at");
+        if (now < readyAt) return;
+
+        net.minecraft.item.ItemStack blade = org.marj4n.smooth_classes.origin.HomunculusAccessories.stack(player,
+                org.marj4n.smooth_classes.origin.HomunculusAccessories.WEAPON);
+        double baseDamage = org.marj4n.smooth_classes.origin.HomunculusAccessories.weaponArmDamage(blade);
+        if (baseDamage <= 0.0D) return;
+
+        float bonusDamage = (float) Math.max(1.0D, baseDamage * 0.55D);
+        living.timeUntilRegen = 0;
+        boolean damaged = living.damage(player.getDamageSources().playerAttack(player), bonusDamage);
+        if (!damaged) return;
+
+        state.longProgress("homunculus.weapon_arm_followup_at", now + 4L);
+        living.timeUntilRegen = 0;
+        player.getServerWorld().playSound(null, living.getX(), living.getY(), living.getZ(),
+                SoundEvents.ITEM_TRIDENT_HIT, SoundCategory.PLAYERS, 0.55F, 1.55F);
+        player.getServerWorld().spawnParticles(net.minecraft.particle.ParticleTypes.SWEEP_ATTACK,
+                living.getX(), living.getBodyY(0.5D), living.getZ(), 1, 0.0D, 0.0D, 0.0D, 0.0D);
+        player.getServerWorld().spawnParticles(net.minecraft.particle.ParticleTypes.CRIT,
+                living.getX(), living.getBodyY(0.5D), living.getZ(), 6, 0.20D, 0.20D, 0.20D, 0.02D);
+    }
 
     @Inject(method="attack", at=@At("TAIL"))
     private void smooth_classes$manBatBloodOnBasicAttack(Entity target, CallbackInfo ci) {
