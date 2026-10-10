@@ -80,6 +80,7 @@ public final class SmoothClassesClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+        org.marj4n.smooth_classes.client.effects.AvengerSoulAnimationClient.register();
         DeathListBookClient.register();
         ModelRegistry.registerModels();
         net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap.INSTANCE.putBlock(
