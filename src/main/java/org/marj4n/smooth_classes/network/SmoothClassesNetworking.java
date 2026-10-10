@@ -22,6 +22,7 @@ import java.util.UUID;
 
 /** two ability channels with server-authoritative cooldown sync. */
 public final class SmoothClassesNetworking {
+    public static final Identifier AVENGER_SOUL_ANIMATION = SmoothClasses.id("avenger_soul_animation");
     public static final Identifier CAST_SIGNATURE = SmoothClasses.id("cast_signature");
     public static final Identifier CAST_ASCENDANCY = SmoothClasses.id("cast_ascendancy");
     public static final Identifier BLADE_WORKS_HOLD = SmoothClasses.id("blade_works_hold");

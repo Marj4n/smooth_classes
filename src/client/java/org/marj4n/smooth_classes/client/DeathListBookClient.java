@@ -34,6 +34,8 @@ public final class DeathListBookClient {
     private static final Identifier LEDGER_ENTRY = new Identifier("smooth_classes", "ledger");
     private static final Map<String, Integer> SOULS = new HashMap<>();
     private static final Map<String, Integer> KILLS = new HashMap<>();
+    /** Cache the discovered list once per server sync, not on every Patchouli text render. */
+    private static List<AvengerSummonRecipes.Recipe> DISCOVERED_RECIPES = List.of();
 
     private static int totalSouls;
     private static int discovered;
@@ -72,6 +74,12 @@ public final class DeathListBookClient {
         for (String id : soulData.getKeys()) SOULS.put(id, soulData.getInt(id));
         NbtCompound killData = nbt.getCompound("SmoothDeathKillCounts");
         for (String id : killData.getKeys()) KILLS.put(id, killData.getInt(id));
+        List<AvengerSummonRecipes.Recipe> discoveredRecipes = new ArrayList<>();
+        for (AvengerSummonRecipes.Recipe recipe : AvengerSummonRecipes.allRecipes()) {
+            if (KILLS.getOrDefault(recipe.entityId(), 0) > 0) discoveredRecipes.add(recipe);
+        }
+        discoveredRecipes.sort(Comparator.comparing(recipe -> AvengerSummonRecipes.friendlyEntityName(recipe.entityId())));
+        DISCOVERED_RECIPES = List.copyOf(discoveredRecipes);
     }
 
     private static void registerPatchouliHooks() {
@@ -146,12 +154,7 @@ public final class DeathListBookClient {
         } catch (RuntimeException ignored) {
             return null;
         }
-        List<AvengerSummonRecipes.Recipe> known = new ArrayList<>();
-        for (AvengerSummonRecipes.Recipe recipe : AvengerSummonRecipes.allRecipes()) {
-            if (KILLS.getOrDefault(recipe.entityId(), 0) > 0) known.add(recipe);
-        }
-        known.sort(Comparator.comparing(recipe -> AvengerSummonRecipes.friendlyEntityName(recipe.entityId())));
-        return slot < known.size() ? known.get(slot) : null;
+        return slot < DISCOVERED_RECIPES.size() ? DISCOVERED_RECIPES.get(slot) : null;
     }
 
     private static String stockName(String slot) {

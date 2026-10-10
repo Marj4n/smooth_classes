@@ -25,12 +25,15 @@
     "VillagerHostilesSensorMixin",
     "WardenEntityMixin",
     "BladeLootingMixin",
-    "BloodRainSunlightMixin"
+    "BloodRainSunlightMixin",
+    "AvengerWitherBossBarAccessor"
   ],
   "injectors": {
     "defaultRequire": 1
   },
   "client": [
+    "client.AvengerSoulEntityRenderMixin",
+    "client.AvengerCastingPlayerPoseMixin",
     "client.BloodRainWeatherMixin",
     "client.VampireBatClickMixin",
     "client.VampireBatInventoryClickMixin",

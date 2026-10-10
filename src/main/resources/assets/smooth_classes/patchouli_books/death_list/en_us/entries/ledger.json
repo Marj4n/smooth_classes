@@ -158,11 +158,331 @@
     },
     {
       "type": "patchouli:text",
-      "text": "$(#4A235A)$(l)SOUL STOCK$()$(br2)$(#241C24)$(smooth_death_stock_name:76)$()  $(#5C244E)$(smooth_death_stock_mark:76)$(smooth_death_stock_count:76)$()$(br2)$(#241C24)$(smooth_death_stock_name:77)$()  $(#5C244E)$(smooth_death_stock_mark:77)$(smooth_death_stock_count:77)$()$(br2)$(#241C24)$(smooth_death_stock_name:78)$()  $(#5C244E)$(smooth_death_stock_mark:78)$(smooth_death_stock_count:78)$()$(br2)"
+      "text": "$(#4A235A)$(l)SOUL STOCK$()$(br2)$(#241C24)$(smooth_death_stock_name:76)$()  $(#5C244E)$(smooth_death_stock_mark:76)$(smooth_death_stock_count:76)$()$(br2)$(#241C24)$(smooth_death_stock_name:77)$()  $(#5C244E)$(smooth_death_stock_mark:77)$(smooth_death_stock_count:77)$()$(br2)$(#241C24)$(smooth_death_stock_name:78)$()  $(#5C244E)$(smooth_death_stock_mark:78)$(smooth_death_stock_count:78)$()$(br2)$(#241C24)$(smooth_death_stock_name:79)$()  $(#5C244E)$(smooth_death_stock_mark:79)$(smooth_death_stock_count:79)$()$(br2)"
     },
     {
       "type": "patchouli:text",
-      "text": "$(#4A235A)$(l)RECIPES$()$(br2)$(#241C24)$(l)$(smooth_death_stock_name:76)$()$(br)$(#5A4A50)$(smooth_death_stock_main:76)$()$(br)$(#5A4A50)$(smooth_death_stock_off:76)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:77)$()$(br)$(#5A4A50)$(smooth_death_stock_main:77)$()$(br)$(#5A4A50)$(smooth_death_stock_off:77)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:78)$()$(br)$(#5A4A50)$(smooth_death_stock_main:78)$()$(br)$(#5A4A50)$(smooth_death_stock_off:78)$()$(br)"
+      "text": "$(#4A235A)$(l)RECIPES$()$(br2)$(#241C24)$(l)$(smooth_death_stock_name:76)$()$(br)$(#5A4A50)$(smooth_death_stock_main:76)$()$(br)$(#5A4A50)$(smooth_death_stock_off:76)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:77)$()$(br)$(#5A4A50)$(smooth_death_stock_main:77)$()$(br)$(#5A4A50)$(smooth_death_stock_off:77)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:78)$()$(br)$(#5A4A50)$(smooth_death_stock_main:78)$()$(br)$(#5A4A50)$(smooth_death_stock_off:78)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:79)$()$(br)$(#5A4A50)$(smooth_death_stock_main:79)$()$(br)$(#5A4A50)$(smooth_death_stock_off:79)$()$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)SOUL STOCK$()$(br2)$(#241C24)$(smooth_death_stock_name:80)$()  $(#5C244E)$(smooth_death_stock_mark:80)$(smooth_death_stock_count:80)$()$(br2)$(#241C24)$(smooth_death_stock_name:81)$()  $(#5C244E)$(smooth_death_stock_mark:81)$(smooth_death_stock_count:81)$()$(br2)$(#241C24)$(smooth_death_stock_name:82)$()  $(#5C244E)$(smooth_death_stock_mark:82)$(smooth_death_stock_count:82)$()$(br2)$(#241C24)$(smooth_death_stock_name:83)$()  $(#5C244E)$(smooth_death_stock_mark:83)$(smooth_death_stock_count:83)$()$(br2)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)RECIPES$()$(br2)$(#241C24)$(l)$(smooth_death_stock_name:80)$()$(br)$(#5A4A50)$(smooth_death_stock_main:80)$()$(br)$(#5A4A50)$(smooth_death_stock_off:80)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:81)$()$(br)$(#5A4A50)$(smooth_death_stock_main:81)$()$(br)$(#5A4A50)$(smooth_death_stock_off:81)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:82)$()$(br)$(#5A4A50)$(smooth_death_stock_main:82)$()$(br)$(#5A4A50)$(smooth_death_stock_off:82)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:83)$()$(br)$(#5A4A50)$(smooth_death_stock_main:83)$()$(br)$(#5A4A50)$(smooth_death_stock_off:83)$()$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)SOUL STOCK$()$(br2)$(#241C24)$(smooth_death_stock_name:84)$()  $(#5C244E)$(smooth_death_stock_mark:84)$(smooth_death_stock_count:84)$()$(br2)$(#241C24)$(smooth_death_stock_name:85)$()  $(#5C244E)$(smooth_death_stock_mark:85)$(smooth_death_stock_count:85)$()$(br2)$(#241C24)$(smooth_death_stock_name:86)$()  $(#5C244E)$(smooth_death_stock_mark:86)$(smooth_death_stock_count:86)$()$(br2)$(#241C24)$(smooth_death_stock_name:87)$()  $(#5C244E)$(smooth_death_stock_mark:87)$(smooth_death_stock_count:87)$()$(br2)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)RECIPES$()$(br2)$(#241C24)$(l)$(smooth_death_stock_name:84)$()$(br)$(#5A4A50)$(smooth_death_stock_main:84)$()$(br)$(#5A4A50)$(smooth_death_stock_off:84)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:85)$()$(br)$(#5A4A50)$(smooth_death_stock_main:85)$()$(br)$(#5A4A50)$(smooth_death_stock_off:85)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:86)$()$(br)$(#5A4A50)$(smooth_death_stock_main:86)$()$(br)$(#5A4A50)$(smooth_death_stock_off:86)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:87)$()$(br)$(#5A4A50)$(smooth_death_stock_main:87)$()$(br)$(#5A4A50)$(smooth_death_stock_off:87)$()$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)SOUL STOCK$()$(br2)$(#241C24)$(smooth_death_stock_name:88)$()  $(#5C244E)$(smooth_death_stock_mark:88)$(smooth_death_stock_count:88)$()$(br2)$(#241C24)$(smooth_death_stock_name:89)$()  $(#5C244E)$(smooth_death_stock_mark:89)$(smooth_death_stock_count:89)$()$(br2)$(#241C24)$(smooth_death_stock_name:90)$()  $(#5C244E)$(smooth_death_stock_mark:90)$(smooth_death_stock_count:90)$()$(br2)$(#241C24)$(smooth_death_stock_name:91)$()  $(#5C244E)$(smooth_death_stock_mark:91)$(smooth_death_stock_count:91)$()$(br2)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)RECIPES$()$(br2)$(#241C24)$(l)$(smooth_death_stock_name:88)$()$(br)$(#5A4A50)$(smooth_death_stock_main:88)$()$(br)$(#5A4A50)$(smooth_death_stock_off:88)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:89)$()$(br)$(#5A4A50)$(smooth_death_stock_main:89)$()$(br)$(#5A4A50)$(smooth_death_stock_off:89)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:90)$()$(br)$(#5A4A50)$(smooth_death_stock_main:90)$()$(br)$(#5A4A50)$(smooth_death_stock_off:90)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:91)$()$(br)$(#5A4A50)$(smooth_death_stock_main:91)$()$(br)$(#5A4A50)$(smooth_death_stock_off:91)$()$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)SOUL STOCK$()$(br2)$(#241C24)$(smooth_death_stock_name:92)$()  $(#5C244E)$(smooth_death_stock_mark:92)$(smooth_death_stock_count:92)$()$(br2)$(#241C24)$(smooth_death_stock_name:93)$()  $(#5C244E)$(smooth_death_stock_mark:93)$(smooth_death_stock_count:93)$()$(br2)$(#241C24)$(smooth_death_stock_name:94)$()  $(#5C244E)$(smooth_death_stock_mark:94)$(smooth_death_stock_count:94)$()$(br2)$(#241C24)$(smooth_death_stock_name:95)$()  $(#5C244E)$(smooth_death_stock_mark:95)$(smooth_death_stock_count:95)$()$(br2)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)RECIPES$()$(br2)$(#241C24)$(l)$(smooth_death_stock_name:92)$()$(br)$(#5A4A50)$(smooth_death_stock_main:92)$()$(br)$(#5A4A50)$(smooth_death_stock_off:92)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:93)$()$(br)$(#5A4A50)$(smooth_death_stock_main:93)$()$(br)$(#5A4A50)$(smooth_death_stock_off:93)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:94)$()$(br)$(#5A4A50)$(smooth_death_stock_main:94)$()$(br)$(#5A4A50)$(smooth_death_stock_off:94)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:95)$()$(br)$(#5A4A50)$(smooth_death_stock_main:95)$()$(br)$(#5A4A50)$(smooth_death_stock_off:95)$()$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)SOUL STOCK$()$(br2)$(#241C24)$(smooth_death_stock_name:96)$()  $(#5C244E)$(smooth_death_stock_mark:96)$(smooth_death_stock_count:96)$()$(br2)$(#241C24)$(smooth_death_stock_name:97)$()  $(#5C244E)$(smooth_death_stock_mark:97)$(smooth_death_stock_count:97)$()$(br2)$(#241C24)$(smooth_death_stock_name:98)$()  $(#5C244E)$(smooth_death_stock_mark:98)$(smooth_death_stock_count:98)$()$(br2)$(#241C24)$(smooth_death_stock_name:99)$()  $(#5C244E)$(smooth_death_stock_mark:99)$(smooth_death_stock_count:99)$()$(br2)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)RECIPES$()$(br2)$(#241C24)$(l)$(smooth_death_stock_name:96)$()$(br)$(#5A4A50)$(smooth_death_stock_main:96)$()$(br)$(#5A4A50)$(smooth_death_stock_off:96)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:97)$()$(br)$(#5A4A50)$(smooth_death_stock_main:97)$()$(br)$(#5A4A50)$(smooth_death_stock_off:97)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:98)$()$(br)$(#5A4A50)$(smooth_death_stock_main:98)$()$(br)$(#5A4A50)$(smooth_death_stock_off:98)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:99)$()$(br)$(#5A4A50)$(smooth_death_stock_main:99)$()$(br)$(#5A4A50)$(smooth_death_stock_off:99)$()$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)SOUL STOCK$()$(br2)$(#241C24)$(smooth_death_stock_name:100)$()  $(#5C244E)$(smooth_death_stock_mark:100)$(smooth_death_stock_count:100)$()$(br2)$(#241C24)$(smooth_death_stock_name:101)$()  $(#5C244E)$(smooth_death_stock_mark:101)$(smooth_death_stock_count:101)$()$(br2)$(#241C24)$(smooth_death_stock_name:102)$()  $(#5C244E)$(smooth_death_stock_mark:102)$(smooth_death_stock_count:102)$()$(br2)$(#241C24)$(smooth_death_stock_name:103)$()  $(#5C244E)$(smooth_death_stock_mark:103)$(smooth_death_stock_count:103)$()$(br2)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)RECIPES$()$(br2)$(#241C24)$(l)$(smooth_death_stock_name:100)$()$(br)$(#5A4A50)$(smooth_death_stock_main:100)$()$(br)$(#5A4A50)$(smooth_death_stock_off:100)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:101)$()$(br)$(#5A4A50)$(smooth_death_stock_main:101)$()$(br)$(#5A4A50)$(smooth_death_stock_off:101)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:102)$()$(br)$(#5A4A50)$(smooth_death_stock_main:102)$()$(br)$(#5A4A50)$(smooth_death_stock_off:102)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:103)$()$(br)$(#5A4A50)$(smooth_death_stock_main:103)$()$(br)$(#5A4A50)$(smooth_death_stock_off:103)$()$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)SOUL STOCK$()$(br2)$(#241C24)$(smooth_death_stock_name:104)$()  $(#5C244E)$(smooth_death_stock_mark:104)$(smooth_death_stock_count:104)$()$(br2)$(#241C24)$(smooth_death_stock_name:105)$()  $(#5C244E)$(smooth_death_stock_mark:105)$(smooth_death_stock_count:105)$()$(br2)$(#241C24)$(smooth_death_stock_name:106)$()  $(#5C244E)$(smooth_death_stock_mark:106)$(smooth_death_stock_count:106)$()$(br2)$(#241C24)$(smooth_death_stock_name:107)$()  $(#5C244E)$(smooth_death_stock_mark:107)$(smooth_death_stock_count:107)$()$(br2)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)RECIPES$()$(br2)$(#241C24)$(l)$(smooth_death_stock_name:104)$()$(br)$(#5A4A50)$(smooth_death_stock_main:104)$()$(br)$(#5A4A50)$(smooth_death_stock_off:104)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:105)$()$(br)$(#5A4A50)$(smooth_death_stock_main:105)$()$(br)$(#5A4A50)$(smooth_death_stock_off:105)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:106)$()$(br)$(#5A4A50)$(smooth_death_stock_main:106)$()$(br)$(#5A4A50)$(smooth_death_stock_off:106)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:107)$()$(br)$(#5A4A50)$(smooth_death_stock_main:107)$()$(br)$(#5A4A50)$(smooth_death_stock_off:107)$()$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)SOUL STOCK$()$(br2)$(#241C24)$(smooth_death_stock_name:108)$()  $(#5C244E)$(smooth_death_stock_mark:108)$(smooth_death_stock_count:108)$()$(br2)$(#241C24)$(smooth_death_stock_name:109)$()  $(#5C244E)$(smooth_death_stock_mark:109)$(smooth_death_stock_count:109)$()$(br2)$(#241C24)$(smooth_death_stock_name:110)$()  $(#5C244E)$(smooth_death_stock_mark:110)$(smooth_death_stock_count:110)$()$(br2)$(#241C24)$(smooth_death_stock_name:111)$()  $(#5C244E)$(smooth_death_stock_mark:111)$(smooth_death_stock_count:111)$()$(br2)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)RECIPES$()$(br2)$(#241C24)$(l)$(smooth_death_stock_name:108)$()$(br)$(#5A4A50)$(smooth_death_stock_main:108)$()$(br)$(#5A4A50)$(smooth_death_stock_off:108)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:109)$()$(br)$(#5A4A50)$(smooth_death_stock_main:109)$()$(br)$(#5A4A50)$(smooth_death_stock_off:109)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:110)$()$(br)$(#5A4A50)$(smooth_death_stock_main:110)$()$(br)$(#5A4A50)$(smooth_death_stock_off:110)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:111)$()$(br)$(#5A4A50)$(smooth_death_stock_main:111)$()$(br)$(#5A4A50)$(smooth_death_stock_off:111)$()$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)SOUL STOCK$()$(br2)$(#241C24)$(smooth_death_stock_name:112)$()  $(#5C244E)$(smooth_death_stock_mark:112)$(smooth_death_stock_count:112)$()$(br2)$(#241C24)$(smooth_death_stock_name:113)$()  $(#5C244E)$(smooth_death_stock_mark:113)$(smooth_death_stock_count:113)$()$(br2)$(#241C24)$(smooth_death_stock_name:114)$()  $(#5C244E)$(smooth_death_stock_mark:114)$(smooth_death_stock_count:114)$()$(br2)$(#241C24)$(smooth_death_stock_name:115)$()  $(#5C244E)$(smooth_death_stock_mark:115)$(smooth_death_stock_count:115)$()$(br2)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)RECIPES$()$(br2)$(#241C24)$(l)$(smooth_death_stock_name:112)$()$(br)$(#5A4A50)$(smooth_death_stock_main:112)$()$(br)$(#5A4A50)$(smooth_death_stock_off:112)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:113)$()$(br)$(#5A4A50)$(smooth_death_stock_main:113)$()$(br)$(#5A4A50)$(smooth_death_stock_off:113)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:114)$()$(br)$(#5A4A50)$(smooth_death_stock_main:114)$()$(br)$(#5A4A50)$(smooth_death_stock_off:114)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:115)$()$(br)$(#5A4A50)$(smooth_death_stock_main:115)$()$(br)$(#5A4A50)$(smooth_death_stock_off:115)$()$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)SOUL STOCK$()$(br2)$(#241C24)$(smooth_death_stock_name:116)$()  $(#5C244E)$(smooth_death_stock_mark:116)$(smooth_death_stock_count:116)$()$(br2)$(#241C24)$(smooth_death_stock_name:117)$()  $(#5C244E)$(smooth_death_stock_mark:117)$(smooth_death_stock_count:117)$()$(br2)$(#241C24)$(smooth_death_stock_name:118)$()  $(#5C244E)$(smooth_death_stock_mark:118)$(smooth_death_stock_count:118)$()$(br2)$(#241C24)$(smooth_death_stock_name:119)$()  $(#5C244E)$(smooth_death_stock_mark:119)$(smooth_death_stock_count:119)$()$(br2)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)RECIPES$()$(br2)$(#241C24)$(l)$(smooth_death_stock_name:116)$()$(br)$(#5A4A50)$(smooth_death_stock_main:116)$()$(br)$(#5A4A50)$(smooth_death_stock_off:116)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:117)$()$(br)$(#5A4A50)$(smooth_death_stock_main:117)$()$(br)$(#5A4A50)$(smooth_death_stock_off:117)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:118)$()$(br)$(#5A4A50)$(smooth_death_stock_main:118)$()$(br)$(#5A4A50)$(smooth_death_stock_off:118)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:119)$()$(br)$(#5A4A50)$(smooth_death_stock_main:119)$()$(br)$(#5A4A50)$(smooth_death_stock_off:119)$()$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)SOUL STOCK$()$(br2)$(#241C24)$(smooth_death_stock_name:120)$()  $(#5C244E)$(smooth_death_stock_mark:120)$(smooth_death_stock_count:120)$()$(br2)$(#241C24)$(smooth_death_stock_name:121)$()  $(#5C244E)$(smooth_death_stock_mark:121)$(smooth_death_stock_count:121)$()$(br2)$(#241C24)$(smooth_death_stock_name:122)$()  $(#5C244E)$(smooth_death_stock_mark:122)$(smooth_death_stock_count:122)$()$(br2)$(#241C24)$(smooth_death_stock_name:123)$()  $(#5C244E)$(smooth_death_stock_mark:123)$(smooth_death_stock_count:123)$()$(br2)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)RECIPES$()$(br2)$(#241C24)$(l)$(smooth_death_stock_name:120)$()$(br)$(#5A4A50)$(smooth_death_stock_main:120)$()$(br)$(#5A4A50)$(smooth_death_stock_off:120)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:121)$()$(br)$(#5A4A50)$(smooth_death_stock_main:121)$()$(br)$(#5A4A50)$(smooth_death_stock_off:121)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:122)$()$(br)$(#5A4A50)$(smooth_death_stock_main:122)$()$(br)$(#5A4A50)$(smooth_death_stock_off:122)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:123)$()$(br)$(#5A4A50)$(smooth_death_stock_main:123)$()$(br)$(#5A4A50)$(smooth_death_stock_off:123)$()$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)SOUL STOCK$()$(br2)$(#241C24)$(smooth_death_stock_name:124)$()  $(#5C244E)$(smooth_death_stock_mark:124)$(smooth_death_stock_count:124)$()$(br2)$(#241C24)$(smooth_death_stock_name:125)$()  $(#5C244E)$(smooth_death_stock_mark:125)$(smooth_death_stock_count:125)$()$(br2)$(#241C24)$(smooth_death_stock_name:126)$()  $(#5C244E)$(smooth_death_stock_mark:126)$(smooth_death_stock_count:126)$()$(br2)$(#241C24)$(smooth_death_stock_name:127)$()  $(#5C244E)$(smooth_death_stock_mark:127)$(smooth_death_stock_count:127)$()$(br2)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)RECIPES$()$(br2)$(#241C24)$(l)$(smooth_death_stock_name:124)$()$(br)$(#5A4A50)$(smooth_death_stock_main:124)$()$(br)$(#5A4A50)$(smooth_death_stock_off:124)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:125)$()$(br)$(#5A4A50)$(smooth_death_stock_main:125)$()$(br)$(#5A4A50)$(smooth_death_stock_off:125)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:126)$()$(br)$(#5A4A50)$(smooth_death_stock_main:126)$()$(br)$(#5A4A50)$(smooth_death_stock_off:126)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:127)$()$(br)$(#5A4A50)$(smooth_death_stock_main:127)$()$(br)$(#5A4A50)$(smooth_death_stock_off:127)$()$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)SOUL STOCK$()$(br2)$(#241C24)$(smooth_death_stock_name:128)$()  $(#5C244E)$(smooth_death_stock_mark:128)$(smooth_death_stock_count:128)$()$(br2)$(#241C24)$(smooth_death_stock_name:129)$()  $(#5C244E)$(smooth_death_stock_mark:129)$(smooth_death_stock_count:129)$()$(br2)$(#241C24)$(smooth_death_stock_name:130)$()  $(#5C244E)$(smooth_death_stock_mark:130)$(smooth_death_stock_count:130)$()$(br2)$(#241C24)$(smooth_death_stock_name:131)$()  $(#5C244E)$(smooth_death_stock_mark:131)$(smooth_death_stock_count:131)$()$(br2)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)RECIPES$()$(br2)$(#241C24)$(l)$(smooth_death_stock_name:128)$()$(br)$(#5A4A50)$(smooth_death_stock_main:128)$()$(br)$(#5A4A50)$(smooth_death_stock_off:128)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:129)$()$(br)$(#5A4A50)$(smooth_death_stock_main:129)$()$(br)$(#5A4A50)$(smooth_death_stock_off:129)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:130)$()$(br)$(#5A4A50)$(smooth_death_stock_main:130)$()$(br)$(#5A4A50)$(smooth_death_stock_off:130)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:131)$()$(br)$(#5A4A50)$(smooth_death_stock_main:131)$()$(br)$(#5A4A50)$(smooth_death_stock_off:131)$()$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)SOUL STOCK$()$(br2)$(#241C24)$(smooth_death_stock_name:132)$()  $(#5C244E)$(smooth_death_stock_mark:132)$(smooth_death_stock_count:132)$()$(br2)$(#241C24)$(smooth_death_stock_name:133)$()  $(#5C244E)$(smooth_death_stock_mark:133)$(smooth_death_stock_count:133)$()$(br2)$(#241C24)$(smooth_death_stock_name:134)$()  $(#5C244E)$(smooth_death_stock_mark:134)$(smooth_death_stock_count:134)$()$(br2)$(#241C24)$(smooth_death_stock_name:135)$()  $(#5C244E)$(smooth_death_stock_mark:135)$(smooth_death_stock_count:135)$()$(br2)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)RECIPES$()$(br2)$(#241C24)$(l)$(smooth_death_stock_name:132)$()$(br)$(#5A4A50)$(smooth_death_stock_main:132)$()$(br)$(#5A4A50)$(smooth_death_stock_off:132)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:133)$()$(br)$(#5A4A50)$(smooth_death_stock_main:133)$()$(br)$(#5A4A50)$(smooth_death_stock_off:133)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:134)$()$(br)$(#5A4A50)$(smooth_death_stock_main:134)$()$(br)$(#5A4A50)$(smooth_death_stock_off:134)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:135)$()$(br)$(#5A4A50)$(smooth_death_stock_main:135)$()$(br)$(#5A4A50)$(smooth_death_stock_off:135)$()$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)SOUL STOCK$()$(br2)$(#241C24)$(smooth_death_stock_name:136)$()  $(#5C244E)$(smooth_death_stock_mark:136)$(smooth_death_stock_count:136)$()$(br2)$(#241C24)$(smooth_death_stock_name:137)$()  $(#5C244E)$(smooth_death_stock_mark:137)$(smooth_death_stock_count:137)$()$(br2)$(#241C24)$(smooth_death_stock_name:138)$()  $(#5C244E)$(smooth_death_stock_mark:138)$(smooth_death_stock_count:138)$()$(br2)$(#241C24)$(smooth_death_stock_name:139)$()  $(#5C244E)$(smooth_death_stock_mark:139)$(smooth_death_stock_count:139)$()$(br2)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)RECIPES$()$(br2)$(#241C24)$(l)$(smooth_death_stock_name:136)$()$(br)$(#5A4A50)$(smooth_death_stock_main:136)$()$(br)$(#5A4A50)$(smooth_death_stock_off:136)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:137)$()$(br)$(#5A4A50)$(smooth_death_stock_main:137)$()$(br)$(#5A4A50)$(smooth_death_stock_off:137)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:138)$()$(br)$(#5A4A50)$(smooth_death_stock_main:138)$()$(br)$(#5A4A50)$(smooth_death_stock_off:138)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:139)$()$(br)$(#5A4A50)$(smooth_death_stock_main:139)$()$(br)$(#5A4A50)$(smooth_death_stock_off:139)$()$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)SOUL STOCK$()$(br2)$(#241C24)$(smooth_death_stock_name:140)$()  $(#5C244E)$(smooth_death_stock_mark:140)$(smooth_death_stock_count:140)$()$(br2)$(#241C24)$(smooth_death_stock_name:141)$()  $(#5C244E)$(smooth_death_stock_mark:141)$(smooth_death_stock_count:141)$()$(br2)$(#241C24)$(smooth_death_stock_name:142)$()  $(#5C244E)$(smooth_death_stock_mark:142)$(smooth_death_stock_count:142)$()$(br2)$(#241C24)$(smooth_death_stock_name:143)$()  $(#5C244E)$(smooth_death_stock_mark:143)$(smooth_death_stock_count:143)$()$(br2)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)RECIPES$()$(br2)$(#241C24)$(l)$(smooth_death_stock_name:140)$()$(br)$(#5A4A50)$(smooth_death_stock_main:140)$()$(br)$(#5A4A50)$(smooth_death_stock_off:140)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:141)$()$(br)$(#5A4A50)$(smooth_death_stock_main:141)$()$(br)$(#5A4A50)$(smooth_death_stock_off:141)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:142)$()$(br)$(#5A4A50)$(smooth_death_stock_main:142)$()$(br)$(#5A4A50)$(smooth_death_stock_off:142)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:143)$()$(br)$(#5A4A50)$(smooth_death_stock_main:143)$()$(br)$(#5A4A50)$(smooth_death_stock_off:143)$()$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)SOUL STOCK$()$(br2)$(#241C24)$(smooth_death_stock_name:144)$()  $(#5C244E)$(smooth_death_stock_mark:144)$(smooth_death_stock_count:144)$()$(br2)$(#241C24)$(smooth_death_stock_name:145)$()  $(#5C244E)$(smooth_death_stock_mark:145)$(smooth_death_stock_count:145)$()$(br2)$(#241C24)$(smooth_death_stock_name:146)$()  $(#5C244E)$(smooth_death_stock_mark:146)$(smooth_death_stock_count:146)$()$(br2)$(#241C24)$(smooth_death_stock_name:147)$()  $(#5C244E)$(smooth_death_stock_mark:147)$(smooth_death_stock_count:147)$()$(br2)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)RECIPES$()$(br2)$(#241C24)$(l)$(smooth_death_stock_name:144)$()$(br)$(#5A4A50)$(smooth_death_stock_main:144)$()$(br)$(#5A4A50)$(smooth_death_stock_off:144)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:145)$()$(br)$(#5A4A50)$(smooth_death_stock_main:145)$()$(br)$(#5A4A50)$(smooth_death_stock_off:145)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:146)$()$(br)$(#5A4A50)$(smooth_death_stock_main:146)$()$(br)$(#5A4A50)$(smooth_death_stock_off:146)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:147)$()$(br)$(#5A4A50)$(smooth_death_stock_main:147)$()$(br)$(#5A4A50)$(smooth_death_stock_off:147)$()$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)SOUL STOCK$()$(br2)$(#241C24)$(smooth_death_stock_name:148)$()  $(#5C244E)$(smooth_death_stock_mark:148)$(smooth_death_stock_count:148)$()$(br2)$(#241C24)$(smooth_death_stock_name:149)$()  $(#5C244E)$(smooth_death_stock_mark:149)$(smooth_death_stock_count:149)$()$(br2)$(#241C24)$(smooth_death_stock_name:150)$()  $(#5C244E)$(smooth_death_stock_mark:150)$(smooth_death_stock_count:150)$()$(br2)$(#241C24)$(smooth_death_stock_name:151)$()  $(#5C244E)$(smooth_death_stock_mark:151)$(smooth_death_stock_count:151)$()$(br2)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)RECIPES$()$(br2)$(#241C24)$(l)$(smooth_death_stock_name:148)$()$(br)$(#5A4A50)$(smooth_death_stock_main:148)$()$(br)$(#5A4A50)$(smooth_death_stock_off:148)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:149)$()$(br)$(#5A4A50)$(smooth_death_stock_main:149)$()$(br)$(#5A4A50)$(smooth_death_stock_off:149)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:150)$()$(br)$(#5A4A50)$(smooth_death_stock_main:150)$()$(br)$(#5A4A50)$(smooth_death_stock_off:150)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:151)$()$(br)$(#5A4A50)$(smooth_death_stock_main:151)$()$(br)$(#5A4A50)$(smooth_death_stock_off:151)$()$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)SOUL STOCK$()$(br2)$(#241C24)$(smooth_death_stock_name:152)$()  $(#5C244E)$(smooth_death_stock_mark:152)$(smooth_death_stock_count:152)$()$(br2)$(#241C24)$(smooth_death_stock_name:153)$()  $(#5C244E)$(smooth_death_stock_mark:153)$(smooth_death_stock_count:153)$()$(br2)$(#241C24)$(smooth_death_stock_name:154)$()  $(#5C244E)$(smooth_death_stock_mark:154)$(smooth_death_stock_count:154)$()$(br2)$(#241C24)$(smooth_death_stock_name:155)$()  $(#5C244E)$(smooth_death_stock_mark:155)$(smooth_death_stock_count:155)$()$(br2)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)RECIPES$()$(br2)$(#241C24)$(l)$(smooth_death_stock_name:152)$()$(br)$(#5A4A50)$(smooth_death_stock_main:152)$()$(br)$(#5A4A50)$(smooth_death_stock_off:152)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:153)$()$(br)$(#5A4A50)$(smooth_death_stock_main:153)$()$(br)$(#5A4A50)$(smooth_death_stock_off:153)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:154)$()$(br)$(#5A4A50)$(smooth_death_stock_main:154)$()$(br)$(#5A4A50)$(smooth_death_stock_off:154)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:155)$()$(br)$(#5A4A50)$(smooth_death_stock_main:155)$()$(br)$(#5A4A50)$(smooth_death_stock_off:155)$()$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)SOUL STOCK$()$(br2)$(#241C24)$(smooth_death_stock_name:156)$()  $(#5C244E)$(smooth_death_stock_mark:156)$(smooth_death_stock_count:156)$()$(br2)$(#241C24)$(smooth_death_stock_name:157)$()  $(#5C244E)$(smooth_death_stock_mark:157)$(smooth_death_stock_count:157)$()$(br2)$(#241C24)$(smooth_death_stock_name:158)$()  $(#5C244E)$(smooth_death_stock_mark:158)$(smooth_death_stock_count:158)$()$(br2)$(#241C24)$(smooth_death_stock_name:159)$()  $(#5C244E)$(smooth_death_stock_mark:159)$(smooth_death_stock_count:159)$()$(br2)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)RECIPES$()$(br2)$(#241C24)$(l)$(smooth_death_stock_name:156)$()$(br)$(#5A4A50)$(smooth_death_stock_main:156)$()$(br)$(#5A4A50)$(smooth_death_stock_off:156)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:157)$()$(br)$(#5A4A50)$(smooth_death_stock_main:157)$()$(br)$(#5A4A50)$(smooth_death_stock_off:157)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:158)$()$(br)$(#5A4A50)$(smooth_death_stock_main:158)$()$(br)$(#5A4A50)$(smooth_death_stock_off:158)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:159)$()$(br)$(#5A4A50)$(smooth_death_stock_main:159)$()$(br)$(#5A4A50)$(smooth_death_stock_off:159)$()$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)SOUL STOCK$()$(br2)$(#241C24)$(smooth_death_stock_name:160)$()  $(#5C244E)$(smooth_death_stock_mark:160)$(smooth_death_stock_count:160)$()$(br2)$(#241C24)$(smooth_death_stock_name:161)$()  $(#5C244E)$(smooth_death_stock_mark:161)$(smooth_death_stock_count:161)$()$(br2)$(#241C24)$(smooth_death_stock_name:162)$()  $(#5C244E)$(smooth_death_stock_mark:162)$(smooth_death_stock_count:162)$()$(br2)$(#241C24)$(smooth_death_stock_name:163)$()  $(#5C244E)$(smooth_death_stock_mark:163)$(smooth_death_stock_count:163)$()$(br2)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)RECIPES$()$(br2)$(#241C24)$(l)$(smooth_death_stock_name:160)$()$(br)$(#5A4A50)$(smooth_death_stock_main:160)$()$(br)$(#5A4A50)$(smooth_death_stock_off:160)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:161)$()$(br)$(#5A4A50)$(smooth_death_stock_main:161)$()$(br)$(#5A4A50)$(smooth_death_stock_off:161)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:162)$()$(br)$(#5A4A50)$(smooth_death_stock_main:162)$()$(br)$(#5A4A50)$(smooth_death_stock_off:162)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:163)$()$(br)$(#5A4A50)$(smooth_death_stock_main:163)$()$(br)$(#5A4A50)$(smooth_death_stock_off:163)$()$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)SOUL STOCK$()$(br2)$(#241C24)$(smooth_death_stock_name:164)$()  $(#5C244E)$(smooth_death_stock_mark:164)$(smooth_death_stock_count:164)$()$(br2)$(#241C24)$(smooth_death_stock_name:165)$()  $(#5C244E)$(smooth_death_stock_mark:165)$(smooth_death_stock_count:165)$()$(br2)$(#241C24)$(smooth_death_stock_name:166)$()  $(#5C244E)$(smooth_death_stock_mark:166)$(smooth_death_stock_count:166)$()$(br2)$(#241C24)$(smooth_death_stock_name:167)$()  $(#5C244E)$(smooth_death_stock_mark:167)$(smooth_death_stock_count:167)$()$(br2)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)RECIPES$()$(br2)$(#241C24)$(l)$(smooth_death_stock_name:164)$()$(br)$(#5A4A50)$(smooth_death_stock_main:164)$()$(br)$(#5A4A50)$(smooth_death_stock_off:164)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:165)$()$(br)$(#5A4A50)$(smooth_death_stock_main:165)$()$(br)$(#5A4A50)$(smooth_death_stock_off:165)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:166)$()$(br)$(#5A4A50)$(smooth_death_stock_main:166)$()$(br)$(#5A4A50)$(smooth_death_stock_off:166)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:167)$()$(br)$(#5A4A50)$(smooth_death_stock_main:167)$()$(br)$(#5A4A50)$(smooth_death_stock_off:167)$()$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)SOUL STOCK$()$(br2)$(#241C24)$(smooth_death_stock_name:168)$()  $(#5C244E)$(smooth_death_stock_mark:168)$(smooth_death_stock_count:168)$()$(br2)$(#241C24)$(smooth_death_stock_name:169)$()  $(#5C244E)$(smooth_death_stock_mark:169)$(smooth_death_stock_count:169)$()$(br2)$(#241C24)$(smooth_death_stock_name:170)$()  $(#5C244E)$(smooth_death_stock_mark:170)$(smooth_death_stock_count:170)$()$(br2)$(#241C24)$(smooth_death_stock_name:171)$()  $(#5C244E)$(smooth_death_stock_mark:171)$(smooth_death_stock_count:171)$()$(br2)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)RECIPES$()$(br2)$(#241C24)$(l)$(smooth_death_stock_name:168)$()$(br)$(#5A4A50)$(smooth_death_stock_main:168)$()$(br)$(#5A4A50)$(smooth_death_stock_off:168)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:169)$()$(br)$(#5A4A50)$(smooth_death_stock_main:169)$()$(br)$(#5A4A50)$(smooth_death_stock_off:169)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:170)$()$(br)$(#5A4A50)$(smooth_death_stock_main:170)$()$(br)$(#5A4A50)$(smooth_death_stock_off:170)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:171)$()$(br)$(#5A4A50)$(smooth_death_stock_main:171)$()$(br)$(#5A4A50)$(smooth_death_stock_off:171)$()$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)SOUL STOCK$()$(br2)$(#241C24)$(smooth_death_stock_name:172)$()  $(#5C244E)$(smooth_death_stock_mark:172)$(smooth_death_stock_count:172)$()$(br2)$(#241C24)$(smooth_death_stock_name:173)$()  $(#5C244E)$(smooth_death_stock_mark:173)$(smooth_death_stock_count:173)$()$(br2)$(#241C24)$(smooth_death_stock_name:174)$()  $(#5C244E)$(smooth_death_stock_mark:174)$(smooth_death_stock_count:174)$()$(br2)$(#241C24)$(smooth_death_stock_name:175)$()  $(#5C244E)$(smooth_death_stock_mark:175)$(smooth_death_stock_count:175)$()$(br2)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)RECIPES$()$(br2)$(#241C24)$(l)$(smooth_death_stock_name:172)$()$(br)$(#5A4A50)$(smooth_death_stock_main:172)$()$(br)$(#5A4A50)$(smooth_death_stock_off:172)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:173)$()$(br)$(#5A4A50)$(smooth_death_stock_main:173)$()$(br)$(#5A4A50)$(smooth_death_stock_off:173)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:174)$()$(br)$(#5A4A50)$(smooth_death_stock_main:174)$()$(br)$(#5A4A50)$(smooth_death_stock_off:174)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:175)$()$(br)$(#5A4A50)$(smooth_death_stock_main:175)$()$(br)$(#5A4A50)$(smooth_death_stock_off:175)$()$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)SOUL STOCK$()$(br2)$(#241C24)$(smooth_death_stock_name:176)$()  $(#5C244E)$(smooth_death_stock_mark:176)$(smooth_death_stock_count:176)$()$(br2)$(#241C24)$(smooth_death_stock_name:177)$()  $(#5C244E)$(smooth_death_stock_mark:177)$(smooth_death_stock_count:177)$()$(br2)$(#241C24)$(smooth_death_stock_name:178)$()  $(#5C244E)$(smooth_death_stock_mark:178)$(smooth_death_stock_count:178)$()$(br2)$(#241C24)$(smooth_death_stock_name:179)$()  $(#5C244E)$(smooth_death_stock_mark:179)$(smooth_death_stock_count:179)$()$(br2)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)RECIPES$()$(br2)$(#241C24)$(l)$(smooth_death_stock_name:176)$()$(br)$(#5A4A50)$(smooth_death_stock_main:176)$()$(br)$(#5A4A50)$(smooth_death_stock_off:176)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:177)$()$(br)$(#5A4A50)$(smooth_death_stock_main:177)$()$(br)$(#5A4A50)$(smooth_death_stock_off:177)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:178)$()$(br)$(#5A4A50)$(smooth_death_stock_main:178)$()$(br)$(#5A4A50)$(smooth_death_stock_off:178)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:179)$()$(br)$(#5A4A50)$(smooth_death_stock_main:179)$()$(br)$(#5A4A50)$(smooth_death_stock_off:179)$()$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)SOUL STOCK$()$(br2)$(#241C24)$(smooth_death_stock_name:180)$()  $(#5C244E)$(smooth_death_stock_mark:180)$(smooth_death_stock_count:180)$()$(br2)$(#241C24)$(smooth_death_stock_name:181)$()  $(#5C244E)$(smooth_death_stock_mark:181)$(smooth_death_stock_count:181)$()$(br2)$(#241C24)$(smooth_death_stock_name:182)$()  $(#5C244E)$(smooth_death_stock_mark:182)$(smooth_death_stock_count:182)$()$(br2)$(#241C24)$(smooth_death_stock_name:183)$()  $(#5C244E)$(smooth_death_stock_mark:183)$(smooth_death_stock_count:183)$()$(br2)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)RECIPES$()$(br2)$(#241C24)$(l)$(smooth_death_stock_name:180)$()$(br)$(#5A4A50)$(smooth_death_stock_main:180)$()$(br)$(#5A4A50)$(smooth_death_stock_off:180)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:181)$()$(br)$(#5A4A50)$(smooth_death_stock_main:181)$()$(br)$(#5A4A50)$(smooth_death_stock_off:181)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:182)$()$(br)$(#5A4A50)$(smooth_death_stock_main:182)$()$(br)$(#5A4A50)$(smooth_death_stock_off:182)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:183)$()$(br)$(#5A4A50)$(smooth_death_stock_main:183)$()$(br)$(#5A4A50)$(smooth_death_stock_off:183)$()$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)SOUL STOCK$()$(br2)$(#241C24)$(smooth_death_stock_name:184)$()  $(#5C244E)$(smooth_death_stock_mark:184)$(smooth_death_stock_count:184)$()$(br2)$(#241C24)$(smooth_death_stock_name:185)$()  $(#5C244E)$(smooth_death_stock_mark:185)$(smooth_death_stock_count:185)$()$(br2)$(#241C24)$(smooth_death_stock_name:186)$()  $(#5C244E)$(smooth_death_stock_mark:186)$(smooth_death_stock_count:186)$()$(br2)$(#241C24)$(smooth_death_stock_name:187)$()  $(#5C244E)$(smooth_death_stock_mark:187)$(smooth_death_stock_count:187)$()$(br2)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)RECIPES$()$(br2)$(#241C24)$(l)$(smooth_death_stock_name:184)$()$(br)$(#5A4A50)$(smooth_death_stock_main:184)$()$(br)$(#5A4A50)$(smooth_death_stock_off:184)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:185)$()$(br)$(#5A4A50)$(smooth_death_stock_main:185)$()$(br)$(#5A4A50)$(smooth_death_stock_off:185)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:186)$()$(br)$(#5A4A50)$(smooth_death_stock_main:186)$()$(br)$(#5A4A50)$(smooth_death_stock_off:186)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:187)$()$(br)$(#5A4A50)$(smooth_death_stock_main:187)$()$(br)$(#5A4A50)$(smooth_death_stock_off:187)$()$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)SOUL STOCK$()$(br2)$(#241C24)$(smooth_death_stock_name:188)$()  $(#5C244E)$(smooth_death_stock_mark:188)$(smooth_death_stock_count:188)$()$(br2)$(#241C24)$(smooth_death_stock_name:189)$()  $(#5C244E)$(smooth_death_stock_mark:189)$(smooth_death_stock_count:189)$()$(br2)$(#241C24)$(smooth_death_stock_name:190)$()  $(#5C244E)$(smooth_death_stock_mark:190)$(smooth_death_stock_count:190)$()$(br2)$(#241C24)$(smooth_death_stock_name:191)$()  $(#5C244E)$(smooth_death_stock_mark:191)$(smooth_death_stock_count:191)$()$(br2)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)RECIPES$()$(br2)$(#241C24)$(l)$(smooth_death_stock_name:188)$()$(br)$(#5A4A50)$(smooth_death_stock_main:188)$()$(br)$(#5A4A50)$(smooth_death_stock_off:188)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:189)$()$(br)$(#5A4A50)$(smooth_death_stock_main:189)$()$(br)$(#5A4A50)$(smooth_death_stock_off:189)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:190)$()$(br)$(#5A4A50)$(smooth_death_stock_main:190)$()$(br)$(#5A4A50)$(smooth_death_stock_off:190)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:191)$()$(br)$(#5A4A50)$(smooth_death_stock_main:191)$()$(br)$(#5A4A50)$(smooth_death_stock_off:191)$()$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)SOUL STOCK$()$(br2)$(#241C24)$(smooth_death_stock_name:192)$()  $(#5C244E)$(smooth_death_stock_mark:192)$(smooth_death_stock_count:192)$()$(br2)$(#241C24)$(smooth_death_stock_name:193)$()  $(#5C244E)$(smooth_death_stock_mark:193)$(smooth_death_stock_count:193)$()$(br2)$(#241C24)$(smooth_death_stock_name:194)$()  $(#5C244E)$(smooth_death_stock_mark:194)$(smooth_death_stock_count:194)$()$(br2)$(#241C24)$(smooth_death_stock_name:195)$()  $(#5C244E)$(smooth_death_stock_mark:195)$(smooth_death_stock_count:195)$()$(br2)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)RECIPES$()$(br2)$(#241C24)$(l)$(smooth_death_stock_name:192)$()$(br)$(#5A4A50)$(smooth_death_stock_main:192)$()$(br)$(#5A4A50)$(smooth_death_stock_off:192)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:193)$()$(br)$(#5A4A50)$(smooth_death_stock_main:193)$()$(br)$(#5A4A50)$(smooth_death_stock_off:193)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:194)$()$(br)$(#5A4A50)$(smooth_death_stock_main:194)$()$(br)$(#5A4A50)$(smooth_death_stock_off:194)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:195)$()$(br)$(#5A4A50)$(smooth_death_stock_main:195)$()$(br)$(#5A4A50)$(smooth_death_stock_off:195)$()$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)SOUL STOCK$()$(br2)$(#241C24)$(smooth_death_stock_name:196)$()  $(#5C244E)$(smooth_death_stock_mark:196)$(smooth_death_stock_count:196)$()$(br2)$(#241C24)$(smooth_death_stock_name:197)$()  $(#5C244E)$(smooth_death_stock_mark:197)$(smooth_death_stock_count:197)$()$(br2)$(#241C24)$(smooth_death_stock_name:198)$()  $(#5C244E)$(smooth_death_stock_mark:198)$(smooth_death_stock_count:198)$()$(br2)$(#241C24)$(smooth_death_stock_name:199)$()  $(#5C244E)$(smooth_death_stock_mark:199)$(smooth_death_stock_count:199)$()$(br2)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)RECIPES$()$(br2)$(#241C24)$(l)$(smooth_death_stock_name:196)$()$(br)$(#5A4A50)$(smooth_death_stock_main:196)$()$(br)$(#5A4A50)$(smooth_death_stock_off:196)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:197)$()$(br)$(#5A4A50)$(smooth_death_stock_main:197)$()$(br)$(#5A4A50)$(smooth_death_stock_off:197)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:198)$()$(br)$(#5A4A50)$(smooth_death_stock_main:198)$()$(br)$(#5A4A50)$(smooth_death_stock_off:198)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:199)$()$(br)$(#5A4A50)$(smooth_death_stock_main:199)$()$(br)$(#5A4A50)$(smooth_death_stock_off:199)$()$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)SOUL STOCK$()$(br2)$(#241C24)$(smooth_death_stock_name:200)$()  $(#5C244E)$(smooth_death_stock_mark:200)$(smooth_death_stock_count:200)$()$(br2)$(#241C24)$(smooth_death_stock_name:201)$()  $(#5C244E)$(smooth_death_stock_mark:201)$(smooth_death_stock_count:201)$()$(br2)$(#241C24)$(smooth_death_stock_name:202)$()  $(#5C244E)$(smooth_death_stock_mark:202)$(smooth_death_stock_count:202)$()$(br2)$(#241C24)$(smooth_death_stock_name:203)$()  $(#5C244E)$(smooth_death_stock_mark:203)$(smooth_death_stock_count:203)$()$(br2)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)RECIPES$()$(br2)$(#241C24)$(l)$(smooth_death_stock_name:200)$()$(br)$(#5A4A50)$(smooth_death_stock_main:200)$()$(br)$(#5A4A50)$(smooth_death_stock_off:200)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:201)$()$(br)$(#5A4A50)$(smooth_death_stock_main:201)$()$(br)$(#5A4A50)$(smooth_death_stock_off:201)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:202)$()$(br)$(#5A4A50)$(smooth_death_stock_main:202)$()$(br)$(#5A4A50)$(smooth_death_stock_off:202)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:203)$()$(br)$(#5A4A50)$(smooth_death_stock_main:203)$()$(br)$(#5A4A50)$(smooth_death_stock_off:203)$()$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)SOUL STOCK$()$(br2)$(#241C24)$(smooth_death_stock_name:204)$()  $(#5C244E)$(smooth_death_stock_mark:204)$(smooth_death_stock_count:204)$()$(br2)$(#241C24)$(smooth_death_stock_name:205)$()  $(#5C244E)$(smooth_death_stock_mark:205)$(smooth_death_stock_count:205)$()$(br2)$(#241C24)$(smooth_death_stock_name:206)$()  $(#5C244E)$(smooth_death_stock_mark:206)$(smooth_death_stock_count:206)$()$(br2)$(#241C24)$(smooth_death_stock_name:207)$()  $(#5C244E)$(smooth_death_stock_mark:207)$(smooth_death_stock_count:207)$()$(br2)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)RECIPES$()$(br2)$(#241C24)$(l)$(smooth_death_stock_name:204)$()$(br)$(#5A4A50)$(smooth_death_stock_main:204)$()$(br)$(#5A4A50)$(smooth_death_stock_off:204)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:205)$()$(br)$(#5A4A50)$(smooth_death_stock_main:205)$()$(br)$(#5A4A50)$(smooth_death_stock_off:205)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:206)$()$(br)$(#5A4A50)$(smooth_death_stock_main:206)$()$(br)$(#5A4A50)$(smooth_death_stock_off:206)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:207)$()$(br)$(#5A4A50)$(smooth_death_stock_main:207)$()$(br)$(#5A4A50)$(smooth_death_stock_off:207)$()$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)SOUL STOCK$()$(br2)$(#241C24)$(smooth_death_stock_name:208)$()  $(#5C244E)$(smooth_death_stock_mark:208)$(smooth_death_stock_count:208)$()$(br2)$(#241C24)$(smooth_death_stock_name:209)$()  $(#5C244E)$(smooth_death_stock_mark:209)$(smooth_death_stock_count:209)$()$(br2)$(#241C24)$(smooth_death_stock_name:210)$()  $(#5C244E)$(smooth_death_stock_mark:210)$(smooth_death_stock_count:210)$()$(br2)$(#241C24)$(smooth_death_stock_name:211)$()  $(#5C244E)$(smooth_death_stock_mark:211)$(smooth_death_stock_count:211)$()$(br2)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)RECIPES$()$(br2)$(#241C24)$(l)$(smooth_death_stock_name:208)$()$(br)$(#5A4A50)$(smooth_death_stock_main:208)$()$(br)$(#5A4A50)$(smooth_death_stock_off:208)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:209)$()$(br)$(#5A4A50)$(smooth_death_stock_main:209)$()$(br)$(#5A4A50)$(smooth_death_stock_off:209)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:210)$()$(br)$(#5A4A50)$(smooth_death_stock_main:210)$()$(br)$(#5A4A50)$(smooth_death_stock_off:210)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:211)$()$(br)$(#5A4A50)$(smooth_death_stock_main:211)$()$(br)$(#5A4A50)$(smooth_death_stock_off:211)$()$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)SOUL STOCK$()$(br2)$(#241C24)$(smooth_death_stock_name:212)$()  $(#5C244E)$(smooth_death_stock_mark:212)$(smooth_death_stock_count:212)$()$(br2)$(#241C24)$(smooth_death_stock_name:213)$()  $(#5C244E)$(smooth_death_stock_mark:213)$(smooth_death_stock_count:213)$()$(br2)$(#241C24)$(smooth_death_stock_name:214)$()  $(#5C244E)$(smooth_death_stock_mark:214)$(smooth_death_stock_count:214)$()$(br2)$(#241C24)$(smooth_death_stock_name:215)$()  $(#5C244E)$(smooth_death_stock_mark:215)$(smooth_death_stock_count:215)$()$(br2)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)RECIPES$()$(br2)$(#241C24)$(l)$(smooth_death_stock_name:212)$()$(br)$(#5A4A50)$(smooth_death_stock_main:212)$()$(br)$(#5A4A50)$(smooth_death_stock_off:212)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:213)$()$(br)$(#5A4A50)$(smooth_death_stock_main:213)$()$(br)$(#5A4A50)$(smooth_death_stock_off:213)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:214)$()$(br)$(#5A4A50)$(smooth_death_stock_main:214)$()$(br)$(#5A4A50)$(smooth_death_stock_off:214)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:215)$()$(br)$(#5A4A50)$(smooth_death_stock_main:215)$()$(br)$(#5A4A50)$(smooth_death_stock_off:215)$()$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)SOUL STOCK$()$(br2)$(#241C24)$(smooth_death_stock_name:216)$()  $(#5C244E)$(smooth_death_stock_mark:216)$(smooth_death_stock_count:216)$()$(br2)$(#241C24)$(smooth_death_stock_name:217)$()  $(#5C244E)$(smooth_death_stock_mark:217)$(smooth_death_stock_count:217)$()$(br2)$(#241C24)$(smooth_death_stock_name:218)$()  $(#5C244E)$(smooth_death_stock_mark:218)$(smooth_death_stock_count:218)$()$(br2)$(#241C24)$(smooth_death_stock_name:219)$()  $(#5C244E)$(smooth_death_stock_mark:219)$(smooth_death_stock_count:219)$()$(br2)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)RECIPES$()$(br2)$(#241C24)$(l)$(smooth_death_stock_name:216)$()$(br)$(#5A4A50)$(smooth_death_stock_main:216)$()$(br)$(#5A4A50)$(smooth_death_stock_off:216)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:217)$()$(br)$(#5A4A50)$(smooth_death_stock_main:217)$()$(br)$(#5A4A50)$(smooth_death_stock_off:217)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:218)$()$(br)$(#5A4A50)$(smooth_death_stock_main:218)$()$(br)$(#5A4A50)$(smooth_death_stock_off:218)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:219)$()$(br)$(#5A4A50)$(smooth_death_stock_main:219)$()$(br)$(#5A4A50)$(smooth_death_stock_off:219)$()$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)SOUL STOCK$()$(br2)$(#241C24)$(smooth_death_stock_name:220)$()  $(#5C244E)$(smooth_death_stock_mark:220)$(smooth_death_stock_count:220)$()$(br2)$(#241C24)$(smooth_death_stock_name:221)$()  $(#5C244E)$(smooth_death_stock_mark:221)$(smooth_death_stock_count:221)$()$(br2)$(#241C24)$(smooth_death_stock_name:222)$()  $(#5C244E)$(smooth_death_stock_mark:222)$(smooth_death_stock_count:222)$()$(br2)$(#241C24)$(smooth_death_stock_name:223)$()  $(#5C244E)$(smooth_death_stock_mark:223)$(smooth_death_stock_count:223)$()$(br2)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)RECIPES$()$(br2)$(#241C24)$(l)$(smooth_death_stock_name:220)$()$(br)$(#5A4A50)$(smooth_death_stock_main:220)$()$(br)$(#5A4A50)$(smooth_death_stock_off:220)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:221)$()$(br)$(#5A4A50)$(smooth_death_stock_main:221)$()$(br)$(#5A4A50)$(smooth_death_stock_off:221)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:222)$()$(br)$(#5A4A50)$(smooth_death_stock_main:222)$()$(br)$(#5A4A50)$(smooth_death_stock_off:222)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:223)$()$(br)$(#5A4A50)$(smooth_death_stock_main:223)$()$(br)$(#5A4A50)$(smooth_death_stock_off:223)$()$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)SOUL STOCK$()$(br2)$(#241C24)$(smooth_death_stock_name:224)$()  $(#5C244E)$(smooth_death_stock_mark:224)$(smooth_death_stock_count:224)$()$(br2)$(#241C24)$(smooth_death_stock_name:225)$()  $(#5C244E)$(smooth_death_stock_mark:225)$(smooth_death_stock_count:225)$()$(br2)$(#241C24)$(smooth_death_stock_name:226)$()  $(#5C244E)$(smooth_death_stock_mark:226)$(smooth_death_stock_count:226)$()$(br2)$(#241C24)$(smooth_death_stock_name:227)$()  $(#5C244E)$(smooth_death_stock_mark:227)$(smooth_death_stock_count:227)$()$(br2)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)RECIPES$()$(br2)$(#241C24)$(l)$(smooth_death_stock_name:224)$()$(br)$(#5A4A50)$(smooth_death_stock_main:224)$()$(br)$(#5A4A50)$(smooth_death_stock_off:224)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:225)$()$(br)$(#5A4A50)$(smooth_death_stock_main:225)$()$(br)$(#5A4A50)$(smooth_death_stock_off:225)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:226)$()$(br)$(#5A4A50)$(smooth_death_stock_main:226)$()$(br)$(#5A4A50)$(smooth_death_stock_off:226)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:227)$()$(br)$(#5A4A50)$(smooth_death_stock_main:227)$()$(br)$(#5A4A50)$(smooth_death_stock_off:227)$()$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)SOUL STOCK$()$(br2)$(#241C24)$(smooth_death_stock_name:228)$()  $(#5C244E)$(smooth_death_stock_mark:228)$(smooth_death_stock_count:228)$()$(br2)$(#241C24)$(smooth_death_stock_name:229)$()  $(#5C244E)$(smooth_death_stock_mark:229)$(smooth_death_stock_count:229)$()$(br2)$(#241C24)$(smooth_death_stock_name:230)$()  $(#5C244E)$(smooth_death_stock_mark:230)$(smooth_death_stock_count:230)$()$(br2)$(#241C24)$(smooth_death_stock_name:231)$()  $(#5C244E)$(smooth_death_stock_mark:231)$(smooth_death_stock_count:231)$()$(br2)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)RECIPES$()$(br2)$(#241C24)$(l)$(smooth_death_stock_name:228)$()$(br)$(#5A4A50)$(smooth_death_stock_main:228)$()$(br)$(#5A4A50)$(smooth_death_stock_off:228)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:229)$()$(br)$(#5A4A50)$(smooth_death_stock_main:229)$()$(br)$(#5A4A50)$(smooth_death_stock_off:229)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:230)$()$(br)$(#5A4A50)$(smooth_death_stock_main:230)$()$(br)$(#5A4A50)$(smooth_death_stock_off:230)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:231)$()$(br)$(#5A4A50)$(smooth_death_stock_main:231)$()$(br)$(#5A4A50)$(smooth_death_stock_off:231)$()$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)SOUL STOCK$()$(br2)$(#241C24)$(smooth_death_stock_name:232)$()  $(#5C244E)$(smooth_death_stock_mark:232)$(smooth_death_stock_count:232)$()$(br2)$(#241C24)$(smooth_death_stock_name:233)$()  $(#5C244E)$(smooth_death_stock_mark:233)$(smooth_death_stock_count:233)$()$(br2)$(#241C24)$(smooth_death_stock_name:234)$()  $(#5C244E)$(smooth_death_stock_mark:234)$(smooth_death_stock_count:234)$()$(br2)$(#241C24)$(smooth_death_stock_name:235)$()  $(#5C244E)$(smooth_death_stock_mark:235)$(smooth_death_stock_count:235)$()$(br2)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)RECIPES$()$(br2)$(#241C24)$(l)$(smooth_death_stock_name:232)$()$(br)$(#5A4A50)$(smooth_death_stock_main:232)$()$(br)$(#5A4A50)$(smooth_death_stock_off:232)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:233)$()$(br)$(#5A4A50)$(smooth_death_stock_main:233)$()$(br)$(#5A4A50)$(smooth_death_stock_off:233)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:234)$()$(br)$(#5A4A50)$(smooth_death_stock_main:234)$()$(br)$(#5A4A50)$(smooth_death_stock_off:234)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:235)$()$(br)$(#5A4A50)$(smooth_death_stock_main:235)$()$(br)$(#5A4A50)$(smooth_death_stock_off:235)$()$(br)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)SOUL STOCK$()$(br2)$(#241C24)$(smooth_death_stock_name:236)$()  $(#5C244E)$(smooth_death_stock_mark:236)$(smooth_death_stock_count:236)$()$(br2)$(#241C24)$(smooth_death_stock_name:237)$()  $(#5C244E)$(smooth_death_stock_mark:237)$(smooth_death_stock_count:237)$()$(br2)$(#241C24)$(smooth_death_stock_name:238)$()  $(#5C244E)$(smooth_death_stock_mark:238)$(smooth_death_stock_count:238)$()$(br2)$(#241C24)$(smooth_death_stock_name:239)$()  $(#5C244E)$(smooth_death_stock_mark:239)$(smooth_death_stock_count:239)$()$(br2)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)RECIPES$()$(br2)$(#241C24)$(l)$(smooth_death_stock_name:236)$()$(br)$(#5A4A50)$(smooth_death_stock_main:236)$()$(br)$(#5A4A50)$(smooth_death_stock_off:236)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:237)$()$(br)$(#5A4A50)$(smooth_death_stock_main:237)$()$(br)$(#5A4A50)$(smooth_death_stock_off:237)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:238)$()$(br)$(#5A4A50)$(smooth_death_stock_main:238)$()$(br)$(#5A4A50)$(smooth_death_stock_off:238)$()$(br)$(#241C24)$(l)$(smooth_death_stock_name:239)$()$(br)$(#5A4A50)$(smooth_death_stock_main:239)$()$(br)$(#5A4A50)$(smooth_death_stock_off:239)$()$(br)"
     }
   ]
 }

@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-/** Vanilla summon ingredients shown by the Death List. */
+/** Vanilla and optional modded soul recipes shown by the Death List. */
 public final class AvengerSummonRecipes {
     private static final Map<String, Recipe> RECIPES = new LinkedHashMap<>();
     private static final Map<String, List<Recipe>> BY_MAIN_ITEM = new HashMap<>();
@@ -99,10 +99,10 @@ public final class AvengerSummonRecipes {
         r("zombie_villager", "rotten_flesh", "emerald");
         r("zombified_piglin", "rotten_flesh", "gold_nugget");
 
-        // Bosses are intentionally expensive, but still obey the same rule:
-        // ingredients alone are useless until the Avenger has actually killed one.
+        // Wither is the ONLY exception to the no-boss-bar rule.
+        // Ender Dragon and modded boss-bar entities are intentionally excluded.
         r("wither", "nether_star", "soul_sand");
-        r("ender_dragon", "dragon_breath", "end_crystal");
+        AvengerModdedSummonRecipes.register();
 
         for (Recipe recipe : RECIPES.values()) {
             BY_MAIN_ITEM.computeIfAbsent(recipe.mainItemId(), ignored -> new ArrayList<>()).add(recipe);
@@ -118,9 +118,27 @@ public final class AvengerSummonRecipes {
                 offhand == null ? null : "minecraft:" + offhand));
     }
 
-    public static Recipe recipe(String entityId) { return RECIPES.get(entityId); }
-    public static boolean supported(String entityId) { return RECIPES.containsKey(entityId); }
-    public static List<Recipe> allRecipes() { return List.copyOf(RECIPES.values()); }
+    /** No compile-time or runtime dependency on any of the optional mob mods. */
+    static void registerExternal(String entityId, String mainItemId, String offhandItemId) {
+        if (AvengerSummonSafety.bannedId(entityId)) return;
+        RECIPES.put(entityId, new Recipe(entityId, mainItemId, offhandItemId));
+    }
+
+    private static boolean available(Recipe recipe) {
+        if (recipe == null || AvengerSummonSafety.bannedId(recipe.entityId())) return false;
+        if (!Registries.ENTITY_TYPE.containsId(recipe.entityIdentifier())) return false;
+        if (!Registries.ITEM.containsId(new Identifier(recipe.mainItemId()))) return false;
+        return recipe.offhandItemId() == null || Registries.ITEM.containsId(new Identifier(recipe.offhandItemId()));
+    }
+
+    public static Recipe recipe(String entityId) {
+        Recipe candidate = RECIPES.get(entityId);
+        return available(candidate) ? candidate : null;
+    }
+    public static boolean supported(String entityId) { return recipe(entityId) != null; }
+    public static List<Recipe> allRecipes() {
+        return RECIPES.values().stream().filter(AvengerSummonRecipes::available).toList();
+    }
 
     /**
      * Exact off-hand fusion recipes take precedence. If the off-hand does not form
@@ -136,6 +154,7 @@ public final class AvengerSummonRecipes {
         List<Recipe> fusion = null;
         List<Recipe> mainOnly = null;
         for (Recipe recipe : candidates) {
+            if (!available(recipe)) continue;
             if (recipe.offhandItemId() == null) {
                 if (mainOnly == null) mainOnly = new ArrayList<>(2);
                 mainOnly.add(recipe);

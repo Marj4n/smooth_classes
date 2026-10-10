@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.boss.WitherEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.SpawnReason;
@@ -41,6 +42,7 @@ import net.minecraft.village.VillagerProfession;
 import org.marj4n.smooth_classes.content.avenger.AvengerClass;
 import org.marj4n.smooth_classes.content.avenger.AvengerContent;
 import org.marj4n.smooth_classes.integration.OptionalCompatRuntime;
+import org.marj4n.smooth_classes.mixin.AvengerWitherBossBarAccessor;
 import org.marj4n.smooth_classes.network.SmoothClassesNetworking;
 import org.marj4n.smooth_classes.runtime.AbilityRuntime;
 import org.marj4n.smooth_classes.runtime.ExecutionResult;
@@ -73,6 +75,7 @@ public final class AvengerReworkRuntime {
     private AvengerReworkRuntime() {}
 
     public static void register() {
+        AvengerSoulAnimationRuntime.register();
         ServerTickEvents.END_SERVER_TICK.register(server -> {
             // Avenger maintenance has no behavior faster than five ticks. Keep the
             // player's own age phase so scheduled 20-tick work still lands correctly.
@@ -125,7 +128,7 @@ public final class AvengerReworkRuntime {
         if (!AbilityRuntime.isClass(player, AvengerClass.ID)) return;
         if (victim instanceof PlayerEntity) return;
         String entityId = Registries.ENTITY_TYPE.getId(victim.getType()).toString();
-        if (!AvengerSummonRecipes.supported(entityId)) return;
+        if (!AvengerSummonRecipes.supported(entityId) || !AvengerSummonSafety.allowed(victim)) return;
 
         AvengerDeathListState state = AvengerDeathListState.get(player.getServer());
         state.recordKill(player.getUuid(), entityId);
@@ -144,7 +147,7 @@ public final class AvengerReworkRuntime {
         if (owner == null) return;
 
         String entityId = Registries.ENTITY_TYPE.getId(victim.getType()).toString();
-        if (!AvengerSummonRecipes.supported(entityId)) return;
+        if (!AvengerSummonRecipes.supported(entityId) || !AvengerSummonSafety.allowed(victim)) return;
         MinecraftServer server = victim.getServer();
         if (server == null) return;
 
@@ -162,7 +165,7 @@ public final class AvengerReworkRuntime {
 
     private static void captureDevoured(ServerPlayerEntity player, LivingEntity victim) {
         String entityId = Registries.ENTITY_TYPE.getId(victim.getType()).toString();
-        if (!AvengerSummonRecipes.supported(entityId)) return;
+        if (!AvengerSummonRecipes.supported(entityId) || !AvengerSummonSafety.allowed(victim)) return;
         AvengerDeathListState state = AvengerDeathListState.get(player.getServer());
         state.recordKill(player.getUuid(), entityId);
         refreshDeathListNow(player, state);
@@ -323,26 +326,45 @@ public final class AvengerReworkRuntime {
     private static void appendRecipePages(List<Text> pages, UUID playerId, AvengerDeathListState state,
                                           AvengerDeathListState.PlayerLedger ledger,
                                           List<AvengerSummonRecipes.Recipe> recipes) {
-        var page = Text.empty();
-        int onPage = 0;
-        int pageIndex = 1;
+        // Avoid 100+ oversized vanilla book pages now that ~150 optional mobs exist.
+        // Discovered recipes get full ingredient listings; undiscovered souls are
+        // compact, since their recipes must remain secret until the first kill.
+        List<AvengerSummonRecipes.Recipe> known = new ArrayList<>();
+        List<AvengerSummonRecipes.Recipe> unknown = new ArrayList<>();
         for (AvengerSummonRecipes.Recipe recipe : recipes) {
-            if (onPage == 0) {
-                page.append(Text.literal("SOUL RECIPES " + pageIndex + "\n")
-                        .formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
-                page.append(Text.literal("----------------\n").formatted(Formatting.DARK_GRAY));
-            }
-            int slain = ledger.kills().getOrDefault(recipe.entityId(), 0);
-            if (slain > 0) appendSoulRecord(page, playerId, state, recipe, slain);
-            else appendUndiscoveredRecord(page, recipe);
-            if (++onPage >= 2) {
-                pages.add(page);
-                page = Text.empty();
-                onPage = 0;
-                pageIndex++;
-            }
+            if (ledger.kills().getOrDefault(recipe.entityId(), 0) > 0) known.add(recipe);
+            else unknown.add(recipe);
         }
-        if (onPage > 0) pages.add(page);
+
+        int pageIndex = 1;
+        for (int i = 0; i < known.size() && pages.size() < 98; i += 2) {
+            var page = Text.empty();
+            page.append(Text.literal("SOUL RECIPES " + pageIndex++ + "\n")
+                    .formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
+            page.append(Text.literal("----------------\n").formatted(Formatting.DARK_GRAY));
+            for (int j = i; j < Math.min(i + 2, known.size()); j++) {
+                AvengerSummonRecipes.Recipe recipe = known.get(j);
+                appendSoulRecord(page, playerId, state, recipe,
+                        ledger.kills().getOrDefault(recipe.entityId(), 0));
+            }
+            pages.add(page);
+        }
+
+        for (int i = 0; i < unknown.size() && pages.size() < 98; i += 8) {
+            var page = Text.empty();
+            page.append(Text.literal("UNDISCOVERED " + (1 + i / 8) + "\n")
+                    .formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
+            page.append(Text.literal("----------------\n").formatted(Formatting.DARK_GRAY));
+            for (int j = i; j < Math.min(i + 8, unknown.size()); j++) {
+                page.append(Text.literal(AvengerSummonRecipes.friendlyEntityName(unknown.get(j).entityId()) + "  ???\n")
+                        .formatted(Formatting.DARK_GRAY));
+            }
+            pages.add(page);
+        }
+        if (pages.size() >= 98) {
+            pages.add(Text.literal("Large Soul Ledger\n\nFor all collected souls and recipes, use the Patchouli Death List interface.")
+                    .formatted(Formatting.DARK_PURPLE));
+        }
     }
 
     private static void appendSoulRecord(net.minecraft.text.MutableText page, UUID playerId,
@@ -417,7 +439,7 @@ public final class AvengerReworkRuntime {
                     + AvengerSummonRecipes.friendlyEntityName(first) + " first.");
         }
 
-        LivingEntity summoned = spawnVanillaSoul(player, chosen);
+        LivingEntity summoned = spawnRegisteredSoul(player, chosen);
         if (summoned == null) return ExecutionResult.failure("That soul could not manifest here.");
 
         // Resource spending only happens after a successful spawn.
@@ -434,6 +456,7 @@ public final class AvengerReworkRuntime {
         if (chosen.offhandItemId() != null) consumeHandIngredient(player, Hand.OFF_HAND);
 
         refreshDeathListNow(player, state);
+        AvengerSoulAnimationRuntime.emerge(player, summoned);
         ServerWorld world = player.getServerWorld();
         world.spawnParticles(ParticleTypes.SOUL, summoned.getX(), summoned.getBodyY(0.55D), summoned.getZ(),
                 28, 0.65D, 0.75D, 0.65D, 0.04D);
@@ -445,25 +468,44 @@ public final class AvengerReworkRuntime {
                 + " (" + summonCharges(player) + "/3 charges)");
     }
 
-    private static LivingEntity spawnVanillaSoul(ServerPlayerEntity player, AvengerSummonRecipes.Recipe recipe) {
-        if (!Registries.ENTITY_TYPE.containsId(recipe.entityIdentifier())) return null;
+    private static LivingEntity spawnRegisteredSoul(ServerPlayerEntity player, AvengerSummonRecipes.Recipe recipe) {
+        // Do not create an unexpected boss or non-living entity, even from a forged old ledger.
+        if (!AvengerSummonRecipes.supported(recipe.entityId()) || AvengerSummonSafety.bannedId(recipe.entityId())) return null;
         EntityType<?> type = Registries.ENTITY_TYPE.get(recipe.entityIdentifier());
         Vec3d look = player.getRotationVec(1F);
         Vec3d flat = new Vec3d(look.x, 0D, look.z);
         if (flat.lengthSquared() < 1.0E-6D) flat = new Vec3d(0D, 0D, 1D);
         flat = flat.normalize();
         Vec3d pos = player.getPos().add(flat.multiply(2.5D));
-        Entity entity = type.spawn(player.getServerWorld(), net.minecraft.util.math.BlockPos.ofFloored(pos), SpawnReason.MOB_SUMMONED);
+        Entity entity;
+        try {
+            entity = type.spawn(player.getServerWorld(), net.minecraft.util.math.BlockPos.ofFloored(pos), SpawnReason.MOB_SUMMONED);
+        } catch (RuntimeException spawnFailure) {
+            // Optional modded entities can reject invalid spawn contexts. No item,
+            // soul, or charge has been consumed yet; don't crash the server.
+            return null;
+        }
         if (!(entity instanceof LivingEntity living) || entity instanceof PlayerEntity) {
             if (entity != null) entity.discard();
+            return null;
+        }
+        if (!AvengerSummonSafety.allowed(living)) {
+            living.discard();
             return null;
         }
         living.refreshPositionAndAngles(pos.x, living.getY(), pos.z, player.getYaw(), 0F);
 
         tagSummon(living, player.getUuid());
         configureOwnership(player, living);
+        hideBoundWitherBossBar(living);
         applySummonBuffs(player, living);
         return living;
+    }
+
+    private static void hideBoundWitherBossBar(LivingEntity entity) {
+        if (entity instanceof WitherEntity wither && isAvengerSummon(wither)) {
+            ((AvengerWitherBossBarAccessor) wither).smoothClasses$getBossBar().setVisible(false);
+        }
     }
 
     private static void configureOwnership(ServerPlayerEntity owner, LivingEntity living) {
@@ -539,6 +581,9 @@ public final class AvengerReworkRuntime {
         if (!isOwnedSummon(player, summon)) {
             return ExecutionResult.failure("That summon does not belong to your Death List.");
         }
+        if (AvengerSoulAnimationRuntime.busy(summon)) {
+            return ExecutionResult.failure("That soul is still materializing or being absorbed.");
+        }
 
         String entityId = Registries.ENTITY_TYPE.getId(summon.getType()).toString();
         AvengerSummonRecipes.Recipe recipe = AvengerSummonRecipes.recipe(entityId);
@@ -546,33 +591,17 @@ public final class AvengerReworkRuntime {
             return ExecutionResult.failure("That summon has no Death List recall recipe.");
         }
 
-        ServerWorld world = player.getServerWorld();
-        Vec3d center = summon.getPos().add(0D, summon.getHeight() * 0.55D, 0D);
-
-        // Return the bound soul without increasing lifetime kill statistics.
-        state.restoreSoul(player.getUuid(), entityId);
-        refundRecipeItem(player, recipe.mainItemId());
-        if (recipe.offhandItemId() != null) refundRecipeItem(player, recipe.offhandItemId());
-
-        // Recall is not a kill: no kill-credit callback is fired and no extra soul
-        // is generated. Passengers are safely detached before the entity disappears.
-        summon.removeAllPassengers();
-        summon.stopRiding();
-        world.spawnParticles(ParticleTypes.SOUL, center.x, center.y, center.z,
-                24, 0.55D, 0.65D, 0.55D, 0.035D);
-        world.spawnParticles(ParticleTypes.REVERSE_PORTAL, center.x, center.y, center.z,
-                18, 0.45D, 0.55D, 0.45D, 0.05D);
-        world.playSound(null, summon.getBlockPos(), SoundEvents.BLOCK_SOUL_SAND_BREAK,
+        if (!AvengerSoulAnimationRuntime.recall(player, summon, recipe)) {
+            return ExecutionResult.failure("That soul cannot be recalled right now.");
+        }
+        player.getServerWorld().playSound(null, summon.getBlockPos(), SoundEvents.BLOCK_SOUL_SAND_BREAK,
                 SoundCategory.PLAYERS, 0.9F, 0.55F);
-        summon.discard();
-
-        refreshDeathListNow(player, state);
-        SmoothClassesNetworking.sendAbilityState(player);
-        return ExecutionResult.success(1, "Recalled " + AvengerSummonRecipes.friendlyEntityName(entityId)
-                + " to the Death List. Soul and summon ingredients restored.");
+        return ExecutionResult.success(1, "Absorbing " + AvengerSummonRecipes.friendlyEntityName(entityId)
+                + " into the Death List. Soul and ingredients return after the ritual.");
     }
 
     private static ExecutionResult unbindSummon(ServerPlayerEntity player, AvengerDeathListState state, LivingEntity summon) {
+        if (AvengerSoulAnimationRuntime.busy(summon)) return ExecutionResult.failure("That soul is still in a ritual.");
         // A manifested soul was already consumed from the ledger. Unbinding never
         // refunds it or erases other captured souls of the same species.
         summon.removeScoreboardTag(SUMMON_TAG);
@@ -602,7 +631,7 @@ public final class AvengerReworkRuntime {
         return ExecutionResult.success(1, "Soul unbound. Its normal AI is restored.");
     }
 
-    private static void refundRecipeItem(ServerPlayerEntity player, String itemId) {
+    static void refundRecipeItem(ServerPlayerEntity player, String itemId) {
         if (itemId == null || itemId.isBlank()) return;
         Identifier id = new Identifier(itemId);
         if (!Registries.ITEM.containsId(id)) return;
@@ -769,6 +798,7 @@ public final class AvengerReworkRuntime {
         // reaches a status-effect application path other than the sourced overload mixin.
         boolean hasOwnedWardenNearby = false;
         for (LivingEntity summon : summons) {
+            hideBoundWitherBossBar(summon);
             if (summon instanceof WardenEntity) {
                 hasOwnedWardenNearby = true;
                 break;
@@ -874,6 +904,7 @@ public final class AvengerReworkRuntime {
         if (!AbilityRuntime.isClass(player, AvengerClass.ID)) return ExecutionResult.failure("You are not an Avenger.");
         LivingEntity target = aimedLiving(player, 36D, entity -> isOwnedSummon(player, entity));
         if (target == null) return ExecutionResult.failure("Curtain Call requires one of your summons under the crosshair.");
+        if (AvengerSoulAnimationRuntime.busy(target)) return ExecutionResult.failure("Wait for the soul ritual to finish.");
 
         int rank = talentRank(player, AvengerContent.CURTAIN_CALL_I, AvengerContent.CURTAIN_CALL_II);
         float explosionPower = rank >= 2 ? 8F : rank == 1 ? 6F : 4F;
