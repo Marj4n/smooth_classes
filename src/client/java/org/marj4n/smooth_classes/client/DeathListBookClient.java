@@ -83,6 +83,10 @@ public final class DeathListBookClient {
         DISCOVERED_RECIPES = List.copyOf(discoveredRecipes);
     }
 
+    /** Read-only access to the server's latest synced snapshot for Soul Search. */
+    static int availableSouls(String id) { return SOULS.getOrDefault(id, 0); }
+    static int killCount(String id) { return KILLS.getOrDefault(id, 0); }
+
     /** Search only revealed recipes; hidden ingredients never leak before a soul is captured. */
     static List<AvengerSummonRecipes.Recipe> searchDiscoveredRecipes(String rawQuery) {
         String query = rawQuery == null ? "" : rawQuery.strip().toLowerCase(Locale.ROOT);

@@ -337,8 +337,25 @@ public final class OriginRuntime {
             return;
         }
 
-        boolean exposed = !batForm && player.getWorld().isDay() && player.getWorld().isSkyVisible(player.getBlockPos());
+        // Vanilla-style weather protection: ordinary clouds are cosmetic, but
+        // actual rain/thunder and the local Raining Blood cloud shield sunlight.
+        // Use the rain at this position, not just a global weather flag, so dry
+        // biomes do not gain rain protection accidentally.
+        boolean stormShelter = VampireSunlightRules.weatherSheltered(
+                player.getWorld().hasRain(player.getBlockPos()),
+                player.getWorld().isThundering(),
+                org.marj4n.smooth_classes.runtime.BloodRainRuntime.shelters(player));
+        boolean exposed = VampireSunlightRules.exposedToSunlight(
+                batForm, player.getWorld().isDay(),
+                player.getWorld().isSkyVisible(player.getBlockPos()), stormShelter);
         boolean lord = OriginSkillRuntime.unlocked(player, OriginType.VAMPIRE, "final");
+        if (stormShelter) {
+            // Stop active daylight punishment at once when sheltering weather
+            // arrives. Retain unrelated lava/fire and long-duration potion debuffs.
+            if (state.sunExposure() > 0) player.extinguish();
+            state.sunExposure(0);
+            clearSunlightEffects(player, state);
+        }
         if (batForm) {
             // Travel-form protection: daylight does not burn the vampire while transformed.
             state.sunExposure(0);
@@ -359,16 +376,16 @@ public final class OriginRuntime {
             // Ordinary Man-Bat follows the same accumulating burn as normal Vampire.
             // Tiny Bat retains its existing travel-form protection.
             if (exposed) {
-                player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 30, 0, false, false, true));
-                player.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS, 30, 0, false, false, true));
+                applySunlightEffect(player, state, StatusEffects.SLOWNESS, "vampire.sunlight.slow");
+                applySunlightEffect(player, state, StatusEffects.WEAKNESS, "vampire.sunlight.weak");
             }
         } else {
             int sun = state.sunExposure();
             boolean tolerant = OriginSkillRuntime.unlocked(player, OriginType.VAMPIRE, "sun_tolerance");
             int slowAt = tolerant ? 70 : 50;
             int weakAt = tolerant ? 90 : 75;
-            if (sun >= slowAt) player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 30, 0, false, false, true));
-            if (sun >= weakAt) player.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS, 30, 0, false, false, true));
+            if (sun >= slowAt) applySunlightEffect(player, state, StatusEffects.SLOWNESS, "vampire.sunlight.slow");
+            if (sun >= weakAt) applySunlightEffect(player, state, StatusEffects.WEAKNESS, "vampire.sunlight.weak");
             if (sun >= 100 && player.age % (tolerant ? 40 : 20) == 0) player.setOnFireFor(1);
         }
 
@@ -397,6 +414,36 @@ public final class OriginRuntime {
                 && player.getWorld().getGameRules().getBoolean(net.minecraft.world.GameRules.NATURAL_REGENERATION)
                 && player.getHealth() < player.getMaxHealth() && player.age % 80 == 0) {
             player.heal(1.0F);
+        }
+    }
+
+    /** Track only the debuffs applied by our sunlight mechanic. */
+    private static void applySunlightEffect(ServerPlayerEntity player, OriginState state,
+                                            net.minecraft.entity.effect.StatusEffect effect, String marker) {
+        player.addStatusEffect(new StatusEffectInstance(effect, 30, 0, false, false, true));
+        state.flag(marker);
+    }
+
+    /** Remove residual sunlight-only debuffs when rain or Blood Rain blocks the sun.
+     *  A longer/stronger Weakness or Slowness from combat, potions, or empty Blood
+     *  is NOT ours and must be preserved.
+     */
+    private static void clearSunlightEffects(ServerPlayerEntity player, OriginState state) {
+        clearSunlightEffect(player, state, StatusEffects.SLOWNESS, "vampire.sunlight.slow");
+        clearSunlightEffect(player, state, StatusEffects.WEAKNESS, "vampire.sunlight.weak");
+    }
+
+    private static void clearSunlightEffect(ServerPlayerEntity player, OriginState state,
+                                            net.minecraft.entity.effect.StatusEffect effect, String marker) {
+        if (!state.hasFlag(marker)) return;
+        state.unflag(marker);
+        StatusEffectInstance current = player.getStatusEffect(effect);
+        // Our daylight effects are amplifier 0, at most 30 ticks, nonambient,
+        // particles hidden, and icon visible. Do not clear an unrelated effect.
+        if (current != null && VampireSunlightRules.isShortSunlightEffect(
+                current.getAmplifier(), current.getDuration(), current.isAmbient(),
+                current.shouldShowParticles(), current.shouldShowIcon())) {
+            player.removeStatusEffect(effect);
         }
     }
 

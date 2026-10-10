@@ -21,19 +21,15 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 /**
- * Search UI embedded in the right-hand recipe page of the real Patchouli Death List.
+ * Client-only Soul Search chapter of the real Patchouli Death List.
  *
- * The feature is intentionally implemented through Fabric's screen events, not a
- * hard Patchouli class dependency or global Patchouli mixin. Other Patchouli books
- * are untouched and the ledger/recipe authority remains server-side.
- *
- * The vanilla Patchouli pages remain visible until the user enters a query.
- * During search the matching recipes are drawn over the right-hand recipe page,
- * avoiding Patchouli's cached text-formatting callback results.
+ * <p>Unlike R3, this NEVER adds widgets or overlays to the Soul Ledger's
+ * normal recipe pages. Only smooth_classes:soul_search has interactive widgets,
+ * and its right-hand Patchouli text page is intentionally empty.</p>
  */
 public final class DeathListRecipeSearchClient {
     private static final String ENTRY_CLASS = "vazkii.patchouli.client.book.gui.GuiBookEntry";
-    private static final String LEDGER_ENTRY = "smooth_classes:ledger";
+    private static final String SEARCH_ENTRY = "smooth_classes:soul_search";
     private static final int RIGHT_PAGE_X = 141;
     private static final int PAGE_WIDTH = 116;
     private static final int PAGE_SIZE = 3;
@@ -45,43 +41,43 @@ public final class DeathListRecipeSearchClient {
     public static void register() {
         if (registered) return;
         registered = true;
-
         ScreenEvents.AFTER_INIT.register((client, screen, width, height) -> {
-            if (!isOurLedgerEntry(screen)) return;
+            if (!isSearchChapter(screen)) return;
             int left = getBookCoordinate(screen, "bookLeft");
             int top = getBookCoordinate(screen, "bookTop");
             if (left == Integer.MIN_VALUE || top == Integer.MIN_VALUE) return;
 
             SearchState state = new SearchState(client, left, top);
             STATES.put(screen, state);
-            // Patchouli's GuiBook dispatches mouse input to its children, so the
-            // controls belong to the real book instead of opening another screen.
+            // Add input/buttons to Patchouli's own screen; no secondary GUI screen.
             Screens.getButtons(screen).add(state.search);
             Screens.getButtons(screen).add(state.previous);
             Screens.getButtons(screen).add(state.next);
+            Screens.getButtons(screen).add(state.back);
 
             ScreenEvents.afterRender(screen).register((currentScreen, context, mouseX, mouseY, delta) -> {
-                if (STATES.get(currentScreen) == state) state.render(currentScreen, context, mouseX, mouseY, delta);
+                if (STATES.get(currentScreen) == state) {
+                    state.render(currentScreen, context, mouseX, mouseY, delta);
+                }
             });
-
             ScreenMouseEvents.afterMouseClick(screen).register((currentScreen, mouseX, mouseY, button) -> {
                 if (STATES.get(currentScreen) != state || button != GLFW.GLFW_MOUSE_BUTTON_LEFT) return;
                 float factor = (float) client.getWindow().getScaledWidth() / Math.max(1, currentScreen.width);
-                double scaledX = mouseX / factor;
-                double scaledY = mouseY / factor;
-                boolean editing = scaledX >= state.search.getX()
-                        && scaledX < state.search.getX() + state.search.getWidth()
-                        && scaledY >= state.search.getY()
-                        && scaledY < state.search.getY() + state.search.getHeight();
-                if (editing) currentScreen.setFocused(state.search);
+                int x = (int) (mouseX / factor);
+                int y = (int) (mouseY / factor);
+                boolean editing = state.contains(state.search, x, y);
+                if (editing) {
+                    currentScreen.setFocused(state.search);
+                    state.showResults();
+                }
                 state.search.setFocused(editing);
+                if (!editing) state.selectAt(x, y);
             });
 
             ScreenKeyboardEvents.allowKeyPress(screen).register((currentScreen, key, scanCode, modifiers) -> {
                 if (STATES.get(currentScreen) != state || !state.search.isFocused()) return true;
-                // Patchouli intercepts Backspace (go back) and the inventory key
-                // (close book) before normal child widgets see them. While editing,
-                // consume ALL non-Escape keystrokes at the text field first.
+                // Patchouli uses Backspace for navigation. Hand input to the field
+                // before Patchouli can process it. Escape still closes the book.
                 if (key == GLFW.GLFW_KEY_ESCAPE) return true;
                 if (key == GLFW.GLFW_KEY_ENTER || key == GLFW.GLFW_KEY_KP_ENTER) {
                     state.search.setFocused(false);
@@ -93,15 +89,15 @@ public final class DeathListRecipeSearchClient {
         });
     }
 
-    private static boolean isOurLedgerEntry(Screen screen) {
+    private static boolean isSearchChapter(Screen screen) {
         if (!ENTRY_CLASS.equals(screen.getClass().getName())) return false;
         try {
             Object entry = screen.getClass().getMethod("getEntry").invoke(screen);
             if (entry == null) return false;
             Object id = entry.getClass().getMethod("getId").invoke(entry);
-            return LEDGER_ENTRY.equals(String.valueOf(id));
+            return SEARCH_ENTRY.equals(String.valueOf(id));
         } catch (ReflectiveOperationException | LinkageError ex) {
-            SmoothClasses.LOGGER.debug("Death List recipe search could not identify Patchouli ledger", ex);
+            SmoothClasses.LOGGER.debug("Soul Search could not identify its Patchouli entry", ex);
             return false;
         }
     }
@@ -111,124 +107,187 @@ public final class DeathListRecipeSearchClient {
             Field field = screen.getClass().getField(name);
             return field.getInt(screen);
         } catch (ReflectiveOperationException | LinkageError ex) {
-            SmoothClasses.LOGGER.debug("Death List recipe search could not read Patchouli book coordinate: {}", name, ex);
+            SmoothClasses.LOGGER.debug("Soul Search could not read Patchouli coordinate {}", name, ex);
             return Integer.MIN_VALUE;
         }
     }
 
     private static final class SearchState {
-        private static final int PARCHMENT = 0xFFF1E8D5;
-        private static final int PARCHMENT_ALT = 0xFFE8DCC4;
-        private static final int BORDER = 0xFF8A6B5A;
-        private static final int INK = 0xFF38273A;
-        private static final int MUTED = 0xFF755E66;
-        private static final int ACCENT = 0xFF683B60;
+        private static final int PAPER = 0xFFF8F0DE;
+        private static final int PAPER_ALT = 0xFFEDE0C7;
+        private static final int BORDER = 0xFFAB947B;
+        private static final int INK = 0xFF35253A;
+        private static final int MUTED = 0xFF705865;
+        private static final int ACCENT = 0xFF653158;
+        private static final int INPUT_Y = 43;
+        private static final int HEADER_Y = 19;
+        private static final int ROW_Y = 76;
+        private static final int ROW_HEIGHT = 25;
+        private static final int NAV_Y = 158;
 
         final MinecraftClient client;
         final int left;
         final int top;
+        final int pageX;
         final TextFieldWidget search;
         final ButtonWidget previous;
         final ButtonWidget next;
+        final ButtonWidget back;
         List<AvengerSummonRecipes.Recipe> results = List.of();
-        int resultPage = 0;
+        int resultPage;
+        AvengerSummonRecipes.Recipe selected;
 
         SearchState(MinecraftClient client, int left, int top) {
             this.client = client;
             this.left = left;
             this.top = top;
-            int x = left + RIGHT_PAGE_X + 5;
-            search = new TextFieldWidget(client.textRenderer, x, top + 20,
-                    PAGE_WIDTH - 12, 15, Text.literal("Search Death List recipes"));
+            this.pageX = left + RIGHT_PAGE_X + 3;
+            int x = pageX + 4;
+            search = new TextFieldWidget(client.textRenderer, x, top + INPUT_Y, PAGE_WIDTH - 12, 15,
+                    Text.literal("Search discovered souls"));
             search.setMaxLength(100);
-            search.setPlaceholder(Text.literal("Search recipes..."));
+            search.setPlaceholder(Text.literal("Mob, mod or ingredient..."));
+            search.setDrawsBackground(false);
+            search.setEditableColor(INK);
             search.setChangedListener(query -> {
                 resultPage = 0;
-                results = DeathListBookClient.searchDiscoveredRecipes(query);
+                selected = null;
+                results = query.isBlank() ? List.of() : DeathListBookClient.searchDiscoveredRecipes(query);
                 updateNavigation();
             });
+
             previous = ButtonWidget.builder(Text.literal("<"), button -> {
                 if (resultPage > 0) resultPage--;
                 updateNavigation();
-            }).dimensions(x + 14, top + 154, 18, 13).build();
+            }).dimensions(pageX + 16, top + NAV_Y, 18, 12).build();
             next = ButtonWidget.builder(Text.literal(">"), button -> {
                 if ((resultPage + 1) * PAGE_SIZE < results.size()) resultPage++;
                 updateNavigation();
-            }).dimensions(x + 75, top + 154, 18, 13).build();
+            }).dimensions(pageX + 79, top + NAV_Y, 18, 12).build();
+            back = ButtonWidget.builder(Text.literal("Back to results"), button -> showResults())
+                    .dimensions(pageX + 8, top + NAV_Y, PAGE_WIDTH - 20, 12).build();
+            updateNavigation();
+        }
+
+        boolean contains(TextFieldWidget widget, int x, int y) {
+            return x >= widget.getX() && x < widget.getX() + widget.getWidth()
+                    && y >= widget.getY() && y < widget.getY() + widget.getHeight();
+        }
+
+        void showResults() {
+            selected = null;
+            updateNavigation();
+        }
+
+        void selectAt(int x, int y) {
+            if (selected != null || search.getText().isBlank() || results.isEmpty()) return;
+            if (x < pageX + 2 || x > pageX + PAGE_WIDTH - 5) return;
+            int row = (y - (top + ROW_Y)) / ROW_HEIGHT;
+            if (y < top + ROW_Y || row < 0 || row >= PAGE_SIZE) return;
+            int index = resultPage * PAGE_SIZE + row;
+            if (index >= results.size()) return;
+            selected = results.get(index);
             updateNavigation();
         }
 
         void updateNavigation() {
-            boolean hasQuery = !search.getText().isBlank();
-            previous.visible = hasQuery && results.size() > PAGE_SIZE;
-            next.visible = previous.visible;
+            boolean hasPages = selected == null && !search.getText().isBlank() && results.size() > PAGE_SIZE;
+            previous.visible = hasPages;
+            next.visible = hasPages;
             previous.active = resultPage > 0;
             next.active = (resultPage + 1) * PAGE_SIZE < results.size();
+            back.visible = selected != null;
         }
 
         void render(Screen screen, DrawContext context, int mouseX, int mouseY, float delta) {
-            // GuiBook uses its own potentially adjusted GUI scale. Match that scale
-            // when drawing and when forwarding mouse coordinates to search widgets.
             float scale = (float) client.getWindow().getScaledWidth() / Math.max(1, screen.width);
             context.getMatrices().push();
-            context.getMatrices().scale(scale, scale, 1.0F);
+            context.getMatrices().scale(scale, scale, 1F);
             int mx = (int) (mouseX / scale);
             int my = (int) (mouseY / scale);
-            int x = left + RIGHT_PAGE_X + 2;
+            TextRenderer font = client.textRenderer;
 
-            // Reserve a small band for the search box over Patchouli's RECIPES title.
-            context.fill(x, top + 17, x + PAGE_WIDTH - 2, top + 38, PARCHMENT);
-            context.fill(x + 1, top + 18, x + PAGE_WIDTH - 3, top + 19, BORDER);
+            // This page has no Patchouli text to cover. Draw on the intentionally
+            // empty right page, leaving stock and recipe spreads untouched.
+            context.drawCenteredTextWithShadow(font, "SOUL SEARCH", pageX + PAGE_WIDTH / 2,
+                    top + HEADER_Y, ACCENT);
+            context.drawText(font, "Search discovered souls", pageX + 6, top + 31, MUTED, false);
+            context.fill(pageX + 3, top + INPUT_Y - 2, pageX + PAGE_WIDTH - 3,
+                    top + INPUT_Y + 17, BORDER);
+            context.fill(pageX + 4, top + INPUT_Y - 1, pageX + PAGE_WIDTH - 4,
+                    top + INPUT_Y + 16, PAPER);
+            context.fill(pageX + 5, top + 65, pageX + PAGE_WIDTH - 5, top + 66, BORDER);
 
-            if (!search.getText().isBlank()) {
-                drawMatchingRecipes(context, x, client.textRenderer);
-            }
+            if (selected != null) drawDetail(context, font);
+            else drawResults(context, font, mx, my);
 
-            // The field and navigation are children of the Patchouli screen for input,
-            // but explicitly rendered here so they appear above the recipe overlay.
+            // They are registered as real children for input; render after the
+            // other page decorations to guarantee readable text and controls.
             search.render(context, mx, my, delta);
             if (previous.visible) previous.render(context, mx, my, delta);
             if (next.visible) next.render(context, mx, my, delta);
+            if (back.visible) back.render(context, mx, my, delta);
             context.getMatrices().pop();
         }
 
-        void drawMatchingRecipes(DrawContext context, int x, TextRenderer font) {
-            int rx = x + 4;
-            int right = x + PAGE_WIDTH - 4;
-            context.fill(x, top + 39, x + PAGE_WIDTH - 2, top + 169, PARCHMENT);
-            context.drawText(font, "MATCHES " + results.size(), rx, top + 40, ACCENT, false);
-            context.fill(rx, top + 51, right, top + 52, BORDER);
-
-            if (results.isEmpty()) {
-                context.drawText(font, "No recipes found", rx, top + 65, INK, false);
-                context.drawText(font, "Try another name or", rx, top + 80, MUTED, false);
-                context.drawText(font, "summon ingredient.", rx, top + 91, MUTED, false);
+        void drawResults(DrawContext context, TextRenderer font, int mx, int my) {
+            int x = pageX + 6;
+            if (search.getText().isBlank()) {
+                drawTrimmed(context, font, "Type to find a soul", x, top + 81, INK, 102);
+                drawTrimmed(context, font, "Mob name / mod ID / item", x, top + 98, MUTED, 102);
+                drawTrimmed(context, font, "Only collected souls", x, top + 115, MUTED, 102);
+                drawTrimmed(context, font, "have visible recipes.", x, top + 127, MUTED, 102);
                 return;
             }
-
+            drawTrimmed(context, font, "MATCHES " + results.size(), x, top + 68, ACCENT, 102);
+            if (results.isEmpty()) {
+                drawTrimmed(context, font, "No matching souls.", x, top + 87, INK, 102);
+                drawTrimmed(context, font, "Try another keyword.", x, top + 101, MUTED, 102);
+                return;
+            }
             int start = resultPage * PAGE_SIZE;
             for (int i = 0; i < PAGE_SIZE && start + i < results.size(); i++) {
                 AvengerSummonRecipes.Recipe recipe = results.get(start + i);
-                int y = top + 54 + i * 32;
-                if ((i & 1) != 0) context.fill(x + 2, y - 1, x + PAGE_WIDTH - 4, y + 30, PARCHMENT_ALT);
-                drawTrimmed(context, font, AvengerSummonRecipes.friendlyEntityName(recipe.entityId()), rx, y, INK, 104);
-                drawTrimmed(context, font, "Main: " + AvengerSummonRecipes.friendlyItemName(recipe.mainItemId()), rx, y + 9, MUTED, 104);
-                String off = recipe.offhandItemId() == null ? "Not required"
-                        : AvengerSummonRecipes.friendlyItemName(recipe.offhandItemId());
-                drawTrimmed(context, font, "Off: " + off, rx, y + 18, MUTED, 104);
+                int y = top + ROW_Y + i * ROW_HEIGHT;
+                if ((i & 1) != 0 || (mx >= pageX + 2 && mx < pageX + PAGE_WIDTH - 5
+                        && my >= y && my < y + ROW_HEIGHT)) {
+                    context.fill(pageX + 2, y, pageX + PAGE_WIDTH - 5, y + ROW_HEIGHT - 1, PAPER_ALT);
+                }
+                drawTrimmed(context, font, AvengerSummonRecipes.friendlyEntityName(recipe.entityId()),
+                        x, y + 2, INK, 98);
+                int stock = DeathListBookClient.availableSouls(recipe.entityId());
+                drawTrimmed(context, font, "Souls x" + stock + "  |  View >", x, y + 13, MUTED, 98);
             }
-            int totalPages = (results.size() + PAGE_SIZE - 1) / PAGE_SIZE;
-            context.fill(rx, top + 151, right, top + 152, BORDER);
-            context.drawCenteredTextWithShadow(font, (resultPage + 1) + "/" + totalPages,
-                    x + PAGE_WIDTH / 2, top + 156, ACCENT);
+            int pages = (results.size() + PAGE_SIZE - 1) / PAGE_SIZE;
+            context.drawCenteredTextWithShadow(font, (resultPage + 1) + "/" + pages,
+                    pageX + PAGE_WIDTH / 2, top + NAV_Y + 2, ACCENT);
         }
 
-        void drawTrimmed(DrawContext context, TextRenderer font, String text, int x, int y, int color, int maxWidth) {
-            String clipped = font.trimToWidth(text, maxWidth);
-            if (clipped.length() != text.length()) {
-                clipped = font.trimToWidth(text, Math.max(1, maxWidth - font.getWidth("..."))) + "...";
+        void drawDetail(DrawContext context, TextRenderer font) {
+            String id = selected.entityId();
+            int x = pageX + 6;
+            drawTrimmed(context, font, AvengerSummonRecipes.friendlyEntityName(id),
+                    x, top + 70, ACCENT, 101);
+            drawTrimmed(context, font, "Soul stock: " + DeathListBookClient.availableSouls(id),
+                    x, top + 85, INK, 101);
+            drawTrimmed(context, font, "Defeated: " + DeathListBookClient.killCount(id),
+                    x, top + 96, MUTED, 101);
+            drawTrimmed(context, font, "MAINHAND", x, top + 111, ACCENT, 101);
+            drawTrimmed(context, font, AvengerSummonRecipes.friendlyItemName(selected.mainItemId()),
+                    x, top + 122, INK, 101);
+            drawTrimmed(context, font, "OFFHAND", x, top + 135, ACCENT, 101);
+            String off = selected.offhandItemId() == null ? "Not required"
+                    : AvengerSummonRecipes.friendlyItemName(selected.offhandItemId());
+            drawTrimmed(context, font, off, x, top + 146, INK, 101);
+        }
+
+        void drawTrimmed(DrawContext context, TextRenderer font, String label,
+                         int x, int y, int color, int width) {
+            String shown = font.trimToWidth(label, width);
+            if (shown.length() != label.length()) {
+                shown = font.trimToWidth(label, Math.max(1, width - font.getWidth("..."))) + "...";
             }
-            context.drawText(font, clipped, x, y, color, false);
+            context.drawText(font, shown, x, y, color, false);
         }
     }
 }
