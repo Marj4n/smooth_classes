@@ -1,0 +1,16 @@
+{
+  "name": "Soul Search",
+  "category": "smooth_classes:soul_search",
+  "icon": "minecraft:spyglass",
+  "priority": true,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "$(#4A235A)$(l)SOUL SEARCH$()$(br2)$(#241C24)Find captured souls by mob name, mod ID, mainhand, or offhand item.$()$(br2)Click a result to view your soul stock, kills, and summon recipe.$()$(br2)$(#5C244E)Undiscovered souls stay hidden.$()$(br2)$(l:smooth_classes:ledger)Back to Soul Ledger$(/l)"
+    },
+    {
+      "type": "patchouli:text",
+      "text": ""
+    }
+  ]
+}

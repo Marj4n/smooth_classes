@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "$(#4A235A)$(l)SOUL STOCK$()$(br2)$(#241C24)$(smooth_death_stock_name:0)$()  $(#5C244E)$(smooth_death_stock_mark:0)$(smooth_death_stock_count:0)$()$(br2)$(#241C24)$(smooth_death_stock_name:1)$()  $(#5C244E)$(smooth_death_stock_mark:1)$(smooth_death_stock_count:1)$()$(br2)$(#241C24)$(smooth_death_stock_name:2)$()  $(#5C244E)$(smooth_death_stock_mark:2)$(smooth_death_stock_count:2)$()$(br2)$(#241C24)$(smooth_death_stock_name:3)$()  $(#5C244E)$(smooth_death_stock_mark:3)$(smooth_death_stock_count:3)$()$(br2)"
+      "text": "$(#4A235A)$(l)SOUL STOCK$()$(br2)$(#241C24)$(smooth_death_stock_name:0)$()  $(#5C244E)$(smooth_death_stock_mark:0)$(smooth_death_stock_count:0)$()$(br2)$(#241C24)$(smooth_death_stock_name:1)$()  $(#5C244E)$(smooth_death_stock_mark:1)$(smooth_death_stock_count:1)$()$(br2)$(#241C24)$(smooth_death_stock_name:2)$()  $(#5C244E)$(smooth_death_stock_mark:2)$(smooth_death_stock_count:2)$()$(br2)$(#241C24)$(smooth_death_stock_name:3)$()  $(#5C244E)$(smooth_death_stock_mark:3)$(smooth_death_stock_count:3)$()$(br2)$(#5C244E)$(l:smooth_classes:soul_search)Open Soul Search >$(/l)$()"
     },
     {
       "type": "patchouli:text",
