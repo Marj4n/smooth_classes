@@ -82,6 +82,7 @@ public final class SmoothClassesClient implements ClientModInitializer {
     public void onInitializeClient() {
         org.marj4n.smooth_classes.client.effects.AvengerSoulAnimationClient.register();
         DeathListBookClient.register();
+        DeathListRecipeSearchClient.register();
         ModelRegistry.registerModels();
         net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap.INSTANCE.putBlock(
                 org.marj4n.smooth_classes.registry.SmoothBlocks.ARCANE_FIRE,
