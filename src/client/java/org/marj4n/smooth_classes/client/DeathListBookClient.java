@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -80,6 +81,26 @@ public final class DeathListBookClient {
         }
         discoveredRecipes.sort(Comparator.comparing(recipe -> AvengerSummonRecipes.friendlyEntityName(recipe.entityId())));
         DISCOVERED_RECIPES = List.copyOf(discoveredRecipes);
+    }
+
+    /** Search only revealed recipes; hidden ingredients never leak before a soul is captured. */
+    static List<AvengerSummonRecipes.Recipe> searchDiscoveredRecipes(String rawQuery) {
+        String query = rawQuery == null ? "" : rawQuery.strip().toLowerCase(Locale.ROOT);
+        if (query.isEmpty()) return List.of();
+        List<AvengerSummonRecipes.Recipe> matches = new ArrayList<>();
+        for (AvengerSummonRecipes.Recipe recipe : DISCOVERED_RECIPES) {
+            String modId = recipe.entityId().split(":", 2)[0];
+            String main = AvengerSummonRecipes.friendlyItemName(recipe.mainItemId());
+            String off = recipe.offhandItemId() == null ? "" : AvengerSummonRecipes.friendlyItemName(recipe.offhandItemId());
+            if (recipe.entityId().toLowerCase(Locale.ROOT).contains(query)
+                    || modId.toLowerCase(Locale.ROOT).contains(query)
+                    || AvengerSummonRecipes.friendlyEntityName(recipe.entityId()).toLowerCase(Locale.ROOT).contains(query)
+                    || main.toLowerCase(Locale.ROOT).contains(query)
+                    || off.toLowerCase(Locale.ROOT).contains(query)) {
+                matches.add(recipe);
+            }
+        }
+        return List.copyOf(matches);
     }
 
     private static void registerPatchouliHooks() {
