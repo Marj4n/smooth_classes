@@ -291,6 +291,7 @@ public final class OriginRuntime {
     private static void tickVampire(ServerPlayerEntity player, OriginState state) {
         // Complete the one-time coffin awakening BEFORE normal sunlight checks.
         VampireGraveSpawn.tickIntro(player, state);
+        VampireLordTeaser.tick(player, state);
         // Blood is the Vampire's nutrition; vanilla HungerManager.update is
         // suppressed by VampireHungerManagerMixin, including vanilla passive
         // food/saturation healing and vanilla starvation. Keep the hidden value
