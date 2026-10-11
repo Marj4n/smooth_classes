@@ -12,9 +12,9 @@ import java.util.Optional;
 /**
  * The twelve base Origins used by Smooth Classes.
  *
- * V1 intentionally keeps every first spawn in the Overworld.  Spawn routing is
- * kept out of the enum so the later per-origin birthplace design can be added
- * without changing player save data.
+ * Base Origins currently start in the Overworld, but Vampire wakes inside the
+ * Forgotten Graveyard crypt. Spawn implementation lives outside this enum,
+ * avoiding player save data changes as more origin birthplaces are introduced.
  */
 public enum OriginType {
     HUMAN("Human", "The Unbroken Will", Items.COMPASS, 1,
@@ -24,7 +24,7 @@ public enum OriginType {
             "Normal", "Awakened Human"),
 
     VAMPIRE("Vampire", "Blood of the Night", Items.FERMENTED_SPIDER_EYE, 3,
-            "Ancient bloodlines awakened when the Holy Grail shattered. Vampires flourish beneath the moon and survive by taking blood from the living.",
+            "Once human, you were buried among the forgotten dead of an old church. The shattered Holy Grail stirred your heart, but its long sleep has left you with no memory of your past. Blood now sustains you, while daylight threatens your second life.",
             new String[]{"Night Vision", "Faster and stronger at night", "Blood feeding restores the body"},
             new String[]{"Only 15 health", "Normal food is rejected", "Direct sunlight is dangerous"},
             "Blood", "Vampire Lord"),
@@ -122,7 +122,7 @@ public enum OriginType {
     public String[] weaknesses() { return weaknesses.clone(); }
     public String diet() { return diet; }
     public String evolution() { return evolution; }
-    public String v1Spawn() { return "Overworld (V1)"; }
+    public String v1Spawn() { return this == VAMPIRE ? "Forgotten Graveyard (Overworld)" : "Overworld (V1)"; }
     public Identifier categoryId() { return SmoothClasses.id("origin_" + id()); }
 
 

@@ -150,7 +150,12 @@ public final class OriginProgressUnlocks {
                     skill.unlock(player);
                     PuffishSkillsIntegration.invalidateRuntimeCache(player);
                     if (origin == OriginType.VAMPIRE && "final".equals(skillId)) {
+                        // Mirror the newly unlocked flag before the immediate state
+                        // packet, so the existing Lord HUD starts alongside the bolts.
+                        OriginState state = OriginRuntime.state(player);
+                        state.flag("vampire.evolution.lord");
                         VampireTransformationEffects.playLordEvolution(player);
+                        VampireLordTeaser.begin(player, state);
                     }
                     // Use Minecraft's built-in achievement toast (task / challenge)
                     // instead of a competing action-bar message.

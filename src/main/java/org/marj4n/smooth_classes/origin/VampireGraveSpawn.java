@@ -18,7 +18,6 @@ import net.minecraft.network.packet.s2c.play.SubtitleS2CPacket;
 import net.minecraft.network.packet.s2c.play.TitleFadeS2CPacket;
 import net.minecraft.network.packet.s2c.play.TitleS2CPacket;
 import net.minecraft.registry.Registries;
-import net.minecraft.registry.tag.BlockTags;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
@@ -27,19 +26,34 @@ import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.structure.StructurePlacementData;
+import net.minecraft.structure.StructureTemplate;
 import net.minecraft.world.Heightmap;
 
 /**
- * One-time Vampire grave: a compact 5x5 (interior), four-block-high sealed crypt.
- * The soil above it is an actual digging puzzle. The only teleport happens before
- * entering the real bed/coffin sleeping pose; waking uses vanilla bed positioning.
+ * Vampire's first awakening inside a 5x5 sealed crypt UNDER ONE OF THE REAL GRAVES
+ * in hauntedchurch.schem. The full above-ground church + graveyard is loaded from
+ * the original schematic converted to a vanilla StructureTemplate resource.
+ *
+ * Surface gravestones and all other church details are identical to the source
+ * schematic (except block IDs remapped for Minecraft 1.20.1); there is no special
+ * mausoleum or centered player tomb. The coffin is below a normal grave, surrounded
+ * by the other graves. Player digs a narrow exit upward through dirt.
  */
 public final class VampireGraveSpawn {
     public static final String AWAKENED_FLAG = "vampire.grave_awakened";
     private static final String INTRO_SLEEPING = "vampire.grave_intro_sleeping";
-    private static final int ROOM_RADIUS = 2;  // 5x5 walkable footprint
-    private static final int SHELL_RADIUS = 3; // 7x7 including surrounding stone walls
+    private static final int ROOM_RADIUS = 2;   // 5x5 interior footprint
+    private static final int SHELL_RADIUS = 3;  // 7x7 including stone walls
     private static final int INTERIOR_HEIGHT = 4;
+
+    private static final Identifier CHURCH_TEMPLATE = new Identifier("smooth_classes", "hauntedchurch_original");
+    // One of the ORIGINAL grave plots (next to an existing ordinary R.I.P. sign).
+    // Anchor is in schematic coordinates, no special surface gravestone is spawned.
+    private static final int GRAVE_X = 22;
+    private static final int GRAVE_Z = 44;
+    private static final int GRAVE_SURFACE_Y = 6;
+    private static final int TERRAIN_BLEND_RADIUS = 10;
 
     private VampireGraveSpawn() { }
 
@@ -54,7 +68,11 @@ public final class VampireGraveSpawn {
         }
 
         cancelIntro(player, state);
-        build(world, center);
+        if (!build(world, center)) {
+            player.sendMessage(Text.literal("The haunted church schematic could not be placed. Check the bundled structure resource.")
+                    .formatted(Formatting.RED), false);
+            return false;
+        }
         state.flag(AWAKENED_FLAG);
 
         // This is the sole intentional position change: from origin selection to coffin.
@@ -118,87 +136,94 @@ public final class VampireGraveSpawn {
         return spawned;
     }
 
+    /**
+     * Choose a local solid land position without rejecting trees, buildings, or hills.
+     * Anything in the imported 54x54 church schematic volume is allowed to be replaced.
+     * Never fail merely because a forest/structure occupies the site. A fallback
+     * guarantees a location even where suitable flat land is not found nearby.
+     */
     private static BlockPos locate(ServerWorld world, BlockPos around) {
-        // Natural, mostly flat ground only: do not carve into buildings or fluids.
-        for (int radius = 16; radius <= 160; radius += 8) {
-            for (int point = 0; point < 12; point++) {
-                double angle = (point / 12.0D) * Math.PI * 2D;
+        BlockPos fallback = null;
+        for (int radius = 12; radius <= 140; radius += 16) {
+            for (int i = 0; i < 16; i++) {
+                double angle = (i / 16.0D) * Math.PI * 2.0D;
                 int x = around.getX() + (int) Math.round(Math.cos(angle) * radius);
                 int z = around.getZ() + (int) Math.round(Math.sin(angle) * radius);
                 int top = world.getTopY(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, x, z);
-                BlockPos center = new BlockPos(x, top - 8, z);
-                if (safeSite(world, center, top)) return center;
-            }
-        }
-        return null;
-    }
-
-    private static boolean safeSite(ServerWorld world, BlockPos center, int top) {
-        if (top < 65 || top > 180 || !world.getWorldBorder().contains(center)) return false;
-        for (int dx = -SHELL_RADIUS; dx <= SHELL_RADIUS; dx++) {
-            for (int dz = -SHELL_RADIUS; dz <= SHELL_RADIUS; dz++) {
-                int x = center.getX() + dx, z = center.getZ() + dz;
-                int localTop = world.getTopY(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, x, z);
-                if (Math.abs(localTop - top) > 1) return false;
-                BlockState surface = world.getBlockState(new BlockPos(x, localTop - 1, z));
-                if (!isNaturalSurface(surface)) return false;
-                for (int y = center.getY(); y < top; y++) {
-                    BlockPos p = new BlockPos(x, y, z);
-                    BlockState state = world.getBlockState(p);
-                    if (world.getBlockEntity(p) != null || !state.getFluidState().isEmpty()) return false;
-                    if (y < localTop - 1 && (state.isAir() || !state.isOpaqueFullCube(world, p))) return false;
-                }
-                for (int above = top; above <= top + 3; above++) {
-                    BlockPos p = new BlockPos(x, above, z);
-                    BlockState state = world.getBlockState(p);
-                    if (world.getBlockEntity(p) != null || !state.getFluidState().isEmpty()) return false;
-                    if (!state.isAir() && !state.isReplaceable()) return false;
+                BlockPos surface = new BlockPos(x, top - 1, z);
+                if (top < 58 || top > 205 || !world.getWorldBorder().contains(surface)) continue;
+                BlockPos candidate = new BlockPos(x, top - 1 - GRAVE_SURFACE_Y, z);
+                if (fallback == null) fallback = candidate;
+                BlockState block = world.getBlockState(surface);
+                if (block.getFluidState().isEmpty() && block.isSolidBlock(world, surface)) {
+                    return candidate;
                 }
             }
         }
-        return true;
-    }
+        if (fallback != null) return fallback;
 
-    private static boolean isNaturalSurface(BlockState state) {
-        return state.isIn(BlockTags.DIRT) || state.isOf(Blocks.GRASS_BLOCK)
-                || state.isOf(Blocks.SAND) || state.isOf(Blocks.RED_SAND)
-                || state.isOf(Blocks.GRAVEL) || state.isOf(Blocks.STONE)
-                || state.isOf(Blocks.SNOW_BLOCK) || state.isOf(Blocks.MUD);
+        // Extreme terrain or island world: construct a platform from the exact
+        // schematic terrain itself, instead of refusing to spawn Vampire.
+        int top = world.getTopY(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, around.getX(), around.getZ());
+        int surfaceY = Math.max(world.getBottomY() + 10, Math.min(205, top - 1));
+        return new BlockPos(around.getX(), surfaceY - GRAVE_SURFACE_Y, around.getZ());
     }
 
     private static BlockPos coffinHead(BlockPos center) {
         return center.add(-1, 1, 1);
     }
 
-    private static void build(ServerWorld world, BlockPos center) {
-        // dy=0 floor, dy=1..4 open room, dy=5/6 dirt ceiling, dy=7 natural grave level.
-        // Only the 5x5 central surface is dressed; surrounding terrain stays natural.
+    /**
+     * Place the SOURCE schematic exactly as a vanilla template, then excavate only
+     * below the designated ordinary grave. The surface church and graveyard remain
+     * untouched, including the authentic neighboring grave markers.
+     *
+     * After placement, feather the surrounding terrain with an irregular natural
+     * skirt so the build does not look like a perfectly machine-cut rectangular island.
+     */
+    private static boolean build(ServerWorld world, BlockPos center) {
+        StructureTemplate template = world.getStructureTemplateManager().getTemplateOrBlank(CHURCH_TEMPLATE);
+        if (template.getSize().getX() != 54 || template.getSize().getZ() != 54) return false;
+
+        BlockPos templateOrigin = center.add(-GRAVE_X, 0, -GRAVE_Z);
+        StructurePlacementData placement = new StructurePlacementData()
+                .setIgnoreEntities(true)
+                .setPlaceFluids(false)
+                // Do not auto-recalculate 200 source block states on the 87k-cell
+                // import: preserves the source's stairs/fence/wall shapes and
+                // minimizes one-time server-tick spikes.
+                .setUpdateNeighbors(false);
+        if (!template.place(world, templateOrigin, templateOrigin, placement, world.getRandom(), Block.NOTIFY_LISTENERS)) {
+            return false;
+        }
+
+        blendTerrain(world, templateOrigin, template.getSize().getX(), template.getSize().getZ());
+
+        // y=0 is the floor, y=1..4 is the interior, y=5..6 is DIGGABLE
+        // soil, y=7+ is the UNMODIFIED original graveyard from hauntedchurch.schem.
+        // Actual interior: exactly 5x5 and four blocks high.
         for (int dx = -SHELL_RADIUS; dx <= SHELL_RADIUS; dx++) {
             for (int dz = -SHELL_RADIUS; dz <= SHELL_RADIUS; dz++) {
-                for (int dy = 0; dy <= 7; dy++) {
-                    if (dy == 7 && (Math.abs(dx) > ROOM_RADIUS || Math.abs(dz) > ROOM_RADIUS)) continue;
-                    BlockPos p = center.add(dx, dy, dz);
+                for (int dy = 0; dy <= 6; dy++) {
+                    BlockPos pos = center.add(dx, dy, dz);
                     boolean interior = Math.abs(dx) <= ROOM_RADIUS && Math.abs(dz) <= ROOM_RADIUS;
                     BlockState replacement;
                     if (dy == 0) {
                         replacement = floorMaterial(dx, dz);
                     } else if (dy <= INTERIOR_HEIGHT) {
                         replacement = interior ? Blocks.AIR.getDefaultState() : wallMaterial(dx, dy, dz);
-                    } else if (dy == 5) {
-                        // The diggable cap starts directly above the four-high room.
-                        replacement = interior && (dx + dz) % 4 != 0
-                                ? Blocks.ROOTED_DIRT.getDefaultState() : Blocks.DIRT.getDefaultState();
-                    } else if (dy == 6) {
-                        replacement = Blocks.DIRT.getDefaultState();
                     } else {
-                        replacement = surfaceMaterial(dx, dz);
+                        // Two layers of natural, shovel-diggable dirt, including
+                        // the crypt cap. Never replace the nisan above at y >= 7.
+                        replacement = ((dx + dz + dy) & 3) == 0
+                                ? Blocks.ROOTED_DIRT.getDefaultState() : Blocks.DIRT.getDefaultState();
                     }
-                    world.setBlockState(p, replacement, Block.NOTIFY_ALL);
+                    world.setBlockState(pos, replacement, Block.NOTIFY_ALL);
                 }
             }
         }
 
-        // Compact ruined archwork: corner pedestals and old iron reinforcement.
+        // Compact floor pedestals, wall bars and eerie low light unchanged.
         for (int x : new int[]{-2, 2}) {
             for (int z : new int[]{-2, 2}) {
                 world.setBlockState(center.add(x, 1, z),
@@ -208,12 +233,10 @@ public final class VampireGraveSpawn {
             }
         }
         for (int z : new int[]{-1, 1}) {
-            world.setBlockState(center.add(-3, 2, z),
-                    Blocks.IRON_BARS.getDefaultState(), Block.NOTIFY_ALL);
+            world.setBlockState(center.add(-3, 2, z), Blocks.IRON_BARS.getDefaultState(), Block.NOTIFY_ALL);
         }
-        // Two low-light wall-side lamps (kept away from the coffin and excavation path).
-        for (int[] pos : new int[][]{{-2, -1}, {2, 1}}) {
-            BlockPos chain = center.add(pos[0], 4, pos[1]);
+        for (int[] lamp : new int[][]{{-2, -1}, {2, 1}}) {
+            BlockPos chain = center.add(lamp[0], 4, lamp[1]);
             world.setBlockState(chain, Blocks.CHAIN.getDefaultState(), Block.NOTIFY_ALL);
             world.setBlockState(chain.down(), Blocks.SOUL_LANTERN.getDefaultState()
                     .with(LanternBlock.HANGING, true), Block.NOTIFY_ALL);
@@ -221,7 +244,6 @@ public final class VampireGraveSpawn {
         world.setBlockState(center.add(2, 3, -2), Blocks.COBWEB.getDefaultState(), Block.NOTIFY_ALL);
         world.setBlockState(center.add(-2, 3, 2), Blocks.COBWEB.getDefaultState(), Block.NOTIFY_ALL);
 
-        // Subtle pedestal in the floor, not a raised obstruction to waking.
         for (int x = -2; x <= 0; x++) {
             for (int z = 0; z <= 1; z++) {
                 world.setBlockState(center.add(x, 0, z),
@@ -230,7 +252,8 @@ public final class VampireGraveSpawn {
             }
         }
 
-        // The real, sleep-capable coffin. The long axis points south.
+        // Existing sleep-capable Bewitchment coffin or fallback black bed.
+        // One placement, one natural sleep / wake: no post-wake teleport.
         Block coffin = coffinOrBed();
         BlockPos foot = center.add(-1, 1, 0);
         BlockPos head = coffinHead(center);
@@ -239,7 +262,7 @@ public final class VampireGraveSpawn {
         world.setBlockState(head, bed.with(BedBlock.PART, BedPart.HEAD), bedFlags);
         world.setBlockState(foot, bed.with(BedBlock.PART, BedPart.FOOT), bedFlags);
 
-        // Directly next to the coffin's foot, not on the opposite crypt wall.
+        // The starting journal and iron shovel are beside the coffin, as before.
         BlockPos chestPos = center.add(0, 1, 0);
         world.setBlockState(chestPos, Blocks.CHEST.getDefaultState()
                 .with(ChestBlock.FACING, Direction.SOUTH), Block.NOTIFY_ALL);
@@ -249,34 +272,128 @@ public final class VampireGraveSpawn {
             chest.setStack(1, new ItemStack(Items.IRON_SHOVEL));
             chest.markDirty();
         }
+        return true;
+    }
 
-        // No ladder, trapdoor, staircase or prepared escape tunnel. The player
-        // digs through rooted dirt and topsoil above the central aisle.
+    private static void blendTerrain(ServerWorld world, BlockPos templateOrigin, int sizeX, int sizeZ) {
+        int minX = templateOrigin.getX();
+        int maxX = minX + sizeX - 1;
+        int minZ = templateOrigin.getZ();
+        int maxZ = minZ + sizeZ - 1;
+        int plateauY = templateOrigin.getY() + GRAVE_SURFACE_Y;
+        int seaLevel = world.getSeaLevel();
 
-        // Small 5x5 surface grave: uneven earth mound, cracked headstone, worn
-        // stone border and two quiet blue lamps. No surrounding 9x9 build.
-        for (int x = -1; x <= 0; x++) {
-            for (int z = -1; z <= 1; z++) {
-                world.setBlockState(center.add(x, 7, z), Blocks.PODZOL.getDefaultState(), Block.NOTIFY_ALL);
-                world.setBlockState(center.add(x, 8, z),
-                        (x + z) % 3 == 0 ? Blocks.ROOTED_DIRT.getDefaultState()
-                                : Blocks.COARSE_DIRT.getDefaultState(), Block.NOTIFY_ALL);
-            }
-        }
-        for (int z = -1; z <= 1; z++) {
-            for (int x : new int[]{-2, 1}) {
-                if (z != 0 || x == -2) {
-                    world.setBlockState(center.add(x, 8, z),
-                            Blocks.MOSSY_COBBLESTONE_SLAB.getDefaultState(), Block.NOTIFY_ALL);
+        for (int x = minX - TERRAIN_BLEND_RADIUS - 1; x <= maxX + TERRAIN_BLEND_RADIUS + 1; x++) {
+            for (int z = minZ - TERRAIN_BLEND_RADIUS - 1; z <= maxZ + TERRAIN_BLEND_RADIUS + 1; z++) {
+                int dx = x < minX ? (minX - x) : (x > maxX ? (x - maxX) : 0);
+                int dz = z < minZ ? (minZ - z) : (z > maxZ ? (z - maxZ) : 0);
+                if (dx == 0 && dz == 0) continue;
+
+                double noise = terrainNoise(x, z);
+                int localRadius = Math.max(5, TERRAIN_BLEND_RADIUS + ((columnHash(x, z) >>> 4) & 3) - 1);
+                double distance = Math.sqrt(dx * dx + dz * dz) + noise * 0.85D;
+                if (distance > localRadius + 0.75D) continue;
+
+                int oceanFloorY = world.getTopY(Heightmap.Type.OCEAN_FLOOR, x, z) - 1;
+                int motionTopY = world.getTopY(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, x, z) - 1;
+                int naturalTopY = Math.max(oceanFloorY, motionTopY);
+                if (naturalTopY < world.getBottomY() + 1) naturalTopY = world.getBottomY() + 1;
+
+                double t = Math.max(0.0D, Math.min(1.0D, distance / (double) localRadius));
+                int rimY = plateauY - (noise > 0.4D ? 0 : 1);
+                int targetSurfaceY = (int) Math.round(lerp(rimY, naturalTopY, t));
+                targetSurfaceY = Math.max(Math.min(targetSurfaceY, plateauY), naturalTopY);
+
+                int foundationStartY = Math.max(world.getBottomY() + 1, Math.min(oceanFloorY + 1, targetSurfaceY));
+                if (foundationStartY > targetSurfaceY) continue;
+
+                BlockState topState = chooseBlendTop(world, x, z, targetSurfaceY, seaLevel);
+                BlockState fillState = chooseBlendFill(world, x, z, targetSurfaceY, seaLevel);
+
+                for (int y = foundationStartY; y <= targetSurfaceY; y++) {
+                    BlockPos pos = new BlockPos(x, y, z);
+                    world.setBlockState(pos, y == targetSurfaceY ? topState : fillState, Block.NOTIFY_LISTENERS);
+                }
+
+                // Prevent a visibly straight man-made face by adding a little toe of
+                // gravel/coarse dirt at the waterline / coastline on near-edge columns.
+                if (distance < 2.35D) {
+                    BlockPos toe = new BlockPos(x, Math.max(world.getBottomY() + 1, targetSurfaceY - 1), z);
+                    if (world.getBlockState(toe.down()).isAir()) {
+                        world.setBlockState(toe.down(), fillState, Block.NOTIFY_LISTENERS);
+                    }
                 }
             }
         }
-        // Weathered north headstone fits entirely within the 5x5 surface.
-        world.setBlockState(center.add(-1, 8, -2), Blocks.MOSSY_STONE_BRICKS.getDefaultState(), Block.NOTIFY_ALL);
-        world.setBlockState(center.add(-1, 9, -2), Blocks.CHISELED_STONE_BRICKS.getDefaultState(), Block.NOTIFY_ALL);
-        world.setBlockState(center.add(-1, 10, -2), Blocks.STONE_BRICK_SLAB.getDefaultState(), Block.NOTIFY_ALL);
-        world.setBlockState(center.add(1, 8, -2), Blocks.SOUL_LANTERN.getDefaultState(), Block.NOTIFY_ALL);
-        world.setBlockState(center.add(1, 8, 2), Blocks.COBBLESTONE_SLAB.getDefaultState(), Block.NOTIFY_ALL);
+    }
+
+    private static BlockState chooseBlendTop(ServerWorld world, int x, int z, int y, int seaLevel) {
+        BlockState sample = sampleSurface(world, x, z);
+        if (sample.isOf(Blocks.RED_SAND) || sample.isOf(Blocks.RED_SANDSTONE)) {
+            return Blocks.RED_SAND.getDefaultState();
+        }
+        if (sample.isOf(Blocks.SAND) || sample.isOf(Blocks.SANDSTONE) || sample.isOf(Blocks.SMOOTH_SANDSTONE)) {
+            return Blocks.SAND.getDefaultState();
+        }
+        if (sample.isOf(Blocks.GRAVEL)) {
+            return Blocks.GRAVEL.getDefaultState();
+        }
+        if (sample.isOf(Blocks.MUD) || sample.isOf(Blocks.MUDDY_MANGROVE_ROOTS)) {
+            return Blocks.MUD.getDefaultState();
+        }
+        if (y <= seaLevel - 2) {
+            return ((x + z) & 1) == 0 ? Blocks.GRAVEL.getDefaultState() : Blocks.SAND.getDefaultState();
+        }
+        if (y <= seaLevel) {
+            int hash = Math.floorMod(x * 17 + z * 31, 5);
+            if (hash == 0) return Blocks.GRAVEL.getDefaultState();
+            if (hash < 3) return Blocks.COARSE_DIRT.getDefaultState();
+            return Blocks.ROOTED_DIRT.getDefaultState();
+        }
+        return surfaceMaterial(x, z);
+    }
+
+    private static BlockState chooseBlendFill(ServerWorld world, int x, int z, int y, int seaLevel) {
+        BlockState sample = sampleSurface(world, x, z);
+        if (sample.isOf(Blocks.RED_SAND) || sample.isOf(Blocks.RED_SANDSTONE)) {
+            return Blocks.RED_SANDSTONE.getDefaultState();
+        }
+        if (sample.isOf(Blocks.SAND) || sample.isOf(Blocks.SANDSTONE) || sample.isOf(Blocks.SMOOTH_SANDSTONE)) {
+            return Blocks.SANDSTONE.getDefaultState();
+        }
+        if (sample.isOf(Blocks.GRAVEL)) {
+            return Blocks.STONE.getDefaultState();
+        }
+        if (y <= seaLevel - 3) {
+            return ((x ^ z) & 1) == 0 ? Blocks.STONE.getDefaultState() : Blocks.GRAVEL.getDefaultState();
+        }
+        int hash = Math.floorMod(x * 29 + z * 11 + y * 7, 9);
+        if (hash < 2) return Blocks.STONE.getDefaultState();
+        if (hash < 4) return Blocks.GRAVEL.getDefaultState();
+        if (hash == 4) return Blocks.ROOTED_DIRT.getDefaultState();
+        return Blocks.DIRT.getDefaultState();
+    }
+
+    private static BlockState sampleSurface(ServerWorld world, int x, int z) {
+        int y = world.getTopY(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, x, z) - 1;
+        if (y < world.getBottomY()) y = world.getBottomY();
+        return world.getBlockState(new BlockPos(x, y, z));
+    }
+
+    private static int columnHash(int x, int z) {
+        int h = x * 73428767 ^ z * 91293199;
+        h ^= (h >>> 13);
+        h *= 1274126177;
+        return h;
+    }
+
+    private static double terrainNoise(int x, int z) {
+        int h = columnHash(x, z);
+        return ((h >>> 8) & 1023) / 511.5D - 1.0D;
+    }
+
+    private static double lerp(double a, double b, double t) {
+        return a + (b - a) * t;
     }
 
     private static BlockState floorMaterial(int x, int z) {
@@ -312,6 +429,7 @@ public final class VampireGraveSpawn {
         return Blocks.BLACK_BED;
     }
 
+    /** The last gravedigger's testimony; its secrets are discovered after waking. */
     private static ItemStack loreBook() {
         ItemStack book = new ItemStack(Items.WRITTEN_BOOK);
         NbtCompound nbt = book.getOrCreateNbt();
@@ -319,13 +437,28 @@ public final class VampireGraveSpawn {
         nbt.putString("author", "The Last Gravedigger");
         nbt.putInt("generation", 0);
         NbtList pages = new NbtList();
-        pages.add(net.minecraft.nbt.NbtString.of(Text.Serializer.toJson(Text.literal(
-                "To the one who rises from this coffin...\n\nYou were not buried because you died.\n\nYou were buried because they feared what you would become."))));
-        pages.add(net.minecraft.nbt.NbtString.of(Text.Serializer.toJson(Text.literal(
-                "The stones remember your name, though the living have forgotten it.\n\nThe last light of day cannot reach you here. Wait for the night to answer."))));
-        pages.add(net.minecraft.nbt.NbtString.of(Text.Serializer.toJson(Text.literal(
-                "A shovel rests in the chest beside you. Above the roof lies only soil and an old grave. Dig your way to freedom.\n\nThe dead do not always stay dead."))));
+        addLorePage(pages, "If you are reading this, death has failed to keep you. "
+                + "You were human once. Neither royalty nor legend, only another soul laid to rest beneath this church.");
+        addLorePage(pages, "Your name has faded from our records. Decades passed, perhaps centuries. "
+                + "The living forgot you, as they eventually forget us all. Your grave became one among hundreds.");
+        addLorePage(pages, "Then the Holy Grail shattered. Something ancient seeped into the earth, "
+                + "carrying a hunger older than mankind. Most graves remained silent. Yours did not.");
+        addLorePage(pages, "The priests heard a heartbeat beneath your grave. They called it a curse, "
+                + "built a stone chamber around your coffin, and bound your restless heart to silence.");
+        addLorePage(pages, "I was ordered to leave you buried. Instead, I placed this journal "
+                + "and an iron shovel beside your coffin. If a human soul survives within you, it deserves a chance.");
+        addLorePage(pages, "The priests believed their bell and prayers could keep you asleep forever. "
+                + "I do not know why the broken Grail chose your grave. I only know that you were once one of us.");
+        addLorePage(pages, "Take the shovel. Break through the earth above you. "
+                + "The sun may reject you; blood may sustain you. But what you become now is yours to decide.\n\n"
+                + "- The Last Gravedigger");
         nbt.put("pages", pages);
         return book;
     }
+
+    private static void addLorePage(NbtList pages, String text) {
+        pages.add(net.minecraft.nbt.NbtString.of(
+                Text.Serializer.toJson(Text.literal(text))));
+    }
+
 }

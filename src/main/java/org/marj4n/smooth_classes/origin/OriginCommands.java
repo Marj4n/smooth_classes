@@ -92,6 +92,20 @@ public final class OriginCommands {
                                             ctx.getSource().sendError(Text.literal("Choose Vampire and stand near natural Overworld terrain to test the grave."));
                                             return 0;
                                         })))
+                                .then(CommandManager.literal("lord")
+                                        .then(CommandManager.literal("teaser")
+                                                .then(CommandManager.literal("test")
+                                                        .requires(source -> source.hasPermissionLevel(2))
+                                                        .executes(ctx -> {
+                                                            ServerPlayerEntity player = ctx.getSource().getPlayerOrThrow();
+                                                            if (!VampireLordTeaser.replayForTest(player)) {
+                                                                ctx.getSource().sendError(Text.literal("Choose Vampire first."));
+                                                                return 0;
+                                                            }
+                                                            ctx.getSource().sendFeedback(() -> Text.literal(
+                                                                    "[Origin] Seven Thunders preview started. This does not unlock Vampire Lord."), false);
+                                                            return 1;
+                                                        }))))
                                 .then(CommandManager.literal("clear")
                                         .requires(source -> source.hasPermissionLevel(2))
                                         .executes(ctx -> {
