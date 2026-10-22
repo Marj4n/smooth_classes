@@ -32,6 +32,9 @@ public final class OriginCommands {
                                             OriginType type = state.origin();
                                             if (type == null || !type.isV1Playable()) {
                                                 ctx.getSource().sendFeedback(() -> Text.literal("No Origin selected."), false);
+                                            } else if (type == OriginType.HUMAN) {
+                                                ctx.getSource().sendFeedback(() -> Text.literal(
+                                                        "Origin=Human (vanilla; Class skills only)"), false);
                                             } else {
                                                 ctx.getSource().sendFeedback(() -> Text.literal(
                                                         "Origin=" + type.displayName()
@@ -125,6 +128,10 @@ public final class OriginCommands {
             source.sendError(Text.literal("Choose an Origin before using Origin levels."));
             return 0;
         }
+        if (origin == OriginType.HUMAN) {
+            source.sendFeedback(() -> Text.literal("Human has no Origin skill tree or milestones."), false);
+            return 0;
+        }
         int level = OriginDebugLevels.level(player);
         int max = OriginDebugLevels.maxLevel(origin);
         source.sendFeedback(() -> Text.literal("[Origin] " + origin.displayName() +
@@ -136,8 +143,8 @@ public final class OriginCommands {
             throws com.mojang.brigadier.exceptions.CommandSyntaxException {
         ServerPlayerEntity player = source.getPlayerOrThrow();
         OriginType origin = OriginRuntime.state(player).origin();
-        if (origin == null || !origin.isV1Playable()) {
-            source.sendError(Text.literal("Choose a playable Origin first (Human, Vampire, Mermaid, Slime)."));
+        if (origin != OriginType.VAMPIRE) {
+            source.sendError(Text.literal("Only Vampire has Origin evolution levels. Human has none."));
             return 0;
         }
         int current = OriginDebugLevels.level(player);

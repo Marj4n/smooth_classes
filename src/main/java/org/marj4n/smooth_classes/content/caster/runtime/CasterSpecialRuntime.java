@@ -48,8 +48,6 @@ public final class CasterSpecialRuntime {
         SELECTED.put(player.getUuid(), index);
         apply(player, index);
         attunementFx(player, index);
-        player.sendMessage(Text.literal("Attunement: " + SpellSchoolSelection.name(index))
-                .formatted(SpellSchoolSelection.color(index)), true);
         return ExecutionResult.success(1, SpellSchoolSelection.name(index) + " Attunement: +15% selected school, +8% other schools.");
     }
 

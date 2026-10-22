@@ -1,8 +1,0 @@
-{
-  "replace": false,
-  "order": 120,
-  "slots": [
-    "homunculus_head_patch"
-  ],
-  "icon": "accessories:gui/group/head"
-}

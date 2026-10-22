@@ -63,6 +63,7 @@ public final class ClassSpecialDispatcher {
 
     public static ExecutionResult select(ServerPlayerEntity player, int selection) {
         if (org.marj4n.smooth_classes.origin.VampireBatAbilityLock.isLocked(player)) return ExecutionResult.failure("Return from Bat Form to use class abilities.");
+        if (AbilityRuntime.isClass(player, AvengerClass.ID)) return AvengerReworkRuntime.selectSummonOrder(player, selection);
         if (AbilityRuntime.isClass(player, ArcherClass.ID)) return ArcherSpecialRuntime.select(player, selection);
         if (AbilityRuntime.isClass(player, CasterClass.ID)) return CasterSpecialRuntime.select(player, selection);
         if (AbilityRuntime.isClass(player, ForeignerClass.ID)) return ForeignerSpecialRuntime.select(player, selection);

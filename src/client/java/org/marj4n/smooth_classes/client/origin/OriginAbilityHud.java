@@ -14,7 +14,7 @@ public final class OriginAbilityHud {
         OriginType origin = OriginType.byId(OriginClientState.originId).orElse(null);
         if (origin == null) return new Slot("No Origin", Items.BARRIER);
         Slot[] slots = switch (origin) {
-            case HUMAN -> new Slot[]{s("Adaptation", Items.COMPASS), s("Second Wind", Items.RABBIT_FOOT), s("Awaken", Items.NETHER_STAR)};
+            case HUMAN -> new Slot[]{s("Class Only", Items.BARRIER), s("Class Only", Items.BARRIER), s("Class Only", Items.BARRIER)};
             case VAMPIRE -> new Slot[]{s("Bat Form", Items.PHANTOM_MEMBRANE), s("Man-Bat", Items.FERMENTED_SPIDER_EYE), s("Blood Sense", Items.SPIDER_EYE)};
             case WEREWOLF -> new Slot[]{s("Wolf / Lycan", Items.RABBIT_FOOT), s("Blood Scent", Items.SPIDER_EYE), s("Howl", Items.GOAT_HORN)};
             case MERMAID -> new Slot[]{s("Siren Song", Items.NAUTILUS_SHELL), s("Tidal Rush", Items.HEART_OF_THE_SEA), s("Royal Tide", Items.TRIDENT)};

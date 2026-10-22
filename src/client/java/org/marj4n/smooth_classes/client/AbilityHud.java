@@ -23,7 +23,7 @@ public final class AbilityHud {
         int x = (client.getWindow().getScaledWidth() / 2) + 86;
         int y = client.getWindow().getScaledHeight() - 29;
 
-        if (AbilityPageState.isOriginPage() && !OriginClientState.originId.isBlank()) {
+        if (AbilityPageState.isOriginPage() && "vampire".equals(OriginClientState.originId)) {
             renderPageToggle(context, client, x + 81, y);
             renderOriginSlot(context, client, x, y, 0, SmoothClassesClient.signatureKey());
             renderOriginSlot(context, client, x + 22, y, 1, SmoothClassesClient.ascendancyKey());
@@ -31,7 +31,9 @@ public final class AbilityHud {
             return;
         }
 
-        renderPageToggle(context, client, x + 81, y);
+        if ("vampire".equals(OriginClientState.originId)) {
+            renderPageToggle(context, client, x + 81, y);
+        }
         renderSlot(context, client, x, y, AbilityHudState.signatureAbility, AbilityHudState.signatureIcon(),
                 AbilityHudState.signatureCooldownMs, AbilityHudState.signatureRemainingMs(), SmoothClassesClient.signatureKey());
         renderSlot(context, client, x + 22, y, AbilityHudState.ascendancyAbility, AbilityHudState.ascendancyIcon(),

@@ -60,7 +60,11 @@ public final class SmoothClassesClient implements ClientModInitializer {
     private static int arcaneHoldTicks;
     private static boolean riderFlightWasMounted;
     private static boolean shadowWasDown;
-    private static boolean deathListComboWasDown;
+    // Short H tap keeps its context-sensitive summon/recall action. Hold for wheel.
+    private static boolean avengerHWasDown;
+    private static int avengerHHoldTicks;
+    private static boolean avengerRadialOpened;
+    private static final int AVENGER_RADIAL_HOLD_TICKS = 6;
     private static boolean classSpecialHoldSent;
     private static boolean classSpecialWasDown;
     private static int classSpecialHoldTicks;
@@ -82,6 +86,8 @@ public final class SmoothClassesClient implements ClientModInitializer {
     public void onInitializeClient() {
         org.marj4n.smooth_classes.client.effects.AvengerSoulAnimationClient.register();
         DeathListBookClient.register();
+        AvengerSummonHoverGlow.register();
+        org.marj4n.smooth_classes.client.effects.AvengerAttackMarkClient.register();
         DeathListRecipeSearchClient.register();
         ModelRegistry.registerModels();
         net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap.INSTANCE.putBlock(
@@ -110,6 +116,7 @@ public final class SmoothClassesClient implements ClientModInitializer {
         // player feature-renderer hooks, which some animation/culling mods can replace.
         WorldRenderEvents.AFTER_ENTITIES.register(context -> {
             ShadowAimClient.render(context);
+            org.marj4n.smooth_classes.client.effects.AvengerAttackMarkClient.render(context);
             var client = net.minecraft.client.MinecraftClient.getInstance();
             if (client.world == null || context.matrixStack() == null || context.consumers() == null) return;
 
@@ -194,7 +201,7 @@ public final class SmoothClassesClient implements ClientModInitializer {
                         if (client.player != null && client.player.getUuid().equals(playerId)) {
                             org.marj4n.smooth_classes.client.origin.OriginClientState.sync(
                                     origin, blood, bloodCapacity, sun, wetness, wing, instability, soul, bone, carbon, living, progress, flags);
-                            if (origin == null || origin.isBlank()) AbilityPageState.setClassPage();
+                            if (origin == null || !"vampire".equals(origin)) AbilityPageState.setClassPage();
                             else if ("vampire".equals(origin) && flags.contains("vampire.form.bat"))
                                 AbilityPageState.setOriginPage(); // Never strand the player behind a locked Class page.
                         }
@@ -272,7 +279,9 @@ public final class SmoothClassesClient implements ClientModInitializer {
                     org.marj4n.smooth_classes.client.origin.OriginClientState.reset();
                     AbilityPageState.reset();
                     ShadowAimClient.reset();
-                    deathListComboWasDown = false;
+                    avengerHWasDown = false;
+                    avengerHHoldTicks = 0;
+                    avengerRadialOpened = false;
                     classSpecialHoldSent = false;
                     classSpecialWasDown = false;
                     classSpecialHoldTicks = 0;
@@ -302,35 +311,23 @@ public final class SmoothClassesClient implements ClientModInitializer {
                     AbilityPageState.setOriginPage(); // Dismissal key must remain available.
                     continue;
                 }
-                if (!org.marj4n.smooth_classes.client.origin.OriginClientState.originId.isBlank()) {
+                if ("vampire".equals(org.marj4n.smooth_classes.client.origin.OriginClientState.originId)) {
                     AbilityPageState.toggle();
                     if (client.player != null) {
                         client.player.sendMessage(Text.literal(AbilityPageState.isOriginPage()
                                 ? "Ability Page: Origin" : "Ability Page: Class"), true);
                     }
+                } else {
+                    // Human has no Origin abilities. Z must never hide Class skills.
+                    AbilityPageState.setClassPage();
                 }
             }
             boolean classPage = AbilityPageState.isClassPage();
             boolean tinyBatLocked = org.marj4n.smooth_classes.client.origin.OriginClientState.hasFlag("vampire.form.bat")
                     && "vampire".equals(org.marj4n.smooth_classes.client.origin.OriginClientState.originId);
 
-            // Ctrl+H is a fixed Death List shortcut, independent of the shared H keybind
-            // and independent of HUD sync. The server remains authoritative and ignores
-            // the request when the player is not an Avenger. This avoids losing Ctrl+H
-            // when another mod/keybind owns H or the Avenger HUD state has not synced yet.
-            boolean deathListComboDown = false;
-            if (classPage && client.player != null && client.getNetworkHandler() != null
-                    && client.currentScreen == null && client.isWindowFocused()) {
-                long window = client.getWindow().getHandle();
-                boolean control = InputUtil.isKeyPressed(window, GLFW.GLFW_KEY_LEFT_CONTROL)
-                        || InputUtil.isKeyPressed(window, GLFW.GLFW_KEY_RIGHT_CONTROL);
-                deathListComboDown = control && InputUtil.isKeyPressed(window, GLFW.GLFW_KEY_H);
-                if (deathListComboDown && !deathListComboWasDown
-                        && ClientPlayNetworking.canSend(SmoothClassesNetworking.OPEN_DEATH_LIST)) {
-                    ClientPlayNetworking.send(SmoothClassesNetworking.OPEN_DEATH_LIST, PacketByteBufs.empty());
-                }
-            }
-            deathListComboWasDown = deathListComboDown;
+            // Avenger controls use the normal H key only: tap to summon/recall,
+            // hold to open the command wheel (including the Death List).
             boolean preparationSelected = classPage && !tinyBatLocked && "preparation".equals(AbilityHudState.signatureAbility);
             boolean shadowDown = preparationSelected && client.player != null && client.getNetworkHandler() != null
                     && client.currentScreen == null && client.isWindowFocused() && signature.isPressed();
@@ -368,6 +365,35 @@ public final class SmoothClassesClient implements ClientModInitializer {
                 sendBladeHold(true); bladeHoldSent = true; bladeHoldTicks = 0;
             } else if (!bladeDown && bladeHoldSent) {
                 sendBladeHold(false); bladeHoldSent = false; bladeHoldTicks = 0;
+            }
+
+            // Avenger: tap H acts on crosshair/ingredients, hold H for radial orders.
+            // A hold never sends the default cast, so hovering a summon cannot
+            // accidentally recall it while the player is choosing Guard.
+            boolean avengerSelected = classPage && !tinyBatLocked
+                    && "summoning_ritual".equals(AbilityHudState.classSpecialId)
+                    && AbilityHudState.classSpecialVisible;
+            boolean avengerDown = avengerSelected && client.player != null
+                    && client.getNetworkHandler() != null && client.isWindowFocused()
+                    && (client.currentScreen == null || client.currentScreen instanceof ClassSpecialRadialScreen)
+                    && classSpecial.isPressed();
+            if (avengerDown && !avengerHWasDown) {
+                avengerHHoldTicks = 0;
+                avengerRadialOpened = false;
+            }
+            if (avengerDown && !avengerRadialOpened && client.currentScreen == null
+                    && ++avengerHHoldTicks >= AVENGER_RADIAL_HOLD_TICKS) {
+                avengerRadialOpened = true;
+                client.setScreen(new ClassSpecialRadialScreen("summoning_ritual", -1));
+            }
+            if (!avengerDown && avengerHWasDown && !avengerRadialOpened
+                    && client.currentScreen == null) {
+                sendClassSpecial(false);
+            }
+            avengerHWasDown = avengerDown;
+            if (!avengerDown) {
+                avengerHHoldTicks = 0;
+                avengerRadialOpened = false;
             }
 
             // Berserker H is a real hold-to-charge class special, matching the
@@ -410,6 +436,7 @@ public final class SmoothClassesClient implements ClientModInitializer {
                 if (tinyBatLocked) continue;
                 if (client.player == null) continue;
                 if ("crimson_revenant".equals(AbilityHudState.classSpecialId)) continue;
+                if ("summoning_ritual".equals(AbilityHudState.classSpecialId)) continue;
                 if (!AbilityHudState.classSpecialVisible) continue;
 
                 // Treasury H has two context-sensitive actions:
@@ -540,6 +567,12 @@ public final class SmoothClassesClient implements ClientModInitializer {
         ClientPlayNetworking.send(SmoothClassesNetworking.CLASS_SPECIAL, packet);
     }
 
+    public static void requestDeathList() {
+        if (net.minecraft.client.MinecraftClient.getInstance().getNetworkHandler() == null) return;
+        if (ClientPlayNetworking.canSend(SmoothClassesNetworking.OPEN_DEATH_LIST))
+            ClientPlayNetworking.send(SmoothClassesNetworking.OPEN_DEATH_LIST, PacketByteBufs.empty());
+    }
+
     public static void sendClassSpecialSelection(int selection) {
         if (net.minecraft.client.MinecraftClient.getInstance().getNetworkHandler() == null) return;
         if (!ClientPlayNetworking.canSend(SmoothClassesNetworking.CLASS_SPECIAL_SELECT)) return;
@@ -576,7 +609,7 @@ public final class SmoothClassesClient implements ClientModInitializer {
             client.player.sendMessage(Text.literal("When On High is still channeling."),true);return;
         }
         if (remaining > 0) {
-            client.player.sendMessage(Text.literal("Ability can be used again in " + (int)Math.ceil(remaining/1000D) + "s"), true);
+            client.player.sendMessage(Text.literal("Cooldown: " + (int)Math.ceil(remaining/1000D) + "s"), true);
             client.player.getWorld().playSound(client.player, client.player.getBlockPos(), SmoothSounds.ABILITY_BLOCKED, SoundCategory.PLAYERS, 0.1F, 1.5F);
             return;
         }

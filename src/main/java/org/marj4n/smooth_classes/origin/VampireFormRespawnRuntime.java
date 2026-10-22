@@ -11,6 +11,8 @@ public final class VampireFormRespawnRuntime {
     public static void clear(OriginState state) {
         if (state.origin() != OriginType.VAMPIRE) return;
         state.unflag("vampire.form.bat");
+        state.unflag(VampireBatPerchRuntime.PERCHED);
+        state.longProgress("vampire.bat.perch.still_ticks", 0L);
         state.unflag("vampire.form.man_bat");
         VampireBatHealthRuntime.discard(state);
         state.longProgress("vampire.man_bat_end_at", 0L);

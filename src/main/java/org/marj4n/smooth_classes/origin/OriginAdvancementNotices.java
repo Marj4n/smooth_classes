@@ -18,13 +18,13 @@ public final class OriginAdvancementNotices {
     private OriginAdvancementNotices() {}
 
     public static void onOriginSelected(ServerPlayerEntity player, OriginType origin) {
-        if (origin == null || !origin.isV1Playable()) return;
+        if (origin != OriginType.VAMPIRE) return;
         ensureRoot(player, origin);
         grant(player, origin, "origin_base");
     }
 
     public static void onMilestoneUnlocked(ServerPlayerEntity player, OriginType origin, String skillId) {
-        if (origin == null || !origin.isV1Playable()) return;
+        if (origin != OriginType.VAMPIRE) return;
         ensureRoot(player, origin);
         grant(player, origin, skillId);
     }

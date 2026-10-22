@@ -8,7 +8,6 @@ import net.minecraft.entity.mob.GuardianEntity;
 import net.minecraft.entity.mob.DrownedEntity;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec3d;
 import org.marj4n.smooth_classes.network.SmoothClassesNetworking;
 
@@ -28,7 +27,7 @@ public final class OriginAbilityDispatcher {
         if (slot < 0 || slot > 2) return Result.fail("Unknown Origin ability slot.");
 
         return switch (origin) {
-            case HUMAN -> activateHuman(player, state, slot);
+            case HUMAN -> Result.fail("Human has no Origin abilities. Use your Class skills.");
             case VAMPIRE -> activateVampire(player, state, slot);
             case HOMUNCULUS -> activateHomunculus(player, slot);
             case MERMAID -> activateMermaid(player, state, slot);
@@ -54,40 +53,6 @@ public final class OriginAbilityDispatcher {
         return Result.fail("Alchemical Core evolution is not yet available in this debugging build.");
     }
 
-    private static Result activateHuman(ServerPlayerEntity player, OriginState state, int slot) {
-        if (slot == 0) {
-            if (!OriginSkillRuntime.unlocked(player, OriginType.HUMAN, "survivor")) return Result.fail("Adaptation is still locked.");
-            String[] known = {"nether", "ocean", "sky", "cold", "end"};
-            int start = state.progress("human.adaptation_index");
-            for (int i = 1; i <= known.length; i++) {
-                int next = (start + i) % known.length;
-                if (state.hasFlag("human.environment_mastered." + known[next])) {
-                    state.progress("human.adaptation_index", next);
-                    state.flag("human.adaptation_selected." + known[next]);
-                    player.sendMessage(Text.literal("Adaptation: " + title(known[next])), true);
-                    SmoothClassesNetworking.sendOriginState(player);
-                    return Result.ok("Adaptation changed.");
-                }
-            }
-            return Result.fail("Master a harsh environment first.");
-        }
-        if (slot == 1) {
-            if (!OriginSkillRuntime.unlocked(player, OriginType.HUMAN, "second_wind")) return Result.fail("Second Wind is still locked.");
-            long ready = state.longProgress("human.second_wind_manual_ready_at");
-            if (player.getWorld().getTime() < ready) return Result.fail("Second Wind is recovering.");
-            player.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, 20 * 8, 1, false, true, true));
-            player.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 20 * 8, 0, false, true, true));
-            player.heal(4.0F);
-            state.longProgress("human.second_wind_manual_ready_at", player.getWorld().getTime() + 20L * 120L);
-            return Result.ok("Second Wind.");
-        }
-        if (!OriginSkillRuntime.unlocked(player, OriginType.HUMAN, "final")) return Result.fail("Awakened Human is still locked.");
-        player.addStatusEffect(new StatusEffectInstance(StatusEffects.HASTE, 20 * 12, 0, false, true, true));
-        player.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, 20 * 12, 0, false, true, true));
-        player.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 20 * 12, 0, false, true, true));
-        return Result.ok("Human potential awakened.");
-    }
-
     private static Result activateVampire(ServerPlayerEntity player, OriginState state, int slot) {
         if (state.hasFlag("vampire.form.bat") && slot != 0)
             return Result.fail("Return from Bat Form before casting abilities.");
@@ -96,6 +61,7 @@ public final class OriginAbilityDispatcher {
             long ready = state.longProgress("vampire.bat_form_ready_at");
             if (!state.hasFlag("vampire.form.bat") && player.getWorld().getTime() < ready) return Result.fail("Bat Form is recovering.");
             if (state.hasFlag("vampire.form.bat")) {
+                VampireBatPerchRuntime.stop(player, state, false);
                 state.unflag("vampire.form.bat");
                 VampireBatHealthRuntime.exit(player, state);
                 state.longProgress("vampire.bat_form_ready_at", player.getWorld().getTime() + 200L); // Nycto-like 10s cooldown
@@ -154,6 +120,7 @@ public final class OriginAbilityDispatcher {
             state.blood(state.blood() - 3);
             // Forms are exclusive. Preserve Bat Form's temporarily clipped HP.
             boolean exitingBat = state.hasFlag("vampire.form.bat");
+            if (exitingBat) VampireBatPerchRuntime.stop(player, state, false);
             state.unflag("vampire.form.bat");
             if (exitingBat) VampireBatHealthRuntime.exit(player, state);
             state.flag("vampire.form.man_bat");
@@ -284,8 +251,5 @@ public final class OriginAbilityDispatcher {
         VampireTransformationEffects.play(player, entering);
     }
 
-    private static String title(String value) {
-        if (value == null || value.isBlank()) return "Unknown";
-        return Character.toUpperCase(value.charAt(0)) + value.substring(1);
-    }
+
 }

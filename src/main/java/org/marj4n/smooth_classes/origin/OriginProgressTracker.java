@@ -80,12 +80,6 @@ public final class OriginProgressTracker {
                     state.flag("undead.skeletal_species." + species);
                 }
             }
-            case HUMAN -> {
-                if (victim.getMaxHealth() >= 80.0F) {
-                    state.addProgress("human.major_kills", 1);
-                    state.flag("human.major_species." + species);
-                }
-            }
             default -> { }
         }
     }
@@ -123,7 +117,6 @@ public final class OriginProgressTracker {
         if (origin == null) return;
 
         switch (origin) {
-            case HUMAN -> tickHuman(player, state);
             case VAMPIRE -> {
                 if (player.getWorld().isNight()) state.addProgress("vampire.night_ticks", 20);
                 if (state.progress("vampire.night_ticks") >= 10_000) state.flag("vampire.full_night_survived");
@@ -158,24 +151,6 @@ public final class OriginProgressTracker {
             case DOPPELGANGER -> observeForms(player, state);
             default -> { }
         }
-    }
-
-    private static void tickHuman(ServerPlayerEntity player, OriginState state) {
-        if (player.getWorld().getRegistryKey() == World.NETHER) state.flag("human.dimension_visited.nether");
-        else if (player.getWorld().getRegistryKey() == World.END) state.flag("human.dimension_visited.end");
-        else state.flag("human.dimension_visited.overworld");
-
-        String environment = null;
-        if (player.getWorld().getRegistryKey() == World.NETHER) environment = "nether";
-        else if (player.getWorld().getRegistryKey() == World.END) environment = "end";
-        else if (player.isSubmergedInWater()) environment = "ocean";
-        else if (player.getY() >= 160) environment = "sky";
-        else if (player.isFrozen()) environment = "cold";
-
-        if (environment == null) return;
-        String key = "human.environment_ticks." + environment;
-        int ticks = state.addProgress(key, 20);
-        if (ticks >= 12_000) state.flag("human.environment_mastered." + environment); // 10 minutes
     }
 
     private static void observeHumanoids(ServerPlayerEntity player, OriginState state, String counter, String prefix) {

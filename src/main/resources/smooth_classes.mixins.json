@@ -22,6 +22,9 @@
     "WhenOnHighInvulnerabilityMixin",
     "WhenOnHighEffectGuardMixin",
     "MobEntityTargetMixin",
+    "AvengerBoundPersistenceMixin",
+    "AvengerBoundZombieMixin",
+    "AvengerGuardDeathNoticeMixin",
     "VillagerHostilesSensorMixin",
     "WardenEntityMixin",
     "BladeLootingMixin",
@@ -66,8 +69,12 @@
     "client.ManBatHeldItemAnchorMixin",
     "client.BatStuckArrowsFeatureMixin",
     "client.VampireCameraMixin",
+    "client.VampireBatPerchControlMixin",
+    "client.VampireBatPerchKeyboardInputMixin",
+    "client.VampireBatCeilingCameraMixin",
     "client.BatInWallOverlayMixin",
     "client.VampireHungerHudMixin",
-    "client.VampireCrosshairMixin"
+    "client.VampireCrosshairMixin",
+    "client.AvengerSummonHoverGlowMixin"
   ]
 }

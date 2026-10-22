@@ -25,8 +25,8 @@ import java.util.function.Function;
 /**
  * Client-side view of the Avenger Death List.
  *
- * <p>The server owns the ledger and sends a fresh snapshot whenever Ctrl+H is
- * pressed. If Patchouli is installed the snapshot is exposed through Patchouli
+ * <p>The server owns the ledger and sends a fresh snapshot whenever Death List
+ * is selected from the H command wheel. If Patchouli is installed the snapshot is exposed through Patchouli
  * formatting functions and the real {@code smooth_classes:death_list} book is
  * opened. The vanilla written-book screen is kept only as a safe fallback.</p>
  */

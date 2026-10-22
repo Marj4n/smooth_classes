@@ -16,8 +16,6 @@ import java.util.List;
 public final class OriginDebugLevels {
     private OriginDebugLevels() { }
 
-    private static final List<String> HUMAN = List.of(
-            "survivor", "wayfarer", "indomitable", "endurance", "memory", "second_wind", "final");
     private static final List<String> VAMPIRE = List.of(
             "bat_form", "man_bat", "blood_sense", "blood_flask", "nobility", "sun_tolerance", "final");
     private static final List<String> MERMAID = List.of(
@@ -28,7 +26,7 @@ public final class OriginDebugLevels {
     public static List<String> milestones(OriginType origin) {
         if (origin == null) return List.of();
         return switch (origin) {
-            case HUMAN -> HUMAN;
+            case HUMAN -> List.of();
             case VAMPIRE -> VAMPIRE;
             case MERMAID -> MERMAID;
             case SLIME -> SLIME;

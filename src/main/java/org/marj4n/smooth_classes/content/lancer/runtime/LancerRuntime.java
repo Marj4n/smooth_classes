@@ -243,13 +243,8 @@ public final class LancerRuntime {
     }
 
     private static void addMomentum(ServerPlayerEntity player, int amount, String reason) {
-        int old = momentumPercent(player);
-        int next = Math.min(MAX_MOMENTUM_PERCENT, old + Math.max(0, amount));
+        int next = Math.min(MAX_MOMENTUM_PERCENT, momentumPercent(player) + Math.max(0, amount));
         MOMENTUM.put(player.getUuid(), next);
-        if (next != old) {
-            player.sendMessage(Text.literal("Lancer Momentum: +" + next + "%").formatted(
-                    next >= MAX_MOMENTUM_PERCENT ? Formatting.GOLD : Formatting.AQUA), true);
-        }
     }
 
     private static void tickPassiveAttributes(ServerPlayerEntity player) {

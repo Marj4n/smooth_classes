@@ -14,6 +14,7 @@ public final class OriginMorphState {
     private static final Map<UUID, Float> MERMAID = new HashMap<>();
     private static final Map<UUID, Float> BAT = new HashMap<>();
     private static final Map<UUID, Float> BAT_FLIGHT = new HashMap<>();
+    private static final Map<UUID, Float> BAT_PERCH = new HashMap<>();
 
     private OriginMorphState() {}
 
@@ -22,6 +23,7 @@ public final class OriginMorphState {
             MERMAID.clear();
             BAT.clear();
             BAT_FLIGHT.clear();
+            BAT_PERCH.clear();
             return;
         }
         for (AbstractClientPlayerEntity player : client.world.getPlayers()) {
@@ -44,6 +46,17 @@ public final class OriginMorphState {
                     batFlightTarget ? 1.0F : 0.0F,
                     1.0F / 6.0F
             ));
+
+            // Blend the upside-down perch model and camera across ~12 ticks.
+            // The local player's flags are mirrored separately by the origin packet.
+            boolean perched = batTarget && state.hasFlag("vampire.bat.perched");
+            if (player == client.player) {
+                perched = "vampire".equals(OriginClientState.originId)
+                        && OriginClientState.hasFlag("vampire.form.bat")
+                        && OriginClientState.hasFlag("vampire.bat.perched");
+            }
+            BAT_PERCH.put(id, approach(BAT_PERCH.getOrDefault(id, 0.0F),
+                    perched ? 1.0F : 0.0F, 1.0F / 12.0F));
         }
     }
 
@@ -63,6 +76,10 @@ public final class OriginMorphState {
 
     public static float batFlight(AbstractClientPlayerEntity player) {
         return player == null ? 0.0F : BAT_FLIGHT.getOrDefault(player.getUuid(), 0.0F);
+    }
+
+    public static float batPerch(AbstractClientPlayerEntity player) {
+        return player == null ? 0.0F : BAT_PERCH.getOrDefault(player.getUuid(), 0.0F);
     }
 
     public static boolean hideMermaidLegs(AbstractClientPlayerEntity player) {
