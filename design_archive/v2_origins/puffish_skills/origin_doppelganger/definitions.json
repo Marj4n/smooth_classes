@@ -1,0 +1,210 @@
+{
+  "origin_base": {
+    "title": {
+      "text": "Doppelganger"
+    },
+    "description": {
+      "text": "18 health. Faceless adaptive body. Copies biology and social identity, not full combat kits."
+    },
+    "cost": 0,
+    "size": 1.25,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:name_tag"
+      }
+    },
+    "rewards": []
+  },
+  "imitation": {
+    "title": {
+      "text": "Imitation"
+    },
+    "description": {
+      "text": "Observe eight creature species closely without attacking. Build the first Form Archive."
+    },
+    "cost": 1,
+    "size": 1.05,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:spyglass"
+      }
+    },
+    "rewards": []
+  },
+  "social_mask": {
+    "title": {
+      "text": "Social Mask"
+    },
+    "description": {
+      "text": "Live among villages, Piglins, undead and aquatic creatures while disguised."
+    },
+    "cost": 1,
+    "size": 1.05,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:carved_pumpkin"
+      }
+    },
+    "rewards": []
+  },
+  "biology": {
+    "title": {
+      "text": "Biological Mimicry"
+    },
+    "description": {
+      "text": "Current form gains one curated biological package such as breathing, climbing or heat tolerance."
+    },
+    "cost": 1,
+    "size": 1.05,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:dragon_breath"
+      }
+    },
+    "rewards": []
+  },
+  "perfect_copy": {
+    "title": {
+      "text": "Perfect Copy"
+    },
+    "description": {
+      "text": "Learn many shapes, including tiny, large and humanoid identities."
+    },
+    "cost": 1,
+    "size": 1.05,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:player_head"
+      }
+    },
+    "rewards": []
+  },
+  "favorites": {
+    "title": {
+      "text": "Favorite Forms"
+    },
+    "description": {
+      "text": "Pin commonly used shapes for faster selection."
+    },
+    "cost": 1,
+    "size": 1.05,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:book"
+      }
+    },
+    "rewards": []
+  },
+  "quick_shift": {
+    "title": {
+      "text": "Quick Shift"
+    },
+    "description": {
+      "text": "Out-of-combat transformation becomes dramatically faster."
+    },
+    "cost": 1,
+    "size": 1.05,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:clock"
+      }
+    },
+    "rewards": []
+  },
+  "final": {
+    "title": {
+      "text": "Many-Faced One"
+    },
+    "description": {
+      "text": "Complete the identity trial using multiple bodies, then return to the original faceless form."
+    },
+    "cost": 1,
+    "size": 1.25,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:nether_star"
+      }
+    },
+    "rewards": []
+  }
+}

@@ -59,8 +59,6 @@ public final class ForeignerSpecialRuntime {
         ACTIVE_UNTIL.put(player.getUuid(), (long) player.getServer().getTicks() + ACTIVE_TICKS);
         AbilityCooldowns.start(player, ID, COOLDOWN_TICKS);
         imprintFx(player, index);
-        player.sendMessage(Text.literal("Spell Imprint: " + SpellSchoolSelection.name(index))
-                .formatted(SpellSchoolSelection.color(index)), true);
         return ExecutionResult.success(1, "Imprinted " + SpellSchoolSelection.name(index) + " into your weapon for 15s.");
     }
 

@@ -17,6 +17,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.Box;
 import org.marj4n.smooth_classes.content.avenger.AvengerContent;
+import org.marj4n.smooth_classes.integration.SmoothProgressionSummonLevels;
 import org.marj4n.smooth_classes.effects.SmoothEffects;
 import org.marj4n.smooth_classes.effects.SourceStatusEffectInstance;
 import org.marj4n.smooth_classes.entity.AvengerMinionEntity;
@@ -79,6 +80,7 @@ public final class AvengerMinionGameplay {
         minion.setPositionTarget(owner.getBlockPos().up(2), 32);
 
         applyScaling(owner, minion, plan.necroticFortification());
+        SmoothProgressionSummonLevels.synchronize(owner, minion);
 
         if (plan.shadowAura()) {
             minion.addStatusEffect(new StatusEffectInstance(
@@ -353,6 +355,7 @@ public final class AvengerMinionGameplay {
             ServerPlayerEntity owner,
             AvengerMinionEntity minion
     ) {
+        if (minion.age % 20 == 0) SmoothProgressionSummonLevels.synchronize(owner, minion);
         // Keep a summon engaged with the owner's current combat target.
         LivingEntity ownerTarget = owner.getAttacking();
 

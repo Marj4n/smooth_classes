@@ -1,0 +1,42 @@
+{
+  "normal": {
+    "bidirectional": [
+      [
+        "origin_base",
+        "riftborn"
+      ],
+      [
+        "riftborn",
+        "void_shell"
+      ],
+      [
+        "void_shell",
+        "phase"
+      ],
+      [
+        "void_shell",
+        "absence"
+      ],
+      [
+        "phase",
+        "hollow"
+      ],
+      [
+        "absence",
+        "hollow"
+      ],
+      [
+        "hollow",
+        "rejection"
+      ],
+      [
+        "hollow",
+        "final"
+      ],
+      [
+        "rejection",
+        "final"
+      ]
+    ]
+  }
+}

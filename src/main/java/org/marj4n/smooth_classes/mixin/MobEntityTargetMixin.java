@@ -11,6 +11,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 /** Stops vanilla goal AI from re-acquiring Avenger allies after runtime cleanup. */
 @Mixin(MobEntity.class)
 public abstract class MobEntityTargetMixin {
+    @Inject(method = "tick", at = @At("TAIL"))
+    private void smooth_classes$processAvengerGuard(CallbackInfo ci) {
+        MobEntity self = (MobEntity) (Object) this;
+        AvengerReworkRuntime.maintainSummonPersistence(self);
+        AvengerReworkRuntime.tickGuardedMob(self);
+    }
+
     @Inject(method = "setTarget", at = @At("HEAD"), cancellable = true)
     private void smooth_classes$filterAvengerSummonTarget(LivingEntity target, CallbackInfo ci) {
         if (target == null) return;

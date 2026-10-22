@@ -1,0 +1,42 @@
+{
+  "normal": {
+    "bidirectional": [
+      [
+        "origin_base",
+        "imitation"
+      ],
+      [
+        "imitation",
+        "social_mask"
+      ],
+      [
+        "imitation",
+        "biology"
+      ],
+      [
+        "social_mask",
+        "perfect_copy"
+      ],
+      [
+        "biology",
+        "perfect_copy"
+      ],
+      [
+        "perfect_copy",
+        "favorites"
+      ],
+      [
+        "perfect_copy",
+        "quick_shift"
+      ],
+      [
+        "favorites",
+        "final"
+      ],
+      [
+        "quick_shift",
+        "final"
+      ]
+    ]
+  }
+}
