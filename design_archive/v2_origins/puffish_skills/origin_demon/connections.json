@@ -1,0 +1,42 @@
+{
+  "normal": {
+    "bidirectional": [
+      [
+        "origin_base",
+        "emberblood"
+      ],
+      [
+        "emberblood",
+        "conqueror"
+      ],
+      [
+        "conqueror",
+        "lava_heart"
+      ],
+      [
+        "conqueror",
+        "hellwalker"
+      ],
+      [
+        "lava_heart",
+        "dominion"
+      ],
+      [
+        "hellwalker",
+        "dominion"
+      ],
+      [
+        "dominion",
+        "authority"
+      ],
+      [
+        "dominion",
+        "final"
+      ],
+      [
+        "authority",
+        "final"
+      ]
+    ]
+  }
+}

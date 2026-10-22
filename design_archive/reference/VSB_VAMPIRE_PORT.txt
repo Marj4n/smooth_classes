@@ -1,0 +1,26 @@
+Vampires Strike Back 1.8.1 - user supplied reference port
+
+Source avatar inside supplied pack:
+  overrides/figura/avatars/vampire/model.bbmodel
+  overrides/figura/avatars/vampire/strigoni.png
+  overrides/figura/avatars/vampire/strigoni_e.png
+  overrides/figura/avatars/vampire/script.lua
+
+Avatar metadata:
+  name: Vampire
+  description: (Striking Back)
+  author: nekomaster1000
+
+Smooth Classes port scope:
+- Appearance/model geometry only
+- Figura animation clips: spawn, idle, walk, land
+- script.lua smooth head + crouch visual offsets
+- Original VSB texture + emissive texture for local reference testing
+
+NOT PORTED:
+- skills
+- powers
+- Origin gameplay
+- combat mechanics
+- progression
+- datapack logic

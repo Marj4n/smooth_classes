@@ -1,0 +1,42 @@
+{
+  "normal": {
+    "bidirectional": [
+      [
+        "origin_base",
+        "night_wolf"
+      ],
+      [
+        "night_wolf",
+        "lycan"
+      ],
+      [
+        "lycan",
+        "predator"
+      ],
+      [
+        "lycan",
+        "blood_scent"
+      ],
+      [
+        "predator",
+        "moonbound"
+      ],
+      [
+        "blood_scent",
+        "moonbound"
+      ],
+      [
+        "moonbound",
+        "pack_howl"
+      ],
+      [
+        "moonbound",
+        "final"
+      ],
+      [
+        "pack_howl",
+        "final"
+      ]
+    ]
+  }
+}

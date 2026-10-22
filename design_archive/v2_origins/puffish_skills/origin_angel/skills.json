@@ -1,0 +1,50 @@
+{
+  "origin_base": {
+    "definition": "origin_base",
+    "x": 0,
+    "y": 128,
+    "root": true
+  },
+  "true_wings": {
+    "definition": "true_wings",
+    "x": 0,
+    "y": 64,
+    "root": false
+  },
+  "skyborne": {
+    "definition": "skyborne",
+    "x": -72,
+    "y": 0,
+    "root": false
+  },
+  "consecrated": {
+    "definition": "consecrated",
+    "x": 72,
+    "y": 0,
+    "root": false
+  },
+  "guardian_halo": {
+    "definition": "guardian_halo",
+    "x": 0,
+    "y": -80,
+    "root": false
+  },
+  "grace": {
+    "definition": "grace",
+    "x": -72,
+    "y": -144,
+    "root": false
+  },
+  "halo": {
+    "definition": "halo",
+    "x": 72,
+    "y": -144,
+    "root": false
+  },
+  "final": {
+    "definition": "final",
+    "x": 0,
+    "y": -224,
+    "root": false
+  }
+}

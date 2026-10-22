@@ -1,0 +1,42 @@
+{
+  "normal": {
+    "bidirectional": [
+      [
+        "origin_base",
+        "weapon_assimilation"
+      ],
+      [
+        "weapon_assimilation",
+        "modular"
+      ],
+      [
+        "modular",
+        "skin"
+      ],
+      [
+        "modular",
+        "arms"
+      ],
+      [
+        "skin",
+        "alchemy"
+      ],
+      [
+        "arms",
+        "alchemy"
+      ],
+      [
+        "alchemy",
+        "core"
+      ],
+      [
+        "alchemy",
+        "final"
+      ],
+      [
+        "core",
+        "final"
+      ]
+    ]
+  }
+}

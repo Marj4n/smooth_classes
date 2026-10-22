@@ -82,6 +82,7 @@ public final class CombatEventRuntime {
     public static boolean onIncomingDamage(ServerPlayerEntity player, DamageSource source, float amount) {
         if (!player.isAlive()) return true;
 
+        if (!org.marj4n.smooth_classes.origin.OriginRuntime.allowIncomingDamage(player, source, amount)) return false;
         if (!AscendancyRuntime.incomingDamage(player, source, amount)) return false;
 
         // Barrier consumes one stack and completely absorbs the hit.
@@ -118,6 +119,7 @@ public final class CombatEventRuntime {
     }
 
     public static void onKilledOther(ServerPlayerEntity player, ServerWorld world, LivingEntity victim) {
+        org.marj4n.smooth_classes.origin.OriginRuntime.onKilledOther(player, victim);
         org.marj4n.smooth_classes.content.assassin.runtime.ShadowTechniqueRuntime.onKill(player);
         org.marj4n.smooth_classes.content.avenger.runtime.AvengerReworkRuntime.onKilledOther(player, victim);
         org.marj4n.smooth_classes.content.lancer.runtime.LancerRuntime.onKill(player, victim);

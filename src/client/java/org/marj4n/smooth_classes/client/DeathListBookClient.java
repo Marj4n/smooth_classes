@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -24,8 +25,8 @@ import java.util.function.Function;
 /**
  * Client-side view of the Avenger Death List.
  *
- * <p>The server owns the ledger and sends a fresh snapshot whenever Ctrl+H is
- * pressed. If Patchouli is installed the snapshot is exposed through Patchouli
+ * <p>The server owns the ledger and sends a fresh snapshot whenever Death List
+ * is selected from the H command wheel. If Patchouli is installed the snapshot is exposed through Patchouli
  * formatting functions and the real {@code smooth_classes:death_list} book is
  * opened. The vanilla written-book screen is kept only as a safe fallback.</p>
  */
@@ -34,6 +35,8 @@ public final class DeathListBookClient {
     private static final Identifier LEDGER_ENTRY = new Identifier("smooth_classes", "ledger");
     private static final Map<String, Integer> SOULS = new HashMap<>();
     private static final Map<String, Integer> KILLS = new HashMap<>();
+    /** Cache the discovered list once per server sync, not on every Patchouli text render. */
+    private static List<AvengerSummonRecipes.Recipe> DISCOVERED_RECIPES = List.of();
 
     private static int totalSouls;
     private static int discovered;
@@ -72,6 +75,36 @@ public final class DeathListBookClient {
         for (String id : soulData.getKeys()) SOULS.put(id, soulData.getInt(id));
         NbtCompound killData = nbt.getCompound("SmoothDeathKillCounts");
         for (String id : killData.getKeys()) KILLS.put(id, killData.getInt(id));
+        List<AvengerSummonRecipes.Recipe> discoveredRecipes = new ArrayList<>();
+        for (AvengerSummonRecipes.Recipe recipe : AvengerSummonRecipes.allRecipes()) {
+            if (KILLS.getOrDefault(recipe.entityId(), 0) > 0) discoveredRecipes.add(recipe);
+        }
+        discoveredRecipes.sort(Comparator.comparing(recipe -> AvengerSummonRecipes.friendlyEntityName(recipe.entityId())));
+        DISCOVERED_RECIPES = List.copyOf(discoveredRecipes);
+    }
+
+    /** Read-only access to the server's latest synced snapshot for Soul Search. */
+    static int availableSouls(String id) { return SOULS.getOrDefault(id, 0); }
+    static int killCount(String id) { return KILLS.getOrDefault(id, 0); }
+
+    /** Search only revealed recipes; hidden ingredients never leak before a soul is captured. */
+    static List<AvengerSummonRecipes.Recipe> searchDiscoveredRecipes(String rawQuery) {
+        String query = rawQuery == null ? "" : rawQuery.strip().toLowerCase(Locale.ROOT);
+        if (query.isEmpty()) return List.of();
+        List<AvengerSummonRecipes.Recipe> matches = new ArrayList<>();
+        for (AvengerSummonRecipes.Recipe recipe : DISCOVERED_RECIPES) {
+            String modId = recipe.entityId().split(":", 2)[0];
+            String main = AvengerSummonRecipes.friendlyItemName(recipe.mainItemId());
+            String off = recipe.offhandItemId() == null ? "" : AvengerSummonRecipes.friendlyItemName(recipe.offhandItemId());
+            if (recipe.entityId().toLowerCase(Locale.ROOT).contains(query)
+                    || modId.toLowerCase(Locale.ROOT).contains(query)
+                    || AvengerSummonRecipes.friendlyEntityName(recipe.entityId()).toLowerCase(Locale.ROOT).contains(query)
+                    || main.toLowerCase(Locale.ROOT).contains(query)
+                    || off.toLowerCase(Locale.ROOT).contains(query)) {
+                matches.add(recipe);
+            }
+        }
+        return List.copyOf(matches);
     }
 
     private static void registerPatchouliHooks() {
@@ -146,12 +179,7 @@ public final class DeathListBookClient {
         } catch (RuntimeException ignored) {
             return null;
         }
-        List<AvengerSummonRecipes.Recipe> known = new ArrayList<>();
-        for (AvengerSummonRecipes.Recipe recipe : AvengerSummonRecipes.allRecipes()) {
-            if (KILLS.getOrDefault(recipe.entityId(), 0) > 0) known.add(recipe);
-        }
-        known.sort(Comparator.comparing(recipe -> AvengerSummonRecipes.friendlyEntityName(recipe.entityId())));
-        return slot < known.size() ? known.get(slot) : null;
+        return slot < DISCOVERED_RECIPES.size() ? DISCOVERED_RECIPES.get(slot) : null;
     }
 
     private static String stockName(String slot) {

@@ -1,0 +1,42 @@
+{
+  "normal": {
+    "bidirectional": [
+      [
+        "origin_base",
+        "green_thumb"
+      ],
+      [
+        "green_thumb",
+        "living_mass"
+      ],
+      [
+        "green_thumb",
+        "shelter"
+      ],
+      [
+        "living_mass",
+        "communion"
+      ],
+      [
+        "shelter",
+        "communion"
+      ],
+      [
+        "communion",
+        "bark"
+      ],
+      [
+        "communion",
+        "heartwood"
+      ],
+      [
+        "bark",
+        "final"
+      ],
+      [
+        "heartwood",
+        "final"
+      ]
+    ]
+  }
+}

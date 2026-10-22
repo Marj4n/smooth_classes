@@ -112,6 +112,10 @@ public final class SmoothSounds {
         register("energy_charge");
         register("maw");
         register("activate_plinth_01");
+        register("origin_vampire_bite");
+        register("origin_vampire_feeding");
+        register("origin_vampire_transform_in");
+        register("origin_vampire_transform_out");
         SKILL_UNLOCK = get("fx_ui_unlock");
         ABILITY_USE = get("soundeffect_7");
         ABILITY_BLOCKED = get("gong_warbly");

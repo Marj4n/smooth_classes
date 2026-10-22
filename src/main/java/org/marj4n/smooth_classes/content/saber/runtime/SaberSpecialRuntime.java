@@ -54,7 +54,6 @@ public final class SaberSpecialRuntime {
         AbilityCooldowns.start(player, ID, COOLDOWN_TICKS);
         applyModifiers(player);
         burstFx(player);
-        player.sendMessage(Text.literal("Radiant Burst").formatted(Formatting.GOLD), true);
         return ExecutionResult.success(1, "Radiant Burst empowered your sword for 10s.");
     }
 

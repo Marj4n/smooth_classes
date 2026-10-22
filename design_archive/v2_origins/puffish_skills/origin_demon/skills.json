@@ -1,0 +1,50 @@
+{
+  "origin_base": {
+    "definition": "origin_base",
+    "x": 0,
+    "y": -128,
+    "root": true
+  },
+  "emberblood": {
+    "definition": "emberblood",
+    "x": 0,
+    "y": -64,
+    "root": false
+  },
+  "conqueror": {
+    "definition": "conqueror",
+    "x": 0,
+    "y": 0,
+    "root": false
+  },
+  "lava_heart": {
+    "definition": "lava_heart",
+    "x": -72,
+    "y": 64,
+    "root": false
+  },
+  "hellwalker": {
+    "definition": "hellwalker",
+    "x": 72,
+    "y": 64,
+    "root": false
+  },
+  "dominion": {
+    "definition": "dominion",
+    "x": 0,
+    "y": 112,
+    "root": false
+  },
+  "authority": {
+    "definition": "authority",
+    "x": 72,
+    "y": 176,
+    "root": false
+  },
+  "final": {
+    "definition": "final",
+    "x": 0,
+    "y": 224,
+    "root": false
+  }
+}

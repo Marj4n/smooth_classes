@@ -1,0 +1,42 @@
+{
+  "normal": {
+    "bidirectional": [
+      [
+        "origin_base",
+        "true_wings"
+      ],
+      [
+        "true_wings",
+        "skyborne"
+      ],
+      [
+        "true_wings",
+        "consecrated"
+      ],
+      [
+        "skyborne",
+        "guardian_halo"
+      ],
+      [
+        "consecrated",
+        "guardian_halo"
+      ],
+      [
+        "guardian_halo",
+        "grace"
+      ],
+      [
+        "guardian_halo",
+        "halo"
+      ],
+      [
+        "grace",
+        "final"
+      ],
+      [
+        "halo",
+        "final"
+      ]
+    ]
+  }
+}

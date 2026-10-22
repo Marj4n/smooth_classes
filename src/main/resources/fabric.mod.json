@@ -25,10 +25,13 @@
     "puffish_skills": "*",
     "puffish_attributes": "*",
     "spell_engine": "*",
-    "spell_power": "*"
+    "spell_power": "*",
+    "accessories": ">=1.0.0-beta.47"
   },
   "mixins": [
-    "smooth_classes.mixins.json"
+    "smooth_classes.mixins.json",
+    "smooth_classes.bewitchment.mixins.json",
+    "smooth_classes.dynamic_bars.mixins.json"
   ],
   "suggests": {
     "simplyswords": "*",
@@ -40,6 +43,9 @@
     "patchouli": "*",
     "wizards": "*",
     "elemental_wizards_rpg": "*",
-    "more_rpg_classes": "*"
+    "more_rpg_classes": "*",
+    "icarus": "*",
+    "armor_model_api": "*",
+    "bewitchment": "*"
   }
 }
