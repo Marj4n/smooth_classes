@@ -57,7 +57,6 @@ public final class LancerSpecialRuntime {
                 player.velocityModified = true;
                 player.fallDistance = 0F;
                 diveFx(player);
-                player.sendMessage(Text.literal("Dragoon Dive").formatted(Formatting.AQUA), true);
                 return ExecutionResult.success(1, "High Jump converted into Dragoon Dive.");
             }
             return ExecutionResult.failure(current.diving ? "Dragoon Dive is already descending." : "Get airborne before diving.");
@@ -79,7 +78,6 @@ public final class LancerSpecialRuntime {
         player.velocityModified = true;
         player.fallDistance = 0F;
         leapFx(player);
-        player.sendMessage(Text.literal("High Jump — press H again in the air to dive.").formatted(Formatting.AQUA), true);
         return ExecutionResult.success(1, "High Jump launched the Lancer.");
     }
 
@@ -136,7 +134,6 @@ public final class LancerSpecialRuntime {
         world.spawnParticles(ParticleTypes.EXPLOSION, player.getX(), player.getY() + 0.15D, player.getZ(), 4, 1.25D, 0.15D, 1.25D, 0.0D);
         world.spawnParticles(ParticleTypes.CRIT, player.getX(), player.getY() + 0.2D, player.getZ(), 42, 1.8D, 0.35D, 1.8D, 0.12D);
         world.playSound(null, player.getBlockPos(), SoundEvents.ITEM_TRIDENT_THUNDER, SoundCategory.PLAYERS, 0.75F, 1.3F);
-        player.sendMessage(Text.literal("Dragoon Impact" + (hits > 0 ? " — " + hits + " hit" : "")).formatted(Formatting.AQUA), true);
     }
 
     private static void spawnSpearEruption(ServerPlayerEntity player, ItemStack visualStack) {

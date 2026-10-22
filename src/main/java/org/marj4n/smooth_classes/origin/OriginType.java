@@ -17,11 +17,10 @@ import java.util.Optional;
  * avoiding player save data changes as more origin birthplaces are introduced.
  */
 public enum OriginType {
-    HUMAN("Human", "The Unbroken Will", Items.COMPASS, 1,
-            "The Grail broke the world, but humanity endured unchanged. What humans lack in supernatural birthright, they replace with adaptation.",
-            new String[]{"No racial weakness", "Normal food, sleep and equipment", "Learns environmental Adaptations"},
-            new String[]{"No supernatural power at the start", "Adaptations must be earned", "No transformation shortcut"},
-            "Normal", "Awakened Human"),
+    HUMAN("Human", "Ordinary Human", Items.COMPASS, 0,
+            "A completely ordinary human. Play vanilla Minecraft with no Origin powers, passives, weaknesses, evolutions or quests. Only your chosen Class grants special abilities.",
+            new String[]{}, new String[]{},
+            "Vanilla", "None"),
 
     VAMPIRE("Vampire", "Blood of the Night", Items.FERMENTED_SPIDER_EYE, 3,
             "Once human, you were buried among the forgotten dead of an old church. The shattered Holy Grail stirred your heart, but its long sleep has left you with no memory of your past. Blood now sustains you, while daylight threatens your second life.",
@@ -126,10 +125,10 @@ public enum OriginType {
     public Identifier categoryId() { return SmoothClasses.id("origin_" + id()); }
 
 
-    private static final OriginType[] V1_PLAYABLE = {HUMAN, VAMPIRE, HOMUNCULUS};
+    private static final OriginType[] V1_PLAYABLE = {HUMAN, VAMPIRE};
 
     public boolean isV1Playable() {
-        return this == HUMAN || this == VAMPIRE || this == HOMUNCULUS;
+        return this == HUMAN || this == VAMPIRE;
     }
 
     public static OriginType[] v1PlayableValues() {

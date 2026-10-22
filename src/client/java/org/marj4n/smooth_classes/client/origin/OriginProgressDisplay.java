@@ -15,12 +15,10 @@ public final class OriginProgressDisplay {
 
     public static List<Text> compactPanel(OriginType origin) {
         List<Text> lines = new ArrayList<>();
-        lines.add(Text.literal(origin.displayName() + " Progress").formatted(Formatting.GOLD));
+        lines.add(Text.literal(origin == OriginType.HUMAN ? "Human — Vanilla"
+                : origin.displayName() + " Progress").formatted(Formatting.GOLD));
         switch (origin) {
-            case HUMAN -> {
-                lines.add(count("Harsh environments", OriginClientState.countFlags("human.environment_mastered."), 3));
-                lines.add(count("Major enemies", OriginClientState.progress("human.major_kills"), 3));
-            }
+            case HUMAN -> lines.add(Text.literal("Vanilla human — Class abilities only.").formatted(Formatting.GRAY));
             case VAMPIRE -> vampireCompact(lines);
             case WEREWOLF -> {
                 lines.add(count("Meat species eaten", OriginClientState.countFlags("werewolf.meat_species."), 8));
@@ -140,6 +138,11 @@ public final class OriginProgressDisplay {
         lines.add(Text.literal(origin.subtitle()).formatted(Formatting.GOLD));
         lines.add(Text.literal(origin.lore()).formatted(Formatting.GRAY));
         lines.add(Text.empty());
+        if (origin == OriginType.HUMAN) {
+            lines.add(Text.literal("No Origin skills, effects or evolution.").formatted(Formatting.GRAY));
+            lines.add(Text.literal("Class skills work normally.").formatted(Formatting.GREEN));
+            return lines;
+        }
 
         lines.add(Text.literal("Buffs").formatted(Formatting.GREEN));
         for (String strength : origin.strengths()) {
@@ -175,7 +178,7 @@ public final class OriginProgressDisplay {
     public static List<Text> nodeLines(OriginType origin, String skillId) {
         List<Text> lines = new ArrayList<>();
         switch (origin) {
-            case HUMAN -> human(skillId, lines);
+            case HUMAN -> { /* No Human Origin skill nodes. */ }
             case VAMPIRE -> vampire(skillId, lines);
             case WEREWOLF -> werewolf(skillId, lines);
             case MERMAID -> mermaid(skillId, lines);
@@ -189,33 +192,6 @@ public final class OriginProgressDisplay {
             case DOPPELGANGER -> doppelganger(skillId, lines);
         }
         return lines;
-    }
-
-    private static void human(String id, List<Text> out) {
-        switch (id) {
-            case "survivor" -> {
-                out.add(count("Harsh environments mastered", OriginClientState.countFlags("human.environment_mastered."), 3));
-                out.add(Text.literal("10 minutes in each environment").formatted(Formatting.DARK_GRAY));
-                out.add(Text.literal("Reward: first Adaptation").formatted(Formatting.AQUA));
-            }
-            case "wayfarer" -> {
-                out.add(count("Dimensions visited", OriginClientState.countFlags("human.dimension_visited."), 3));
-                out.add(Text.literal("Reward: second concurrent Adaptation").formatted(Formatting.AQUA));
-            }
-            case "indomitable" -> {
-                out.add(count("Major enemies defeated", OriginClientState.progress("human.major_kills"), 3));
-                out.add(count("Adaptations learned", OriginClientState.countFlags("human.environment_mastered."), 3));
-            }
-            case "endurance", "memory" -> out.add(count("Adaptations learned", OriginClientState.countFlags("human.environment_mastered."), 4));
-            case "second_wind" -> {
-                out.add(count("Major enemies defeated", OriginClientState.progress("human.major_kills"), 5));
-                out.add(Text.literal("Reward: automatic + manual Second Wind").formatted(Formatting.AQUA));
-            }
-            case "final" -> {
-                out.add(count("Adaptations learned", OriginClientState.countFlags("human.environment_mastered."), 5));
-                out.add(Text.literal("Reward: three learned Adaptations at once").formatted(Formatting.LIGHT_PURPLE));
-            }
-        }
     }
 
     private static void vampire(String id, List<Text> out) {

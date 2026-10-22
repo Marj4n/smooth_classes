@@ -49,7 +49,9 @@ public final class OriginRuntime {
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> server.execute(() -> {
             ServerPlayerEntity player = handler.player;
             ensureSelectedCategory(player);
-            OriginProgressUnlocks.sync(player, state(player));
+            if (state(player).origin() != OriginType.HUMAN) {
+                OriginProgressUnlocks.sync(player, state(player));
+            }
             SmoothClassesNetworking.sendOriginState(player);
             if (!state(player).hasOrigin()) {
                 if (!player.isCreative()) player.setInvulnerable(true);
@@ -180,6 +182,7 @@ public final class OriginRuntime {
     public static void setOrigin(ServerPlayerEntity player, OriginType origin) {
         if (origin != OriginType.VAMPIRE) VampireGraveSpawn.cancelIntro(player, state(player));
         if (state(player).hasFlag("vampire.form.bat")) {
+            VampireBatPerchRuntime.stop(player, state(player), false);
             state(player).unflag("vampire.form.bat");
             VampireBatHealthRuntime.exit(player, state(player));
         }
@@ -189,8 +192,10 @@ public final class OriginRuntime {
         state(player).setOrigin(origin);
         if (!player.isCreative()) player.setInvulnerable(false);
         if (origin != OriginType.ANGEL) setAngelFlight(player, false);
-        unlockOriginCategory(player, origin);
-        OriginAdvancementNotices.onOriginSelected(player, origin);
+        if (origin == OriginType.VAMPIRE) {
+            unlockOriginCategory(player, origin);
+            OriginAdvancementNotices.onOriginSelected(player, origin);
+        }
         applyAttributes(player, origin);
         player.calculateDimensions();
         if (origin == OriginType.VAMPIRE) VampireGraveSpawn.awakenOnce(player, state(player));
@@ -202,6 +207,7 @@ public final class OriginRuntime {
     public static void clearOrigin(ServerPlayerEntity player) {
         VampireGraveSpawn.cancelIntro(player, state(player));
         if (state(player).hasFlag("vampire.form.bat")) {
+            VampireBatPerchRuntime.stop(player, state(player), false);
             state(player).unflag("vampire.form.bat");
             VampireBatHealthRuntime.exit(player, state(player));
         }
@@ -221,7 +227,7 @@ public final class OriginRuntime {
 
     public static void onKilledOther(ServerPlayerEntity player, LivingEntity victim) {
         OriginState state = state(player);
-        OriginProgressTracker.onKill(player, victim);
+        if (state.origin() != OriginType.HUMAN) OriginProgressTracker.onKill(player, victim);
         if (state.origin() == OriginType.UNDEAD) {
             int gain = victim.getMaxHealth() >= 100 ? 30 : victim.getMaxHealth() >= 40 ? 15 : victim.getMaxHealth() >= 20 ? 8 : 5;
             state.soul(state.soul() + gain);
@@ -266,7 +272,8 @@ public final class OriginRuntime {
             applyAttributes(player, origin);
         }
 
-        OriginSkillRuntime.tick(player, state);
+        // Human deliberately has no Origin tree, passive, evolution or quest processing.
+        if (origin != OriginType.HUMAN) OriginSkillRuntime.tick(player, state);
         if (origin == OriginType.VAMPIRE) VampireFeedingRuntime.tick(player);
 
         switch (origin) {
@@ -282,8 +289,10 @@ public final class OriginRuntime {
         }
 
         if (player.age % 20 == 0) {
-            OriginProgressTracker.tickSecond(player, state);
-            OriginProgressUnlocks.sync(player, state);
+            if (origin != OriginType.HUMAN) {
+                OriginProgressTracker.tickSecond(player, state);
+                OriginProgressUnlocks.sync(player, state);
+            }
             SmoothClassesNetworking.sendOriginState(player);
         }
     }
@@ -322,6 +331,10 @@ public final class OriginRuntime {
         }
         boolean batForm = state.hasFlag("vampire.form.bat");
         boolean manBatForm = state.hasFlag("vampire.form.man_bat");
+
+        // Server-controlled ceiling roost runs every tick, including creative-mode
+        // transitions, before the early return for sunlight immunity.
+        VampireBatPerchRuntime.tick(player, state);
 
         // Keep the authoritative bounding box compact for the entire Bat Form.
         // A recalculation every few ticks prevents stale humanoid dimensions after
@@ -726,7 +739,7 @@ public final class OriginRuntime {
 
     private static void ensureSelectedCategory(ServerPlayerEntity player) {
         OriginType origin = state(player).origin();
-        if (origin != null) unlockOriginCategory(player, origin);
+        if (origin == OriginType.VAMPIRE) unlockOriginCategory(player, origin);
     }
 
     private static void unlockOriginCategory(ServerPlayerEntity player, OriginType origin) {

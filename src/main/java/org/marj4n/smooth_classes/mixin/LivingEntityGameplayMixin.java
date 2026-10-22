@@ -77,6 +77,8 @@ public abstract class LivingEntityGameplayMixin {
 
     @Inject(method = "onDeath", at = @At("HEAD"))
     private void smooth_classes$creditAvengerSummonKill(DamageSource source, CallbackInfo ci) {
+        org.marj4n.smooth_classes.content.avenger.runtime.AvengerReworkRuntime.onAttackTargetDied(
+                (LivingEntity) (Object) this);
         org.marj4n.smooth_classes.content.avenger.runtime.AvengerReworkRuntime.onSummonKilledOther(
                 (LivingEntity) (Object) this, source);
     }

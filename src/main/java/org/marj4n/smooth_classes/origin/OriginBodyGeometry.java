@@ -25,4 +25,12 @@ public final class OriginBodyGeometry {
     public static final double BAT_FLIGHT_VISUAL_LIFT = 0.14D;
     public static final double BAT_AIRBORNE_RENDER_Y =
             BAT_GROUNDED_RENDER_Y - BAT_FLIGHT_VISUAL_LIFT;
+
+    /**
+     * Vanilla bat parts in the upside-down roost pose extend upward from the
+     * model origin. In the PlayerFeatureRenderer coordinate space this Y value
+     * aligns their feet with the UNDERSIDE of the supporting ceiling block.
+     * It is intentionally independent from the unchanged flight/ground anchors.
+     */
+    public static final double BAT_PERCHED_RENDER_Y = 1.34D;
 }

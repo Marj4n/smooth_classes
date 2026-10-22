@@ -65,9 +65,6 @@ public final class RulerSpecialRuntime {
         applyEdict(target, mode);
         edictFx(player, target, mode);
 
-        String name = target == player ? "yourself" : target.getName().getString();
-        player.sendMessage(Text.literal("Edict: " + (mode == Mode.PROTECT ? "Protect " : "Condemn ") + name)
-                .formatted(mode == Mode.PROTECT ? Formatting.GOLD : Formatting.RED), true);
         return ExecutionResult.success(1, "Divine Edict: " + mode.name().toLowerCase(java.util.Locale.ROOT));
     }
 

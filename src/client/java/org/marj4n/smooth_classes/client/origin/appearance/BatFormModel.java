@@ -21,6 +21,13 @@ public final class BatFormModel<T extends PlayerEntity> extends EntityModel<T> {
     private final ModelPart leftWing;
     private final ModelPart rightWingTip;
     private final ModelPart leftWingTip;
+    private final float originalHeadPivotY;
+    private final float originalRightWingPivotX;
+    private final float originalRightWingPivotY;
+    private final float originalRightWingPivotZ;
+    private final float originalLeftWingPivotX;
+    private final float originalLeftWingPivotY;
+    private final float originalLeftWingPivotZ;
 
     public BatFormModel(ModelPart root) {
         this.root = root;
@@ -30,6 +37,13 @@ public final class BatFormModel<T extends PlayerEntity> extends EntityModel<T> {
         this.leftWing = body.getChild("left_wing");
         this.rightWingTip = rightWing.getChild("right_wing_tip");
         this.leftWingTip = leftWing.getChild("left_wing_tip");
+        this.originalHeadPivotY = head.pivotY;
+        this.originalRightWingPivotX = rightWing.pivotX;
+        this.originalRightWingPivotY = rightWing.pivotY;
+        this.originalRightWingPivotZ = rightWing.pivotZ;
+        this.originalLeftWingPivotX = leftWing.pivotX;
+        this.originalLeftWingPivotY = leftWing.pivotY;
+        this.originalLeftWingPivotZ = leftWing.pivotZ;
     }
 
     public static TexturedModelData createData() {
@@ -39,6 +53,15 @@ public final class BatFormModel<T extends PlayerEntity> extends EntityModel<T> {
 
     public void prepare(T player, float animationProgress, float limbAngle, float limbDistance, float flightBlend) {
         float blend = MathHelper.clamp(flightBlend, 0.0F, 1.0F);
+        // The same shared ModelPart instances render grounded/flying/roosting.
+        // Always restore the original pivots before recomputing the next pose.
+        head.pivotY = originalHeadPivotY;
+        rightWing.pivotX = originalRightWingPivotX;
+        rightWing.pivotY = originalRightWingPivotY;
+        rightWing.pivotZ = originalRightWingPivotZ;
+        leftWing.pivotX = originalLeftWingPivotX;
+        leftWing.pivotY = originalLeftWingPivotY;
+        leftWing.pivotZ = originalLeftWingPivotZ;
 
         // Grounded locomotion transplanted from V1.5.6 because that is the
         // version whose walk/crawl movement felt right in-game. Keep its torso
@@ -105,6 +128,58 @@ public final class BatFormModel<T extends PlayerEntity> extends EntityModel<T> {
         leftWingTip.yaw = MathHelper.lerp(blend, groundLeftTipYaw, airLeftTipYaw);
         rightWingTip.roll = MathHelper.lerp(blend, groundRightTipRoll, airRightTipRoll);
         leftWingTip.roll = MathHelper.lerp(blend, groundLeftTipRoll, airLeftTipRoll);
+    }
+
+
+    /**
+     * Actual vanilla BatEntityModel roosting angles (1.20-era), rather than
+     * turning a spread-wing flying pose over like a cardboard cutout.
+     *
+     * The head and torso each rotate separately, the main wings wrap around
+     * the flanks, and their tips fold back over the chest. Keep this animation
+     * local to Bat Form so the approved flying and ground poses stay unchanged.
+     */
+    public void preparePerch(float blend) {
+        blend = MathHelper.clamp(blend, 0.0F, 1.0F);
+        if (blend <= 0.0F) return;
+
+        // The vanilla roost pose is achieved IN the model parts, not by
+        // rotating its entire rendering matrix by 180 degrees.
+        body.pitch = MathHelper.lerp(blend, body.pitch, MathHelper.PI);
+        body.roll = MathHelper.lerp(blend, body.roll, 0.0F);
+        body.yaw = MathHelper.lerp(blend, body.yaw, 0.0F);
+        head.pitch = MathHelper.lerp(blend, head.pitch, 0.0F);
+        head.yaw = MathHelper.lerp(blend, head.yaw, 0.0F);
+        head.roll = MathHelper.lerp(blend, head.roll, MathHelper.PI);
+        // Vanilla's hanging silhouette raises the head a little and brings
+        // both wing hinges close to the chest, instead of leaving the extended
+        // flying hinges in place. ModelPart pivots are in 1/16-block units.
+        head.pivotY = MathHelper.lerp(blend, originalHeadPivotY, -2.0F);
+        rightWing.pivotX = MathHelper.lerp(blend, originalRightWingPivotX, -3.0F);
+        rightWing.pivotY = MathHelper.lerp(blend, originalRightWingPivotY, 0.0F);
+        rightWing.pivotZ = MathHelper.lerp(blend, originalRightWingPivotZ, 3.0F);
+        leftWing.pivotX = MathHelper.lerp(blend, originalLeftWingPivotX, 3.0F);
+        leftWing.pivotY = MathHelper.lerp(blend, originalLeftWingPivotY, 0.0F);
+        leftWing.pivotZ = MathHelper.lerp(blend, originalLeftWingPivotZ, 3.0F);
+
+        // These values reproduce the folded, embracing silhouette of the
+        // classic vanilla roosting bat: wing yaw +/-72 degrees and wing-tip
+        // yaw +/-99 degrees. The small wing pitch tucks the outer membrane.
+        final float foldedWingPitch = -MathHelper.PI * 0.05F;
+        final float foldedWingYaw = MathHelper.PI * 0.40F;
+        final float foldedTipYaw = MathHelper.PI * 0.55F;
+        rightWing.pitch = MathHelper.lerp(blend, rightWing.pitch, foldedWingPitch);
+        leftWing.pitch = MathHelper.lerp(blend, leftWing.pitch, foldedWingPitch);
+        rightWing.yaw = MathHelper.lerp(blend, rightWing.yaw, -foldedWingYaw);
+        leftWing.yaw = MathHelper.lerp(blend, leftWing.yaw, foldedWingYaw);
+        rightWing.roll = MathHelper.lerp(blend, rightWing.roll, 0.0F);
+        leftWing.roll = MathHelper.lerp(blend, leftWing.roll, 0.0F);
+        rightWingTip.pitch = MathHelper.lerp(blend, rightWingTip.pitch, 0.0F);
+        leftWingTip.pitch = MathHelper.lerp(blend, leftWingTip.pitch, 0.0F);
+        rightWingTip.yaw = MathHelper.lerp(blend, rightWingTip.yaw, -foldedTipYaw);
+        leftWingTip.yaw = MathHelper.lerp(blend, leftWingTip.yaw, foldedTipYaw);
+        rightWingTip.roll = MathHelper.lerp(blend, rightWingTip.roll, 0.0F);
+        leftWingTip.roll = MathHelper.lerp(blend, leftWingTip.roll, 0.0F);
     }
 
     @Override

@@ -5,6 +5,7 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
@@ -18,6 +19,13 @@ public final class ClassSpecialRadialScreen extends Screen {
     private static final int RADIUS = 68;
     private static final int DEAD_ZONE = 24;
     private static final int SLOT = 28;
+
+    private static final String[] SOUL_COMMANDS = {"Follow", "Guard Here", "Recall Soul", "Unbind", "Death List", "Attack", "Stay", "Need Backup"};
+    private static final ItemStack[] SOUL_ICONS = {
+            new ItemStack(Items.LEAD), new ItemStack(Items.SHIELD),
+            new ItemStack(Items.SOUL_LANTERN), new ItemStack(Items.SHEARS), new ItemStack(Items.WRITTEN_BOOK),
+            new ItemStack(Items.IRON_SWORD), new ItemStack(Items.ARMOR_STAND), new ItemStack(Items.GOAT_HORN)
+    };
 
     private static final String[] SCHOOL_NAMES = {"Arcane", "Fire", "Frost", "Wind", "Water", "Earth"};
     private static final Identifier[] SCHOOL_ICONS = {
@@ -41,12 +49,14 @@ public final class ClassSpecialRadialScreen extends Screen {
     }
 
     public static boolean supports(String id) {
-        return "treasury_key".equals(id) || "arcane_attunement".equals(id) || "spell_imprint".equals(id);
+        return "treasury_key".equals(id) || "arcane_attunement".equals(id)
+                || "spell_imprint".equals(id) || "summoning_ritual".equals(id);
     }
 
     private static String titleFor(String id) {
         return switch (id == null ? "" : id) {
             case "treasury_key" -> "Treasury";
+            case "summoning_ritual" -> "Bound Soul Commands";
             case "spell_imprint" -> "Spell Imprint";
             default -> "Elemental Attunement";
         };
@@ -56,12 +66,16 @@ public final class ClassSpecialRadialScreen extends Screen {
         return "arcane_attunement".equals(specialId) || "spell_imprint".equals(specialId);
     }
 
-    private int optionCount() { return schoolMode() ? SCHOOL_NAMES.length : AbilityHudState.treasuryCapacity; }
+    private boolean soulMode() { return "summoning_ritual".equals(specialId); }
+
+    private int optionCount() {
+        return soulMode() ? SOUL_COMMANDS.length : schoolMode() ? SCHOOL_NAMES.length : AbilityHudState.treasuryCapacity;
+    }
 
     @Override
     protected void init() {
         super.init();
-        SmoothClassesClient.sendClassSpecialHold(true);
+        if (!soulMode()) SmoothClassesClient.sendClassSpecialHold(true);
         if (client != null) {
             // Open centered like a proper hold-to-select wheel instead of inheriting
             // whatever hidden cursor position Minecraft had before opening the screen.
@@ -94,7 +108,13 @@ public final class ClassSpecialRadialScreen extends Screen {
     private void finishSelection() {
         if (finished) return;
         finished = true;
-        int selected = hovered >= 0 ? hovered : Math.min(initialSelection, optionCount() - 1);
+        int selected = hovered >= 0 ? hovered : (soulMode() ? -1 : Math.min(initialSelection, optionCount() - 1));
+        if (soulMode()) {
+            if (selected == 4) SmoothClassesClient.requestDeathList();
+            else if (selected >= 0) SmoothClassesClient.sendClassSpecialSelection(selected);
+            if (client != null) client.setScreen(null);
+            return;
+        }
         if (!schoolMode()) {
             boolean explicitlyHovered = hovered >= 0;
             if (selected < 0 || selected >= AbilityHudState.treasurySlots.length
@@ -124,7 +144,7 @@ public final class ClassSpecialRadialScreen extends Screen {
 
     @Override
     public void close() {
-        if (!finished) SmoothClassesClient.sendClassSpecialHold(false);
+        if (!finished && !soulMode()) SmoothClassesClient.sendClassSpecialHold(false);
         finished = true; // ESC cancels instead of accidentally selecting.
         super.close();
     }
@@ -139,8 +159,6 @@ public final class ClassSpecialRadialScreen extends Screen {
         hovered = hoveredIndex(mouseX, mouseY, cx, cy, optionCount());
 
         context.fill(0, 0, width, height, 0x66000000);
-        context.fill(cx - 39, cy - 15, cx + 39, cy + 15, 0xB0101018);
-        context.drawCenteredTextWithShadow(textRenderer, title, cx, cy - 5, 0xFFE8C76A);
 
         int count = optionCount();
         int radius = count > 6 ? 78 : RADIUS;
@@ -148,30 +166,34 @@ public final class ClassSpecialRadialScreen extends Screen {
             double angle = -Math.PI / 2.0D + (Math.PI * 2.0D * i / count);
             int x = cx + (int) Math.round(Math.cos(angle) * radius);
             int y = cy + (int) Math.round(Math.sin(angle) * radius);
-            boolean treasuryEmpty = !schoolMode() && (AbilityHudState.treasurySlots[i] == null || AbilityHudState.treasurySlots[i].isEmpty());
-            boolean selected = !treasuryEmpty && (hovered == i || (hovered < 0 && i == Math.min(initialSelection, count - 1)));
+            boolean treasuryEmpty = !soulMode() && !schoolMode()
+                    && (AbilityHudState.treasurySlots[i] == null || AbilityHudState.treasurySlots[i].isEmpty());
+            boolean selected = !treasuryEmpty && (hovered == i
+                    || (!soulMode() && hovered < 0 && i == Math.min(initialSelection, count - 1)));
 
             int bg = treasuryEmpty ? 0xB0101014 : selected ? 0xE0B58A2A : 0xC0181820;
             int border = treasuryEmpty ? 0xFF34343A : selected ? 0xFFFFD86A : 0xFF666670;
             context.fill(x - SLOT / 2, y - SLOT / 2, x + SLOT / 2, y + SLOT / 2, border);
             context.fill(x - SLOT / 2 + 1, y - SLOT / 2 + 1, x + SLOT / 2 - 1, y + SLOT / 2 - 1, bg);
 
-            if (schoolMode()) renderSchoolIcon(context, i, x - 8, y - 8);
+            if (soulMode()) context.drawItem(SOUL_ICONS[i], x - 8, y - 8);
+            else if (schoolMode()) renderSchoolIcon(context, i, x - 8, y - 8);
             else renderTreasuryIcon(context, i, x - 8, y - 8);
         }
 
-        int selected = hovered >= 0 ? hovered : Math.min(initialSelection, count - 1);
+        int selected = hovered >= 0 ? hovered : (soulMode() ? -1 : Math.min(initialSelection, count - 1));
         String name;
-        if (schoolMode()) {
+        if (soulMode()) {
+            name = selected >= 0 ? SOUL_COMMANDS[selected] : "Soul Orders";
+        } else if (schoolMode()) {
             name = SCHOOL_NAMES[selected];
         } else {
             ItemStack stack = AbilityHudState.treasurySlots[selected];
             name = stack == null || stack.isEmpty() ? "Empty" : stack.getName().getString();
         }
+        if (name.length() > 28) name = name.substring(0, 25) + "...";
         context.drawCenteredTextWithShadow(textRenderer, Text.literal(name), cx, cy + 19,
-                "Empty".equals(name) ? 0x888888 : 0xFFFFFF);
-        context.drawCenteredTextWithShadow(textRenderer,
-                Text.literal("Hold H • Move cursor • Release H to select"), cx, cy + (count > 6 ? 78 : RADIUS) + 30, 0xB8B8C8);
+                "Empty".equals(name) ? 0x888888 : 0xFFE8D19E);
 
         super.render(context, mouseX, mouseY, delta);
     }

@@ -204,10 +204,12 @@ public final class OriginAppearanceFeatureRenderer
             matrices.pop();
         } else if (isActiveVampireFlag(player, state, "vampire.form.bat")) {
             float flightBlend = org.marj4n.smooth_classes.client.origin.OriginMorphState.batFlight(player);
+            float perchBlend = org.marj4n.smooth_classes.client.origin.OriginMorphState.batPerch(player);
 
             // V1.6.2: always use Minecraft's actual BatEntityModel.  Grounded state is
             // only a different pose/anchor; there is no custom crawl mesh anymore.
             bat.prepare(player, player.age + 0.5F, limbAngle, limbDistance, flightBlend);
+            bat.preparePerch(perchBlend);
             matrices.push();
 
             // The player feature renderer is centred on a humanoid body, while the
@@ -221,9 +223,18 @@ public final class OriginAppearanceFeatureRenderer
             double airborneY = org.marj4n.smooth_classes.origin.OriginBodyGeometry.BAT_AIRBORNE_RENDER_Y;
             double y = MathHelper.lerp(flightBlend, groundedY, airborneY);
             double z = 0.04D * (1.0F - flightBlend);
+            // During roost the inverted model PARTS extend toward the roof.
+            // Their origin therefore has to move down in model-space Y, which
+            // moves the actual feet UP toward the ceiling in world coordinates.
+            // This is separate from (and does not disturb) the flight anchor.
+            double perchY = org.marj4n.smooth_classes.origin.OriginBodyGeometry.BAT_PERCHED_RENDER_Y;
+            y = MathHelper.lerp(perchBlend, y, perchY);
+            z = MathHelper.lerp(perchBlend, z, 0.0D);
             matrices.translate(0.0D, y, z);
             float batScale = org.marj4n.smooth_classes.origin.OriginBodyGeometry.BAT_RENDER_SCALE;
             matrices.scale(batScale, batScale, batScale);
+            // No whole-body 180-degree matrix rotation: vanilla roosting uses
+            // head.roll=PI and body.pitch=PI, with wings folded around its body.
 
             VertexConsumer batConsumer = vertexConsumers.getBuffer(RenderLayer.getEntityTranslucent(BAT));
             if (isActiveVampireFlag(player, state, "vampire.evolution.lord")) {

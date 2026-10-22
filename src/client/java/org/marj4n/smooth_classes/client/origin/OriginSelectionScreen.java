@@ -149,6 +149,14 @@ public final class OriginSelectionScreen extends Screen {
     private List<Line> buildLines(OriginType origin, int width) {
         List<Line> result = new ArrayList<>();
         wrap(result, origin.lore(), width, 0xC7C7C7);
+        if (origin == OriginType.HUMAN) {
+            result.add(new Line(Text.literal("").asOrderedText(), 0xFFFFFF));
+            wrap(result, "Origin abilities: None", width, 0xD0D0D0);
+            wrap(result, "Origin skill tree: None", width, 0xD0D0D0);
+            wrap(result, "Class abilities: Available", width, 0x93E89A);
+            wrap(result, "Spawn: Overworld (vanilla)", width, 0xE5C76B);
+            return result;
+        }
         result.add(new Line(Text.literal("").asOrderedText(), 0xFFFFFF));
         result.add(new Line(Text.literal("Strengths").asOrderedText(), 0x66E36F));
         for (String value : origin.strengths()) wrap(result, "+ " + value, width, 0x93E89A);
@@ -212,8 +220,12 @@ public final class OriginSelectionScreen extends Screen {
             context.drawBorder(x, y, boxW, boxH, 0xFFB8B8B8);
             context.drawCenteredTextWithShadow(textRenderer, Text.literal("Choose " + origin.displayName() + "?"), width / 2, y + 12, 0xFFFFFF);
             context.drawCenteredTextWithShadow(textRenderer, Text.literal(origin.subtitle()), width / 2, y + 27, 0xC9B7FF);
-            context.drawCenteredTextWithShadow(textRenderer, Text.literal("This permanently sets your body and Origin tree."), width / 2, y + 47, 0xBDBDBD);
-            context.drawCenteredTextWithShadow(textRenderer, Text.literal("V1 birthplace: Overworld"), width / 2, y + 61, 0xE5C76B);
+            context.drawCenteredTextWithShadow(textRenderer, Text.literal(origin == OriginType.HUMAN
+                    ? "Vanilla human: no Origin skill tree or special powers."
+                    : "This permanently sets your body and Origin tree."), width / 2, y + 47, 0xBDBDBD);
+            context.drawCenteredTextWithShadow(textRenderer, Text.literal(origin == OriginType.HUMAN
+                    ? "Only your chosen Class grants abilities."
+                    : "Birthplace: Forgotten Graveyard"), width / 2, y + 61, 0xE5C76B);
             super.render(context, mouseX, mouseY, delta);
         }
     }

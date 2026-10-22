@@ -8,7 +8,7 @@ package org.marj4n.smooth_classes.origin;
 public final class VampireProgressionRequirements {
     private VampireProgressionRequirements() { }
 
-    public static final int BAT_KILLS = 20;
+    public static final int BAT_KILLS = 5;
     public static final int MAN_BAT_HUMANOID_BLOOD = 200;
     public static final int MAN_BAT_NIGHT_KILLS = 50;
     public static final int BLOOD_SENSE_LIFETIME = 750;

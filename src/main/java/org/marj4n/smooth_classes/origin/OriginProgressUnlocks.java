@@ -13,32 +13,11 @@ public final class OriginProgressUnlocks {
         if (origin == null) return;
 
         switch (origin) {
-            case HUMAN -> syncHuman(player, state);
             case VAMPIRE -> syncVampire(player, state);
             case MERMAID -> syncMermaid(player, state);
             case SLIME -> syncSlime(player, state);
             default -> { }
         }
-    }
-
-    private static void syncHuman(ServerPlayerEntity player, OriginState state) {
-        int mastered = state.countFlags("human.environment_mastered.");
-        int dimensions = state.countFlags("human.dimension_visited.");
-        int majors = state.progress("human.major_kills");
-
-        unlockIf(player, OriginType.HUMAN, "survivor", mastered >= 3);
-        unlockIf(player, OriginType.HUMAN, "wayfarer", dimensions >= 3);
-        unlockIf(player, OriginType.HUMAN, "indomitable", mastered >= 3 && dimensions >= 3 && majors >= 3);
-        if (isUnlocked(player, OriginType.HUMAN, "indomitable")) {
-            unlockIf(player, OriginType.HUMAN, "endurance", mastered >= 4);
-            unlockIf(player, OriginType.HUMAN, "memory", dimensions >= 3 && mastered >= 4);
-            unlockIf(player, OriginType.HUMAN, "second_wind", majors >= 5);
-        }
-        unlockIf(player, OriginType.HUMAN, "final",
-                mastered >= 5
-                        && isUnlocked(player, OriginType.HUMAN, "endurance")
-                        && isUnlocked(player, OriginType.HUMAN, "memory")
-                        && isUnlocked(player, OriginType.HUMAN, "second_wind"));
     }
 
     private static void syncVampire(ServerPlayerEntity player, OriginState state) {

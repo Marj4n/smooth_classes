@@ -29,75 +29,9 @@ public final class OriginSkillRuntime {
         OriginType origin = state.origin();
         if (origin == null) return;
         switch (origin) {
-            case HUMAN -> tickHuman(player, state);
             case VAMPIRE -> tickVampire(player, state);
             case MERMAID -> tickMermaid(player, state);
             case SLIME -> tickSlime(player, state);
-            default -> { }
-        }
-    }
-
-    private static void tickHuman(ServerPlayerEntity player, OriginState state) {
-        if (unlocked(player, OriginType.HUMAN, "survivor")) {
-            String current = currentHumanEnvironment(player);
-            if (current != null && state.hasFlag("human.environment_mastered." + current)) {
-                applyHumanAdaptation(player, current);
-            }
-
-            String[] known = {"nether", "ocean", "sky", "cold", "end"};
-            int selected = Math.floorMod(state.progress("human.adaptation_index"), known.length);
-            if (unlocked(player, OriginType.HUMAN, "memory")
-                    && state.hasFlag("human.environment_mastered." + known[selected])) {
-                applyHumanAdaptation(player, known[selected]);
-            }
-
-            if (unlocked(player, OriginType.HUMAN, "wayfarer")) {
-                for (int i = 1; i <= known.length; i++) {
-                    String extra = known[(selected + i) % known.length];
-                    if (state.hasFlag("human.environment_mastered." + extra)) {
-                        applyHumanAdaptation(player, extra);
-                        break;
-                    }
-                }
-            }
-
-            if (unlocked(player, OriginType.HUMAN, "final")) {
-                int applied = 0;
-                for (String extra : known) {
-                    if (!state.hasFlag("human.environment_mastered." + extra)) continue;
-                    applyHumanAdaptation(player, extra);
-                    if (++applied >= 3) break;
-                }
-            }
-        }
-
-        if (unlocked(player, OriginType.HUMAN, "second_wind")) {
-            long readyAt = state.longProgress("human.second_wind_ready_at");
-            if (player.getHealth() <= player.getMaxHealth() * 0.30F && player.getWorld().getTime() >= readyAt) {
-                player.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, 20 * 6, 1, false, true, true));
-                player.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 20 * 6, 0, false, true, true));
-                player.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 20 * 4, 0, false, true, true));
-                state.longProgress("human.second_wind_ready_at", player.getWorld().getTime() + 20L * 120L);
-            }
-        }
-    }
-
-    private static String currentHumanEnvironment(ServerPlayerEntity player) {
-        if (player.getWorld().getRegistryKey() == net.minecraft.world.World.NETHER) return "nether";
-        if (player.getWorld().getRegistryKey() == net.minecraft.world.World.END) return "end";
-        if (player.isSubmergedInWater()) return "ocean";
-        if (player.getY() >= 160) return "sky";
-        if (player.isFrozen()) return "cold";
-        return null;
-    }
-
-    private static void applyHumanAdaptation(ServerPlayerEntity player, String adaptation) {
-        switch (adaptation) {
-            case "nether" -> player.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 50, 0, false, false, true));
-            case "ocean" -> player.addStatusEffect(new StatusEffectInstance(StatusEffects.WATER_BREATHING, 50, 0, false, false, true));
-            case "sky" -> player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOW_FALLING, 50, 0, false, false, true));
-            case "cold" -> player.setFrozenTicks(Math.max(0, player.getFrozenTicks() - 8));
-            case "end" -> player.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 50, 0, false, false, true));
             default -> { }
         }
     }
@@ -172,6 +106,7 @@ public final class OriginSkillRuntime {
     public static void exitVampireForms(ServerPlayerEntity player, OriginState state) {
         boolean wasManBat = state.hasFlag("vampire.form.man_bat");
         boolean wasBat = state.hasFlag("vampire.form.bat");
+        if (wasBat) VampireBatPerchRuntime.stop(player, state, false);
         state.unflag("vampire.form.bat");
         state.unflag("vampire.form.man_bat");
         if (wasBat) VampireBatHealthRuntime.exit(player, state);

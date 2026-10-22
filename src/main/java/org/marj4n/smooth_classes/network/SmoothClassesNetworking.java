@@ -23,6 +23,9 @@ import java.util.UUID;
 /** two ability channels with server-authoritative cooldown sync. */
 public final class SmoothClassesNetworking {
     public static final Identifier AVENGER_SOUL_ANIMATION = SmoothClasses.id("avenger_soul_animation");
+    public static final Identifier CHECK_SUMMON_HOVER = SmoothClasses.id("check_summon_hover");
+    public static final Identifier SYNC_SUMMON_HOVER = SmoothClasses.id("sync_summon_hover");
+    public static final Identifier SYNC_AVENGER_ATTACK_MARK = SmoothClasses.id("avenger_attack_mark");
     public static final Identifier CAST_SIGNATURE = SmoothClasses.id("cast_signature");
     public static final Identifier CAST_ASCENDANCY = SmoothClasses.id("cast_ascendancy");
     public static final Identifier BLADE_WORKS_HOLD = SmoothClasses.id("blade_works_hold");
@@ -47,6 +50,21 @@ public final class SmoothClassesNetworking {
     private SmoothClassesNetworking() {}
 
     public static void registerServer() {
+        // Verify highlighted summons server-side. Entity scoreboard tags are not
+        // reliably synced to vanilla clients, so the client must not guess ownership.
+        ServerPlayNetworking.registerGlobalReceiver(CHECK_SUMMON_HOVER,
+                (server, player, handler, buf, responseSender) -> {
+                    int entityId = buf.readVarInt();
+                    server.execute(() -> {
+                        net.minecraft.entity.Entity entity = player.getWorld().getEntityById(entityId);
+                        boolean owned = entity != null && player.squaredDistanceTo(entity) <= 48D * 48D
+                                && org.marj4n.smooth_classes.content.avenger.runtime.AvengerReworkRuntime.isOwnedSummon(player, entity);
+                        PacketByteBuf result = PacketByteBufs.create();
+                        result.writeVarInt(entityId);
+                        result.writeBoolean(owned);
+                        ServerPlayNetworking.send(player, SYNC_SUMMON_HOVER, result);
+                    });
+                });
         ServerPlayNetworking.registerGlobalReceiver(SELECT_ORIGIN,
                 (server, player, handler, buf, responseSender) -> {
                     String originId = buf.readString(64);
@@ -63,7 +81,7 @@ public final class SmoothClassesNetworking {
                     int slot = buf.readVarInt();
                     server.execute(() -> {
                         var result = org.marj4n.smooth_classes.origin.OriginAbilityDispatcher.activate(player, slot);
-                        if (!result.success()) player.sendMessage(Text.literal("[Origin] " + result.message()), true);
+                        if (!result.success()) SkillFeedback.failure(player, result.message());
                         sendOriginState(player);
                     });
                 });
@@ -89,7 +107,7 @@ public final class SmoothClassesNetworking {
                     server.execute(() -> {
                         if (org.marj4n.smooth_classes.origin.VampireBatAbilityLock.isLocked(player)) return;
                         var result = ClassSpecialDispatcher.activate(player, alternate);
-                        if (!result.success()) player.sendMessage(Text.literal("[Smooth Classes] " + result.detail()), true);
+                        if (!result.success()) SkillFeedback.failure(player, result.detail());
                         sendAbilityState(player);
                     });
                 });
@@ -99,7 +117,8 @@ public final class SmoothClassesNetworking {
                     server.execute(() -> {
                         if (org.marj4n.smooth_classes.origin.VampireBatAbilityLock.isLocked(player)) return;
                         var result = ClassSpecialDispatcher.select(player, selection);
-                        if (!result.success()) player.sendMessage(Text.literal("[Smooth Classes] " + result.detail()), true);
+                        // Successful radial orders are silent; failed ones are brief.
+                        if (!result.success()) SkillFeedback.failure(player, result.detail());
                         sendAbilityState(player);
                     });
                 });
@@ -134,7 +153,7 @@ public final class SmoothClassesNetworking {
                         if (org.marj4n.smooth_classes.origin.VampireBatAbilityLock.isLocked(player)) return;
                         var result = org.marj4n.smooth_classes.content.assassin.runtime.ShadowTechniqueRuntime
                                 .castAimed(player, targetEntityId, targetBlockHit);
-                        if (!result.success()) player.sendMessage(Text.literal("[Smooth Classes] " + result.detail()), true);
+                        if (!result.success()) SkillFeedback.failure(player, result.detail());
                         sendAbilityState(player);
                     });
                 });
@@ -181,7 +200,7 @@ public final class SmoothClassesNetworking {
                 server.execute(() -> {
                     if (org.marj4n.smooth_classes.origin.VampireBatAbilityLock.isLocked(player)) return;
                     var result = SignatureAbilityDispatcher.cast(player);
-                    if (!result.success()) player.sendMessage(Text.literal("[Smooth Classes] " + result.message()), true);
+                    if (!result.success()) SkillFeedback.failure(player, result.message());
                     sendAbilityState(player);
                 }));
         ServerPlayNetworking.registerGlobalReceiver(CAST_ASCENDANCY, (server, player, handler, buf, responseSender) ->
@@ -191,7 +210,7 @@ public final class SmoothClassesNetworking {
                     var result = ability.isBlank()
                             ? AscendancyAbilityDispatcher.DispatchResult.failPublic("No Ascendancy ability unlocked.")
                             : AscendancyAbilityDispatcher.castNamed(player, ability);
-                    if (!result.success()) player.sendMessage(Text.literal("[Smooth Classes] " + result.message()), true);
+                    if (!result.success()) SkillFeedback.failure(player, result.message());
                     sendAbilityState(player);
                 }));
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> server.execute(() -> sendAbilityState(handler.player)));

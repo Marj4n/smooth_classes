@@ -54,7 +54,6 @@ public final class AssassinSpecialRuntime {
                 player.getX(), player.getBodyY(0.45D), player.getZ(), 30, 0.65D, 0.7D, 0.65D, 0.08D);
         player.getServerWorld().playSound(null, player.getBlockPos(), SoundEvents.ENTITY_ENDERMAN_TELEPORT,
                 SoundCategory.PLAYERS, 0.35F, 1.65F);
-        player.sendMessage(Text.literal("Vanish").formatted(Formatting.DARK_PURPLE), true);
         return ExecutionResult.success(1, "Vanish broke nearby aggro and granted Stealth for 6s.");
     }
 

@@ -39,6 +39,8 @@ public abstract class PlayerOriginAppearanceRendererMixin
     @Unique private boolean smooth_classes$rightPantsVisible;
     @Unique private boolean smooth_classes$leftPantsVisible;
     @Unique private boolean smooth_classes$visibilityChanged;
+    @Unique private java.util.List<net.minecraft.client.render.entity.feature.FeatureRenderer<AbstractClientPlayerEntity,
+            PlayerEntityModel<AbstractClientPlayerEntity>>> smooth_classes$batFeaturesBackup;
 
     protected PlayerOriginAppearanceRendererMixin(EntityRendererFactory.Context ctx,
                                                    PlayerEntityModel<AbstractClientPlayerEntity> model,
@@ -69,6 +71,20 @@ public abstract class PlayerOriginAppearanceRendererMixin
             float yaw, float tickDelta, MatrixStack matrices,
             VertexConsumerProvider consumers, int light, CallbackInfo ci) {
         OriginVanillaBodyGuard.begin(player);
+        // Accessories and other third-party feature renderers attach to the old
+        // humanoid skeleton, so they float around the tiny Bat Form model.
+        // Temporarily render only Smooth Classes' native origin feature; restore
+        // the entire feature set right afterward for all other player forms.
+        boolean bat = (OriginRuntime.state(player).origin() == OriginType.VAMPIRE
+                && OriginRuntime.state(player).hasFlag("vampire.form.bat"))
+                || (player == MinecraftClient.getInstance().player
+                    && "vampire".equals(OriginClientState.originId)
+                    && OriginClientState.hasFlag("vampire.form.bat"));
+        if (bat && smooth_classes$batFeaturesBackup == null) {
+            smooth_classes$batFeaturesBackup = new java.util.ArrayList<>(this.features);
+            this.features.removeIf(feature -> !(feature instanceof OriginAppearanceFeatureRenderer)
+                    && !(feature instanceof ManBatPosePreparerFeatureRenderer));
+        }
     }
 
     @Inject(method = "render(Lnet/minecraft/client/network/AbstractClientPlayerEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V",
@@ -124,6 +140,11 @@ public abstract class PlayerOriginAppearanceRendererMixin
                                              MatrixStack matrices, VertexConsumerProvider consumers, int light,
                                              CallbackInfo ci) {
         OriginVanillaBodyGuard.end(player);
+        if (smooth_classes$batFeaturesBackup != null) {
+            this.features.clear();
+            this.features.addAll(smooth_classes$batFeaturesBackup);
+            smooth_classes$batFeaturesBackup = null;
+        }
         if (!smooth_classes$visibilityChanged) return;
         smooth_classes$restoreVisibility(this.getModel());
         smooth_classes$visibilityChanged = false;
