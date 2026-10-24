@@ -1,0 +1,42 @@
+{
+  "normal": {
+    "bidirectional": [
+      [
+        "origin_base",
+        "siren_voice"
+      ],
+      [
+        "siren_voice",
+        "drowned_song"
+      ],
+      [
+        "siren_voice",
+        "sea_kinship"
+      ],
+      [
+        "drowned_song",
+        "oceans_favor"
+      ],
+      [
+        "sea_kinship",
+        "oceans_favor"
+      ],
+      [
+        "oceans_favor",
+        "royal_court"
+      ],
+      [
+        "oceans_favor",
+        "landwalker"
+      ],
+      [
+        "royal_court",
+        "final"
+      ],
+      [
+        "landwalker",
+        "final"
+      ]
+    ]
+  }
+}

@@ -29,7 +29,8 @@
     "WardenEntityMixin",
     "BladeLootingMixin",
     "BloodRainSunlightMixin",
-    "AvengerWitherBossBarAccessor"
+    "AvengerWitherBossBarAccessor",
+    "AvengerWitherBossBarLifecycleMixin"
   ],
   "injectors": {
     "defaultRequire": 1

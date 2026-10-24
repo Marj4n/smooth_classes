@@ -1,0 +1,28 @@
+{
+  "origin_base": {
+    "title": {
+      "text": "Homunculus"
+    },
+    "description": {
+      "text": "5 hearts. Equip four whitelisted inner armor pieces in Accessories to stitch your body together. Equip a sword in Weapon Arm for an integrated blade. Outer armor remains visible."
+    },
+    "cost": 0,
+    "size": 1.25,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:brewing_stand"
+      }
+    },
+    "rewards": []
+  }
+}

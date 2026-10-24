@@ -1,0 +1,43 @@
+{
+  "school": "ARCANE",
+  "range": 42,
+  "tier": 1,
+  "learn": {},
+  "active": {
+    "cast": {
+      "duration": 0.75
+    }
+  },
+  "release": {
+    "sound": {
+      "id": "smooth_classes:energy_charge",
+      "volume": 0.6,
+      "pitch": 0.8
+    },
+    "animation": {
+      "id": "smooth_classes:arcane_charge"
+    }
+  },
+  "target": {
+    "type": "CASTER"
+  },
+  "deliver": {
+    "type": "DIRECT"
+  },
+  "impacts": [
+    {
+      "action": {
+        "type": "STATUS_EFFECT",
+        "status_effect": {
+          "effect_id": "smooth_classes:arcane_slash",
+          "duration": 0.8,
+          "apply_mode": "SET",
+          "show_particles": false
+        }
+      }
+    }
+  ],
+  "cost": {
+    "durability": 0
+  }
+}

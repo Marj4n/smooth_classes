@@ -109,3 +109,42 @@ publishing {
         // retrieving dependencies.
     }
 }
+
+
+// Do not ship an apparently successful JAR with its Puffish Skills datapack missing.
+// These configs define the Class/Ascendancy/Vampire trees; saved unlocks are
+// meaningless to the UI until their original category and skill IDs are loaded.
+tasks.register('validateSkillTreeResources') {
+    group = 'verification'
+    description = 'Fails before compilation/resource packaging if core Puffish Skills data is missing.'
+    doLast {
+        def skillsDir = file('src/main/resources/data/smooth_classes/puffish_skills')
+        def configFile = new File(skillsDir, 'config.json')
+        if (!configFile.isFile()) {
+            throw new GradleException('Smooth Classes Puffish Skills config.json is missing. Restore src/main/resources/data/ from the full source ZIP before building.')
+        }
+        def config = new groovy.json.JsonSlurper().parse(configFile)
+        def requiredCategories = [
+            'tree', 'avenger', 'foreigner', 'caster', 'berserker',
+            'archer', 'assassin', 'saber', 'ruler', 'rider', 'lancer',
+            'ascendancy', 'origin_vampire'
+        ]
+        if (!(config.categories instanceof Collection) || !config.categories.containsAll(requiredCategories)) {
+            throw new GradleException('Smooth Classes Skill Tree config is missing core Class/Ascendancy/Vampire categories. Restore the original config.json.')
+        }
+        if (config.categories.contains('origin_human')) {
+            throw new GradleException('Human is vanilla and must not have an Origin skill category.')
+        }
+        requiredCategories.each { category ->
+            def categoryDir = new File(skillsDir, 'categories/' + category)
+            ['category.json', 'skills.json', 'definitions.json'].each { name ->
+                if (!new File(categoryDir, name).isFile()) {
+                    throw new GradleException('Missing Puffish Skills resource: ' + category + '/' + name)
+                }
+            }
+        }
+    }
+}
+tasks.named('processResources') {
+    dependsOn tasks.named('validateSkillTreeResources')
+}

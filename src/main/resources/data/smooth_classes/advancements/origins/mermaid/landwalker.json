@@ -1,0 +1,28 @@
+{
+  "parent": "smooth_classes:origins/mermaid/root",
+  "display": {
+    "icon": {
+      "item": "minecraft:leather_boots"
+    },
+    "title": {
+      "text": "Landwalker"
+    },
+    "description": {
+      "text": "Origin milestone unlocked: Landwalker."
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": true
+  },
+  "criteria": {
+    "earned": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "earned"
+    ]
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "parent": "smooth_classes:origins/vampire/root",
+  "display": {
+    "icon": {
+      "item": "minecraft:glass_bottle"
+    },
+    "title": {
+      "text": "Blood Flask"
+    },
+    "description": {
+      "text": "Origin milestone unlocked: Blood Flask."
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": true
+  },
+  "criteria": {
+    "earned": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "earned"
+    ]
+  ]
+}
