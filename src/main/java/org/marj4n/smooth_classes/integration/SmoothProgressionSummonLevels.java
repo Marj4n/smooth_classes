@@ -7,6 +7,7 @@ import net.minecraft.entity.attribute.EntityAttributeInstance;
 import net.minecraft.entity.attribute.EntityAttributeModifier;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.mob.HostileEntity;
+import net.minecraft.entity.boss.WitherEntity;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 
@@ -29,12 +30,15 @@ public final class SmoothProgressionSummonLevels {
     private static final String ORIGINAL_LEVEL_PREFIX = "smooth_classes_avenger_original_level.";
     private static final UUID PROGRESSION_HEALTH_MODIFIER = UUID.fromString(
             "f6a2791b-857e-48c2-9ab9-df4e22b5f8d0");
+    private static final UUID PROGRESSION_BOSS_HEALTH_MODIFIER = UUID.fromString(
+            "2c9b713e-b6c1-4bfa-bd93-7b1ad9074d91");
     private static final boolean LOADED = FabricLoader.getInstance().isModLoaded("smooth_progression");
 
     private static boolean initialized;
     private static Method progressionGet;
     private static Method playerGetLevel;
     private static Method mobLevelReapply;
+    private static Method bossLevelRefresh;
 
     private SmoothProgressionSummonLevels() {}
 
@@ -55,7 +59,10 @@ public final class SmoothProgressionSummonLevels {
                 }
             }
         }
-        if (singleCorrectTag) return;
+        // A 1.0.5 world may already have the right scoreboard level but still
+        // contain a *persistent* Smooth Progression boss HP modifier. Repair it
+        // even when the level tag itself has not changed.
+        if (singleCorrectTag && !hasStaleBossHealth(summon)) return;
 
         // Remember the normal area level before the FIRST binding, for Unbind.
         if (!hasOriginalLevel(tags)) summon.addCommandTag(ORIGINAL_LEVEL_PREFIX + previous);
@@ -76,9 +83,18 @@ public final class SmoothProgressionSummonLevels {
             }
             summon.removeScoreboardTag(tag);
         }
-        if (originalLevel < 0) return;
-        replaceLevel(summon, originalLevel);
+        if (originalLevel < 0 && !(summon instanceof WitherEntity)) return;
+        // Older bound Withers may not have recorded their original level.
+        // As an unbound boss, they must not keep the owner's level tag.
+        replaceLevel(summon, Math.max(0, originalLevel));
         reapplyProgressionHealth(summon);
+        // After the Avenger owner tags have been REMOVED, restore ordinary
+        // Wither boss HP as well. Keep this optional via reflection.
+        initialize();
+        if (bossLevelRefresh != null && summon instanceof WitherEntity) {
+            try { bossLevelRefresh.invoke(null, summon); }
+            catch (ReflectiveOperationException | RuntimeException ignored) { /* no hard dependency */ }
+        }
     }
 
     private static void initialize() {
@@ -101,6 +117,12 @@ public final class SmoothProgressionSummonLevels {
             mobLevelReapply.setAccessible(true);
         } catch (ReflectiveOperationException | LinkageError | SecurityException ignored) {
             mobLevelReapply = null;
+        }
+        try {
+            Class<?> boss = Class.forName("org.marj4n.smooth_progression.boss.BossProgression");
+            bossLevelRefresh = boss.getMethod("refreshEntity", Entity.class);
+        } catch (ReflectiveOperationException | LinkageError ignored) {
+            bossLevelRefresh = null;
         }
     }
 
@@ -142,6 +164,12 @@ public final class SmoothProgressionSummonLevels {
         if (level > 0) summon.addCommandTag(LEVEL_PREFIX + level);
     }
 
+    private static boolean hasStaleBossHealth(LivingEntity entity) {
+        if (!(entity instanceof WitherEntity)) return false;
+        EntityAttributeInstance health = entity.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH);
+        return health != null && health.getModifier(PROGRESSION_BOSS_HEALTH_MODIFIER) != null;
+    }
+
     private static void reapplyProgressionHealth(LivingEntity summon) {
         // Smooth Progression itself only scales hostile mobs. Passive souls receive
         // the level tag but retain their native + Avenger-talent health balance.
@@ -153,6 +181,13 @@ public final class SmoothProgressionSummonLevels {
         if (attribute == null) return;
         float previousMax = Math.max(1F, hostile.getMaxHealth());
         float healthFraction = Math.max(0F, Math.min(1F, hostile.getHealth() / previousMax));
+
+        // The summoned Wither used to be categorized as a boss and may still
+        // have a saved boss HP modifier. Strip ONLY Smooth Progression's known
+        // modifier, preserving the health percentage and Avenger talent boosts.
+        if (hasStaleBossHealth(summon)) {
+            attribute.removeModifier(PROGRESSION_BOSS_HEALTH_MODIFIER);
+        }
 
         // MobLevelScaling's on-load method will not replace an existing UUID,
         // so remove only its OWN modifier before recalculating with the new level.

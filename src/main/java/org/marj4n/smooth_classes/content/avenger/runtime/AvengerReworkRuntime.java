@@ -1255,8 +1255,6 @@ public final class AvengerReworkRuntime {
         // refunds it or erases other captured souls of the same species.
         clearGuard(summon);
         clearStay(summon);
-        // Returned to a normal entity: restore Smooth Progression's area level.
-        SmoothProgressionSummonLevels.restoreOnUnbind(summon);
         if (summon.getCommandTags().contains(HIDDEN_NAME_TAG)) {
             summon.setCustomName(null);
             summon.setCustomNameVisible(false);
@@ -1267,6 +1265,11 @@ public final class AvengerReworkRuntime {
             if (tag.startsWith(OWNER_TAG_PREFIX)) summon.removeScoreboardTag(tag);
         }
         SUMMON_OWNER_CACHE.remove(summon);
+        // The Wither only becomes an ordinary boss AFTER all owner tags are gone.
+        SmoothProgressionSummonLevels.restoreOnUnbind(summon);
+        if (summon instanceof WitherEntity wither) {
+            ((AvengerWitherBossBarAccessor) wither).smoothClasses$getBossBar().setVisible(true);
+        }
         if (summon instanceof TameableEntity tameable) {
             tameable.setOwnerUuid(null);
             tameable.setTamed(false);

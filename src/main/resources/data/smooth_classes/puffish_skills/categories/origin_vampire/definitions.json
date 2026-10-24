@@ -1,0 +1,210 @@
+{
+  "origin_base": {
+    "title": {
+      "text": "Vampire"
+    },
+    "description": {
+      "text": "Blood Hunger and Night Vision. Feed on living non-hostile mobs to survive; explore the four Blood Diet quality tiers in this node."
+    },
+    "cost": 0,
+    "size": 1.25,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:fermented_spider_eye"
+      }
+    },
+    "rewards": []
+  },
+  "bat_form": {
+    "title": {
+      "text": "Bat Form"
+    },
+    "description": {
+      "text": "Kill 5 bats, fill Blood once and survive a full night. Unlocks the tiny Bat travel form with flight; combat and item use are disabled while transformed."
+    },
+    "cost": 1,
+    "size": 1.05,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:phantom_membrane"
+      }
+    },
+    "rewards": []
+  },
+  "man_bat": {
+    "title": {
+      "text": "Man-Bat"
+    },
+    "description": {
+      "text": "Drink 200 Humanoid Blood and score 50 night kills. Unlocks Man-Bat: armored combat form, strong Blood healing and slow, heavy bat flight. Lasts 60s; 30s cooldown."
+    },
+    "cost": 1,
+    "size": 1.05,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:leather_chestplate"
+      }
+    },
+    "rewards": []
+  },
+  "blood_sense": {
+    "title": {
+      "text": "Blood Sense"
+    },
+    "description": {
+      "text": "Taste all 4 Blood Types and drink 750 lifetime Blood. Reveal nearby mobs within 20 blocks for 10s, even through walls. 20s cooldown."
+    },
+    "cost": 1,
+    "size": 1.05,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:spider_eye"
+      }
+    },
+    "rewards": []
+  },
+  "blood_flask": {
+    "title": {
+      "text": "Blood Flask"
+    },
+    "description": {
+      "text": "Drink 1000 lifetime Blood. Sneak-use a Glass Bottle to store 30 Blood; drink it later to restore Blood."
+    },
+    "cost": 1,
+    "size": 1.05,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:glass_bottle"
+      }
+    },
+    "rewards": []
+  },
+  "nobility": {
+    "title": {
+      "text": "Crimson Nobility"
+    },
+    "description": {
+      "text": "Taste all 4 Blood Types and drink 1500 lifetime Blood. Blood capacity increases to 150."
+    },
+    "cost": 1,
+    "size": 1.05,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:redstone"
+      }
+    },
+    "rewards": []
+  },
+  "sun_tolerance": {
+    "title": {
+      "text": "Sun Tolerance"
+    },
+    "description": {
+      "text": "Prove yourself through 125 night kills. Sunlight penalties build later and burning ticks slower."
+    },
+    "cost": 1,
+    "size": 1.05,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:sunflower"
+      }
+    },
+    "rewards": []
+  },
+  "final": {
+    "title": {
+      "text": "Vampire Lord"
+    },
+    "description": {
+      "text": "Vampire Lord trial: drink 3000 lifetime Blood, unlock Crimson Nobility and Sun Tolerance, discover Alex's Caves Forlorn Hollows, and personally defeat 5 Vespers and 2 Forsaken INSIDE that cave. Vespers are the giant hostile bats; Forsaken are the terrifying ritual-born predators of the Forlorn Hollows. Reward: Man-Bat has 2x damage, movement and flight speed, normal attack speed, and a 15s cooldown (60s duration). Blood Sense: 40-block radius, 20s reveal, 10s cooldown. Sunlight slows and weakens instead of burning. Royal plum/wine-violet Man-Bat and Bat palette; tiny Bat speed and cooldown stay unchanged."
+    },
+    "cost": 1,
+    "size": 1.25,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:nether_star"
+      }
+    },
+    "rewards": []
+  }
+}

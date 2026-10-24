@@ -1,0 +1,42 @@
+{
+  "normal": {
+    "bidirectional": [
+      [
+        "origin_base",
+        "bat_form"
+      ],
+      [
+        "bat_form",
+        "man_bat"
+      ],
+      [
+        "man_bat",
+        "blood_sense"
+      ],
+      [
+        "man_bat",
+        "blood_flask"
+      ],
+      [
+        "blood_sense",
+        "nobility"
+      ],
+      [
+        "blood_flask",
+        "nobility"
+      ],
+      [
+        "nobility",
+        "sun_tolerance"
+      ],
+      [
+        "nobility",
+        "final"
+      ],
+      [
+        "sun_tolerance",
+        "final"
+      ]
+    ]
+  }
+}

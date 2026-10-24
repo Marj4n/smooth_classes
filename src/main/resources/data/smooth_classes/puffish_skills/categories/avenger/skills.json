@@ -1,0 +1,110 @@
+{
+  "avenger_death_list": {
+    "definition": "avengerDeathList",
+    "x": 0,
+    "y": 0,
+    "root": true
+  },
+  "avenger_curtain_call": {
+    "definition": "avengerCurtainCall",
+    "x": -73.9,
+    "y": -72,
+    "root": false
+  },
+  "avenger_curtain_call_i": {
+    "definition": "avengerCurtainCallI",
+    "x": -110.8,
+    "y": -112,
+    "root": false
+  },
+  "avenger_curtain_call_ii": {
+    "definition": "avengerCurtainCallII",
+    "x": -73.9,
+    "y": -152,
+    "root": false
+  },
+  "avenger_endless_devour": {
+    "definition": "avengerEndlessDevour",
+    "x": 73.9,
+    "y": -72,
+    "root": false
+  },
+  "avenger_devour_150": {
+    "definition": "avengerDevour150",
+    "x": 55.4,
+    "y": -112,
+    "root": false
+  },
+  "avenger_devour_200": {
+    "definition": "avengerDevour200",
+    "x": 92.4,
+    "y": -152,
+    "root": false
+  },
+  "avenger_devour_fast": {
+    "definition": "avengerDevourFast",
+    "x": 129.3,
+    "y": -112,
+    "root": false
+  },
+  "avenger_soul_conduit_i": {
+    "definition": "avengerSoulConduitI",
+    "x": 0,
+    "y": 55,
+    "root": false
+  },
+  "avenger_soul_conduit_ii": {
+    "definition": "avengerSoulConduitII",
+    "x": 0,
+    "y": 105,
+    "root": false
+  },
+  "avenger_summon_damage_i": {
+    "definition": "avengerSummonDamageI",
+    "x": -73.9,
+    "y": 64,
+    "root": false
+  },
+  "avenger_summon_damage_ii": {
+    "definition": "avengerSummonDamageII",
+    "x": -110.8,
+    "y": 112,
+    "root": false
+  },
+  "avenger_summon_health_i": {
+    "definition": "avengerSummonHealthI",
+    "x": 73.9,
+    "y": 64,
+    "root": false
+  },
+  "avenger_summon_health_ii": {
+    "definition": "avengerSummonHealthII",
+    "x": 110.8,
+    "y": 112,
+    "root": false
+  },
+  "avenger_summon_armor_i": {
+    "definition": "avengerSummonArmorI",
+    "x": -55.4,
+    "y": 152,
+    "root": false
+  },
+  "avenger_summon_armor_ii": {
+    "definition": "avengerSummonArmorII",
+    "x": -55.4,
+    "y": 200,
+    "root": false
+  },
+  "avenger_death_march": {
+    "definition": "avengerDeathMarch",
+    "x": 55.4,
+    "y": 152,
+    "root": false
+  },
+  "avenger_soul_pact": {
+    "definition": "avengerSoulPact",
+    "x": 55.4,
+    "y": 200,
+    "root": false
+  }
+}

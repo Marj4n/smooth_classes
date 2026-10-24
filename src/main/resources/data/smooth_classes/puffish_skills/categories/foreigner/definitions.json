@@ -1,0 +1,478 @@
+{
+  "melee_damage_multi+2%": {
+    "title": {
+      "translate": "text.skills.melee_damage_multi+2%.title"
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/attack_up.png"
+      }
+    },
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:attribute",
+        "data": {
+          "attribute": "puffish_skills:player.melee_damage",
+          "value": 0.03,
+          "operation": "multiply_base"
+        }
+      }
+    ]
+  },
+  "attack_speed_multi+2%": {
+    "title": {
+      "translate": "text.skills.attack_speed_multi+2%.title"
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/attackspeed_up.png"
+      }
+    },
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:attribute",
+        "data": {
+          "attribute": "generic.attack_speed",
+          "value": 0.03,
+          "operation": "multiply_base"
+        }
+      }
+    ]
+  },
+  "spellbladeWeaponExpert": {
+    "title": {
+      "translate": "text.skills.spellbladeWeaponExpert.title"
+    },
+    "description": {
+      "translate": "text.skills.spellbladeWeaponExpert.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/spellblade_weapon_expert.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "spellbladeWeaponExpert"
+        }
+      }
+    ]
+  },
+  "spellbladeSpellweaving": {
+    "title": {
+      "translate": "text.skills.spellbladeSpellweaving.title"
+    },
+    "description": {
+      "translate": "text.skills.spellbladeSpellweaving.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/spellblade_spellweaving.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "spellbladeSpellweaving"
+        }
+      }
+    ]
+  },
+  "spellbladeSignatureElementalSurge": {
+    "title": {
+      "translate": "text.skills.spellbladeSignatureElementalSurge.title"
+    },
+    "description": {
+      "translate": "text.skills.spellbladeSignatureElementalSurge.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/spellblade_signature_elemental_surge.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "spellbladeSignatureElementalSurge"
+        }
+      }
+    ]
+  },
+  "spellbladeSignatureElementalSurgeNoFrost": {
+    "title": {
+      "translate": "text.skills.spellbladeSignatureElementalSurgeNoFrost.title"
+    },
+    "description": {
+      "translate": "text.skills.spellbladeSignatureElementalSurgeNoFrost.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/spellblade_signature_elemental_surge.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "spellbladeSignatureElementalSurgeNoFrost"
+        }
+      }
+    ]
+  },
+  "spellbladeSignatureElementalSurgeNoFire": {
+    "title": {
+      "translate": "text.skills.spellbladeSignatureElementalSurgeNoFire.title"
+    },
+    "description": {
+      "translate": "text.skills.spellbladeSignatureElementalSurgeNoFire.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/spellblade_signature_elemental_surge.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "spellbladeSignatureElementalSurgeNoFire"
+        }
+      }
+    ]
+  },
+  "spellbladeSignatureElementalSurgeRenewal": {
+    "title": {
+      "translate": "text.skills.spellbladeSignatureElementalSurgeRenewal.title"
+    },
+    "description": {
+      "translate": "text.skills.spellbladeSignatureElementalSurgeRenewal.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/spellblade_signature_elemental_surge.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "spellbladeSignatureElementalSurgeRenewal"
+        }
+      }
+    ]
+  },
+  "spellbladeSignatureElementalSurgeNoLightning": {
+    "title": {
+      "translate": "text.skills.spellbladeSignatureElementalSurgeNoLightning.title"
+    },
+    "description": {
+      "translate": "text.skills.spellbladeSignatureElementalSurgeNoLightning.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/spellblade_signature_elemental_surge.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "spellbladeSignatureElementalSurgeNoLightning"
+        }
+      }
+    ]
+  },
+  "spellbladeSignatureElementalImpact": {
+    "title": {
+      "translate": "text.skills.spellbladeSignatureElementalImpact.title"
+    },
+    "description": {
+      "translate": "text.skills.spellbladeSignatureElementalImpact.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/spellblade_signature_elemental_impact.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "spellbladeSignatureElementalImpact"
+        }
+      }
+    ]
+  },
+  "spellbladeSignatureElementalImpactMagnet": {
+    "title": {
+      "translate": "text.skills.spellbladeSignatureElementalImpactMagnet.title"
+    },
+    "description": {
+      "translate": "text.skills.spellbladeSignatureElementalImpactMagnet.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/spellblade_signature_elemental_impact.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "spellbladeSignatureElementalImpactMagnet"
+        }
+      }
+    ]
+  },
+  "spellbladeSignatureElementalImpactResistance": {
+    "title": {
+      "translate": "text.skills.spellbladeSignatureElementalImpactResistance.title"
+    },
+    "description": {
+      "translate": "text.skills.spellbladeSignatureElementalImpactResistance.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/spellblade_signature_elemental_impact.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "spellbladeSignatureElementalImpactResistance"
+        }
+      }
+    ]
+  },
+  "spellbladeSignatureSpellweaver": {
+    "title": {
+      "translate": "text.skills.spellbladeSignatureSpellweaver.title"
+    },
+    "description": {
+      "translate": "text.skills.spellbladeSignatureSpellweaver.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/spellblade_signature_spellweaver.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "spellbladeSignatureSpellweaver"
+        }
+      }
+    ]
+  },
+  "spellbladeSignatureSpellweaverHaste": {
+    "title": {
+      "translate": "text.skills.spellbladeSignatureSpellweaverHaste.title"
+    },
+    "description": {
+      "translate": "text.skills.spellbladeSignatureSpellweaverHaste.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/spellblade_signature_spellweaver.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "spellbladeSignatureSpellweaverHaste"
+        }
+      }
+    ]
+  },
+  "spellbladeSignatureSpellweaverRegeneration": {
+    "title": {
+      "translate": "text.skills.spellbladeSignatureSpellweaverRegeneration.title"
+    },
+    "description": {
+      "translate": "text.skills.spellbladeSignatureSpellweaverRegeneration.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/spellblade_signature_spellweaver.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "spellbladeSignatureSpellweaverRegeneration"
+        }
+      }
+    ]
+  }
+}

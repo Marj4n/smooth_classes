@@ -1,0 +1,11 @@
+{
+  "school": "ARCANE",
+  "range": 0,
+  "tier": 1,
+  "active": { "cast": { "duration": 0 } },
+  "release": { "animation": { "id": "smooth_classes:treasury_store" } },
+  "target": { "type": "CASTER" },
+  "deliver": { "type": "DIRECT" },
+  "impacts": [],
+  "cost": { "durability": 0 }
+}
