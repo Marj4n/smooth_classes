@@ -1,0 +1,37 @@
+{
+  "project": "smooth_classes",
+  "status": "PASS_BUILD_ARTIFACT_CHECKS",
+  "jars": [
+    {
+      "loader": "fabric",
+      "file": "D:\\Development\\minecraft\\Smooth Classes\\build\\libs\\smooth_classes-1.0.5-1.20.1-fabric.jar",
+      "sha256": "827041ada890f3f66ab35797fecf29a4a321a709b33f594cccb3196417b67a84",
+      "bytes": 13281727,
+      "assets_and_data_verified": 830,
+      "mixin_configs_checked": [
+        "smooth_classes.bewitchment.mixins.json",
+        "smooth_classes.dynamic_bars.mixins.json",
+        "smooth_classes.mixins.json"
+      ]
+    },
+    {
+      "loader": "forge",
+      "file": "D:\\Development\\minecraft\\Smooth Classes\\build\\libs\\smooth_classes-1.0.5-1.20.1-forge.jar",
+      "sha256": "ffc5ffd90aa72b2c5ccc5c9b9c919877b8e8bd3c9e78e244a4380278e1a455d3",
+      "bytes": 13305598,
+      "assets_and_data_verified": 830,
+      "mixin_configs_checked": [
+        "smooth_classes.dynamic_bars.mixins.json",
+        "smooth_classes.mixins.json"
+      ]
+    }
+  ],
+  "runtime_test": "NOT_RUN \u2014 no game/server startup performed",
+  "installed_utc": "2026-10-26T12:10:48.858028+00:00",
+  "previous_branch": "dev-origin",
+  "migration_branch": "codex/multiloader-1.20.1",
+  "original_backup": "C:\\Users\\kevin\\OneDrive\\Documents\\ChatGPT\\Minecraft Project\\multiloader-work\\smooth_classes-before-multiloader.zip",
+  "installed_folder_build": "PASS",
+  "verified_utc": "2026-10-26T12:16:33.292269+00:00",
+  "warnings": "Compiler deprecations and remapping notices remain; runtime behavior has not been tested."
+}
