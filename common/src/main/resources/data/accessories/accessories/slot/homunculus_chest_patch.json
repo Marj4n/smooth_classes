@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "amount": 1,
+  "operation": "set",
+  "order": 1001,
+  "icon": "smooth_classes:gui/slot/homunculus_chest_patch",
+  "validators": [
+    "smooth_classes:homunculus_only"
+  ]
+}

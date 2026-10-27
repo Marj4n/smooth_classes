@@ -1,111 +1,66 @@
 plugins {
-    id 'fabric-loom' version '1.17.21'
-    id 'maven-publish'
+    id 'base'
+    id 'dev.architectury.loom' version '1.17.493' apply false
 }
-
-version = project.mod_version
-group = project.maven_group
-
-base {
-    archivesName = project.archives_base_name
+allprojects {
+    group = rootProject.maven_group
+    version = rootProject.mod_version
 }
+project(':forge') { ext['loom.platform'] = 'forge' }
+tasks.register('collectJars', Sync) {
+    dependsOn ':fabric:remapJar', ':forge:remapJar'
+    from(project(':fabric').tasks.named('remapJar').flatMap { it.archiveFile })
+    from(project(':forge').tasks.named('remapJar').flatMap { it.archiveFile })
+    into(layout.buildDirectory.dir('libs'))
+}
+tasks.named('build') {
+    dependsOn ':fabric:build', ':forge:build', 'collectJars', ':common:validateSharedResources'
+}
+tasks.named('clean') { dependsOn ':fabric:clean', ':forge:clean', ':common:clean' }
 
-loom {
-    splitEnvironmentSourceSets()
+// Packaging is part of the build, so a successful compile cannot hide missing data.
+tasks.register('verifyLoaderJars') {
+    dependsOn ':fabric:remapJar', ':forge:remapJar', ':common:validateSharedResources'
+    doLast {
+        ['fabric', 'forge'].each { loader ->
+            def artifact = project(":" + loader).tasks.named('remapJar').get().archiveFile.get().asFile
+            new java.util.jar.JarFile(artifact).withCloseable { jar ->
+                def names = jar.entries().collect { it.name }
+                def ownMetadata = loader == 'fabric' ? 'fabric.mod.json' : 'META-INF/mods.toml'
+                def otherMetadata = loader == 'fabric' ? 'META-INF/mods.toml' : 'fabric.mod.json'
+                if (!names.contains(ownMetadata) || names.contains(otherMetadata)) {
+                    throw new GradleException('Loader metadata is incorrect in ' + artifact.name)
+                }
+                if (loader == 'forge' && !names.contains('pack.mcmeta')) {
+                    throw new GradleException('Missing Forge resource pack metadata in ' + artifact.name)
+                }
+                def metadata = jar.getInputStream(jar.getJarEntry(ownMetadata)).getText('UTF-8')
+                if (metadata.contains('$' + '{version}')) throw new GradleException('Unexpanded version in ' + artifact.name)
+                ['assets', 'data'].each { prefix ->
+                    fileTree('common/src/main/resources/' + prefix).files.each { original ->
+                        def relative = file('common/src/main/resources').toPath().relativize(original.toPath()).toString().replace('\\', '/')
+                        def entry = jar.getJarEntry(relative)
+                        if (entry == null || !java.util.Arrays.equals(original.bytes, jar.getInputStream(entry).bytes)) {
+                            throw new GradleException('Missing or changed shared resource in ' + artifact.name + ': ' + relative)
+                        }
+                    }
+                }
+                names.findAll { it.endsWith('.mixins.json') }.each { name ->
+                    def config = new groovy.json.JsonSlurper().parse(jar.getInputStream(jar.getJarEntry(name)))
+                    if (!names.contains(config.refmap)) throw new GradleException('Missing mixin refmap: ' + name)
+                    def refmapText = jar.getInputStream(jar.getJarEntry(config.refmap)).getText('UTF-8')
+                    if (refmapText.contains('L/;')) throw new GradleException('Invalid generic type descriptor in mixin refmap: ' + name)
 
-    mods {
-        "smooth_classes" {
-            sourceSet sourceSets.main
-            sourceSet sourceSets.client
+                    def packagePath = config.package.replace('.', '/') + '/'
+                    ((config.mixins ?: []) + (config.client ?: []) + (config.server ?: [])).each { mixin ->
+                        if (!names.contains(packagePath + mixin.replace('.', '/') + '.class')) {
+                            throw new GradleException('Missing mixin class: ' + mixin)
+                        }
+                    }
+                }
+                logger.lifecycle('Verified ' + loader + ' metadata, mixins and shared resources: ' + artifact.name)
+            }
         }
     }
 }
-
-
-repositories {
-    maven { url "https://www.cursemaven.com"; content { includeGroup "curse.maven" } }
-    maven { name = "Modrinth"; url = "https://api.modrinth.com/maven"; content { includeGroup "maven.modrinth" } }
-    // Add repositories to retrieve artifacts from in here.
-    // You should only use this when depending on other mods because
-    // Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
-    // See https://docs.gradle.org/current/userguide/declaring_repositories.html
-    // for more information about repositories.
-}
-
-dependencies {
-    // To change the versions see the gradle.properties file
-    minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-    modImplementation "curse.maven:puffish-skills-835091:${project.puffish_skills_version}"
-    modImplementation "curse.maven:puffish-attributes-991341:${project.puffish_attributes_version}"
-    modImplementation "maven.modrinth:spell-power:${project.spellpower_version}-fabric"
-    modImplementation "maven.modrinth:spell-engine:${project.spell_engine_version}-fabric"
-    // Homunculus body-patch + integrated weapon slots. Accessories is a runtime dependency;
-    // its JAR is downloaded by Gradle and never redistributed in our source archive.
-    modImplementation "maven.modrinth:jtmvUHXj:BmhkZr5J" // Accessories Fabric 1.0.0-beta.47+1.20.1
-    // Only used at compile time by the conditional compatibility mixin. NEVER bundled.
-    modCompileOnly "maven.modrinth:AKbBSvuC:JwA6Nkik" // Bewitchment 1.20-10
-}
-
-processResources {
-    inputs.property "version", project.version
-    inputs.property "minecraft_version", project.minecraft_version
-    inputs.property "loader_version", project.loader_version
-    filteringCharset "UTF-8"
-
-    filesMatching("fabric.mod.json") {
-        expand "version": project.version,
-                "minecraft_version": project.minecraft_version,
-                "loader_version": project.loader_version
-    }
-}
-
-def targetJavaVersion = 17
-tasks.withType(JavaCompile).configureEach {
-    // ensure that the encoding is set to UTF-8, no matter what the system default is
-    // this fixes some edge cases with special characters not displaying correctly
-    // see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
-    // If Javadoc is generated, this must be specified in that task too.
-    it.options.encoding = "UTF-8"
-    if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
-        it.options.release.set(targetJavaVersion)
-    }
-}
-
-java {
-    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
-    if (JavaVersion.current() < javaVersion) {
-        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
-    }
-    // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
-    // if it is present.
-    // If you remove this line, sources will not be generated.
-    withSourcesJar()
-}
-
-jar {
-    from("LICENSE.txt") {
-        rename { "${it}_${project.archives_base_name}" }
-    }
-}
-
-// configure the maven publication
-publishing {
-    publications {
-        create("mavenJava", MavenPublication) {
-            artifactId = project.archives_base_name
-            from components.java
-        }
-    }
-
-    // See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
-    repositories {
-        // Add repositories to publish to here.
-        // Notice: This block does NOT have the same function as the block in the top level.
-        // The repositories here will be used for publishing your artifact, not for
-        // retrieving dependencies.
-    }
-}
+tasks.named('collectJars') { dependsOn 'verifyLoaderJars' }

@@ -1,0 +1,792 @@
+{
+  "spell_healing_power_multi+1%": {
+    "title": {
+      "translate": "text.skills.spell_healing_power_multi+1%.title"
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/healing_up.png"
+      }
+    },
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:attribute",
+        "data": {
+          "attribute": "spell_power:healing",
+          "value": 0.05,
+          "operation": "multiply_base"
+        }
+      }
+    ]
+  },
+  "health+2": {
+    "title": {
+      "translate": "text.skills.health+2.title"
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/health_up.png"
+      }
+    },
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:attribute",
+        "data": {
+          "attribute": "generic.max_health",
+          "value": 0.1,
+          "operation": "multiply_base"
+        }
+      }
+    ]
+  },
+  "resistance_multi+2%": {
+    "title": {
+      "translate": "text.skills.resistance_multi+2%.title"
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/resist_up.png"
+      }
+    },
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:attribute",
+        "data": {
+          "attribute": "puffish_skills:player.resistance",
+          "value": 0.05,
+          "operation": "multiply_base"
+        }
+      }
+    ]
+  },
+  "melee_damage_multi+2%": {
+    "title": {
+      "translate": "text.skills.melee_damage_multi+2%.title"
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/attack_up.png"
+      }
+    },
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:attribute",
+        "data": {
+          "attribute": "puffish_skills:player.melee_damage",
+          "value": 0.03,
+          "operation": "multiply_base"
+        }
+      }
+    ]
+  },
+  "stamina_multi+7%": {
+    "title": {
+      "translate": "text.skills.stamina_multi+7%.title"
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/stamina_up.png"
+      }
+    },
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:attribute",
+        "data": {
+          "attribute": "puffish_skills:player.stamina",
+          "value": 0.05,
+          "operation": "multiply_base"
+        }
+      }
+    ]
+  },
+  "crusaderAegis": {
+    "title": {
+      "translate": "text.skills.crusaderAegis.title"
+    },
+    "description": {
+      "translate": "text.skills.crusaderAegis.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/crusader_aegis.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "crusaderAegis"
+        }
+      }
+    ]
+  },
+  "crusaderRetribution": {
+    "title": {
+      "translate": "text.skills.crusaderRetribution.title"
+    },
+    "description": {
+      "translate": "text.skills.crusaderRetribution.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/crusader_retribution.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "crusaderRetribution"
+        }
+      }
+    ]
+  },
+  "crusaderExhaustiveRecovery": {
+    "title": {
+      "translate": "text.skills.crusaderExhaustiveRecovery.title"
+    },
+    "description": {
+      "translate": "text.skills.crusaderExhaustiveRecovery.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/crusader_exhaustive_recovery.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "crusaderExhaustiveRecovery"
+        }
+      }
+    ]
+  },
+  "crusaderSignatureConsecration": {
+    "title": {
+      "translate": "text.skills.crusaderSignatureConsecration.title"
+    },
+    "description": {
+      "translate": "text.skills.crusaderSignatureConsecration.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/crusader_signature_consecration.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "crusaderSignatureConsecration"
+        }
+      }
+    ]
+  },
+  "crusaderSignatureConsecrationDuration": {
+    "title": {
+      "translate": "text.skills.crusaderSignatureConsecrationDuration.title"
+    },
+    "description": {
+      "translate": "text.skills.crusaderSignatureConsecrationDuration.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/crusader_signature_consecration.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "crusaderSignatureConsecrationDuration"
+        }
+      }
+    ]
+  },
+  "crusaderSignatureConsecrationWard": {
+    "title": {
+      "translate": "text.skills.crusaderSignatureConsecrationWard.title"
+    },
+    "description": {
+      "translate": "text.skills.crusaderSignatureConsecrationWard.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/crusader_signature_consecration.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "crusaderSignatureConsecrationWard"
+        }
+      }
+    ]
+  },
+  "crusaderSignatureConsecrationTaunt": {
+    "title": {
+      "translate": "text.skills.crusaderSignatureConsecrationTaunt.title"
+    },
+    "description": {
+      "translate": "text.skills.crusaderSignatureConsecrationTaunt.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/crusader_signature_consecration.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "crusaderSignatureConsecrationTaunt"
+        }
+      }
+    ]
+  },
+  "crusaderSignatureConsecrationMighty": {
+    "title": {
+      "translate": "text.skills.crusaderSignatureConsecrationMighty.title"
+    },
+    "description": {
+      "translate": "text.skills.crusaderSignatureConsecrationMighty.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/crusader_signature_consecration.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "crusaderSignatureConsecrationMighty"
+        }
+      }
+    ]
+  },
+  "crusaderSignatureConsecrationSpellforged": {
+    "title": {
+      "translate": "text.skills.crusaderSignatureConsecrationSpellforged.title"
+    },
+    "description": {
+      "translate": "text.skills.crusaderSignatureConsecrationSpellforged.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/crusader_signature_consecration.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "crusaderSignatureConsecrationSpellforged"
+        }
+      }
+    ]
+  },
+  "crusaderSignatureSacredOnslaught": {
+    "title": {
+      "translate": "text.skills.crusaderSignatureSacredOnslaught.title"
+    },
+    "description": {
+      "translate": "text.skills.crusaderSignatureSacredOnslaught.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/crusader_signature_sacred_onslaught.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "crusaderSignatureSacredOnslaught"
+        }
+      }
+    ]
+  },
+  "crusaderSignatureSacredOnslaughtHeal": {
+    "title": {
+      "translate": "text.skills.crusaderSignatureSacredOnslaughtHeal.title"
+    },
+    "description": {
+      "translate": "text.skills.crusaderSignatureSacredOnslaughtHeal.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/crusader_signature_sacred_onslaught.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "crusaderSignatureSacredOnslaughtHeal"
+        }
+      }
+    ]
+  },
+  "crusaderSignatureSacredOnslaughtDefend": {
+    "title": {
+      "translate": "text.skills.crusaderSignatureSacredOnslaughtDefend.title"
+    },
+    "description": {
+      "translate": "text.skills.crusaderSignatureSacredOnslaughtDefend.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/crusader_signature_sacred_onslaught.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "crusaderSignatureSacredOnslaughtDefend"
+        }
+      }
+    ]
+  },
+  "crusaderSignatureSacredOnslaughtMighty": {
+    "title": {
+      "translate": "text.skills.crusaderSignatureSacredOnslaughtMighty.title"
+    },
+    "description": {
+      "translate": "text.skills.crusaderSignatureSacredOnslaughtMighty.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/crusader_signature_sacred_onslaught.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "crusaderSignatureSacredOnslaughtMighty"
+        }
+      }
+    ]
+  },
+  "crusaderSignatureSacredOnslaughtStun": {
+    "title": {
+      "translate": "text.skills.crusaderSignatureSacredOnslaughtStun.title"
+    },
+    "description": {
+      "translate": "text.skills.crusaderSignatureSacredOnslaughtStun.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/crusader_signature_sacred_onslaught.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "crusaderSignatureSacredOnslaughtStun"
+        }
+      }
+    ]
+  },
+  "crusaderSignatureDivineAdjudication": {
+    "title": {
+      "translate": "text.skills.crusaderSignatureDivineAdjudication.title"
+    },
+    "description": {
+      "translate": "text.skills.crusaderSignatureDivineAdjudication.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/crusader_signature_divine_adjudication.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "crusaderSignatureDivineAdjudication"
+        }
+      }
+    ]
+  },
+  "crusaderSignatureDivineAdjudicationTaunt": {
+    "title": {
+      "translate": "text.skills.crusaderSignatureDivineAdjudicationTaunt.title"
+    },
+    "description": {
+      "translate": "text.skills.crusaderSignatureDivineAdjudicationTaunt.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/crusader_signature_divine_adjudication.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "crusaderSignatureDivineAdjudicationTaunt"
+        }
+      }
+    ]
+  },
+  "crusaderSignatureDivineAdjudicationMark": {
+    "title": {
+      "translate": "text.skills.crusaderSignatureDivineAdjudicationMark.title"
+    },
+    "description": {
+      "translate": "text.skills.crusaderSignatureDivineAdjudicationMark.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/crusader_signature_divine_adjudication.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "crusaderSignatureDivineAdjudicationMark"
+        }
+      }
+    ]
+  },
+  "crusaderSignatureDivineAdjudicationChain": {
+    "title": {
+      "translate": "text.skills.crusaderSignatureDivineAdjudicationChain.title"
+    },
+    "description": {
+      "translate": "text.skills.crusaderSignatureDivineAdjudicationChain.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/crusader_signature_divine_adjudication.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "crusaderSignatureDivineAdjudicationChain"
+        }
+      }
+    ]
+  },
+  "crusaderSignatureDivineAdjudicationRecuperate": {
+    "title": {
+      "translate": "text.skills.crusaderSignatureDivineAdjudicationRecuperate.title"
+    },
+    "description": {
+      "translate": "text.skills.crusaderSignatureDivineAdjudicationRecuperate.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/crusader_signature_divine_adjudication.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "crusaderSignatureDivineAdjudicationRecuperate"
+        }
+      }
+    ]
+  },
+  "crusaderSignatureDivineAdjudicationMighty": {
+    "title": {
+      "translate": "text.skills.crusaderSignatureDivineAdjudicationMighty.title"
+    },
+    "description": {
+      "translate": "text.skills.crusaderSignatureDivineAdjudicationMighty.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/crusader_signature_divine_adjudication.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "crusaderSignatureDivineAdjudicationMighty"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,894 @@
+{
+  "health+2": {
+    "title": {
+      "translate": "text.skills.health+2.title"
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/health_up.png"
+      }
+    },
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:attribute",
+        "data": {
+          "attribute": "generic.max_health",
+          "value": 0.1,
+          "operation": "multiply_base"
+        }
+      }
+    ]
+  },
+  "melee_damage_multi+2%": {
+    "title": {
+      "translate": "text.skills.melee_damage_multi+2%.title"
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/attack_up.png"
+      }
+    },
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:attribute",
+        "data": {
+          "attribute": "puffish_skills:player.melee_damage",
+          "value": 0.03,
+          "operation": "multiply_base"
+        }
+      }
+    ]
+  },
+  "berserkerSwordMastery": {
+    "title": {
+      "translate": "text.skills.berserkerSwordMastery.title"
+    },
+    "description": {
+      "translate": "text.skills.berserkerSwordMastery.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/berserker_sword_mastery.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "berserkerSwordMastery"
+        }
+      }
+    ]
+  },
+  "berserkerSwordMasteryProficient": {
+    "title": {
+      "translate": "text.skills.berserkerSwordMasteryProficient.title"
+    },
+    "description": {
+      "translate": "text.skills.berserkerSwordMasteryProficient.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/berserker_sword_mastery_proficient.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "berserkerSwordMasteryProficient"
+        }
+      }
+    ]
+  },
+  "berserkerSwordMasterySkilled": {
+    "title": {
+      "translate": "text.skills.berserkerSwordMasterySkilled.title"
+    },
+    "description": {
+      "translate": "text.skills.berserkerSwordMasterySkilled.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/berserker_sword_mastery_skilled.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "berserkerSwordMasterySkilled"
+        }
+      }
+    ]
+  },
+  "berserkerAxeMastery": {
+    "title": {
+      "translate": "text.skills.berserkerAxeMastery.title"
+    },
+    "description": {
+      "translate": "text.skills.berserkerAxeMastery.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/berserker_axe_mastery.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "berserkerAxeMastery"
+        }
+      }
+    ]
+  },
+  "berserkerAxeMasteryProficient": {
+    "title": {
+      "translate": "text.skills.berserkerAxeMasteryProficient.title"
+    },
+    "description": {
+      "translate": "text.skills.berserkerAxeMasteryProficient.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/berserker_axe_mastery_proficient.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "berserkerAxeMasteryProficient"
+        }
+      }
+    ]
+  },
+  "berserkerAxeMasterySkilled": {
+    "title": {
+      "translate": "text.skills.berserkerAxeMasterySkilled.title"
+    },
+    "description": {
+      "translate": "text.skills.berserkerAxeMasterySkilled.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/berserker_axe_mastery_skilled.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "berserkerAxeMasterySkilled"
+        }
+      }
+    ]
+  },
+  "berserkerIgnorePain": {
+    "title": {
+      "translate": "text.skills.berserkerIgnorePain.title"
+    },
+    "description": {
+      "translate": "text.skills.berserkerIgnorePain.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/berserker_ignore_pain.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "berserkerIgnorePain"
+        }
+      }
+    ]
+  },
+  "berserkerIgnorePainProficient": {
+    "title": {
+      "translate": "text.skills.berserkerIgnorePainProficient.title"
+    },
+    "description": {
+      "translate": "text.skills.berserkerIgnorePainProficient.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/berserker_ignore_pain_proficient.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "berserkerIgnorePainProficient"
+        }
+      }
+    ]
+  },
+  "berserkerIgnorePainSkilled": {
+    "title": {
+      "translate": "text.skills.berserkerIgnorePainSkilled.title"
+    },
+    "description": {
+      "translate": "text.skills.berserkerIgnorePainSkilled.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/berserker_ignore_pain_skilled.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "berserkerIgnorePainSkilled"
+        }
+      }
+    ]
+  },
+  "berserkerChallenge": {
+    "title": {
+      "translate": "text.skills.berserkerChallenge.title"
+    },
+    "description": {
+      "translate": "text.skills.berserkerChallenge.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/berserker_challenge.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "berserkerChallenge"
+        }
+      }
+    ]
+  },
+  "berserkerExploit": {
+    "title": {
+      "translate": "text.skills.berserkerExploit.title"
+    },
+    "description": {
+      "translate": "text.skills.berserkerExploit.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/berserker_challenge.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "berserkerExploit"
+        }
+      }
+    ]
+  },
+  "berserkerSignatureRampage": {
+    "title": {
+      "translate": "text.skills.berserkerSignatureRampage.title"
+    },
+    "description": {
+      "translate": "text.skills.berserkerSignatureRampage.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/berserker_signature_rampage.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "berserkerSignatureRampage"
+        }
+      }
+    ]
+  },
+  "berserkerSignatureRampageCharge": {
+    "title": {
+      "translate": "text.skills.berserkerSignatureRampageCharge.title"
+    },
+    "description": {
+      "translate": "text.skills.berserkerSignatureRampageCharge.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/berserker_signature_rampage_bullrush.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "berserkerSignatureRampageCharge"
+        }
+      }
+    ]
+  },
+  "berserkerSignatureRampageChargeRelentless": {
+    "title": {
+      "translate": "text.skills.berserkerSignatureRampageChargeRelentless.title"
+    },
+    "description": {
+      "translate": "text.skills.berserkerSignatureRampageChargeRelentless.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/berserker_signature_rampage_bullrush.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "berserkerSignatureRampageChargeRelentless"
+        }
+      }
+    ]
+  },
+  "berserkerSignatureRampageChargeImmob": {
+    "title": {
+      "translate": "text.skills.berserkerSignatureRampageChargeImmob.title"
+    },
+    "description": {
+      "translate": "text.skills.berserkerSignatureRampageChargeImmob.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/berserker_signature_rampage_bullrush.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "berserkerSignatureRampageChargeImmob"
+        }
+      }
+    ]
+  },
+  "berserkerSignatureBloodthirsty": {
+    "title": {
+      "translate": "text.skills.berserkerSignatureBloodthirsty.title"
+    },
+    "description": {
+      "translate": "text.skills.berserkerSignatureBloodthirsty.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/berserker_signature_bloodthirsty.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "berserkerSignatureBloodthirsty"
+        }
+      }
+    ]
+  },
+  "berserkerSignatureBloodthirstyMighty": {
+    "title": {
+      "translate": "text.skills.berserkerSignatureBloodthirstyMighty.title"
+    },
+    "description": {
+      "translate": "text.skills.berserkerSignatureBloodthirstyMighty.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/berserker_signature_bloodthirsty.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "berserkerSignatureBloodthirstyMighty"
+        }
+      }
+    ]
+  },
+  "berserkerSignatureBloodthirstyTireless": {
+    "title": {
+      "translate": "text.skills.berserkerSignatureBloodthirstyTireless.title"
+    },
+    "description": {
+      "translate": "text.skills.berserkerSignatureBloodthirstyTireless.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/berserker_signature_bloodthirsty.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "berserkerSignatureBloodthirstyTireless"
+        }
+      }
+    ]
+  },
+  "berserkerSignatureBloodthirstyTremor": {
+    "title": {
+      "translate": "text.skills.berserkerSignatureBloodthirstyTremor.title"
+    },
+    "description": {
+      "translate": "text.skills.berserkerSignatureBloodthirstyTremor.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/berserker_signature_bloodthirsty.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "berserkerSignatureBloodthirstyTremor"
+        }
+      }
+    ]
+  },
+  "berserkerSignatureBerserking": {
+    "title": {
+      "translate": "text.skills.berserkerSignatureBerserking.title"
+    },
+    "description": {
+      "translate": "text.skills.berserkerSignatureBerserking.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/berserker_signature_berserking.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "berserkerSignatureBerserking"
+        }
+      }
+    ]
+  },
+  "berserkerSignatureBerserkingLeap": {
+    "title": {
+      "translate": "text.skills.berserkerSignatureBerserkingLeap.title"
+    },
+    "description": {
+      "translate": "text.skills.berserkerSignatureBerserkingLeap.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/berserker_signature_berserking_leapslam.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "berserkerSignatureBerserkingLeap"
+        }
+      }
+    ]
+  },
+  "berserkerSignatureBerserkingLeapImmob": {
+    "title": {
+      "translate": "text.skills.berserkerSignatureBerserkingLeapImmob.title"
+    },
+    "description": {
+      "translate": "text.skills.berserkerSignatureBerserkingLeapImmob.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/berserker_signature_berserking_leapslam.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "berserkerSignatureBerserkingLeapImmob"
+        }
+      }
+    ]
+  },
+  "berserkerSignatureBerserkingLeapPull": {
+    "title": {
+      "translate": "text.skills.berserkerSignatureBerserkingLeapPull.title"
+    },
+    "description": {
+      "translate": "text.skills.berserkerSignatureBerserkingLeapPull.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/berserker_signature_berserking_leapslam.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "berserkerSignatureBerserkingLeapPull"
+        }
+      }
+    ]
+  },
+  "berserkerCrimsonRevenantEnduring": {
+    "title": {
+      "translate": "text.skills.berserkerCrimsonRevenantEnduring.title"
+    },
+    "description": {
+      "translate": "text.skills.berserkerCrimsonRevenantEnduring.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/berserker_signature_berserking.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "crimson_revenant_enduring"
+        }
+      }
+    ]
+  },
+  "berserkerCrimsonRevenantFortress": {
+    "title": {
+      "translate": "text.skills.berserkerCrimsonRevenantFortress.title"
+    },
+    "description": {
+      "translate": "text.skills.berserkerCrimsonRevenantFortress.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/berserker_ignore_pain_skilled.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "crimson_revenant_fortress"
+        }
+      }
+    ]
+  },
+  "berserkerCrimsonRevenantMassacre": {
+    "title": {
+      "translate": "text.skills.berserkerCrimsonRevenantMassacre.title"
+    },
+    "description": {
+      "translate": "text.skills.berserkerCrimsonRevenantMassacre.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/berserker_challenge.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "crimson_revenant_massacre"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "parent": "smooth_classes:origins/mermaid/root",
+  "display": {
+    "icon": {
+      "item": "minecraft:heart_of_the_sea"
+    },
+    "title": {
+      "text": "Royal Court"
+    },
+    "description": {
+      "text": "Origin milestone unlocked: Royal Court."
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": true
+  },
+  "criteria": {
+    "earned": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "earned"
+    ]
+  ]
+}

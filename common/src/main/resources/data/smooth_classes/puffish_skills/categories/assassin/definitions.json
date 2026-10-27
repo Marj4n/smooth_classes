@@ -1,0 +1,956 @@
+{
+  "melee_damage_multi+2%": {
+    "title": {
+      "translate": "text.skills.melee_damage_multi+2%.title"
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/attack_up.png"
+      }
+    },
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:attribute",
+        "data": {
+          "attribute": "puffish_skills:player.melee_damage",
+          "value": 0.03,
+          "operation": "multiply_base"
+        }
+      }
+    ]
+  },
+  "attack_speed_multi+2%": {
+    "title": {
+      "translate": "text.skills.attack_speed_multi+2%.title"
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/attackspeed_up.png"
+      }
+    },
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:attribute",
+        "data": {
+          "attribute": "generic.attack_speed",
+          "value": 0.03,
+          "operation": "multiply_base"
+        }
+      }
+    ]
+  },
+  "movement_speed_multi+1.5%": {
+    "title": {
+      "translate": "text.skills.movement_speed_multi+1.5%.title"
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/movespeed_up.png"
+      }
+    },
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:attribute",
+        "data": {
+          "attribute": "generic.movement_speed",
+          "value": 0.03,
+          "operation": "multiply_base"
+        }
+      }
+    ]
+  },
+  "rogueSmokeBomb": {
+    "title": {
+      "translate": "text.skills.rogueSmokeBomb.title"
+    },
+    "description": {
+      "translate": "text.skills.rogueSmokeBomb.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/rogue_smoke_bomb.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "rogueSmokeBomb"
+        }
+      }
+    ]
+  },
+  "rogueOpportunisticMastery": {
+    "title": {
+      "translate": "text.skills.rogueOpportunisticMastery.title"
+    },
+    "description": {
+      "translate": "text.skills.rogueOpportunisticMastery.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/rogue_opportunistic_mastery.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "rogueOpportunisticMastery"
+        }
+      }
+    ]
+  },
+  "rogueOpportunisticMasteryProficient": {
+    "title": {
+      "translate": "text.skills.rogueOpportunisticMasteryProficient.title"
+    },
+    "description": {
+      "translate": "text.skills.rogueOpportunisticMasteryProficient.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/rogue_opportunistic_mastery_proficient.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "rogueOpportunisticMasteryProficient"
+        }
+      }
+    ]
+  },
+  "rogueOpportunisticMasterySkilled": {
+    "title": {
+      "translate": "text.skills.rogueOpportunisticMasterySkilled.title"
+    },
+    "description": {
+      "translate": "text.skills.rogueOpportunisticMasterySkilled.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/rogue_opportunistic_mastery_skilled.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "rogueOpportunisticMasterySkilled"
+        }
+      }
+    ]
+  },
+  "rogueEvasionMastery": {
+    "title": {
+      "translate": "text.skills.rogueEvasionMastery.title"
+    },
+    "description": {
+      "translate": "text.skills.rogueEvasionMastery.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/rogue_evasion_mastery.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "rogueEvasionMastery"
+        }
+      }
+    ]
+  },
+  "rogueEvasionMasteryProficient": {
+    "title": {
+      "translate": "text.skills.rogueEvasionMasteryProficient.title"
+    },
+    "description": {
+      "translate": "text.skills.rogueEvasionMasteryProficient.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/rogue_evasion_mastery_proficient.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "rogueEvasionMasteryProficient"
+        }
+      }
+    ]
+  },
+  "rogueEvasionMasterySkilled": {
+    "title": {
+      "translate": "text.skills.rogueEvasionMasterySkilled.title"
+    },
+    "description": {
+      "translate": "text.skills.rogueEvasionMasterySkilled.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/rogue_evasion_mastery_skilled.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "rogueEvasionMasterySkilled"
+        }
+      }
+    ]
+  },
+  "rogueExploitation": {
+    "title": {
+      "translate": "text.skills.rogueExploitation.title"
+    },
+    "description": {
+      "translate": "text.skills.rogueExploitation.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/rogue_exploitation.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "rogueExploitation"
+        }
+      }
+    ]
+  },
+  "rogueRecovery": {
+    "title": {
+      "translate": "text.skills.rogueRecovery.title"
+    },
+    "description": {
+      "translate": "text.skills.rogueRecovery.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/rogue_recovery.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "rogueRecovery"
+        }
+      }
+    ]
+  },
+  "rogueShadowVeil": {
+    "title": {
+      "translate": "text.skills.rogueShadowVeil.title"
+    },
+    "description": {
+      "translate": "text.skills.rogueShadowVeil.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/rogue_shadow_veil.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "rogueShadowVeil"
+        }
+      }
+    ]
+  },
+  "rogueDeflection": {
+    "title": {
+      "translate": "text.skills.rogueDeflection.title"
+    },
+    "description": {
+      "translate": "text.skills.rogueDeflection.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/rogue_deflection.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "rogueDeflection"
+        }
+      }
+    ]
+  },
+  "rogueFleetfooted": {
+    "title": {
+      "translate": "text.skills.rogueFleetfooted.title"
+    },
+    "description": {
+      "translate": "text.skills.rogueFleetfooted.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/rogue_fleetfooted.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "rogueFleetfooted"
+        }
+      }
+    ]
+  },
+  "rogueSignatureEvasion": {
+    "title": {
+      "translate": "text.skills.rogueSignatureEvasion.title"
+    },
+    "description": {
+      "translate": "text.skills.rogueSignatureEvasion.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/rogue_signature_evasion.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "rogueSignatureEvasion"
+        }
+      }
+    ]
+  },
+  "rogueSignatureEvasionFanOfBlades": {
+    "title": {
+      "translate": "text.skills.rogueSignatureEvasionFanOfBlades.title"
+    },
+    "description": {
+      "translate": "text.skills.rogueSignatureEvasionFanOfBlades.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/rogue_signature_evasion_fanofblades.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "rogueSignatureEvasionFanOfBlades"
+        }
+      }
+    ]
+  },
+  "rogueSignatureEvasionFanOfBladesDisenchantment": {
+    "title": {
+      "translate": "text.skills.rogueSignatureEvasionFanOfBladesDisenchantment.title"
+    },
+    "description": {
+      "translate": "text.skills.rogueSignatureEvasionFanOfBladesDisenchantment.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/rogue_signature_evasion_fanofblades.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "rogueSignatureEvasionFanOfBladesDisenchantment"
+        }
+      }
+    ]
+  },
+  "rogueSignatureEvasionFanOfBladesAssault": {
+    "title": {
+      "translate": "text.skills.rogueSignatureEvasionFanOfBladesAssault.title"
+    },
+    "description": {
+      "translate": "text.skills.rogueSignatureEvasionFanOfBladesAssault.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/rogue_signature_evasion_fanofblades.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "rogueSignatureEvasionFanOfBladesAssault"
+        }
+      }
+    ]
+  },
+  "rogueSignatureEvasionFanOfBladesRenewal": {
+    "title": {
+      "translate": "text.skills.rogueSignatureEvasionFanOfBladesRenewal.title"
+    },
+    "description": {
+      "translate": "text.skills.rogueSignatureEvasionFanOfBladesRenewal.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/rogue_signature_evasion_fanofblades.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "rogueSignatureEvasionFanOfBladesRenewal"
+        }
+      }
+    ]
+  },
+  "rogueSignatureEvasionFanOfBladesBladestorm": {
+    "title": {
+      "translate": "text.skills.rogueSignatureEvasionFanOfBladesBladestorm.title"
+    },
+    "description": {
+      "translate": "text.skills.rogueSignatureEvasionFanOfBladesBladestorm.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/rogue_bladestorm.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "rogueSignatureEvasionFanOfBladesBladestorm"
+        }
+      }
+    ]
+  },
+  "rogueSignatureEvasionFanOfBladesBladestormSiphon": {
+    "title": {
+      "translate": "text.skills.rogueSignatureEvasionFanOfBladesBladestormSiphon.title"
+    },
+    "description": {
+      "translate": "text.skills.rogueSignatureEvasionFanOfBladesBladestormSiphon.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/rogue_bladestorm_siphon.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "rogueSignatureEvasionFanOfBladesBladestormSiphon"
+        }
+      }
+    ]
+  },
+  "rogueSignaturePreparation": {
+    "title": {
+      "translate": "text.skills.rogueSignaturePreparation.title"
+    },
+    "description": {
+      "translate": "text.skills.rogueSignaturePreparation.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/rogue_signature_preparation.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "rogueSignaturePreparation"
+        }
+      }
+    ]
+  },
+  "rogueSignaturePreparationShadowstrike": {
+    "title": {
+      "translate": "text.skills.rogueSignaturePreparationShadowstrike.title"
+    },
+    "description": {
+      "translate": "text.skills.rogueSignaturePreparationShadowstrike.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/rogue_signature_preparation.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "rogueSignaturePreparationShadowstrike"
+        }
+      }
+    ]
+  },
+  "rogueSignaturePreparationShadowstrikeVampire": {
+    "title": {
+      "translate": "text.skills.rogueSignaturePreparationShadowstrikeVampire.title"
+    },
+    "description": {
+      "translate": "text.skills.rogueSignaturePreparationShadowstrikeVampire.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/rogue_signature_preparation.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "rogueSignaturePreparationShadowstrikeVampire"
+        }
+      }
+    ]
+  },
+  "rogueSignaturePreparationShadowstrikeShield": {
+    "title": {
+      "translate": "text.skills.rogueSignaturePreparationShadowstrikeShield.title"
+    },
+    "description": {
+      "translate": "text.skills.rogueSignaturePreparationShadowstrikeShield.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/rogue_signature_preparation.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "rogueSignaturePreparationShadowstrikeShield"
+        }
+      }
+    ]
+  },
+  "rogueSignatureSiphoningStrikes": {
+    "title": {
+      "translate": "text.skills.rogueSignatureSiphoningStrikes.title"
+    },
+    "description": {
+      "translate": "text.skills.rogueSignatureSiphoningStrikes.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/rogue_signature_siphoning_strikes.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "rogueSignatureSiphoningStrikes"
+        }
+      }
+    ]
+  },
+  "rogueSignatureSiphoningStrikesMighty": {
+    "title": {
+      "translate": "text.skills.rogueSignatureSiphoningStrikesMighty.title"
+    },
+    "description": {
+      "translate": "text.skills.rogueSignatureSiphoningStrikesMighty.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/rogue_signature_siphoning_strikes.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "rogueSignatureSiphoningStrikesMighty"
+        }
+      }
+    ]
+  },
+  "rogueSignatureSiphoningStrikesAura": {
+    "title": {
+      "translate": "text.skills.rogueSignatureSiphoningStrikesAura.title"
+    },
+    "description": {
+      "translate": "text.skills.rogueSignatureSiphoningStrikesAura.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/rogue_signature_siphoning_strikes.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "rogueSignatureSiphoningStrikesAura"
+        }
+      }
+    ]
+  },
+  "rogueSignatureSiphoningStrikesVanish": {
+    "title": {
+      "translate": "text.skills.rogueSignatureSiphoningStrikesVanish.title"
+    },
+    "description": {
+      "translate": "text.skills.rogueSignatureSiphoningStrikesVanish.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/rogue_signature_siphoning_strikes.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "rogueSignatureSiphoningStrikesVanish"
+        }
+      }
+    ]
+  }
+}

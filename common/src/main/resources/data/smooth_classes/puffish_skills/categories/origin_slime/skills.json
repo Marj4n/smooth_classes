@@ -1,0 +1,50 @@
+{
+  "origin_base": {
+    "definition": "origin_base",
+    "x": 0,
+    "y": 128,
+    "root": true
+  },
+  "humanoid": {
+    "definition": "humanoid",
+    "x": 0,
+    "y": 64,
+    "root": false
+  },
+  "elastic_core": {
+    "definition": "elastic_core",
+    "x": 0,
+    "y": 0,
+    "root": false
+  },
+  "squeeze": {
+    "definition": "squeeze",
+    "x": -72,
+    "y": -64,
+    "root": false
+  },
+  "fragment": {
+    "definition": "fragment",
+    "x": 72,
+    "y": -64,
+    "root": false
+  },
+  "perfect_gel": {
+    "definition": "perfect_gel",
+    "x": 0,
+    "y": -120,
+    "root": false
+  },
+  "size_control": {
+    "definition": "size_control",
+    "x": 72,
+    "y": -176,
+    "root": false
+  },
+  "final": {
+    "definition": "final",
+    "x": 0,
+    "y": -224,
+    "root": false
+  }
+}

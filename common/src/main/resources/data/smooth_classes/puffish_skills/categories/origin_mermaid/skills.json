@@ -1,0 +1,50 @@
+{
+  "origin_base": {
+    "definition": "origin_base",
+    "x": 0,
+    "y": 128,
+    "root": true
+  },
+  "siren_voice": {
+    "definition": "siren_voice",
+    "x": 0,
+    "y": 64,
+    "root": false
+  },
+  "drowned_song": {
+    "definition": "drowned_song",
+    "x": -64,
+    "y": 0,
+    "root": false
+  },
+  "sea_kinship": {
+    "definition": "sea_kinship",
+    "x": 64,
+    "y": 0,
+    "root": false
+  },
+  "oceans_favor": {
+    "definition": "oceans_favor",
+    "x": 0,
+    "y": -72,
+    "root": false
+  },
+  "royal_court": {
+    "definition": "royal_court",
+    "x": -72,
+    "y": -144,
+    "root": false
+  },
+  "landwalker": {
+    "definition": "landwalker",
+    "x": 72,
+    "y": -144,
+    "root": false
+  },
+  "final": {
+    "definition": "final",
+    "x": 0,
+    "y": -224,
+    "root": false
+  }
+}
