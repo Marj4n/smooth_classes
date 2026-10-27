@@ -1,0 +1,28 @@
+{
+  "parent": "smooth_classes:origins/vampire/root",
+  "display": {
+    "icon": {
+      "item": "minecraft:sunflower"
+    },
+    "title": {
+      "text": "Sun Tolerance"
+    },
+    "description": {
+      "text": "Origin milestone unlocked: Sun Tolerance."
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": true
+  },
+  "criteria": {
+    "earned": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "earned"
+    ]
+  ]
+}

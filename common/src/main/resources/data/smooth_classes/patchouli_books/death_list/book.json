@@ -1,0 +1,11 @@
+{
+  "name": "Death List",
+  "landing_text": "$(#4A235A)$(l)DEATH LIST$() $(#241C24)Tap H to Attack aimed enemies, Recall your souls, or Summon with ingredients. Hold H for the soul command wheel and Death List.$()",
+  "version": 1,
+  "use_resource_pack": true,
+  "show_progress": false,
+  "text_color": "241C24",
+  "header_color": "4A235A",
+  "link_color": "5C244E",
+  "link_hover_color": "6B315F"
+}

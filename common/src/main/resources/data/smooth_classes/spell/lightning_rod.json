@@ -1,0 +1,125 @@
+{
+  "school": "LIGHTNING",
+  "range": 3.0,
+  "tier": 1,
+  "learn": {},
+  "active": {
+    "cast": {
+      "duration": 0
+    }
+  },
+  "release": {
+    "sound": {
+      "id": "smooth_classes:soundeffect_35"
+    },
+    "visuals": {
+      "particles": [
+        {
+          "id": "spell_engine:smoke_medium",
+          "appearance": {},
+          "batch": {
+            "count": 50.0,
+            "shape": "CIRCLE",
+            "min_speed": 0.2,
+            "max_speed": 0.3,
+            "pre_travel": 6,
+            "anchor": "ENTITY",
+            "vertical_origin": 0.5
+          }
+        },
+        {
+          "id": "spell_engine:smoke_medium",
+          "appearance": {},
+          "batch": {
+            "count": 60.0,
+            "shape": "CIRCLE",
+            "min_speed": 0.2,
+            "max_speed": 0.3,
+            "pre_travel": 8,
+            "anchor": "ENTITY",
+            "vertical_origin": 0.5
+          }
+        },
+        {
+          "id": "spell_engine:smoke_medium",
+          "appearance": {},
+          "batch": {
+            "count": 50,
+            "shape": "SPHERE",
+            "min_speed": 0.25,
+            "max_speed": 0.25,
+            "pre_travel": 4,
+            "anchor": "ENTITY",
+            "vertical_origin": 0.5
+          }
+        },
+        {
+          "id": "spell_engine:electric_arc_a",
+          "appearance": {},
+          "batch": {
+            "count": 6.0,
+            "shape": "PILLAR",
+            "min_speed": 0.01,
+            "max_speed": 0.05,
+            "extent": 3,
+            "anchor": "ENTITY",
+            "vertical_origin": 0.0
+          }
+        },
+        {
+          "id": "spell_engine:electric_arc_b",
+          "appearance": {},
+          "batch": {
+            "count": 8.0,
+            "shape": "PILLAR",
+            "min_speed": 0.01,
+            "max_speed": 0.05,
+            "extent": 5,
+            "anchor": "ENTITY",
+            "vertical_origin": 0.0
+          }
+        }
+      ]
+    }
+  },
+  "target": {
+    "type": "AREA",
+    "area": {
+      "vertical_range_multiplier": 0.5
+    }
+  },
+  "deliver": {
+    "type": "DIRECT"
+  },
+  "impacts": [
+    {
+      "action": {
+        "type": "DAMAGE",
+        "damage": {
+          "spell_power_coefficient": 1
+        }
+      }
+    },
+    {
+      "action": {
+        "type": "STATUS_EFFECT",
+        "status_effect": {
+          "effect_id": "minecraft:weakness",
+          "duration": 3,
+          "apply_mode": "ADD",
+          "apply_limit": {
+            "health_base": 500,
+            "spell_power_multiplier": 2
+          },
+          "show_particles": false
+        }
+      },
+      "sound": {
+        "id": "smooth_classes:soundeffect_35"
+      }
+    }
+  ],
+  "cost": {
+    "exhaust": 0
+  }
+}

@@ -1,0 +1,572 @@
+{
+  "spell_healing_power_multi+1%": {
+    "title": {
+      "translate": "text.skills.spell_healing_power_multi+1%.title"
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/healing_up.png"
+      }
+    },
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:attribute",
+        "data": {
+          "attribute": "spell_power:healing",
+          "value": 0.05,
+          "operation": "multiply_base"
+        }
+      }
+    ]
+  },
+  "health+2": {
+    "title": {
+      "translate": "text.skills.health+2.title"
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/health_up.png"
+      }
+    },
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:attribute",
+        "data": {
+          "attribute": "generic.max_health",
+          "value": 0.1,
+          "operation": "multiply_base"
+        }
+      }
+    ]
+  },
+  "resistance_multi+2%": {
+    "title": {
+      "translate": "text.skills.resistance_multi+2%.title"
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/resist_up.png"
+      }
+    },
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:attribute",
+        "data": {
+          "attribute": "puffish_skills:player.resistance",
+          "value": 0.05,
+          "operation": "multiply_base"
+        }
+      }
+    ]
+  },
+  "clericAltruism": {
+    "title": {
+      "translate": "text.skills.clericAltruism.title"
+    },
+    "description": {
+      "translate": "text.skills.clericAltruism.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/cleric_altruism.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "clericAltruism"
+        }
+      }
+    ]
+  },
+  "clericMutualMending": {
+    "title": {
+      "translate": "text.skills.clericMutualMending.title"
+    },
+    "description": {
+      "translate": "text.skills.clericMutualMending.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/cleric_mutual_mending.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "clericMutualMending"
+        }
+      }
+    ]
+  },
+  "clericHealingWard": {
+    "title": {
+      "translate": "text.skills.clericHealingWard.title"
+    },
+    "description": {
+      "translate": "text.skills.clericHealingWard.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/cleric_healing_ward.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "clericHealingWard"
+        }
+      }
+    ]
+  },
+  "clericSignatureSacredOrb": {
+    "title": {
+      "translate": "text.skills.clericSignatureSacredOrb.title"
+    },
+    "description": {
+      "translate": "text.skills.clericSignatureSacredOrb.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "smooth_classes:sacred_banner_icon"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "clericSignatureSacredOrb"
+        }
+      }
+    ]
+  },
+  "clericSignatureSacredOrbSpeed": {
+    "title": {
+      "translate": "text.skills.clericSignatureSacredOrbSpeed.title"
+    },
+    "description": {
+      "translate": "text.skills.clericSignatureSacredOrbSpeed.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "minecraft:textures/mob_effect/strength.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "clericSignatureSacredOrbSpeed"
+        }
+      }
+    ]
+  },
+  "clericSignatureSacredOrbDebuffs": {
+    "title": {
+      "translate": "text.skills.clericSignatureSacredOrbDebuffs.title"
+    },
+    "description": {
+      "translate": "text.skills.clericSignatureSacredOrbDebuffs.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "minecraft:textures/mob_effect/resistance.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "clericSignatureSacredOrbDebuffs"
+        }
+      }
+    ]
+  },
+  "clericSignatureSacredOrbBuffs": {
+    "title": {
+      "translate": "text.skills.clericSignatureSacredOrbBuffs.title"
+    },
+    "description": {
+      "translate": "text.skills.clericSignatureSacredOrbBuffs.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "minecraft:textures/mob_effect/haste.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "clericSignatureSacredOrbBuffs"
+        }
+      }
+    ]
+  },
+  "clericSignatureDivineIntervention": {
+    "title": {
+      "translate": "text.skills.clericSignatureDivineIntervention.title"
+    },
+    "description": {
+      "translate": "text.skills.clericSignatureDivineIntervention.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/cleric_signature_divine_intervention.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "clericSignatureDivineIntervention"
+        }
+      }
+    ]
+  },
+  "clericSignatureDivineInterventionFireResistance": {
+    "title": {
+      "translate": "text.skills.clericSignatureDivineInterventionFireResistance.title"
+    },
+    "description": {
+      "translate": "text.skills.clericSignatureDivineInterventionFireResistance.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/cleric_signature_divine_intervention.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "clericSignatureDivineInterventionFireResistance"
+        }
+      }
+    ]
+  },
+  "clericSignatureDivineInterventionMight": {
+    "title": {
+      "translate": "text.skills.clericSignatureDivineInterventionMight.title"
+    },
+    "description": {
+      "translate": "text.skills.clericSignatureDivineInterventionMight.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/cleric_signature_divine_intervention.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "clericSignatureDivineInterventionMight"
+        }
+      }
+    ]
+  },
+  "clericSignatureDivineInterventionSpellforged": {
+    "title": {
+      "translate": "text.skills.clericSignatureDivineInterventionSpellforged.title"
+    },
+    "description": {
+      "translate": "text.skills.clericSignatureDivineInterventionSpellforged.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/cleric_signature_divine_intervention.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "clericSignatureDivineInterventionSpellforged"
+        }
+      }
+    ]
+  },
+  "clericSignatureAnointWeapon": {
+    "title": {
+      "translate": "text.skills.clericSignatureAnointWeapon.title"
+    },
+    "description": {
+      "translate": "text.skills.clericSignatureAnointWeapon.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/cleric_signature_anoint_weapon.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "clericSignatureAnointWeapon"
+        }
+      }
+    ]
+  },
+  "clericSignatureAnointWeaponResistance": {
+    "title": {
+      "translate": "text.skills.clericSignatureAnointWeaponResistance.title"
+    },
+    "description": {
+      "translate": "text.skills.clericSignatureAnointWeaponResistance.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/cleric_signature_anoint_weapon.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "clericSignatureAnointWeaponResistance"
+        }
+      }
+    ]
+  },
+  "clericSignatureAnointWeaponUndying": {
+    "title": {
+      "translate": "text.skills.clericSignatureAnointWeaponUndying.title"
+    },
+    "description": {
+      "translate": "text.skills.clericSignatureAnointWeaponUndying.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/cleric_signature_anoint_weapon.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "clericSignatureAnointWeaponUndying"
+        }
+      }
+    ]
+  },
+  "clericSignatureAnointWeaponCleanse": {
+    "title": {
+      "translate": "text.skills.clericSignatureAnointWeaponCleanse.title"
+    },
+    "description": {
+      "translate": "text.skills.clericSignatureAnointWeaponCleanse.description"
+    },
+    "size": 1.1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "texture",
+      "data": {
+        "texture": "smooth_classes:textures/icons/alternate_reduced/cleric_signature_anoint_weapon.png"
+      }
+    },
+    "rewards": [
+      {
+        "type": "puffish_skills:passive_skill",
+        "data": {
+          "passive_skill": "clericSignatureAnointWeaponCleanse"
+        }
+      }
+    ]
+  }
+}

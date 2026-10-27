@@ -1,0 +1,28 @@
+{
+  "parent": "smooth_classes:origins/mermaid/root",
+  "display": {
+    "icon": {
+      "item": "minecraft:note_block"
+    },
+    "title": {
+      "text": "Siren Voice"
+    },
+    "description": {
+      "text": "Origin milestone unlocked: Siren Voice."
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": true
+  },
+  "criteria": {
+    "earned": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "earned"
+    ]
+  ]
+}

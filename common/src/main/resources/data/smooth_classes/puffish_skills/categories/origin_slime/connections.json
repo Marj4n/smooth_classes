@@ -1,0 +1,42 @@
+{
+  "normal": {
+    "bidirectional": [
+      [
+        "origin_base",
+        "humanoid"
+      ],
+      [
+        "humanoid",
+        "elastic_core"
+      ],
+      [
+        "elastic_core",
+        "squeeze"
+      ],
+      [
+        "elastic_core",
+        "fragment"
+      ],
+      [
+        "squeeze",
+        "perfect_gel"
+      ],
+      [
+        "fragment",
+        "perfect_gel"
+      ],
+      [
+        "perfect_gel",
+        "size_control"
+      ],
+      [
+        "perfect_gel",
+        "final"
+      ],
+      [
+        "size_control",
+        "final"
+      ]
+    ]
+  }
+}

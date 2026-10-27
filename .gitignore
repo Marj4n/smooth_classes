@@ -53,3 +53,5 @@ saves/
 
 # Keep Gradle Wrapper JAR
 !gradle/wrapper/gradle-wrapper.jar
+# Local multi-loader build output
+multiloader-build.log

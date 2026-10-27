@@ -1,0 +1,129 @@
+{
+  "school": "HEALING",
+  "range": 42,
+  "tier": 1,
+  "learn": {},
+  "active": {
+    "cast": {
+      "duration": 0.75,
+      "animation": {
+        "id": "spell_engine:one_handed_projectile_charge"
+      },
+      "sound": {
+        "id": "spell_engine:generic_healing_casting",
+        "randomness": 0
+      },
+      "particles": [
+        {
+          "id": "spell_engine:holy_spark_mini",
+          "appearance": {},
+          "batch": {
+            "count": 5.0,
+            "shape": "SPHERE",
+            "min_speed": 0.02,
+            "max_speed": 0.05,
+            "anchor": "ENTITY",
+            "vertical_origin": 0.5
+          }
+        }
+      ]
+    }
+  },
+  "release": {
+    "animation": {
+      "id": "spell_engine:one_handed_projectile_release"
+    },
+    "sound": {
+      "id": "smooth_classes:soundeffect_35",
+      "volume": 0.2,
+      "pitch": 1.1
+    }
+  },
+  "target": {
+    "type": "AIM",
+    "aim": {}
+  },
+  "deliver": {
+    "type": "PROJECTILE",
+    "projectile": {
+      "launch_properties": {
+        "velocity": 2.6
+      },
+      "projectile": {
+        "homing_angle": 99.1,
+        "client_data": {
+          "travel_particles": [
+            {
+              "id": "spell_engine:holy_spark_mini",
+              "appearance": {},
+              "batch": {
+                "count": 3.0,
+                "shape": "SPHERE",
+                "min_speed": 0.01,
+                "max_speed": 0.03,
+                "anchor": "ENTITY",
+                "vertical_origin": 0.5
+              }
+            },
+            {
+              "id": "spell_engine:healing_ascend",
+              "appearance": {},
+              "batch": {
+                "count": 2.0,
+                "shape": "SPHERE",
+                "min_speed": 0.01,
+                "max_speed": 0.02,
+                "anchor": "ENTITY",
+                "vertical_origin": 0.5
+              }
+            }
+          ],
+          "composite_model": {
+            "models": [
+              {
+                "orientation": "ALONG_MOTION",
+                "fx": {
+                  "model_id": "minecraft:sea_lantern",
+                  "scale": 0.0
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "impacts": [
+    {
+      "action": {
+        "type": "HEAL",
+        "damage": {
+          "spell_power_coefficient": 0.2
+        }
+      },
+      "sound": {
+        "id": "smooth_classes:soundeffect_35",
+        "volume": 0.2
+      },
+      "visuals": {
+        "particles": [
+          {
+            "id": "spell_engine:healing_ascend",
+            "appearance": {},
+            "batch": {
+              "count": 10,
+              "shape": "SPHERE",
+              "min_speed": 0.02,
+              "max_speed": 0.07,
+              "anchor": "ENTITY",
+              "vertical_origin": 0.5
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "cost": {
+    "durability": 0
+  }
+}

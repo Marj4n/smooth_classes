@@ -1,0 +1,28 @@
+{
+  "parent": "smooth_classes:origins/mermaid/root",
+  "display": {
+    "icon": {
+      "item": "minecraft:tropical_fish"
+    },
+    "title": {
+      "text": "Sea Kinship"
+    },
+    "description": {
+      "text": "Origin milestone unlocked: Sea Kinship."
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": true
+  },
+  "criteria": {
+    "earned": {
+      "trigger": "minecraft:impossible"
+    }
+  },
+  "requirements": [
+    [
+      "earned"
+    ]
+  ]
+}
