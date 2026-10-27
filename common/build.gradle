@@ -1,0 +1,64 @@
+plugins { id 'base' }
+tasks.register('validateSharedResources') {
+    doLast {
+        def metadata = file('src/main/resources/smooth_classes.mixins.json')
+        if (!metadata.isFile()) throw new GradleException('Shared mixin metadata is missing')
+        def root = file('src/main/resources/data/smooth_classes/puffish_skills')
+        def config = new groovy.json.JsonSlurper().parse(new File(root, 'config.json'))
+        def required = ['tree','avenger','foreigner','caster','berserker','archer','assassin','saber','ruler','rider','lancer','ascendancy','origin_vampire']
+        if (!config.categories.containsAll(required)) throw new GradleException('Class or Vampire trees missing')
+        required.each { category ->
+            ['category.json','skills.json','definitions.json'].each { name ->
+                if (!new File(root, 'categories/' + category + '/' + name).isFile()) throw new GradleException('Missing shared skill resource: ' + category + '/' + name)
+            }
+        }
+    }
+}
+
+// Validate references, including atlas aliases, before either loader is packaged.
+tasks.register('validateTextureReferences') {
+    doLast {
+        def resources = file('src/main/resources')
+        def parser = new groovy.json.JsonSlurper()
+        def aliases = [:]
+        def atlas = new File(resources, 'assets/minecraft/atlases/blocks.json')
+        if (atlas.isFile()) {
+            parser.parse(atlas).sources.each { source ->
+                if (source.type == 'minecraft:single' && source.sprite) aliases[source.sprite] = source.resource
+            }
+        }
+        def spriteExists
+        spriteExists = { String id, Set visited ->
+            if (!id.startsWith('smooth_classes:')) return true
+            if (new File(resources, 'assets/smooth_classes/textures/' + id.split(':', 2)[1] + '.png').isFile()) return true
+            if (!visited.add(id)) return false
+            return aliases.containsKey(id) && spriteExists(aliases[id], visited)
+        }
+        def errors = []
+        def checkValue
+        checkValue = { value, source ->
+            if (value instanceof Map) value.values().each { checkValue(it, source) }
+            else if (value instanceof List) value.each { checkValue(it, source) }
+            else if (value instanceof String && value.startsWith('smooth_classes:') && value.endsWith('.png')) {
+                if (!new File(resources, 'assets/' + value.replace(':', '/')).isFile()) errors.add(source + ': ' + value)
+            }
+        }
+        fileTree(resources).matching { include '**/*.json' }.files.each { source ->
+            def data = parser.parse(source)
+            checkValue(data, source.name)
+            if (source.toPath().startsWith(new File(resources, 'assets/smooth_classes/models').toPath())) {
+                (data.textures ?: [:]).values().each { id ->
+                    if (id instanceof String && id.startsWith('smooth_classes:') && !spriteExists(id, new HashSet())) errors.add(source.name + ': ' + id)
+                }
+            }
+        }
+        def effects = file('src/main/java/org/marj4n/smooth_classes/effects/SmoothEffects.java').text
+        def ids = (effects =~ /(?:register|attunement)\("([^"]+)"/).collect { it[1] }.toSet()
+        ids.each { id ->
+            if (!new File(resources, 'assets/smooth_classes/textures/mob_effect/' + id + '.png').isFile()) errors.add('Status effect icon: ' + id)
+        }
+        if (!errors.empty) throw new GradleException('Unresolved Smooth Classes textures:\n' + errors.unique().join('\n'))
+        logger.lifecycle('Validated local texture references, model atlas aliases and ' + ids.size() + ' status effect icons')
+    }
+}
+tasks.named('validateSharedResources') { dependsOn 'validateTextureReferences' }

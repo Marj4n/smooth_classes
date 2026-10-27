@@ -1,0 +1,67 @@
+plugins { id 'dev.architectury.loom'; id 'maven-publish' }
+base { archivesName = rootProject.archives_base_name }
+java { toolchain.languageVersion = JavaLanguageVersion.of(21); withSourcesJar() }
+repositories {
+    maven { url = 'https://maven.fabricmc.net/' }
+    maven { url = 'https://maven.architectury.dev/' }
+    maven { url = 'https://maven.su5ed.dev/releases' }
+    maven { url = 'https://www.cursemaven.com'; content { includeGroup 'curse.maven' } }
+    maven { url = 'https://api.modrinth.com/maven'; content { includeGroup 'maven.modrinth' } }
+    mavenCentral()
+}
+repositories.exclusiveContent {
+    forRepository { repositories.maven { name = 'ModrinthExclusive'; url = 'https://api.modrinth.com/maven' } }
+    filter { includeGroup 'maven.modrinth' }
+}
+repositories.exclusiveContent {
+    forRepository { repositories.maven { name = 'CurseMavenExclusive'; url = 'https://www.cursemaven.com' } }
+    filter { includeGroup 'curse.maven' }
+}
+repositories.exclusiveContent {
+    forRepository { repositories.maven { name = 'SinytraExclusive'; url = 'https://maven.su5ed.dev/releases' } }
+    filter { includeGroupByRegex 'dev[.]su5ed[.]sinytra.*' }
+}
+sourceSets.main.java.srcDirs += [rootProject.file('common/src/main/java'), rootProject.file('common/src/client/java')]
+sourceSets.main.resources.srcDirs += [rootProject.file('common/src/main/resources'), rootProject.file('common/src/client/resources')]
+dependencies {
+    minecraft 'com.mojang:minecraft:1.20.1'
+    mappings 'net.fabricmc:yarn:1.20.1+build.10:v2'
+    forge "net.minecraftforge:forge:${rootProject.forge_version}"
+    modImplementation 'dev.su5ed.sinytra.fabric-api:fabric-api:0.92.6+1.11.15+1.20.1'
+    modImplementation 'maven.modrinth:hqQqvaa4:zfbPzmtb'
+    modImplementation 'curse.maven:puffish-attributes-991341:7551331'
+    modImplementation 'maven.modrinth:spell-engine:jZqwFTXe'
+    modImplementation 'maven.modrinth:spell-power:ko7p47uf'
+    modImplementation 'maven.modrinth:accessories:HkgYoWJH'
+}
+loom {
+    mixin { useLegacyMixinAp = true; defaultRefmapName = "smooth_classes.refmap.json" }
+    forge {
+        mixinConfig 'smooth_classes.dynamic_bars.mixins.json'
+        mixinConfig 'smooth_classes.mixins.json'
+    }
+}
+sourceSets.main.java.exclude '**/compat/BewitchmentVampireTransformationMixin.java', '**/compat/BewitchmentBloodBottleMixin.java'
+sourceSets.main.resources.exclude 'smooth_classes.bewitchment.mixins.json'
+tasks.withType(JavaCompile).configureEach { options.encoding = 'UTF-8'; options.release = 17 }
+tasks.named('processResources') {
+    dependsOn ':common:validateSharedResources'
+    inputs.property 'version', project.version
+    filesMatching(['fabric.mod.json', 'META-INF/mods.toml']) {
+        expand version: project.version, minecraft_version: rootProject.minecraft_version, loader_version: rootProject.loader_version
+    }
+}
+tasks.named('jar') {
+    archiveClassifier = 'dev-forge'
+    from(rootProject.file('LICENSE.txt'))
+}
+tasks.named('remapJar') { archiveClassifier = 'forge' }
+tasks.named('sourcesJar') { archiveClassifier = 'forge-sources' }
+
+// Use the Forge runtime selector for Spell Engine's generic renderer override.
+sourceSets.main.java.exclude '**/mixin/client/SpellProjectileRendererClientMixin.java'
+tasks.named('processResources') {
+    filesMatching('smooth_classes.mixins.json') {
+        filter { line -> line.replace('"client.SpellProjectileRendererClientMixin"', '"client.ForgeSpellProjectileRendererClientMixin"') }
+    }
+}
