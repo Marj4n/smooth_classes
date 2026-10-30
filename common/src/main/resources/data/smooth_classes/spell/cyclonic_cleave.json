@@ -5,7 +5,10 @@
   "learn": {},
   "active": {
     "cast": {
-      "duration": 0.75
+      "duration": 0.75,
+      "animation": {
+        "id": "spell_engine:one_handed_projectile_charge"
+      }
     }
   },
   "release": {

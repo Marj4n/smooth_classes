@@ -8,5 +8,6 @@ import org.marj4n.smooth_classes.SmoothClasses;
 
 public final class SpellTargetRenderer extends EntityRenderer<SpellTargetEntity> {
     public SpellTargetRenderer(EntityRendererFactory.Context context) { super(context); }
-    @Override public Identifier getTexture(SpellTargetEntity entity) { return SmoothClasses.id("textures/entity/spell_target.png"); }
+    // This invisible marker renders no geometry; keep its required texture identifier valid.
+    @Override public Identifier getTexture(SpellTargetEntity entity) { return Identifier.of("minecraft", "textures/block/white_concrete.png"); }
 }

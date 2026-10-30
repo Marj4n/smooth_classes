@@ -4,7 +4,10 @@
   "tier": 1,
   "active": {
     "cast": {
-      "duration": 0
+      "duration": 0,
+      "animation": {
+        "id": "spell_engine:one_handed_projectile_charge"
+      }
     }
   },
   "release": {

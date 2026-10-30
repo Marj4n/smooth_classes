@@ -23,7 +23,10 @@
             "vertical_origin": 0.0
           }
         }
-      ]
+      ],
+      "animation": {
+        "id": "spell_engine:one_handed_projectile_charge"
+      }
     }
   },
   "release": {
