@@ -1,0 +1,92 @@
+{
+  "origin_base": {
+    "definition": "origin_base",
+    "x": 0,
+    "y": 224,
+    "root": true
+  },
+  "cinder_reflex": {
+    "definition": "cinder_reflex",
+    "x": 0,
+    "y": 160,
+    "root": false
+  },
+  "choose_path": {
+    "definition": "choose_path",
+    "x": 0,
+    "y": 96,
+    "root": false
+  },
+  "world_ender": {
+    "definition": "world_ender",
+    "x": 0,
+    "y": 32,
+    "root": false
+  },
+  "temptation": {
+    "definition": "temptation",
+    "x": -160,
+    "y": 32,
+    "root": false
+  },
+  "hellkeeper": {
+    "definition": "hellkeeper",
+    "x": 160,
+    "y": 32,
+    "root": false
+  },
+  "divine_demon": {
+    "definition": "divine_demon",
+    "x": 240,
+    "y": 32,
+    "root": false
+  },
+  "trial": {
+    "definition": "trial",
+    "x": 0,
+    "y": -32,
+    "root": false
+  },
+  "brand_of_ruin": {
+    "definition": "brand_of_ruin",
+    "x": 0,
+    "y": -96,
+    "root": false
+  },
+  "netherforged": {
+    "definition": "netherforged",
+    "x": -64,
+    "y": -160,
+    "root": false
+  },
+  "pandemonium": {
+    "definition": "pandemonium",
+    "x": 64,
+    "y": -160,
+    "root": false
+  },
+  "recognition": {
+    "definition": "recognition",
+    "x": 0,
+    "y": -224,
+    "root": false
+  },
+  "sovereign": {
+    "definition": "sovereign",
+    "x": 0,
+    "y": -288,
+    "root": false
+  },
+  "all_hell_shall_kneel": {
+    "definition": "all_hell_shall_kneel",
+    "x": 0,
+    "y": -352,
+    "root": false
+  },
+  "demon_lord": {
+    "definition": "demon_lord",
+    "x": 0,
+    "y": -416,
+    "root": false
+  }
+}

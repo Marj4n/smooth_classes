@@ -225,7 +225,7 @@ public final class OriginSelectionScreen extends Screen {
                     : "This permanently sets your body and Origin tree."), width / 2, y + 47, 0xBDBDBD);
             context.drawCenteredTextWithShadow(textRenderer, Text.literal(origin == OriginType.HUMAN
                     ? "Only your chosen Class grants abilities."
-                    : "Birthplace: Forgotten Graveyard"), width / 2, y + 61, 0xE5C76B);
+                    : "Birthplace: " + origin.v1Spawn()), width / 2, y + 61, 0xE5C76B);
             super.render(context, mouseX, mouseY, delta);
         }
     }

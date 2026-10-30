@@ -18,7 +18,7 @@ public final class OriginAbilityHud {
             case VAMPIRE -> new Slot[]{s("Bat Form", Items.PHANTOM_MEMBRANE), s("Man-Bat", Items.FERMENTED_SPIDER_EYE), s("Blood Sense", Items.SPIDER_EYE)};
             case WEREWOLF -> new Slot[]{s("Wolf / Lycan", Items.RABBIT_FOOT), s("Blood Scent", Items.SPIDER_EYE), s("Howl", Items.GOAT_HORN)};
             case MERMAID -> new Slot[]{s("Siren Song", Items.NAUTILUS_SHELL), s("Tidal Rush", Items.HEART_OF_THE_SEA), s("Royal Tide", Items.TRIDENT)};
-            case DEMON -> new Slot[]{s("Emberblood", Items.BLAZE_POWDER), s("Infernal Anchor", Items.CRYING_OBSIDIAN), s("Infernal Recall", Items.ENDER_PEARL)};
+            case DEMON -> new Slot[]{s(OriginClientState.hasFlag("demon.brand_recall") ? "Recall Curse" : "Brand of Ruin", Items.FLINT_AND_STEEL), s("Pandemonium", Items.FIRE_CHARGE), s("All Hell Shall Kneel", Items.NETHER_STAR)};
             case ANGEL -> new Slot[]{s("Wings", Items.FEATHER), s("Consecration", Items.GLOWSTONE_DUST), s("Grace", Items.TOTEM_OF_UNDYING)};
             case SLIME -> new Slot[]{s("Humanoid Form", Items.SLIME_BALL), s("Shape", Items.SLIME_BLOCK), s("Fragment", Items.MAGMA_CREAM)};
             case HOMUNCULUS -> new Slot[]{s("Weapon Arm", Items.IRON_SWORD), s("Body Config", Items.IRON_CHESTPLATE), s("Alchemical Core", Items.BREWING_STAND)};

@@ -29,6 +29,7 @@ public final class OriginAbilityDispatcher {
         return switch (origin) {
             case HUMAN -> Result.fail("Human has no Origin abilities. Use your Class skills.");
             case VAMPIRE -> activateVampire(player, state, slot);
+            case DEMON -> org.marj4n.smooth_classes.origin.demon.DemonRuntime.activate(player, slot);
             case HOMUNCULUS -> activateHomunculus(player, slot);
             case MERMAID -> activateMermaid(player, state, slot);
             case SLIME -> activateSlime(player, state, slot);

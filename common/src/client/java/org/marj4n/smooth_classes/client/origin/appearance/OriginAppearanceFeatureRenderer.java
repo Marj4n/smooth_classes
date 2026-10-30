@@ -112,11 +112,7 @@ public final class OriginAppearanceFeatureRenderer
                     matrices.pop();
                 }
             }
-            case DEMON -> {
-                renderOverlay(parent, DEMON_TINT, matrices, vertexConsumers, light, 1, 1, 1, 0.10F);
-                renderCosmetic(cosmetics::renderDemon, WHITE, matrices, vertexConsumers, light,
-                        0.58F, 0.08F, 0.08F, 1.0F);
-            }
+            case DEMON -> org.marj4n.smooth_classes.client.origin.demon.DemonVisualModel.render(player, parent, matrices, vertexConsumers, light, limbAngle, limbDistance, animationProgress, headYaw, headPitch);
             case ANGEL -> renderCosmetic(cosmetics::renderAngel, WHITE, matrices, vertexConsumers, light,
                     1.0F, 0.96F, 0.80F, 0.95F);
             case SLIME -> {
@@ -260,7 +256,7 @@ public final class OriginAppearanceFeatureRenderer
         }
         if (origin == null) return false;
         return switch (origin) {
-            case VOID, UNDEAD, HOMUNCULUS, SPRIGGAN -> true;
+            case VOID, UNDEAD, HOMUNCULUS, SPRIGGAN, DEMON -> true;
             case SLIME -> !state.hasFlag("slime.form.humanoid");
             case VAMPIRE -> isActiveVampireFlag(player, state, "vampire.form.bat") ||
                     (isActiveVampireFlag(player, state, "vampire.form.man_bat")

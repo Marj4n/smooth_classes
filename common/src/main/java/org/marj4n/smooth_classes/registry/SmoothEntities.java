@@ -74,6 +74,7 @@ public final class SmoothEntities {
     public static final EntityType<ShadowAnchorEntity> SHADOW_ANCHOR = org.marj4n.smooth_classes.platform.PlatformRegistry.register(Registries.ENTITY_TYPE,
             SmoothClasses.id("shadow_anchor"), FabricEntityTypeBuilder.create(SpawnGroup.MISC, ShadowAnchorEntity::new)
                     .dimensions(EntityDimensions.fixed(.6F,1.8F)).trackRangeBlocks(64).build());
+    public static final EntityType<DemonSeatEntity> DEMON_SEAT = org.marj4n.smooth_classes.platform.PlatformRegistry.register(Registries.ENTITY_TYPE, SmoothClasses.id("demon_seat"), FabricEntityTypeBuilder.create(SpawnGroup.MISC, DemonSeatEntity::new).dimensions(EntityDimensions.fixed(.1F,.1F)).trackRangeBlocks(64).build());
     public static void register() {
         FabricDefaultAttributeRegistry.register(DREADGLARE, DreadglareEntity.createAttributes());
         FabricDefaultAttributeRegistry.register(GREATER_DREADGLARE, GreaterDreadglareEntity.createAttributes());

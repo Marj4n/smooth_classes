@@ -36,6 +36,10 @@ public final class ManBatPosePreparerFeatureRenderer
                        AbstractClientPlayerEntity player, float limbAngle, float limbDistance,
                        float tickDelta, float animationProgress, float headYaw, float headPitch) {
         if (player.isInvisible() || player.isSpectator()) return;
+        if (org.marj4n.smooth_classes.client.origin.demon.DemonVisualModel.applies(player)) {
+            org.marj4n.smooth_classes.client.origin.demon.DemonVisualModel.prepare(player,getContextModel(),limbAngle,limbDistance,animationProgress,headYaw,headPitch);
+            return;
+        }
         var state = OriginRuntime.state(player);
         if (state.origin() != OriginType.VAMPIRE || !state.hasFlag("vampire.form.man_bat")) return;
         manBat.prepare(player, getContextModel(), limbAngle, limbDistance,

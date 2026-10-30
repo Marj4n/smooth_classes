@@ -30,7 +30,16 @@
     "BladeLootingMixin",
     "BloodRainSunlightMixin",
     "AvengerWitherBossBarAccessor",
-    "AvengerWitherBossBarLifecycleMixin"
+    "AvengerWitherBossBarLifecycleMixin",
+    "DemonItemMixin",
+    "DemonLivingMixin",
+    "DemonLootMixin",
+    "DemonMobMixin",
+    "DemonPlayerMixin",
+    "DemonScreenHandlerMixin",
+    "DemonWorldMixin",
+    "DemonServerPlayerMixin",
+    "DemonDimensionsMixin"
   ],
   "injectors": {
     "defaultRequire": 1
@@ -76,7 +85,19 @@
     "client.BatInWallOverlayMixin",
     "client.VampireHungerHudMixin",
     "client.VampireCrosshairMixin",
-    "client.AvengerSummonHoverGlowMixin"
+    "client.AvengerSummonHoverGlowMixin",
+    "client.DemonFirstPersonMixin",
+    "client.DemonBaseBodyMixin",
+    "client.DemonArmorMixin",
+    "client.DemonLordScaleMixin",
+    "client.DemonHeldItemMixin",
+    "client.DemonResourceReloadMixin",
+    "client.ForbiddenBirthCameraMixin",
+    "client.ForbiddenBirthPlayerMixin",
+    "client.ForbiddenBirthHandMixin",
+    "client.ForbiddenBirthHudMixin",
+    "client.ForbiddenBirthToastMixin",
+    "client.ForbiddenBirthFogMixin"
   ],
   "refmap": "smooth_classes.refmap.json"
 }

@@ -5,7 +5,7 @@ tasks.register('validateSharedResources') {
         if (!metadata.isFile()) throw new GradleException('Shared mixin metadata is missing')
         def root = file('src/main/resources/data/smooth_classes/puffish_skills')
         def config = new groovy.json.JsonSlurper().parse(new File(root, 'config.json'))
-        def required = ['tree','avenger','foreigner','caster','berserker','archer','assassin','saber','ruler','rider','lancer','ascendancy','origin_vampire']
+        def required = ['tree','avenger','foreigner','caster','berserker','archer','assassin','saber','ruler','rider','lancer','ascendancy','origin_vampire','origin_demon']
         if (!config.categories.containsAll(required)) throw new GradleException('Class or Vampire trees missing')
         required.each { category ->
             ['category.json','skills.json','definitions.json'].each { name ->

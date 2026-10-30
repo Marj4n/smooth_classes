@@ -23,7 +23,7 @@ public final class AbilityHud {
         int x = (client.getWindow().getScaledWidth() / 2) + 86;
         int y = client.getWindow().getScaledHeight() - 29;
 
-        if (AbilityPageState.isOriginPage() && "vampire".equals(OriginClientState.originId)) {
+        if (AbilityPageState.isOriginPage() && ("vampire".equals(OriginClientState.originId) || "demon".equals(OriginClientState.originId))) {
             renderPageToggle(context, client, x + 81, y);
             renderOriginSlot(context, client, x, y, 0, SmoothClassesClient.signatureKey());
             renderOriginSlot(context, client, x + 22, y, 1, SmoothClassesClient.ascendancyKey());
@@ -31,7 +31,7 @@ public final class AbilityHud {
             return;
         }
 
-        if ("vampire".equals(OriginClientState.originId)) {
+        if ("vampire".equals(OriginClientState.originId) || "demon".equals(OriginClientState.originId)) {
             renderPageToggle(context, client, x + 81, y);
         }
         renderSlot(context, client, x, y, AbilityHudState.signatureAbility, AbilityHudState.signatureIcon(),
@@ -114,6 +114,11 @@ public final class AbilityHud {
         if (slot == 2 && org.marj4n.smooth_classes.origin.OriginType.VAMPIRE.id().equals(OriginClientState.originId)) {
             originCooldownMs = OriginClientState.bloodSenseCooldownRemainingMs();
             originCooldownTotalMs = 20_000;
+        }
+        if ("demon".equals(OriginClientState.originId)) {
+            if(slot==0 && !OriginClientState.hasFlag("demon.brand_recall")){originCooldownMs=OriginClientState.progress("demon.brand_cd")*50L;originCooldownTotalMs=30000;}
+            if(slot==1){originCooldownMs=OriginClientState.progress("demon.domain_cd")*50L;originCooldownTotalMs=60000;}
+            if(slot==0 && OriginClientState.hasFlag("demon.brand_recall"))context.drawCenteredTextWithShadow(client.textRenderer,Text.literal("R"),x+18,y+14,0xFFB080);
         }
         if (originCooldownMs > 0L) {
             int overlayHeight = Math.max(1, Math.min(16,

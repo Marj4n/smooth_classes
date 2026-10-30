@@ -31,9 +31,11 @@ public final class OriginProgressDisplay {
                 lines.add(time("Time submerged", OriginClientState.progress("mermaid.submerged_ticks"), 20 * 60 * 20));
             }
             case DEMON -> {
-                lines.add(time("Time in lava", OriginClientState.progress("demon.lava_ticks"), 60 * 20));
-                lines.add(count("Magma Cubes", OriginClientState.progress("demon.magma_kills"), 10));
-                lines.add(count("Blazes", OriginClientState.progress("demon.blaze_kills"), 10));
+                lines.add(check("Cinder Reflex",OriginClientState.hasFlag("demon.cinder_unlocked")));
+                lines.add(check("World-Ender Path",OriginClientState.hasFlag("demon.world_ender")));
+                lines.add(check("Fortress loot",OriginClientState.hasFlag("demon.trial.fortress")));
+                lines.add(check("Bastion loot",OriginClientState.hasFlag("demon.trial.bastion")));
+                lines.add(check("Demon Lord",OriginClientState.hasFlag("demon.lord")));
             }
             case ANGEL -> {
                 lines.add(count("Hostile species", OriginClientState.countFlags("angel.hostile_species."), 6));
@@ -285,17 +287,15 @@ public final class OriginProgressDisplay {
         }
     }
 
-    private static void demon(String id, List<Text> out) {
-        if ("emberblood".equals(id)) {
-            out.add(time("Time in lava", OriginClientState.progress("demon.lava_ticks"), 60 * 20));
-            out.add(count("Magma Cubes defeated", OriginClientState.progress("demon.magma_kills"), 10));
-            out.add(count("Blazes defeated", OriginClientState.progress("demon.blaze_kills"), 10));
-            out.add(Text.literal("○ Sleep in the Nether: upcoming").formatted(Formatting.GRAY));
-        } else if ("conqueror".equals(id) || "hellwalker".equals(id) || "lava_heart".equals(id)) {
-            out.add(count("Nether hostiles", OriginClientState.progress("demon.nether_hostile_kills"), 30));
-            out.add(Text.literal("○ Fortress + Bastion conquest: upcoming").formatted(Formatting.GRAY));
-        } else if ("dominion".equals(id) || "authority".equals(id) || "final".equals(id)) {
-            out.add(Text.literal("○ Infernal Anchor / boss trial: upcoming").formatted(Formatting.GRAY));
+    private static void demon(String id,List<Text> out) {
+        if(id.equals("trial")||id.equals("brand_of_ruin")){
+            out.add(check("Fortress entered and looted",OriginClientState.hasFlag("demon.trial.fortress")));
+            out.add(check("Bastion entered and looted",OriginClientState.hasFlag("demon.trial.bastion")));
+        }
+        if(id.equals("choose_path")||id.equals("world_ender"))out.add(Text.literal("Use /smoothclasses demon path to choose. Other paths are Coming Soon."));
+        if(id.equals("recognition")||id.equals("sovereign")||id.equals("demon_lord"))for(String boss:org.marj4n.smooth_classes.origin.demon.DemonRules.BOSSES){
+            out.add(check(boss.replace('_',' '),OriginClientState.hasFlag("demon.boss."+boss)));
+            if(OriginClientState.progress("demon.requirement."+boss)==0)out.add(Text.literal("Dependency not registered: "+boss).formatted(Formatting.RED));
         }
     }
 

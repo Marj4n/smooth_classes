@@ -1,0 +1,22 @@
+{
+  "display": {
+    "icon": {
+      "item": "minecraft:beacon"
+    },
+    "title": {
+      "text": "Demon Lord"
+    },
+    "description": {
+      "text": "Bind your soul to The Black Throne."
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": true
+  },
+  "criteria": {
+    "binding": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}
