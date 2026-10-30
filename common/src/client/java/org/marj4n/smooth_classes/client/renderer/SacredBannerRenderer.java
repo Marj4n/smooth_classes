@@ -17,7 +17,7 @@ import org.marj4n.smooth_classes.entity.SacredBannerEntity;
 
 /** Battle Standard geometry and texture from the user-supplied Simply Swords 1.70.2 JAR. */
 public final class SacredBannerRenderer extends EntityRenderer<SacredBannerEntity> {
-    private static final Identifier TEXTURE = new Identifier("smooth_classes",
+    private static final Identifier TEXTURE = Identifier.of("smooth_classes",
             "textures/entity/sacred_banner/battlestandard_texture.png");
     private static final float SCALE = 64F / 30F; // 30 model pixels -> 4 blocks
     private final ModelPart model;
@@ -53,14 +53,14 @@ public final class SacredBannerRenderer extends EntityRenderer<SacredBannerEntit
     }
 
     private static void renderGoldenCloth(MatrixStack matrices, VertexConsumerProvider vertices, int light, float time) {
-        var atlas = net.minecraft.client.texture.SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE;
+        var atlas = net.minecraft.screen.PlayerScreenHandler.BLOCK_ATLAS_TEXTURE;
         var sprite = net.minecraft.client.MinecraftClient.getInstance().getSpriteAtlas(atlas)
-                .apply(new Identifier("smooth_classes", "item/sacred_banner_white"));
+                .apply(Identifier.of("smooth_classes", "item/sacred_banner_white"));
         // Full supplied White Faction cloth, with its black border preserved.
         float u0 = sprite.getFrameU(0D);
-        float u1 = sprite.getFrameU(16D);
+        float u1 = sprite.getFrameU(16D * 310D / 320D);
         float v0 = sprite.getFrameV(0D);
-        float v1 = sprite.getFrameV(16D);
+        float v1 = sprite.getFrameV(16D * 446D / 448D);
         var buffer = vertices.getBuffer(RenderLayer.getEntityCutoutNoCull(atlas));
         var entry = matrices.peek();
         float left=-4F/16F, right=5F/16F;

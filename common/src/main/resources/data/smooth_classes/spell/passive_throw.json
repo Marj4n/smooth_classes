@@ -6,7 +6,10 @@
   "active": {
     "cast": {
       "duration": 0.5,
-      "particles": []
+      "particles": [],
+      "animation": {
+        "id": "spell_engine:one_handed_projectile_charge"
+      }
     }
   },
   "release": {
