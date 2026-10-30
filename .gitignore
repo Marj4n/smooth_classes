@@ -44,7 +44,7 @@ desktop.ini
 *~
 
 # Local test configs / generated runtime data
-config/
+/config/
 world/
 saves/
 
