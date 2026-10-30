@@ -2,6 +2,7 @@ plugins { id 'dev.architectury.loom'; id 'maven-publish' }
 base { archivesName = rootProject.archives_base_name }
 java { toolchain.languageVersion = JavaLanguageVersion.of(21); withSourcesJar() }
 repositories {
+    maven { url = 'https://maven.shedaniel.me/' }
     maven { url = 'https://maven.fabricmc.net/' }
     maven { url = 'https://maven.architectury.dev/' }
     maven { url = 'https://maven.su5ed.dev/releases' }
@@ -56,6 +57,25 @@ tasks.named('sourcesJar') { archiveClassifier = 'fabric-sources' }
 sourceSets.test.java.srcDirs += [rootProject.file('common/src/test/java')]
 dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter:5.11.4'
+    testImplementation "net.fabricmc:fabric-loader-junit:${rootProject.loader_version}"
+    modLocalRuntime('me.shedaniel.cloth:cloth-config-fabric:11.1.136') { transitive = false }
+    modLocalRuntime('maven.modrinth:playeranimator:yDqYTUaf') { transitive = false }
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.11.4'
 }
 tasks.named('test') { useJUnitPlatform() }
+
+// Loom's development classpath does not expose Spell Power's nested config mod
+// to the JUnit launcher. Make that existing runtime library available to tests.
+configurations { testEmbeddedMods }
+dependencies {
+    testEmbeddedMods('maven.modrinth:spell-power:7FbHvvWA') { transitive = false }
+}
+def testEmbeddedDir = layout.buildDirectory.dir('test-embedded-mods')
+def extractTestEmbeddedMods = tasks.register('extractTestEmbeddedMods', Sync) {
+    from { zipTree(configurations.testEmbeddedMods.singleFile).matching { include 'META-INF/jars/tiny-config-*.jar' } }
+    into testEmbeddedDir
+}
+tasks.named('test') {
+    dependsOn extractTestEmbeddedMods
+    classpath += files(provider { fileTree(testEmbeddedDir.get().asFile).matching { include '**/*.jar' }.files })
+}
