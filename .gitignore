@@ -45,6 +45,8 @@ desktop.ini
 
 # Local test configs / generated runtime data
 /config/
+/fabric/config/
+/forge/config/
 world/
 saves/
 
