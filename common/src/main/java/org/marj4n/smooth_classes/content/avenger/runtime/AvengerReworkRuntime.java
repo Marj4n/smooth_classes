@@ -863,7 +863,7 @@ public final class AvengerReworkRuntime {
         if (mob.isAiDisabled()) mob.setAiDisabled(false);
         if (mob instanceof WardenEntity warden && warden.isValidTarget(target)) {
             warden.increaseAngerAt(target, 150, false);
-            warden.updateAttackTarget(target);
+            if (warden.getTarget() != target) warden.updateAttackTarget(target);
         } else mob.setTarget(target);
         if (mob.squaredDistanceTo(target) > 2.25D * 2.25D) {
             mob.getNavigation().startMovingTo(target, 1.25D);
@@ -1182,7 +1182,7 @@ public final class AvengerReworkRuntime {
             mob.setAiDisabled(false);
             if (mob instanceof WardenEntity warden && warden.isValidTarget(target)) {
                 warden.increaseAngerAt(target, 150, false);
-                warden.updateAttackTarget(target);
+                if (warden.getTarget() != target) warden.updateAttackTarget(target);
             } else if (mob.getTarget() != target) {
                 mob.setTarget(target);
             }
@@ -1539,7 +1539,7 @@ public final class AvengerReworkRuntime {
                 mob.setAiDisabled(false);
                 if (summon instanceof WardenEntity warden && warden.isValidTarget(ownerTarget)) {
                     warden.increaseAngerAt(ownerTarget, 150, false);
-                    warden.updateAttackTarget(ownerTarget);
+                    if (warden.getTarget() != ownerTarget) warden.updateAttackTarget(ownerTarget);
                 } else if (mob.canTarget(ownerTarget)) {
                     mob.setTarget(ownerTarget);
                 }
