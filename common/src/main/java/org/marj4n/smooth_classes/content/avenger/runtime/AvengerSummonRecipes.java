@@ -146,6 +146,9 @@ public final class AvengerSummonRecipes {
      * unrelated off-hand item (shield, torch, etc.).
      */
     public static List<Recipe> matching(ItemStack main, ItemStack offhand) {
+        if (AvengerLibrarianSummons.isRecipe(main, offhand)) {
+            return List.of(new Recipe("minecraft:villager", "minecraft:emerald", itemId(offhand)));
+        }
         String mainId = itemId(main);
         List<Recipe> candidates = BY_MAIN_ITEM.get(mainId);
         if (candidates == null || candidates.isEmpty()) return List.of();

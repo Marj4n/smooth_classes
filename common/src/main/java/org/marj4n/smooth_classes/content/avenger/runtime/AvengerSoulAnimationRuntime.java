@@ -9,6 +9,7 @@ import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -134,6 +135,9 @@ public final class AvengerSoulAnimationRuntime {
             if (phase.recipe.offhandItemId() != null) {
                 AvengerReworkRuntime.refundRecipeItem(caster, phase.recipe.offhandItemId());
             }
+            if (!phase.boundBook.isEmpty()) {
+                AvengerReworkRuntime.refundRecipeStack(caster, phase.boundBook);
+            }
             SmoothClassesNetworking.sendAbilityState(caster);
         } else {
             // Normally impossible because disconnect completes the phase.
@@ -194,6 +198,7 @@ public final class AvengerSoulAnimationRuntime {
         final ServerWorld world;
         final byte action;
         final AvengerSummonRecipes.Recipe recipe;
+        final ItemStack boundBook;
         int ticks;
         boolean oldNoAi;
         boolean oldInvulnerable;
@@ -206,6 +211,7 @@ public final class AvengerSoulAnimationRuntime {
             this.action = action;
             this.ticks = ticks;
             this.recipe = recipe;
+            this.boundBook = recipe == null ? ItemStack.EMPTY : AvengerLibrarianSummons.boundBook(entity);
         }
     }
 }

@@ -483,6 +483,10 @@ public final class AvengerReworkRuntime {
         ItemStack main = player.getMainHandStack();
         ItemStack off = player.getOffHandStack();
         if (main.isEmpty()) return ExecutionResult.failure("Hold a Death List summon ingredient in your main hand.");
+        if (AvengerLibrarianSummons.isRecipe(main, off)
+                && !AvengerLibrarianSummons.hasStoredEnchantments(off)) {
+            return ExecutionResult.failure("That enchanted book has no stored enchantments.");
+        }
 
         List<AvengerSummonRecipes.Recipe> recipes = AvengerSummonRecipes.matching(main, off);
         if (recipes.isEmpty()) {
@@ -513,6 +517,9 @@ public final class AvengerReworkRuntime {
         }
         LivingEntity summoned = spawnRegisteredSoul(player, chosen, staySpot);
         if (summoned == null) return ExecutionResult.failure("No space to summon there.");
+        if (summoned instanceof VillagerEntity villager && AvengerLibrarianSummons.isRecipe(main, off)) {
+            AvengerLibrarianSummons.bind(villager, off);
+        }
 
         // Resource spending only happens after a successful spawn.
         if (!state.consumeSoul(player.getUuid(), chosen.entityId())) {
@@ -651,7 +658,8 @@ public final class AvengerReworkRuntime {
         }
         // Death List villagers start genuinely unemployed. They may acquire a
         // profession later through normal workstation AI, but summoning never
-        // grants a profession or pre-baked trades.
+        // grants a profession or pre-baked trades unless an enchanted book is
+        // explicitly bound by the emerald + off-hand book recipe afterward.
         if (living instanceof VillagerEntity villager) {
             villager.setVillagerData(villager.getVillagerData()
                     .withProfession(VillagerProfession.NONE)
@@ -1300,6 +1308,12 @@ public final class AvengerReworkRuntime {
         if (!Registries.ITEM.containsId(id)) return;
 
         ItemStack refund = new ItemStack(Registries.ITEM.get(id), 1);
+        refundRecipeStack(player, refund);
+    }
+
+    static void refundRecipeStack(ServerPlayerEntity player, ItemStack source) {
+        if (source.isEmpty()) return;
+        ItemStack refund = source.copy();
 
         // Inventory#insertStack may choose an empty slot before coalescing a stack in
         // some modded inventory setups. Recall should feel exactly like returning the
