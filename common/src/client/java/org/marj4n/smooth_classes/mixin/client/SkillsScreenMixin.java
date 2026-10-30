@@ -34,7 +34,7 @@ public abstract class SkillsScreenMixin {
     @Unique
     private static final boolean PROMINENT_LOADED = PlatformLoader.getInstance().isModLoaded("prominent");
     @Unique
-    private static final Identifier OMINOUS_EYE = new Identifier("smooth_classes", "textures/backgrounds/decor/ominous_eye.png");
+    private static final Identifier OMINOUS_EYE = Identifier.of("smooth_classes", "textures/backgrounds/decor/ominous_eye.png");
     @Unique
     private static final int EYE_FRAME_COUNT = 8;
     @Unique
@@ -44,11 +44,11 @@ public abstract class SkillsScreenMixin {
     @Unique
     private static final int EYE_MIN_GAP = 36;
     @Unique
-    private final Identifier cloudsTexture1 = new Identifier("smooth_classes", "textures/backgrounds/decor/clouds.png");
+    private final Identifier cloudsTexture1 = Identifier.of("smooth_classes", "textures/backgrounds/decor/clouds.png");
     @Unique
-    private final Identifier cloudsTexture2 = new Identifier("smooth_classes", "textures/backgrounds/decor/clouds_2.png");
+    private final Identifier cloudsTexture2 = Identifier.of("smooth_classes", "textures/backgrounds/decor/clouds_2.png");
     @Unique
-    private final Identifier cloudsTexture3 = new Identifier("smooth_classes", "textures/backgrounds/decor/clouds_3.png");
+    private final Identifier cloudsTexture3 = Identifier.of("smooth_classes", "textures/backgrounds/decor/clouds_3.png");
     @Unique
     private float cloudsX = 0;
 

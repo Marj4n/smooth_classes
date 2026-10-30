@@ -8,7 +8,7 @@ import net.minecraft.util.Identifier;
 import org.marj4n.smooth_classes.entity.HighBeamEntity;
 
 public final class HighBeamRenderer extends EntityRenderer<HighBeamEntity> {
-    private static final Identifier TEXTURE=new Identifier("minecraft","textures/entity/beacon_beam.png");
+    private static final Identifier TEXTURE=Identifier.of("minecraft","textures/entity/beacon_beam.png");
     public HighBeamRenderer(EntityRendererFactory.Context context){super(context);}
     @Override public Identifier getTexture(HighBeamEntity e){return TEXTURE;}
     @Override public boolean shouldRender(HighBeamEntity e,Frustum f,double x,double y,double z){return true;}

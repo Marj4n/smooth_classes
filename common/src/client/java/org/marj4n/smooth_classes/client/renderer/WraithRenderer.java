@@ -13,7 +13,7 @@ import org.marj4n.smooth_classes.entity.WraithEntity;
 public class WraithRenderer extends MobEntityRenderer<WraithEntity, WraithModel> {
 
 
-     private static final Identifier TEXTURE = new Identifier("smooth_classes","textures/entity/wraith.png");
+     private static final Identifier TEXTURE = Identifier.of("smooth_classes","textures/entity/wraith.png");
 
     public WraithRenderer(EntityRendererFactory.Context ctx) {
         super(ctx, new WraithModel(ctx.getPart(SmoothClassesClient.WRAITH_MODEL)), 1.0f);

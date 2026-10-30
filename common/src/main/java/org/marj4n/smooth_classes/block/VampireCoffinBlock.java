@@ -43,6 +43,7 @@ public final class VampireCoffinBlock extends HorizontalFacingBlock {
     }
 
     @Override
+    @Deprecated // Vanilla implementation hook; callers use BlockState.
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player,
                               Hand hand, BlockHitResult hit) {
         if (world.isClient) return ActionResult.SUCCESS;

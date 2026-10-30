@@ -13,11 +13,11 @@ import net.minecraft.util.Identifier;
 import net.minecraft.entity.boss.ServerBossBar;
 
 public final class DemonMobIdentity {
-    public static final TagKey<EntityType<?>> NATIVE=TagKey.of(RegistryKeys.ENTITY_TYPE,new Identifier("smooth_classes:demon_nether_native"));
-    public static final TagKey<EntityType<?>> BOSSES=TagKey.of(RegistryKeys.ENTITY_TYPE,new Identifier("smooth_classes:demon_bosses"));
-    private static final TagKey<EntityType<?>> COMMON_BOSSES=TagKey.of(RegistryKeys.ENTITY_TYPE,new Identifier("c:bosses")),FORGE_BOSSES=TagKey.of(RegistryKeys.ENTITY_TYPE,new Identifier("forge:bosses"));
-    public static final TagKey<EntityType<?>> EXCLUDED=TagKey.of(RegistryKeys.ENTITY_TYPE,new Identifier("smooth_classes:demon_command_excluded"));
-    public static final TagKey<EntityType<?>> STRUCTURE_NATIVE=TagKey.of(RegistryKeys.ENTITY_TYPE,new Identifier("smooth_classes:demon_nether_structure_native"));
+    public static final TagKey<EntityType<?>> NATIVE=TagKey.of(RegistryKeys.ENTITY_TYPE,org.marj4n.smooth_classes.util.ResourceIds.parse("smooth_classes:demon_nether_native"));
+    public static final TagKey<EntityType<?>> BOSSES=TagKey.of(RegistryKeys.ENTITY_TYPE,org.marj4n.smooth_classes.util.ResourceIds.parse("smooth_classes:demon_bosses"));
+    private static final TagKey<EntityType<?>> COMMON_BOSSES=TagKey.of(RegistryKeys.ENTITY_TYPE,org.marj4n.smooth_classes.util.ResourceIds.parse("c:bosses")),FORGE_BOSSES=TagKey.of(RegistryKeys.ENTITY_TYPE,org.marj4n.smooth_classes.util.ResourceIds.parse("forge:bosses"));
+    public static final TagKey<EntityType<?>> EXCLUDED=TagKey.of(RegistryKeys.ENTITY_TYPE,org.marj4n.smooth_classes.util.ResourceIds.parse("smooth_classes:demon_command_excluded"));
+    public static final TagKey<EntityType<?>> STRUCTURE_NATIVE=TagKey.of(RegistryKeys.ENTITY_TYPE,org.marj4n.smooth_classes.util.ResourceIds.parse("smooth_classes:demon_nether_structure_native"));
     private static final Set<EntityType<?>> NATIVES=new HashSet<>();
     private static final Set<net.minecraft.world.gen.structure.Structure> NETHER_STRUCTURES=new HashSet<>();
     private static final Map<Class<?>,Boolean> BOSS_CLASSES=new HashMap<>();
@@ -31,7 +31,7 @@ public final class DemonMobIdentity {
         }
         // Being a Nether visitor (e.g. an Overworld enderman) does not establish Nether identity.
         NATIVES.removeAll(other);
-        for(String id:DemonConfig.INSTANCE.nativeEntities){Identifier key=Identifier.tryParse(id);if(key!=null&&Registries.ENTITY_TYPE.containsId(key))NATIVES.add(Registries.ENTITY_TYPE.get(key));}
+        for(String id:DemonConfig.INSTANCE.nativeEntities){Identifier key=Identifier.tryParse(id);if(key!=null&&org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE.containsId(key))NATIVES.add(org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE.get(key));}
         var nether=server.getWorld(World.NETHER);
         if(nether!=null){
             var netherBiomes=nether.getChunkManager().getChunkGenerator().getBiomeSource().getBiomes();
@@ -49,7 +49,7 @@ public final class DemonMobIdentity {
     public static boolean nativeMob(LivingEntity e){return e instanceof MobEntity&&(e.getType().isIn(NATIVE)||NATIVES.contains(e.getType())||DemonEntityData.of(e).nativeBirth);}
     public static boolean boss(LivingEntity e){
         if(e.getType().isIn(BOSSES)||e.getType().isIn(COMMON_BOSSES)||e.getType().isIn(FORGE_BOSSES))return true;
-        if(DemonConfig.INSTANCE.bossEntities.containsValue(Registries.ENTITY_TYPE.getId(e.getType()).toString()))return true;
+        if(DemonConfig.INSTANCE.bossEntities.containsValue(org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE.getId(e.getType()).toString()))return true;
         return BOSS_CLASSES.computeIfAbsent(e.getClass(),type->{
             try{for(Class<?> c=type;c!=null&&c!=Object.class;c=c.getSuperclass()){
                 // Cataclysm also has minibosses without a visible ServerBossBar.
@@ -61,7 +61,7 @@ public final class DemonMobIdentity {
         });
     }
     public static boolean eligible(LivingEntity e){
-        if(!nativeMob(e)||!e.isAlive()||boss(e)||e.getType().isIn(EXCLUDED)||DemonConfig.INSTANCE.excludedEntities.contains(Registries.ENTITY_TYPE.getId(e.getType()).toString()))return false;
+        if(!nativeMob(e)||!e.isAlive()||boss(e)||e.getType().isIn(EXCLUDED)||DemonConfig.INSTANCE.excludedEntities.contains(org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE.getId(e.getType()).toString()))return false;
         if(e instanceof net.minecraft.entity.Tameable t&&t.getOwnerUuid()!=null)return false;
         if(e instanceof AbstractHorseEntity h&&h.getOwnerUuid()!=null)return false;
         if(e instanceof MobEntity mob&&mob.isLeashed())return false;

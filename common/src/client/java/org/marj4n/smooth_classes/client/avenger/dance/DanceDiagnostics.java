@@ -57,12 +57,15 @@ public final class DanceDiagnostics {
 
         String output=System.getProperty("smooth_classes.danceExport");if(output==null||exported||c.world==null||c.player==null)return;
         try{Path dir=Path.of(output);Files.createDirectories(dir);int count=0;
-            for(String id:java.util.stream.Stream.concat(DanceProfiles.SIGNATURES.stream(),java.util.stream.Stream.of("cow","ghast","cod","cat")).distinct().toList()){var type=Registries.ENTITY_TYPE.get(new Identifier("minecraft",id));Entity entity=type.create(c.world);var renderer=c.getEntityRenderDispatcher().getRenderer(entity);if(!(renderer instanceof LivingEntityRenderer<?,?> living))throw new IllegalStateException("No living renderer "+id);((net.minecraft.client.render.entity.model.EntityModel)living.getModel()).animateModel(entity,0,0,0);((net.minecraft.client.render.entity.model.EntityModel)living.getModel()).setAngles(entity,0,0,0,0,0);var rig=new DanceRig(living.getModel());if(rig.roots.isEmpty())throw new IllegalStateException("No root "+id);
+            for(String id:java.util.stream.Stream.concat(DanceProfiles.SIGNATURES.stream(),java.util.stream.Stream.of("cow","ghast","cod","cat")).distinct().toList()){var type=org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE.get(Identifier.of("minecraft",id));Entity entity=type.create(c.world);var renderer=c.getEntityRenderDispatcher().getRenderer(entity);if(!(renderer instanceof LivingEntityRenderer<?,?> living))throw new IllegalStateException("No living renderer "+id);var rig=new DanceRig(living.getModel());if(rig.roots.isEmpty())throw new IllegalStateException("No root "+id);
                 var model=new LinkedHashMap<String,Object>();model.put("id",id);model.put("source","Actual vanilla baked EntityRenderer model, Minecraft Java1.20.1; not a replacement");model.put("model_class",living.getModel().getClass().getName());var roots=new ArrayList<Object>();for(var e:rig.roots.entrySet())roots.add(part(e.getKey(),e.getValue()));model.put("roots",roots);
-                model.put("texture",((LivingEntityRenderer)living).getTexture((LivingEntity)entity).toString());Files.writeString(dir.resolve(id+".json"),JSON.toJson(model));count++;
+                model.put("texture",textureForEntity(entity));Files.writeString(dir.resolve(id+".json"),JSON.toJson(model));count++;
             }exported=true;Files.writeString(dir.resolve("PASS.json"),"{\"original_vanilla_rigs\":"+count+"}");org.marj4n.smooth_classes.SmoothClasses.LOGGER.info("AVENGER_DANCE exported {} original rigs",count);
         }catch(Exception e){exported=true;org.marj4n.smooth_classes.SmoothClasses.LOGGER.error("Dance rig export failed",e);}
     }
     private static Object part(String name,ModelPart p){var n=new LinkedHashMap<String,Object>();n.put("name",name);n.put("pivot",List.of(p.pivotX,p.pivotY,p.pivotZ));n.put("rotation",List.of(p.pitch,p.yaw,p.roll));n.put("visible",p.visible);var a=(AvengerDancePartAccessor)(Object)p;var cubes=new ArrayList<Object>();for(var c:a.smoothClasses$danceCuboids())cubes.add(List.of(c.minX,c.minY,c.minZ,c.maxX,c.maxY,c.maxZ));n.put("cubes",cubes);var children=new ArrayList<Object>();for(var e:a.smoothClasses$danceChildren().entrySet())children.add(part(e.getKey(),e.getValue()));n.put("children",children);return n;}
+    private static <T extends Entity> String textureForEntity(T entity) {
+        return MinecraftClient.getInstance().getEntityRenderDispatcher().getRenderer(entity).getTexture(entity).toString();
+    }
     private DanceDiagnostics(){}
 }

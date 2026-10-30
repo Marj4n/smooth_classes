@@ -21,17 +21,17 @@ public final class PlatformRegistry {
         activeEvent = event;
         try {
             // Keep each class uninitialized until Forge unlocks that registry.
-            if (key.equals(Registries.BLOCK.getKey())) {
+            if (key.equals(org.marj4n.smooth_classes.platform.PlatformRegistries.BLOCK.getKey())) {
                 org.marj4n.smooth_classes.registry.SmoothBlocks.register();
-            } else if (key.equals(Registries.ITEM.getKey())) {
+            } else if (key.equals(org.marj4n.smooth_classes.platform.PlatformRegistries.ITEM.getKey())) {
                 org.marj4n.smooth_classes.registry.SmoothItems.register();
-            } else if (key.equals(Registries.STATUS_EFFECT.getKey())) {
+            } else if (key.equals(org.marj4n.smooth_classes.platform.PlatformRegistries.STATUS_EFFECT.getKey())) {
                 org.marj4n.smooth_classes.effects.SmoothEffects.register();
-            } else if (key.equals(Registries.ENTITY_TYPE.getKey())) {
+            } else if (key.equals(org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE.getKey())) {
                 org.marj4n.smooth_classes.registry.SmoothEntities.register();
-            } else if (key.equals(Registries.PARTICLE_TYPE.getKey())) {
+            } else if (key.equals(org.marj4n.smooth_classes.platform.PlatformRegistries.PARTICLE_TYPE.getKey())) {
                 org.marj4n.smooth_classes.registry.SmoothParticles.register();
-            } else if (key.equals(Registries.SOUND_EVENT.getKey())) {
+            } else if (key.equals(org.marj4n.smooth_classes.platform.PlatformRegistries.SOUND_EVENT.getKey())) {
                 org.marj4n.smooth_classes.registry.SmoothSounds.register();
             } else {
                 return;
@@ -48,7 +48,7 @@ public final class PlatformRegistry {
         }
     }
 
-    public static <V,T extends V> T register(Registry<V> registry, Identifier id, T value) {
+    public static <V,T extends V> T register(RegistryAccess<V> registry, Identifier id, T value) {
         if (activeEvent == null || !activeEvent.getRegistryKey().equals(registry.getKey())) {
             throw new IllegalStateException("Registration outside its Forge RegisterEvent: " + id);
         }

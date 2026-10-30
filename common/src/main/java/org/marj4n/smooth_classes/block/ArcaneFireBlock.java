@@ -24,6 +24,7 @@ public final class ArcaneFireBlock extends Block {
     public ArcaneFireBlock(Settings settings) { super(settings); }
 
     @Override
+    @Deprecated // Vanilla implementation hook; callers use BlockState.
     public void onBlockAdded(BlockState state, World world, BlockPos pos,
                              BlockState oldState, boolean notify) {
         if (!world.isClient && !oldState.isOf(this))
@@ -31,12 +32,14 @@ public final class ArcaneFireBlock extends Block {
     }
 
     @Override
+    @Deprecated // Vanilla implementation hook; callers use BlockState.
     public void scheduledTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
         if (world.getBlockState(pos).isOf(this))
             world.setBlockState(pos, Blocks.AIR.getDefaultState(), Block.NOTIFY_ALL);
     }
 
     @Override
+    @Deprecated // Vanilla implementation hook; callers use BlockState.
     public boolean canPlaceAt(BlockState state, WorldView world, BlockPos pos) {
         BlockPos below = pos.down();
         return !world.getBlockState(below).getCollisionShape(world, below).isEmpty()
@@ -44,12 +47,14 @@ public final class ArcaneFireBlock extends Block {
     }
 
     @Override
+    @Deprecated // Vanilla implementation hook; callers use BlockState.
     public BlockState getStateForNeighborUpdate(BlockState state, Direction direction,
             BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
         return canPlaceAt(state, world, pos) ? state : Blocks.AIR.getDefaultState();
     }
 
     @Override
+    @Deprecated // Vanilla implementation hook; callers use BlockState.
     public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
         if (!world.isClient && entity instanceof LivingEntity && entity.isAlive()) {
             // Deliberately no owner/team exclusion or fire-immunity check.

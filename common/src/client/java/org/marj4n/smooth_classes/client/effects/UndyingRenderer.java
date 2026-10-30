@@ -16,12 +16,12 @@ import org.marj4n.smooth_classes.SmoothClasses;
 
 
 public class UndyingRenderer implements CustomModelStatusEffect.Renderer {
-    public static final Identifier modelId_base = new Identifier(SmoothClasses.MOD_ID, "effect/undying");
-    public static final Identifier modelId_overlay = new Identifier(SmoothClasses.MOD_ID, "effect/undying_glow");
-    public static final Identifier modelId_barrier = new Identifier(SmoothClasses.MOD_ID, "effect/undying_barrier");
+    public static final Identifier modelId_base = Identifier.of(SmoothClasses.MOD_ID, "effect/undying");
+    public static final Identifier modelId_overlay = Identifier.of(SmoothClasses.MOD_ID, "effect/undying_glow");
+    public static final Identifier modelId_barrier = Identifier.of(SmoothClasses.MOD_ID, "effect/undying_barrier");
 
     private static final RenderLayer BASE_RENDER_LAYER =
-            RenderLayer.getEntityTranslucent(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE);
+            RenderLayer.getEntityTranslucent(net.minecraft.screen.PlayerScreenHandler.BLOCK_ATLAS_TEXTURE);
     private static final RenderLayer OVERLAY_RENDER_LAYER =
             CustomLayers.spellEffect(LightEmission.GLOW, true);
 

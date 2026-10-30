@@ -52,6 +52,37 @@ tasks.register('validateTextureReferences') {
                 }
             }
         }
+        def spells = fileTree(new File(resources, 'data/smooth_classes/spell')).matching { include '**/*.json' }.files
+        spells.each { spellFile ->
+            def spellId = spellFile.name.replaceFirst(/\.json$/, '')
+            if (!new File(resources, 'assets/smooth_classes/textures/spell/' + spellId + '.png').isFile()) errors.add('Spell hotbar icon: ' + spellId)
+            def spell = parser.parse(spellFile)
+            if (spell.active?.cast != null && !spell.active.cast.animation?.id) errors.add('Missing cast animation: ' + spellId)
+        }
+        fileTree(resources).matching { include '**/*.png.mcmeta' }.files.each { meta ->
+            def animation = parser.parse(meta).animation
+            if (animation) {
+                def png = new File(meta.path.substring(0, meta.path.length() - 7))
+                def image = javax.imageio.ImageIO.read(png)
+                def width = animation.width ?: Math.min(image.width, image.height)
+                def height = animation.height ?: Math.min(image.width, image.height)
+                if (image.width % width != 0 || image.height % height != 0) errors.add('Invalid PNG animation frame dimensions: ' + png.name)
+            }
+        }
+        def skillConfig = parser.parse(new File(resources, 'data/smooth_classes/puffish_skills/config.json'))
+        if (skillConfig.version != 3) errors.add('Puffish configuration must use schema 3')
+        fileTree(new File(resources, 'data/smooth_classes/puffish_skills/categories')).matching { include '**/experience.json' }.files.each { exp ->
+            def data = parser.parse(exp)
+            if (data.containsKey('enabled')) errors.add('Legacy experience enabled flag: ' + exp.parentFile.name)
+            def checkExperience
+            checkExperience = { value ->
+                if (value instanceof Map) {
+                    if (value.type in ['dropped_experience','killed_living_entity','max_health']) errors.add('Legacy experience operation: ' + value.type)
+                    value.values().each { checkExperience(it) }
+                } else if (value instanceof List) value.each { checkExperience(it) }
+            }
+            checkExperience(data)
+        }
         def effects = file('src/main/java/org/marj4n/smooth_classes/effects/SmoothEffects.java').text
         def ids = (effects =~ /(?:register|attunement)\("([^"]+)"/).collect { it[1] }.toSet()
         ids.each { id ->

@@ -39,7 +39,7 @@ public final class AbilityRuntime {
             return 0;
         }
 
-        Identifier categoryId = new Identifier(talentId.getNamespace(), path.substring(0, slash));
+        Identifier categoryId = Identifier.of(talentId.getNamespace(), path.substring(0, slash));
         int rank = 0;
         for (String skillId : PuffishTalentSkillMap.skillIds(path)) {
             if (PuffishSkillsIntegration.isSkillUnlocked(categoryId, skillId, player)) rank++;

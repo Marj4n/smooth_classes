@@ -15,6 +15,6 @@ public abstract class BladeLootingMixin {
     private static void smoothClasses$projectedLooting(LivingEntity entity, CallbackInfoReturnable<Integer> cir) {
         BladeDamageContext.Hit hit = BladeDamageContext.current();
         if (hit != null && hit.caster() == entity)
-            cir.setReturnValue(EnchantmentHelper.getLevel(Enchantments.LOOTING, hit.weapon()));
+            cir.setReturnValue(org.marj4n.smooth_classes.platform.PlatformItems.enchantmentLevel(Enchantments.LOOTING, hit.weapon()));
     }
 }

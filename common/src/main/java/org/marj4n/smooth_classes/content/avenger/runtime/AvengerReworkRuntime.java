@@ -154,7 +154,7 @@ public final class AvengerReworkRuntime {
         if (MANUAL_CAPTURED.remove(victim.getUuid())) return;
         if (!AbilityRuntime.isClass(player, AvengerClass.ID)) return;
         if (victim instanceof PlayerEntity) return;
-        String entityId = Registries.ENTITY_TYPE.getId(victim.getType()).toString();
+        String entityId = org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE.getId(victim.getType()).toString();
         if (!AvengerSummonRecipes.supported(entityId) || !AvengerSummonSafety.allowed(victim)) return;
 
         AvengerDeathListState state = AvengerDeathListState.get(player.getServer());
@@ -173,7 +173,7 @@ public final class AvengerReworkRuntime {
         if (owner == null && victim.getAttacker() != null) owner = summonOwnerUuid(victim.getAttacker());
         if (owner == null) return;
 
-        String entityId = Registries.ENTITY_TYPE.getId(victim.getType()).toString();
+        String entityId = org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE.getId(victim.getType()).toString();
         if (!AvengerSummonRecipes.supported(entityId) || !AvengerSummonSafety.allowed(victim)) return;
         MinecraftServer server = victim.getServer();
         if (server == null) return;
@@ -191,7 +191,7 @@ public final class AvengerReworkRuntime {
     }
 
     private static void captureDevoured(ServerPlayerEntity player, LivingEntity victim) {
-        String entityId = Registries.ENTITY_TYPE.getId(victim.getType()).toString();
+        String entityId = org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE.getId(victim.getType()).toString();
         if (!AvengerSummonRecipes.supported(entityId) || !AvengerSummonSafety.allowed(victim)) return;
         AvengerDeathListState state = AvengerDeathListState.get(player.getServer());
         state.recordKill(player.getUuid(), entityId);
@@ -585,7 +585,7 @@ public final class AvengerReworkRuntime {
 
     private static Vec3d staySpotAbove(ServerWorld world, BlockPos ground) {
         BlockPos spawnBlock = ground.up();
-        if (!world.isChunkLoaded(ground) || !world.isChunkLoaded(spawnBlock)) return null;
+        if (!world.isChunkLoaded(ground.getX() >> 4, ground.getZ() >> 4) || !world.isChunkLoaded(spawnBlock.getX() >> 4, spawnBlock.getZ() >> 4)) return null;
         var groundState = world.getBlockState(ground);
         var shape = groundState.getCollisionShape(world, ground);
         if (shape.isEmpty() || !groundState.getFluidState().isEmpty()) return null;
@@ -601,7 +601,7 @@ public final class AvengerReworkRuntime {
                                                     Vec3d requestedStaySpot) {
         // Do not create an unexpected boss or non-living entity, even from a forged old ledger.
         if (!AvengerSummonRecipes.supported(recipe.entityId()) || AvengerSummonSafety.bannedId(recipe.entityId())) return null;
-        EntityType<?> type = Registries.ENTITY_TYPE.get(recipe.entityIdentifier());
+        EntityType<?> type = org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE.get(recipe.entityIdentifier());
         Vec3d look = player.getRotationVec(1F);
         Vec3d flat = new Vec3d(look.x, 0D, look.z);
         if (flat.lengthSquared() < 1.0E-6D) flat = new Vec3d(0D, 0D, 1D);
@@ -923,7 +923,7 @@ public final class AvengerReworkRuntime {
             int baseY = owner.getBlockY();
             for (int dy = 3; dy >= -3; dy--) {
                 BlockPos p = new BlockPos(x, baseY + dy, z);
-                if (!world.isChunkLoaded(p)) continue;
+                if (!world.isChunkLoaded(p.getX() >> 4, p.getZ() >> 4)) continue;
                 if (!world.getBlockState(p.down()).isSideSolidFullSquare(world, p.down(), Direction.UP)) continue;
                 boolean room = true;
                 int height = Math.max(2, net.minecraft.util.math.MathHelper.ceil(summon.getHeight()));
@@ -1243,7 +1243,7 @@ public final class AvengerReworkRuntime {
             return ExecutionResult.failure("That soul is still materializing or being absorbed.");
         }
 
-        String entityId = Registries.ENTITY_TYPE.getId(summon.getType()).toString();
+        String entityId = org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE.getId(summon.getType()).toString();
         AvengerSummonRecipes.Recipe recipe = AvengerSummonRecipes.recipe(entityId);
         if (recipe == null) {
             return ExecutionResult.failure("That summon has no Death List recall recipe.");
@@ -1304,10 +1304,10 @@ public final class AvengerReworkRuntime {
 
     static void refundRecipeItem(ServerPlayerEntity player, String itemId) {
         if (itemId == null || itemId.isBlank()) return;
-        Identifier id = new Identifier(itemId);
-        if (!Registries.ITEM.containsId(id)) return;
+        Identifier id = org.marj4n.smooth_classes.util.ResourceIds.parse(itemId);
+        if (!org.marj4n.smooth_classes.platform.PlatformRegistries.ITEM.containsId(id)) return;
 
-        ItemStack refund = new ItemStack(Registries.ITEM.get(id), 1);
+        ItemStack refund = new ItemStack(org.marj4n.smooth_classes.platform.PlatformRegistries.ITEM.get(id), 1);
         refundRecipeStack(player, refund);
     }
 
@@ -1602,7 +1602,7 @@ public final class AvengerReworkRuntime {
         // Return the sacrificed soul deterministically before the blast. The kill hook is suppressed
         // for this one entity so Curtain Call never duplicates the Death List entry.
         AvengerDeathListState.get(player.getServer()).recordKill(player.getUuid(),
-                Registries.ENTITY_TYPE.getId(target.getType()).toString());
+                org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE.getId(target.getType()).toString());
         refreshDeathListNow(player, AvengerDeathListState.get(player.getServer()));
         MANUAL_CAPTURED.add(target.getUuid());
         CURTAIN_BYPASS.add(target.getUuid());
@@ -1626,7 +1626,7 @@ public final class AvengerReworkRuntime {
         world.spawnParticles(ParticleTypes.SOUL_FIRE_FLAME, center.x, center.y, center.z,
                 rank >= 2 ? 70 : 40, radius * 0.35D, 1.2D, radius * 0.35D, 0.06D);
         return ExecutionResult.success(1, "Curtain Call detonated " + AvengerSummonRecipes.friendlyEntityName(
-                Registries.ENTITY_TYPE.getId(target.getType()).toString()));
+                org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE.getId(target.getType()).toString()));
     }
 
     // ---------------------------------------------------------------------

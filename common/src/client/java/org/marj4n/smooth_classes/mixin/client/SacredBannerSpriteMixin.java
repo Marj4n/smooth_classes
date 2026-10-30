@@ -16,12 +16,12 @@ public abstract class SacredBannerSpriteMixin {
     @Inject(method="<init>",at=@At("RETURN"))
     private void smooth$bannerMask(Identifier id, SpriteDimensions dimensions, NativeImage image,
                                    AnimationResourceMetadata metadata, CallbackInfo ci) {
-        if (id.equals(new Identifier("smooth_classes","item/sacred_banner_white"))) {
+        if (id.equals(Identifier.of("smooth_classes","item/sacred_banner_white"))) {
             maskOuterBackground(image);
             return;
         }
-        boolean goldenCloth = id.equals(new Identifier("smooth_classes","item/sacred_banner_gold"));
-        if (!goldenCloth && !id.equals(new Identifier("smooth_classes","item/sacred_banner_source"))) return;
+        boolean goldenCloth = id.equals(Identifier.of("smooth_classes","item/sacred_banner_gold"));
+        if (!goldenCloth && !id.equals(Identifier.of("smooth_classes","item/sacred_banner_source"))) return;
         for (int y=0;y<image.getHeight();y++) {
             for (int x=0;x<image.getWidth();x++) {
                 int color=image.getColor(x,y);

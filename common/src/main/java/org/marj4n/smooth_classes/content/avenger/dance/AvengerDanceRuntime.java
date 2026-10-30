@@ -21,7 +21,7 @@ import org.marj4n.smooth_classes.mixin.AvengerJukeboxAccessor;
 
 /** Cosmetic authority only: never writes AI, commands, targets, ownership or position. */
 public final class AvengerDanceRuntime {
-    public static final Identifier SYNC=new Identifier("smooth_classes","avenger_dance_v2");
+    public static final Identifier SYNC=Identifier.of("smooth_classes","avenger_dance_v2");
     public record Song(BlockPos pos,long start,long end,int disc) {}
     public record State(int entityId,UUID uuid,String profile,Song song) {}
     private static final String OWNER="smooth_classes_avenger_owner_";
@@ -47,7 +47,7 @@ public final class AvengerDanceRuntime {
     }
     /** Called only after actual Death List spawn + successful soul/charge/material costs. */
     public static void issue(ServerPlayerEntity owner,LivingEntity entity){
-        String type=Registries.ENTITY_TYPE.getId(entity.getType()).toString();
+        String type=org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE.getId(entity.getType()).toString();
         if(!(entity instanceof MobEntity mob)||!type.startsWith("minecraft:")||!AvengerSummonRecipes.supported(type)||!AvengerReworkRuntime.isOwnedSummon(owner,entity))return;
         DanceBindings.get(owner.getServer()).issue(entity.getUuid(),owner.getUuid(),type);
         data((ServerWorld)entity.getWorld()).candidates.put(entity.getUuid(),mob);
@@ -55,7 +55,7 @@ public final class AvengerDanceRuntime {
     public static boolean authorized(MobEntity mob){
         if(!(mob.getWorld() instanceof ServerWorld w)||!AvengerReworkRuntime.isAvengerSummon(mob))return false;
         var binding=DanceBindings.get(w.getServer()).get(mob.getUuid());if(binding==null)return false;
-        String type=Registries.ENTITY_TYPE.getId(mob.getType()).toString();
+        String type=org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE.getId(mob.getType()).toString();
         if(!type.equals(binding.type())||DanceProfiles.profile(type)==null||!AvengerSummonRecipes.supported(type)||!AvengerReworkRuntime.isOwnedSummon(binding.owner(),mob))return false;
         int count=0;for(String t:mob.getCommandTags())if(t.startsWith(OWNER)){if(!t.equals(OWNER+binding.owner()))return false;count++;}if(count!=1)return false;
         var ledger=AvengerDeathListState.get(w.getServer());if(!ledger.hasAwakened(binding.owner())||ledger.kills(binding.owner(),type)<1)return false;
@@ -71,7 +71,7 @@ public final class AvengerDanceRuntime {
         if(!be.isPlayingRecord()||be.isRemoved()||!(be.getStack(0).getItem() instanceof MusicDiscItem disc)){removeSong(d,key);return;}
         var accessor=(AvengerJukeboxAccessor)be;long elapsed=Math.max(0,accessor.smoothClasses$danceTick()-accessor.smoothClasses$danceStart());
         if(elapsed>=disc.getSongLengthInTicks()){removeSong(d,key);return;}
-        long start=w.getTime()-elapsed;int id=Registries.ITEM.getRawId(disc);Song old=d.songs.get(key);
+        long start=w.getTime()-elapsed;int id=net.minecraft.item.Item.getRawId(disc);Song old=d.songs.get(key);
         // Preserve established origin despite tick ordering; distinguish actual replay using record identity/start.
         if(old!=null&&old.disc()==id&&Math.abs(old.start()-start)<=1)return;
         Song song=new Song(be.getPos().toImmutable(),start,start+disc.getSongLengthInTicks(),id);d.songs.put(key,song);
@@ -107,7 +107,7 @@ public final class AvengerDanceRuntime {
             boolean urgent=combat(m);Song song=old==null?null:old.song();
             if(urgent||song!=null&&(!d.songs.containsKey(song.pos().asLong())||w.getTime()>=song.end()||m.getPos().squaredDistanceTo(Vec3d.ofCenter(song.pos()))>256))song=null;
             if(w.getTime()%5==Math.floorMod(m.getId(),5))song=!urgent&&authorized(m)?nearest(d,m):null;
-            State next=song==null?null:old!=null&&old.song().equals(song)?old:new State(m.getId(),m.getUuid(),DanceProfiles.profile(Registries.ENTITY_TYPE.getId(m.getType()).toString()),song);
+            State next=song==null?null:old!=null&&old.song().equals(song)?old:new State(m.getId(),m.getUuid(),DanceProfiles.profile(org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE.getId(m.getType()).toString()),song);
             if(!Objects.equals(old,next)){if(next==null)d.dancing.remove(entry.getKey());else d.dancing.put(entry.getKey(),next);send(w,next==null?old:next,next!=null);}
         }
         tickNanos=System.nanoTime()-begin;maxTickNanos=Math.max(maxTickNanos,tickNanos);

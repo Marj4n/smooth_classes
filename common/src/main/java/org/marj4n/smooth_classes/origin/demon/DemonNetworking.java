@@ -7,7 +7,7 @@ import net.minecraft.text.Text;
 import org.marj4n.smooth_classes.network.SmoothClassesNetworking;
 
 public final class DemonNetworking {
-    public static final Identifier OPEN_PATH=new Identifier("smooth_classes:demon_open_path"),CHOOSE_PATH=new Identifier("smooth_classes:demon_choose_path"),OPEN_ARMY=new Identifier("smooth_classes:demon_open_army"),ARMY=new Identifier("smooth_classes:demon_army");
+    public static final Identifier OPEN_PATH=org.marj4n.smooth_classes.util.ResourceIds.parse("smooth_classes:demon_open_path"),CHOOSE_PATH=org.marj4n.smooth_classes.util.ResourceIds.parse("smooth_classes:demon_choose_path"),OPEN_ARMY=org.marj4n.smooth_classes.util.ResourceIds.parse("smooth_classes:demon_open_army"),ARMY=org.marj4n.smooth_classes.util.ResourceIds.parse("smooth_classes:demon_army");
     private DemonNetworking(){}
     public static void register(){
         ServerPlayNetworking.registerGlobalReceiver(CHOOSE_PATH,(server,player,handler,buf,sender)->{

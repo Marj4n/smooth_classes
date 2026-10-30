@@ -10,11 +10,11 @@ import org.marj4n.smooth_classes.SmoothClasses;
 import java.util.List;
 
 public class VitalityBondRenderer extends OrbitingEffectRenderer {
-    public static final Identifier modelId_base = new Identifier(SmoothClasses.MOD_ID, "effect/vitality_bond");
-    public static final Identifier modelId_overlay = new Identifier(SmoothClasses.MOD_ID, "effect/vitality_bond");
+    public static final Identifier modelId_base = Identifier.of(SmoothClasses.MOD_ID, "effect/vitality_bond");
+    public static final Identifier modelId_overlay = Identifier.of(SmoothClasses.MOD_ID, "effect/vitality_bond");
 
     private static final RenderLayer BASE_RENDER_LAYER =
-            RenderLayer.getEntityTranslucent(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE);
+            RenderLayer.getEntityTranslucent(net.minecraft.screen.PlayerScreenHandler.BLOCK_ATLAS_TEXTURE);
     private static final RenderLayer GLOWING_RENDER_LAYER =
             CustomLayers.spellEffect(LightEmission.RADIATE, false);
 

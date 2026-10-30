@@ -100,7 +100,7 @@ public final class LancerRuntime {
         if (stack == null || stack.isEmpty()) return false;
         if (stack.isOf(Items.TRIDENT) || stack.isIn(LANCER_SPEARS)) return true;
 
-        Identifier id = Registries.ITEM.getId(stack.getItem());
+        Identifier id = org.marj4n.smooth_classes.platform.PlatformRegistries.ITEM.getId(stack.getItem());
         String path = id.getPath().toLowerCase(Locale.ROOT);
         if (containsWeaponWord(path, "spear") || containsWeaponWord(path, "lance")
                 || containsWeaponWord(path, "pike") || containsWeaponWord(path, "javelin")) return true;

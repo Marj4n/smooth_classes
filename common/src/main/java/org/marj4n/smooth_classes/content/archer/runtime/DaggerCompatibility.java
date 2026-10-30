@@ -42,7 +42,7 @@ public final class DaggerCompatibility {
                 // Better Combat is optional; allow the documented ID fallback below.
             }
         }
-        return daggerWord(Registries.ITEM.getId(stack.getItem()).getPath());
+        return daggerWord(org.marj4n.smooth_classes.platform.PlatformRegistries.ITEM.getId(stack.getItem()).getPath());
     }
 
     private static boolean daggerWord(String value) {

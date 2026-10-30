@@ -17,7 +17,7 @@ public final class DemonThrone {
         if(world.getRegistryKey()!=World.NETHER)return false;
         for(int y=0;y<4;y++)for(int z=0;z<3;z++)for(int x=0;x<3;x++){
             int[] rz=DemonRules.rotate(x,z,rotation);BlockPos p=origin.add(rz[0],y,rz[1]);
-            if(!world.isChunkLoaded(p)||!world.getWorldBorder().contains(p))return false;
+            if(!world.isChunkLoaded(p.getX() >> 4, p.getZ() >> 4)||!world.getWorldBorder().contains(p))return false;
             var block=world.getBlockState(p);char c=DemonRules.throne(x,y,z);
             if(c=='N'?!block.isOf(Blocks.NETHERITE_BLOCK):c=='B'?!block.isOf(Blocks.BEACON):!block.isAir())return false;
         }
@@ -51,7 +51,7 @@ public final class DemonThrone {
             OriginState state=OriginRuntime.state(p);state.flag("demon.lord");state.progress("demon.decay",0);state.unflag("demon.zombified");
             DemonProgression.sync(p,state);
             state.progress("demon.binding_cinematic",40);
-            var advancement=p.getServer().getAdvancementLoader().get(new net.minecraft.util.Identifier("smooth_classes:demon/demon_lord"));
+            var advancement=p.getServer().getAdvancementLoader().get(org.marj4n.smooth_classes.util.ResourceIds.parse("smooth_classes:demon/demon_lord"));
             if(advancement!=null)for(String criterion:advancement.getCriteria().keySet())p.getAdvancementTracker().grantCriterion(advancement,criterion);
             p.networkHandler.sendPacket(new net.minecraft.network.packet.s2c.play.TitleS2CPacket(Text.literal("DEMON LORD").formatted(net.minecraft.util.Formatting.DARK_RED)));
             org.marj4n.smooth_classes.network.SmoothClassesNetworking.sendOriginState(p);return true;

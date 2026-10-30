@@ -24,7 +24,7 @@ public final class AscendancyAbilityDispatcher {
         if(org.marj4n.smooth_classes.runtime.WhenOnHighRuntime.active(p))return DispatchResult.fail("When On High is still channeling.");
         String ability=raw.toLowerCase(Locale.ROOT);
         if(!AscendancyRuntime.unlocked(p,ability))return DispatchResult.fail(ability+" is not unlocked in Puffish Ascendancy.");
-        Identifier id=new Identifier("smooth_classes","ascendancy_"+ability);
+        Identifier id=Identifier.of("smooth_classes","ascendancy_"+ability);
         long remaining=AbilityCooldowns.remainingTicks(p,id);
         if(remaining>0)return DispatchResult.fail(ability+" cooldown "+String.format(Locale.ROOT,"%.1f",remaining/20D)+"s");
         ExecutionResult r=AscendancyRuntime.cast(p,ability);

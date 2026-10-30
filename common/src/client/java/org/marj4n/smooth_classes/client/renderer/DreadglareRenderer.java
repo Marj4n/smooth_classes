@@ -16,7 +16,7 @@ import org.marj4n.smooth_classes.entity.DreadglareEntity;
 public class DreadglareRenderer extends MobEntityRenderer<DreadglareEntity, DreadglareModel> {
 
 
-     private static final Identifier TEXTURE = new Identifier("smooth_classes","textures/entity/dreadglare.png");
+     private static final Identifier TEXTURE = Identifier.of("smooth_classes","textures/entity/dreadglare.png");
 
     public DreadglareRenderer(EntityRendererFactory.Context ctx) {
         super(ctx, new DreadglareModel(ctx.getPart(SmoothClassesClient.DREADGLARE_MODEL)), 1.0f);

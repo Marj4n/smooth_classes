@@ -20,7 +20,7 @@ public final class BloodRainRuntime {
     private static final Map<UUID,BloodRainEntity> ACTIVE=new HashMap<>();
     private static final Map<UUID,Integer> HIT_COUNTS = new HashMap<>();
     private static boolean striking;
-    private static final Identifier BESMIRCHMENT_SUNSCREEN = new Identifier("besmirchment", "sunscreen");
+    private static final Identifier BESMIRCHMENT_SUNSCREEN = Identifier.of("besmirchment", "sunscreen");
     private static java.lang.reflect.Method bewitchmentIsVampire;
     private static boolean bewitchmentVampireLookupDone;
     private BloodRainRuntime(){}
@@ -129,7 +129,7 @@ public final class BloodRainRuntime {
     private static void refreshVampireSunscreen(ServerPlayerEntity player) {
         var loader = org.marj4n.smooth_classes.platform.PlatformLoader.getInstance();
         if (!loader.isModLoaded("bewitchment") || !loader.isModLoaded("besmirchment")) return;
-        if (!Registries.STATUS_EFFECT.containsId(BESMIRCHMENT_SUNSCREEN)) return;
+        if (!org.marj4n.smooth_classes.platform.PlatformRegistries.STATUS_EFFECT.containsId(BESMIRCHMENT_SUNSCREEN)) return;
 
         // Prefer Bewitchment's own API to avoid showing Sunscreen on non-vampires.
         // If a particular Bewitchment build moves that API, fail safe: the
@@ -138,7 +138,7 @@ public final class BloodRainRuntime {
         Boolean vampire = isBewitchmentVampire(player);
         if (Boolean.FALSE.equals(vampire)) return;
 
-        StatusEffect sunscreen = Registries.STATUS_EFFECT.get(BESMIRCHMENT_SUNSCREEN);
+        StatusEffect sunscreen = org.marj4n.smooth_classes.platform.PlatformRegistries.STATUS_EFFECT.get(BESMIRCHMENT_SUNSCREEN);
         StatusEffectInstance current = player.getStatusEffect(sunscreen);
         // Do not overwrite a real, long-duration sunscreen the player consumed.
         // Our temporary copy is refreshed only as it gets close to expiring.

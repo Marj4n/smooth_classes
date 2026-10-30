@@ -22,7 +22,7 @@ import java.util.ArrayList;
  * coupling the datapack to the old Smooth Classes Java code.
  */
 public final class PassiveSkillReward implements Reward {
-    public static final Identifier ID = new Identifier("puffish_skills", "passive_skill");
+    public static final Identifier ID = Identifier.of("puffish_skills", "passive_skill");
 
     private final String passiveSkillId;
 

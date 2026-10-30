@@ -126,9 +126,9 @@ public final class AvengerSummonRecipes {
 
     private static boolean available(Recipe recipe) {
         if (recipe == null || AvengerSummonSafety.bannedId(recipe.entityId())) return false;
-        if (!Registries.ENTITY_TYPE.containsId(recipe.entityIdentifier())) return false;
-        if (!Registries.ITEM.containsId(new Identifier(recipe.mainItemId()))) return false;
-        return recipe.offhandItemId() == null || Registries.ITEM.containsId(new Identifier(recipe.offhandItemId()));
+        if (!org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE.containsId(recipe.entityIdentifier())) return false;
+        if (!org.marj4n.smooth_classes.platform.PlatformRegistries.ITEM.containsId(org.marj4n.smooth_classes.util.ResourceIds.parse(recipe.mainItemId()))) return false;
+        return recipe.offhandItemId() == null || org.marj4n.smooth_classes.platform.PlatformRegistries.ITEM.containsId(org.marj4n.smooth_classes.util.ResourceIds.parse(recipe.offhandItemId()));
     }
 
     public static Recipe recipe(String entityId) {
@@ -172,7 +172,7 @@ public final class AvengerSummonRecipes {
 
     public static String itemId(ItemStack stack) {
         if (stack == null || stack.isEmpty()) return "";
-        return Registries.ITEM.getId(stack.getItem()).toString();
+        return org.marj4n.smooth_classes.platform.PlatformRegistries.ITEM.getId(stack.getItem()).toString();
     }
 
     public static String friendlyEntityName(String entityId) {
@@ -203,6 +203,6 @@ public final class AvengerSummonRecipes {
     }
 
     public record Recipe(String entityId, String mainItemId, String offhandItemId) {
-        public Identifier entityIdentifier() { return new Identifier(entityId); }
+        public Identifier entityIdentifier() { return org.marj4n.smooth_classes.util.ResourceIds.parse(entityId); }
     }
 }

@@ -65,7 +65,7 @@ public final class PuffishSkillsIntegration {
     private static final Map<UUID, AscendancyCountCache> ASCENDANCY_COUNT_CACHE = new HashMap<>();
 
     private PuffishSkillsIntegration() {}
-    private static Identifier id(String path) { return new Identifier("smooth_classes", path); }
+    private static Identifier id(String path) { return Identifier.of("smooth_classes", path); }
 
     public static Optional<Category> category(Identifier id) {
         Category cached = CATEGORY_CACHE.get(id);

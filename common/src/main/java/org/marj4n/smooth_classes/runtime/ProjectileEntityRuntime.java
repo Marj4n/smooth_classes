@@ -18,10 +18,10 @@ import org.marj4n.smooth_classes.integration.SkillNodeIds;
 
 /** Chapter 7: special projectile lifecycle layered on Spell Engine projectiles. */
 public final class ProjectileEntityRuntime {
-    private static final Identifier FROST_ARROW_HOMING = new Identifier("smooth_classes", "frost_arrow_homing");
-    private static final Identifier FIRE_ARROW_HOMING = new Identifier("smooth_classes", "fire_arrow_homing");
-    private static final Identifier LIGHTNING_ARROW_HOMING = new Identifier("smooth_classes", "lightning_arrow_homing");
-    private static final Identifier LIGHTNING_LESSER = new Identifier("smooth_classes", "lightning_lesser");
+    private static final Identifier FROST_ARROW_HOMING = Identifier.of("smooth_classes", "frost_arrow_homing");
+    private static final Identifier FIRE_ARROW_HOMING = Identifier.of("smooth_classes", "fire_arrow_homing");
+    private static final Identifier LIGHTNING_ARROW_HOMING = Identifier.of("smooth_classes", "lightning_arrow_homing");
+    private static final Identifier LIGHTNING_LESSER = Identifier.of("smooth_classes", "lightning_lesser");
     private ProjectileEntityRuntime(){}
 
     public static void tickSpellProjectile(ServerPlayerEntity owner, SpellProjectile p, Identifier id){

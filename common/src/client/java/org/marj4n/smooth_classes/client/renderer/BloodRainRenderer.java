@@ -10,8 +10,8 @@ import net.minecraft.world.Heightmap;
 import org.marj4n.smooth_classes.entity.BloodRainEntity;
 
 public final class BloodRainRenderer extends EntityRenderer<BloodRainEntity> {
-    private static final Identifier RAIN=new Identifier("minecraft","textures/environment/rain.png");
-    private static final Identifier CLOUD=new Identifier("minecraft","textures/environment/clouds.png");
+    private static final Identifier RAIN=Identifier.of("minecraft","textures/environment/rain.png");
+    private static final Identifier CLOUD=Identifier.of("minecraft","textures/environment/clouds.png");
     private long lastSoundTick=Long.MIN_VALUE;
     public BloodRainRenderer(EntityRendererFactory.Context ctx){super(ctx);}
     @Override public boolean shouldRender(BloodRainEntity e,Frustum f,double x,double y,double z){return true;}

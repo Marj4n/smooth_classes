@@ -13,8 +13,8 @@ public final class SmoothItems {
     private SmoothItems() {}
 
     public static void register() {
-        org.marj4n.smooth_classes.platform.PlatformRegistry.register(Registries.ITEM, SmoothClasses.id("sacred_banner_icon"), SACRED_BANNER_ICON);
-        org.marj4n.smooth_classes.platform.PlatformRegistry.register(Registries.ITEM, SmoothClasses.id("blood_bottle"), BLOOD_BOTTLE);
-        org.marj4n.smooth_classes.platform.PlatformRegistry.register(Registries.ITEM, SmoothClasses.id("vampire_coffin"), new BlockItem(SmoothBlocks.VAMPIRE_COFFIN, new Item.Settings().maxCount(1)));
+        org.marj4n.smooth_classes.platform.PlatformRegistry.register(org.marj4n.smooth_classes.platform.PlatformRegistries.ITEM, SmoothClasses.id("sacred_banner_icon"), SACRED_BANNER_ICON);
+        org.marj4n.smooth_classes.platform.PlatformRegistry.register(org.marj4n.smooth_classes.platform.PlatformRegistries.ITEM, SmoothClasses.id("blood_bottle"), BLOOD_BOTTLE);
+        org.marj4n.smooth_classes.platform.PlatformRegistry.register(org.marj4n.smooth_classes.platform.PlatformRegistries.ITEM, SmoothClasses.id("vampire_coffin"), new BlockItem(SmoothBlocks.VAMPIRE_COFFIN, new Item.Settings().maxCount(1)));
     }
 }

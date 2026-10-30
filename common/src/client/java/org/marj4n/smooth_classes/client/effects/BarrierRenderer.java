@@ -14,10 +14,10 @@ import org.marj4n.smooth_classes.SmoothClasses;
 
 
 public class BarrierRenderer implements CustomModelStatusEffect.Renderer {
-    public static final Identifier modelId_base = new Identifier(SmoothClasses.MOD_ID, "effect/barrier");
+    public static final Identifier modelId_base = Identifier.of(SmoothClasses.MOD_ID, "effect/barrier");
 
     private static final RenderLayer BASE_RENDER_LAYER =
-            RenderLayer.getEntityTranslucent(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE);
+            RenderLayer.getEntityTranslucent(net.minecraft.screen.PlayerScreenHandler.BLOCK_ATLAS_TEXTURE);
 
 
     @Override

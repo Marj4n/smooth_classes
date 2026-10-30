@@ -13,7 +13,7 @@ import net.minecraft.util.Identifier;
 
 /** Server-owned, nonpersistent passive. Army-owner credit is intentionally excluded. */
 public final class DemonKillStreak {
-    public static final Identifier SYNC=new Identifier("smooth_classes:demon_infernal_streak");
+    public static final Identifier SYNC=org.marj4n.smooth_classes.util.ResourceIds.parse("smooth_classes:demon_infernal_streak");
     private static final UUID HEALTH=UUID.fromString("65d777d3-0458-40ce-b04d-bcc88b061662"),ARMOR=UUID.fromString("00731a89-b91c-40b1-89cf-606d0df6f174");
     private static final Map<UUID,DemonStreakCounter> ACTIVE=new HashMap<>();
     private DemonKillStreak(){}

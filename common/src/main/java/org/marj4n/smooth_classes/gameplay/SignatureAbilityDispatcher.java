@@ -175,10 +175,10 @@ public final class SignatureAbilityDispatcher {
     }
 
     private static boolean clazz(ServerPlayerEntity p, String path) {
-        return PuffishSkillsIntegration.isCategoryUnlocked(new Identifier("smooth_classes", path), p);
+        return PuffishSkillsIntegration.isCategoryUnlocked(Identifier.of("smooth_classes", path), p);
     }
     private static boolean skill(ServerPlayerEntity p, String category, String skill) {
-        return PuffishSkillsIntegration.isSkillUnlocked(new Identifier("smooth_classes", category), skill, p);
+        return PuffishSkillsIntegration.isSkillUnlocked(Identifier.of("smooth_classes", category), skill, p);
     }
     @FunctionalInterface
     private interface CastAction {
@@ -186,7 +186,7 @@ public final class SignatureAbilityDispatcher {
     }
 
     private static DispatchResult result(ServerPlayerEntity player, String ability, CastAction action) {
-        Identifier abilityId = new Identifier("smooth_classes", ability);
+        Identifier abilityId = Identifier.of("smooth_classes", ability);
         long remaining = AbilityCooldowns.remainingTicks(player, abilityId);
         if (remaining > 0) return DispatchResult.fail(ability + " cooldown " + formatSeconds(remaining) + "s");
         ExecutionResult r = action.run();

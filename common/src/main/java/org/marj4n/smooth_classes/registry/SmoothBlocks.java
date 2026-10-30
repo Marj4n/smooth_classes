@@ -17,7 +17,7 @@ public final class SmoothBlocks {
                     .luminance(15).dropsNothing());
     private SmoothBlocks() {}
     public static void register() {
-        org.marj4n.smooth_classes.platform.PlatformRegistry.register(Registries.BLOCK, SmoothClasses.id("arcane_fire"), ARCANE_FIRE);
-        org.marj4n.smooth_classes.platform.PlatformRegistry.register(Registries.BLOCK, SmoothClasses.id("vampire_coffin"), VAMPIRE_COFFIN);
+        org.marj4n.smooth_classes.platform.PlatformRegistry.register(org.marj4n.smooth_classes.platform.PlatformRegistries.BLOCK, SmoothClasses.id("arcane_fire"), ARCANE_FIRE);
+        org.marj4n.smooth_classes.platform.PlatformRegistry.register(org.marj4n.smooth_classes.platform.PlatformRegistries.BLOCK, SmoothClasses.id("vampire_coffin"), VAMPIRE_COFFIN);
     }
 }

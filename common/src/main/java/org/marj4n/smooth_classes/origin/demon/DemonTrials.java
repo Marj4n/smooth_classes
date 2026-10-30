@@ -17,9 +17,9 @@ import org.marj4n.smooth_classes.origin.*;
 public final class DemonTrials {
     private DemonTrials(){}
     public static String structure(ServerWorld w,BlockPos pos){
-        if(w.getRegistryKey()!=World.NETHER||!w.isChunkLoaded(pos))return "";
+        if(w.getRegistryKey()!=World.NETHER||!org.marj4n.smooth_classes.util.LoadedChunks.contains(w, pos))return "";
         for(String id:List.of("fortress","bastion_remnant")){
-            var key=RegistryKey.of(RegistryKeys.STRUCTURE,new Identifier("minecraft",id));
+            var key=RegistryKey.of(RegistryKeys.STRUCTURE,Identifier.of("minecraft",id));
             var start=w.getStructureAccessor().getStructureContaining(pos,key);
             if(start!=null&&start.hasChildren())return id.equals("fortress")?"fortress":"bastion";
         }
@@ -42,7 +42,7 @@ public final class DemonTrials {
         if(!(player instanceof ServerPlayerEntity p)||!DemonProgression.demon(p)||!DemonProgression.has(p,"world_ender")||p.getWorld().getRegistryKey()!=World.NETHER)return List.of();
         var ledger=DemonWorldState.get(p.getServer());List<Receipt> out=new ArrayList<>();Set<Inventory> seen=Collections.newSetFromMap(new IdentityHashMap<>());
         for(var entry:ledger.naturalChests.entrySet()){
-            BlockPos pos=BlockPos.fromLong(entry.getKey());if(pos.getSquaredDistance(p.getBlockPos())>64||!p.getServerWorld().isChunkLoaded(pos))continue;
+            BlockPos pos=BlockPos.fromLong(entry.getKey());if(pos.getSquaredDistance(p.getBlockPos())>64||!org.marj4n.smooth_classes.util.LoadedChunks.contains(p.getServerWorld(), pos))continue;
             if(!(p.getWorld().getBlockEntity(pos) instanceof Inventory container))continue;
             if(!entry.getValue().equals(structure(p.getServerWorld(),pos))||!entry.getValue().equals(structure(p.getServerWorld(),p.getBlockPos())))continue;
             for(var slot:handler.slots)if(slot.inventory==container||(slot.inventory instanceof DoubleInventory d&&d.isPart(container))){
