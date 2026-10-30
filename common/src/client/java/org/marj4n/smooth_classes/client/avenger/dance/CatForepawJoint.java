@@ -35,10 +35,31 @@ public final class CatForepawJoint {
         for(V b:polygon){boolean bi=lower?b.y>=5:b.y<=5;if(ai!=bi){float t=(5-a.y)/(b.y-a.y);out.add(new V(a.x+(b.x-a.x)*t,5,a.z+(b.z-a.z)*t,a.u+(b.u-a.u)*t,a.v+(b.v-a.v)*t));}if(bi)out.add(b);a=b;ai=bi;}return out;
     }
     private static List<Face> faces(ModelPart.Cuboid cube){
-        var faces=new ArrayList<Face>();for(var q:((AvengerDanceCuboidAccessor)(Object)cube).smoothClasses$danceSides()){
-            var original=new ArrayList<V>();for(var p:q.vertices)original.add(new V(p.pos.x,p.pos.y,p.pos.z,p.u,p.v));
-            for(boolean lower:new boolean[]{false,true}){var cut=clip(original,lower);if(cut.size()>=3)faces.add(new Face(List.copyOf(cut),q.direction.x,q.direction.y,q.direction.z,lower));}
-        }return List.copyOf(faces);
+        // Capture the original vanilla cuboid once through its public renderer.
+        // Forge keeps Quad/Vertex private; no loader-specific access widening or
+        // replacement geometry is needed. Positions return to model-pixel units.
+        var capture=new FaceCapture();
+        cube.renderCuboid(new MatrixStack().peek(),capture,0,0,1,1,1,1);
+        return List.copyOf(capture.faces);
+    }
+    private static final class FaceCapture implements VertexConsumer {
+        final List<Face> faces=new ArrayList<>();
+        final List<V> quad=new ArrayList<>(4);
+        float x,y,z,u,v,nx,ny,nz;
+        public VertexConsumer vertex(double x,double y,double z){this.x=(float)x*16;this.y=(float)y*16;this.z=(float)z*16;return this;}
+        public VertexConsumer color(int r,int g,int b,int a){return this;}
+        public VertexConsumer texture(float u,float v){this.u=u;this.v=v;return this;}
+        public VertexConsumer overlay(int u,int v){return this;}
+        public VertexConsumer light(int u,int v){return this;}
+        public VertexConsumer normal(float x,float y,float z){nx=x;ny=y;nz=z;return this;}
+        public void fixedColor(int r,int g,int b,int a){}
+        public void unfixColor(){}
+        public void next(){
+            quad.add(new V(x,y,z,u,v));
+            if(quad.size()!=4)return;
+            for(boolean lower:new boolean[]{false,true}){var cut=clip(quad,lower);if(cut.size()>=3)faces.add(new Face(List.copyOf(cut),nx,ny,nz,lower));}
+            quad.clear();
+        }
     }
     public static boolean draw(ModelPart part,MatrixStack.Entry entry,VertexConsumer out,int light,int overlay,float r,float g,float b,float a){
         if(ACTIVE.isEmpty())return false;Float bend=ACTIVE.get(part);if(bend==null)return false;
