@@ -85,14 +85,33 @@ public final class OriginCommands {
                                                             OriginRuntime.state(player).origin()), true);
                                                 })))
                                 .then(CommandManager.literal("grave")
-                                        .requires(source -> source.hasPermissionLevel(2))
-                                        .then(CommandManager.literal("test").executes(ctx -> {
+                                        .then(CommandManager.literal("status").executes(ctx -> {
+                                            String status = VampireGraveSpawn.status(ctx.getSource().getPlayerOrThrow());
+                                            ctx.getSource().sendFeedback(() -> Text.literal(status), false);
+                                            return 1;
+                                        }))
+                                        .then(CommandManager.literal("claim").executes(ctx -> {
+                                            ServerPlayerEntity player = ctx.getSource().getPlayerOrThrow();
+                                            return VampireGraveSpawn.awakenOnce(player, OriginRuntime.state(player)) ? 1 : 0;
+                                        }))
+                                        .then(CommandManager.literal("adopt")
+                                                .requires(source -> source.hasPermissionLevel(2))
+                                                .executes(ctx -> {
+                                                    ServerPlayerEntity player = ctx.getSource().getPlayerOrThrow();
+                                                    if (!VampireGraveSpawn.adoptExisting(player)) {
+                                                        ctx.getSource().sendError(Text.literal("A shared church already exists, or no intact legacy crypt was found nearby in the Overworld."));
+                                                        return 0;
+                                                    }
+                                                    ctx.getSource().sendFeedback(() -> Text.literal(VampireGraveSpawn.status(player)), false);
+                                                    return 1;
+                                                }))
+                                        .then(CommandManager.literal("test").requires(source -> source.hasPermissionLevel(2)).executes(ctx -> {
                                             ServerPlayerEntity player = ctx.getSource().getPlayerOrThrow();
                                             if (VampireGraveSpawn.replayForTest(player)) {
-                                                ctx.getSource().sendFeedback(() -> Text.literal("[Origin] Generated Vampire grave test spawn."), false);
+                                                ctx.getSource().sendFeedback(() -> Text.literal("[Origin] Replaying the existing Vampire coffin. No structures or loot were regenerated."), false);
                                                 return 1;
                                             }
-                                            ctx.getSource().sendError(Text.literal("Choose Vampire and stand near natural Overworld terrain to test the grave."));
+                                            ctx.getSource().sendError(Text.literal("Choose Vampire first; the assigned grave must still contain its coffin. Legacy players can adopt an old church but cannot regenerate an old grave."));
                                             return 0;
                                         })))
                                 .then(CommandManager.literal("lord")

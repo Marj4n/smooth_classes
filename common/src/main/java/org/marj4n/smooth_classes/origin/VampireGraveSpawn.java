@@ -31,14 +31,9 @@ import net.minecraft.structure.StructureTemplate;
 import net.minecraft.world.Heightmap;
 
 /**
- * Vampire's first awakening inside a 5x5 sealed crypt UNDER ONE OF THE REAL GRAVES
- * in hauntedchurch.schem. The full above-ground church + graveyard is loaded from
- * the original schematic converted to a vanilla StructureTemplate resource.
- *
- * Surface gravestones and all other church details are identical to the source
- * schematic (except block IDs remapped for Minecraft 1.20.1); there is no special
- * mausoleum or centered player tomb. The coffin is below a normal grave, surrounded
- * by the other graves. Player digs a narrow exit upward through dirt.
+ * One persistent church per Overworld, with UUID-owned crypts around it.
+ * New Vampires awaken beneath their assigned grave; subsequent joins never
+ * rebuild the church, duplicate a crypt, or refill the starting chest.
  */
 public final class VampireGraveSpawn {
     public static final String AWAKENED_FLAG = "vampire.grave_awakened";
@@ -57,26 +52,133 @@ public final class VampireGraveSpawn {
 
     private VampireGraveSpawn() { }
 
+    private static final java.util.Map<net.minecraft.server.MinecraftServer, java.util.LinkedHashSet<java.util.UUID>> PENDING = new java.util.WeakHashMap<>();
+
+    public static void register() {
+        net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents.END_SERVER_TICK.register(server -> {
+            if (server.getTicks() % 40 != 0) return;
+            var queue = PENDING.get(server);
+            if (queue == null || queue.isEmpty()) return;
+            java.util.UUID id = queue.iterator().next();
+            queue.remove(id);
+            ServerPlayerEntity player = server.getPlayerManager().getPlayer(id);
+            if (player != null && stateEligible(player)) awakenOnce(player, OriginRuntime.state(player));
+        });
+        net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents.SERVER_STOPPED.register(PENDING::remove);
+        net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
+            if (stateEligible(handler.player)) server.execute(() -> awakenOnce(handler.player, OriginRuntime.state(handler.player)));
+        });
+        net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, newPlayer, alive) -> {
+            if (stateEligible(newPlayer)) PENDING.computeIfAbsent(newPlayer.getServer(), ignored -> new java.util.LinkedHashSet<>()).add(newPlayer.getUuid());
+        });
+    }
+
+    private static boolean stateEligible(ServerPlayerEntity player) {
+        OriginState state = OriginRuntime.state(player);
+        return player.isAlive() && state.origin() == OriginType.VAMPIRE && !state.hasFlag(AWAKENED_FLAG);
+    }
+
     public static boolean awakenOnce(ServerPlayerEntity player, OriginState state) {
         if (state.origin() != OriginType.VAMPIRE || state.hasFlag(AWAKENED_FLAG)) return false;
         ServerWorld world = player.getServer().getOverworld();
-        BlockPos center = locate(world, player.getBlockPos());
-        if (center == null) {
-            player.sendMessage(Text.literal("No safe grave site was found nearby. Vampire Origin remains selected.")
+        VampireGraveyardState cemetery = VampireGraveyardState.get(player.getServer());
+        // A reset Origin/player flag must never duplicate a grave or refill its loot.
+        if (cemetery.ownedBy(player.getUuid()) != null) {
+            state.flag(AWAKENED_FLAG);
+            return false;
+        }
+        if (!ensureChurch(world, cemetery)) {
+            player.sendMessage(Text.literal("No untouched site was found for the shared Vampire church. No terrain was replaced. An administrator can adopt an existing crypt with /smoothclasses origin grave adopt.")
                     .formatted(Formatting.YELLOW), false);
             return false;
         }
 
-        cancelIntro(player, state);
-        if (!build(world, center)) {
-            player.sendMessage(Text.literal("The haunted church schematic could not be placed. Check the bundled structure resource.")
-                    .formatted(Formatting.RED), false);
+        VampireGraveyardState.Plot selected = null;
+        for (int batch = 0; batch < 2 && selected == null; batch++) {
+            for (VampireGraveyardState.Plot plot : cemetery.plots()) {
+                if (!plot.available()) continue;
+                if (VampireGraveyardSites.fingerprint(world, plot.center()) != plot.fingerprint()) {
+                    cemetery.block(plot); // Preserve player edits and naturally changed plots.
+                    continue;
+                }
+                if (VampireGraveyardSites.emptyOfEntities(world, plot.center())) { selected = plot; break; }
+            }
+            if (selected == null && batch == 0) VampireGraveyardSites.reserveMore(world, cemetery);
+        }
+        if (selected == null) {
+            if (cemetery.nextCandidate() < VampireGraveyardLayout.MAX_CANDIDATES || cemetery.availableCount() > 0) {
+                var queue = PENDING.computeIfAbsent(player.getServer(), ignored -> new java.util.LinkedHashSet<>());
+                queue.add(player.getUuid());
+                if (state.longProgress("vampire.grave_wait_notice") == 0L) {
+                    state.longProgress("vampire.grave_wait_notice", 1L);
+                    player.sendMessage(Text.literal("Preparing a safe grave around the shared church. Your awakening will begin when a plot is ready.").formatted(Formatting.GRAY), false);
+                }
+            } else {
+                player.sendMessage(Text.literal("No untouched grave plots remain around the shared church. No existing graves or buildings were replaced.").formatted(Formatting.YELLOW), false);
+            }
             return false;
         }
-        state.flag(AWAKENED_FLAG);
 
-        // This is the sole intentional position change: from origin selection to coffin.
-        // Do not teleport again during or after awakening. Let bed/coffin handle waking.
+        // Reserve UUID ownership before placing anything. All calls run on the
+        // server thread, including queued joins, so two players cannot claim a plot.
+        cemetery.claim(player.getUuid(), selected);
+        buildCrypt(world, selected.center());
+        if (!selected.original()) buildHeadstone(world, selected.center(), player.getGameProfile().getName());
+        cemetery.finish(selected);
+        state.flag(AWAKENED_FLAG);
+        return beginIntro(player, state, selected.center());
+    }
+
+    private static boolean ensureChurch(ServerWorld world, VampireGraveyardState cemetery) {
+        if (cemetery.hasChurch()) return true;
+        // Adopt a verifiable old crypt near spawn instead of placing a second church.
+        BlockPos oldCenter = VampireGraveyardSites.findLegacyCrypt(world, world.getSpawnPos(), 12);
+        if (oldCenter != null) {
+            adopt(world, cemetery, oldCenter);
+            return true;
+        }
+        StructureTemplate template = world.getStructureTemplateManager().getTemplateOrBlank(CHURCH_TEMPLATE);
+        if (template.getSize().getX() != 54 || template.getSize().getZ() != 54) return false;
+        BlockPos origin = VampireGraveyardSites.findChurch(world, template.getSize());
+        if (origin == null) return false;
+        if (!placeChurch(world, origin, template)) return false;
+        cemetery.establishChurch(origin);
+        BlockPos original = origin.add(GRAVE_X, 0, GRAVE_Z);
+        cemetery.reserve(original, VampireGraveyardSites.fingerprint(world, original), true);
+        VampireGraveyardSites.reserveMore(world, cemetery);
+        return true;
+    }
+
+    private static void adopt(ServerWorld world, VampireGraveyardState cemetery, BlockPos oldCenter) {
+        cemetery.establishChurch(oldCenter.add(-GRAVE_X, 0, -GRAVE_Z));
+        // The old crypt may already belong to a legacy player. Never refill or
+        // give its coffin/chest to a newcomer when UUID ownership is unknown.
+        var old = cemetery.reserve(oldCenter, VampireGraveyardSites.fingerprint(world, oldCenter), true);
+        cemetery.block(old);
+    }
+
+    public static boolean adoptExisting(ServerPlayerEntity player) {
+        VampireGraveyardState cemetery = VampireGraveyardState.get(player.getServer());
+        if (cemetery.hasChurch()) return false;
+        ServerWorld world = player.getServer().getOverworld();
+        if (player.getServerWorld() != world) return false;
+        BlockPos center = VampireGraveyardSites.findLegacyCrypt(world, player.getBlockPos(), 2, false);
+        if (center == null) return false;
+        adopt(world, cemetery, center);
+        return true;
+    }
+
+    public static String status(ServerPlayerEntity player) {
+        VampireGraveyardState cemetery = VampireGraveyardState.get(player.getServer());
+        if (!cemetery.hasChurch()) return "No shared Vampire church has been registered in this world.";
+        return "Shared church (Overworld): " + cemetery.church().toShortString()
+                + ". Assigned graves: " + cemetery.claimedCount() + "; reserved free plots: " + cemetery.availableCount() + ".";
+    }
+
+    private static boolean beginIntro(ServerPlayerEntity player, OriginState state, BlockPos center) {
+        ServerWorld world = player.getServer().getOverworld();
+        cancelIntro(player, state);
+        state.longProgress("vampire.grave_wait_notice", 0L);
         BlockPos head = coffinHead(center);
         player.teleport(world, head.getX() + 0.5D, head.getY() + 0.1D,
                 head.getZ() + 0.5D, 180.0F, 0.0F);
@@ -86,12 +188,9 @@ public final class VampireGraveSpawn {
         state.longProgress(INTRO_SLEEPING, 1L);
         state.sunExposure(0);
         player.extinguish();
-
         player.networkHandler.sendPacket(new TitleFadeS2CPacket(12, 55, 18));
-        player.networkHandler.sendPacket(new TitleS2CPacket(
-                Text.literal("THE FORGOTTEN CRYPT").formatted(Formatting.DARK_RED)));
-        player.networkHandler.sendPacket(new SubtitleS2CPacket(
-                Text.literal("Beneath the earth, you awaken.").formatted(Formatting.GRAY)));
+        player.networkHandler.sendPacket(new TitleS2CPacket(Text.literal("THE FORGOTTEN CRYPT").formatted(Formatting.DARK_RED)));
+        player.networkHandler.sendPacket(new SubtitleS2CPacket(Text.literal("Beneath the earth, you awaken.").formatted(Formatting.GRAY)));
         player.playSound(SoundEvents.BLOCK_WOODEN_DOOR_CLOSE, 0.55F, 0.63F);
         return true;
     }
@@ -125,80 +224,33 @@ public final class VampireGraveSpawn {
         if (player.isSleeping()) player.wakeUp(true, true);
     }
 
-    /** OP-only replay for existing test worlds; never resets the progression tree. */
+    /** OP replay reuses the existing coffin; it never rebuilds a church or refills loot. */
     public static boolean replayForTest(ServerPlayerEntity player) {
         OriginState state = OriginRuntime.state(player);
         if (state.origin() != OriginType.VAMPIRE) return false;
-        boolean alreadyAwakened = state.hasFlag(AWAKENED_FLAG);
-        state.unflag(AWAKENED_FLAG);
-        boolean spawned = awakenOnce(player, state);
-        if (!spawned && alreadyAwakened) state.flag(AWAKENED_FLAG);
-        return spawned;
-    }
-
-    /**
-     * Choose a local solid land position without rejecting trees, buildings, or hills.
-     * Anything in the imported 54x54 church schematic volume is allowed to be replaced.
-     * Never fail merely because a forest/structure occupies the site. A fallback
-     * guarantees a location even where suitable flat land is not found nearby.
-     */
-    private static BlockPos locate(ServerWorld world, BlockPos around) {
-        BlockPos fallback = null;
-        for (int radius = 12; radius <= 140; radius += 16) {
-            for (int i = 0; i < 16; i++) {
-                double angle = (i / 16.0D) * Math.PI * 2.0D;
-                int x = around.getX() + (int) Math.round(Math.cos(angle) * radius);
-                int z = around.getZ() + (int) Math.round(Math.sin(angle) * radius);
-                int top = world.getTopY(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, x, z);
-                BlockPos surface = new BlockPos(x, top - 1, z);
-                if (top < 58 || top > 205 || !world.getWorldBorder().contains(surface)) continue;
-                BlockPos candidate = new BlockPos(x, top - 1 - GRAVE_SURFACE_Y, z);
-                if (fallback == null) fallback = candidate;
-                BlockState block = world.getBlockState(surface);
-                if (block.getFluidState().isEmpty() && block.isSolidBlock(world, surface)) {
-                    return candidate;
-                }
-            }
-        }
-        if (fallback != null) return fallback;
-
-        // Extreme terrain or island world: construct a platform from the exact
-        // schematic terrain itself, instead of refusing to spawn Vampire.
-        int top = world.getTopY(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, around.getX(), around.getZ());
-        int surfaceY = Math.max(world.getBottomY() + 10, Math.min(205, top - 1));
-        return new BlockPos(around.getX(), surfaceY - GRAVE_SURFACE_Y, around.getZ());
+        var plot = VampireGraveyardState.get(player.getServer()).ownedBy(player.getUuid());
+        if (plot == null) return awakenOnce(player, state);
+        if (!plot.built()) return false;
+        BlockState bed = player.getServer().getOverworld().getBlockState(coffinHead(plot.center()));
+        if (!(bed.getBlock() instanceof BedBlock) || bed.get(BedBlock.PART) != BedPart.HEAD) return false;
+        return beginIntro(player, state, plot.center());
     }
 
     private static BlockPos coffinHead(BlockPos center) {
         return center.add(-1, 1, 1);
     }
 
-    /**
-     * Place the SOURCE schematic exactly as a vanilla template, then excavate only
-     * below the designated ordinary grave. The surface church and graveyard remain
-     * untouched, including the authentic neighboring grave markers.
-     *
-     * After placement, feather the surrounding terrain with an irregular natural
-     * skirt so the build does not look like a perfectly machine-cut rectangular island.
-     */
-    private static boolean build(ServerWorld world, BlockPos center) {
-        StructureTemplate template = world.getStructureTemplateManager().getTemplateOrBlank(CHURCH_TEMPLATE);
-        if (template.getSize().getX() != 54 || template.getSize().getZ() != 54) return false;
-
-        BlockPos templateOrigin = center.add(-GRAVE_X, 0, -GRAVE_Z);
+    /** Called once for the shared church, never for individual player joins. */
+    private static boolean placeChurch(ServerWorld world, BlockPos templateOrigin, StructureTemplate template) {
         StructurePlacementData placement = new StructurePlacementData()
-                .setIgnoreEntities(true)
-                .setPlaceFluids(false)
-                // Do not auto-recalculate 200 source block states on the 87k-cell
-                // import: preserves the source's stairs/fence/wall shapes and
-                // minimizes one-time server-tick spikes.
-                .setUpdateNeighbors(false);
-        if (!template.place(world, templateOrigin, templateOrigin, placement, world.getRandom(), Block.NOTIFY_LISTENERS)) {
-            return false;
-        }
-
+                .setIgnoreEntities(true).setPlaceFluids(false).setUpdateNeighbors(false);
+        if (!template.place(world, templateOrigin, templateOrigin, placement, world.getRandom(), Block.NOTIFY_LISTENERS)) return false;
         blendTerrain(world, templateOrigin, template.getSize().getX(), template.getSize().getZ());
+        return true;
+    }
 
+    /** Excavate only the assigned 7x7 crypt. The church is never re-placed here. */
+    private static void buildCrypt(ServerWorld world, BlockPos center) {
         // y=0 is the floor, y=1..4 is the interior, y=5..6 is DIGGABLE
         // soil, y=7+ is the UNMODIFIED original graveyard from hauntedchurch.schem.
         // Actual interior: exactly 5x5 and four blocks high.
@@ -272,7 +324,19 @@ public final class VampireGraveSpawn {
             chest.setStack(1, new ItemStack(Items.IRON_SHOVEL));
             chest.markDirty();
         }
-        return true;
+    }
+
+    private static void buildHeadstone(ServerWorld world, BlockPos center, String playerName) {
+        world.setBlockState(center.add(0, 7, -1), Blocks.STONE_BRICKS.getDefaultState(), Block.NOTIFY_ALL);
+        for (int x = -1; x <= 1; x++)
+            world.setBlockState(center.add(x, 8, -1), Blocks.STONE_BRICKS.getDefaultState(), Block.NOTIFY_ALL);
+        BlockPos signPos = center.add(0, 7, 0);
+        world.setBlockState(signPos, Blocks.OAK_SIGN.getDefaultState().with(net.minecraft.block.SignBlock.ROTATION, 0), Block.NOTIFY_ALL);
+        if (world.getBlockEntity(signPos) instanceof net.minecraft.block.entity.SignBlockEntity sign) {
+            sign.setText(sign.getFrontText().withMessage(0, Text.literal("R.I.P."))
+                    .withMessage(1, Text.literal(playerName)).withMessage(2, Text.literal("The Forgotten")), true);
+            sign.markDirty();
+        }
     }
 
     private static void blendTerrain(ServerWorld world, BlockPos templateOrigin, int sizeX, int sizeZ) {
