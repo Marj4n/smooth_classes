@@ -90,7 +90,7 @@ public final class HomunculusAccessories {
         if (!(stack.getItem() instanceof ArmorItem armor)) return false;
         // Initial whitelist is vanilla-like. Never accept untested armor with custom
         // set bonuses, hidden equipment hooks, or arbitrary custom model renderers.
-        Identifier key = Registries.ITEM.getId(stack.getItem());
+        Identifier key = org.marj4n.smooth_classes.platform.PlatformRegistries.ITEM.getId(stack.getItem());
         if (!"minecraft".equals(key.getNamespace())) return false;
         EquipmentSlot expected = switch (slot) {
             case HEAD -> EquipmentSlot.HEAD;
@@ -132,7 +132,7 @@ public final class HomunculusAccessories {
         if (stack.getItem() instanceof SwordItem || stack.getItem() instanceof ToolItem || stack.getItem() instanceof TridentItem) {
             return true;
         }
-        Identifier key = Registries.ITEM.getId(stack.getItem());
+        Identifier key = org.marj4n.smooth_classes.platform.PlatformRegistries.ITEM.getId(stack.getItem());
         String path = key.getPath().toLowerCase(java.util.Locale.ROOT);
         return path.contains("sword") || path.contains("blade") || path.contains("dagger")
                 || path.contains("knife") || path.contains("axe") || path.contains("spear")

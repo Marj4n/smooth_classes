@@ -29,7 +29,7 @@ public final class OriginProgressTracker {
         OriginType origin = state.origin();
         if (origin == null || victim == null) return;
 
-        Identifier typeId = Registries.ENTITY_TYPE.getId(victim.getType());
+        Identifier typeId = org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE.getId(victim.getType());
         String species = typeId.toString();
         switch (origin) {
             case VAMPIRE -> {
@@ -101,10 +101,10 @@ public final class OriginProgressTracker {
         OriginType origin = state.origin();
         if (origin == null) return;
 
-        if (origin == OriginType.WEREWOLF && stack.getItem().getFoodComponent() != null
-                && stack.getItem().getFoodComponent().isMeat()) {
+        if (origin == OriginType.WEREWOLF && org.marj4n.smooth_classes.platform.PlatformItems.food(stack, player) != null
+                && org.marj4n.smooth_classes.platform.PlatformItems.food(stack, player).isMeat()) {
             state.addProgress("werewolf.meat_eaten", 1);
-            Identifier itemId = Registries.ITEM.getId(stack.getItem());
+            Identifier itemId = org.marj4n.smooth_classes.platform.PlatformRegistries.ITEM.getId(stack.getItem());
             state.flag("werewolf.meat_species." + itemId);
         }
         if (origin == OriginType.VOID && stack.isOf(Items.CHORUS_FRUIT)) {
@@ -160,7 +160,7 @@ public final class OriginProgressTracker {
         if (nearby.isEmpty()) return;
         state.addProgress(counter, 20);
         for (LivingEntity entity : nearby) {
-            state.flag(prefix + Registries.ENTITY_TYPE.getId(entity.getType()));
+            state.flag(prefix + org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE.getId(entity.getType()));
         }
     }
 
@@ -168,7 +168,7 @@ public final class OriginProgressTracker {
         var nearby = player.getWorld().getEntitiesByClass(LivingEntity.class, player.getBoundingBox().expand(8.0D),
                 entity -> entity != player && entity.isAlive());
         for (LivingEntity entity : nearby) {
-            Identifier id = Registries.ENTITY_TYPE.getId(entity.getType());
+            Identifier id = org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE.getId(entity.getType());
             String tickKey = "doppelganger.observe_ticks." + id;
             int ticks = state.addProgress(tickKey, 20);
             if (ticks >= 200) state.flag("doppelganger.form_studied." + id); // 10 cumulative seconds
@@ -177,7 +177,7 @@ public final class OriginProgressTracker {
 
     public static boolean isHumanoid(LivingEntity entity) {
         if (entity == null) return false;
-        String path = Registries.ENTITY_TYPE.getId(entity.getType()).getPath();
+        String path = org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE.getId(entity.getType()).getPath();
         return path.contains("villager") || path.contains("illager") || path.contains("pillager")
                 || path.contains("vindicator") || path.contains("evoker") || path.contains("witch")
                 || path.contains("zombie") || path.contains("skeleton") || path.contains("piglin")

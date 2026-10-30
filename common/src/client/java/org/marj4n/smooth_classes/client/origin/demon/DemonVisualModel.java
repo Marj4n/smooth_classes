@@ -42,7 +42,7 @@ public final class DemonVisualModel {
         return player != null && OriginRuntime.state(player).origin() == OriginType.DEMON;
     }
     private static JsonObject resource(String name) {
-        Identifier id = new Identifier("smooth_classes", "demon_visual/"+name);
+        Identifier id = Identifier.of("smooth_classes", "demon_visual/"+name);
         try (var input=MinecraftClient.getInstance().getResourceManager().getResource(id).orElseThrow().getInputStream();
              var reader=new InputStreamReader(input,StandardCharsets.UTF_8)) {
             return JsonParser.parseReader(reader).getAsJsonObject();
@@ -62,7 +62,7 @@ public final class DemonVisualModel {
         Map<String,List<Part>> armorParts=new HashMap<>();
         if(data.has("armor_parts"))for(JsonElement e:data.getAsJsonArray("armor_parts")){var p=e.getAsJsonObject();List<Vertex> vertices=new ArrayList<>();for(JsonElement v:p.getAsJsonArray("vertices")){var a=v.getAsJsonArray();vertices.add(new Vertex(a.get(0).getAsFloat(),a.get(1).getAsFloat(),a.get(2).getAsFloat(),a.get(3).getAsFloat(),a.get(4).getAsFloat(),a.get(5).getAsFloat(),a.get(6).getAsFloat(),a.get(7).getAsFloat()));}armorParts.computeIfAbsent(p.get("slot").getAsString(),k->new ArrayList<>()).add(new Part(p.get("name").getAsString(),p.get("bone").getAsString(),List.copyOf(vertices),p.has("depth_bias")?p.get("depth_bias").getAsFloat():0));}
         if(Boolean.getBoolean("smooth_classes.demonTest"))org.marj4n.smooth_classes.SmoothClasses.LOGGER.info("DEMON_VISUAL_LOAD {} parts={} skin={} armor={} code={}",name,parts.size(),skinParts.size(),armorParts.size(),DemonVisualModel.class.getProtectionDomain().getCodeSource().getLocation());
-        return new Definition(Map.copyOf(bones),List.copyOf(parts),List.copyOf(skinParts),List.copyOf(slimSkinParts),Map.copyOf(armorParts),Map.copyOf(clips),new Identifier("smooth_classes","textures/entity/origin/demon_visual/"+name+".png"),data.has("emissive")&&data.get("emissive").getAsBoolean()?new Identifier("smooth_classes","textures/entity/origin/demon_visual/"+name+"_e.png"):null,data.has("horn_texture")?new Identifier("smooth_classes","textures/entity/origin/demon_visual/"+name+"_horns.png"):null,data.has("crown_texture")?new Identifier("smooth_classes","textures/entity/origin/demon_visual/"+name+"_crown.png"):null,data.has("crown_texture")?new Identifier("smooth_classes","textures/entity/origin/demon_visual/"+name+"_crown_e.png"):null,grips(bones,parts,skinParts),grips(bones,parts,slimSkinParts.isEmpty()?skinParts:slimSkinParts));
+        return new Definition(Map.copyOf(bones),List.copyOf(parts),List.copyOf(skinParts),List.copyOf(slimSkinParts),Map.copyOf(armorParts),Map.copyOf(clips),Identifier.of("smooth_classes","textures/entity/origin/demon_visual/"+name+".png"),data.has("emissive")&&data.get("emissive").getAsBoolean()?Identifier.of("smooth_classes","textures/entity/origin/demon_visual/"+name+"_e.png"):null,data.has("horn_texture")?Identifier.of("smooth_classes","textures/entity/origin/demon_visual/"+name+"_horns.png"):null,data.has("crown_texture")?Identifier.of("smooth_classes","textures/entity/origin/demon_visual/"+name+"_crown.png"):null,data.has("crown_texture")?Identifier.of("smooth_classes","textures/entity/origin/demon_visual/"+name+"_crown_e.png"):null,grips(bones,parts,skinParts),grips(bones,parts,slimSkinParts.isEmpty()?skinParts:slimSkinParts));
     }
     private static Map<String,Grip> grips(Map<String,Bone> bones,List<Part> demon,List<Part> human){
         Map<String,Grip> result=new HashMap<>();

@@ -19,7 +19,7 @@ public final class DemonPortals {
     private static final ArrayDeque<Job> JOBS=new ArrayDeque<>();
     private DemonPortals(){}
     public static Portal rectangle(ServerWorld w,BlockPos seed){
-        if(!w.isChunkLoaded(seed)||!w.getBlockState(seed).isOf(Blocks.NETHER_PORTAL))return null;
+        if(!org.marj4n.smooth_classes.util.LoadedChunks.contains(w, seed)||!w.getBlockState(seed).isOf(Blocks.NETHER_PORTAL))return null;
         Direction.Axis axis=w.getBlockState(seed).get(NetherPortalBlock.AXIS);BlockPos step=axis==Direction.Axis.X?new BlockPos(1,0,0):new BlockPos(0,0,1);
         BlockPos bottom=seed;
         for(int i=0;i<21&&portal(w,bottom.down(),axis);i++)bottom=bottom.down();
@@ -33,15 +33,15 @@ public final class DemonPortals {
         for(int y=0;y<height;y++)if(!obsidian(w,bottom.subtract(step).up(y))||!obsidian(w,bottom.add(step.multiply(width)).up(y)))return null;
         return new Portal(bottom,width,height,axis);
     }
-    private static boolean portal(ServerWorld w,BlockPos p,Direction.Axis a){return w.isChunkLoaded(p)&&w.getBlockState(p).isOf(Blocks.NETHER_PORTAL)&&w.getBlockState(p).get(NetherPortalBlock.AXIS)==a;}
-    private static boolean obsidian(ServerWorld w,BlockPos p){return w.isChunkLoaded(p)&&w.getBlockState(p).isOf(Blocks.OBSIDIAN);}
+    private static boolean portal(ServerWorld w,BlockPos p,Direction.Axis a){return org.marj4n.smooth_classes.util.LoadedChunks.contains(w, p)&&w.getBlockState(p).isOf(Blocks.NETHER_PORTAL)&&w.getBlockState(p).get(NetherPortalBlock.AXIS)==a;}
+    private static boolean obsidian(ServerWorld w,BlockPos p){return org.marj4n.smooth_classes.util.LoadedChunks.contains(w, p)&&w.getBlockState(p).isOf(Blocks.OBSIDIAN);}
     private static Portal near(ServerWorld w,BlockPos around,int radius){
         // Vanilla portal POIs cover the entire vertical range, without scanning
         // millions of blocks or loading terrain chunks merely to search for troops.
         return w.getPointOfInterestStorage().getInSquare(
                 entry->entry.matchesKey(net.minecraft.world.poi.PointOfInterestTypes.NETHER_PORTAL),around,radius,
                 net.minecraft.world.poi.PointOfInterestStorage.OccupationStatus.ANY)
-            .map(net.minecraft.world.poi.PointOfInterest::getPos).filter(w::isChunkLoaded)
+            .map(net.minecraft.world.poi.PointOfInterest::getPos).filter(pos->org.marj4n.smooth_classes.util.LoadedChunks.contains(w,pos))
             .sorted(Comparator.comparingDouble(pos->pos.getSquaredDistance(around)))
             .map(pos->rectangle(w,pos)).filter(Objects::nonNull).findFirst().orElse(null);
     }
@@ -91,7 +91,7 @@ public final class DemonPortals {
             double along=spread-(portal.width()-1)*.5;
             double outward=side*(offset+depth*(mob.getWidth()+.25));
             Vec3d p=middle.add(portal.axis()==Direction.Axis.X?along:outward,0,portal.axis()==Direction.Axis.Z?along:outward);
-            if(!w.isChunkLoaded(BlockPos.ofFloored(p)))continue;
+            if(!org.marj4n.smooth_classes.util.LoadedChunks.contains(w, BlockPos.ofFloored(p)))continue;
             Box box=mob.getDimensions(mob.getPose()).getBoxAt(p);
             if(!w.isSpaceEmpty(mob,box)||!w.getOtherEntities(null,box).isEmpty()||!w.getFluidState(BlockPos.ofFloored(p)).isEmpty())continue;
             if(!(mob instanceof FlyingEntity)&&!w.getBlockState(BlockPos.ofFloored(p).down()).isSolidBlock(w,BlockPos.ofFloored(p).down()))continue;

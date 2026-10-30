@@ -261,8 +261,8 @@ public final class SmoothClassesNetworking {
                 : "sacred_orb".equals(sig) ? SignatureCooldowns.ticks("sacred_orb") : sig.isBlank() ? 1
                 : AbilityCooldowns.adjustedTicks(player, SignatureCooldowns.ticks(sig));
         int ascTotal = asc.isBlank() ? 1 : AscendancyAbilityDispatcher.effectiveCooldownTicks(player, asc);
-        long sigRemain = sig.isBlank() ? 0 : AbilityCooldowns.remainingTicks(player, new Identifier(SmoothClasses.MOD_ID, sig));
-        long ascRemain = asc.isBlank() ? 0 : AbilityCooldowns.remainingTicks(player, new Identifier(SmoothClasses.MOD_ID, "ascendancy_" + asc));
+        long sigRemain = sig.isBlank() ? 0 : AbilityCooldowns.remainingTicks(player, Identifier.of(SmoothClasses.MOD_ID, sig));
+        long ascRemain = asc.isBlank() ? 0 : AbilityCooldowns.remainingTicks(player, Identifier.of(SmoothClasses.MOD_ID, "ascendancy_" + asc));
 
         PacketByteBuf out = PacketByteBufs.create();
         out.writeString(sig);

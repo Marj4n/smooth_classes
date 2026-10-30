@@ -17,8 +17,8 @@ import org.marj4n.smooth_classes.SmoothClasses;
 
 /** Actual player remains the sole character. Fruit is client-only, not an item drop. */
 public final class ForbiddenBirth {
-    public static final Identifier START=new Identifier("smooth_classes","forbidden_birth_start"),END=new Identifier("smooth_classes","forbidden_birth_end"),SKIP=new Identifier("smooth_classes","forbidden_birth_skip"),READY=new Identifier("smooth_classes","forbidden_birth_ready");
-    public static final Item FRUIT=org.marj4n.smooth_classes.platform.PlatformRegistry.register(Registries.ITEM,new Identifier("smooth_classes","forbidden_apple_cinematic"),new Item(new Item.Settings().maxCount(1)));
+    public static final Identifier START=Identifier.of("smooth_classes","forbidden_birth_start"),END=Identifier.of("smooth_classes","forbidden_birth_end"),SKIP=Identifier.of("smooth_classes","forbidden_birth_skip"),READY=Identifier.of("smooth_classes","forbidden_birth_ready");
+    public static final Item FRUIT=org.marj4n.smooth_classes.platform.PlatformRegistry.register(org.marj4n.smooth_classes.platform.PlatformRegistries.ITEM,Identifier.of("smooth_classes","forbidden_apple_cinematic"),new Item(new Item.Settings().maxCount(1)));
     public record Scene(UUID player,UUID token,long start,Vec3d anchor,Vec3d fruit,Vec3d landing){}
     private static final Map<UUID,Scene> ACTIVE=new HashMap<>();
     private static final Map<UUID,Long> PREPARED_AT=new HashMap<>();

@@ -14,7 +14,7 @@ import org.marj4n.smooth_classes.SmoothClasses;
 
 
 public class TauntedRenderer implements CustomModelStatusEffect.Renderer {
-    public static final Identifier modelId_overlay = new Identifier(SmoothClasses.MOD_ID, "effect/taunted");
+    public static final Identifier modelId_overlay = Identifier.of(SmoothClasses.MOD_ID, "effect/taunted");
 
     private static final RenderLayer OVERLAY_RENDER_LAYER =
             CustomLayers.spellEffect(LightEmission.GLOW, false);

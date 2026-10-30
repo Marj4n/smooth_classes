@@ -316,7 +316,7 @@ public final class ArcherSpecialRuntime {
                 || item instanceof TridentItem || item instanceof BowItem || item instanceof CrossbowItem) return true;
 
         // Compatibility fallback for modded weapon classes that don't subclass vanilla weapon items.
-        String path = Registries.ITEM.getId(item).getPath().toLowerCase(Locale.ROOT);
+        String path = org.marj4n.smooth_classes.platform.PlatformRegistries.ITEM.getId(item).getPath().toLowerCase(Locale.ROOT);
         return containsWeaponWord(path, "sword") || containsWeaponWord(path, "blade")
                 || containsWeaponWord(path, "dagger") || containsWeaponWord(path, "spear")
                 || containsWeaponWord(path, "lance") || containsWeaponWord(path, "katana")

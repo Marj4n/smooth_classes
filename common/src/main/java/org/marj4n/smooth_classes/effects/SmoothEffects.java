@@ -134,11 +134,11 @@ public final class SmoothEffects {
     }
 
     private static StatusEffect register(String id, StatusEffectCategory category, int color) {
-        return org.marj4n.smooth_classes.platform.PlatformRegistry.register(Registries.STATUS_EFFECT, SmoothClasses.id(id), new SmoothStatusEffect(id, category, color));
+        return org.marj4n.smooth_classes.platform.PlatformRegistry.register(org.marj4n.smooth_classes.platform.PlatformRegistries.STATUS_EFFECT, SmoothClasses.id(id), new SmoothStatusEffect(id, category, color));
     }
 
     public static void register() {
-        long count = Registries.STATUS_EFFECT.getIds().stream()
+        long count = org.marj4n.smooth_classes.platform.PlatformRegistries.STATUS_EFFECT.getIds().stream()
                 .filter(id -> SmoothClasses.MOD_ID.equals(id.getNamespace()))
                 .count();
         SmoothClasses.LOGGER.info("Registered {} Smooth Classes status effects.", count);

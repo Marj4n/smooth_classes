@@ -136,7 +136,7 @@ public final class ProjectedDaggerEntity extends ProjectileEntity {
     private void strike(ServerPlayerEntity caster, LivingEntity target, Vec3d point) {
         ItemStack weapon = weapon();
         float damage = (attackDamage + EnchantmentHelper.getAttackDamage(weapon, target.getGroup())) * multiplier;
-        int fire = EnchantmentHelper.getLevel(Enchantments.FIRE_ASPECT, weapon);
+        int fire = org.marj4n.smooth_classes.platform.PlatformItems.enchantmentLevel(Enchantments.FIRE_ASPECT, weapon);
         int oldFireTicks = target.getFireTicks();
         int oldRegen = target.timeUntilRegen;
         Vec3d oldVelocity = target.getVelocity();
@@ -148,7 +148,7 @@ public final class ProjectedDaggerEntity extends ProjectileEntity {
             landed = target.damage(caster.getDamageSources().playerAttack(caster), damage);
             if (landed) {
                 target.setVelocity(oldVelocity);
-                int knockback = EnchantmentHelper.getLevel(Enchantments.KNOCKBACK, weapon);
+                int knockback = org.marj4n.smooth_classes.platform.PlatformItems.enchantmentLevel(Enchantments.KNOCKBACK, weapon);
                 if (knockback > 0) target.takeKnockback(knockback * .3, -getVelocity().x, -getVelocity().z);
                 if (fire > 0) target.setOnFireFor(fire * 4);
                 // Standard enchantment hooks also include modded enchantments implementing these callbacks.

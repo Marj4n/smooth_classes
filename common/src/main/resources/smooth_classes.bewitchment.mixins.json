@@ -10,5 +10,6 @@
   "injectors": {
     "defaultRequire": 1
   },
-  "refmap": "smooth_classes.refmap.json"
+  "refmap": "smooth_classes.refmap.json",
+  "minVersion": "0.8.5"
 }

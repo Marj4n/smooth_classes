@@ -44,7 +44,7 @@ public final class InternalSpellRuntime {
 
     private static boolean cast(PlayerEntity p, String id, List<Entity> targets, float multiplier, boolean universalPower, net.spell_power.api.SpellSchool powerSchool) {
         if (p.getWorld().isClient) return false;
-        RegistryEntry<Spell> e=entry(p,new Identifier(id));
+        RegistryEntry<Spell> e=entry(p,org.marj4n.smooth_classes.util.ResourceIds.parse(id));
         if(e==null)return false;
         Spell spell=e.value();
         var power=SpellPower.getSpellPower(spell.school,p);

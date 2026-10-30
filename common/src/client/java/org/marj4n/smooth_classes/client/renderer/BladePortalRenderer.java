@@ -21,7 +21,7 @@ import org.marj4n.smooth_classes.entity.BladePortalEntity;
  * textured center vortex and a mirrored front/back appearance.
  */
 public final class BladePortalRenderer extends EntityRenderer<BladePortalEntity> {
-    private static final Identifier CORE_TEXTURE = new Identifier("minecraft", "textures/block/white_concrete.png");
+    private static final Identifier CORE_TEXTURE = Identifier.of("minecraft", "textures/block/white_concrete.png");
     private static final int FULL_BRIGHT = 0xF000F0;
 
     public BladePortalRenderer(EntityRendererFactory.Context context) {

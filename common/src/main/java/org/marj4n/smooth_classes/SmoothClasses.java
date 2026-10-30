@@ -25,7 +25,7 @@ public final class SmoothClasses {
     public SmoothClasses() {}
 
     public static Identifier id(String path) {
-        return new Identifier(MOD_ID, path);
+        return Identifier.of(MOD_ID, path);
     }
     public void onInitialize() {
         org.marj4n.smooth_classes.platform.PlatformRegistry.initializeContent();

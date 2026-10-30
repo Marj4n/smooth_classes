@@ -39,12 +39,13 @@ dependencies {
 loom {
     mixin { useLegacyMixinAp = true; defaultRefmapName = "smooth_classes.refmap.json" }
 }
-tasks.withType(JavaCompile).configureEach { options.encoding = 'UTF-8'; options.release = 17 }
+tasks.withType(JavaCompile).configureEach { options.encoding = 'UTF-8'; options.release = 17; options.compilerArgs += ['-Xlint:deprecation','-Xlint:unchecked','-Xmaxwarns','1000'] }
+def expandedModMetadata = [version: project.version, minecraft_version: rootProject.minecraft_version, loader_version: rootProject.loader_version]
 tasks.named('processResources') {
     dependsOn ':common:validateSharedResources'
     inputs.property 'version', project.version
     filesMatching(['fabric.mod.json', 'META-INF/mods.toml']) {
-        expand version: project.version, minecraft_version: rootProject.minecraft_version, loader_version: rootProject.loader_version
+        expand expandedModMetadata
     }
 }
 tasks.named('jar') {

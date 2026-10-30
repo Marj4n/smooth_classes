@@ -27,7 +27,7 @@ public final class DemonProgression {
     }
     public static void recordKill(java.util.UUID owner,LivingEntity victim){
         if(victim.getServer()==null)return;
-        String id=Registries.ENTITY_TYPE.getId(victim.getType()).toString();
+        String id=org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE.getId(victim.getType()).toString();
         DemonConfig.INSTANCE.bossEntities.forEach((boss,entity)->{
             if(id.equals(entity)&&(!boss.equals("azazel")||victim.getWorld().getRegistryKey()==World.NETHER)){
                 var ledger=DemonWorldState.get(victim.getServer());ledger.historicalKills.computeIfAbsent(owner,ignored->new java.util.HashSet<>()).add(boss);ledger.markDirty();
@@ -43,7 +43,7 @@ public final class DemonProgression {
         // Azazel's Nether encounter type, never the separate azazel_human boss.
         DemonConfig.INSTANCE.bossEntities.forEach((boss,id)->{
             Identifier key=Identifier.tryParse(id);
-            if(key!=null&&Registries.ENTITY_TYPE.containsId(key)&&p.getStatHandler().getStat(net.minecraft.stat.Stats.KILLED,Registries.ENTITY_TYPE.get(key))>0)s.flag("demon.boss."+boss);
+            if(key!=null&&org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE.containsId(key)&&p.getStatHandler().getStat(net.minecraft.stat.Stats.KILLED,org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE.get(key))>0)s.flag("demon.boss."+boss);
         });
         unlock(p,"origin_base",true);
         unlock(p,"cinder_reflex",s.hasFlag("demon.cinder_unlocked"));
@@ -52,7 +52,7 @@ public final class DemonProgression {
         if(!s.hasFlag("demon.world_ender"))return;
         boolean trial=s.hasFlag("demon.trial.fortress")&&s.hasFlag("demon.trial.bastion");
         unlock(p,"trial",trial);grant(p,s,"brand",trial,"brand_of_ruin");
-        var advancement=p.getServer().getAdvancementLoader().get(new Identifier("minecraft:nether/explore_nether"));
+        var advancement=p.getServer().getAdvancementLoader().get(org.marj4n.smooth_classes.util.ResourceIds.parse("minecraft:nether/explore_nether"));
         boolean tourist=trial&&advancement!=null&&p.getAdvancementTracker().getProgress(advancement).isDone();
         grant(p,s,"netherforged",tourist,"netherforged");grant(p,s,"pandemonium",tourist,"pandemonium");
         boolean two=tourist&&s.hasFlag("demon.boss.nether_gauntlet")&&s.hasFlag("demon.boss.decaying_king");
@@ -63,7 +63,7 @@ public final class DemonProgression {
         unlock(p,"demon_lord",s.hasFlag("demon.lord"));
         for(String boss:DemonRules.BOSSES){
             Identifier id=Identifier.tryParse(DemonConfig.INSTANCE.bossEntities.getOrDefault(boss,""));
-            s.progress("demon.requirement."+boss,id!=null&&Registries.ENTITY_TYPE.containsId(id)?1:0);
+            s.progress("demon.requirement."+boss,id!=null&&org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE.containsId(id)?1:0);
         }
     }
     private static void grant(ServerPlayerEntity p,OriginState s,String flag,boolean ready,String node){

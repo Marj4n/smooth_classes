@@ -224,8 +224,8 @@ public final class BasePathRuntime {
     }
 
     private static void eldritchEnfeeblement(ServerPlayerEntity p) {
-        var critChance=Registries.ATTRIBUTE.get(new Identifier("spell_power","critical_chance"));
-        var critDamage=Registries.ATTRIBUTE.get(new Identifier("spell_power","critical_damage"));
+        var critChance=org.marj4n.smooth_classes.platform.PlatformRegistries.ATTRIBUTE.get(Identifier.of("spell_power","critical_chance"));
+        var critDamage=org.marj4n.smooth_classes.platform.PlatformRegistries.ATTRIBUTE.get(Identifier.of("spell_power","critical_damage"));
         if(critChance==null||critDamage==null)return;
         double chance=p.getAttributeValue(critChance), damage=p.getAttributeValue(critDamage);
         if(p.getRandom().nextInt(100)<chance)p.heal((float)Math.min(3,damage/100.0));

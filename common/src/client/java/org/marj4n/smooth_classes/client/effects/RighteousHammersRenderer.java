@@ -9,7 +9,7 @@ import org.marj4n.smooth_classes.SmoothClasses;
 import java.util.List;
 
 public class RighteousHammersRenderer extends OrbitingRotatingEffectRenderer {
-    public static final Identifier modelId_base = new Identifier(SmoothClasses.MOD_ID, "spell_projectile/righteous_hammers");
+    public static final Identifier modelId_base = Identifier.of(SmoothClasses.MOD_ID, "spell_projectile/righteous_hammers");
 
     private static final RenderLayer GLOWING_RENDER_LAYER =
             CustomLayers.spellEffect(LightEmission.GLOW, true);

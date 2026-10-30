@@ -65,7 +65,7 @@ public final class ProjectedDaggerRenderer extends EntityRenderer<ProjectedDagge
                                     double x,double y,double z,float alpha){
         buffer.vertex(matrix,(float)x,(float)y,(float)z).color(1F,1F,1F,alpha).next();
     }
-    @Override public Identifier getTexture(ProjectedDaggerEntity entity) { return SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE; }
+    @Override public Identifier getTexture(ProjectedDaggerEntity entity) { return net.minecraft.screen.PlayerScreenHandler.BLOCK_ATLAS_TEXTURE; }
     @Override public void render(ProjectedDaggerEntity entity, float yaw, float delta, MatrixStack matrices,
                                  VertexConsumerProvider vertices, int light) {
         if (entity.weapon().isEmpty()) return;

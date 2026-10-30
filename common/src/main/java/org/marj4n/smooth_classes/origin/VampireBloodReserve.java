@@ -21,9 +21,9 @@ public final class VampireBloodReserve {
     private static final long VILLAGER_REGEN = 75L * 20L;
     private static final long PASSIVE_REGEN = 55L * 20L;
     private static final TagKey<EntityType<?>> ALLOW = TagKey.of(RegistryKeys.ENTITY_TYPE,
-            new Identifier("smooth_classes", "vampire_blood_sources"));
+            Identifier.of("smooth_classes", "vampire_blood_sources"));
     private static final TagKey<EntityType<?>> DENY = TagKey.of(RegistryKeys.ENTITY_TYPE,
-            new Identifier("smooth_classes", "vampire_blood_excluded"));
+            Identifier.of("smooth_classes", "vampire_blood_excluded"));
 
     private VampireBloodReserve() {}
 

@@ -31,8 +31,8 @@ import java.util.function.Function;
  * opened. The vanilla written-book screen is kept only as a safe fallback.</p>
  */
 public final class DeathListBookClient {
-    private static final Identifier BOOK_ID = new Identifier("smooth_classes", "death_list");
-    private static final Identifier LEDGER_ENTRY = new Identifier("smooth_classes", "ledger");
+    private static final Identifier BOOK_ID = Identifier.of("smooth_classes", "death_list");
+    private static final Identifier LEDGER_ENTRY = Identifier.of("smooth_classes", "ledger");
     private static final Map<String, Integer> SOULS = new HashMap<>();
     private static final Map<String, Integer> KILLS = new HashMap<>();
     /** Cache the discovered list once per server sync, not on every Patchouli text render. */

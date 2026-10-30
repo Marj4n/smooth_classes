@@ -8,7 +8,7 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.RotationAxis;
 import org.marj4n.smooth_classes.entity.ShadowAnchorEntity;
 public final class ShadowAnchorRenderer extends EntityRenderer<ShadowAnchorEntity> {
-    private static final Identifier TEXTURE = new Identifier("minecraft", "textures/block/white_concrete.png");
+    private static final Identifier TEXTURE = Identifier.of("minecraft", "textures/block/white_concrete.png");
     private final ModelPart body;
     public ShadowAnchorRenderer(EntityRendererFactory.Context context) {
         super(context); body = context.getPart(EntityModelLayers.PLAYER);

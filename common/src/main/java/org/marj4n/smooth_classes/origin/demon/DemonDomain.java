@@ -84,7 +84,7 @@ public final class DemonDomain {
             int slice=Math.max(1,scan/(domains.size()-turns+1));int end=Math.min(DemonDomainCursor.size(),d.cursor+slice);
             while(d.cursor<end){int i=d.cursor++;scan--;int x=DemonDomainCursor.x(i),y=DemonDomainCursor.y(i),z=DemonDomainCursor.z(i);
                 BlockPos pos=d.center.add(x,y,z);
-                if(pos.getY()<d.world.getBottomY()||pos.getY()>=d.world.getTopY()||!d.world.isChunkLoaded(pos))continue;
+                if(pos.getY()<d.world.getBottomY()||pos.getY()>=d.world.getTopY()||!org.marj4n.smooth_classes.util.LoadedChunks.contains(d.world, pos))continue;
                 if(d.world.getFluidState(pos).isIn(FluidTags.WATER)&&DemonProtection.allow(d.owner,d.world,pos)){
                     if(writes<=0){d.cursor--;break;} // Resume here next tick; never skip unprocessed water.
                     BlockState block=d.world.getBlockState(pos);

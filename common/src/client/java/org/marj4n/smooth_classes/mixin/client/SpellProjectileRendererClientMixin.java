@@ -31,7 +31,7 @@ public class SpellProjectileRendererClientMixin<T extends Entity & FlyingItemEnt
                 for(Spell.ProjectileModelComposite.Model model:data.models){
                     if(model==null || model.fx==null || model.fx.model_id==null) continue;
                     String id=model.fx.model_id;
-                    if(id.contains("swordfall") || id.contains("sword")) model.rotate_degrees_per_tick=0;
+                    if(id.startsWith("smooth_classes:") && id.contains("sword")) model.rotate_degrees_per_tick=0;
                 }
             }
         }
@@ -41,8 +41,8 @@ public class SpellProjectileRendererClientMixin<T extends Entity & FlyingItemEnt
             target="Lnet/spell_engine/api/render/CustomModels;renderModel(Lnet/minecraft/client/render/RenderLayer;Lnet/spell_engine/mixin/client/render/ItemRendererAccessor;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/client/render/model/BakedModel;)V"),
             index=0,require=0)
     private static RenderLayer smooth_classes$heldItemCutout(RenderLayer original){
-        return RenderLayer.getEntityCutout(SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE);
+        return RenderLayer.getEntityCutout(net.minecraft.screen.PlayerScreenHandler.BLOCK_ATLAS_TEXTURE);
     }
 
-    @Override public Identifier getTexture(T entity){ return SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE; }
+    @Override public Identifier getTexture(T entity){ return net.minecraft.screen.PlayerScreenHandler.BLOCK_ATLAS_TEXTURE; }
 }

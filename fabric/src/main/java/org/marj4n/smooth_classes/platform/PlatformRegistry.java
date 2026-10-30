@@ -9,7 +9,8 @@ public final class PlatformRegistry {
         org.marj4n.smooth_classes.registry.SmoothBlocks.register();
         org.marj4n.smooth_classes.registry.SmoothEntities.register();
     }
-    public static <V,T extends V> T register(net.minecraft.registry.Registry<V> registry, net.minecraft.util.Identifier id, T value) {
-        return net.minecraft.registry.Registry.register(registry, id, value);
+    public static <V,T extends V> T register(RegistryAccess<V> registry, net.minecraft.util.Identifier id, T value) {
+        registry.register(id, value);
+        return value;
     }
 }

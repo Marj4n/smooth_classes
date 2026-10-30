@@ -70,7 +70,7 @@ public final class DemonRuntimeChecks {
             if(input==null)throw new AssertionError("Approved blueprint resource is missing");
             JsonObject blueprint=JsonParser.parseReader(new java.io.InputStreamReader(input,java.nio.charset.StandardCharsets.UTF_8)).getAsJsonObject();
             for(int y=0;y<4;y++)for(int z=0;z<3;z++)for(int x=0;x<3;x++)w.setBlockState(origin.add(x,y,z),Blocks.AIR.getDefaultState(),2);
-            for(var cell:blueprint.getAsJsonArray("blocks")){var b=cell.getAsJsonObject();int[] rotated=DemonRules.rotate(b.get("x").getAsInt(),b.get("z").getAsInt(),rotation);var block=net.minecraft.registry.Registries.BLOCK.get(new net.minecraft.util.Identifier(b.get("block").getAsString()));w.setBlockState(origin.add(rotated[0],b.get("y").getAsInt(),rotated[1]),block.getDefaultState(),2);}
+            for(var cell:blueprint.getAsJsonArray("blocks")){var b=cell.getAsJsonObject();int[] rotated=DemonRules.rotate(b.get("x").getAsInt(),b.get("z").getAsInt(),rotation);var block=org.marj4n.smooth_classes.platform.PlatformRegistries.BLOCK.get(org.marj4n.smooth_classes.util.ResourceIds.parse(b.get("block").getAsString()));w.setBlockState(origin.add(rotated[0],b.get("y").getAsInt(),rotated[1]),block.getDefaultState(),2);}
         }catch(java.io.IOException ex){throw new IllegalStateException(ex);}
     }
     private static void run(String mode,ServerPlayerEntity p){
@@ -78,7 +78,7 @@ public final class DemonRuntimeChecks {
         var s=OriginRuntime.state(p);
         switch(mode){
             case "shot_front","shot_back","shot_first","shot_peer","shot_walk","shot_run","shot_crouch","shot_head","shot_pulse","shot_hud"->{
-                String shot=mode.substring(5);var buf=net.fabricmc.fabric.api.networking.v1.PacketByteBufs.create();buf.writeString(shot);net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking.send(p,new net.minecraft.util.Identifier("smooth_classes:demon_visual_test_capture"),buf);
+                String shot=mode.substring(5);var buf=net.fabricmc.fabric.api.networking.v1.PacketByteBufs.create();buf.writeString(shot);net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking.send(p,org.marj4n.smooth_classes.util.ResourceIds.parse("smooth_classes:demon_visual_test_capture"),buf);
             }
             case "streak_one"->{
                 check("Streak fixture Lord",DemonKillStreak.eligible(p));long before=DemonKillStreak.stacks(p);float max=p.getMaxHealth();p.setHealth(max-4);float health=p.getHealth();
@@ -277,17 +277,17 @@ public final class DemonRuntimeChecks {
             case "modded"->{
                 clearMobs(p);arena(p);s.flag("demon.sovereign");s.flag("demon.army");
                 for(String id:List.of("skarrier_mobs:hellamander","skarrier_mobs:crimlin","netherman:ghastly","cataclysm:ignited_berserker")){
-                    var key=new net.minecraft.util.Identifier(id);check("Original mod native registered: "+id,net.minecraft.registry.Registries.ENTITY_TYPE.containsId(key));
-                    var e=net.minecraft.registry.Registries.ENTITY_TYPE.get(key).create(p.getWorld());check("Original mob factory creates a living native: "+id,e instanceof MobEntity);
+                    var key=org.marj4n.smooth_classes.util.ResourceIds.parse(id);check("Original mod native registered: "+id,org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE.containsId(key));
+                    var e=org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE.get(key).create(p.getWorld());check("Original mob factory creates a living native: "+id,e instanceof MobEntity);
                     var m=(MobEntity)e;m.setAiDisabled(true);m.refreshPositionAndAngles(p.getX()+3,p.getY(),p.getZ()+3,0,0);m.addCommandTag("sc_demon_test");p.getServerWorld().spawnEntity(m);
                     check("Original mod native is eligible: "+id,DemonMobIdentity.eligible(m));
                     DemonArmy.command(p,0);check("Original mob is claimed without replacement: "+id,p.getUuid().equals(DemonEntityData.of(m).commander));
                 }
                 for(String id:List.of("cataclysm:ignis","cataclysm:netherite_monstrosity","cataclysm:ignited_revenant","netherman:azazel","bosses_of_mass_destruction:gauntlet","soulsweapons:accursed_lord_boss")){
-                    var key=new net.minecraft.util.Identifier(id);check("Required original encounter registered: "+id,net.minecraft.registry.Registries.ENTITY_TYPE.containsId(key));
-                    var e=net.minecraft.registry.Registries.ENTITY_TYPE.get(key).create(p.getWorld());check("Boss or miniboss cannot join army: "+id,e instanceof LivingEntity l&&DemonMobIdentity.boss(l)&&!DemonMobIdentity.eligible(l));
+                    var key=org.marj4n.smooth_classes.util.ResourceIds.parse(id);check("Required original encounter registered: "+id,org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE.containsId(key));
+                    var e=org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE.get(key).create(p.getWorld());check("Boss or miniboss cannot join army: "+id,e instanceof LivingEntity l&&DemonMobIdentity.boss(l)&&!DemonMobIdentity.eligible(l));
                 }
-                var human=net.minecraft.registry.Registries.ENTITY_TYPE.get(new net.minecraft.util.Identifier("netherman:azazel_human")).create(p.getWorld());s.unflag("demon.boss.azazel");
+                var human=org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE.get(org.marj4n.smooth_classes.util.ResourceIds.parse("netherman:azazel_human")).create(p.getWorld());s.unflag("demon.boss.azazel");
                 DemonWorldState.get(p.getServer()).historicalKills.computeIfAbsent(p.getUuid(),ignored->new HashSet<>()).remove("azazel");
                 if(human instanceof LivingEntity living)DemonProgression.onKill(p,living);check("Human Azazel does not grant Nether encounter credit",!s.hasFlag("demon.boss.azazel"));clearMobs(p);
             }
@@ -416,7 +416,7 @@ public final class DemonRuntimeChecks {
                 check("Valid rectangular portal detected",DemonPortals.rectangle(net,from)!=null&&DemonPortals.rectangle(over,to)!=null);
                 p.teleport(over,to.getX()+.5,to.getY(),to.getZ()+2.5,180,0);
             }
-            case "portal_send"->{var nw=nether(p);var from=new BlockPos(64,161,16);record("Portal source diagnostic",true,"loaded="+nw.isChunkLoaded(from)+" rectangle="+DemonPortals.rectangle(nw,from)+" POIs="+nw.getPointOfInterestStorage().getInSquare(e->e.matchesKey(net.minecraft.world.poi.PointOfInterestTypes.NETHER_PORTAL),from,16,net.minecraft.world.poi.PointOfInterestStorage.OccupationStatus.ANY).count());var result=DemonPortals.backup(p);record("Hellgate diagnostic",true,result.message());check("Hellgate accepts an existing coordinate-linked portal pair",result.success());}
+            case "portal_send"->{var nw=nether(p);var from=new BlockPos(64,161,16);record("Portal source diagnostic",true,"loaded="+org.marj4n.smooth_classes.util.LoadedChunks.contains(nw, from)+" rectangle="+DemonPortals.rectangle(nw,from)+" POIs="+nw.getPointOfInterestStorage().getInSquare(e->e.matchesKey(net.minecraft.world.poi.PointOfInterestTypes.NETHER_PORTAL),from,16,net.minecraft.world.poi.PointOfInterestStorage.OccupationStatus.ANY).count());var result=DemonPortals.backup(p);record("Hellgate diagnostic",true,result.message());check("Hellgate accepts an existing coordinate-linked portal pair",result.success());}
             case "portal_check"->{
                 int source=0,destination=0;Set<UUID> ids=new HashSet<>();
                 for(var world:p.getServer().getWorlds())for(var e:world.iterateEntities())if(e instanceof MobEntity mob&&e.getCommandTags().contains("sc_demon_test")&&e.isAlive()){
@@ -431,7 +431,7 @@ public final class DemonRuntimeChecks {
     }
     private static DemonEntityData roundTrip(LivingEntity e){var result=new DemonEntityData();result.read(DemonEntityData.of(e).write());return result;}
     private static void testNaturalLoot(ServerPlayerEntity p,String name){
-        var w=nether(p);var registry=w.getRegistryManager().get(net.minecraft.registry.RegistryKeys.STRUCTURE);var key=net.minecraft.registry.RegistryKey.of(net.minecraft.registry.RegistryKeys.STRUCTURE,new net.minecraft.util.Identifier("minecraft",name));
+        var w=nether(p);var registry=w.getRegistryManager().get(net.minecraft.registry.RegistryKeys.STRUCTURE);var key=net.minecraft.registry.RegistryKey.of(net.minecraft.registry.RegistryKeys.STRUCTURE,net.minecraft.util.Identifier.of("minecraft",name));
         var entry=registry.entryOf(key);var found=w.getChunkManager().getChunkGenerator().locateStructure(w,net.minecraft.registry.entry.RegistryEntryList.of(entry),BlockPos.ORIGIN,64,false);
         check("Natural generated structure located: "+name,found!=null);var start=w.getChunk(found.getFirst()).getStructureStart(entry.value());
         check("Real structure start exists: "+name,start!=null&&start.hasChildren());var bounds=start.getBoundingBox();

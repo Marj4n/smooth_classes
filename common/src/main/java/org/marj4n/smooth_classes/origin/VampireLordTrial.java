@@ -23,10 +23,10 @@ public final class VampireLordTrial {
     public static final String FORSAKEN_KILLS_KEY = "vampire.forlorn_forsaken_kills";
     public static final int REQUIRED_FORSAKEN = 2;
 
-    private static final Identifier VESPER_ID = new Identifier("alexscaves", "vesper");
-    private static final Identifier FORSAKEN_ID = new Identifier("alexscaves", "forsaken");
+    private static final Identifier VESPER_ID = Identifier.of("alexscaves", "vesper");
+    private static final Identifier FORSAKEN_ID = Identifier.of("alexscaves", "forsaken");
     private static final RegistryKey<Biome> FORLORN_HOLLOWS = RegistryKey.of(
-            RegistryKeys.BIOME, new Identifier("alexscaves", "forlorn_hollows"));
+            RegistryKeys.BIOME, Identifier.of("alexscaves", "forlorn_hollows"));
 
     private VampireLordTrial() {}
 
@@ -47,7 +47,7 @@ public final class VampireLordTrial {
      *  kills or despawns cannot advance someone else's Vampire Lord trial.
      */
     public static void onKill(ServerPlayerEntity player, OriginState state, LivingEntity victim) {
-        Identifier id = Registries.ENTITY_TYPE.getId(victim.getType());
+        Identifier id = org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE.getId(victim.getType());
         if (!VESPER_ID.equals(id) && !FORSAKEN_ID.equals(id)) return;
         if (!isForlornHollows(victim.getWorld(), victim.getBlockPos())) return;
         // If the very first tracked kill happens as the player enters the cave,

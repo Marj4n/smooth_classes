@@ -104,7 +104,7 @@ public final class SaberSpecialRuntime {
     private static boolean isSword(ItemStack stack) {
         if (stack == null || stack.isEmpty()) return false;
         if (stack.getItem() instanceof SwordItem) return true;
-        String path = Registries.ITEM.getId(stack.getItem()).getPath().toLowerCase(java.util.Locale.ROOT);
+        String path = org.marj4n.smooth_classes.platform.PlatformRegistries.ITEM.getId(stack.getItem()).getPath().toLowerCase(java.util.Locale.ROOT);
         return path.contains("sword") || path.contains("blade") || path.contains("katana") || path.contains("saber");
     }
 

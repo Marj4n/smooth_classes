@@ -34,13 +34,13 @@ public final class OriginAppearanceFeatureRenderer
     private static final Identifier VOID_EYES = SmoothClasses.id("textures/entity/origin/void_eyes_defile.png");
     private static final Identifier HOMUNCULUS = SmoothClasses.id("textures/entity/origin/homunculus_player.png");
     private static final Identifier SPRIGGAN = SmoothClasses.id("textures/entity/origin/spriggan_player.png");
-    private static final Identifier SLIME = new Identifier("minecraft", "textures/entity/slime/slime.png");
+    private static final Identifier SLIME = Identifier.of("minecraft", "textures/entity/slime/slime.png");
     private static final Identifier VAMPIRE = SmoothClasses.id("textures/entity/origin/vampire_nycto.png");
     private static final Identifier MAN_BAT = SmoothClasses.id("textures/entity/origin/vsb_vampire.png");
     private static final Identifier MAN_BAT_EMISSIVE = SmoothClasses.id("textures/entity/origin/vsb_vampire_e.png");
     private static final Identifier LORD_MAN_BAT = SmoothClasses.id("textures/entity/origin/vsb_vampire_lord.png");
     private static final Identifier LORD_MAN_BAT_EMISSIVE = SmoothClasses.id("textures/entity/origin/vsb_vampire_lord_e.png");
-    private static final Identifier BAT = new Identifier("minecraft", "textures/entity/bat.png");
+    private static final Identifier BAT = Identifier.of("minecraft", "textures/entity/bat.png");
     private static final Identifier VAMPIRE_EYES = SmoothClasses.id("textures/entity/origin/vampire_eyes_nycto.png");
     private static final Identifier[] UNDEAD = new Identifier[]{
             SmoothClasses.id("textures/entity/origin/undead/amethyst.png"),

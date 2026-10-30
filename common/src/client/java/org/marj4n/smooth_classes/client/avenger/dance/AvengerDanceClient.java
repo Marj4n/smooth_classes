@@ -58,7 +58,7 @@ public final class AvengerDanceClient {
     public static void finishLayer(EntityModel<?> model,MatrixStack matrices){var pose=POSES.get(model);if(pose!=null&&pose.applied&&pose.layer){pose.restore();matrices.pop();}}
     private static boolean applyInternal(EntityModel<?> model,LivingEntity e,float delta,MatrixStack matrices,boolean includeRoot){
         var p=playback(e);
-        if(includeRoot&&org.marj4n.smooth_classes.content.avenger.dance.DanceChecks.ENABLED&&DanceDiagnostics.benchmark==null&&probes.size()<1000)probes.put(e.getUuid(),Map.of("model_instance",System.identityHashCode(model),"overlay",p!=null,"applied",false,"type",net.minecraft.registry.Registries.ENTITY_TYPE.getId(e.getType()).toString(),"tick",e.getWorld().getTime()));
+        if(includeRoot&&org.marj4n.smooth_classes.content.avenger.dance.DanceChecks.ENABLED&&DanceDiagnostics.benchmark==null&&probes.size()<1000)probes.put(e.getUuid(),Map.of("model_instance",System.identityHashCode(model),"overlay",p!=null,"applied",false,"type",org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE.getId(e.getType()).toString(),"tick",e.getWorld().getTime()));
         if(p==null)return false;long begin=System.nanoTime();
         var pose=POSES.computeIfAbsent(model,Pose::new);if(!includeRoot&&pose.applied)return false;pose.restore();if(pose.rig.parts.isEmpty())return false;
         var clip=CLIPS.computeIfAbsent(p.profile(),DanceClip::load);if(clip.tracks.isEmpty())return false;
@@ -94,7 +94,7 @@ public final class AvengerDanceClient {
             poseDetails.put(e.getUuid(),details);
         }
         renderCalls++;renderNanos+=System.nanoTime()-begin;
-        if(includeRoot&&org.marj4n.smooth_classes.content.avenger.dance.DanceChecks.ENABLED&&DanceDiagnostics.benchmark==null&&probes.size()<1000)probes.put(e.getUuid(),Map.of("model_instance",System.identityHashCode(model),"overlay",true,"applied",true,"submerged",e.isSubmergedInWater(),"type",net.minecraft.registry.Registries.ENTITY_TYPE.getId(e.getType()).toString(),"tick",e.getWorld().getTime()));
+        if(includeRoot&&org.marj4n.smooth_classes.content.avenger.dance.DanceChecks.ENABLED&&DanceDiagnostics.benchmark==null&&probes.size()<1000)probes.put(e.getUuid(),Map.of("model_instance",System.identityHashCode(model),"overlay",true,"applied",true,"submerged",e.isSubmergedInWater(),"type",org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE.getId(e.getType()).toString(),"tick",e.getWorld().getTime()));
         return true;
     }
     private static float sample(DanceClip base,DanceClip variant,int i,float phase,int axis,float mix){

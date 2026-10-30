@@ -32,7 +32,7 @@ public final class AvengerSummonSafety {
 
     public static boolean allowed(LivingEntity entity) {
         if (entity == null) return false;
-        String id = Registries.ENTITY_TYPE.getId(entity.getType()).toString();
+        String id = org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE.getId(entity.getType()).toString();
         if ("minecraft:wither".equals(id)) return true;
         if (bannedId(id)) return false;
         return !BOSS_BAR_CACHE.computeIfAbsent(entity.getClass(), AvengerSummonSafety::hasBossBarField);

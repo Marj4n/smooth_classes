@@ -47,7 +47,7 @@ public final class VampireBloodDiet {
     private VampireBloodDiet() {}
 
     private static TagKey<EntityType<?>> typeTag(String path) {
-        return TagKey.of(RegistryKeys.ENTITY_TYPE, new Identifier("smooth_classes", path));
+        return TagKey.of(RegistryKeys.ENTITY_TYPE, Identifier.of("smooth_classes", path));
     }
 
     public static Type type(LivingEntity entity) {
@@ -58,7 +58,7 @@ public final class VampireBloodDiet {
         if (entityType.isIn(AQUATIC)) return Type.AQUATIC;
 
         if (entity instanceof VillagerEntity || entity instanceof WanderingTraderEntity) return Type.HUMANOID;
-        String path = Registries.ENTITY_TYPE.getId(entityType).getPath();
+        String path = org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE.getId(entityType).getPath();
         if (containsAny(path, "villager", "trader", "merchant", "humanoid", "npc")) return Type.HUMANOID;
         if (containsAny(path, "fish", "squid", "dolphin", "axolotl", "tadpole", "turtle", "jellyfish",
                 "whale", "seahorse", "octopus", "crab", "shrimp", "salmon", "cod", "puffer",

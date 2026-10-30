@@ -17,7 +17,7 @@ import java.util.Optional;
  * them back on the Angel on the next check.
  */
 public final class AngelIcarusRuntime {
-    private static final Identifier WHITE_FEATHERED_WINGS = new Identifier("icarus", "white_feathered_wings");
+    private static final Identifier WHITE_FEATHERED_WINGS = Identifier.of("icarus", "white_feathered_wings");
     private static final String BOUND_TAG = "SmoothClassesAngelWing";
 
     private AngelIcarusRuntime() {}
@@ -30,7 +30,7 @@ public final class AngelIcarusRuntime {
 
     @SuppressWarnings("unchecked")
     private static void ensureEquipped(ServerPlayerEntity player) {
-        Item wingItem = Registries.ITEM.get(WHITE_FEATHERED_WINGS);
+        Item wingItem = org.marj4n.smooth_classes.platform.PlatformRegistries.ITEM.get(WHITE_FEATHERED_WINGS);
         if (wingItem == null || wingItem == Items.AIR) return;
 
         try {

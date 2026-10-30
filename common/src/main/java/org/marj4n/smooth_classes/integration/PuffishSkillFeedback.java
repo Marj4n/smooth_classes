@@ -48,7 +48,7 @@ public final class PuffishSkillFeedback {
     }
 
     private static void playUnlockSound(ServerPlayerEntity player) {
-        SoundEvent sound = Registries.SOUND_EVENT.get(UNLOCK_SOUND_ID);
+        SoundEvent sound = org.marj4n.smooth_classes.platform.PlatformRegistries.SOUND_EVENT.get(UNLOCK_SOUND_ID);
         player.getServerWorld().playSound(
                 null,
                 player.getBlockPos(),

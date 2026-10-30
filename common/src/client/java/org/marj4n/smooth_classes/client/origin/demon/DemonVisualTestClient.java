@@ -15,7 +15,7 @@ public final class DemonVisualTestClient {
  private static int ticks;
  public static void register(){
   if(!Boolean.getBoolean("smooth_classes.demonTest"))return;
-  ClientPlayNetworking.registerGlobalReceiver(new Identifier("smooth_classes:demon_visual_test_capture"),(client,handler,buf,sender)->{
+  ClientPlayNetworking.registerGlobalReceiver(org.marj4n.smooth_classes.util.ResourceIds.parse("smooth_classes:demon_visual_test_capture"),(client,handler,buf,sender)->{
    String requested=buf.readString(60);client.execute(()->{
     if(client.getCurrentServerEntry()==null||!client.getCurrentServerEntry().address.startsWith("127.0.0.1:"))return;
     mode=requested;ticks=requested.equals("pulse")?2:30;client.setScreen(null);client.options.hudHidden=!requested.equals("hud");

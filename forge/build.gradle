@@ -43,12 +43,13 @@ loom {
 }
 sourceSets.main.java.exclude '**/compat/BewitchmentVampireTransformationMixin.java', '**/compat/BewitchmentBloodBottleMixin.java'
 sourceSets.main.resources.exclude 'smooth_classes.bewitchment.mixins.json'
-tasks.withType(JavaCompile).configureEach { options.encoding = 'UTF-8'; options.release = 17 }
+tasks.withType(JavaCompile).configureEach { options.encoding = 'UTF-8'; options.release = 17; options.compilerArgs += ['-Xlint:deprecation','-Xlint:unchecked','-Xmaxwarns','1000'] }
+def expandedModMetadata = [version: project.version, minecraft_version: rootProject.minecraft_version, loader_version: rootProject.loader_version]
 tasks.named('processResources') {
     dependsOn ':common:validateSharedResources'
     inputs.property 'version', project.version
     filesMatching(['fabric.mod.json', 'META-INF/mods.toml']) {
-        expand version: project.version, minecraft_version: rootProject.minecraft_version, loader_version: rootProject.loader_version
+        expand expandedModMetadata
     }
 }
 tasks.named('jar') {
@@ -65,3 +66,37 @@ tasks.named('processResources') {
         filter { line -> line.replace('"client.SpellProjectileRendererClientMixin"', '"client.ForgeSpellProjectileRendererClientMixin"') }
     }
 }
+
+// Intersection-bound generic render methods need a verified Forge runtime selector.
+tasks.named('processResources') { inputs.property('runtimeMixinBindings', '2') }
+sourceSets.main.java.exclude '**/mixin/client/AvengerDanceEnergyOverlayMixin.java'
+tasks.named('processResources') {
+    filesMatching('smooth_classes.mixins.json') {
+        filter { line -> line.replace('"client.AvengerDanceEnergyOverlayMixin"', '"client.ForgeAvengerDanceEnergyOverlayMixin"') }
+    }
+}
+
+// The annotation processor sees named intersection-bound stubs, whereas these
+// two hooks intentionally target Forge's SRG runtime. Fail the build if either
+// precise runtime method disappears: never merely hide a missing injection.
+tasks.register('validateForgeRuntimeTargets') {
+    doLast {
+        def runtime = new File(gradle.gradleUserHomeDir, 'caches/fabric-loom/1.20.1/forge/1.20.1-47.4.0/minecraft-merged-srg-patched.jar')
+        if (!runtime.isFile()) throw new GradleException('Forge runtime bytecode unavailable for mixin validation')
+        new java.util.jar.JarFile(runtime).withCloseable { jar ->
+            def targets = [
+                ['net/minecraft/client/renderer/entity/layers/EnergySwirlLayer', 'm_6494_', '(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/Entity;FFFFFF)V'],
+                ['net/minecraft/client/model/EntityModel', 'm_6973_', '(Lnet/minecraft/world/entity/Entity;FFFFF)V']
+            ]
+            targets.each { t ->
+                def entry = jar.getJarEntry(t[0] + '.class')
+                if (entry == null) throw new GradleException('Missing mixin target class: ' + t[0])
+                def node = new org.objectweb.asm.tree.ClassNode()
+                new org.objectweb.asm.ClassReader(jar.getInputStream(entry)).accept(node, 0)
+                if (!node.methods.any { it.name == t[1] && it.desc == t[2] }) throw new GradleException('Missing runtime mixin target: ' + t)
+            }
+        }
+        logger.lifecycle('Validated exact Forge energy-overlay runtime method descriptors')
+    }
+}
+tasks.named('compileJava') { dependsOn 'validateForgeRuntimeTargets' }

@@ -191,12 +191,12 @@ public final class AbilityHudState {
 
     private static Identifier schoolIcon(int variant) {
         return switch (variant) {
-            case 0 -> new Identifier("wizards", "textures/item/spell_book/arcane.png");
-            case 1 -> new Identifier("wizards", "textures/item/spell_book/fire.png");
-            case 2 -> new Identifier("wizards", "textures/item/spell_book/frost.png");
-            case 3 -> new Identifier("elemental_wizards_rpg", "textures/item/spellbooks/wind_spell_book.png");
-            case 4 -> new Identifier("elemental_wizards_rpg", "textures/item/spellbooks/aqua_spell_book.png");
-            case 5 -> new Identifier("elemental_wizards_rpg", "textures/item/spellbooks/terra_spell_book.png");
+            case 0 -> Identifier.of("wizards", "textures/item/spell_book/arcane.png");
+            case 1 -> Identifier.of("wizards", "textures/item/spell_book/fire.png");
+            case 2 -> Identifier.of("wizards", "textures/item/spell_book/frost.png");
+            case 3 -> Identifier.of("elemental_wizards_rpg", "textures/item/spellbooks/wind_spell_book.png");
+            case 4 -> Identifier.of("elemental_wizards_rpg", "textures/item/spellbooks/aqua_spell_book.png");
+            case 5 -> Identifier.of("elemental_wizards_rpg", "textures/item/spellbooks/terra_spell_book.png");
             default -> SmoothClasses.id("textures/icons/classes/caster.png");
         };
     }

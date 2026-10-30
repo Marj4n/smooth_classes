@@ -19,11 +19,18 @@ tasks.named('build') {
 tasks.named('clean') { dependsOn ':fabric:clean', ':forge:clean', ':common:clean' }
 
 // Packaging is part of the build, so a successful compile cannot hide missing data.
+def loaderJarOutputs = [:]
+gradle.projectsEvaluated {
+    ['fabric', 'forge'].each { loader -> loaderJarOutputs[loader] = project(':' + loader).tasks.named('remapJar').flatMap { it.archiveFile } }
+}
+def sharedResourceRoot = file('common/src/main/resources')
+def sharedResourceFiles = fileTree(sharedResourceRoot).matching { include 'assets/**', 'data/**' }
+
 tasks.register('verifyLoaderJars') {
     dependsOn ':fabric:remapJar', ':forge:remapJar', ':common:validateSharedResources'
     doLast {
         ['fabric', 'forge'].each { loader ->
-            def artifact = project(":" + loader).tasks.named('remapJar').get().archiveFile.get().asFile
+            def artifact = loaderJarOutputs[loader].get().asFile
             new java.util.jar.JarFile(artifact).withCloseable { jar ->
                 def names = jar.entries().collect { it.name }
                 def ownMetadata = loader == 'fabric' ? 'fabric.mod.json' : 'META-INF/mods.toml'
@@ -37,8 +44,8 @@ tasks.register('verifyLoaderJars') {
                 def metadata = jar.getInputStream(jar.getJarEntry(ownMetadata)).getText('UTF-8')
                 if (metadata.contains('$' + '{version}')) throw new GradleException('Unexpanded version in ' + artifact.name)
                 ['assets', 'data'].each { prefix ->
-                    fileTree('common/src/main/resources/' + prefix).files.each { original ->
-                        def relative = file('common/src/main/resources').toPath().relativize(original.toPath()).toString().replace('\\', '/')
+                    sharedResourceFiles.files.findAll { it.toPath().startsWith(sharedResourceRoot.toPath().resolve(prefix)) }.each { original ->
+                        def relative = sharedResourceRoot.toPath().relativize(original.toPath()).toString().replace('\\', '/')
                         def entry = jar.getJarEntry(relative)
                         if (entry == null || !java.util.Arrays.equals(original.bytes, jar.getInputStream(entry).bytes)) {
                             throw new GradleException('Missing or changed shared resource in ' + artifact.name + ': ' + relative)

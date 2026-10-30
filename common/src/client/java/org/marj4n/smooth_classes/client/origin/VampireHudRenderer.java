@@ -25,7 +25,7 @@ public final class VampireHudRenderer {
     private static final long BLOOD_SENSE_FADE_OUT_MS = 1_600L;
     private static final long BLOOD_SENSE_FADE_IN_MS = 240L;
     private static final boolean DYNAMIC_BARS = PlatformLoader.getInstance().isModLoaded("dynamic_resource_bars");
-    private static final Identifier STAMINA_FRAME = new Identifier("dynamic_resource_bars", "textures/gui/stamina_foreground.png");
+    private static final Identifier STAMINA_FRAME = Identifier.of("dynamic_resource_bars", "textures/gui/stamina_foreground.png");
     private static final long LORD_EVOLUTION_MS = 6_500L;
 
     static {

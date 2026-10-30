@@ -74,6 +74,6 @@ public final class LancerImpaleRenderer extends EntityRenderer<LancerImpaleEntit
 
     @Override
     public Identifier getTexture(LancerImpaleEntity entity) {
-        return SpriteAtlasTexture.BLOCK_ATLAS_TEXTURE;
+        return net.minecraft.screen.PlayerScreenHandler.BLOCK_ATLAS_TEXTURE;
     }
 }

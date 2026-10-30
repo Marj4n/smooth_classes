@@ -15,7 +15,7 @@ import org.marj4n.smooth_classes.SmoothClasses;
 
 
 public class MagicCircleRenderer implements CustomModelStatusEffect.Renderer {
-    public static final Identifier modelId_overlay = new Identifier(SmoothClasses.MOD_ID, "effect/magic_circle");
+    public static final Identifier modelId_overlay = Identifier.of(SmoothClasses.MOD_ID, "effect/magic_circle");
 
 
     private static final RenderLayer OVERLAY_RENDER_LAYER =

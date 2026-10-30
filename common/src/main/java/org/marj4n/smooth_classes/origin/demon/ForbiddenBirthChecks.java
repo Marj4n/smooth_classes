@@ -16,7 +16,7 @@ import org.marj4n.smooth_classes.origin.*;
 /** Explicit disposable-lab opt in only. No mission/Origin bypass registered in normal games. */
 public final class ForbiddenBirthChecks {
     public static final boolean ENABLED=Boolean.getBoolean("smooth_classes.forbiddenBirthLab");
-    public static final Identifier ACTION=new Identifier("smooth_classes","forbidden_birth_test_action");
+    public static final Identifier ACTION=Identifier.of("smooth_classes","forbidden_birth_test_action");
     private record Inventory(String nbt,int xp,UUID id){}
     private static final Map<UUID,Inventory> INVENTORY=new HashMap<>();
     private static final List<Map<String,Object>> RESULTS=new ArrayList<>();

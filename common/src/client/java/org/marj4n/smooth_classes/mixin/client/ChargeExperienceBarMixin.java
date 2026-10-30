@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(InGameHud.class)
 public abstract class ChargeExperienceBarMixin {
     private static final Identifier CAST_BAR =
-            new Identifier("spell_engine", "textures/hud/castbar.png");
+            Identifier.of("spell_engine", "textures/hud/castbar.png");
     private static final int BAR_WIDTH = 182;
     private static final int BAR_HEIGHT = 5;
 

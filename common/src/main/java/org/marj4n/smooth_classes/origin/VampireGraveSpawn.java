@@ -42,7 +42,7 @@ public final class VampireGraveSpawn {
     private static final int SHELL_RADIUS = 3;  // 7x7 including stone walls
     private static final int INTERIOR_HEIGHT = 4;
 
-    private static final Identifier CHURCH_TEMPLATE = new Identifier("smooth_classes", "hauntedchurch_original");
+    private static final Identifier CHURCH_TEMPLATE = Identifier.of("smooth_classes", "hauntedchurch_original");
     // One of the ORIGINAL grave plots (next to an existing ordinary R.I.P. sign).
     // Anchor is in schematic coordinates, no special surface gravestone is spawned.
     private static final int GRAVE_X = 22;
@@ -484,9 +484,9 @@ public final class VampireGraveSpawn {
 
     private static Block coffinOrBed() {
         if (PlatformLoader.getInstance().isModLoaded("bewitchment")) {
-            Identifier id = new Identifier("bewitchment", "black_coffin");
-            if (Registries.BLOCK.containsId(id)) {
-                Block block = Registries.BLOCK.get(id);
+            Identifier id = Identifier.of("bewitchment", "black_coffin");
+            if (org.marj4n.smooth_classes.platform.PlatformRegistries.BLOCK.containsId(id)) {
+                Block block = org.marj4n.smooth_classes.platform.PlatformRegistries.BLOCK.get(id);
                 if (block instanceof BedBlock) return block;
             }
         }

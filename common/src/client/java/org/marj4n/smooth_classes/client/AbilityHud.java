@@ -13,7 +13,7 @@ import org.marj4n.smooth_classes.client.origin.OriginClientState;
 
 /** Ability HUD: signature (V), ascendancy (R), plus the current class-special H slot. */
 public final class AbilityHud {
-    private static final Identifier FRAME = new Identifier("minecraft", "textures/gui/widgets.png");
+    private static final Identifier FRAME = Identifier.of("minecraft", "textures/gui/widgets.png");
     private static final Identifier COOLDOWN = SmoothClasses.id("textures/gui/cooldown_overlay.png");
 
     public void render(DrawContext context, float tickDelta) {

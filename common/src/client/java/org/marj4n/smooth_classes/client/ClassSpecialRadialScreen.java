@@ -29,12 +29,12 @@ public final class ClassSpecialRadialScreen extends Screen {
 
     private static final String[] SCHOOL_NAMES = {"Arcane", "Fire", "Frost", "Wind", "Water", "Earth"};
     private static final Identifier[] SCHOOL_ICONS = {
-            new Identifier("wizards", "textures/item/spell_book/arcane.png"),
-            new Identifier("wizards", "textures/item/spell_book/fire.png"),
-            new Identifier("wizards", "textures/item/spell_book/frost.png"),
-            new Identifier("elemental_wizards_rpg", "textures/item/spellbooks/wind_spell_book.png"),
-            new Identifier("elemental_wizards_rpg", "textures/item/spellbooks/aqua_spell_book.png"),
-            new Identifier("elemental_wizards_rpg", "textures/item/spellbooks/terra_spell_book.png")
+            Identifier.of("wizards", "textures/item/spell_book/arcane.png"),
+            Identifier.of("wizards", "textures/item/spell_book/fire.png"),
+            Identifier.of("wizards", "textures/item/spell_book/frost.png"),
+            Identifier.of("elemental_wizards_rpg", "textures/item/spellbooks/wind_spell_book.png"),
+            Identifier.of("elemental_wizards_rpg", "textures/item/spellbooks/aqua_spell_book.png"),
+            Identifier.of("elemental_wizards_rpg", "textures/item/spellbooks/terra_spell_book.png")
     };
 
     private final String specialId;
