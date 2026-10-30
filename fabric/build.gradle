@@ -52,3 +52,10 @@ tasks.named('jar') {
 }
 tasks.named('remapJar') { archiveClassifier = 'fabric' }
 tasks.named('sourcesJar') { archiveClassifier = 'fabric-sources' }
+
+sourceSets.test.java.srcDirs += [rootProject.file('common/src/test/java')]
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.11.4'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.11.4'
+}
+tasks.named('test') { useJUnitPlatform() }

@@ -68,6 +68,7 @@ public final class SmoothClasses {
         org.marj4n.smooth_classes.origin.HomunculusAccessories.register();
         org.marj4n.smooth_classes.origin.OriginRuntime.register();
         org.marj4n.smooth_classes.origin.OriginCommands.register();
+        org.marj4n.smooth_classes.origin.VampireGraveSpawn.register();
         LOGGER.info("Smooth Classes initialized. Puffish Skills owns class trees and unlock state; {} class definitions registered.",
                 org.marj4n.smooth_classes.registry.ClassRegistry.values().size());
     }
