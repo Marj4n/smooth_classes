@@ -527,6 +527,7 @@ public final class AvengerReworkRuntime {
         consumeHandIngredient(player, Hand.MAIN_HAND);
         if (chosen.offhandItemId() != null) consumeHandIngredient(player, Hand.OFF_HAND);
 
+        org.marj4n.smooth_classes.content.avenger.dance.AvengerDanceRuntime.issue(player, summoned);
         refreshDeathListNow(player, state);
         // Set Stay BEFORE emerge(): the emergence animation snapshots AI state and
         // restores it afterward, so this remains frozen when the ritual finishes.
