@@ -44,7 +44,8 @@
     "AvengerJukeboxMixin",
     "AvengerJukeboxAccessor",
     "AvengerDanceWitherAttackMixin",
-    "AvengerDanceAnimationClockAccessor"
+    "AvengerDanceAnimationClockAccessor",
+    "SmoothProgressionExperienceCompatMixin"
   ],
   "injectors": {
     "defaultRequire": 1
@@ -115,5 +116,6 @@
     "client.AvengerDanceHorseArmorMixin",
     "client.AvengerDanceForepawMixin"
   ],
-  "refmap": "smooth_classes.refmap.json"
+  "refmap": "smooth_classes.refmap.json",
+  "minVersion": "0.8.5"
 }
