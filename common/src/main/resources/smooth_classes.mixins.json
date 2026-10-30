@@ -112,7 +112,6 @@
     "client.AvengerDanceOverlayMixin",
     "client.AvengerDanceEnergyOverlayMixin",
     "client.AvengerDanceHorseArmorMixin",
-    "client.AvengerDanceCuboidAccessor",
     "client.AvengerDanceForepawMixin"
   ],
   "refmap": "smooth_classes.refmap.json"
