@@ -84,6 +84,7 @@ public final class SmoothClassesClient {
     public void onInitializeClient() {
         org.marj4n.smooth_classes.platform.PlatformClientModels.registerLayers();
         org.marj4n.smooth_classes.client.effects.AvengerSoulAnimationClient.register();
+        org.marj4n.smooth_classes.client.avenger.dance.AvengerDanceClient.register();
         DeathListBookClient.register();
         AvengerSummonHoverGlow.register();
         org.marj4n.smooth_classes.client.effects.AvengerAttackMarkClient.register();

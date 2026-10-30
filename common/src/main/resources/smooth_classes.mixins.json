@@ -39,7 +39,11 @@
     "DemonScreenHandlerMixin",
     "DemonWorldMixin",
     "DemonServerPlayerMixin",
-    "DemonDimensionsMixin"
+    "DemonDimensionsMixin",
+    "AvengerJukeboxMixin",
+    "AvengerJukeboxAccessor",
+    "AvengerDanceWitherAttackMixin",
+    "AvengerDanceAnimationClockAccessor"
   ],
   "injectors": {
     "defaultRequire": 1
@@ -97,7 +101,19 @@
     "client.ForbiddenBirthHandMixin",
     "client.ForbiddenBirthHudMixin",
     "client.ForbiddenBirthToastMixin",
-    "client.ForbiddenBirthFogMixin"
+    "client.ForbiddenBirthFogMixin",
+    "client.AvengerDanceRenderMixin",
+    "client.AvengerDancePartAccessor",
+    "client.AvengerDanceQuadrupedAccessor",
+    "client.AvengerDanceCreeperFlashMixin",
+    "client.AvengerDanceFrameMixin",
+    "client.AvengerDanceAnimalAccessor",
+    "client.AvengerDanceWardenGlowMixin",
+    "client.AvengerDanceOverlayMixin",
+    "client.AvengerDanceEnergyOverlayMixin",
+    "client.AvengerDanceHorseArmorMixin",
+    "client.AvengerDanceCuboidAccessor",
+    "client.AvengerDanceForepawMixin"
   ],
   "refmap": "smooth_classes.refmap.json"
 }
