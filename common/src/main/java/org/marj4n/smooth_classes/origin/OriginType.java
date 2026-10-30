@@ -40,11 +40,11 @@ public enum OriginType {
             new String[]{"Only 16 health", "Must stay wet", "Base form eventually dies on land"},
             "Aquatic food", "Mermaid Queen"),
 
-    DEMON("Demon", "Born of Ash and Flame", Items.BLAZE_POWDER, 2,
-            "Infernal blood turned the Nether from a prison into a homeland. Demons endure heat, master lava, and can even rest where mortal beds explode.",
-            new String[]{"Fire and Nether adaptation", "Lava mastery through evolution", "Can safely sleep in the Nether"},
-            new String[]{"Water and rain suppress recovery", "Strongest advantages are environmental", "Infernal growth must be conquered"},
-            "Nether-biased", "Archdemon"),
+    DEMON("Demon", "Appleborn", Items.BLAZE_POWDER, 3,
+            "Born from a mysterious Nether apple, your infernal soul must conquer its own evolutionary path. The Nether is your homeland; prolonged exile causes Netherbound Decay.",
+            new String[]{"Cinder Reflex: fire protection with recovery", "Safe Nether rest", "World-Ender evolution through objectives"},
+            new String[]{"Netherbound Decay outside the Nether", "World-Ender requires Infernal Diet", "Evolution must be conquered"},
+            "Normal; Infernal Diet after World-Ender", "Demon Lord"),
 
     ANGEL("Angel", "Winged by Ruin and Grace", Items.FEATHER, 3,
             "Celestial grace survived the broken Grail, but imperfectly. Angels begin fragile, carrying wings that must be strengthened through trial.",
@@ -121,14 +121,14 @@ public enum OriginType {
     public String[] weaknesses() { return weaknesses.clone(); }
     public String diet() { return diet; }
     public String evolution() { return evolution; }
-    public String v1Spawn() { return this == VAMPIRE ? "Forgotten Graveyard (Overworld)" : "Overworld (V1)"; }
+    public String v1Spawn() { return this == VAMPIRE ? "Forgotten Graveyard (Overworld)" : this == DEMON ? "Safe Nether birthplace" : "Overworld (V1)"; }
     public Identifier categoryId() { return SmoothClasses.id("origin_" + id()); }
 
 
-    private static final OriginType[] V1_PLAYABLE = {HUMAN, VAMPIRE};
+    private static final OriginType[] V1_PLAYABLE = {HUMAN, VAMPIRE, DEMON};
 
     public boolean isV1Playable() {
-        return this == HUMAN || this == VAMPIRE;
+        return this == HUMAN || this == VAMPIRE || this == DEMON;
     }
 
     public static OriginType[] v1PlayableValues() {

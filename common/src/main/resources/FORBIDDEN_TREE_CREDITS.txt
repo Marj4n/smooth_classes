@@ -1,0 +1,5 @@
+Forbidden Apple Tree structure based on "Horror Tree with Face" by Psemata — Planet Minecraft.
+Official source: https://www.planetminecraft.com/project/1-21-8-horror-tree-with-face-download/
+Original variant: horror-tree-with_face1.schem
+Schematic SHA-256: 0ffe42aed930e87687e22fb605cefa65325c0f96a7f87126d7cb790a5a62ec1a
+Original tree is NOT made by Marj4n. Free-use statement prohibits resale or claiming authorship. Public redistribution permission must be reviewed before release.

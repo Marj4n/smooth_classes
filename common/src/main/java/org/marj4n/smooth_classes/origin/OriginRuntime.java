@@ -180,6 +180,7 @@ public final class OriginRuntime {
     }
 
     public static void setOrigin(ServerPlayerEntity player, OriginType origin) {
+        org.marj4n.smooth_classes.origin.demon.DemonRuntime.cleanup(player);
         if (origin != OriginType.VAMPIRE) VampireGraveSpawn.cancelIntro(player, state(player));
         if (state(player).hasFlag("vampire.form.bat")) {
             VampireBatPerchRuntime.stop(player, state(player), false);
@@ -192,19 +193,21 @@ public final class OriginRuntime {
         state(player).setOrigin(origin);
         if (!player.isCreative()) player.setInvulnerable(false);
         if (origin != OriginType.ANGEL) setAngelFlight(player, false);
-        if (origin == OriginType.VAMPIRE) {
+        if (origin == OriginType.VAMPIRE || origin == OriginType.DEMON) {
             unlockOriginCategory(player, origin);
             OriginAdvancementNotices.onOriginSelected(player, origin);
         }
         applyAttributes(player, origin);
         player.calculateDimensions();
         if (origin == OriginType.VAMPIRE) VampireGraveSpawn.awakenOnce(player, state(player));
+        if (origin == OriginType.DEMON) org.marj4n.smooth_classes.origin.demon.DemonBirth.begin(player);
         SmoothClassesNetworking.sendOriginState(player);
         player.sendMessage(Text.literal("Origin Chosen: " + origin.displayName()), false);
         player.sendMessage(Text.literal(origin.subtitle()), true);
     }
 
     public static void clearOrigin(ServerPlayerEntity player) {
+        org.marj4n.smooth_classes.origin.demon.DemonRuntime.cleanup(player);
         VampireGraveSpawn.cancelIntro(player, state(player));
         if (state(player).hasFlag("vampire.form.bat")) {
             VampireBatPerchRuntime.stop(player, state(player), false);
@@ -253,9 +256,7 @@ public final class OriginRuntime {
             return state.blood() <= 0;
         }
 
-        if (origin == OriginType.DEMON && source.isIn(DamageTypeTags.IS_FIRE)) {
-            if (player.isInLava() && state.lavaGraceTicks() > 0) return false;
-        }
+        if (origin == OriginType.DEMON && org.marj4n.smooth_classes.origin.demon.DemonBiology.protectFire(player, source)) return false;
         if (origin == OriginType.SLIME && source.isIn(DamageTypeTags.IS_FALL)) {
             return false;
         }
@@ -487,14 +488,7 @@ public final class OriginRuntime {
     }
 
     private static void tickDemon(ServerPlayerEntity player, OriginState state) {
-        if (player.isInLava()) {
-            state.lavaGraceTicks(state.lavaGraceTicks() - 1);
-        } else {
-            state.lavaGraceTicks(5 * 20);
-        }
-        if (player.isTouchingWaterOrRain()) {
-            player.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS, 30, 0, false, false, true));
-        }
+        org.marj4n.smooth_classes.origin.demon.DemonRuntime.tick(player, state);
     }
 
     private static void tickSlime(ServerPlayerEntity player, OriginState state) {
@@ -645,10 +639,7 @@ public final class OriginRuntime {
                     armor = queen ? 6.0 : 4.0;
                 }
             }
-            case DEMON -> {
-                if (nether) { speed = 0.08; attack = 0.08; armor = 1.5; }
-                if (wet) speed -= 0.05;
-            }
+            case DEMON -> { /* All infernal biology lives in the Demon runtime. */ }
             case ANGEL -> { health = -4.0; speed = 0.05; knockback = -0.10; }
             case SLIME -> {
                 boolean sovereign = OriginSkillRuntime.unlocked(player, OriginType.SLIME, "final");
@@ -739,7 +730,7 @@ public final class OriginRuntime {
 
     private static void ensureSelectedCategory(ServerPlayerEntity player) {
         OriginType origin = state(player).origin();
-        if (origin == OriginType.VAMPIRE) unlockOriginCategory(player, origin);
+        if (origin == OriginType.VAMPIRE || origin == OriginType.DEMON) unlockOriginCategory(player, origin);
     }
 
     private static void unlockOriginCategory(ServerPlayerEntity player, OriginType origin) {

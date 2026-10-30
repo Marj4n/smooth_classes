@@ -14,6 +14,7 @@ public final class OriginProgressUnlocks {
 
         switch (origin) {
             case VAMPIRE -> syncVampire(player, state);
+            case DEMON -> org.marj4n.smooth_classes.origin.demon.DemonProgression.sync(player, state);
             case MERMAID -> syncMermaid(player, state);
             case SLIME -> syncSlime(player, state);
             default -> { }

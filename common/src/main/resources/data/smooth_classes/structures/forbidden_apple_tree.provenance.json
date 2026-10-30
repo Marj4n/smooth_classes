@@ -1,0 +1,134 @@
+{
+  "creator": "Psemata",
+  "attribution": "Forbidden Apple Tree structure based on \"Horror Tree with Face\" by Psemata \u2014 Planet Minecraft.",
+  "source": "https://www.planetminecraft.com/project/1-21-8-horror-tree-with-face-download/",
+  "variant": "horror-tree-with_face1.schem",
+  "original_sha256": "0ffe42aed930e87687e22fb605cefa65325c0f96a7f87126d7cb790a5a62ec1a",
+  "converted_sha256": "54a606565ae1977d1ff721aae478678838cc354c418321083a186dbfc52c4d0c",
+  "original_data_version": 4440,
+  "converted_data_version": 3465,
+  "selection_dimensions": [
+    64,
+    96,
+    37
+  ],
+  "occupied_bounds": [
+    [
+      0,
+      63
+    ],
+    [
+      0,
+      84
+    ],
+    [
+      0,
+      36
+    ]
+  ],
+  "non_air_blocks": 8271,
+  "palette_states": 53,
+  "block_entities": 0,
+  "entities": 0,
+  "replacements": [],
+  "notes": [
+    "No tree block removed, scaled or invented. Original grass/purple-concrete authoring base preserved.",
+    "Air in source is omitted from placement to prevent clearing unrelated terrain; original selection size retained in NBT.",
+    "All palette IDs predate1.20.1; actual block properties must still pass runtime registry validation.",
+    "Custom budgeted placement reads the full template and is not restricted by the vanilla structure-block UI48 size."
+  ],
+  "palette": {
+    "0": "minecraft:purple_concrete",
+    "1": "minecraft:grass_block[snowy=false]",
+    "2": "minecraft:air",
+    "3": "minecraft:smooth_basalt",
+    "4": "minecraft:mossy_stone_brick_slab[type=bottom,waterlogged=false]",
+    "5": "minecraft:mossy_stone_brick_stairs[facing=south,half=bottom,shape=straight,waterlogged=false]",
+    "6": "minecraft:deepslate_coal_ore",
+    "7": "minecraft:mossy_stone_bricks",
+    "8": "minecraft:mossy_stone_brick_stairs[facing=north,half=bottom,shape=straight,waterlogged=false]",
+    "9": "minecraft:mossy_stone_brick_stairs[facing=west,half=bottom,shape=straight,waterlogged=false]",
+    "10": "minecraft:mossy_stone_brick_stairs[facing=east,half=bottom,shape=straight,waterlogged=false]",
+    "11": "minecraft:red_mushroom_block[down=true,east=true,north=true,south=true,up=true,west=true]",
+    "12": "minecraft:mossy_stone_brick_stairs[facing=west,half=top,shape=straight,waterlogged=false]",
+    "13": "minecraft:mossy_stone_brick_slab[type=double,waterlogged=false]",
+    "14": "minecraft:mossy_stone_brick_stairs[facing=north,half=top,shape=straight,waterlogged=false]",
+    "15": "minecraft:coal_block",
+    "16": "minecraft:mossy_stone_brick_stairs[facing=east,half=top,shape=straight,waterlogged=false]",
+    "17": "minecraft:diorite_stairs[facing=east,half=bottom,shape=straight,waterlogged=false]",
+    "18": "minecraft:cobbled_deepslate_stairs[facing=east,half=top,shape=straight,waterlogged=false]",
+    "19": "minecraft:diorite_stairs[facing=west,half=bottom,shape=straight,waterlogged=false]",
+    "20": "minecraft:cobbled_deepslate_stairs[facing=north,half=bottom,shape=straight,waterlogged=false]",
+    "21": "minecraft:cobbled_deepslate_slab[type=double,waterlogged=false]",
+    "22": "minecraft:diorite_stairs[facing=west,half=top,shape=straight,waterlogged=false]",
+    "23": "minecraft:cobbled_deepslate_stairs[facing=south,half=bottom,shape=straight,waterlogged=false]",
+    "24": "minecraft:cobbled_deepslate_stairs[facing=east,half=bottom,shape=straight,waterlogged=false]",
+    "25": "minecraft:diorite_stairs[facing=east,half=top,shape=straight,waterlogged=false]",
+    "26": "minecraft:cobbled_deepslate_slab[type=bottom,waterlogged=false]",
+    "27": "minecraft:cobbled_deepslate_stairs[facing=south,half=top,shape=straight,waterlogged=false]",
+    "28": "minecraft:mossy_stone_brick_slab[type=top,waterlogged=false]",
+    "29": "minecraft:cobbled_deepslate_stairs[facing=west,half=top,shape=straight,waterlogged=false]",
+    "30": "minecraft:cobbled_deepslate_stairs[facing=west,half=bottom,shape=straight,waterlogged=false]",
+    "31": "minecraft:cobbled_deepslate_slab[type=top,waterlogged=false]",
+    "32": "minecraft:basalt[axis=y]",
+    "33": "minecraft:tuff",
+    "34": "minecraft:acacia_wood[axis=y]",
+    "35": "minecraft:red_nether_bricks",
+    "36": "minecraft:red_nether_brick_stairs[facing=east,half=bottom,shape=straight,waterlogged=false]",
+    "37": "minecraft:red_nether_brick_stairs[facing=west,half=top,shape=straight,waterlogged=false]",
+    "38": "minecraft:crimson_hyphae[axis=y]",
+    "39": "minecraft:nether_wart_block",
+    "40": "minecraft:red_concrete",
+    "41": "minecraft:red_wool",
+    "42": "minecraft:red_mushroom_block[down=true,east=true,north=true,south=false,up=true,west=true]",
+    "43": "minecraft:red_mushroom_block[down=true,east=false,north=false,south=false,up=true,west=true]",
+    "44": "minecraft:red_mushroom_block[down=true,east=true,north=true,south=true,up=true,west=false]",
+    "45": "minecraft:red_mushroom_block[down=true,east=true,north=false,south=true,up=true,west=true]",
+    "46": "minecraft:red_mushroom_block[down=true,east=false,north=true,south=true,up=true,west=true]",
+    "47": "minecraft:red_mushroom_block[down=true,east=true,north=true,south=false,up=true,west=false]",
+    "48": "minecraft:red_mushroom_block[down=true,east=false,north=false,south=true,up=false,west=true]",
+    "49": "minecraft:red_mushroom_block[down=false,east=true,north=true,south=true,up=true,west=true]",
+    "50": "minecraft:red_mushroom_block[down=true,east=true,north=true,south=true,up=false,west=true]",
+    "51": "minecraft:red_mushroom_block[down=true,east=false,north=true,south=true,up=false,west=true]",
+    "52": "minecraft:red_mushroom_block[down=true,east=true,north=false,south=true,up=true,west=false]"
+  },
+  "anchors": {
+    "face_center": [
+      28.5,
+      11.5,
+      23.8
+    ],
+    "front_normal": [
+      0.6,
+      0,
+      0.8
+    ],
+    "fruit": [
+      33.5,
+      30.4,
+      28.5
+    ],
+    "fruit_support": [
+      33,
+      31,
+      28
+    ],
+    "fruit_support_state": "minecraft:acacia_wood[axis=y]",
+    "landing": [
+      33.5,
+      1,
+      28.5
+    ],
+    "framing_center": [
+      32.0,
+      42,
+      18.5
+    ],
+    "physical_height": 85,
+    "selection": [
+      64,
+      96,
+      37
+    ]
+  }
+}

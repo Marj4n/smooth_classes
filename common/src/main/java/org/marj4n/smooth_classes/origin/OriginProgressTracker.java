@@ -53,6 +53,7 @@ public final class OriginProgressTracker {
                 if (victim instanceof net.minecraft.entity.mob.GuardianEntity) state.addProgress("mermaid.guardian_kills", 1);
             }
             case DEMON -> {
+                org.marj4n.smooth_classes.origin.demon.DemonProgression.onKill(player, victim);
                 if (victim instanceof BlazeEntity) state.addProgress("demon.blaze_kills", 1);
                 if (victim instanceof MagmaCubeEntity) state.addProgress("demon.magma_kills", 1);
                 if (player.getWorld().getRegistryKey() == World.NETHER) state.addProgress("demon.nether_hostile_kills", 1);

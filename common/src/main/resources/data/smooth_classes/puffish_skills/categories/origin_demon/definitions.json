@@ -1,0 +1,392 @@
+{
+  "origin_base": {
+    "title": {
+      "text": "Demon \u2014 Appleborn"
+    },
+    "description": {
+      "text": "Born safely in the Nether. Normal food before choosing World-Ender. Nether rest never explodes."
+    },
+    "cost": 1,
+    "size": 1.15,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:apple"
+      }
+    },
+    "rewards": []
+  },
+  "cinder_reflex": {
+    "title": {
+      "text": "Cinder Reflex"
+    },
+    "description": {
+      "text": "Touch fire or lava. Fire Resistance 666s, then 666s recovery."
+    },
+    "cost": 1,
+    "size": 1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:blaze_powder"
+      }
+    },
+    "rewards": []
+  },
+  "choose_path": {
+    "title": {
+      "text": "Choose Your Path"
+    },
+    "description": {
+      "text": "Choose one permanent evolutionary path: /smoothclasses demon path."
+    },
+    "cost": 1,
+    "size": 1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:nether_star"
+      }
+    },
+    "rewards": []
+  },
+  "world_ender": {
+    "title": {
+      "text": "World-Ender"
+    },
+    "description": {
+      "text": "Available. Infernal Diet: pork and Nether plants only; 50% exhaustion."
+    },
+    "cost": 1,
+    "size": 1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:netherite_sword"
+      }
+    },
+    "rewards": []
+  },
+  "temptation": {
+    "title": {
+      "text": "Temptation / Succubus \u2014 Coming Soon"
+    },
+    "description": {
+      "text": "Unavailable in this version."
+    },
+    "cost": 1,
+    "size": 1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:barrier"
+      }
+    },
+    "rewards": []
+  },
+  "hellkeeper": {
+    "title": {
+      "text": "Hellkeeper \u2014 Coming Soon"
+    },
+    "description": {
+      "text": "Unavailable in this version."
+    },
+    "cost": 1,
+    "size": 1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:barrier"
+      }
+    },
+    "rewards": []
+  },
+  "divine_demon": {
+    "title": {
+      "text": "Divine Demon \u2014 Coming Soon"
+    },
+    "description": {
+      "text": "Unavailable in this version."
+    },
+    "cost": 1,
+    "size": 1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:barrier"
+      }
+    },
+    "rewards": []
+  },
+  "trial": {
+    "title": {
+      "text": "Trial of Destruction"
+    },
+    "description": {
+      "text": "Enter and take loot from naturally generated Fortress AND Bastion chests."
+    },
+    "cost": 1,
+    "size": 1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:chest"
+      }
+    },
+    "rewards": []
+  },
+  "brand_of_ruin": {
+    "title": {
+      "text": "Brand of Ruin \u2014 I"
+    },
+    "description": {
+      "text": "One living target. Slowness II, -25% effective armor, -20% outgoing damage. 30s cast cooldown. Activate again to recall and reset cooldown. Milk cannot cleanse."
+    },
+    "cost": 1,
+    "size": 1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:flint_and_steel"
+      }
+    },
+    "rewards": []
+  },
+  "netherforged": {
+    "title": {
+      "text": "Netherforged"
+    },
+    "description": {
+      "text": "Complete Hot Tourist Destinations after the trial. Permanent Fire Resistance. Brand gains DoT."
+    },
+    "cost": 1,
+    "size": 1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:magma_cream"
+      }
+    },
+    "rewards": []
+  },
+  "pandemonium": {
+    "title": {
+      "text": "Pandemonium \u2014 II"
+    },
+    "description": {
+      "text": "Same advancement: 64-block infernal domain, 45s duration, then 60s cooldown. Permanent water evaporation; multiplayer terrain changes require server permission."
+    },
+    "cost": 1,
+    "size": 1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:fire_charge"
+      }
+    },
+    "rewards": []
+  },
+  "recognition": {
+    "title": {
+      "text": "Infernal Recognition"
+    },
+    "description": {
+      "text": "Defeat Decaying King and Nether Gauntlet. Eligible non-boss Nether natives do not initiate attacks; they may retaliate."
+    },
+    "cost": 1,
+    "size": 1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:gold_ingot"
+      }
+    },
+    "rewards": []
+  },
+  "sovereign": {
+    "title": {
+      "text": "Sovereign's Presence"
+    },
+    "description": {
+      "text": "Defeat all five rulers: Gauntlet, Decaying King, Nether Azazel, Ignis, Netherite Monstrosity. Absolute Respect and Last Tribute (24 blocks, 180s cooldown). Brand gains death bursts and bounded spreading."
+    },
+    "cost": 1,
+    "size": 1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:golden_helmet"
+      }
+    },
+    "rewards": []
+  },
+  "all_hell_shall_kneel": {
+    "title": {
+      "text": "All Hell Shall Kneel \u2014 III"
+    },
+    "description": {
+      "text": "Command eligible Nether mobs within 128 blocks: Rally, March, Attack, Guard, Withdraw, Backup. No army-size cap. Bosses and others' pets excluded."
+    },
+    "cost": 1,
+    "size": 1,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:goat_horn"
+      }
+    },
+    "rewards": []
+  },
+  "demon_lord": {
+    "title": {
+      "text": "Demon Lord"
+    },
+    "description": {
+      "text": "Bind a valid Compact V2 Black Throne in the Nether: 18 Netherite + 1 Beacon. Netherbound ends; Infernal Diet remains. Thronebound saves fatal damage outside Nether after Last Tribute: return at 6 HP, 900s cooldown. Hellgate brings existing troops through fitting loaded portals."
+    },
+    "cost": 1,
+    "size": 1.15,
+    "frame": {
+      "type": "texture",
+      "data": {
+        "unlocked": "smooth_classes:textures/frames/unlocked.png",
+        "available": "smooth_classes:textures/frames/available.png",
+        "locked": "smooth_classes:textures/frames/locked.png",
+        "excluded": "smooth_classes:textures/frames/excluded.png"
+      }
+    },
+    "icon": {
+      "type": "item",
+      "data": {
+        "item": "minecraft:beacon"
+      }
+    },
+    "rewards": []
+  }
+}

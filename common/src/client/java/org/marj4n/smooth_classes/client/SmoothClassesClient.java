@@ -184,7 +184,7 @@ public final class SmoothClassesClient {
                         if (client.player != null && client.player.getUuid().equals(playerId)) {
                             org.marj4n.smooth_classes.client.origin.OriginClientState.sync(
                                     origin, blood, bloodCapacity, sun, wetness, wing, instability, soul, bone, carbon, living, progress, flags);
-                            if (origin == null || !"vampire".equals(origin)) AbilityPageState.setClassPage();
+                            if (origin == null || (!"vampire".equals(origin) && !"demon".equals(origin))) AbilityPageState.setClassPage();
                             else if ("vampire".equals(origin) && flags.contains("vampire.form.bat"))
                                 AbilityPageState.setOriginPage(); // Never strand the player behind a locked Class page.
                         }
@@ -294,7 +294,7 @@ public final class SmoothClassesClient {
                     AbilityPageState.setOriginPage(); // Dismissal key must remain available.
                     continue;
                 }
-                if ("vampire".equals(org.marj4n.smooth_classes.client.origin.OriginClientState.originId)) {
+                if ("vampire".equals(org.marj4n.smooth_classes.client.origin.OriginClientState.originId) || "demon".equals(org.marj4n.smooth_classes.client.origin.OriginClientState.originId)) {
                     AbilityPageState.toggle();
                     if (client.player != null) {
                         client.player.sendMessage(Text.literal(AbilityPageState.isOriginPage()
@@ -461,7 +461,9 @@ public final class SmoothClassesClient {
                     || org.marj4n.smooth_classes.client.charge.ChargeHudState.active(org.marj4n.smooth_classes.client.charge.ChargeHudState.PORTAL_OF_SOVEREIGNTY)))
                 client.player.setSprinting(false);
         });
+        org.marj4n.smooth_classes.client.origin.demon.DemonHud.register();
         HudRenderCallback.EVENT.register((context, tickDelta) -> {
+            org.marj4n.smooth_classes.client.origin.demon.DemonHud.render(context, tickDelta);
             HUD.render(context, tickDelta);
             org.marj4n.smooth_classes.client.origin.VampireHudRenderer.render(context, tickDelta);
             CrimsonRevenantVisionOverlay.render(context, tickDelta);
@@ -645,6 +647,7 @@ public final class SmoothClassesClient {
         EntityRendererRegistry.register(SmoothEntities.HIGH_BEAM, org.marj4n.smooth_classes.client.renderer.HighBeamRenderer::new);
         EntityRendererRegistry.register(SmoothEntities.SACRED_BANNER, SacredBannerRenderer::new);
         EntityRendererRegistry.register(SmoothEntities.SPELL_TARGET, SpellTargetRenderer::new);
+        EntityRendererRegistry.register(SmoothEntities.DEMON_SEAT, org.marj4n.smooth_classes.client.origin.demon.DemonSeatRenderer::new);
         EntityRendererRegistry.register(SmoothEntities.DREADGLARE, DreadglareRenderer::new);
         EntityRendererRegistry.register(SmoothEntities.GREATER_DREADGLARE, GreaterDreadglareRenderer::new);
         EntityRendererRegistry.register(SmoothEntities.WRAITH, WraithRenderer::new);

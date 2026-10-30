@@ -1,0 +1,30 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:blaze",
+    "minecraft:ghast",
+    "minecraft:magma_cube",
+    "minecraft:piglin",
+    "minecraft:piglin_brute",
+    "minecraft:zombified_piglin",
+    "minecraft:hoglin",
+    "minecraft:strider",
+    "minecraft:wither_skeleton",
+    {
+      "id": "skarrier_mobs:hellamander",
+      "required": false
+    },
+    {
+      "id": "skarrier_mobs:crimlin",
+      "required": false
+    },
+    {
+      "id": "netherman:ghastly",
+      "required": false
+    },
+    {
+      "id": "cataclysm:ignited_berserker",
+      "required": false
+    }
+  ]
+}
