@@ -1494,6 +1494,19 @@ public final class AvengerReworkRuntime {
         return shouldIgnoreSummonTarget(livingWarden, livingTarget);
     }
 
+    /** Boss friends fire only at an order, retaliation target, or an actual guard threat. */
+    public static boolean mayBoundWitherAttack(WitherEntity wither, LivingEntity target) {
+        if (target == null || !target.isAlive() || shouldIgnoreSummonTarget(wither, target) || isStaying(wither)) return false;
+        UUID id = summonOwnerUuid(wither);
+        if (id == null) return true;
+        var server = wither.getServer();
+        var owner = server == null ? null : server.getPlayerManager().getPlayer(id);
+        if (owner == null || owner.getWorld() != wither.getWorld() || !validEnemy(owner, target)) return false;
+        if (attackTarget(owner) == target || owner.getAttacking() == target || owner.getLastAttacker() == target || wither.getAttacker() == target) return true;
+        BlockPos post = guardPosition(wither);
+        return post != null && isGuardHostile(owner, post, target);
+    }
+
     public static boolean shouldBlockSummonedWardenDarkness(LivingEntity entity) {
         if (entity == null || entity.getWorld().isClient) return false;
         UUID protectedOwner = entity instanceof ServerPlayerEntity player
