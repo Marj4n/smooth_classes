@@ -31,5 +31,6 @@ public abstract class AvengerLibrarianMixin implements AvengerLibrarianSummons.B
     @Inject(method = "readCustomDataFromNbt", at = @At("TAIL"))
     private void smoothClasses$loadLibrarianBook(NbtCompound nbt, CallbackInfo ci) {
         smoothClasses$librarianBook = AvengerLibrarianSummons.readBook(nbt);
+        AvengerLibrarianSummons.restoreBoundOffer((VillagerEntity) (Object) this);
     }
 }

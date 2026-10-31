@@ -118,4 +118,35 @@ class AvengerLibrarianSummonsTest {
         AvengerLibrarianSummons.writeBook(data, ItemStack.EMPTY);
         assertTrue(data.isEmpty());
     }
+
+    @Test void fortuneRitualRepairsRandomVanillaTradeInTheAuthoritativeList() {
+        ItemStack fortune = new ItemStack(Items.ENCHANTED_BOOK);
+        NbtCompound enchantment = new NbtCompound();
+        enchantment.putString("id", "minecraft:fortune");
+        enchantment.putShort("lvl", (short) 3);
+        NbtList stored = new NbtList();
+        stored.add(enchantment);
+        fortune.getOrCreateNbt().put("StoredEnchantments", stored);
+        TradeOfferList liveOffers = AvengerLibrarianSummons.offersFor(book());
+        AvengerLibrarianSummons.replaceIncorrectOffer(liveOffers, fortune);
+        assertEquals(1, liveOffers.size());
+        assertEquals(fortune.getNbt(), liveOffers.get(0).getSellItem().getNbt());
+        assertEquals(fortune.getNbt(), new TradeOffer(liveOffers.get(0).toNbt()).getSellItem().getNbt());
+    }
+
+    @Test void repairRetainsCorrectOfferUsesAndDoesNotResetStock() {
+        TradeOfferList offers = AvengerLibrarianSummons.offersFor(book());
+        TradeOffer original = offers.get(0);
+        original.use();
+        AvengerLibrarianSummons.replaceIncorrectOffer(offers, book());
+        assertSame(original, offers.get(0));
+        assertEquals(1, offers.get(0).getUses());
+    }
+
+    @Test void absentBoundBookLeavesOrdinaryTradesUntouched() {
+        TradeOfferList offers = AvengerLibrarianSummons.offersFor(book());
+        TradeOffer original = offers.get(0);
+        AvengerLibrarianSummons.replaceIncorrectOffer(offers, ItemStack.EMPTY);
+        assertSame(original, offers.get(0));
+    }
 }

@@ -59,8 +59,32 @@ public final class AvengerLibrarianSummons {
         // Villagers with trade experience retain their profession without a POI.
         // Normal lectern/work/restock behavior remains vanilla.
         villager.setExperience(1);
-        villager.setOffersFromServer(offersFor(book));
         ((BookCarrier) villager).smoothClasses$setLibrarianBook(book);
+        restoreBoundOffer(villager);
+    }
+
+    /** Repair pre-fix summons while retaining uses/prices of an already correct offer. */
+    public static void restoreBoundOffer(VillagerEntity villager) {
+        if (!(villager instanceof BookCarrier carrier)) return;
+        ItemStack book = copyBook(carrier.smoothClasses$getLibrarianBook());
+        if (book.isEmpty()) return; // Never touch ordinary or emerald-only villagers.
+        villager.setVillagerData(villager.getVillagerData()
+                .withProfession(VillagerProfession.LIBRARIAN));
+        if (villager.getExperience() < 1) villager.setExperience(1);
+        replaceIncorrectOffer(villager.getOffers(), book);
+    }
+
+    public static void replaceIncorrectOffer(TradeOfferList offers, ItemStack book) {
+        ItemStack original = copyBook(book);
+        if (original.isEmpty()) return;
+        if (!offers.isEmpty()) {
+            ItemStack sold = offers.get(0).getSellItem();
+            if (sold.isOf(original.getItem()) && java.util.Objects.equals(sold.getNbt(), original.getNbt())) return;
+        }
+        // MerchantEntity.setOffersFromServer is a no-op on Java 1.20.1 server
+        // entities. Mutate the actual authoritative list returned by getOffers.
+        offers.clear();
+        offers.addAll(offersFor(original));
     }
 
     public static ItemStack boundBook(LivingEntity entity) {
