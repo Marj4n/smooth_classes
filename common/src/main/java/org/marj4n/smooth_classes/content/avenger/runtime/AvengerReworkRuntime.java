@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.boss.WitherEntity;
+import org.marj4n.smooth_classes.SmoothClasses;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.SpawnReason;
@@ -100,6 +101,8 @@ public final class AvengerReworkRuntime {
 
     public static void register() {
         AvengerSoulAnimationRuntime.register();
+        AvengerVisualBindings.registerServer();
+        ServerLifecycleEvents.SERVER_STARTED.register(AvengerSummonCatalog::rebuild);
         ServerTickEvents.END_SERVER_TICK.register(server -> {
             // Avenger maintenance has no behavior faster than five ticks. Keep the
             // player's own age phase so scheduled 20-tick work still lands correctly.
@@ -272,6 +275,16 @@ public final class AvengerReworkRuntime {
         nbt.putLong("SmoothDeathRechargeMillis", Math.max(0L, charges.remainingMillis()));
         nbt.put("SmoothDeathSoulCounts", soulCounts);
         nbt.put("SmoothDeathKillCounts", killCounts);
+        NbtList recipeSnapshot = new NbtList();
+        for (AvengerSummonRecipes.Recipe recipe : recipes) {
+            if (ledger.kills().getOrDefault(recipe.entityId(), 0) <= 0) continue;
+            NbtCompound value = new NbtCompound();
+            value.putString("entity", recipe.entityId());
+            value.putString("main", recipe.mainItemId());
+            if (recipe.offhandItemId() != null) value.putString("off", recipe.offhandItemId());
+            recipeSnapshot.add(value);
+        }
+        nbt.put("SmoothDeathRecipes", recipeSnapshot);
 
         List<Text> pages = new ArrayList<>();
         pages.add(deathListCover(charges, totalSouls, discovered, recipes.size()));
@@ -609,8 +622,9 @@ public final class AvengerReworkRuntime {
         Vec3d pos = requestedStaySpot == null ? player.getPos().add(flat.multiply(2.5D)) : requestedStaySpot;
         Entity entity;
         try {
-            entity = type.spawn(player.getServerWorld(), net.minecraft.util.math.BlockPos.ofFloored(pos), SpawnReason.MOB_SUMMONED);
-        } catch (RuntimeException spawnFailure) {
+            entity = type.create(player.getServerWorld());
+        } catch (RuntimeException | LinkageError spawnFailure) {
+            SmoothClasses.LOGGER.warn("Avenger constructor rejected {}", recipe.entityId(), spawnFailure);
             // Optional modded entities can reject invalid spawn contexts. No item,
             // soul, or charge has been consumed yet; don't crash the server.
             return null;
@@ -623,8 +637,16 @@ public final class AvengerReworkRuntime {
             living.discard();
             return null;
         }
-        living.refreshPositionAndAngles(pos.x, requestedStaySpot == null ? living.getY() : pos.y,
-                pos.z, player.getYaw(), 0F);
+        living.refreshPositionAndAngles(pos.x, pos.y, pos.z, player.getYaw(), 0F);
+        if (living instanceof MobEntity mob) {
+            try {
+                org.marj4n.smooth_classes.platform.PlatformSpawns.initialize(mob, player.getServerWorld(), SpawnReason.MOB_SUMMONED);
+            } catch (RuntimeException | LinkageError failure) {
+                SmoothClasses.LOGGER.warn("Avenger initialization rejected {}", recipe.entityId(), failure);
+                living.discard(); return null;
+            }
+        }
+        if (!AvengerSummonSafety.allowed(living)) { living.discard(); return null; }
         if (requestedStaySpot != null && !player.getServerWorld().isSpaceEmpty(living)) {
             // Do not charge the player for a mob stuck inside a throne/wall.
             living.discard();
@@ -635,9 +657,22 @@ public final class AvengerReworkRuntime {
         configureOwnership(player, living);
         protectSummonPersistence(living);
         hideBoundWitherBossBar(living);
+        if (living instanceof WitherEntity wither) wither.setInvulTimer(0);
         applySummonBuffs(player, living);
         // Match the owner's RPG level, not the area's naturally generated mob level.
         SmoothProgressionSummonLevels.synchronize(player, living);
+        // One captured soul summons one mob. Do not introduce a hidden boss or
+        // free recallable souls through randomized natural-spawn passengers.
+        for (Entity passenger : living.streamSelfAndPassengers().filter(e -> e != living).toList()) {
+            if (passenger instanceof LivingEntity rider) {
+                if (!AvengerSummonSafety.allowed(rider)) { living.discard(); rider.discard(); return null; }
+            }
+            passenger.stopRiding(); passenger.discard();
+        }
+        if (living.isRemoved() || !living.isAlive() || !player.getServerWorld().spawnEntity(living)) {
+            SmoothClasses.LOGGER.warn("Avenger world rejected {} removed={}", recipe.entityId(), living.isRemoved());
+            living.discard(); return null;
+        }
         return living;
     }
 
@@ -1274,6 +1309,7 @@ public final class AvengerReworkRuntime {
             if (tag.startsWith(OWNER_TAG_PREFIX)) summon.removeScoreboardTag(tag);
         }
         SUMMON_OWNER_CACHE.remove(summon);
+        refreshBoundVisualState(summon);
         // The Wither only becomes an ordinary boss AFTER all owner tags are gone.
         SmoothProgressionSummonLevels.restoreOnUnbind(summon);
         if (summon instanceof WitherEntity wither) {
@@ -1366,10 +1402,38 @@ public final class AvengerReworkRuntime {
         entity.addCommandTag(SUMMON_TAG);
         entity.addCommandTag(OWNER_TAG_PREFIX + owner);
         SUMMON_OWNER_CACHE.put(entity, owner);
+        refreshBoundVisualState(entity);
     }
 
     public static boolean isAvengerSummon(Entity entity) {
         return entity != null && summonOwnerUuid(entity) != null;
+    }
+
+    public static void discardHabitatMobUnlessBound(Object candidate) {
+        if (candidate instanceof Entity entity && entity.getWorld().isClient && entity.age < 20) return;
+        if (candidate instanceof Entity entity && !isAvengerSummon(entity)
+                && !(entity.getWorld().isClient && AvengerVisualBindings.clientBound(entity))) entity.discard();
+    }
+
+    public static boolean isBoundForHabitat(Object candidate) {
+        return candidate instanceof Entity entity && (isAvengerSummon(entity)
+                || entity.getWorld().isClient && (entity.age < 20 || AvengerVisualBindings.clientBound(entity)));
+    }
+
+    public static int boundHabitatLife(Object candidate, int naturalLife) {
+        return isBoundForHabitat(candidate) ? 512 : naturalLife;
+    }
+
+    public static void killHabitatMobUnlessBound(Object candidate) {
+        if (candidate instanceof Entity entity && !isBoundForHabitat(entity)) entity.kill();
+    }
+
+    public static void refreshBoundVisualState(Entity entity) {
+        AvengerVisualBindings.refreshTracking(entity);
+    }
+
+    public static boolean rejectNaturalCaveSpawn(net.minecraft.block.BlockState state, net.minecraft.block.Block block, Object candidate) {
+        return !(candidate instanceof Entity entity && isAvengerSummon(entity)) && state.isOf(block);
     }
 
     public static boolean isOwnedSummon(ServerPlayerEntity owner, Entity entity) {

@@ -39,6 +39,7 @@ public final class AvengerSoulAnimationClient {
     public static void register() {
         if (registered) return;
         registered = true;
+        AvengerVisualBindingsClient.register();
         ClientPlayNetworking.registerGlobalReceiver(SmoothClassesNetworking.AVENGER_SOUL_ANIMATION,
                 (client, handler, buf, responseSender) -> {
                     int entityId = buf.readVarInt();

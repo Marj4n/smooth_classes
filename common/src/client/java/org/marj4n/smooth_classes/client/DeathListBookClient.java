@@ -76,7 +76,15 @@ public final class DeathListBookClient {
         NbtCompound killData = nbt.getCompound("SmoothDeathKillCounts");
         for (String id : killData.getKeys()) KILLS.put(id, killData.getInt(id));
         List<AvengerSummonRecipes.Recipe> discoveredRecipes = new ArrayList<>();
-        for (AvengerSummonRecipes.Recipe recipe : AvengerSummonRecipes.allRecipes()) {
+        List<AvengerSummonRecipes.Recipe> syncedRecipes = new ArrayList<>();
+        if (nbt.contains("SmoothDeathRecipes")) {
+            var entries = nbt.getList("SmoothDeathRecipes", net.minecraft.nbt.NbtElement.COMPOUND_TYPE);
+            for (int i = 0; i < entries.size(); i++) {
+                var value = entries.getCompound(i);
+                syncedRecipes.add(new AvengerSummonRecipes.Recipe(value.getString("entity"), value.getString("main"), value.contains("off") ? value.getString("off") : null));
+            }
+        } else syncedRecipes.addAll(AvengerSummonRecipes.allRecipes());
+        for (AvengerSummonRecipes.Recipe recipe : syncedRecipes) {
             if (KILLS.getOrDefault(recipe.entityId(), 0) > 0) discoveredRecipes.add(recipe);
         }
         discoveredRecipes.sort(Comparator.comparing(recipe -> AvengerSummonRecipes.friendlyEntityName(recipe.entityId())));
