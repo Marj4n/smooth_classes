@@ -1,9 +1,13 @@
 {
   "required": true,
   "package": "org.marj4n.smooth_classes.mixin",
+  "plugin": "org.marj4n.smooth_classes.mixin.AvengerCompatibilityPlugin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "ServerPlayerEntityMixin",
+    "AvengerServerWorldCompatMixin",
+    "AvengerAechorHabitatMixin",
+    "AvengerWhirlwindHabitatMixin",
     "VampireBatActionPacketMixin",
     "VampireBatSpellInteractorMixin",
     "PlayerEntityMixin",

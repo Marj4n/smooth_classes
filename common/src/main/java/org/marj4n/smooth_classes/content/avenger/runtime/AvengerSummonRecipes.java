@@ -16,6 +16,7 @@ public final class AvengerSummonRecipes {
     private static final Map<String, Recipe> RECIPES = new LinkedHashMap<>();
     private static final Map<String, List<Recipe>> BY_MAIN_ITEM = new HashMap<>();
     private static final Map<String, String> FRIENDLY_NAMES = new HashMap<>();
+    private static final List<Recipe> BUILTINS;
 
     static {
         // Passive / utility mobs
@@ -103,6 +104,7 @@ public final class AvengerSummonRecipes {
         // Ender Dragon and modded boss-bar entities are intentionally excluded.
         r("wither", "nether_star", "soul_sand");
         AvengerModdedSummonRecipes.register();
+        BUILTINS = List.copyOf(RECIPES.values());
 
         for (Recipe recipe : RECIPES.values()) {
             BY_MAIN_ITEM.computeIfAbsent(recipe.mainItemId(), ignored -> new ArrayList<>()).add(recipe);
@@ -111,6 +113,16 @@ public final class AvengerSummonRecipes {
     }
 
     private AvengerSummonRecipes() {}
+
+    static List<Recipe> builtinRecipes() { return BUILTINS; }
+    static void installCatalog(List<Recipe> recipes) {
+        RECIPES.clear(); BY_MAIN_ITEM.clear();
+        for (Recipe recipe : recipes) {
+            RECIPES.put(recipe.entityId(), recipe);
+            BY_MAIN_ITEM.computeIfAbsent(recipe.mainItemId(), ignored -> new ArrayList<>()).add(recipe);
+        }
+        BY_MAIN_ITEM.replaceAll((ignored, values) -> List.copyOf(values));
+    }
 
     private static void r(String mob, String main) { r(mob, main, null); }
     private static void r(String mob, String main, String offhand) {
