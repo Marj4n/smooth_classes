@@ -33,8 +33,14 @@ public final class VampireFeedingRuntime {
         Entity raw = player.getWorld().getEntityById(targetId);
         if (!(raw instanceof LivingEntity living) || !valid(player, living)) return;
         ACTIVE.put(player.getUuid(), new FeedState(targetId));
-        player.getWorld().playSound(null, player.getBlockPos(), SmoothSounds.get("origin_vampire_bite"),
-                SoundCategory.PLAYERS, 0.8F, 0.95F + player.getRandom().nextFloat() * 0.1F);
+        player.getWorld()
+                .playSound(
+                        null,
+                        player.getBlockPos(),
+                        SmoothSounds.get("origin_vampire_bite"),
+                        SoundCategory.PLAYERS,
+                        0.8F,
+                        0.95F + player.getRandom().nextFloat() * 0.1F);
     }
 
     public static void tick(ServerPlayerEntity player) {
@@ -60,11 +66,20 @@ public final class VampireFeedingRuntime {
         if (feed.ticks % 20 != 0) return;
         if (!VampireBloodReserve.consume(living, player)) {
             ACTIVE.remove(player.getUuid());
-            player.sendMessage(net.minecraft.text.Text.literal("This creature needs time to replenish its blood."), true);
+            player.sendMessage(
+                    net.minecraft.text.Text.literal(
+                            "This creature needs time to replenish its blood."),
+                    true);
             return;
         }
-        player.getWorld().playSound(null, player.getBlockPos(), net.minecraft.sound.SoundEvents.ENTITY_GENERIC_DRINK,
-                SoundCategory.PLAYERS, 0.28F, 0.86F + player.getRandom().nextFloat() * 0.06F);
+        player.getWorld()
+                .playSound(
+                        null,
+                        player.getBlockPos(),
+                        net.minecraft.sound.SoundEvents.ENTITY_GENERIC_DRINK,
+                        SoundCategory.PLAYERS,
+                        0.28F,
+                        0.86F + player.getRandom().nextFloat() * 0.06F);
         int capacity = OriginRuntime.vampireBloodCapacity(player);
         int gain = VampireBloodDiet.gain(living);
 
@@ -76,16 +91,25 @@ public final class VampireFeedingRuntime {
     }
 
     private static boolean valid(ServerPlayerEntity player, LivingEntity living) {
-        if (!living.isAlive() || living == player || player.squaredDistanceTo(living) > 12.25D) return false;
+        if (!living.isAlive() || living == player || player.squaredDistanceTo(living) > 12.25D)
+            return false;
         return VampireBloodReserve.isFeedable(living);
     }
 
-    public static void cleanup(ServerPlayerEntity player) { ACTIVE.remove(player.getUuid()); }
-    public static void clear() { ACTIVE.clear(); }
+    public static void cleanup(ServerPlayerEntity player) {
+        ACTIVE.remove(player.getUuid());
+    }
+
+    public static void clear() {
+        ACTIVE.clear();
+    }
 
     private static final class FeedState {
         final int targetId;
         int ticks;
-        FeedState(int targetId) { this.targetId = targetId; }
+
+        FeedState(int targetId) {
+            this.targetId = targetId;
+        }
     }
 }

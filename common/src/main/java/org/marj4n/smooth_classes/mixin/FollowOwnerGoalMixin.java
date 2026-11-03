@@ -20,21 +20,23 @@ public abstract class FollowOwnerGoalMixin {
     // to guard a post; otherwise the AI takes over the navigation every tick.
     @Inject(method = "canStart", at = @At("HEAD"), cancellable = true)
     private void smoothClasses$guardStopsFollow(CallbackInfoReturnable<Boolean> cir) {
-        if (org.marj4n.smooth_classes.content.avenger.runtime.AvengerReworkRuntime.isStationary(tameable))
-            cir.setReturnValue(false);
+        if (org.marj4n.smooth_classes.content.avenger.runtime.AvengerReworkRuntime.isStationary(
+                tameable)) cir.setReturnValue(false);
     }
 
     @Inject(method = "shouldContinue", at = @At("HEAD"), cancellable = true)
     private void smoothClasses$guardStopsContinuing(CallbackInfoReturnable<Boolean> cir) {
-        if (org.marj4n.smooth_classes.content.avenger.runtime.AvengerReworkRuntime.isStationary(tameable))
-            cir.setReturnValue(false);
+        if (org.marj4n.smooth_classes.content.avenger.runtime.AvengerReworkRuntime.isStationary(
+                tameable)) cir.setReturnValue(false);
     }
 
     @Inject(method = "tryTeleport", at = @At("HEAD"), cancellable = true)
     private void smoothClasses$nearbyDreadglare(CallbackInfo ci) {
-        if (tameable != null && !tameable.getWorld().isClient()
-                && (tameable instanceof DreadglareEntity || tameable instanceof GreaterDreadglareEntity)
-                && tameable.getOwner() != null && tameable.squaredDistanceTo(tameable.getOwner()) < 576)
-            ci.cancel();
+        if (tameable != null
+                && !tameable.getWorld().isClient()
+                && (tameable instanceof DreadglareEntity
+                        || tameable instanceof GreaterDreadglareEntity)
+                && tameable.getOwner() != null
+                && tameable.squaredDistanceTo(tameable.getOwner()) < 576) ci.cancel();
     }
 }

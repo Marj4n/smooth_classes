@@ -17,10 +17,18 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(HeldItemFeatureRenderer.class)
 public abstract class OriginHeldItemFeatureMixin {
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
-    private void smooth_classes$hideOriginHeldItem(MatrixStack matrices, VertexConsumerProvider vertices,
-                                                    int light, LivingEntity entity, float limbAngle,
-                                                    float limbDistance, float tickDelta, float animationProgress,
-                                                    float headYaw, float headPitch, CallbackInfo ci) {
+    private void smooth_classes$hideOriginHeldItem(
+            MatrixStack matrices,
+            VertexConsumerProvider vertices,
+            int light,
+            LivingEntity entity,
+            float limbAngle,
+            float limbDistance,
+            float tickDelta,
+            float animationProgress,
+            float headYaw,
+            float headPitch,
+            CallbackInfo ci) {
         if (!(entity instanceof PlayerEntity player)) return;
         var state = OriginRuntime.state(player);
         if ((state.origin() == OriginType.SLIME && !state.hasFlag("slime.form.humanoid"))

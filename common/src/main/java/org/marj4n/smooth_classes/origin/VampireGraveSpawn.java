@@ -38,11 +38,12 @@ import net.minecraft.world.Heightmap;
 public final class VampireGraveSpawn {
     public static final String AWAKENED_FLAG = "vampire.grave_awakened";
     private static final String INTRO_SLEEPING = "vampire.grave_intro_sleeping";
-    private static final int ROOM_RADIUS = 2;   // 5x5 interior footprint
-    private static final int SHELL_RADIUS = 3;  // 7x7 including stone walls
+    private static final int ROOM_RADIUS = 2; // 5x5 interior footprint
+    private static final int SHELL_RADIUS = 3; // 7x7 including stone walls
     private static final int INTERIOR_HEIGHT = 4;
 
-    private static final Identifier CHURCH_TEMPLATE = Identifier.of("smooth_classes", "hauntedchurch_original");
+    private static final Identifier CHURCH_TEMPLATE =
+            Identifier.of("smooth_classes", "hauntedchurch_original");
     // One of the ORIGINAL grave plots (next to an existing ordinary R.I.P. sign).
     // Anchor is in schematic coordinates, no special surface gravestone is spawned.
     private static final int GRAVE_X = 22;
@@ -50,32 +51,50 @@ public final class VampireGraveSpawn {
     private static final int GRAVE_SURFACE_Y = 6;
     private static final int TERRAIN_BLEND_RADIUS = 10;
 
-    private VampireGraveSpawn() { }
+    private VampireGraveSpawn() {}
 
-    private static final java.util.Map<net.minecraft.server.MinecraftServer, java.util.LinkedHashSet<java.util.UUID>> PENDING = new java.util.WeakHashMap<>();
+    private static final java.util.Map<
+                    net.minecraft.server.MinecraftServer, java.util.LinkedHashSet<java.util.UUID>>
+            PENDING = new java.util.WeakHashMap<>();
 
     public static void register() {
-        net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents.END_SERVER_TICK.register(server -> {
-            if (server.getTicks() % 40 != 0) return;
-            var queue = PENDING.get(server);
-            if (queue == null || queue.isEmpty()) return;
-            java.util.UUID id = queue.iterator().next();
-            queue.remove(id);
-            ServerPlayerEntity player = server.getPlayerManager().getPlayer(id);
-            if (player != null && stateEligible(player)) awakenOnce(player, OriginRuntime.state(player));
-        });
-        net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents.SERVER_STOPPED.register(PENDING::remove);
-        net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
-            if (stateEligible(handler.player)) server.execute(() -> awakenOnce(handler.player, OriginRuntime.state(handler.player)));
-        });
-        net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents.AFTER_RESPAWN.register((oldPlayer, newPlayer, alive) -> {
-            if (stateEligible(newPlayer)) PENDING.computeIfAbsent(newPlayer.getServer(), ignored -> new java.util.LinkedHashSet<>()).add(newPlayer.getUuid());
-        });
+        net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents.END_SERVER_TICK.register(
+                server -> {
+                    if (server.getTicks() % 40 != 0) return;
+                    var queue = PENDING.get(server);
+                    if (queue == null || queue.isEmpty()) return;
+                    java.util.UUID id = queue.iterator().next();
+                    queue.remove(id);
+                    ServerPlayerEntity player = server.getPlayerManager().getPlayer(id);
+                    if (player != null && stateEligible(player))
+                        awakenOnce(player, OriginRuntime.state(player));
+                });
+        net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents.SERVER_STOPPED.register(
+                PENDING::remove);
+        net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents.JOIN.register(
+                (handler, sender, server) -> {
+                    if (stateEligible(handler.player))
+                        server.execute(
+                                () ->
+                                        awakenOnce(
+                                                handler.player,
+                                                OriginRuntime.state(handler.player)));
+                });
+        net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents.AFTER_RESPAWN.register(
+                (oldPlayer, newPlayer, alive) -> {
+                    if (stateEligible(newPlayer))
+                        PENDING.computeIfAbsent(
+                                        newPlayer.getServer(),
+                                        ignored -> new java.util.LinkedHashSet<>())
+                                .add(newPlayer.getUuid());
+                });
     }
 
     private static boolean stateEligible(ServerPlayerEntity player) {
         OriginState state = OriginRuntime.state(player);
-        return player.isAlive() && state.origin() == OriginType.VAMPIRE && !state.hasFlag(AWAKENED_FLAG);
+        return player.isAlive()
+                && state.origin() == OriginType.VAMPIRE
+                && !state.hasFlag(AWAKENED_FLAG);
     }
 
     public static boolean awakenOnce(ServerPlayerEntity player, OriginState state) {
@@ -88,8 +107,11 @@ public final class VampireGraveSpawn {
             return false;
         }
         if (!ensureChurch(world, cemetery)) {
-            player.sendMessage(Text.literal("No untouched site was found for the shared Vampire church. No terrain was replaced. An administrator can adopt an existing crypt with /smoothclasses origin grave adopt.")
-                    .formatted(Formatting.YELLOW), false);
+            player.sendMessage(
+                    Text.literal(
+                                    "No untouched site was found for the shared Vampire church. No terrain was replaced. An administrator can adopt an existing crypt with /smoothclasses origin grave adopt.")
+                            .formatted(Formatting.YELLOW),
+                    false);
             return false;
         }
 
@@ -101,20 +123,34 @@ public final class VampireGraveSpawn {
                     cemetery.block(plot); // Preserve player edits and naturally changed plots.
                     continue;
                 }
-                if (VampireGraveyardSites.emptyOfEntities(world, plot.center())) { selected = plot; break; }
+                if (VampireGraveyardSites.emptyOfEntities(world, plot.center())) {
+                    selected = plot;
+                    break;
+                }
             }
             if (selected == null && batch == 0) VampireGraveyardSites.reserveMore(world, cemetery);
         }
         if (selected == null) {
-            if (cemetery.nextCandidate() < VampireGraveyardLayout.MAX_CANDIDATES || cemetery.availableCount() > 0) {
-                var queue = PENDING.computeIfAbsent(player.getServer(), ignored -> new java.util.LinkedHashSet<>());
+            if (cemetery.nextCandidate() < VampireGraveyardLayout.MAX_CANDIDATES
+                    || cemetery.availableCount() > 0) {
+                var queue =
+                        PENDING.computeIfAbsent(
+                                player.getServer(), ignored -> new java.util.LinkedHashSet<>());
                 queue.add(player.getUuid());
                 if (state.longProgress("vampire.grave_wait_notice") == 0L) {
                     state.longProgress("vampire.grave_wait_notice", 1L);
-                    player.sendMessage(Text.literal("Preparing a safe grave around the shared church. Your awakening will begin when a plot is ready.").formatted(Formatting.GRAY), false);
+                    player.sendMessage(
+                            Text.literal(
+                                            "Preparing a safe grave around the shared church. Your awakening will begin when a plot is ready.")
+                                    .formatted(Formatting.GRAY),
+                            false);
                 }
             } else {
-                player.sendMessage(Text.literal("No untouched grave plots remain around the shared church. No existing graves or buildings were replaced.").formatted(Formatting.YELLOW), false);
+                player.sendMessage(
+                        Text.literal(
+                                        "No untouched grave plots remain around the shared church. No existing graves or buildings were replaced.")
+                                .formatted(Formatting.YELLOW),
+                        false);
             }
             return false;
         }
@@ -123,7 +159,8 @@ public final class VampireGraveSpawn {
         // server thread, including queued joins, so two players cannot claim a plot.
         cemetery.claim(player.getUuid(), selected);
         buildCrypt(world, selected.center());
-        if (!selected.original()) buildHeadstone(world, selected.center(), player.getGameProfile().getName());
+        if (!selected.original())
+            buildHeadstone(world, selected.center(), player.getGameProfile().getName());
         cemetery.finish(selected);
         state.flag(AWAKENED_FLAG);
         return beginIntro(player, state, selected.center());
@@ -137,7 +174,8 @@ public final class VampireGraveSpawn {
             adopt(world, cemetery, oldCenter);
             return true;
         }
-        StructureTemplate template = world.getStructureTemplateManager().getTemplateOrBlank(CHURCH_TEMPLATE);
+        StructureTemplate template =
+                world.getStructureTemplateManager().getTemplateOrBlank(CHURCH_TEMPLATE);
         if (template.getSize().getX() != 54 || template.getSize().getZ() != 54) return false;
         BlockPos origin = VampireGraveyardSites.findChurch(world, template.getSize());
         if (origin == null) return false;
@@ -149,11 +187,14 @@ public final class VampireGraveSpawn {
         return true;
     }
 
-    private static void adopt(ServerWorld world, VampireGraveyardState cemetery, BlockPos oldCenter) {
+    private static void adopt(
+            ServerWorld world, VampireGraveyardState cemetery, BlockPos oldCenter) {
         cemetery.establishChurch(oldCenter.add(-GRAVE_X, 0, -GRAVE_Z));
         // The old crypt may already belong to a legacy player. Never refill or
         // give its coffin/chest to a newcomer when UUID ownership is unknown.
-        var old = cemetery.reserve(oldCenter, VampireGraveyardSites.fingerprint(world, oldCenter), true);
+        var old =
+                cemetery.reserve(
+                        oldCenter, VampireGraveyardSites.fingerprint(world, oldCenter), true);
         cemetery.block(old);
     }
 
@@ -162,7 +203,8 @@ public final class VampireGraveSpawn {
         if (cemetery.hasChurch()) return false;
         ServerWorld world = player.getServer().getOverworld();
         if (player.getServerWorld() != world) return false;
-        BlockPos center = VampireGraveyardSites.findLegacyCrypt(world, player.getBlockPos(), 2, false);
+        BlockPos center =
+                VampireGraveyardSites.findLegacyCrypt(world, player.getBlockPos(), 2, false);
         if (center == null) return false;
         adopt(world, cemetery, center);
         return true;
@@ -170,18 +212,25 @@ public final class VampireGraveSpawn {
 
     public static String status(ServerPlayerEntity player) {
         VampireGraveyardState cemetery = VampireGraveyardState.get(player.getServer());
-        if (!cemetery.hasChurch()) return "No shared Vampire church has been registered in this world.";
-        return "Shared church (Overworld): " + cemetery.church().toShortString()
-                + ". Assigned graves: " + cemetery.claimedCount() + "; reserved free plots: " + cemetery.availableCount() + ".";
+        if (!cemetery.hasChurch())
+            return "No shared Vampire church has been registered in this world.";
+        return "Shared church (Overworld): "
+                + cemetery.church().toShortString()
+                + ". Assigned graves: "
+                + cemetery.claimedCount()
+                + "; reserved free plots: "
+                + cemetery.availableCount()
+                + ".";
     }
 
-    private static boolean beginIntro(ServerPlayerEntity player, OriginState state, BlockPos center) {
+    private static boolean beginIntro(
+            ServerPlayerEntity player, OriginState state, BlockPos center) {
         ServerWorld world = player.getServer().getOverworld();
         cancelIntro(player, state);
         state.longProgress("vampire.grave_wait_notice", 0L);
         BlockPos head = coffinHead(center);
-        player.teleport(world, head.getX() + 0.5D, head.getY() + 0.1D,
-                head.getZ() + 0.5D, 180.0F, 0.0F);
+        player.teleport(
+                world, head.getX() + 0.5D, head.getY() + 0.1D, head.getZ() + 0.5D, 180.0F, 0.0F);
         player.setVelocity(0.0D, 0.0D, 0.0D);
         player.fallDistance = 0.0F;
         player.sleep(head);
@@ -189,8 +238,12 @@ public final class VampireGraveSpawn {
         state.sunExposure(0);
         player.extinguish();
         player.networkHandler.sendPacket(new TitleFadeS2CPacket(12, 55, 18));
-        player.networkHandler.sendPacket(new TitleS2CPacket(Text.literal("THE FORGOTTEN CRYPT").formatted(Formatting.DARK_RED)));
-        player.networkHandler.sendPacket(new SubtitleS2CPacket(Text.literal("Beneath the earth, you awaken.").formatted(Formatting.GRAY)));
+        player.networkHandler.sendPacket(
+                new TitleS2CPacket(
+                        Text.literal("THE FORGOTTEN CRYPT").formatted(Formatting.DARK_RED)));
+        player.networkHandler.sendPacket(
+                new SubtitleS2CPacket(
+                        Text.literal("Beneath the earth, you awaken.").formatted(Formatting.GRAY)));
         player.playSound(SoundEvents.BLOCK_WOODEN_DOOR_CLOSE, 0.55F, 0.63F);
         return true;
     }
@@ -213,9 +266,11 @@ public final class VampireGraveSpawn {
         state.longProgress(INTRO_SLEEPING, 0L);
         state.sunExposure(0);
         player.extinguish();
-        player.sendMessage(Text.literal(
-                "The earth seals your grave. A shovel and journal rest beside the coffin.")
-                .formatted(Formatting.GRAY), false);
+        player.sendMessage(
+                Text.literal(
+                                "The earth seals your grave. A shovel and journal rest beside the coffin.")
+                        .formatted(Formatting.GRAY),
+                false);
     }
 
     public static void cancelIntro(ServerPlayerEntity player, OriginState state) {
@@ -232,7 +287,8 @@ public final class VampireGraveSpawn {
         if (plot == null) return awakenOnce(player, state);
         if (!plot.built()) return false;
         BlockState bed = player.getServer().getOverworld().getBlockState(coffinHead(plot.center()));
-        if (!(bed.getBlock() instanceof BedBlock) || bed.get(BedBlock.PART) != BedPart.HEAD) return false;
+        if (!(bed.getBlock() instanceof BedBlock) || bed.get(BedBlock.PART) != BedPart.HEAD)
+            return false;
         return beginIntro(player, state, plot.center());
     }
 
@@ -241,10 +297,20 @@ public final class VampireGraveSpawn {
     }
 
     /** Called once for the shared church, never for individual player joins. */
-    private static boolean placeChurch(ServerWorld world, BlockPos templateOrigin, StructureTemplate template) {
-        StructurePlacementData placement = new StructurePlacementData()
-                .setIgnoreEntities(true).setPlaceFluids(false).setUpdateNeighbors(false);
-        if (!template.place(world, templateOrigin, templateOrigin, placement, world.getRandom(), Block.NOTIFY_LISTENERS)) return false;
+    private static boolean placeChurch(
+            ServerWorld world, BlockPos templateOrigin, StructureTemplate template) {
+        StructurePlacementData placement =
+                new StructurePlacementData()
+                        .setIgnoreEntities(true)
+                        .setPlaceFluids(false)
+                        .setUpdateNeighbors(false);
+        if (!template.place(
+                world,
+                templateOrigin,
+                templateOrigin,
+                placement,
+                world.getRandom(),
+                Block.NOTIFY_LISTENERS)) return false;
         blendTerrain(world, templateOrigin, template.getSize().getX(), template.getSize().getZ());
         return true;
     }
@@ -263,12 +329,15 @@ public final class VampireGraveSpawn {
                     if (dy == 0) {
                         replacement = floorMaterial(dx, dz);
                     } else if (dy <= INTERIOR_HEIGHT) {
-                        replacement = interior ? Blocks.AIR.getDefaultState() : wallMaterial(dx, dy, dz);
+                        replacement =
+                                interior ? Blocks.AIR.getDefaultState() : wallMaterial(dx, dy, dz);
                     } else {
                         // Two layers of natural, shovel-diggable dirt, including
                         // the crypt cap. Never replace the nisan above at y >= 7.
-                        replacement = ((dx + dz + dy) & 3) == 0
-                                ? Blocks.ROOTED_DIRT.getDefaultState() : Blocks.DIRT.getDefaultState();
+                        replacement =
+                                ((dx + dz + dy) & 3) == 0
+                                        ? Blocks.ROOTED_DIRT.getDefaultState()
+                                        : Blocks.DIRT.getDefaultState();
                     }
                     world.setBlockState(pos, replacement, Block.NOTIFY_ALL);
                 }
@@ -276,31 +345,43 @@ public final class VampireGraveSpawn {
         }
 
         // Compact floor pedestals, wall bars and eerie low light unchanged.
-        for (int x : new int[]{-2, 2}) {
-            for (int z : new int[]{-2, 2}) {
-                world.setBlockState(center.add(x, 1, z),
-                        Blocks.CHISELED_POLISHED_BLACKSTONE.getDefaultState(), Block.NOTIFY_ALL);
-                world.setBlockState(center.add(x, 2, z),
-                        Blocks.POLISHED_BLACKSTONE_BRICKS.getDefaultState(), Block.NOTIFY_ALL);
+        for (int x : new int[] {-2, 2}) {
+            for (int z : new int[] {-2, 2}) {
+                world.setBlockState(
+                        center.add(x, 1, z),
+                        Blocks.CHISELED_POLISHED_BLACKSTONE.getDefaultState(),
+                        Block.NOTIFY_ALL);
+                world.setBlockState(
+                        center.add(x, 2, z),
+                        Blocks.POLISHED_BLACKSTONE_BRICKS.getDefaultState(),
+                        Block.NOTIFY_ALL);
             }
         }
-        for (int z : new int[]{-1, 1}) {
-            world.setBlockState(center.add(-3, 2, z), Blocks.IRON_BARS.getDefaultState(), Block.NOTIFY_ALL);
+        for (int z : new int[] {-1, 1}) {
+            world.setBlockState(
+                    center.add(-3, 2, z), Blocks.IRON_BARS.getDefaultState(), Block.NOTIFY_ALL);
         }
-        for (int[] lamp : new int[][]{{-2, -1}, {2, 1}}) {
+        for (int[] lamp : new int[][] {{-2, -1}, {2, 1}}) {
             BlockPos chain = center.add(lamp[0], 4, lamp[1]);
             world.setBlockState(chain, Blocks.CHAIN.getDefaultState(), Block.NOTIFY_ALL);
-            world.setBlockState(chain.down(), Blocks.SOUL_LANTERN.getDefaultState()
-                    .with(LanternBlock.HANGING, true), Block.NOTIFY_ALL);
+            world.setBlockState(
+                    chain.down(),
+                    Blocks.SOUL_LANTERN.getDefaultState().with(LanternBlock.HANGING, true),
+                    Block.NOTIFY_ALL);
         }
-        world.setBlockState(center.add(2, 3, -2), Blocks.COBWEB.getDefaultState(), Block.NOTIFY_ALL);
-        world.setBlockState(center.add(-2, 3, 2), Blocks.COBWEB.getDefaultState(), Block.NOTIFY_ALL);
+        world.setBlockState(
+                center.add(2, 3, -2), Blocks.COBWEB.getDefaultState(), Block.NOTIFY_ALL);
+        world.setBlockState(
+                center.add(-2, 3, 2), Blocks.COBWEB.getDefaultState(), Block.NOTIFY_ALL);
 
         for (int x = -2; x <= 0; x++) {
             for (int z = 0; z <= 1; z++) {
-                world.setBlockState(center.add(x, 0, z),
-                        ((x + z) & 1) == 0 ? Blocks.POLISHED_BLACKSTONE_BRICKS.getDefaultState()
-                                : Blocks.CHISELED_POLISHED_BLACKSTONE.getDefaultState(), Block.NOTIFY_ALL);
+                world.setBlockState(
+                        center.add(x, 0, z),
+                        ((x + z) & 1) == 0
+                                ? Blocks.POLISHED_BLACKSTONE_BRICKS.getDefaultState()
+                                : Blocks.CHISELED_POLISHED_BLACKSTONE.getDefaultState(),
+                        Block.NOTIFY_ALL);
             }
         }
 
@@ -316,8 +397,10 @@ public final class VampireGraveSpawn {
 
         // The starting journal and iron shovel are beside the coffin, as before.
         BlockPos chestPos = center.add(0, 1, 0);
-        world.setBlockState(chestPos, Blocks.CHEST.getDefaultState()
-                .with(ChestBlock.FACING, Direction.SOUTH), Block.NOTIFY_ALL);
+        world.setBlockState(
+                chestPos,
+                Blocks.CHEST.getDefaultState().with(ChestBlock.FACING, Direction.SOUTH),
+                Block.NOTIFY_ALL);
         BlockEntity tile = world.getBlockEntity(chestPos);
         if (tile instanceof ChestBlockEntity chest) {
             chest.setStack(0, loreBook());
@@ -327,19 +410,30 @@ public final class VampireGraveSpawn {
     }
 
     private static void buildHeadstone(ServerWorld world, BlockPos center, String playerName) {
-        world.setBlockState(center.add(0, 7, -1), Blocks.STONE_BRICKS.getDefaultState(), Block.NOTIFY_ALL);
+        world.setBlockState(
+                center.add(0, 7, -1), Blocks.STONE_BRICKS.getDefaultState(), Block.NOTIFY_ALL);
         for (int x = -1; x <= 1; x++)
-            world.setBlockState(center.add(x, 8, -1), Blocks.STONE_BRICKS.getDefaultState(), Block.NOTIFY_ALL);
+            world.setBlockState(
+                    center.add(x, 8, -1), Blocks.STONE_BRICKS.getDefaultState(), Block.NOTIFY_ALL);
         BlockPos signPos = center.add(0, 7, 0);
-        world.setBlockState(signPos, Blocks.OAK_SIGN.getDefaultState().with(net.minecraft.block.SignBlock.ROTATION, 0), Block.NOTIFY_ALL);
-        if (world.getBlockEntity(signPos) instanceof net.minecraft.block.entity.SignBlockEntity sign) {
-            sign.setText(sign.getFrontText().withMessage(0, Text.literal("R.I.P."))
-                    .withMessage(1, Text.literal(playerName)).withMessage(2, Text.literal("The Forgotten")), true);
+        world.setBlockState(
+                signPos,
+                Blocks.OAK_SIGN.getDefaultState().with(net.minecraft.block.SignBlock.ROTATION, 0),
+                Block.NOTIFY_ALL);
+        if (world.getBlockEntity(signPos)
+                instanceof net.minecraft.block.entity.SignBlockEntity sign) {
+            sign.setText(
+                    sign.getFrontText()
+                            .withMessage(0, Text.literal("R.I.P."))
+                            .withMessage(1, Text.literal(playerName))
+                            .withMessage(2, Text.literal("The Forgotten")),
+                    true);
             sign.markDirty();
         }
     }
 
-    private static void blendTerrain(ServerWorld world, BlockPos templateOrigin, int sizeX, int sizeZ) {
+    private static void blendTerrain(
+            ServerWorld world, BlockPos templateOrigin, int sizeX, int sizeZ) {
         int minX = templateOrigin.getX();
         int maxX = minX + sizeX - 1;
         int minZ = templateOrigin.getZ();
@@ -348,13 +442,16 @@ public final class VampireGraveSpawn {
         int seaLevel = world.getSeaLevel();
 
         for (int x = minX - TERRAIN_BLEND_RADIUS - 1; x <= maxX + TERRAIN_BLEND_RADIUS + 1; x++) {
-            for (int z = minZ - TERRAIN_BLEND_RADIUS - 1; z <= maxZ + TERRAIN_BLEND_RADIUS + 1; z++) {
+            for (int z = minZ - TERRAIN_BLEND_RADIUS - 1;
+                    z <= maxZ + TERRAIN_BLEND_RADIUS + 1;
+                    z++) {
                 int dx = x < minX ? (minX - x) : (x > maxX ? (x - maxX) : 0);
                 int dz = z < minZ ? (minZ - z) : (z > maxZ ? (z - maxZ) : 0);
                 if (dx == 0 && dz == 0) continue;
 
                 double noise = terrainNoise(x, z);
-                int localRadius = Math.max(5, TERRAIN_BLEND_RADIUS + ((columnHash(x, z) >>> 4) & 3) - 1);
+                int localRadius =
+                        Math.max(5, TERRAIN_BLEND_RADIUS + ((columnHash(x, z) >>> 4) & 3) - 1);
                 double distance = Math.sqrt(dx * dx + dz * dz) + noise * 0.85D;
                 if (distance > localRadius + 0.75D) continue;
 
@@ -368,7 +465,8 @@ public final class VampireGraveSpawn {
                 int targetSurfaceY = (int) Math.round(lerp(rimY, naturalTopY, t));
                 targetSurfaceY = Math.max(Math.min(targetSurfaceY, plateauY), naturalTopY);
 
-                int foundationStartY = Math.max(world.getBottomY() + 1, Math.min(oceanFloorY + 1, targetSurfaceY));
+                int foundationStartY =
+                        Math.max(world.getBottomY() + 1, Math.min(oceanFloorY + 1, targetSurfaceY));
                 if (foundationStartY > targetSurfaceY) continue;
 
                 BlockState topState = chooseBlendTop(world, x, z, targetSurfaceY, seaLevel);
@@ -376,13 +474,18 @@ public final class VampireGraveSpawn {
 
                 for (int y = foundationStartY; y <= targetSurfaceY; y++) {
                     BlockPos pos = new BlockPos(x, y, z);
-                    world.setBlockState(pos, y == targetSurfaceY ? topState : fillState, Block.NOTIFY_LISTENERS);
+                    world.setBlockState(
+                            pos,
+                            y == targetSurfaceY ? topState : fillState,
+                            Block.NOTIFY_LISTENERS);
                 }
 
                 // Prevent a visibly straight man-made face by adding a little toe of
                 // gravel/coarse dirt at the waterline / coastline on near-edge columns.
                 if (distance < 2.35D) {
-                    BlockPos toe = new BlockPos(x, Math.max(world.getBottomY() + 1, targetSurfaceY - 1), z);
+                    BlockPos toe =
+                            new BlockPos(
+                                    x, Math.max(world.getBottomY() + 1, targetSurfaceY - 1), z);
                     if (world.getBlockState(toe.down()).isAir()) {
                         world.setBlockState(toe.down(), fillState, Block.NOTIFY_LISTENERS);
                     }
@@ -396,7 +499,9 @@ public final class VampireGraveSpawn {
         if (sample.isOf(Blocks.RED_SAND) || sample.isOf(Blocks.RED_SANDSTONE)) {
             return Blocks.RED_SAND.getDefaultState();
         }
-        if (sample.isOf(Blocks.SAND) || sample.isOf(Blocks.SANDSTONE) || sample.isOf(Blocks.SMOOTH_SANDSTONE)) {
+        if (sample.isOf(Blocks.SAND)
+                || sample.isOf(Blocks.SANDSTONE)
+                || sample.isOf(Blocks.SMOOTH_SANDSTONE)) {
             return Blocks.SAND.getDefaultState();
         }
         if (sample.isOf(Blocks.GRAVEL)) {
@@ -406,7 +511,9 @@ public final class VampireGraveSpawn {
             return Blocks.MUD.getDefaultState();
         }
         if (y <= seaLevel - 2) {
-            return ((x + z) & 1) == 0 ? Blocks.GRAVEL.getDefaultState() : Blocks.SAND.getDefaultState();
+            return ((x + z) & 1) == 0
+                    ? Blocks.GRAVEL.getDefaultState()
+                    : Blocks.SAND.getDefaultState();
         }
         if (y <= seaLevel) {
             int hash = Math.floorMod(x * 17 + z * 31, 5);
@@ -417,19 +524,24 @@ public final class VampireGraveSpawn {
         return surfaceMaterial(x, z);
     }
 
-    private static BlockState chooseBlendFill(ServerWorld world, int x, int z, int y, int seaLevel) {
+    private static BlockState chooseBlendFill(
+            ServerWorld world, int x, int z, int y, int seaLevel) {
         BlockState sample = sampleSurface(world, x, z);
         if (sample.isOf(Blocks.RED_SAND) || sample.isOf(Blocks.RED_SANDSTONE)) {
             return Blocks.RED_SANDSTONE.getDefaultState();
         }
-        if (sample.isOf(Blocks.SAND) || sample.isOf(Blocks.SANDSTONE) || sample.isOf(Blocks.SMOOTH_SANDSTONE)) {
+        if (sample.isOf(Blocks.SAND)
+                || sample.isOf(Blocks.SANDSTONE)
+                || sample.isOf(Blocks.SMOOTH_SANDSTONE)) {
             return Blocks.SANDSTONE.getDefaultState();
         }
         if (sample.isOf(Blocks.GRAVEL)) {
             return Blocks.STONE.getDefaultState();
         }
         if (y <= seaLevel - 3) {
-            return ((x ^ z) & 1) == 0 ? Blocks.STONE.getDefaultState() : Blocks.GRAVEL.getDefaultState();
+            return ((x ^ z) & 1) == 0
+                    ? Blocks.STONE.getDefaultState()
+                    : Blocks.GRAVEL.getDefaultState();
         }
         int hash = Math.floorMod(x * 29 + z * 11 + y * 7, 9);
         if (hash < 2) return Blocks.STONE.getDefaultState();
@@ -501,28 +613,40 @@ public final class VampireGraveSpawn {
         nbt.putString("author", "The Last Gravedigger");
         nbt.putInt("generation", 0);
         NbtList pages = new NbtList();
-        addLorePage(pages, "If you are reading this, death has failed to keep you. "
-                + "You were human once. Neither royalty nor legend, only another soul laid to rest beneath this church.");
-        addLorePage(pages, "Your name has faded from our records. Decades passed, perhaps centuries. "
-                + "The living forgot you, as they eventually forget us all. Your grave became one among hundreds.");
-        addLorePage(pages, "Then the Holy Grail shattered. Something ancient seeped into the earth, "
-                + "carrying a hunger older than mankind. Most graves remained silent. Yours did not.");
-        addLorePage(pages, "The priests heard a heartbeat beneath your grave. They called it a curse, "
-                + "built a stone chamber around your coffin, and bound your restless heart to silence.");
-        addLorePage(pages, "I was ordered to leave you buried. Instead, I placed this journal "
-                + "and an iron shovel beside your coffin. If a human soul survives within you, it deserves a chance.");
-        addLorePage(pages, "The priests believed their bell and prayers could keep you asleep forever. "
-                + "I do not know why the broken Grail chose your grave. I only know that you were once one of us.");
-        addLorePage(pages, "Take the shovel. Break through the earth above you. "
-                + "The sun may reject you; blood may sustain you. But what you become now is yours to decide.\n\n"
-                + "- The Last Gravedigger");
+        addLorePage(
+                pages,
+                "If you are reading this, death has failed to keep you. "
+                        + "You were human once. Neither royalty nor legend, only another soul laid to rest beneath this church.");
+        addLorePage(
+                pages,
+                "Your name has faded from our records. Decades passed, perhaps centuries. "
+                        + "The living forgot you, as they eventually forget us all. Your grave became one among hundreds.");
+        addLorePage(
+                pages,
+                "Then the Holy Grail shattered. Something ancient seeped into the earth, "
+                        + "carrying a hunger older than mankind. Most graves remained silent. Yours did not.");
+        addLorePage(
+                pages,
+                "The priests heard a heartbeat beneath your grave. They called it a curse, "
+                        + "built a stone chamber around your coffin, and bound your restless heart to silence.");
+        addLorePage(
+                pages,
+                "I was ordered to leave you buried. Instead, I placed this journal "
+                        + "and an iron shovel beside your coffin. If a human soul survives within you, it deserves a chance.");
+        addLorePage(
+                pages,
+                "The priests believed their bell and prayers could keep you asleep forever. "
+                        + "I do not know why the broken Grail chose your grave. I only know that you were once one of us.");
+        addLorePage(
+                pages,
+                "Take the shovel. Break through the earth above you. "
+                        + "The sun may reject you; blood may sustain you. But what you become now is yours to decide.\n\n"
+                        + "- The Last Gravedigger");
         nbt.put("pages", pages);
         return book;
     }
 
     private static void addLorePage(NbtList pages, String text) {
-        pages.add(net.minecraft.nbt.NbtString.of(
-                Text.Serializer.toJson(Text.literal(text))));
+        pages.add(net.minecraft.nbt.NbtString.of(Text.Serializer.toJson(Text.literal(text))));
     }
-
 }

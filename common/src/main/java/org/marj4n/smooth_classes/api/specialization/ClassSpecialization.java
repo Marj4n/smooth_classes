@@ -8,5 +8,4 @@ public record ClassSpecialization(
         Identifier baseClassId,
         String name,
         String description,
-        int requiredLevel
-) {}
+        int requiredLevel) {}

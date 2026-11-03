@@ -15,15 +15,29 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 public abstract class VampireHungerHudMixin {
     @Redirect(
             method = "renderStatusBars",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawTexture(Lnet/minecraft/util/Identifier;IIIIII)V"),
-            require = 0
-    )
-    private void smooth_classes$hideVampireFoodIcons(DrawContext context, Identifier texture,
-                                                       int x, int y, int u, int v, int width, int height) {
+            at =
+                    @At(
+                            value = "INVOKE",
+                            target =
+                                    "Lnet/minecraft/client/gui/DrawContext;drawTexture(Lnet/minecraft/util/Identifier;IIIIII)V"),
+            require = 0)
+    private void smooth_classes$hideVampireFoodIcons(
+            DrawContext context,
+            Identifier texture,
+            int x,
+            int y,
+            int u,
+            int v,
+            int width,
+            int height) {
         MinecraftClient client = MinecraftClient.getInstance();
         OriginType origin = OriginType.byId(OriginClientState.originId).orElse(null);
         // In 1.20.1 vanilla food icons live on v=27 of textures/gui/icons.png.
-        if (client.player != null && origin == OriginType.VAMPIRE && v == 27 && width == 9 && height == 9) {
+        if (client.player != null
+                && origin == OriginType.VAMPIRE
+                && v == 27
+                && width == 9
+                && height == 9) {
             return;
         }
         context.drawTexture(texture, x, y, u, v, width, height);

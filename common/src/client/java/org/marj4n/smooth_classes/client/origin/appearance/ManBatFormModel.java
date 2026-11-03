@@ -51,7 +51,8 @@ public final class ManBatFormModel<T extends PlayerEntity> extends EntityModel<T
 
     public static TexturedModelData createData() {
         ModelData data = new ModelData();
-        data.getRoot().addChild("native_figura_mesh", ModelPartBuilder.create(), ModelTransform.NONE);
+        data.getRoot()
+                .addChild("native_figura_mesh", ModelPartBuilder.create(), ModelTransform.NONE);
         return TexturedModelData.of(data, 64, 64);
     }
 
@@ -60,15 +61,20 @@ public final class ManBatFormModel<T extends PlayerEntity> extends EntityModel<T
      * mixin removes the arms Better Combat needs to render its slash. */
     public static boolean useVanillaFirstPersonCombat(AbstractClientPlayerEntity player) {
         MinecraftClient mc = MinecraftClient.getInstance();
-        return player != null && player == mc.player
+        return player != null
+                && player == mc.player
                 && mc.options.getPerspective().isFirstPerson()
-                && VsbCombatAnimationBridge.isFirstPersonAnimationActive(
-                    player, mc.getTickDelta());
+                && VsbCombatAnimationBridge.isFirstPersonAnimationActive(player, mc.getTickDelta());
     }
 
-    public void prepare(T player, PlayerEntityModel<?> vanillaPose,
-                        float limbAngle, float limbDistance, float animationProgress,
-                        float headYaw, float headPitch) {
+    public void prepare(
+            T player,
+            PlayerEntityModel<?> vanillaPose,
+            float limbAngle,
+            float limbDistance,
+            float animationProgress,
+            float headYaw,
+            float headPitch) {
         UUID id = player.getUuid();
         WeakReference<PlayerEntity> previousEntity = TRACKED_ENTITIES.get(id);
         if (previousEntity == null || previousEntity.get() != player) {
@@ -142,9 +148,17 @@ public final class ManBatFormModel<T extends PlayerEntity> extends EntityModel<T
             beat *= .14F;
         }
         float dive = airborne && vertical < -0.06D ? .32F : 0F;
-        pose = new VsbFiguraAvatarRenderer.Pose(player.isSneaking(), animation, time,
-                rigArms.rotations().isEmpty() ? player.handSwingProgress : 0F,
-                rotations, offsets, open, beat, dive);
+        pose =
+                new VsbFiguraAvatarRenderer.Pose(
+                        player.isSneaking(),
+                        animation,
+                        time,
+                        rigArms.rotations().isEmpty() ? player.handSwingProgress : 0F,
+                        rotations,
+                        offsets,
+                        open,
+                        beat,
+                        dive);
         EQUIPMENT_POSES.put(id, pose);
     }
 
@@ -154,9 +168,10 @@ public final class ManBatFormModel<T extends PlayerEntity> extends EntityModel<T
      * R9 attached the armor to the *opposite* source bone, so rotations and
      * positions disagreed with the visible VSB limbs during walking/combat.
      */
-    public static void alignArmor(PlayerEntity player, EquipmentSlot slot, BipedEntityModel<?> model) {
-        VsbFiguraAvatarRenderer.Pose pose = EQUIPMENT_POSES.getOrDefault(
-                player.getUuid(), VsbFiguraAvatarRenderer.Pose.rest());
+    public static void alignArmor(
+            PlayerEntity player, EquipmentSlot slot, BipedEntityModel<?> model) {
+        VsbFiguraAvatarRenderer.Pose pose =
+                EQUIPMENT_POSES.getOrDefault(player.getUuid(), VsbFiguraAvatarRenderer.Pose.rest());
         setPart(model.head, "head", 0F, pose.crouching ? 2F : -2F, 0F, pose);
         setPart(model.hat, "head", 0F, pose.crouching ? 2F : -2F, 0F, pose);
         setPart(model.body, "body", 0F, -2F, 2F, pose);
@@ -169,8 +184,12 @@ public final class ManBatFormModel<T extends PlayerEntity> extends EntityModel<T
         alignLegArmor(model.leftLeg, "RightLeg", 1.9F, 8F, pose);
     }
 
-    private static void alignLegArmor(ModelPart part, String bone, float restX,
-                                      float restY, VsbFiguraAvatarRenderer.Pose pose) {
+    private static void alignLegArmor(
+            ModelPart part,
+            String bone,
+            float restX,
+            float restY,
+            VsbFiguraAvatarRenderer.Pose pose) {
         VsbFiguraAvatarRenderer.Vec3 delta = pose.vanillaArmOffsets.get(bone);
         float x = restX;
         float y = restY;
@@ -183,8 +202,13 @@ public final class ManBatFormModel<T extends PlayerEntity> extends EntityModel<T
         setPart(part, bone, x, y, z, pose);
     }
 
-    private static void setPart(ModelPart part, String bone, float x, float y, float z,
-                                VsbFiguraAvatarRenderer.Pose pose) {
+    private static void setPart(
+            ModelPart part,
+            String bone,
+            float x,
+            float y,
+            float z,
+            VsbFiguraAvatarRenderer.Pose pose) {
         VsbFiguraAvatarRenderer.Vec3 source = VsbFiguraAvatarRenderer.boneRotation(bone, pose);
         // Apply the same translated origin as the VSB geometry. This is
         // essential for Better Combat poses that move the shoulder itself.
@@ -207,15 +231,27 @@ public final class ManBatFormModel<T extends PlayerEntity> extends EntityModel<T
     }
 
     @Override
-    public void setAngles(T entity, float limbAngle, float limbDistance, float animationProgress,
-                          float headYaw, float headPitch) {
+    public void setAngles(
+            T entity,
+            float limbAngle,
+            float limbDistance,
+            float animationProgress,
+            float headYaw,
+            float headPitch) {
         prepare(entity, null, limbAngle, limbDistance, animationProgress, headYaw, headPitch);
     }
 
     @Override
-    public void render(MatrixStack matrices, VertexConsumer vertices, int light, int overlay,
-                       float red, float green, float blue, float alpha) {
-        VsbFiguraAvatarRenderer.render(matrices, vertices, light, overlay,
-                red, green, blue, alpha, pose);
+    public void render(
+            MatrixStack matrices,
+            VertexConsumer vertices,
+            int light,
+            int overlay,
+            float red,
+            float green,
+            float blue,
+            float alpha) {
+        VsbFiguraAvatarRenderer.render(
+                matrices, vertices, light, overlay, red, green, blue, alpha, pose);
     }
 }

@@ -15,9 +15,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 /** Cancel any in-flight spell before a Bat can finish a charged/channelled cast. */
 @Mixin(SpellCastInteractor.class)
 public abstract class VampireBatSpellInteractorMixin {
-    @Shadow(remap = false) @Final private PlayerEntity player;
-    @Shadow(remap = false) public abstract SpellCast.Process process();
-    @Shadow(remap = false) public abstract void requestClear();
+    @Shadow(remap = false)
+    @Final
+    private PlayerEntity player;
+
+    @Shadow(remap = false)
+    public abstract SpellCast.Process process();
+
+    @Shadow(remap = false)
+    public abstract void requestClear();
 
     @Inject(method = "tick", at = @At("HEAD"), cancellable = true, remap = false)
     private void smooth_classes$clearBatCast(CallbackInfo ci) {
@@ -27,14 +33,16 @@ public abstract class VampireBatSpellInteractorMixin {
     }
 
     @Inject(method = "requestCast", at = @At("HEAD"), cancellable = true, remap = false)
-    private void smooth_classes$noBatCastRequest(Identifier spellId, SpellCast.TargetSnapshot targets, CallbackInfo ci) {
+    private void smooth_classes$noBatCastRequest(
+            Identifier spellId, SpellCast.TargetSnapshot targets, CallbackInfo ci) {
         if (!VampireBatAbilityLock.isLocked(player)) return;
         if (process() != null) requestClear();
         ci.cancel();
     }
 
     @Inject(method = "requestEnd", at = @At("HEAD"), cancellable = true, remap = false)
-    private void smooth_classes$noBatRelease(Identifier spellId, SpellCast.TargetSnapshot targets, CallbackInfo ci) {
+    private void smooth_classes$noBatRelease(
+            Identifier spellId, SpellCast.TargetSnapshot targets, CallbackInfo ci) {
         if (!VampireBatAbilityLock.isLocked(player)) return;
         if (process() != null) requestClear();
         ci.cancel();

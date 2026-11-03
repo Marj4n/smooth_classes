@@ -7,7 +7,10 @@ import net.minecraft.server.network.ServerPlayerEntity;
 /** Shared application point for class-specific effects. */
 public final class ClassEffectRuntime {
     private ClassEffectRuntime() {}
-    public static void apply(ServerPlayerEntity player, StatusEffect effect, int ticks, int amplifier) {
-        player.addStatusEffect(new StatusEffectInstance(effect, ticks, amplifier, false, true, true));
+
+    public static void apply(
+            ServerPlayerEntity player, StatusEffect effect, int ticks, int amplifier) {
+        player.addStatusEffect(
+                new StatusEffectInstance(effect, ticks, amplifier, false, true, true));
     }
 }

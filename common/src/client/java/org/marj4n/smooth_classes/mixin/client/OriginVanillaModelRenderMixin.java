@@ -18,9 +18,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(AnimalModel.class)
 public abstract class OriginVanillaModelRenderMixin {
     @Inject(method = "render", at = @At("HEAD"), cancellable = true)
-    private void smooth_classes$preventVanillaBodyUnderReplacement(MatrixStack matrices,
-            VertexConsumer vertices, int light, int overlay, float red, float green,
-            float blue, float alpha, CallbackInfo ci) {
+    private void smooth_classes$preventVanillaBodyUnderReplacement(
+            MatrixStack matrices,
+            VertexConsumer vertices,
+            int light,
+            int overlay,
+            float red,
+            float green,
+            float blue,
+            float alpha,
+            CallbackInfo ci) {
         if ((Object) this instanceof PlayerEntityModel<?>
                 && OriginVanillaBodyGuard.shouldSuppressVanillaPlayerGeometry()) {
             ci.cancel();

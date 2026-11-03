@@ -43,7 +43,8 @@ import java.util.UUID;
 /** Server-owned Rider mount and signature runtime. Puffish Skills remains authoritative for unlocks. */
 public final class RiderRuntime {
     private static final Identifier SUMMON_COOLDOWN = SmoothClasses.id("rider_mount_summon");
-    private static final UUID MOUNT_ATTACK_MODIFIER = UUID.fromString("7a62ea1a-c747-4ea1-b56f-0d3859de01ad");
+    private static final UUID MOUNT_ATTACK_MODIFIER =
+            UUID.fromString("7a62ea1a-c747-4ea1-b56f-0d3859de01ad");
 
     public static int summonCooldownTicks(ServerPlayerEntity player) {
         return Math.max(1, SmoothBalance.Rider.summonCooldown * 20);
@@ -74,22 +75,28 @@ public final class RiderRuntime {
     private RiderRuntime() {}
 
     public static void register() {
-        ServerTickEvents.END_SERVER_TICK.register(server -> {
-            if (MOUNTS.isEmpty()) return;
-            for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) tickPlayer(player);
-        });
-        ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> cleanup(handler.player.getUuid(), true));
-        ServerLifecycleEvents.SERVER_STOPPING.register(server -> {
-            for (UUID id : new ArrayList<>(MOUNTS.keySet())) cleanup(id, true);
-        });
-        ServerLifecycleEvents.SERVER_STOPPED.register(server -> {
-            MOUNTS.clear();
-            CHARGE_PROTECTED.clear();
-        });
+        ServerTickEvents.END_SERVER_TICK.register(
+                server -> {
+                    if (MOUNTS.isEmpty()) return;
+                    for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList())
+                        tickPlayer(player);
+                });
+        ServerPlayConnectionEvents.DISCONNECT.register(
+                (handler, server) -> cleanup(handler.player.getUuid(), true));
+        ServerLifecycleEvents.SERVER_STOPPING.register(
+                server -> {
+                    for (UUID id : new ArrayList<>(MOUNTS.keySet())) cleanup(id, true);
+                });
+        ServerLifecycleEvents.SERVER_STOPPED.register(
+                server -> {
+                    MOUNTS.clear();
+                    CHARGE_PROTECTED.clear();
+                });
     }
 
     public static ExecutionResult summonMount(ServerPlayerEntity player) {
-        if (!AbilityRuntime.isClass(player, RiderClass.ID)) return ExecutionResult.failure("You are not a Rider.");
+        if (!AbilityRuntime.isClass(player, RiderClass.ID))
+            return ExecutionResult.failure("You are not a Rider.");
 
         ServerWorld world = player.getServerWorld();
         MountSession old = MOUNTS.get(player.getUuid());
@@ -107,21 +114,34 @@ public final class RiderRuntime {
         }
 
         long remaining = AbilityCooldowns.remainingTicks(player, SUMMON_COOLDOWN);
-        if (remaining > 0) return ExecutionResult.failure("Mount summon cooldown " + String.format(java.util.Locale.ROOT, "%.1f", remaining / 20D) + "s");
+        if (remaining > 0)
+            return ExecutionResult.failure(
+                    "Mount summon cooldown "
+                            + String.format(java.util.Locale.ROOT, "%.1f", remaining / 20D)
+                            + "s");
 
         LivingEntity mount = createBestMount(player, world);
         if (mount == null) return ExecutionResult.failure("Could not create Rider mount.");
 
         Vec3d spawn = summonPosition(player);
         mount.refreshPositionAndAngles(spawn.x, player.getY(), spawn.z, player.getYaw(), 0F);
-        if (!world.isSpaceEmpty(mount)) mount.refreshPositionAndAngles(player.getX(), player.getY(), player.getZ(), player.getYaw(), 0F);
-        if (!world.spawnEntity(mount)) return ExecutionResult.failure("Could not spawn Rider mount.");
+        if (!world.isSpaceEmpty(mount))
+            mount.refreshPositionAndAngles(
+                    player.getX(), player.getY(), player.getZ(), player.getYaw(), 0F);
+        if (!world.spawnEntity(mount))
+            return ExecutionResult.failure("Could not spawn Rider mount.");
 
         applyMountStats(player, mount);
         MountSession session = new MountSession(player.getUuid(), mount);
         MOUNTS.put(player.getUuid(), session);
         puff(world, mount.getPos(), false);
-        world.playSound(null, mount.getBlockPos(), SoundEvents.ENTITY_HORSE_AMBIENT, SoundCategory.PLAYERS, .65F, 1.15F);
+        world.playSound(
+                null,
+                mount.getBlockPos(),
+                SoundEvents.ENTITY_HORSE_AMBIENT,
+                SoundCategory.PLAYERS,
+                .65F,
+                1.15F);
         AbilityCooldowns.start(player, SUMMON_COOLDOWN, SmoothBalance.Rider.summonCooldown * 20);
         return ExecutionResult.success(1, describeTier(mountTier(mount)) + " summoned");
     }
@@ -129,13 +149,18 @@ public final class RiderRuntime {
     public static ExecutionResult executeCharge(ServerPlayerEntity player) {
         MountSession session = mountedSession(player);
         if (session == null) return ExecutionResult.failure("Mount your Rider steed first.");
-        if (session.chargeTicks > 0) return ExecutionResult.failure("Rider's Charge is already active.");
+        if (session.chargeTicks > 0)
+            return ExecutionResult.failure("Rider's Charge is already active.");
 
         Vec3d initialDirection = player.getRotationVec(1F);
-        session.chargeDir = initialDirection.lengthSquared() < 1.0E-6D
-                ? horizontal(initialDirection)
-                : initialDirection.normalize();
-        session.chargeTicks = has(player, RiderContent.CHARGE_REACH) ? SmoothBalance.Rider.chargeLongTicks : SmoothBalance.Rider.chargeTicks;
+        session.chargeDir =
+                initialDirection.lengthSquared() < 1.0E-6D
+                        ? horizontal(initialDirection)
+                        : initialDirection.normalize();
+        session.chargeTicks =
+                has(player, RiderContent.CHARGE_REACH)
+                        ? SmoothBalance.Rider.chargeLongTicks
+                        : SmoothBalance.Rider.chargeTicks;
         session.phase = has(player, RiderContent.CHARGE_PHASE);
         session.impact = has(player, RiderContent.CHARGE_IMPACT);
         session.chargeHits.clear();
@@ -147,7 +172,14 @@ public final class RiderRuntime {
             CHARGE_PROTECTED.add(session.mount.getUuid());
         }
         wind(player.getServerWorld(), session.mount.getPos());
-        player.getServerWorld().playSound(null, session.mount.getBlockPos(), SoundEvents.ITEM_TRIDENT_RIPTIDE_2, SoundCategory.PLAYERS, .8F, 1.0F);
+        player.getServerWorld()
+                .playSound(
+                        null,
+                        session.mount.getBlockPos(),
+                        SoundEvents.ITEM_TRIDENT_RIPTIDE_2,
+                        SoundCategory.PLAYERS,
+                        .8F,
+                        1.0F);
         return ExecutionResult.success(1, "Rider's Charge");
     }
 
@@ -164,7 +196,10 @@ public final class RiderRuntime {
     public static ExecutionResult executeBlazingHooves(ServerPlayerEntity player) {
         MountSession session = mountedSession(player);
         if (session == null) return ExecutionResult.failure("Mount your Rider steed first.");
-        session.fireTicks = has(player, RiderContent.FIRE_DURATION) ? SmoothBalance.Rider.fireLongDuration : SmoothBalance.Rider.fireDuration;
+        session.fireTicks =
+                has(player, RiderContent.FIRE_DURATION)
+                        ? SmoothBalance.Rider.fireLongDuration
+                        : SmoothBalance.Rider.fireDuration;
         session.fireDamage = has(player, RiderContent.FIRE_DAMAGE);
         session.fireRadius = has(player, RiderContent.FIRE_RADIUS);
         return ExecutionResult.success(1, "Blazing Hooves");
@@ -177,7 +212,9 @@ public final class RiderRuntime {
     private static void tickPlayer(ServerPlayerEntity player) {
         MountSession s = MOUNTS.get(player.getUuid());
         if (s == null) return;
-        if (!valid(s.mount) || !player.isAlive() || player.getWorld() != s.mount.getWorld()
+        if (!valid(s.mount)
+                || !player.isAlive()
+                || player.getWorld() != s.mount.getWorld()
                 || !AbilityRuntime.isClass(player, RiderClass.ID)) {
             cleanup(player.getUuid(), true);
             return;
@@ -204,13 +241,16 @@ public final class RiderRuntime {
 
         if (player.age % 20 == 0) {
             // Auto-upgrade idle/not-yet-mounted mounts when the player just unlocked an evolution.
-            if (!riding && desiredMountTier(player) > mountTier(s.mount) && evolveMount(player, s, player.getServerWorld())) {
+            if (!riding
+                    && desiredMountTier(player) > mountTier(s.mount)
+                    && evolveMount(player, s, player.getServerWorld())) {
                 s = MOUNTS.get(player.getUuid());
                 if (s == null) return;
             }
             applyMountStats(player, s.mount);
             int recovery = rank(player, RiderContent.RECOVERY_I, RiderContent.RECOVERY_II);
-            if (recovery > 0 && s.mount.getHealth() < s.mount.getMaxHealth()) s.mount.heal(recovery);
+            if (recovery > 0 && s.mount.getHealth() < s.mount.getMaxHealth())
+                s.mount.heal(recovery);
         }
 
         if (!riding) return;
@@ -236,7 +276,8 @@ public final class RiderRuntime {
             if (blended.lengthSquared() > 1.0E-6D) s.chargeDir = blended.normalize();
         }
 
-        double speed = s.impact ? SmoothBalance.Rider.chargeImpactSpeed : SmoothBalance.Rider.chargeSpeed;
+        double speed =
+                s.impact ? SmoothBalance.Rider.chargeImpactSpeed : SmoothBalance.Rider.chargeSpeed;
         Vec3d step = s.chargeDir.multiply(speed);
         Box next = mount.getBoundingBox().offset(step);
 
@@ -255,10 +296,20 @@ public final class RiderRuntime {
         }
         wind(world, mount.getPos());
 
-        float damage = (float) Math.max(4D, player.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE));
-        damage *= s.impact ? SmoothBalance.Rider.chargeImpactDamageMultiplier : SmoothBalance.Rider.chargeDamageMultiplier;
-        for (LivingEntity target : world.getEntitiesByClass(LivingEntity.class, mount.getBoundingBox().expand(1.15D),
-                e -> e.isAlive() && e != player && e != mount && !ally(player, e))) {
+        float damage =
+                (float)
+                        Math.max(
+                                4D,
+                                player.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE));
+        damage *=
+                s.impact
+                        ? SmoothBalance.Rider.chargeImpactDamageMultiplier
+                        : SmoothBalance.Rider.chargeDamageMultiplier;
+        for (LivingEntity target :
+                world.getEntitiesByClass(
+                        LivingEntity.class,
+                        mount.getBoundingBox().expand(1.15D),
+                        e -> e.isAlive() && e != player && e != mount && !ally(player, e))) {
             if (s.chargeHits.add(target.getUuid())) {
                 target.damage(player.getDamageSources().playerAttack(player), damage);
                 Vec3d push = s.chargeDir.multiply(s.impact ? 1.35D : .75D);
@@ -268,16 +319,14 @@ public final class RiderRuntime {
         if (s.chargeTicks <= 0) endCharge(s);
     }
 
-    private static boolean phaseThrough(ServerWorld world, LivingEntity mount, Vec3d dir, double speed) {
+    private static boolean phaseThrough(
+            ServerWorld world, LivingEntity mount, Vec3d dir, double speed) {
         for (int blocks = 1; blocks <= SmoothBalance.Rider.maxPhaseBlocks; blocks++) {
             Vec3d delta = dir.multiply(blocks + .75D);
             Box exit = mount.getBoundingBox().offset(delta);
             if (world.isSpaceEmpty(mount, exit)) {
                 mount.setPosition(
-                        mount.getX() + delta.x,
-                        mount.getY() + delta.y,
-                        mount.getZ() + delta.z
-                );
+                        mount.getX() + delta.x, mount.getY() + delta.y, mount.getZ() + delta.z);
                 mount.setVelocity(dir.x * speed, dir.y * speed, dir.z * speed);
                 mount.velocityModified = true;
                 mount.fallDistance = 0.0F;
@@ -304,43 +353,92 @@ public final class RiderRuntime {
         ServerWorld world = player.getServerWorld();
         double radius = SmoothBalance.Rider.auraRadius;
         Box area = player.getBoundingBox().expand(radius);
-        for (LivingEntity e : world.getEntitiesByClass(LivingEntity.class, area,
-                e -> e.isAlive() && e.squaredDistanceTo(player) <= radius * radius)) {
+        for (LivingEntity e :
+                world.getEntitiesByClass(
+                        LivingEntity.class,
+                        area,
+                        e -> e.isAlive() && e.squaredDistanceTo(player) <= radius * radius)) {
             if (ally(player, e)) {
-                e.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 30, s.auraResistance, false, false, true));
-                e.addStatusEffect(new StatusEffectInstance(StatusEffects.STRENGTH, 30, s.auraStrength, false, false, true));
+                e.addStatusEffect(
+                        new StatusEffectInstance(
+                                StatusEffects.RESISTANCE,
+                                30,
+                                s.auraResistance,
+                                false,
+                                false,
+                                true));
+                e.addStatusEffect(
+                        new StatusEffectInstance(
+                                StatusEffects.STRENGTH, 30, s.auraStrength, false, false, true));
             } else {
-                if (e.isUndead()) e.damage(player.getDamageSources().playerAttack(player), s.auraHarm == 0 ? 6F : 12F);
+                if (e.isUndead())
+                    e.damage(
+                            player.getDamageSources().playerAttack(player),
+                            s.auraHarm == 0 ? 6F : 12F);
                 else StatusEffects.INSTANT_DAMAGE.applyUpdateEffect(e, s.auraHarm);
             }
         }
-        world.spawnParticles(ParticleTypes.ENCHANT, player.getX(), player.getBodyY(.45D), player.getZ(), 22,
-                radius * .45D, .5D, radius * .45D, .015D);
+        world.spawnParticles(
+                ParticleTypes.ENCHANT,
+                player.getX(),
+                player.getBodyY(.45D),
+                player.getZ(),
+                22,
+                radius * .45D,
+                .5D,
+                radius * .45D,
+                .015D);
     }
 
     private static void tickFire(ServerPlayerEntity player, MountSession s) {
         s.fireTicks--;
         LivingEntity mount = s.mount;
         ServerWorld world = player.getServerWorld();
-        player.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 30, 0, false, false, false));
-        mount.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 30, 0, false, false, false));
+        player.addStatusEffect(
+                new StatusEffectInstance(
+                        StatusEffects.FIRE_RESISTANCE, 30, 0, false, false, false));
+        mount.addStatusEffect(
+                new StatusEffectInstance(
+                        StatusEffects.FIRE_RESISTANCE, 30, 0, false, false, false));
         player.extinguish();
         mount.extinguish();
         if ((player.age & 1) == 0) {
-            world.spawnParticles(ParticleTypes.FLAME, mount.getX(), mount.getY() + .12D, mount.getZ(), 7, .5D, .08D, .5D, .01D);
-            world.spawnParticles(ParticleTypes.SMALL_FLAME, mount.getX(), mount.getY() + .08D, mount.getZ(), 4, .4D, .04D, .4D, .005D);
+            world.spawnParticles(
+                    ParticleTypes.FLAME,
+                    mount.getX(),
+                    mount.getY() + .12D,
+                    mount.getZ(),
+                    7,
+                    .5D,
+                    .08D,
+                    .5D,
+                    .01D);
+            world.spawnParticles(
+                    ParticleTypes.SMALL_FLAME,
+                    mount.getX(),
+                    mount.getY() + .08D,
+                    mount.getZ(),
+                    4,
+                    .4D,
+                    .04D,
+                    .4D,
+                    .005D);
         }
         if (player.age % 4 != 0) return;
         double radius = s.fireRadius ? 1.85D : 1.25D;
         float damage = SpellPowerRuntime.strongest(player, s.fireDamage ? 0.95D : 0.70D);
-        for (LivingEntity target : world.getEntitiesByClass(LivingEntity.class, mount.getBoundingBox().expand(radius),
-                e -> e.isAlive() && e != player && e != mount && !ally(player, e))) {
+        for (LivingEntity target :
+                world.getEntitiesByClass(
+                        LivingEntity.class,
+                        mount.getBoundingBox().expand(radius),
+                        e -> e.isAlive() && e != player && e != mount && !ally(player, e))) {
             target.damage(player.getDamageSources().playerAttack(player), Math.max(1F, damage));
             target.setOnFireFor(s.fireDamage ? 5 : 3);
         }
     }
 
-    private static boolean evolveMount(ServerPlayerEntity player, MountSession session, ServerWorld world) {
+    private static boolean evolveMount(
+            ServerPlayerEntity player, MountSession session, ServerWorld world) {
         if (session == null || !valid(session.mount)) return false;
 
         LivingEntity oldMount = session.mount;
@@ -351,7 +449,8 @@ public final class RiderRuntime {
         if (newMount == null || mountTier(newMount) <= mountTier(oldMount)) return false;
 
         boolean riding = player.getVehicle() == oldMount;
-        float healthRatio = oldMount.getMaxHealth() > 0F ? oldMount.getHealth() / oldMount.getMaxHealth() : 1F;
+        float healthRatio =
+                oldMount.getMaxHealth() > 0F ? oldMount.getHealth() / oldMount.getMaxHealth() : 1F;
         Vec3d pos = oldMount.getPos();
         float yaw = oldMount.getYaw();
         float pitch = oldMount.getPitch();
@@ -372,10 +471,19 @@ public final class RiderRuntime {
         if (!world.spawnEntity(newMount)) return false;
 
         applyMountStats(player, newMount);
-        newMount.setHealth(Math.max(1F, Math.min(newMount.getMaxHealth(), newMount.getMaxHealth() * healthRatio)));
+        newMount.setHealth(
+                Math.max(
+                        1F,
+                        Math.min(newMount.getMaxHealth(), newMount.getMaxHealth() * healthRatio)));
         if (riding) player.startRiding(newMount, true);
         puff(world, newMount.getPos(), false);
-        world.playSound(null, newMount.getBlockPos(), SoundEvents.ENTITY_HORSE_AMBIENT, SoundCategory.PLAYERS, .75F, 1.1F);
+        world.playSound(
+                null,
+                newMount.getBlockPos(),
+                SoundEvents.ENTITY_HORSE_AMBIENT,
+                SoundCategory.PLAYERS,
+                .75F,
+                1.1F);
 
         session.mount = newMount;
         session.chargeTicks = 0;
@@ -427,8 +535,14 @@ public final class RiderRuntime {
     }
 
     private static void applyMountStats(ServerPlayerEntity player, LivingEntity mount) {
-        int health = rank(player, RiderContent.HEALTH_I, RiderContent.HEALTH_II, RiderContent.HEALTH_III);
-        int speed = rank(player, RiderContent.SPEED_I, RiderContent.SPEED_II, RiderContent.SPEED_III);
+        int health =
+                rank(
+                        player,
+                        RiderContent.HEALTH_I,
+                        RiderContent.HEALTH_II,
+                        RiderContent.HEALTH_III);
+        int speed =
+                rank(player, RiderContent.SPEED_I, RiderContent.SPEED_II, RiderContent.SPEED_III);
         int armor = rank(player, RiderContent.ARMOR_I, RiderContent.ARMOR_II);
         int jump = rank(player, RiderContent.JUMP_I, RiderContent.JUMP_II);
 
@@ -450,14 +564,18 @@ public final class RiderRuntime {
      * the Dread Steed and Hippogryph evolutions.
      */
     private static void fluidTraversal(ServerPlayerEntity player, LivingEntity mount) {
-        boolean lavaStride = has(player, RiderContent.DREAD_STEED)
-                || has(player, RiderContent.HIPPOGRYPH);
+        boolean lavaStride =
+                has(player, RiderContent.DREAD_STEED) || has(player, RiderContent.HIPPOGRYPH);
 
         if (lavaStride) {
             // A 30-tick protection effect only needs a 10-tick refresh.
             if (player.age % 10 == 0) {
-                player.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 30, 0, false, false, false));
-                mount.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 30, 0, false, false, false));
+                player.addStatusEffect(
+                        new StatusEffectInstance(
+                                StatusEffects.FIRE_RESISTANCE, 30, 0, false, false, false));
+                mount.addStatusEffect(
+                        new StatusEffectInstance(
+                                StatusEffects.FIRE_RESISTANCE, 30, 0, false, false, false));
             }
             if (player.isOnFire()) player.extinguish();
             if (mount.isOnFire()) mount.extinguish();
@@ -465,32 +583,39 @@ public final class RiderRuntime {
     }
 
     private static void applyMountedDamageBuff(ServerPlayerEntity player) {
-        EntityAttributeInstance attack = player.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE);
+        EntityAttributeInstance attack =
+                player.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE);
         if (attack == null || attack.getModifier(MOUNT_ATTACK_MODIFIER) != null) return;
-        attack.addTemporaryModifier(new net.minecraft.entity.attribute.EntityAttributeModifier(
-                MOUNT_ATTACK_MODIFIER,
-                "Smooth Classes Rider Mounted Damage",
-                1.0D,
-                net.minecraft.entity.attribute.EntityAttributeModifier.Operation.MULTIPLY_TOTAL
-        ));
+        attack.addTemporaryModifier(
+                new net.minecraft.entity.attribute.EntityAttributeModifier(
+                        MOUNT_ATTACK_MODIFIER,
+                        "Smooth Classes Rider Mounted Damage",
+                        1.0D,
+                        net.minecraft.entity.attribute.EntityAttributeModifier.Operation
+                                .MULTIPLY_TOTAL));
     }
 
     private static void removeMountedDamageBuff(ServerPlayerEntity player) {
-        EntityAttributeInstance attack = player.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE);
+        EntityAttributeInstance attack =
+                player.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE);
         if (attack != null && attack.getModifier(MOUNT_ATTACK_MODIFIER) != null) {
             attack.removeModifier(MOUNT_ATTACK_MODIFIER);
         }
     }
 
     private static boolean ally(ServerPlayerEntity owner, LivingEntity e) {
-        if (e == owner || e == MOUNTS.getOrDefault(owner.getUuid(), MountSession.EMPTY).mount) return true;
+        if (e == owner || e == MOUNTS.getOrDefault(owner.getUuid(), MountSession.EMPTY).mount)
+            return true;
         if (owner.isTeammate(e)) return true;
-        if (e instanceof TameableEntity tame && owner.getUuid().equals(tame.getOwnerUuid())) return true;
-        if (e instanceof AbstractHorseEntity horse && owner.getUuid().equals(horse.getOwnerUuid())) return true;
+        if (e instanceof TameableEntity tame && owner.getUuid().equals(tame.getOwnerUuid()))
+            return true;
+        if (e instanceof AbstractHorseEntity horse && owner.getUuid().equals(horse.getOwnerUuid()))
+            return true;
         if (e instanceof Ownable ownable) {
             Entity master = ownable.getOwner();
             if (master != null && owner.getUuid().equals(master.getUuid())) return true;
-            if (master instanceof TameableEntity tame && owner.getUuid().equals(tame.getOwnerUuid())) return true;
+            if (master instanceof TameableEntity tame
+                    && owner.getUuid().equals(tame.getOwnerUuid())) return true;
         }
         return false;
     }
@@ -505,11 +630,13 @@ public final class RiderRuntime {
         return mount != null && mount.isAlive() && !mount.isRemoved();
     }
 
-    private static boolean has(ServerPlayerEntity p, org.marj4n.smooth_classes.api.talent.Talent t) {
+    private static boolean has(
+            ServerPlayerEntity p, org.marj4n.smooth_classes.api.talent.Talent t) {
         return AbilityRuntime.hasTalent(p, t.id());
     }
 
-    private static int rank(ServerPlayerEntity p, org.marj4n.smooth_classes.api.talent.Talent... nodes) {
+    private static int rank(
+            ServerPlayerEntity p, org.marj4n.smooth_classes.api.talent.Talent... nodes) {
         int r = 0;
         for (var node : nodes) if (has(p, node)) r++;
         return r;
@@ -556,24 +683,40 @@ public final class RiderRuntime {
         }
         if (player != null) removeMountedDamageBuff(player);
         if (valid(s.mount)) {
-            if (particles && s.mount.getWorld() instanceof ServerWorld world) puff(world, s.mount.getPos(), true);
+            if (particles && s.mount.getWorld() instanceof ServerWorld world)
+                puff(world, s.mount.getPos(), true);
             s.mount.discard();
         }
     }
 
-
     private static void puff(ServerWorld world, Vec3d pos, boolean vanish) {
-        world.spawnParticles(ParticleTypes.POOF, pos.x, pos.y + .7D, pos.z,
-                vanish ? 24 : 18, .65D, .45D, .65D, .055D);
-        world.spawnParticles(ParticleTypes.CLOUD, pos.x, pos.y + .35D, pos.z,
-                vanish ? 10 : 7, .5D, .25D, .5D, .025D);
+        world.spawnParticles(
+                ParticleTypes.POOF,
+                pos.x,
+                pos.y + .7D,
+                pos.z,
+                vanish ? 24 : 18,
+                .65D,
+                .45D,
+                .65D,
+                .055D);
+        world.spawnParticles(
+                ParticleTypes.CLOUD,
+                pos.x,
+                pos.y + .35D,
+                pos.z,
+                vanish ? 10 : 7,
+                .5D,
+                .25D,
+                .5D,
+                .025D);
     }
 
     private static void wind(ServerWorld world, Vec3d pos) {
-        world.spawnParticles(ParticleTypes.CLOUD, pos.x, pos.y + .55D, pos.z,
-                5, .35D, .3D, .35D, .06D);
-        world.spawnParticles(ParticleTypes.SWEEP_ATTACK, pos.x, pos.y + .8D, pos.z,
-                1, .15D, .15D, .15D, 0D);
+        world.spawnParticles(
+                ParticleTypes.CLOUD, pos.x, pos.y + .55D, pos.z, 5, .35D, .3D, .35D, .06D);
+        world.spawnParticles(
+                ParticleTypes.SWEEP_ATTACK, pos.x, pos.y + .8D, pos.z, 1, .15D, .15D, .15D, 0D);
     }
 
     private static final class MountSession {

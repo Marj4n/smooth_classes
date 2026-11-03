@@ -37,31 +37,64 @@ public final class AssassinSpecialRuntime {
         if (active(player)) return ExecutionResult.failure("Vanish is already active.");
         long remaining = remainingTicks(player);
         if (remaining > 0L)
-            return ExecutionResult.failure("Vanish can be used again in " + seconds(remaining) + "s.");
+            return ExecutionResult.failure(
+                    "Vanish can be used again in " + seconds(remaining) + "s.");
 
         long now = player.getServer().getTicks();
         ACTIVE_UNTIL.put(player.getUuid(), now + ACTIVE_TICKS);
         AbilityCooldowns.start(player, ID, COOLDOWN_TICKS);
-        player.addStatusEffect(new StatusEffectInstance(SmoothEffects.STEALTH, ACTIVE_TICKS, 0, false, false, true));
+        player.addStatusEffect(
+                new StatusEffectInstance(
+                        SmoothEffects.STEALTH, ACTIVE_TICKS, 0, false, false, true));
 
-        for (MobEntity mob : player.getServerWorld().getEntitiesByClass(MobEntity.class,
-                player.getBoundingBox().expand(18D), mob -> mob.getTarget() == player)) {
+        for (MobEntity mob :
+                player.getServerWorld()
+                        .getEntitiesByClass(
+                                MobEntity.class,
+                                player.getBoundingBox().expand(18D),
+                                mob -> mob.getTarget() == player)) {
             mob.setTarget(null);
         }
-        player.getServerWorld().spawnParticles(ParticleTypes.CAMPFIRE_COSY_SMOKE,
-                player.getX(), player.getBodyY(0.45D), player.getZ(), 22, 0.7D, 0.6D, 0.7D, 0.04D);
-        player.getServerWorld().spawnParticles(ParticleTypes.POOF,
-                player.getX(), player.getBodyY(0.45D), player.getZ(), 30, 0.65D, 0.7D, 0.65D, 0.08D);
-        player.getServerWorld().playSound(null, player.getBlockPos(), SoundEvents.ENTITY_ENDERMAN_TELEPORT,
-                SoundCategory.PLAYERS, 0.35F, 1.65F);
+        player.getServerWorld()
+                .spawnParticles(
+                        ParticleTypes.CAMPFIRE_COSY_SMOKE,
+                        player.getX(),
+                        player.getBodyY(0.45D),
+                        player.getZ(),
+                        22,
+                        0.7D,
+                        0.6D,
+                        0.7D,
+                        0.04D);
+        player.getServerWorld()
+                .spawnParticles(
+                        ParticleTypes.POOF,
+                        player.getX(),
+                        player.getBodyY(0.45D),
+                        player.getZ(),
+                        30,
+                        0.65D,
+                        0.7D,
+                        0.65D,
+                        0.08D);
+        player.getServerWorld()
+                .playSound(
+                        null,
+                        player.getBlockPos(),
+                        SoundEvents.ENTITY_ENDERMAN_TELEPORT,
+                        SoundCategory.PLAYERS,
+                        0.35F,
+                        1.65F);
         return ExecutionResult.success(1, "Vanish broke nearby aggro and granted Stealth for 6s.");
     }
 
     public static void tick(ServerPlayerEntity player) {
         Long until = ACTIVE_UNTIL.get(player.getUuid());
         if (until == null) return;
-        if (!AbilityRuntime.isClass(player, AssassinClass.ID) || !player.isAlive()
-                || player.getServer().getTicks() >= until || !player.hasStatusEffect(SmoothEffects.STEALTH)) {
+        if (!AbilityRuntime.isClass(player, AssassinClass.ID)
+                || !player.isAlive()
+                || player.getServer().getTicks() >= until
+                || !player.hasStatusEffect(SmoothEffects.STEALTH)) {
             ACTIVE_UNTIL.remove(player.getUuid());
         }
     }
@@ -70,11 +103,24 @@ public final class AssassinSpecialRuntime {
         return ACTIVE_UNTIL.getOrDefault(player.getUuid(), 0L) > player.getServer().getTicks()
                 && player.hasStatusEffect(SmoothEffects.STEALTH);
     }
+
     public static long remainingTicks(ServerPlayerEntity player) {
         return AbilityCooldowns.remainingTicks(player, ID);
     }
-    public static int cooldownTicks() { return COOLDOWN_TICKS; }
-    public static void cleanup(ServerPlayerEntity player) { ACTIVE_UNTIL.remove(player.getUuid()); }
-    public static void clear() { ACTIVE_UNTIL.clear(); }
-    private static int seconds(long ticks) { return (int) Math.ceil(Math.max(0L, ticks) / 20.0D); }
+
+    public static int cooldownTicks() {
+        return COOLDOWN_TICKS;
+    }
+
+    public static void cleanup(ServerPlayerEntity player) {
+        ACTIVE_UNTIL.remove(player.getUuid());
+    }
+
+    public static void clear() {
+        ACTIVE_UNTIL.clear();
+    }
+
+    private static int seconds(long ticks) {
+        return (int) Math.ceil(Math.max(0L, ticks) / 20.0D);
+    }
 }

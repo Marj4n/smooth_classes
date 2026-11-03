@@ -27,7 +27,8 @@ public abstract class VampireCameraMixin {
         if (!(focusedEntity instanceof PlayerEntity player)) return;
         var state = OriginRuntime.state(player);
         if (state.origin() == OriginType.VAMPIRE && state.hasFlag("vampire.form.bat")) {
-            // Read the exact same eye-height constant used by Bat Form geometry; no separate camera magic number.
+            // Read the exact same eye-height constant used by Bat Form geometry; no separate camera
+            // magic number.
             cameraY = org.marj4n.smooth_classes.origin.OriginBodyGeometry.BAT_EYE_HEIGHT;
             lastCameraY = org.marj4n.smooth_classes.origin.OriginBodyGeometry.BAT_EYE_HEIGHT;
         }

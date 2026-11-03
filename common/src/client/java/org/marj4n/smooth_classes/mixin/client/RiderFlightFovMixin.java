@@ -31,8 +31,7 @@ public abstract class RiderFlightFovMixin {
             Camera camera,
             float tickDelta,
             boolean changingFov,
-            CallbackInfoReturnable<Double> cir
-    ) {
+            CallbackInfoReturnable<Double> cir) {
         // GameRenderer also asks for FOV in auxiliary render paths. Only touch
         // the actual changing world FOV so held-item rendering does not pulse.
         if (!changingFov) {
@@ -40,21 +39,18 @@ public abstract class RiderFlightFovMixin {
         }
 
         MinecraftClient client = MinecraftClient.getInstance();
-        boolean boosting = client.player != null
-                && client.player.getVehicle() instanceof RiderHippogryphEntity hippo
-                && hippo.isRiderFlying()
-                && hippo.isRiderBoosting();
+        boolean boosting =
+                client.player != null
+                        && client.player.getVehicle() instanceof RiderHippogryphEntity hippo
+                        && hippo.isRiderFlying()
+                        && hippo.isRiderBoosting();
 
-        double target = boosting
-                ? BOOST_FOV_MULTIPLIER
-                : NORMAL_FOV_MULTIPLIER;
+        double target = boosting ? BOOST_FOV_MULTIPLIER : NORMAL_FOV_MULTIPLIER;
 
-        double smoothing = target > smooth_classes$riderBoostFov
-                ? BOOST_IN_SMOOTHING
-                : BOOST_OUT_SMOOTHING;
+        double smoothing =
+                target > smooth_classes$riderBoostFov ? BOOST_IN_SMOOTHING : BOOST_OUT_SMOOTHING;
 
-        smooth_classes$riderBoostFov +=
-                (target - smooth_classes$riderBoostFov) * smoothing;
+        smooth_classes$riderBoostFov += (target - smooth_classes$riderBoostFov) * smoothing;
 
         if (Math.abs(smooth_classes$riderBoostFov - target) < 0.00025D) {
             smooth_classes$riderBoostFov = target;

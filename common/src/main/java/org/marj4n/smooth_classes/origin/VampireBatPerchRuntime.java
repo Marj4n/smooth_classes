@@ -25,7 +25,8 @@ public final class VampireBatPerchRuntime {
     private VampireBatPerchRuntime() {}
 
     public static void tick(ServerPlayerEntity player, OriginState state) {
-        if (state.origin() != OriginType.VAMPIRE || !state.hasFlag("vampire.form.bat")
+        if (state.origin() != OriginType.VAMPIRE
+                || !state.hasFlag("vampire.form.bat")
                 || player.isSpectator()) {
             stop(player, state, false);
             return;
@@ -38,7 +39,8 @@ public final class VampireBatPerchRuntime {
             double anchorX = support.getX() + 0.5D;
             double anchorY = support.getY() - OriginBodyGeometry.BAT_HEIGHT - 0.025D;
             double anchorZ = support.getZ() + 0.5D;
-            if (player.isSneaking() || !validCeiling(player, support)
+            if (player.isSneaking()
+                    || !validCeiling(player, support)
                     || player.squaredDistanceTo(anchorX, anchorY, anchorZ) > 100.0D) {
                 stop(player, state, true);
                 return;
@@ -53,15 +55,23 @@ public final class VampireBatPerchRuntime {
             double requiredX = anchorX;
             double requiredZ = anchorZ;
             if (player.squaredDistanceTo(requiredX, requiredY, requiredZ) > 0.025D) {
-                player.teleport(player.getServerWorld(), requiredX, requiredY, requiredZ,
-                        player.getYaw(), player.getPitch());
+                player.teleport(
+                        player.getServerWorld(),
+                        requiredX,
+                        requiredY,
+                        requiredZ,
+                        player.getYaw(),
+                        player.getPitch());
             }
             return;
         }
 
         // Pressing sneak is also how the player detaches, so never perch during a descent.
-        if (!player.getAbilities().flying || player.isOnGround() || player.isSneaking()
-                || player.isTouchingWater() || player.hasVehicle()
+        if (!player.getAbilities().flying
+                || player.isOnGround()
+                || player.isSneaking()
+                || player.isTouchingWater()
+                || player.hasVehicle()
                 || player.getVelocity().lengthSquared() > 0.0025D) {
             state.longProgress(STILL_TICKS, 0L);
             return;
@@ -89,9 +99,13 @@ public final class VampireBatPerchRuntime {
         player.setNoGravity(true);
         player.setVelocity(Vec3d.ZERO);
         player.fallDistance = 0.0F;
-        player.teleport(player.getServerWorld(), support.getX() + 0.5D,
+        player.teleport(
+                player.getServerWorld(),
+                support.getX() + 0.5D,
                 support.getY() - OriginBodyGeometry.BAT_HEIGHT - 0.025D,
-                support.getZ() + 0.5D, player.getYaw(), player.getPitch());
+                support.getZ() + 0.5D,
+                player.getYaw(),
+                player.getPitch());
         SmoothClassesNetworking.sendOriginState(player);
     }
 
@@ -110,8 +124,10 @@ public final class VampireBatPerchRuntime {
     }
 
     private static BlockPos anchor(OriginState state) {
-        return new BlockPos((int) (state.longProgress(ANCHOR_X) - 30_000_000L),
-                (int) (state.longProgress(ANCHOR_Y) - 4096L), (int) (state.longProgress(ANCHOR_Z) - 30_000_000L));
+        return new BlockPos(
+                (int) (state.longProgress(ANCHOR_X) - 30_000_000L),
+                (int) (state.longProgress(ANCHOR_Y) - 4096L),
+                (int) (state.longProgress(ANCHOR_Z) - 30_000_000L));
     }
 
     private static BlockPos ceilingAbove(ServerPlayerEntity player) {

@@ -18,34 +18,42 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(SpellProjectile.class)
 public abstract class SpellProjectileMixin extends ProjectileEntity {
-    protected SpellProjectileMixin(EntityType<? extends ProjectileEntity> type, World world) { super(type, world); }
-
-    private SpellProjectile smooth$self(){ return (SpellProjectile)(Object)this; }
-    private Identifier smooth$spellId(){
-        SpellProjectile p=smooth$self();
-        if(p.getSpellEntry()==null)return null;
-        return p.getSpellEntry().getKey().map(k->k.getValue()).orElse(null);
+    protected SpellProjectileMixin(EntityType<? extends ProjectileEntity> type, World world) {
+        super(type, world);
     }
 
-    @Inject(method="tick",at=@At("HEAD"))
-    private void smooth$tick(CallbackInfo ci){
-        if(getWorld().isClient || !(getOwner() instanceof ServerPlayerEntity owner))return;
-        CombatEventRuntime.onSpellProjectileTick(owner,this);
-        ProjectileEntityRuntime.tickSpellProjectile(owner,smooth$self(),smooth$spellId());
+    private SpellProjectile smooth$self() {
+        return (SpellProjectile) (Object) this;
     }
 
-    @Inject(method="onEntityHit",at=@At("HEAD"))
-    private void smooth$entityHit(EntityHitResult hit,CallbackInfo ci){
-        if(getWorld().isClient || !(getOwner() instanceof ServerPlayerEntity owner)
-                || !(hit.getEntity() instanceof LivingEntity target))return;
-        if (smooth$spellId()==null || !smooth$spellId().getPath().equals("righteous_hammer_projectile"))
-            CombatEventRuntime.onSpellProjectileHit(owner,this,target);
-        ProjectileEntityRuntime.onSpellProjectileHit(owner,smooth$self(),smooth$spellId(),target);
+    private Identifier smooth$spellId() {
+        SpellProjectile p = smooth$self();
+        if (p.getSpellEntry() == null) return null;
+        return p.getSpellEntry().getKey().map(k -> k.getValue()).orElse(null);
     }
 
-    @Inject(method="onBlockHit",at=@At("HEAD"),cancellable=true)
-    private void smooth$blockHit(BlockHitResult hit,CallbackInfo ci){
-        Identifier id=smooth$spellId();
-        if(!getWorld().isClient && ProjectileEntityRuntime.ignoreBlockHit(id))ci.cancel();
+    @Inject(method = "tick", at = @At("HEAD"))
+    private void smooth$tick(CallbackInfo ci) {
+        if (getWorld().isClient || !(getOwner() instanceof ServerPlayerEntity owner)) return;
+        CombatEventRuntime.onSpellProjectileTick(owner, this);
+        ProjectileEntityRuntime.tickSpellProjectile(owner, smooth$self(), smooth$spellId());
+    }
+
+    @Inject(method = "onEntityHit", at = @At("HEAD"))
+    private void smooth$entityHit(EntityHitResult hit, CallbackInfo ci) {
+        if (getWorld().isClient
+                || !(getOwner() instanceof ServerPlayerEntity owner)
+                || !(hit.getEntity() instanceof LivingEntity target)) return;
+        if (smooth$spellId() == null
+                || !smooth$spellId().getPath().equals("righteous_hammer_projectile"))
+            CombatEventRuntime.onSpellProjectileHit(owner, this, target);
+        ProjectileEntityRuntime.onSpellProjectileHit(
+                owner, smooth$self(), smooth$spellId(), target);
+    }
+
+    @Inject(method = "onBlockHit", at = @At("HEAD"), cancellable = true)
+    private void smooth$blockHit(BlockHitResult hit, CallbackInfo ci) {
+        Identifier id = smooth$spellId();
+        if (!getWorld().isClient && ProjectileEntityRuntime.ignoreBlockHit(id)) ci.cancel();
     }
 }

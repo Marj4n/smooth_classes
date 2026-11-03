@@ -55,8 +55,10 @@ public final class BerserkerSpecialRuntime {
     private static final Map<UUID, Integer> CHARGE_STARTED_AT = new HashMap<>();
     private static final Map<UUID, Long> CANCEL_COOLDOWN_UNTIL = new HashMap<>();
     private static final Set<UUID> CHARGING = new HashSet<>();
+
     /** Short-lived side preference keeps obstacle avoidance from jittering left/right every tick. */
     private static final Map<UUID, Integer> AVOID_SIDE = new HashMap<>();
+
     private static final Map<UUID, Integer> AVOID_UNTIL = new HashMap<>();
 
     private static final DustParticleEffect SMALL_RED =
@@ -113,13 +115,17 @@ public final class BerserkerSpecialRuntime {
             return ExecutionResult.failure("Only Berserker can use Crimson Revenant.");
         }
         if (isActive(player)) return ExecutionResult.failure("Crimson Revenant is already active.");
-        if (isCharging(player)) return ExecutionResult.failure("Crimson Revenant is already charging.");
-        if (!isHeld(player)) return ExecutionResult.failure("Hold H until Crimson Revenant finishes charging.");
+        if (isCharging(player))
+            return ExecutionResult.failure("Crimson Revenant is already charging.");
+        if (!isHeld(player))
+            return ExecutionResult.failure("Hold H until Crimson Revenant finishes charging.");
 
         long remaining = cooldownRemainingTicks(player);
         if (remaining > 0) {
-            return ExecutionResult.failure("Crimson Revenant can be used again in "
-                    + (int) Math.ceil(remaining / 20.0D) + "s.");
+            return ExecutionResult.failure(
+                    "Crimson Revenant can be used again in "
+                            + (int) Math.ceil(remaining / 20.0D)
+                            + "s.");
         }
 
         UUID id = player.getUuid();
@@ -127,13 +133,20 @@ public final class BerserkerSpecialRuntime {
         CHARGING.add(id);
         CHARGE_STARTED_AT.put(id, player.getServer().getTicks());
         // Long safety duration. The runtime removes it on success/cancel.
-        ClassEffectRuntime.apply(player, SmoothEffects.CRIMSON_REVENANT_CHARGE, CHARGE_TICKS + 40, 0);
+        ClassEffectRuntime.apply(
+                player, SmoothEffects.CRIMSON_REVENANT_CHARGE, CHARGE_TICKS + 40, 0);
         player.setSprinting(false);
         player.setVelocity(0.0D, player.getVelocity().y, 0.0D);
         player.velocityModified = true;
         SmoothClassesNetworking.sendChargeState(player, true, false, HUD_ABILITY, 0, CHARGE_TICKS);
-        player.getWorld().playSound(null, player.getBlockPos(), SoundEvents.ENTITY_RAVAGER_ROAR,
-                SoundCategory.PLAYERS, 1.15F, 0.78F);
+        player.getWorld()
+                .playSound(
+                        null,
+                        player.getBlockPos(),
+                        SoundEvents.ENTITY_RAVAGER_ROAR,
+                        SoundCategory.PLAYERS,
+                        1.15F,
+                        0.78F);
         return ExecutionResult.success(1, "Charging Crimson Revenant");
     }
 
@@ -141,7 +154,8 @@ public final class BerserkerSpecialRuntime {
         UUID id = player.getUuid();
         if (!CHARGING.contains(id)) return;
 
-        if (!player.isAlive() || player.isSpectator()
+        if (!player.isAlive()
+                || player.isSpectator()
                 || !AbilityRuntime.isClass(player, BerserkerClass.ID)
                 || !isHeld(player)) {
             cancelCharge(player, true);
@@ -175,10 +189,17 @@ public final class BerserkerSpecialRuntime {
         SmoothClassesNetworking.sendChargeState(player, false, false, HUD_ABILITY, 0, CHARGE_TICKS);
         if (applyCooldown) {
             AbilityCooldowns.start(player, SPECIAL_ID, CANCEL_COOLDOWN_TICKS);
-            CANCEL_COOLDOWN_UNTIL.put(id, player.getServerWorld().getTime() + CANCEL_COOLDOWN_TICKS);
+            CANCEL_COOLDOWN_UNTIL.put(
+                    id, player.getServerWorld().getTime() + CANCEL_COOLDOWN_TICKS);
         }
-        player.getWorld().playSound(null, player.getBlockPos(), SoundEvents.BLOCK_FIRE_EXTINGUISH,
-                SoundCategory.PLAYERS, 0.55F, 0.72F);
+        player.getWorld()
+                .playSound(
+                        null,
+                        player.getBlockPos(),
+                        SoundEvents.BLOCK_FIRE_EXTINGUISH,
+                        SoundCategory.PLAYERS,
+                        0.55F,
+                        0.72F);
         SmoothClassesNetworking.sendAbilityState(player);
     }
 
@@ -188,23 +209,48 @@ public final class BerserkerSpecialRuntime {
         CHARGE_STARTED_AT.remove(id);
         CANCEL_COOLDOWN_UNTIL.remove(id);
         player.removeStatusEffect(SmoothEffects.CRIMSON_REVENANT_CHARGE);
-        SmoothClassesNetworking.sendChargeState(player, false, true, HUD_ABILITY, CHARGE_TICKS, CHARGE_TICKS);
+        SmoothClassesNetworking.sendChargeState(
+                player, false, true, HUD_ABILITY, CHARGE_TICKS, CHARGE_TICKS);
         AbilityCooldowns.start(player, SPECIAL_ID, cooldownTotalTicks(player));
 
         int duration = BASE_DURATION_TICKS;
-        if (AbilityRuntime.hasTalent(player, BerserkerContent.CRIMSON_REVENANT_ENDURING.id())) duration += 8 * 20;
-        if (AbilityRuntime.hasTalent(player, BerserkerContent.CRIMSON_REVENANT_MASSACRE.id())) duration += 4 * 20;
+        if (AbilityRuntime.hasTalent(player, BerserkerContent.CRIMSON_REVENANT_ENDURING.id()))
+            duration += 8 * 20;
+        if (AbilityRuntime.hasTalent(player, BerserkerContent.CRIMSON_REVENANT_MASSACRE.id()))
+            duration += 4 * 20;
 
         ClassEffectRuntime.apply(player, SmoothEffects.CRIMSON_REVENANT, duration, 0);
         player.heal(Math.min(12.0F, player.getMaxHealth() * 0.30F));
-        player.getWorld().playSound(null, player.getBlockPos(), SoundEvents.ENTITY_WARDEN_ROAR,
-                SoundCategory.PLAYERS, 1.0F, 1.10F);
+        player.getWorld()
+                .playSound(
+                        null,
+                        player.getBlockPos(),
+                        SoundEvents.ENTITY_WARDEN_ROAR,
+                        SoundCategory.PLAYERS,
+                        1.0F,
+                        1.10F);
 
         if (player.getWorld() instanceof ServerWorld world) {
-            world.spawnParticles(LARGE_RED, player.getX(), player.getBodyY(0.65D), player.getZ(),
-                    54, 0.85D, 0.65D, 0.85D, 0.015D);
-            world.spawnParticles(ParticleTypes.SOUL_FIRE_FLAME, player.getX(), player.getBodyY(0.7D), player.getZ(),
-                    28, 0.65D, 0.55D, 0.65D, 0.01D);
+            world.spawnParticles(
+                    LARGE_RED,
+                    player.getX(),
+                    player.getBodyY(0.65D),
+                    player.getZ(),
+                    54,
+                    0.85D,
+                    0.65D,
+                    0.85D,
+                    0.015D);
+            world.spawnParticles(
+                    ParticleTypes.SOUL_FIRE_FLAME,
+                    player.getX(),
+                    player.getBodyY(0.7D),
+                    player.getZ(),
+                    28,
+                    0.65D,
+                    0.55D,
+                    0.65D,
+                    0.01D);
         }
         SmoothClassesNetworking.sendAbilityState(player);
     }
@@ -213,8 +259,10 @@ public final class BerserkerSpecialRuntime {
         var effect = player.getStatusEffect(SmoothEffects.CRIMSON_REVENANT);
         if (effect == null || !(player.getWorld() instanceof ServerWorld world)) return;
 
-        boolean fortress = AbilityRuntime.hasTalent(player, BerserkerContent.CRIMSON_REVENANT_FORTRESS.id());
-        boolean massacre = AbilityRuntime.hasTalent(player, BerserkerContent.CRIMSON_REVENANT_MASSACRE.id());
+        boolean fortress =
+                AbilityRuntime.hasTalent(player, BerserkerContent.CRIMSON_REVENANT_FORTRESS.id());
+        boolean massacre =
+                AbilityRuntime.hasTalent(player, BerserkerContent.CRIMSON_REVENANT_MASSACRE.id());
         double searchRange = massacre ? 24.0D : 18.0D;
         double pursuitSpeed = massacre ? 0.54D : 0.44D;
         int attackInterval = massacre ? 4 : 6;
@@ -222,14 +270,17 @@ public final class BerserkerSpecialRuntime {
 
         // Keep the defensive layer alive without reapplying it twenty times per second.
         if (player.age % 10 == 0) {
-            player.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 30, fortress ? 1 : 0,
-                    false, false, true));
-            player.addStatusEffect(new StatusEffectInstance(StatusEffects.HASTE, 30, 1,
-                    false, false, true));
-            player.addStatusEffect(new StatusEffectInstance(StatusEffects.STRENGTH, 30, massacre ? 1 : 0,
-                    false, false, true));
-            player.addStatusEffect(new StatusEffectInstance(StatusEffects.ABSORPTION, 40, fortress ? 2 : 1,
-                    false, false, true));
+            player.addStatusEffect(
+                    new StatusEffectInstance(
+                            StatusEffects.RESISTANCE, 30, fortress ? 1 : 0, false, false, true));
+            player.addStatusEffect(
+                    new StatusEffectInstance(StatusEffects.HASTE, 30, 1, false, false, true));
+            player.addStatusEffect(
+                    new StatusEffectInstance(
+                            StatusEffects.STRENGTH, 30, massacre ? 1 : 0, false, false, true));
+            player.addStatusEffect(
+                    new StatusEffectInstance(
+                            StatusEffects.ABSORPTION, 40, fortress ? 2 : 1, false, false, true));
         }
 
         spectralEmbers(world, player, effect.getDuration());
@@ -243,7 +294,8 @@ public final class BerserkerSpecialRuntime {
         }
 
         steerToward(player, target, pursuitSpeed);
-        if (player.age % attackInterval == 0 && player.squaredDistanceTo(target) <= strikeRange * strikeRange) {
+        if (player.age % attackInterval == 0
+                && player.squaredDistanceTo(target) <= strikeRange * strikeRange) {
             savageStrike(player, target, massacre ? 7.0F : 4.5F, massacre ? 3.2D : 2.6D);
         }
     }
@@ -253,8 +305,14 @@ public final class BerserkerSpecialRuntime {
         AVOID_UNTIL.remove(player.getUuid());
         if (!player.getWorld().isClient()) {
             player.setSprinting(false);
-            player.getWorld().playSound(null, player.getBlockPos(), SoundEvents.ENTITY_RAVAGER_ROAR,
-                    SoundCategory.PLAYERS, 0.55F, 0.82F);
+            player.getWorld()
+                    .playSound(
+                            null,
+                            player.getBlockPos(),
+                            SoundEvents.ENTITY_RAVAGER_ROAR,
+                            SoundCategory.PLAYERS,
+                            0.55F,
+                            0.82F);
             SmoothClassesNetworking.sendAbilityState(player);
         }
     }
@@ -267,15 +325,33 @@ public final class BerserkerSpecialRuntime {
             double side = ((i & 1) == 0 ? -1.0D : 1.0D) * (0.25D + progress * 0.35D);
             double y = player.getY() + 0.15D + (i % 3) * 0.48D + progress * 0.35D;
             double z = player.getZ() + 0.18D + (i % 2) * 0.14D;
-            world.spawnParticles(progress < 0.55F ? SMALL_RED : LARGE_RED,
-                    player.getX() + side, y, z, 1, 0.015D, 0.03D, 0.015D, 0.0D);
-            if (i == 0) world.spawnParticles(ParticleTypes.SMOKE,
-                    player.getX(), y, player.getZ(), 1, 0.03D, 0.04D, 0.03D, 0.0D);
+            world.spawnParticles(
+                    progress < 0.55F ? SMALL_RED : LARGE_RED,
+                    player.getX() + side,
+                    y,
+                    z,
+                    1,
+                    0.015D,
+                    0.03D,
+                    0.015D,
+                    0.0D);
+            if (i == 0)
+                world.spawnParticles(
+                        ParticleTypes.SMOKE,
+                        player.getX(),
+                        y,
+                        player.getZ(),
+                        1,
+                        0.03D,
+                        0.04D,
+                        0.03D,
+                        0.0D);
         }
     }
 
     /** Tiny embers only; the giant skeletal renderer is the actual aura now. */
-    private static void spectralEmbers(ServerWorld world, ServerPlayerEntity player, int remaining) {
+    private static void spectralEmbers(
+            ServerWorld world, ServerPlayerEntity player, int remaining) {
         if (player.age % 6 != 0) return;
         int count = remaining <= 40 ? 1 : 3;
         for (int i = 0; i < count; i++) {
@@ -288,9 +364,14 @@ public final class BerserkerSpecialRuntime {
 
     private static LivingEntity nearestVictim(ServerPlayerEntity player, double range) {
         Box box = player.getBoundingBox().expand(range, 8.0D, range);
-        return player.getWorld().getEntitiesByClass(LivingEntity.class, box,
-                        candidate -> isVictim(player, candidate)
-                                && player.squaredDistanceTo(candidate) <= range * range)
+        return player
+                .getWorld()
+                .getEntitiesByClass(
+                        LivingEntity.class,
+                        box,
+                        candidate ->
+                                isVictim(player, candidate)
+                                        && player.squaredDistanceTo(candidate) <= range * range)
                 .stream()
                 .min(Comparator.comparingDouble(player::squaredDistanceTo))
                 .orElse(null);
@@ -299,7 +380,8 @@ public final class BerserkerSpecialRuntime {
     /** Friendly mobs, pets, summons and hostile mobs are all valid. Players are not. */
     private static boolean isVictim(ServerPlayerEntity berserker, LivingEntity candidate) {
         if (candidate == null || candidate == berserker || !candidate.isAlive()) return false;
-        if (candidate instanceof ArmorStandEntity || candidate instanceof PlayerEntity) return false;
+        if (candidate instanceof ArmorStandEntity || candidate instanceof PlayerEntity)
+            return false;
         return !candidate.isRemoved();
     }
 
@@ -314,8 +396,9 @@ public final class BerserkerSpecialRuntime {
         // to press sprint manually.
         player.setSprinting(true);
 
-        boolean directBlocked = !horizontalClear(player, desired, 0.85D, 0.0D)
-                || !horizontalClear(player, desired, 1.35D, 0.0D);
+        boolean directBlocked =
+                !horizontalClear(player, desired, 0.85D, 0.0D)
+                        || !horizontalClear(player, desired, 1.35D, 0.0D);
         boolean jumpable = directBlocked && canStepOver(player, desired);
 
         Vec3d move = desired;
@@ -329,7 +412,9 @@ public final class BerserkerSpecialRuntime {
 
         // Auto-jump only for a low obstacle with clear head room. Tall walls/trees are
         // handled by side-routing instead of repeatedly jumping into them.
-        if (player.isOnGround() && (jumpable || (toTarget.y > 0.85D && horizontalClear(player, move, 0.7D, 1.0D)))) {
+        if (player.isOnGround()
+                && (jumpable
+                        || (toTarget.y > 0.85D && horizontalClear(player, move, 0.7D, 1.0D)))) {
             player.setVelocity(player.getVelocity().x, 0.46D, player.getVelocity().z);
             player.velocityModified = true;
         }
@@ -340,8 +425,8 @@ public final class BerserkerSpecialRuntime {
     }
 
     /** True when the player's collision box can occupy a point along this horizontal direction. */
-    private static boolean horizontalClear(ServerPlayerEntity player, Vec3d direction,
-                                           double distance, double yOffset) {
+    private static boolean horizontalClear(
+            ServerPlayerEntity player, Vec3d direction, double distance, double yOffset) {
         if (direction.lengthSquared() < 0.0001D) return true;
         Vec3d dir = new Vec3d(direction.x, 0.0D, direction.z).normalize();
         Box shifted = player.getBoundingBox().offset(dir.x * distance, yOffset, dir.z * distance);
@@ -436,13 +521,18 @@ public final class BerserkerSpecialRuntime {
         double radians = Math.toRadians(degrees);
         double cos = Math.cos(radians);
         double sin = Math.sin(radians);
-        return new Vec3d(direction.x * cos - direction.z * sin,
-                0.0D,
-                direction.x * sin + direction.z * cos).normalize();
+        return new Vec3d(
+                        direction.x * cos - direction.z * sin,
+                        0.0D,
+                        direction.x * sin + direction.z * cos)
+                .normalize();
     }
 
-    private static void savageStrike(ServerPlayerEntity player, LivingEntity primary,
-                                     float bonusDamage, double splashRadius) {
+    private static void savageStrike(
+            ServerPlayerEntity player,
+            LivingEntity primary,
+            float bonusDamage,
+            double splashRadius) {
         if (!(player.getWorld() instanceof ServerWorld world)) return;
 
         player.swingHand(Hand.MAIN_HAND, true);
@@ -451,9 +541,11 @@ public final class BerserkerSpecialRuntime {
         primary.damage(player.getDamageSources().playerAttack(player), bonusDamage);
         primary.timeUntilRegen = 0;
 
-        List<LivingEntity> nearby = world.getEntitiesByClass(LivingEntity.class,
-                primary.getBoundingBox().expand(splashRadius),
-                candidate -> isVictim(player, candidate) && candidate != primary);
+        List<LivingEntity> nearby =
+                world.getEntitiesByClass(
+                        LivingEntity.class,
+                        primary.getBoundingBox().expand(splashRadius),
+                        candidate -> isVictim(player, candidate) && candidate != primary);
         for (LivingEntity victim : nearby) {
             victim.timeUntilRegen = 0;
             victim.damage(player.getDamageSources().playerAttack(player), bonusDamage * 0.6F);
@@ -466,11 +558,23 @@ public final class BerserkerSpecialRuntime {
             }
         }
 
-        world.spawnParticles(ParticleTypes.SWEEP_ATTACK,
-                primary.getX(), primary.getBodyY(0.5D), primary.getZ(),
-                1, 0.0D, 0.0D, 0.0D, 0.0D);
-        world.playSound(null, primary.getBlockPos(), SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP,
-                SoundCategory.PLAYERS, 0.85F, 0.72F);
+        world.spawnParticles(
+                ParticleTypes.SWEEP_ATTACK,
+                primary.getX(),
+                primary.getBodyY(0.5D),
+                primary.getZ(),
+                1,
+                0.0D,
+                0.0D,
+                0.0D,
+                0.0D);
+        world.playSound(
+                null,
+                primary.getBlockPos(),
+                SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP,
+                SoundCategory.PLAYERS,
+                0.85F,
+                0.72F);
     }
 
     public static void disconnect(ServerPlayerEntity player) {
@@ -482,7 +586,8 @@ public final class BerserkerSpecialRuntime {
         AVOID_UNTIL.remove(id);
         if (wasCharging) {
             AbilityCooldowns.start(player, SPECIAL_ID, CANCEL_COOLDOWN_TICKS);
-            CANCEL_COOLDOWN_UNTIL.put(id, player.getServerWorld().getTime() + CANCEL_COOLDOWN_TICKS);
+            CANCEL_COOLDOWN_UNTIL.put(
+                    id, player.getServerWorld().getTime() + CANCEL_COOLDOWN_TICKS);
         }
         player.removeStatusEffect(SmoothEffects.CRIMSON_REVENANT_CHARGE);
     }

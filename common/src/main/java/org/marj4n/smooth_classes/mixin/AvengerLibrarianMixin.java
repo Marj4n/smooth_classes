@@ -15,11 +15,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class AvengerLibrarianMixin implements AvengerLibrarianSummons.BookCarrier {
     @Unique private ItemStack smoothClasses$librarianBook = ItemStack.EMPTY;
 
-    @Override public ItemStack smoothClasses$getLibrarianBook() {
+    @Override
+    public ItemStack smoothClasses$getLibrarianBook() {
         return smoothClasses$librarianBook;
     }
 
-    @Override public void smoothClasses$setLibrarianBook(ItemStack book) {
+    @Override
+    public void smoothClasses$setLibrarianBook(ItemStack book) {
         smoothClasses$librarianBook = AvengerLibrarianSummons.copyBook(book);
     }
 

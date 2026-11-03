@@ -12,13 +12,15 @@ public class BarrierParticles implements CustomParticleStatusEffect.Spawner {
     private final ParticleGroup particles;
 
     public BarrierParticles(int particleCount) {
-        this.particles = ParticleGroupBuilder.of("spell_engine:magic_arcane")
-                .batch(batch -> batch
-                        .count(particleCount)
-                        .shape(ParticleGroup.Shape.PIPE)
-                        .anchor(ParticleGroup.Anchor.GROUND)
-                        .speed(0.1F)
-                        .extent(0.4F));
+        this.particles =
+                ParticleGroupBuilder.of("spell_engine:magic_arcane")
+                        .batch(
+                                batch ->
+                                        batch.count(particleCount)
+                                                .shape(ParticleGroup.Shape.PIPE)
+                                                .anchor(ParticleGroup.Anchor.GROUND)
+                                                .speed(0.1F)
+                                                .extent(0.4F));
     }
 
     @Override

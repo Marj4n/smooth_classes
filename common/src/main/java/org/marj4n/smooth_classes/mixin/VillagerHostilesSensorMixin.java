@@ -12,8 +12,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(VillagerHostilesSensor.class)
 public abstract class VillagerHostilesSensorMixin {
     @Inject(method = "matches", at = @At("HEAD"), cancellable = true)
-    private void smooth_classes$ignoreAvengerSummons(LivingEntity villager, LivingEntity target,
-                                                       CallbackInfoReturnable<Boolean> cir) {
+    private void smooth_classes$ignoreAvengerSummons(
+            LivingEntity villager, LivingEntity target, CallbackInfoReturnable<Boolean> cir) {
         if (AvengerReworkRuntime.isAvengerSummon(target)) cir.setReturnValue(false);
     }
 }

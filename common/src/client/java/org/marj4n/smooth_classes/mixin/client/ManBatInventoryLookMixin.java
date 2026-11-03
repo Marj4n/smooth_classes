@@ -51,14 +51,16 @@ public abstract class ManBatInventoryLookMixin {
     @Unique
     private static double smooth_classes$currentGuiMouseX() {
         MinecraftClient client = MinecraftClient.getInstance();
-        return client.mouse.getX() * client.getWindow().getScaledWidth()
+        return client.mouse.getX()
+                * client.getWindow().getScaledWidth()
                 / (double) Math.max(1, client.getWindow().getWidth());
     }
 
     @Unique
     private static double smooth_classes$currentGuiMouseY() {
         MinecraftClient client = MinecraftClient.getInstance();
-        return client.mouse.getY() * client.getWindow().getScaledHeight()
+        return client.mouse.getY()
+                * client.getWindow().getScaledHeight()
                 / (double) Math.max(1, client.getWindow().getHeight());
     }
 
@@ -73,8 +75,12 @@ public abstract class ManBatInventoryLookMixin {
     }
 
     @ModifyVariable(
-            method = "drawEntity(Lnet/minecraft/client/gui/DrawContext;IIIFFLnet/minecraft/entity/LivingEntity;)V",
-            at = @At("HEAD"), argsOnly = true, ordinal = 0, require = 1)
+            method =
+                    "drawEntity(Lnet/minecraft/client/gui/DrawContext;IIIFFLnet/minecraft/entity/LivingEntity;)V",
+            at = @At("HEAD"),
+            argsOnly = true,
+            ordinal = 0,
+            require = 1)
     private static float smooth_classes$neutralPreviewYaw(float cursorOffsetX) {
         if (!smooth_classes$allowNeutralPreview()) return cursorOffsetX;
         smooth_classes$refreshScreenAnchor();
@@ -90,8 +96,12 @@ public abstract class ManBatInventoryLookMixin {
     }
 
     @ModifyVariable(
-            method = "drawEntity(Lnet/minecraft/client/gui/DrawContext;IIIFFLnet/minecraft/entity/LivingEntity;)V",
-            at = @At("HEAD"), argsOnly = true, ordinal = 1, require = 1)
+            method =
+                    "drawEntity(Lnet/minecraft/client/gui/DrawContext;IIIFFLnet/minecraft/entity/LivingEntity;)V",
+            at = @At("HEAD"),
+            argsOnly = true,
+            ordinal = 1,
+            require = 1)
     private static float smooth_classes$neutralPreviewPitch(float cursorOffsetY) {
         if (!smooth_classes$allowNeutralPreview()) return cursorOffsetY;
         smooth_classes$refreshScreenAnchor();

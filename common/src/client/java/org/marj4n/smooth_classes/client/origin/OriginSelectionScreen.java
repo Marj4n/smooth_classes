@@ -37,12 +37,21 @@ public final class OriginSelectionScreen extends Screen {
         int left = (width - PANEL_W) / 2;
         int top = (height - PANEL_H) / 2;
 
-        previous = addDrawableChild(ButtonWidget.builder(Text.literal("<"), button -> move(-1))
-                .dimensions(left - 28, top + PANEL_H / 2 - 10, 20, 20).build());
-        next = addDrawableChild(ButtonWidget.builder(Text.literal(">"), button -> move(1))
-                .dimensions(left + PANEL_W + 8, top + PANEL_H / 2 - 10, 20, 20).build());
-        select = addDrawableChild(ButtonWidget.builder(Text.literal("Select"), button -> choose())
-                .dimensions(left + 48, top + PANEL_H + 8, 80, 20).build());
+        previous =
+                addDrawableChild(
+                        ButtonWidget.builder(Text.literal("<"), button -> move(-1))
+                                .dimensions(left - 28, top + PANEL_H / 2 - 10, 20, 20)
+                                .build());
+        next =
+                addDrawableChild(
+                        ButtonWidget.builder(Text.literal(">"), button -> move(1))
+                                .dimensions(left + PANEL_W + 8, top + PANEL_H / 2 - 10, 20, 20)
+                                .build());
+        select =
+                addDrawableChild(
+                        ButtonWidget.builder(Text.literal("Select"), button -> choose())
+                                .dimensions(left + 48, top + PANEL_H + 8, 80, 20)
+                                .build());
     }
 
     private void move(int delta) {
@@ -85,16 +94,22 @@ public final class OriginSelectionScreen extends Screen {
         drawHeader(context, origin, left, top);
         drawScrollableBody(context, origin, left, top);
 
-        context.drawCenteredTextWithShadow(textRenderer, Text.literal("Choose your Origin"), width / 2, top - 18, 0xFFFFFF);
-        context.drawCenteredTextWithShadow(textRenderer,
-                Text.literal((index + 1) + " / " + OriginType.v1PlayableValues().length), width / 2, top + PANEL_H + 32, 0xA0A0A0);
+        context.drawCenteredTextWithShadow(
+                textRenderer, Text.literal("Choose your Origin"), width / 2, top - 18, 0xFFFFFF);
+        context.drawCenteredTextWithShadow(
+                textRenderer,
+                Text.literal((index + 1) + " / " + OriginType.v1PlayableValues().length),
+                width / 2,
+                top + PANEL_H + 32,
+                0xA0A0A0);
         super.render(context, mouseX, mouseY, delta);
     }
 
     private void drawHeader(DrawContext context, OriginType origin, int left, int top) {
         int headerY = top + 6;
         context.drawItem(new ItemStack(origin.icon()), left + 8, headerY + 1);
-        context.drawTextWithShadow(textRenderer, Text.literal(origin.displayName()), left + 30, headerY + 1, 0xFFFFFF);
+        context.drawTextWithShadow(
+                textRenderer, Text.literal(origin.displayName()), left + 30, headerY + 1, 0xFFFFFF);
 
         // Keep the Origins-style Impact indicator entirely on the title row.
         Text impactText = Text.literal("Impact");
@@ -108,7 +123,13 @@ public final class OriginSelectionScreen extends Screen {
         }
 
         // Subtitle owns its own row and gets a little extra breathing room.
-        context.drawText(textRenderer, Text.literal(origin.subtitle()), left + 30, headerY + 13, 0xB0B0B0, false);
+        context.drawText(
+                textRenderer,
+                Text.literal(origin.subtitle()),
+                left + 30,
+                headerY + 13,
+                0xB0B0B0,
+                false);
         context.fill(left + 6, top + 31, left + PANEL_W - 6, top + 32, 0xFF3A3A3A);
     }
 
@@ -185,7 +206,7 @@ public final class OriginSelectionScreen extends Screen {
         return super.mouseScrolled(mouseX, mouseY, amount);
     }
 
-    private record Line(OrderedText text, int color) { }
+    private record Line(OrderedText text, int color) {}
 
     private static final class ConfirmOriginScreen extends Screen {
         private final OriginSelectionScreen parent;
@@ -200,14 +221,20 @@ public final class OriginSelectionScreen extends Screen {
         @Override
         protected void init() {
             int y = height / 2 + 35;
-            addDrawableChild(ButtonWidget.builder(Text.literal("Go Back"), b -> client.setScreen(parent))
-                    .dimensions(width / 2 - 104, y, 100, 20).build());
-            addDrawableChild(ButtonWidget.builder(Text.literal("Choose"), b -> parent.confirm(origin))
-                    .dimensions(width / 2 + 4, y, 100, 20).build());
+            addDrawableChild(
+                    ButtonWidget.builder(Text.literal("Go Back"), b -> client.setScreen(parent))
+                            .dimensions(width / 2 - 104, y, 100, 20)
+                            .build());
+            addDrawableChild(
+                    ButtonWidget.builder(Text.literal("Choose"), b -> parent.confirm(origin))
+                            .dimensions(width / 2 + 4, y, 100, 20)
+                            .build());
         }
 
         @Override
-        public boolean shouldCloseOnEsc() { return false; }
+        public boolean shouldCloseOnEsc() {
+            return false;
+        }
 
         @Override
         public void render(DrawContext context, int mouseX, int mouseY, float delta) {
@@ -218,14 +245,32 @@ public final class OriginSelectionScreen extends Screen {
             int y = (height - boxH) / 2;
             context.fill(x, y, x + boxW, y + boxH, 0xE5151515);
             context.drawBorder(x, y, boxW, boxH, 0xFFB8B8B8);
-            context.drawCenteredTextWithShadow(textRenderer, Text.literal("Choose " + origin.displayName() + "?"), width / 2, y + 12, 0xFFFFFF);
-            context.drawCenteredTextWithShadow(textRenderer, Text.literal(origin.subtitle()), width / 2, y + 27, 0xC9B7FF);
-            context.drawCenteredTextWithShadow(textRenderer, Text.literal(origin == OriginType.HUMAN
-                    ? "Vanilla human: no Origin skill tree or special powers."
-                    : "This permanently sets your body and Origin tree."), width / 2, y + 47, 0xBDBDBD);
-            context.drawCenteredTextWithShadow(textRenderer, Text.literal(origin == OriginType.HUMAN
-                    ? "Only your chosen Class grants abilities."
-                    : "Birthplace: " + origin.v1Spawn()), width / 2, y + 61, 0xE5C76B);
+            context.drawCenteredTextWithShadow(
+                    textRenderer,
+                    Text.literal("Choose " + origin.displayName() + "?"),
+                    width / 2,
+                    y + 12,
+                    0xFFFFFF);
+            context.drawCenteredTextWithShadow(
+                    textRenderer, Text.literal(origin.subtitle()), width / 2, y + 27, 0xC9B7FF);
+            context.drawCenteredTextWithShadow(
+                    textRenderer,
+                    Text.literal(
+                            origin == OriginType.HUMAN
+                                    ? "Vanilla human: no Origin skill tree or special powers."
+                                    : "This permanently sets your body and Origin tree."),
+                    width / 2,
+                    y + 47,
+                    0xBDBDBD);
+            context.drawCenteredTextWithShadow(
+                    textRenderer,
+                    Text.literal(
+                            origin == OriginType.HUMAN
+                                    ? "Only your chosen Class grants abilities."
+                                    : "Birthplace: " + origin.v1Spawn()),
+                    width / 2,
+                    y + 61,
+                    0xE5C76B);
             super.render(context, mouseX, mouseY, delta);
         }
     }

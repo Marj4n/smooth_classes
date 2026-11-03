@@ -5,8 +5,16 @@ import java.util.List;
 
 public interface PlayerClass {
     Identifier id();
+
     String name();
+
     String description();
-    default List<Identifier> abilityIds() { return List.of(); }
-    default List<Identifier> talentIds() { return List.of(); }
+
+    default List<Identifier> abilityIds() {
+        return List.of();
+    }
+
+    default List<Identifier> talentIds() {
+        return List.of();
+    }
 }

@@ -14,14 +14,35 @@ import java.util.List;
  * Branch skills have stable test ordering, and the natural quest system is untouched.
  */
 public final class OriginDebugLevels {
-    private OriginDebugLevels() { }
+    private OriginDebugLevels() {}
 
-    private static final List<String> VAMPIRE = List.of(
-            "bat_form", "man_bat", "blood_sense", "blood_flask", "nobility", "sun_tolerance", "final");
-    private static final List<String> MERMAID = List.of(
-            "siren_voice", "drowned_song", "sea_kinship", "oceans_favor", "royal_court", "landwalker", "final");
-    private static final List<String> SLIME = List.of(
-            "humanoid", "elastic_core", "squeeze", "fragment", "perfect_gel", "size_control", "final");
+    private static final List<String> VAMPIRE =
+            List.of(
+                    "bat_form",
+                    "man_bat",
+                    "blood_sense",
+                    "blood_flask",
+                    "nobility",
+                    "sun_tolerance",
+                    "final");
+    private static final List<String> MERMAID =
+            List.of(
+                    "siren_voice",
+                    "drowned_song",
+                    "sea_kinship",
+                    "oceans_favor",
+                    "royal_court",
+                    "landwalker",
+                    "final");
+    private static final List<String> SLIME =
+            List.of(
+                    "humanoid",
+                    "elastic_core",
+                    "squeeze",
+                    "fragment",
+                    "perfect_gel",
+                    "size_control",
+                    "final");
 
     public static List<String> milestones(OriginType origin) {
         if (origin == null) return List.of();
@@ -34,7 +55,9 @@ public final class OriginDebugLevels {
         };
     }
 
-    public static int maxLevel(OriginType origin) { return milestones(origin).size(); }
+    public static int maxLevel(OriginType origin) {
+        return milestones(origin).size();
+    }
 
     /** Level is highest unlocked milestone, including partial branches unlocked by quests. */
     public static int level(ServerPlayerEntity player) {
@@ -46,7 +69,8 @@ public final class OriginDebugLevels {
         int level = 0;
         for (int i = 0; i < steps.size(); i++) {
             String skillId = steps.get(i);
-            if (category.getSkill(skillId).map(skill -> skill.getState(player) == Skill.State.UNLOCKED)
+            if (category.getSkill(skillId)
+                    .map(skill -> skill.getState(player) == Skill.State.UNLOCKED)
                     .orElse(false)) level = i + 1;
         }
         return level;
@@ -56,7 +80,8 @@ public final class OriginDebugLevels {
     public static boolean advanceTo(ServerPlayerEntity player, int target) {
         OriginType origin = OriginRuntime.state(player).origin();
         List<String> steps = milestones(origin);
-        if (steps.isEmpty() || target < 0 || target > steps.size() || target < level(player)) return false;
+        if (steps.isEmpty() || target < 0 || target > steps.size() || target < level(player))
+            return false;
         var category = PuffishSkillsIntegration.category(origin.categoryId()).orElse(null);
         if (category == null || !category.isUnlocked(player)) return false;
         // Pre-validate before changing any state, so a datapack mismatch cannot half-grant a tier.
@@ -65,12 +90,15 @@ public final class OriginDebugLevels {
         }
         for (int i = 0; i < target; i++) {
             String milestone = steps.get(i);
-            category.getSkill(milestone).ifPresent(skill -> {
-                if (skill.getState(player) != Skill.State.UNLOCKED) {
-                    skill.unlock(player);
-                    OriginAdvancementNotices.onMilestoneUnlocked(player, origin, milestone);
-                }
-            });
+            category.getSkill(milestone)
+                    .ifPresent(
+                            skill -> {
+                                if (skill.getState(player) != Skill.State.UNLOCKED) {
+                                    skill.unlock(player);
+                                    OriginAdvancementNotices.onMilestoneUnlocked(
+                                            player, origin, milestone);
+                                }
+                            });
         }
         PuffishSkillsIntegration.invalidateRuntimeCache(player);
         player.calculateDimensions();

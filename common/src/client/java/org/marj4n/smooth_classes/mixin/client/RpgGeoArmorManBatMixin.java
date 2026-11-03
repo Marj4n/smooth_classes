@@ -51,12 +51,15 @@ public abstract class RpgGeoArmorManBatMixin {
      * Keep normal humanoids and Man-Bat untouched so R26's working armor
      * alignment and animations remain identical after re-transforming.
      */
-    @Inject(method = "render", at = @At("HEAD"), cancellable = true,
-            remap = false, require = 0)
+    @Inject(method = "render", at = @At("HEAD"), cancellable = true, remap = false, require = 0)
     private static void smooth_classes$hideGeoArmorForTinyBat(
-            MatrixStack matrices, VertexConsumerProvider consumers,
-            ItemStack stack, LivingEntity entity, EquipmentSlot slot,
-            int light, BipedEntityModel<LivingEntity> contextModel,
+            MatrixStack matrices,
+            VertexConsumerProvider consumers,
+            ItemStack stack,
+            LivingEntity entity,
+            EquipmentSlot slot,
+            int light,
+            BipedEntityModel<LivingEntity> contextModel,
             CallbackInfoReturnable<Boolean> cir) {
         if (!(entity instanceof PlayerEntity player)) return;
         var state = OriginRuntime.state(player);
@@ -71,12 +74,14 @@ public abstract class RpgGeoArmorManBatMixin {
 
     @Redirect(
             method = "render",
-            at = @At(value = "INVOKE", target =
-                    "Lnet/minecraft/client/render/entity/model/BipedEntityModel;copyBipedStateTo(Lnet/minecraft/client/render/entity/model/BipedEntityModel;)V",
-                    remap = true),
+            at =
+                    @At(
+                            value = "INVOKE",
+                            target =
+                                    "Lnet/minecraft/client/render/entity/model/BipedEntityModel;copyBipedStateTo(Lnet/minecraft/client/render/entity/model/BipedEntityModel;)V",
+                            remap = true),
             remap = false,
-            require = 0
-    )
+            require = 0)
     private static void smooth_classes$syncGeoArmorPose(
             BipedEntityModel<LivingEntity> playerPose,
             BipedEntityModel<LivingEntity> geoArmorModel,
@@ -92,7 +97,8 @@ public abstract class RpgGeoArmorManBatMixin {
 
         if (!(entity instanceof PlayerEntity player)) return;
         var origin = OriginRuntime.state(player);
-        if (origin.origin() != OriginType.VAMPIRE || !origin.hasFlag("vampire.form.man_bat")) return;
+        if (origin.origin() != OriginType.VAMPIRE || !origin.hasFlag("vampire.form.man_bat"))
+            return;
 
         // Pose capture already happened in ManBatPosePreparerFeatureRenderer,
         // the first feature of the player's renderer (before all armor features).
@@ -102,9 +108,13 @@ public abstract class RpgGeoArmorManBatMixin {
 
     @Inject(method = "render", at = @At("RETURN"), remap = false, require = 0)
     private static void smooth_classes$restoreGeoArmorScale(
-            MatrixStack matrices, VertexConsumerProvider consumers,
-            ItemStack stack, LivingEntity entity, EquipmentSlot slot,
-            int light, BipedEntityModel<LivingEntity> contextModel,
+            MatrixStack matrices,
+            VertexConsumerProvider consumers,
+            ItemStack stack,
+            LivingEntity entity,
+            EquipmentSlot slot,
+            int light,
+            BipedEntityModel<LivingEntity> contextModel,
             CallbackInfoReturnable<Boolean> cir) {
         // Renderer models are cached across players and passes: no VSB limb
         // scale may leak into the next ordinary humanoid's equipment.

@@ -28,13 +28,15 @@ public abstract class BloodRainWeatherMixin {
             double cameraZ,
             CallbackInfo ci) {
         var client = MinecraftClient.getInstance();
-        if (client.world != null && BloodRainWeatherState.isInsideStorm(client.world, cameraX, cameraZ)) {
+        if (client.world != null
+                && BloodRainWeatherState.isInsideStorm(client.world, cameraX, cameraZ)) {
             ci.cancel();
         }
     }
 
     @Inject(method = "tickRainSplashing", at = @At("HEAD"), cancellable = true)
-    private void smoothClasses$hideVanillaRainEffectsInsideBloodRain(Camera camera, CallbackInfo ci) {
+    private void smoothClasses$hideVanillaRainEffectsInsideBloodRain(
+            Camera camera, CallbackInfo ci) {
         var client = MinecraftClient.getInstance();
         if (client.world == null) {
             return;

@@ -30,11 +30,13 @@ public abstract class ManBatFirstPersonSkinMixin {
     private void smooth_classes$skinForManBatFPV(CallbackInfoReturnable<Identifier> cir) {
         MinecraftClient mc = MinecraftClient.getInstance();
         AbstractClientPlayerEntity self = (AbstractClientPlayerEntity) (Object) this;
-        if (mc.player != self || mc.currentScreen != null
+        if (mc.player != self
+                || mc.currentScreen != null
                 || !mc.options.getPerspective().isFirstPerson()) return;
         var state = OriginRuntime.state(self);
         if (state.origin() == OriginType.VAMPIRE && state.hasFlag("vampire.form.man_bat")) {
-            cir.setReturnValue(state.hasFlag("vampire.evolution.lord") ? VSB_LORD_FPV_SKIN : VSB_FPV_SKIN);
+            cir.setReturnValue(
+                    state.hasFlag("vampire.evolution.lord") ? VSB_LORD_FPV_SKIN : VSB_FPV_SKIN);
         }
     }
 }

@@ -13,8 +13,15 @@ public final class VampireBatParticle extends SpriteBillboardParticle {
     private final SpriteProvider sprites;
     private final float originalScale;
 
-    private VampireBatParticle(ClientWorld world, double x, double y, double z,
-                               double vx, double vy, double vz, SpriteProvider sprites) {
+    private VampireBatParticle(
+            ClientWorld world,
+            double x,
+            double y,
+            double z,
+            double vx,
+            double vy,
+            double vz,
+            SpriteProvider sprites) {
         super(world, x, y, z, vx, vy, vz);
         this.sprites = sprites;
         this.velocityX = vx * 0.62D + (world.random.nextDouble() - 0.5D) * 0.07D;
@@ -50,12 +57,20 @@ public final class VampireBatParticle extends SpriteBillboardParticle {
     public static final class Factory implements ParticleFactory<DefaultParticleType> {
         private final SpriteProvider sprites;
 
-        public Factory(SpriteProvider sprites) { this.sprites = sprites; }
+        public Factory(SpriteProvider sprites) {
+            this.sprites = sprites;
+        }
 
         @Override
-        public Particle createParticle(DefaultParticleType type, ClientWorld world,
-                                       double x, double y, double z,
-                                       double vx, double vy, double vz) {
+        public Particle createParticle(
+                DefaultParticleType type,
+                ClientWorld world,
+                double x,
+                double y,
+                double z,
+                double vx,
+                double vy,
+                double vz) {
             return new VampireBatParticle(world, x, y, z, vx, vy, vz, sprites);
         }
     }

@@ -13,14 +13,18 @@ import org.marj4n.smooth_classes.effects.SmoothEffects;
  * Adds a red pulsing tint and semi-organic vein overlays while charging or frenzied.
  */
 public final class CrimsonRevenantVisionOverlay {
-    private static final Identifier TINT = SmoothClasses.id("textures/gui/crimson_revenant_tint.png");
-    private static final Identifier VEINS = SmoothClasses.id("textures/gui/crimson_revenant_veins.png");
+    private static final Identifier TINT =
+            SmoothClasses.id("textures/gui/crimson_revenant_tint.png");
+    private static final Identifier VEINS =
+            SmoothClasses.id("textures/gui/crimson_revenant_veins.png");
 
     private CrimsonRevenantVisionOverlay() {}
 
     public static void render(DrawContext context, float tickDelta) {
         MinecraftClient client = MinecraftClient.getInstance();
-        if (client.player == null || client.options.hudHidden || !client.options.getPerspective().isFirstPerson()) return;
+        if (client.player == null
+                || client.options.hudHidden
+                || !client.options.getPerspective().isFirstPerson()) return;
 
         var active = client.player.getStatusEffect(SmoothEffects.CRIMSON_REVENANT);
         var charge = client.player.getStatusEffect(SmoothEffects.CRIMSON_REVENANT_CHARGE);
@@ -34,11 +38,15 @@ public final class CrimsonRevenantVisionOverlay {
         float tintAlpha;
         float veinAlpha;
         if (active != null) {
-            float endFade = active.getDuration() <= 40 ? Math.max(0.35F, active.getDuration() / 40.0F) : 1.0F;
+            float endFade =
+                    active.getDuration() <= 40
+                            ? Math.max(0.35F, active.getDuration() / 40.0F)
+                            : 1.0F;
             tintAlpha = (0.10F + pulse * 0.05F) * endFade;
             veinAlpha = (0.24F + pulse * 0.18F) * endFade;
         } else {
-            int elapsed = Math.max(0, (BerserkerSpecialRuntime.CHARGE_TICKS + 40) - charge.getDuration());
+            int elapsed =
+                    Math.max(0, (BerserkerSpecialRuntime.CHARGE_TICKS + 40) - charge.getDuration());
             float progress = Math.min(1.0F, elapsed / (float) BerserkerSpecialRuntime.CHARGE_TICKS);
             tintAlpha = 0.04F + progress * 0.08F + pulse * 0.03F;
             veinAlpha = 0.10F + progress * 0.18F + pulse * 0.08F;
@@ -48,8 +56,15 @@ public final class CrimsonRevenantVisionOverlay {
         drawFull(context, VEINS, width, height, 1.0F, 0.22F, 0.22F, veinAlpha);
     }
 
-    private static void drawFull(DrawContext context, Identifier texture, int width, int height,
-                                 float r, float g, float b, float a) {
+    private static void drawFull(
+            DrawContext context,
+            Identifier texture,
+            int width,
+            int height,
+            float r,
+            float g,
+            float b,
+            float a) {
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.setShaderColor(r, g, b, a);

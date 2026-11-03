@@ -45,41 +45,64 @@ public final class ForeignerSpecialRuntime {
             return ExecutionResult.failure("No spell school selected.");
         if (player.getMainHandStack().isEmpty())
             return ExecutionResult.failure("Spell Imprint requires a weapon in your main hand.");
-        if (active(player))
-            return ExecutionResult.failure("Spell Imprint is already active.");
+        if (active(player)) return ExecutionResult.failure("Spell Imprint is already active.");
         if (!AbilityCooldowns.ready(player, ID))
-            return ExecutionResult.failure("Spell Imprint can be used again in " + seconds(AbilityCooldowns.remainingTicks(player, ID)) + "s.");
+            return ExecutionResult.failure(
+                    "Spell Imprint can be used again in "
+                            + seconds(AbilityCooldowns.remainingTicks(player, ID))
+                            + "s.");
 
         SpellSchool school = SpellSchoolSelection.school(index);
         if (school == null)
-            return ExecutionResult.failure(SpellSchoolSelection.name(index) + " magic is not registered in this modpack.");
+            return ExecutionResult.failure(
+                    SpellSchoolSelection.name(index) + " magic is not registered in this modpack.");
 
         LAST_SELECTION.put(player.getUuid(), index);
         ACTIVE_SCHOOL.put(player.getUuid(), index);
         ACTIVE_UNTIL.put(player.getUuid(), (long) player.getServer().getTicks() + ACTIVE_TICKS);
         AbilityCooldowns.start(player, ID, COOLDOWN_TICKS);
         imprintFx(player, index);
-        return ExecutionResult.success(1, "Imprinted " + SpellSchoolSelection.name(index) + " into your weapon for 15s.");
+        return ExecutionResult.success(
+                1, "Imprinted " + SpellSchoolSelection.name(index) + " into your weapon for 15s.");
     }
 
     public static void onMeleeHit(ServerPlayerEntity player, LivingEntity target) {
-        if (!active(player) || target == null || !target.isAlive() || player.getMainHandStack().isEmpty()) return;
+        if (!active(player)
+                || target == null
+                || !target.isAlive()
+                || player.getMainHandStack().isEmpty()) return;
         int index = ACTIVE_SCHOOL.getOrDefault(player.getUuid(), -1);
         SpellSchool school = SpellSchoolSelection.school(index);
         if (school == null) return;
         float damage = Math.max(1.0F, SpellPowerRuntime.scaled(school, player, 0.45D));
         target.timeUntilRegen = 0;
         target.damage(SpellDamageSource.create(school, player), damage);
-        player.getServerWorld().spawnParticles(SpellSchoolSelection.particle(index),
-                target.getX(), target.getBodyY(0.55D), target.getZ(), 10, 0.35D, 0.45D, 0.35D, 0.04D);
-        player.getServerWorld().playSound(null, target.getBlockPos(), SoundEvents.BLOCK_AMETHYST_BLOCK_HIT,
-                SoundCategory.PLAYERS, 0.35F, 1.35F);
+        player.getServerWorld()
+                .spawnParticles(
+                        SpellSchoolSelection.particle(index),
+                        target.getX(),
+                        target.getBodyY(0.55D),
+                        target.getZ(),
+                        10,
+                        0.35D,
+                        0.45D,
+                        0.35D,
+                        0.04D);
+        player.getServerWorld()
+                .playSound(
+                        null,
+                        target.getBlockPos(),
+                        SoundEvents.BLOCK_AMETHYST_BLOCK_HIT,
+                        SoundCategory.PLAYERS,
+                        0.35F,
+                        1.35F);
     }
 
     public static void tick(ServerPlayerEntity player) {
         Long until = ACTIVE_UNTIL.get(player.getUuid());
         if (until == null) return;
-        if (!AbilityRuntime.isClass(player, ForeignerClass.ID) || !player.isAlive()
+        if (!AbilityRuntime.isClass(player, ForeignerClass.ID)
+                || !player.isAlive()
                 || player.getServer().getTicks() >= until) {
             ACTIVE_UNTIL.remove(player.getUuid());
             ACTIVE_SCHOOL.remove(player.getUuid());
@@ -108,56 +131,100 @@ public final class ForeignerSpecialRuntime {
                 : LAST_SELECTION.getOrDefault(player.getUuid(), -1);
     }
 
-    public static long remainingTicks(ServerPlayerEntity player) { return AbilityCooldowns.remainingTicks(player, ID); }
-    public static long activeRemainingTicks(ServerPlayerEntity player) {
-        return Math.max(0L, ACTIVE_UNTIL.getOrDefault(player.getUuid(), 0L) - player.getServer().getTicks());
+    public static long remainingTicks(ServerPlayerEntity player) {
+        return AbilityCooldowns.remainingTicks(player, ID);
     }
-    public static int cooldownTicks() { return COOLDOWN_TICKS; }
+
+    public static long activeRemainingTicks(ServerPlayerEntity player) {
+        return Math.max(
+                0L,
+                ACTIVE_UNTIL.getOrDefault(player.getUuid(), 0L) - player.getServer().getTicks());
+    }
+
+    public static int cooldownTicks() {
+        return COOLDOWN_TICKS;
+    }
+
     public static void cleanup(ServerPlayerEntity player) {
         ACTIVE_UNTIL.remove(player.getUuid());
         ACTIVE_SCHOOL.remove(player.getUuid());
         LAST_SELECTION.remove(player.getUuid());
     }
-    public static void clear() { LAST_SELECTION.clear(); ACTIVE_SCHOOL.clear(); ACTIVE_UNTIL.clear(); }
 
+    public static void clear() {
+        LAST_SELECTION.clear();
+        ACTIVE_SCHOOL.clear();
+        ACTIVE_UNTIL.clear();
+    }
 
     private static void weaponAura(ServerPlayerEntity player, int index) {
         if (index < 0) return;
         net.minecraft.util.math.Vec3d look = player.getRotationVec(1F).normalize();
-        net.minecraft.util.math.Vec3d right = new net.minecraft.util.math.Vec3d(-look.z, 0D, look.x);
+        net.minecraft.util.math.Vec3d right =
+                new net.minecraft.util.math.Vec3d(-look.z, 0D, look.x);
         if (right.lengthSquared() > 0.0001D) right = right.normalize();
-        net.minecraft.util.math.Vec3d base = player.getEyePos()
-                .add(0D, -0.58D, 0D)
-                .add(right.multiply(0.34D))
-                .add(look.multiply(0.20D));
+        net.minecraft.util.math.Vec3d base =
+                player.getEyePos()
+                        .add(0D, -0.58D, 0D)
+                        .add(right.multiply(0.34D))
+                        .add(look.multiply(0.20D));
 
         for (int i = 0; i < 3; i++) {
             double along = 0.18D + i * 0.24D;
             net.minecraft.util.math.Vec3d point = base.add(look.multiply(along));
-            player.getServerWorld().spawnParticles(SpellSchoolSelection.particle(index),
-                    point.x, point.y, point.z, 1, 0.025D, 0.035D, 0.025D, 0.005D);
+            player.getServerWorld()
+                    .spawnParticles(
+                            SpellSchoolSelection.particle(index),
+                            point.x,
+                            point.y,
+                            point.z,
+                            1,
+                            0.025D,
+                            0.035D,
+                            0.025D,
+                            0.005D);
         }
 
         // A second school-specific accent makes the aura read immediately even on fast swings.
-        net.minecraft.particle.ParticleEffect accent = switch (Math.floorMod(index, SpellSchoolSelection.SIZE)) {
-            case SpellSchoolSelection.FIRE -> net.minecraft.particle.ParticleTypes.SMALL_FLAME;
-            case SpellSchoolSelection.FROST -> net.minecraft.particle.ParticleTypes.SNOWFLAKE;
-            case SpellSchoolSelection.WIND -> net.minecraft.particle.ParticleTypes.POOF;
-            case SpellSchoolSelection.WATER -> net.minecraft.particle.ParticleTypes.SPLASH;
-            case SpellSchoolSelection.EARTH -> net.minecraft.particle.ParticleTypes.ASH;
-            default -> net.minecraft.particle.ParticleTypes.END_ROD;
-        };
+        net.minecraft.particle.ParticleEffect accent =
+                switch (Math.floorMod(index, SpellSchoolSelection.SIZE)) {
+                    case SpellSchoolSelection.FIRE ->
+                            net.minecraft.particle.ParticleTypes.SMALL_FLAME;
+                    case SpellSchoolSelection.FROST ->
+                            net.minecraft.particle.ParticleTypes.SNOWFLAKE;
+                    case SpellSchoolSelection.WIND -> net.minecraft.particle.ParticleTypes.POOF;
+                    case SpellSchoolSelection.WATER -> net.minecraft.particle.ParticleTypes.SPLASH;
+                    case SpellSchoolSelection.EARTH -> net.minecraft.particle.ParticleTypes.ASH;
+                    default -> net.minecraft.particle.ParticleTypes.END_ROD;
+                };
         net.minecraft.util.math.Vec3d tip = base.add(look.multiply(0.70D));
-        player.getServerWorld().spawnParticles(accent, tip.x, tip.y, tip.z, 1,
-                0.02D, 0.02D, 0.02D, 0.002D);
+        player.getServerWorld()
+                .spawnParticles(accent, tip.x, tip.y, tip.z, 1, 0.02D, 0.02D, 0.02D, 0.002D);
     }
 
     private static void imprintFx(ServerPlayerEntity player, int index) {
-        player.getServerWorld().spawnParticles(SpellSchoolSelection.particle(index),
-                player.getX(), player.getBodyY(0.55D), player.getZ(), 32, 0.65D, 0.85D, 0.65D, 0.08D);
-        player.getServerWorld().playSound(null, player.getBlockPos(), SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE,
-                SoundCategory.PLAYERS, 0.7F, 1.2F);
+        player.getServerWorld()
+                .spawnParticles(
+                        SpellSchoolSelection.particle(index),
+                        player.getX(),
+                        player.getBodyY(0.55D),
+                        player.getZ(),
+                        32,
+                        0.65D,
+                        0.85D,
+                        0.65D,
+                        0.08D);
+        player.getServerWorld()
+                .playSound(
+                        null,
+                        player.getBlockPos(),
+                        SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE,
+                        SoundCategory.PLAYERS,
+                        0.7F,
+                        1.2F);
     }
 
-    private static int seconds(long ticks) { return (int) Math.ceil(Math.max(0L, ticks) / 20.0D); }
+    private static int seconds(long ticks) {
+        return (int) Math.ceil(Math.max(0L, ticks) / 20.0D);
+    }
 }

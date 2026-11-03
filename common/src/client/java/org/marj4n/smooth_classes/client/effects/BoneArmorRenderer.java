@@ -10,11 +10,14 @@ import org.marj4n.smooth_classes.SmoothClasses;
 import java.util.List;
 
 public class BoneArmorRenderer extends OrbitingRotatingEffectRenderer {
-    public static final Identifier modelId_base = Identifier.of(SmoothClasses.MOD_ID, "spell_projectile/bones");
-    public static final Identifier modelId_overlay = Identifier.of(SmoothClasses.MOD_ID, "spell_projectile/bones");
+    public static final Identifier modelId_base =
+            Identifier.of(SmoothClasses.MOD_ID, "spell_projectile/bones");
+    public static final Identifier modelId_overlay =
+            Identifier.of(SmoothClasses.MOD_ID, "spell_projectile/bones");
 
     private static final RenderLayer BASE_RENDER_LAYER =
-            RenderLayer.getEntityTranslucent(net.minecraft.screen.PlayerScreenHandler.BLOCK_ATLAS_TEXTURE);
+            RenderLayer.getEntityTranslucent(
+                    net.minecraft.screen.PlayerScreenHandler.BLOCK_ATLAS_TEXTURE);
     private static final RenderLayer GLOWING_RENDER_LAYER =
             CustomLayers.spellEffect(LightEmission.GLOW, false);
 
@@ -25,11 +28,7 @@ public class BoneArmorRenderer extends OrbitingRotatingEffectRenderer {
     }
 
     public BoneArmorRenderer() {
-        super(List.of(
-                        new Model(BASE_RENDER_LAYER, modelId_overlay)),
-                0.9F,
-                1.2F);
+        super(List.of(new Model(BASE_RENDER_LAYER, modelId_overlay)), 0.9F, 1.2F);
         setSpeed(6f);
     }
-
 }

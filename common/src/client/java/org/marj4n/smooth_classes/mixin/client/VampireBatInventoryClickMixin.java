@@ -19,8 +19,13 @@ public abstract class VampireBatInventoryClickMixin {
     }
 
     @Inject(method = "clickSlot", at = @At("HEAD"), cancellable = true)
-    private void smooth_classes$noBatSlotClick(int syncId, int slotId, int button, SlotActionType actionType,
-                                                PlayerEntity player, CallbackInfo ci) {
+    private void smooth_classes$noBatSlotClick(
+            int syncId,
+            int slotId,
+            int button,
+            SlotActionType actionType,
+            PlayerEntity player,
+            CallbackInfo ci) {
         if (locked()) ci.cancel();
     }
 

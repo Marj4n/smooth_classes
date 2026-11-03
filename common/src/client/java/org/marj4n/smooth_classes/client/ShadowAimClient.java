@@ -29,7 +29,9 @@ public final class ShadowAimClient {
 
     private ShadowAimClient() {}
 
-    public static boolean isAiming() { return aiming; }
+    public static boolean isAiming() {
+        return aiming;
+    }
 
     public static void begin(MinecraftClient client) {
         if (client.player == null || client.world == null) return;
@@ -56,8 +58,10 @@ public final class ShadowAimClient {
         Vec3d eye = client.player.getEyePos();
         Vec3d end = eye.add(client.player.getRotationVec(1F).multiply(range));
         HitResult block = client.player.raycast(range, 1F, false);
-        double blockDistanceSq = block.getType() == HitResult.Type.MISS
-                ? eye.squaredDistanceTo(end) : eye.squaredDistanceTo(block.getPos());
+        double blockDistanceSq =
+                block.getType() == HitResult.Type.MISS
+                        ? eye.squaredDistanceTo(end)
+                        : eye.squaredDistanceTo(block.getPos());
 
         LivingEntity entity = findLivingTarget(client, eye, end, blockDistanceSq);
         aimedEntity = entity;
@@ -101,7 +105,9 @@ public final class ShadowAimClient {
             out.writeDouble(aimedBlock.z);
             ClientPlayNetworking.send(SmoothClassesNetworking.SHADOW_AIM_CAST, out);
         } else {
-            client.player.sendMessage(Text.literal("Aim at a creature or block, then release Shadow Technique."), true);
+            client.player.sendMessage(
+                    Text.literal("Aim at a creature or block, then release Shadow Technique."),
+                    true);
         }
         reset();
     }
@@ -115,12 +121,16 @@ public final class ShadowAimClient {
         previewEntity = null;
     }
 
-    private static LivingEntity findLivingTarget(MinecraftClient client, Vec3d eye, Vec3d end, double maxDistanceSq) {
+    private static LivingEntity findLivingTarget(
+            MinecraftClient client, Vec3d eye, Vec3d end, double maxDistanceSq) {
         double nearest = Math.min(eye.squaredDistanceTo(end), maxDistanceSq);
         LivingEntity best = null;
         Box search = new Box(eye, end).expand(1.0D);
-        for (LivingEntity entity : client.world.getEntitiesByClass(LivingEntity.class, search,
-                entity -> entity != client.player && entity.isAlive())) {
+        for (LivingEntity entity :
+                client.world.getEntitiesByClass(
+                        LivingEntity.class,
+                        search,
+                        entity -> entity != client.player && entity.isAlive())) {
             var hit = entity.getBoundingBox().expand(.15D).raycast(eye, end);
             if (hit.isEmpty()) continue;
             double distance = eye.squaredDistanceTo(hit.get());
@@ -133,7 +143,8 @@ public final class ShadowAimClient {
     }
 
     private static Vec3d previewBehindEntity(MinecraftClient client, LivingEntity target) {
-        double distance = Math.max(1.4D, (target.getWidth() + client.player.getWidth()) * .5D + .45D);
+        double distance =
+                Math.max(1.4D, (target.getWidth() + client.player.getWidth()) * .5D + .45D);
         Vec3d back = Vec3d.fromPolar(0F, target.getYaw()).multiply(-distance);
         return safePreview(client, target.getPos().add(back));
     }
@@ -169,7 +180,8 @@ public final class ShadowAimClient {
     }
 
     private static void clearTarget() {
-        if (highlighted != null && !highlighted.isRemoved()) highlighted.setGlowing(highlightedWasGlowing);
+        if (highlighted != null && !highlighted.isRemoved())
+            highlighted.setGlowing(highlightedWasGlowing);
         highlighted = null;
         highlightedWasGlowing = false;
     }
@@ -177,18 +189,30 @@ public final class ShadowAimClient {
     public static void render(WorldRenderContext context) {
         if (!aiming || previewPos == null || AbilityHudState.shadowActive) return;
         MinecraftClient client = MinecraftClient.getInstance();
-        if (client.world == null || client.player == null || context.matrixStack() == null || context.consumers() == null) return;
+        if (client.world == null
+                || client.player == null
+                || context.matrixStack() == null
+                || context.consumers() == null) return;
 
         if (previewEntity == null || previewEntity.getWorld() != client.world) {
             previewEntity = SmoothEntities.SHADOW_ANCHOR.create(client.world);
             if (previewEntity == null) return;
             previewEntity.addCommandTag(PREVIEW_TAG);
         }
-        previewEntity.refreshPositionAndAngles(previewPos.x, previewPos.y, previewPos.z, previewYaw, 0F);
+        previewEntity.refreshPositionAndAngles(
+                previewPos.x, previewPos.y, previewPos.z, previewYaw, 0F);
 
         Vec3d camera = context.camera().getPos();
-        client.getEntityRenderDispatcher().render(previewEntity,
-                previewPos.x - camera.x, previewPos.y - camera.y, previewPos.z - camera.z,
-                previewYaw, context.tickDelta(), context.matrixStack(), context.consumers(), 0xF000F0);
+        client.getEntityRenderDispatcher()
+                .render(
+                        previewEntity,
+                        previewPos.x - camera.x,
+                        previewPos.y - camera.y,
+                        previewPos.z - camera.z,
+                        previewYaw,
+                        context.tickDelta(),
+                        context.matrixStack(),
+                        context.consumers(),
+                        0xF000F0);
     }
 }

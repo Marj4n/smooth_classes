@@ -25,7 +25,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @SuppressWarnings("unchecked")
 @Mixin(PlayerEntityRenderer.class)
 public abstract class PlayerOriginAppearanceRendererMixin
-        extends LivingEntityRenderer<AbstractClientPlayerEntity, PlayerEntityModel<AbstractClientPlayerEntity>> {
+        extends LivingEntityRenderer<
+                AbstractClientPlayerEntity, PlayerEntityModel<AbstractClientPlayerEntity>> {
     @Unique private boolean smooth_classes$headVisible;
     @Unique private boolean smooth_classes$hatVisible;
     @Unique private boolean smooth_classes$bodyVisible;
@@ -39,65 +40,100 @@ public abstract class PlayerOriginAppearanceRendererMixin
     @Unique private boolean smooth_classes$rightPantsVisible;
     @Unique private boolean smooth_classes$leftPantsVisible;
     @Unique private boolean smooth_classes$visibilityChanged;
-    @Unique private java.util.List<net.minecraft.client.render.entity.feature.FeatureRenderer<AbstractClientPlayerEntity,
-            PlayerEntityModel<AbstractClientPlayerEntity>>> smooth_classes$batFeaturesBackup;
 
-    protected PlayerOriginAppearanceRendererMixin(EntityRendererFactory.Context ctx,
-                                                   PlayerEntityModel<AbstractClientPlayerEntity> model,
-                                                   float shadowRadius) {
+    @Unique
+    private java.util.List<
+                    net.minecraft.client.render.entity.feature.FeatureRenderer<
+                            AbstractClientPlayerEntity,
+                            PlayerEntityModel<AbstractClientPlayerEntity>>>
+            smooth_classes$batFeaturesBackup;
+
+    protected PlayerOriginAppearanceRendererMixin(
+            EntityRendererFactory.Context ctx,
+            PlayerEntityModel<AbstractClientPlayerEntity> model,
+            float shadowRadius) {
         super(ctx, model, shadowRadius);
     }
 
     @Inject(method = "<init>", at = @At("TAIL"))
-    private void smooth_classes$addOriginAppearance(EntityRendererFactory.Context ctx, boolean slim, CallbackInfo ci) {
+    private void smooth_classes$addOriginAppearance(
+            EntityRendererFactory.Context ctx, boolean slim, CallbackInfo ci) {
         // The vanilla armor feature runs before our custom appearance feature.
         // Give Man-Bat a renderless first feature to capture the CURRENT
         // Better Combat rig before armor reads the equipment pose.
-        this.features.add(0, new ManBatPosePreparerFeatureRenderer(
-                (FeatureRendererContext<AbstractClientPlayerEntity, PlayerEntityModel<AbstractClientPlayerEntity>>) this,
-                ctx
-        ));
-        this.addFeature(new OriginAppearanceFeatureRenderer(
-                (FeatureRendererContext<AbstractClientPlayerEntity, PlayerEntityModel<AbstractClientPlayerEntity>>) this,
-                ctx
-        ));
+        this.features.add(
+                0,
+                new ManBatPosePreparerFeatureRenderer(
+                        (FeatureRendererContext<
+                                        AbstractClientPlayerEntity,
+                                        PlayerEntityModel<AbstractClientPlayerEntity>>)
+                                this,
+                        ctx));
+        this.addFeature(
+                new OriginAppearanceFeatureRenderer(
+                        (FeatureRendererContext<
+                                        AbstractClientPlayerEntity,
+                                        PlayerEntityModel<AbstractClientPlayerEntity>>)
+                                this,
+                        ctx));
     }
 
     // Begin at the outer PlayerEntityRenderer so the guard survives all later
     // animation modifiers and only affects the matching player's draw calls.
-    @Inject(method = "render(Lnet/minecraft/client/network/AbstractClientPlayerEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V",
+    @Inject(
+            method =
+                    "render(Lnet/minecraft/client/network/AbstractClientPlayerEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V",
             at = @At("HEAD"))
-    private void smooth_classes$enterReplacementRender(AbstractClientPlayerEntity player,
-            float yaw, float tickDelta, MatrixStack matrices,
-            VertexConsumerProvider consumers, int light, CallbackInfo ci) {
+    private void smooth_classes$enterReplacementRender(
+            AbstractClientPlayerEntity player,
+            float yaw,
+            float tickDelta,
+            MatrixStack matrices,
+            VertexConsumerProvider consumers,
+            int light,
+            CallbackInfo ci) {
         OriginVanillaBodyGuard.begin(player);
         // Accessories and other third-party feature renderers attach to the old
         // humanoid skeleton, so they float around the tiny Bat Form model.
         // Temporarily render only Smooth Classes' native origin feature; restore
         // the entire feature set right afterward for all other player forms.
-        boolean bat = (OriginRuntime.state(player).origin() == OriginType.VAMPIRE
-                && OriginRuntime.state(player).hasFlag("vampire.form.bat"))
-                || (player == MinecraftClient.getInstance().player
-                    && "vampire".equals(OriginClientState.originId)
-                    && OriginClientState.hasFlag("vampire.form.bat"));
+        boolean bat =
+                (OriginRuntime.state(player).origin() == OriginType.VAMPIRE
+                                && OriginRuntime.state(player).hasFlag("vampire.form.bat"))
+                        || (player == MinecraftClient.getInstance().player
+                                && "vampire".equals(OriginClientState.originId)
+                                && OriginClientState.hasFlag("vampire.form.bat"));
         if (bat && smooth_classes$batFeaturesBackup == null) {
             smooth_classes$batFeaturesBackup = new java.util.ArrayList<>(this.features);
-            this.features.removeIf(feature -> !(feature instanceof OriginAppearanceFeatureRenderer)
-                    && !(feature instanceof ManBatPosePreparerFeatureRenderer));
+            this.features.removeIf(
+                    feature ->
+                            !(feature instanceof OriginAppearanceFeatureRenderer)
+                                    && !(feature instanceof ManBatPosePreparerFeatureRenderer));
         }
     }
 
-    @Inject(method = "render(Lnet/minecraft/client/network/AbstractClientPlayerEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V",
-            at = @At(value = "INVOKE",
-                    target = "Lnet/minecraft/client/render/entity/PlayerEntityRenderer;setModelPose(Lnet/minecraft/client/network/AbstractClientPlayerEntity;)V",
-                    shift = At.Shift.AFTER))
-    private void smooth_classes$hideReplacedBody(AbstractClientPlayerEntity player, float yaw, float tickDelta,
-                                                  MatrixStack matrices, VertexConsumerProvider consumers, int light,
-                                                  CallbackInfo ci) {
+    @Inject(
+            method =
+                    "render(Lnet/minecraft/client/network/AbstractClientPlayerEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V",
+            at =
+                    @At(
+                            value = "INVOKE",
+                            target =
+                                    "Lnet/minecraft/client/render/entity/PlayerEntityRenderer;setModelPose(Lnet/minecraft/client/network/AbstractClientPlayerEntity;)V",
+                            shift = At.Shift.AFTER))
+    private void smooth_classes$hideReplacedBody(
+            AbstractClientPlayerEntity player,
+            float yaw,
+            float tickDelta,
+            MatrixStack matrices,
+            VertexConsumerProvider consumers,
+            int light,
+            CallbackInfo ci) {
         smooth_classes$visibilityChanged = false;
         if (player == null) return;
         OriginType origin = OriginRuntime.state(player).origin();
-        if (player == MinecraftClient.getInstance().player && "vampire".equals(OriginClientState.originId)) {
+        if (player == MinecraftClient.getInstance().player
+                && "vampire".equals(OriginClientState.originId)) {
             origin = OriginType.VAMPIRE;
         }
         if (origin == null) return;
@@ -119,7 +155,9 @@ public abstract class PlayerOriginAppearanceRendererMixin
             model.rightPants.visible = false;
             model.leftPants.visible = false;
             smooth_classes$visibilityChanged = true;
-        } else if (origin == OriginType.MERMAID && org.marj4n.smooth_classes.client.origin.OriginMorphState.hideMermaidLegs(player)) {
+        } else if (origin == OriginType.MERMAID
+                && org.marj4n.smooth_classes.client.origin.OriginMorphState.hideMermaidLegs(
+                        player)) {
             // Human legs on dry land, complete siren tail while wet.
             model.rightLeg.visible = false;
             model.leftLeg.visible = false;
@@ -134,11 +172,18 @@ public abstract class PlayerOriginAppearanceRendererMixin
         }
     }
 
-    @Inject(method = "render(Lnet/minecraft/client/network/AbstractClientPlayerEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V",
+    @Inject(
+            method =
+                    "render(Lnet/minecraft/client/network/AbstractClientPlayerEntity;FFLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V",
             at = @At("RETURN"))
-    private void smooth_classes$restoreBody(AbstractClientPlayerEntity player, float yaw, float tickDelta,
-                                             MatrixStack matrices, VertexConsumerProvider consumers, int light,
-                                             CallbackInfo ci) {
+    private void smooth_classes$restoreBody(
+            AbstractClientPlayerEntity player,
+            float yaw,
+            float tickDelta,
+            MatrixStack matrices,
+            VertexConsumerProvider consumers,
+            int light,
+            CallbackInfo ci) {
         OriginVanillaBodyGuard.end(player);
         if (smooth_classes$batFeaturesBackup != null) {
             this.features.clear();
@@ -151,7 +196,8 @@ public abstract class PlayerOriginAppearanceRendererMixin
     }
 
     @Unique
-    private void smooth_classes$saveVisibility(PlayerEntityModel<AbstractClientPlayerEntity> model) {
+    private void smooth_classes$saveVisibility(
+            PlayerEntityModel<AbstractClientPlayerEntity> model) {
         smooth_classes$headVisible = model.head.visible;
         smooth_classes$hatVisible = model.hat.visible;
         smooth_classes$bodyVisible = model.body.visible;
@@ -167,7 +213,8 @@ public abstract class PlayerOriginAppearanceRendererMixin
     }
 
     @Unique
-    private void smooth_classes$restoreVisibility(PlayerEntityModel<AbstractClientPlayerEntity> model) {
+    private void smooth_classes$restoreVisibility(
+            PlayerEntityModel<AbstractClientPlayerEntity> model) {
         model.head.visible = smooth_classes$headVisible;
         model.hat.visible = smooth_classes$hatVisible;
         model.body.visible = smooth_classes$bodyVisible;

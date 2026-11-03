@@ -16,20 +16,28 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(BowItem.class)
 public abstract class BowItemMixin {
-    @Shadow public abstract int getMaxUseTime(ItemStack stack);
-    @Invoker("getPullProgress") public static float smooth_classes$getPullProgress(int ticks){throw new AssertionError();}
+    @Shadow
+    public abstract int getMaxUseTime(ItemStack stack);
 
-    @Inject(method="onStoppedUsing", at=@At("HEAD"), cancellable=true)
-    private void smooth_classes$release(ItemStack stack, World world, LivingEntity user, int remaining, CallbackInfo ci) {
+    @Invoker("getPullProgress")
+    public static float smooth_classes$getPullProgress(int ticks) {
+        throw new AssertionError();
+    }
+
+    @Inject(method = "onStoppedUsing", at = @At("HEAD"), cancellable = true)
+    private void smooth_classes$release(
+            ItemStack stack, World world, LivingEntity user, int remaining, CallbackInfo ci) {
         if (!world.isClient && user instanceof ServerPlayerEntity player) {
-            int useTicks=getMaxUseTime(stack)-remaining;
-            String bowName=stack.getName().getString().toLowerCase(java.util.Locale.ROOT);
-            float required=(bowName.contains("shortbow")||bowName.contains("love"))?0.5F:1.0F;
-            boolean full=smooth_classes$getPullProgress(useTicks)>=required;
-            BasePathRuntime.onBowRelease(player,full);
-            if (full && (ArcherRuntime.fireElementalArrows(player)
-                    || ArcherRuntime.fireArrowRain(player)
-                    || ArcherRuntime.fireMarksman(player))) ci.cancel();
+            int useTicks = getMaxUseTime(stack) - remaining;
+            String bowName = stack.getName().getString().toLowerCase(java.util.Locale.ROOT);
+            float required =
+                    (bowName.contains("shortbow") || bowName.contains("love")) ? 0.5F : 1.0F;
+            boolean full = smooth_classes$getPullProgress(useTicks) >= required;
+            BasePathRuntime.onBowRelease(player, full);
+            if (full
+                    && (ArcherRuntime.fireElementalArrows(player)
+                            || ArcherRuntime.fireArrowRain(player)
+                            || ArcherRuntime.fireMarksman(player))) ci.cancel();
         }
     }
 }

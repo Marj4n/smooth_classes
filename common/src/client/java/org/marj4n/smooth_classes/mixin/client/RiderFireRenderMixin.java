@@ -21,7 +21,7 @@ public abstract class RiderFireRenderMixin {
         }
         if (self instanceof PlayerEntity player
                 && (player.getVehicle() instanceof RiderDreadSteedEntity
-                || player.getVehicle() instanceof RiderHippogryphEntity)) {
+                        || player.getVehicle() instanceof RiderHippogryphEntity)) {
             cir.setReturnValue(false);
         }
     }

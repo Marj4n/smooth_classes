@@ -15,6 +15,7 @@ import java.util.*;
 /** Conservative placement: no destructive fallback, no occupied chunks, exact reserved-plot snapshots. */
 final class VampireGraveyardSites {
     private static final int MARGIN = 14; // Covers blendTerrain's complete write footprint.
+
     private VampireGraveyardSites() {}
 
     static BlockPos findChurch(ServerWorld world, net.minecraft.util.math.Vec3i templateSize) {
@@ -29,7 +30,11 @@ final class VampireGraveyardSites {
                 if (top < 58 || top > 205) continue;
                 BlockPos origin = new BlockPos(x - 27, top - 6, z - 27);
                 BlockPos min = origin.add(-MARGIN, -1, -MARGIN);
-                BlockPos max = origin.add(templateSize.getX() - 1 + MARGIN, templateSize.getY() + 1, templateSize.getZ() - 1 + MARGIN);
+                BlockPos max =
+                        origin.add(
+                                templateSize.getX() - 1 + MARGIN,
+                                templateSize.getY() + 1,
+                                templateSize.getZ() - 1 + MARGIN);
                 if (!withinWorld(world, min, max)) continue;
                 // Reject steep/wet sites cheaply, before loading all footprint chunks.
                 int lowest = Integer.MAX_VALUE, highest = Integer.MIN_VALUE;
@@ -37,8 +42,10 @@ final class VampireGraveyardSites {
                 for (int dx = -MARGIN; dx < templateSize.getX() + MARGIN; dx += 16) {
                     for (int dz = -MARGIN; dz < templateSize.getZ() + MARGIN; dz += 16) {
                         int sx = origin.getX() + dx, sz = origin.getZ() + dz;
-                        int sy = world.getTopY(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, sx, sz) - 1;
-                        lowest = Math.min(lowest, sy); highest = Math.max(highest, sy);
+                        int sy =
+                                world.getTopY(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, sx, sz) - 1;
+                        lowest = Math.min(lowest, sy);
+                        highest = Math.max(highest, sy);
                         dry &= world.getFluidState(new BlockPos(sx, sy, sz)).isEmpty();
                     }
                 }
@@ -48,11 +55,13 @@ final class VampireGraveyardSites {
                 // terrain blending. Coarse samples alone can miss a narrow valley.
                 for (int sx = min.getX(); sx <= max.getX() && dry; sx++) {
                     for (int sz = min.getZ(); sz <= max.getZ(); sz++) {
-                        int motion = world.getTopY(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, sx, sz) - 1;
+                        int motion =
+                                world.getTopY(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, sx, sz) - 1;
                         int floor = world.getTopY(Heightmap.Type.OCEAN_FLOOR, sx, sz) - 1;
                         lowest = Math.min(lowest, Math.min(motion, floor));
                         highest = Math.max(highest, Math.max(motion, floor));
-                        if (highest - lowest > 8 || !world.getFluidState(new BlockPos(sx, motion, sz)).isEmpty()) {
+                        if (highest - lowest > 8
+                                || !world.getFluidState(new BlockPos(sx, motion, sz)).isEmpty()) {
                             dry = false;
                             break;
                         }
@@ -61,10 +70,19 @@ final class VampireGraveyardSites {
                 if (!dry) continue;
                 // Blend writes are below the local surface; scan down far enough to
                 // cover the supported terrain delta as well as the template itself.
-                BlockPos scanMin = new BlockPos(min.getX(), Math.max(world.getBottomY() + 1, Math.min(min.getY(), lowest - 2)), min.getZ());
-                BlockPos scanMax = new BlockPos(max.getX(), Math.max(max.getY(), highest + 2), max.getZ());
+                BlockPos scanMin =
+                        new BlockPos(
+                                min.getX(),
+                                Math.max(world.getBottomY() + 1, Math.min(min.getY(), lowest - 2)),
+                                min.getZ());
+                BlockPos scanMax =
+                        new BlockPos(max.getX(), Math.max(max.getY(), highest + 2), max.getZ());
                 if (!naturalVolume(world, scanMin, scanMax)) continue;
-                if (world.getOtherEntities(null, new Box(scanMin, scanMax.add(1, 1, 1)), e -> e instanceof PlayerEntity || e.hasCustomName()).isEmpty()) return origin;
+                if (world.getOtherEntities(
+                                null,
+                                new Box(scanMin, scanMax.add(1, 1, 1)),
+                                e -> e instanceof PlayerEntity || e.hasCustomName())
+                        .isEmpty()) return origin;
             }
         }
         return null;
@@ -83,7 +101,8 @@ final class VampireGraveyardSites {
             int z = state.church().getZ() + 27 + offset.z();
             BlockPos horizontalMin = new BlockPos(x - 4, world.getBottomY() + 1, z - 4);
             BlockPos horizontalMax = new BlockPos(x + 4, world.getTopY() - 1, z + 4);
-            if (!world.getWorldBorder().contains(horizontalMin) || !world.getWorldBorder().contains(horizontalMax)) continue;
+            if (!world.getWorldBorder().contains(horizontalMin)
+                    || !world.getWorldBorder().contains(horizontalMax)) continue;
             if (!freshChunks(world, horizontalMin, horizontalMax)) continue;
             int surface = world.getTopY(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, x, z) - 1;
             BlockPos center = new BlockPos(x, surface - 6, z);
@@ -92,8 +111,13 @@ final class VampireGraveyardSites {
             boolean flat = true;
             for (int dx = -4; dx <= 4 && flat; dx++) {
                 for (int dz = -4; dz <= 4; dz++) {
-                    int height = world.getTopY(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, x + dx, z + dz) - 1;
-                    if (Math.abs(height - surface) > 2) { flat = false; break; }
+                    int height =
+                            world.getTopY(Heightmap.Type.MOTION_BLOCKING_NO_LEAVES, x + dx, z + dz)
+                                    - 1;
+                    if (Math.abs(height - surface) > 2) {
+                        flat = false;
+                        break;
+                    }
                 }
             }
             if (!flat || !naturalVolume(world, min, max)) continue;
@@ -103,7 +127,8 @@ final class VampireGraveyardSites {
     }
 
     static boolean emptyOfEntities(ServerWorld world, BlockPos center) {
-        return world.getOtherEntities(null, new Box(center.add(-4, 0, -4), center.add(5, 11, 5))).isEmpty();
+        return world.getOtherEntities(null, new Box(center.add(-4, 0, -4), center.add(5, 11, 5)))
+                .isEmpty();
     }
 
     static long fingerprint(ServerWorld world, BlockPos center) {
@@ -133,33 +158,46 @@ final class VampireGraveyardSites {
     }
 
     private static boolean withinWorld(ServerWorld world, BlockPos min, BlockPos max) {
-        return min.getY() > world.getBottomY() && max.getY() < world.getTopY()
-                && world.getWorldBorder().contains(min) && world.getWorldBorder().contains(max);
+        return min.getY() > world.getBottomY()
+                && max.getY() < world.getTopY()
+                && world.getWorldBorder().contains(min)
+                && world.getWorldBorder().contains(max);
     }
 
     private static boolean naturalVolume(ServerWorld world, BlockPos min, BlockPos max) {
         for (BlockPos pos : BlockPos.iterate(min, max)) {
             BlockState block = world.getBlockState(pos);
-            if (world.getBlockEntity(pos) != null || !block.getFluidState().isEmpty() || !natural(block)) return false;
+            if (world.getBlockEntity(pos) != null
+                    || !block.getFluidState().isEmpty()
+                    || !natural(block)) return false;
         }
         return true;
     }
 
     private static boolean natural(BlockState state) {
-        return state.isAir() || state.isIn(BlockTags.DIRT) || state.isIn(BlockTags.BASE_STONE_OVERWORLD)
-                || state.isIn(BlockTags.SAND) || state.isIn(BlockTags.TERRACOTTA)
-                || state.isIn(BlockTags.LOGS) || state.isIn(BlockTags.LEAVES)
+        return state.isAir()
+                || state.isIn(BlockTags.DIRT)
+                || state.isIn(BlockTags.BASE_STONE_OVERWORLD)
+                || state.isIn(BlockTags.SAND)
+                || state.isIn(BlockTags.TERRACOTTA)
+                || state.isIn(BlockTags.LOGS)
+                || state.isIn(BlockTags.LEAVES)
                 || state.getBlock() instanceof PlantBlock
-                || state.isOf(Blocks.GRAVEL) || state.isOf(Blocks.CLAY)
-                || state.isOf(Blocks.SNOW) || state.isOf(Blocks.SNOW_BLOCK)
-                || state.isOf(Blocks.ICE) || state.isOf(Blocks.PACKED_ICE) || state.isOf(Blocks.BLUE_ICE);
+                || state.isOf(Blocks.GRAVEL)
+                || state.isOf(Blocks.CLAY)
+                || state.isOf(Blocks.SNOW)
+                || state.isOf(Blocks.SNOW_BLOCK)
+                || state.isOf(Blocks.ICE)
+                || state.isOf(Blocks.PACKED_ICE)
+                || state.isOf(Blocks.BLUE_ICE);
     }
 
     static BlockPos findLegacyCrypt(ServerWorld world, BlockPos around, int radiusChunks) {
         return findLegacyCrypt(world, around, radiusChunks, true);
     }
 
-    static BlockPos findLegacyCrypt(ServerWorld world, BlockPos around, int radiusChunks, boolean requireJournal) {
+    static BlockPos findLegacyCrypt(
+            ServerWorld world, BlockPos around, int radiusChunks, boolean requireJournal) {
         List<BlockPos> matches = new ArrayList<>();
         int cx = around.getX() >> 4, cz = around.getZ() >> 4;
         for (int x = cx - radiusChunks; x <= cx + radiusChunks; x++) {
@@ -174,24 +212,34 @@ final class VampireGraveyardSites {
                     boolean journal = false;
                     for (int slot = 0; slot < chest.size(); slot++) {
                         NbtCompound tag = chest.getStack(slot).getNbt();
-                        if (tag != null && "The Forgotten Crypt".equals(tag.getString("title"))
-                                && "The Last Gravedigger".equals(tag.getString("author"))) { journal = true; break; }
+                        if (tag != null
+                                && "The Forgotten Crypt".equals(tag.getString("title"))
+                                && "The Last Gravedigger".equals(tag.getString("author"))) {
+                            journal = true;
+                            break;
+                        }
                     }
                     if (journal || !requireJournal) matches.add(center);
                 }
             }
         }
-        return matches.stream().min(Comparator.comparingDouble(p -> p.getSquaredDistance(around))).orElse(null);
+        return matches.stream()
+                .min(Comparator.comparingDouble(p -> p.getSquaredDistance(around)))
+                .orElse(null);
     }
 
     static boolean legacyGeometry(ServerWorld world, BlockPos center) {
         if (!(world.getBlockEntity(center.up()) instanceof ChestBlockEntity)) return false;
         BlockState bed = world.getBlockState(center.add(-1, 1, 1));
-        if (!(bed.getBlock() instanceof BedBlock) || bed.get(BedBlock.PART) != BedPart.HEAD) return false;
-        for (int x : new int[]{-2, 2}) for (int z : new int[]{-2, 2}) {
-            if (!world.getBlockState(center.add(x, 1, z)).isOf(Blocks.CHISELED_POLISHED_BLACKSTONE)
-                    || !world.getBlockState(center.add(x, 2, z)).isOf(Blocks.POLISHED_BLACKSTONE_BRICKS)) return false;
-        }
+        if (!(bed.getBlock() instanceof BedBlock) || bed.get(BedBlock.PART) != BedPart.HEAD)
+            return false;
+        for (int x : new int[] {-2, 2})
+            for (int z : new int[] {-2, 2}) {
+                if (!world.getBlockState(center.add(x, 1, z))
+                                .isOf(Blocks.CHISELED_POLISHED_BLACKSTONE)
+                        || !world.getBlockState(center.add(x, 2, z))
+                                .isOf(Blocks.POLISHED_BLACKSTONE_BRICKS)) return false;
+            }
         return true;
     }
 }

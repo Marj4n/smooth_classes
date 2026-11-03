@@ -18,6 +18,7 @@ public final class ArcaneSlashChargeRuntime {
     private static final Identifier ID = SmoothClasses.id("ascendancy_arcane_slash");
     private static final Map<UUID, Integer> HELD_AT = new HashMap<>();
     private static final Set<UUID> CHARGING = new HashSet<>();
+
     private ArcaneSlashChargeRuntime() {}
 
     public static void hold(ServerPlayerEntity player, boolean held) {
@@ -42,14 +43,21 @@ public final class ArcaneSlashChargeRuntime {
     }
 
     public static boolean canContinue(ServerPlayerEntity player) {
-        return CHARGING.contains(player.getUuid()) && isHeld(player)
-                && player.isAlive() && !player.isSpectator();
+        return CHARGING.contains(player.getUuid())
+                && isHeld(player)
+                && player.isAlive()
+                && !player.isSpectator();
     }
 
     public static void finish(ServerPlayerEntity player) {
         if (!CHARGING.remove(player.getUuid())) return;
-        SmoothClassesNetworking.sendChargeState(player, false, true, HUD_ABILITY, CHARGE_TICKS, CHARGE_TICKS);
-        AbilityCooldowns.start(player, ID, org.marj4n.smooth_classes.gameplay.AscendancyAbilityDispatcher.effectiveCooldownTicks(player,"arcane_slash"));
+        SmoothClassesNetworking.sendChargeState(
+                player, false, true, HUD_ABILITY, CHARGE_TICKS, CHARGE_TICKS);
+        AbilityCooldowns.start(
+                player,
+                ID,
+                org.marj4n.smooth_classes.gameplay.AscendancyAbilityDispatcher
+                        .effectiveCooldownTicks(player, "arcane_slash"));
         SmoothClassesNetworking.sendAbilityState(player);
     }
 

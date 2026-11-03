@@ -24,7 +24,9 @@ public final class VampireFeedClient {
             return;
         }
         OriginType origin = OriginType.byId(OriginClientState.originId).orElse(null);
-        if (origin != OriginType.VAMPIRE || client.player.isCreative() || client.player.isSpectator()) {
+        if (origin != OriginType.VAMPIRE
+                || client.player.isCreative()
+                || client.player.isSpectator()) {
             stop();
             return;
         }
@@ -32,7 +34,8 @@ public final class VampireFeedClient {
         int targetId = targetId(client);
         boolean holdingUse = client.options.useKey.isPressed();
         var state = org.marj4n.smooth_classes.origin.OriginRuntime.state(client.player);
-        boolean transformed = state.hasFlag("vampire.form.bat") || state.hasFlag("vampire.form.man_bat");
+        boolean transformed =
+                state.hasFlag("vampire.form.bat") || state.hasFlag("vampire.form.man_bat");
         if (holdingUse && !transformed && targetId >= 0) {
             if (feedingTarget != targetId) {
                 send(targetId);
@@ -48,7 +51,9 @@ public final class VampireFeedClient {
     private static int targetId(MinecraftClient client) {
         if (!client.player.getMainHandStack().isEmpty()) return -1;
         if (!(client.crosshairTarget instanceof EntityHitResult hit)) return -1;
-        if (!(hit.getEntity() instanceof LivingEntity living) || !living.isAlive() || living == client.player) return -1;
+        if (!(hit.getEntity() instanceof LivingEntity living)
+                || !living.isAlive()
+                || living == client.player) return -1;
         if (!org.marj4n.smooth_classes.origin.VampireBloodReserve.isFeedable(living)) return -1;
         if (client.player.squaredDistanceTo(living) > 12.25D) return -1;
         return living.getId();
@@ -67,6 +72,11 @@ public final class VampireFeedClient {
         ClientPlayNetworking.send(SmoothClassesNetworking.VAMPIRE_FEED, buf);
     }
 
-    public static boolean isFeeding() { return feedingTarget >= 0; }
-    public static float progress() { return progress; }
+    public static boolean isFeeding() {
+        return feedingTarget >= 0;
+    }
+
+    public static float progress() {
+        return progress;
+    }
 }

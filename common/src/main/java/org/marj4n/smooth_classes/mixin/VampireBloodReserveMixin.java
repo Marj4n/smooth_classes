@@ -14,23 +14,36 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(LivingEntity.class)
 public abstract class VampireBloodReserveMixin implements VampireBloodReserve.Holder {
-    @Unique private static final TrackedData<Integer> smooth_classes$TRACKED_BLOOD =
+    @Unique
+    private static final TrackedData<Integer> smooth_classes$TRACKED_BLOOD =
             DataTracker.registerData(LivingEntity.class, TrackedDataHandlerRegistry.INTEGER);
+
     @Unique private long smooth_classes$bloodUpdatedAt;
 
     @Inject(method = "initDataTracker", at = @At("TAIL"))
     private void smooth_classes$initBloodData(CallbackInfo ci) {
-        ((LivingEntity)(Object)this).getDataTracker().startTracking(smooth_classes$TRACKED_BLOOD,
-                VampireBloodReserve.MAX_PIPS);
+        ((LivingEntity) (Object) this)
+                .getDataTracker()
+                .startTracking(smooth_classes$TRACKED_BLOOD, VampireBloodReserve.MAX_PIPS);
     }
 
-    @Override public int smooth_classes$getBloodPips() {
-        return ((LivingEntity)(Object)this).getDataTracker().get(smooth_classes$TRACKED_BLOOD);
+    @Override
+    public int smooth_classes$getBloodPips() {
+        return ((LivingEntity) (Object) this).getDataTracker().get(smooth_classes$TRACKED_BLOOD);
     }
-    @Override public long smooth_classes$getBloodUpdatedAt() { return smooth_classes$bloodUpdatedAt; }
-    @Override public void smooth_classes$setBloodReserve(int pips, long timestamp) {
-        ((LivingEntity)(Object)this).getDataTracker().set(smooth_classes$TRACKED_BLOOD,
-                Math.max(0, Math.min(VampireBloodReserve.MAX_PIPS, pips)));
+
+    @Override
+    public long smooth_classes$getBloodUpdatedAt() {
+        return smooth_classes$bloodUpdatedAt;
+    }
+
+    @Override
+    public void smooth_classes$setBloodReserve(int pips, long timestamp) {
+        ((LivingEntity) (Object) this)
+                .getDataTracker()
+                .set(
+                        smooth_classes$TRACKED_BLOOD,
+                        Math.max(0, Math.min(VampireBloodReserve.MAX_PIPS, pips)));
         smooth_classes$bloodUpdatedAt = timestamp;
     }
 
@@ -39,8 +52,9 @@ public abstract class VampireBloodReserveMixin implements VampireBloodReserve.Ho
     // entity-tracked HUD portions up to date for nearby players.
     @Inject(method = "tick", at = @At("TAIL"))
     private void smooth_classes$recoverBlood(CallbackInfo ci) {
-        LivingEntity self = (LivingEntity)(Object)this;
-        if (!self.getWorld().isClient && self.age % 20 == 0
+        LivingEntity self = (LivingEntity) (Object) this;
+        if (!self.getWorld().isClient
+                && self.age % 20 == 0
                 && smooth_classes$getBloodPips() < VampireBloodReserve.MAX_PIPS
                 && VampireBloodReserve.isFeedable(self)) {
             VampireBloodReserve.available(self);
@@ -55,8 +69,10 @@ public abstract class VampireBloodReserveMixin implements VampireBloodReserve.Ho
 
     @Inject(method = "readCustomDataFromNbt", at = @At("TAIL"))
     private void smooth_classes$loadBlood(NbtCompound nbt, CallbackInfo ci) {
-        smooth_classes$setBloodReserve(nbt.contains("SmoothClassesBloodPips")
-                        ? nbt.getInt("SmoothClassesBloodPips") : VampireBloodReserve.MAX_PIPS,
+        smooth_classes$setBloodReserve(
+                nbt.contains("SmoothClassesBloodPips")
+                        ? nbt.getInt("SmoothClassesBloodPips")
+                        : VampireBloodReserve.MAX_PIPS,
                 nbt.getLong("SmoothClassesBloodUpdatedAt"));
     }
 }

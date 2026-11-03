@@ -20,21 +20,37 @@ public final class ClassSpecialRadialScreen extends Screen {
     private static final int DEAD_ZONE = 24;
     private static final int SLOT = 28;
 
-    private static final String[] SOUL_COMMANDS = {"Follow", "Guard Here", "Recall Soul", "Unbind", "Death List", "Attack", "Stay", "Need Backup"};
+    private static final String[] SOUL_COMMANDS = {
+        "Follow",
+        "Guard Here",
+        "Recall Soul",
+        "Unbind",
+        "Death List",
+        "Attack",
+        "Stay",
+        "Need Backup"
+    };
     private static final ItemStack[] SOUL_ICONS = {
-            new ItemStack(Items.LEAD), new ItemStack(Items.SHIELD),
-            new ItemStack(Items.SOUL_LANTERN), new ItemStack(Items.SHEARS), new ItemStack(Items.WRITTEN_BOOK),
-            new ItemStack(Items.IRON_SWORD), new ItemStack(Items.ARMOR_STAND), new ItemStack(Items.GOAT_HORN)
+        new ItemStack(Items.LEAD),
+        new ItemStack(Items.SHIELD),
+        new ItemStack(Items.SOUL_LANTERN),
+        new ItemStack(Items.SHEARS),
+        new ItemStack(Items.WRITTEN_BOOK),
+        new ItemStack(Items.IRON_SWORD),
+        new ItemStack(Items.ARMOR_STAND),
+        new ItemStack(Items.GOAT_HORN)
     };
 
-    private static final String[] SCHOOL_NAMES = {"Arcane", "Fire", "Frost", "Wind", "Water", "Earth"};
+    private static final String[] SCHOOL_NAMES = {
+        "Arcane", "Fire", "Frost", "Wind", "Water", "Earth"
+    };
     private static final Identifier[] SCHOOL_ICONS = {
-            Identifier.of("wizards", "textures/item/spell_book/arcane.png"),
-            Identifier.of("wizards", "textures/item/spell_book/fire.png"),
-            Identifier.of("wizards", "textures/item/spell_book/frost.png"),
-            Identifier.of("elemental_wizards_rpg", "textures/item/spellbooks/wind_spell_book.png"),
-            Identifier.of("elemental_wizards_rpg", "textures/item/spellbooks/aqua_spell_book.png"),
-            Identifier.of("elemental_wizards_rpg", "textures/item/spellbooks/terra_spell_book.png")
+        Identifier.of("wizards", "textures/item/spell_book/arcane.png"),
+        Identifier.of("wizards", "textures/item/spell_book/fire.png"),
+        Identifier.of("wizards", "textures/item/spell_book/frost.png"),
+        Identifier.of("elemental_wizards_rpg", "textures/item/spellbooks/wind_spell_book.png"),
+        Identifier.of("elemental_wizards_rpg", "textures/item/spellbooks/aqua_spell_book.png"),
+        Identifier.of("elemental_wizards_rpg", "textures/item/spellbooks/terra_spell_book.png")
     };
 
     private final String specialId;
@@ -49,8 +65,10 @@ public final class ClassSpecialRadialScreen extends Screen {
     }
 
     public static boolean supports(String id) {
-        return "treasury_key".equals(id) || "arcane_attunement".equals(id)
-                || "spell_imprint".equals(id) || "summoning_ritual".equals(id);
+        return "treasury_key".equals(id)
+                || "arcane_attunement".equals(id)
+                || "spell_imprint".equals(id)
+                || "summoning_ritual".equals(id);
     }
 
     private static String titleFor(String id) {
@@ -66,10 +84,14 @@ public final class ClassSpecialRadialScreen extends Screen {
         return "arcane_attunement".equals(specialId) || "spell_imprint".equals(specialId);
     }
 
-    private boolean soulMode() { return "summoning_ritual".equals(specialId); }
+    private boolean soulMode() {
+        return "summoning_ritual".equals(specialId);
+    }
 
     private int optionCount() {
-        return soulMode() ? SOUL_COMMANDS.length : schoolMode() ? SCHOOL_NAMES.length : AbilityHudState.treasuryCapacity;
+        return soulMode()
+                ? SOUL_COMMANDS.length
+                : schoolMode() ? SCHOOL_NAMES.length : AbilityHudState.treasuryCapacity;
     }
 
     @Override
@@ -79,7 +101,8 @@ public final class ClassSpecialRadialScreen extends Screen {
         if (client != null) {
             // Open centered like a proper hold-to-select wheel instead of inheriting
             // whatever hidden cursor position Minecraft had before opening the screen.
-            GLFW.glfwSetCursorPos(client.getWindow().getHandle(),
+            GLFW.glfwSetCursorPos(
+                    client.getWindow().getHandle(),
                     client.getWindow().getWidth() / 2.0D,
                     client.getWindow().getHeight() / 2.0D);
         }
@@ -93,7 +116,9 @@ public final class ClassSpecialRadialScreen extends Screen {
 
     private boolean specialKeyHeld() {
         if (SmoothClassesClient.classSpecialKey().isPressed()) return true;
-        return client != null && GLFW.glfwGetKey(client.getWindow().getHandle(), GLFW.GLFW_KEY_H) == GLFW.GLFW_PRESS;
+        return client != null
+                && GLFW.glfwGetKey(client.getWindow().getHandle(), GLFW.GLFW_KEY_H)
+                        == GLFW.GLFW_PRESS;
     }
 
     @Override
@@ -108,7 +133,10 @@ public final class ClassSpecialRadialScreen extends Screen {
     private void finishSelection() {
         if (finished) return;
         finished = true;
-        int selected = hovered >= 0 ? hovered : (soulMode() ? -1 : Math.min(initialSelection, optionCount() - 1));
+        int selected =
+                hovered >= 0
+                        ? hovered
+                        : (soulMode() ? -1 : Math.min(initialSelection, optionCount() - 1));
         if (soulMode()) {
             if (selected == 4) SmoothClassesClient.requestDeathList();
             else if (selected >= 0) SmoothClassesClient.sendClassSpecialSelection(selected);
@@ -117,7 +145,8 @@ public final class ClassSpecialRadialScreen extends Screen {
         }
         if (!schoolMode()) {
             boolean explicitlyHovered = hovered >= 0;
-            if (selected < 0 || selected >= AbilityHudState.treasurySlots.length
+            if (selected < 0
+                    || selected >= AbilityHudState.treasurySlots.length
                     || AbilityHudState.treasurySlots[selected] == null
                     || AbilityHudState.treasurySlots[selected].isEmpty()) {
                 if (explicitlyHovered) selected = -1;
@@ -150,7 +179,9 @@ public final class ClassSpecialRadialScreen extends Screen {
     }
 
     @Override
-    public boolean shouldPause() { return false; }
+    public boolean shouldPause() {
+        return false;
+    }
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
@@ -166,22 +197,31 @@ public final class ClassSpecialRadialScreen extends Screen {
             double angle = -Math.PI / 2.0D + (Math.PI * 2.0D * i / count);
             int x = cx + (int) Math.round(Math.cos(angle) * radius);
             int y = cy + (int) Math.round(Math.sin(angle) * radius);
-            boolean treasuryEmpty = !soulMode() && !schoolMode()
-                    && (AbilityHudState.treasurySlots[i] == null || AbilityHudState.treasurySlots[i].isEmpty());
-            boolean selected = !treasuryEmpty && (hovered == i
-                    || (!soulMode() && hovered < 0 && i == Math.min(initialSelection, count - 1)));
+            boolean treasuryEmpty =
+                    !soulMode()
+                            && !schoolMode()
+                            && (AbilityHudState.treasurySlots[i] == null
+                                    || AbilityHudState.treasurySlots[i].isEmpty());
+            boolean selected =
+                    !treasuryEmpty
+                            && (hovered == i
+                                    || (!soulMode()
+                                            && hovered < 0
+                                            && i == Math.min(initialSelection, count - 1)));
 
             int bg = treasuryEmpty ? 0xB0101014 : selected ? 0xE0B58A2A : 0xC0181820;
             int border = treasuryEmpty ? 0xFF34343A : selected ? 0xFFFFD86A : 0xFF666670;
             context.fill(x - SLOT / 2, y - SLOT / 2, x + SLOT / 2, y + SLOT / 2, border);
-            context.fill(x - SLOT / 2 + 1, y - SLOT / 2 + 1, x + SLOT / 2 - 1, y + SLOT / 2 - 1, bg);
+            context.fill(
+                    x - SLOT / 2 + 1, y - SLOT / 2 + 1, x + SLOT / 2 - 1, y + SLOT / 2 - 1, bg);
 
             if (soulMode()) context.drawItem(SOUL_ICONS[i], x - 8, y - 8);
             else if (schoolMode()) renderSchoolIcon(context, i, x - 8, y - 8);
             else renderTreasuryIcon(context, i, x - 8, y - 8);
         }
 
-        int selected = hovered >= 0 ? hovered : (soulMode() ? -1 : Math.min(initialSelection, count - 1));
+        int selected =
+                hovered >= 0 ? hovered : (soulMode() ? -1 : Math.min(initialSelection, count - 1));
         String name;
         if (soulMode()) {
             name = selected >= 0 ? SOUL_COMMANDS[selected] : "Soul Orders";
@@ -192,15 +232,21 @@ public final class ClassSpecialRadialScreen extends Screen {
             name = stack == null || stack.isEmpty() ? "Empty" : stack.getName().getString();
         }
         if (name.length() > 28) name = name.substring(0, 25) + "...";
-        context.drawCenteredTextWithShadow(textRenderer, Text.literal(name), cx, cy + 19,
+        context.drawCenteredTextWithShadow(
+                textRenderer,
+                Text.literal(name),
+                cx,
+                cy + 19,
                 "Empty".equals(name) ? 0x888888 : 0xFFE8D19E);
 
         super.render(context, mouseX, mouseY, delta);
     }
 
     private void renderTreasuryIcon(DrawContext context, int index, int x, int y) {
-        ItemStack stack = index >= 0 && index < AbilityHudState.treasurySlots.length
-                ? AbilityHudState.treasurySlots[index] : ItemStack.EMPTY;
+        ItemStack stack =
+                index >= 0 && index < AbilityHudState.treasurySlots.length
+                        ? AbilityHudState.treasurySlots[index]
+                        : ItemStack.EMPTY;
         if (stack == null || stack.isEmpty()) return;
         context.drawItem(stack, x, y);
         if (stack.getCount() > 1) context.drawItemInSlot(textRenderer, stack, x, y);

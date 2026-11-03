@@ -18,8 +18,8 @@ public final class SpellSchoolSelection {
 
     private static final String[] NAMES = {"Arcane", "Fire", "Frost", "Wind", "Water", "Earth"};
     private static final String[] IDS = {
-            "spell_power:arcane", "spell_power:fire", "spell_power:frost",
-            "spell_power:air", "spell_power:water", "spell_power:earth"
+        "spell_power:arcane", "spell_power:fire", "spell_power:frost",
+        "spell_power:air", "spell_power:water", "spell_power:earth"
     };
 
     private SpellSchoolSelection() {}

@@ -31,7 +31,8 @@ import java.util.*;
  */
 public final class HomunculusReplacementModel<T extends LivingEntity> extends EntityModel<T> {
     public static final float RENDER_SCALE = 1.0F;
-    private static final String MODEL_RESOURCE = "/assets/smooth_classes/blockbench/homunculus.bbmodel";
+    private static final String MODEL_RESOURCE =
+            "/assets/smooth_classes/blockbench/homunculus.bbmodel";
     private static final Definition DEF = Definition.load();
     private static final float DEG = ((float) Math.PI / 180.0F);
 
@@ -62,9 +63,14 @@ public final class HomunculusReplacementModel<T extends LivingEntity> extends En
         return DEF.createTexturedModelData();
     }
 
-    public void copyFrom(PlayerEntityModel<?> ignoredParent, PlayerEntity player,
-                         float limbAngle, float limbDistance, float animationProgress,
-                         float headYaw, float headPitch) {
+    public void copyFrom(
+            PlayerEntityModel<?> ignoredParent,
+            PlayerEntity player,
+            float limbAngle,
+            float limbDistance,
+            float animationProgress,
+            float headYaw,
+            float headPitch) {
         this.weaponMounted = HomunculusAccessories.patched(player, HomunculusAccessories.WEAPON);
 
         resetBone(body, "body");
@@ -80,7 +86,8 @@ public final class HomunculusReplacementModel<T extends LivingEntity> extends En
         float animTime;
         if (player.handSwingProgress > 0.01F) {
             animName = "attack";
-            animTime = DEF.length("attack") * MathHelper.clamp(player.handSwingProgress, 0.0F, 1.0F);
+            animTime =
+                    DEF.length("attack") * MathHelper.clamp(player.handSwingProgress, 0.0F, 1.0F);
         } else if (limbDistance > 0.08F) {
             animName = "walk";
             animTime = limbAngle * 0.65F;
@@ -104,7 +111,13 @@ public final class HomunculusReplacementModel<T extends LivingEntity> extends En
     }
 
     @Override
-    public void setAngles(T entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
+    public void setAngles(
+            T entity,
+            float limbAngle,
+            float limbDistance,
+            float animationProgress,
+            float headYaw,
+            float headPitch) {
         // Animation is applied from copyFrom(...) because it needs player-specific state.
     }
 
@@ -130,7 +143,8 @@ public final class HomunculusReplacementModel<T extends LivingEntity> extends En
         applyBoneAnimation(bodyMoss, "body_mossstuffs", animationName, time);
     }
 
-    private void applyBoneAnimation(ModelPart part, String boneName, String animationName, float time) {
+    private void applyBoneAnimation(
+            ModelPart part, String boneName, String animationName, float time) {
         Animation animation = DEF.animation(animationName);
         if (animation == null) return;
         BoneAnimation bone = animation.bones.get(boneName);
@@ -153,7 +167,9 @@ public final class HomunculusReplacementModel<T extends LivingEntity> extends En
             t = t % length;
             if (t < 0.0F) t += length;
         } else {
-            t = MathHelper.clamp(t, keyframes.get(0).time, keyframes.get(keyframes.size() - 1).time);
+            t =
+                    MathHelper.clamp(
+                            t, keyframes.get(0).time, keyframes.get(keyframes.size() - 1).time);
         }
         Keyframe previous = keyframes.get(0);
         Keyframe next = keyframes.get(keyframes.size() - 1);
@@ -170,18 +186,27 @@ public final class HomunculusReplacementModel<T extends LivingEntity> extends En
     }
 
     @Override
-    public void render(MatrixStack matrices, VertexConsumer vertices, int light, int overlay,
-                       float red, float green, float blue, float alpha) {
+    public void render(
+            MatrixStack matrices,
+            VertexConsumer vertices,
+            int light,
+            int overlay,
+            float red,
+            float green,
+            float blue,
+            float alpha) {
         root.render(matrices, vertices, light, overlay, red, green, blue, alpha);
     }
 
     /** Eyes are already painted into the approved skin. No separate fullbright pass. */
-    public void renderEyes(MatrixStack matrices, VertexConsumer vertices, int overlay) {
-    }
+    public void renderEyes(MatrixStack matrices, VertexConsumer vertices, int overlay) {}
 
     /** Installed weapon is rendered from the left modular arm anchor. */
-    public void renderWeaponArm(PlayerEntity player, MatrixStack matrices,
-                                VertexConsumerProvider consumers, int light) {
+    public void renderWeaponArm(
+            PlayerEntity player,
+            MatrixStack matrices,
+            VertexConsumerProvider consumers,
+            int light) {
         ItemStack mounted = HomunculusAccessories.stack(player, HomunculusAccessories.WEAPON);
         if (!HomunculusAccessories.valid(HomunculusAccessories.WEAPON, mounted)) return;
         matrices.push();
@@ -191,9 +216,17 @@ public final class HomunculusReplacementModel<T extends LivingEntity> extends En
         matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(-90.0F));
         matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(180.0F));
         matrices.scale(0.96F, 0.96F, 0.96F);
-        MinecraftClient.getInstance().getItemRenderer().renderItem(mounted,
-                ModelTransformationMode.FIXED, light, OverlayTexture.DEFAULT_UV,
-                matrices, consumers, player.getWorld(), player.getId());
+        MinecraftClient.getInstance()
+                .getItemRenderer()
+                .renderItem(
+                        mounted,
+                        ModelTransformationMode.FIXED,
+                        light,
+                        OverlayTexture.DEFAULT_UV,
+                        matrices,
+                        consumers,
+                        player.getWorld(),
+                        player.getId());
         matrices.pop();
     }
 
@@ -203,7 +236,11 @@ public final class HomunculusReplacementModel<T extends LivingEntity> extends En
         private final Map<String, BoneDef> bones;
         private final Map<String, Animation> animations;
 
-        private Definition(int textureWidth, int textureHeight, Map<String, BoneDef> bones, Map<String, Animation> animations) {
+        private Definition(
+                int textureWidth,
+                int textureHeight,
+                Map<String, BoneDef> bones,
+                Map<String, Animation> animations) {
             this.textureWidth = textureWidth;
             this.textureHeight = textureHeight;
             this.bones = bones;
@@ -211,9 +248,15 @@ public final class HomunculusReplacementModel<T extends LivingEntity> extends En
         }
 
         static Definition load() {
-            try (var stream = HomunculusReplacementModel.class.getResourceAsStream(MODEL_RESOURCE)) {
-                if (stream == null) throw new IllegalStateException("Missing Homunculus bbmodel resource: " + MODEL_RESOURCE);
-                JsonObject root = JsonParser.parseReader(new InputStreamReader(stream, StandardCharsets.UTF_8)).getAsJsonObject();
+            try (var stream =
+                    HomunculusReplacementModel.class.getResourceAsStream(MODEL_RESOURCE)) {
+                if (stream == null)
+                    throw new IllegalStateException(
+                            "Missing Homunculus bbmodel resource: " + MODEL_RESOURCE);
+                JsonObject root =
+                        JsonParser.parseReader(
+                                        new InputStreamReader(stream, StandardCharsets.UTF_8))
+                                .getAsJsonObject();
 
                 JsonObject texture = root.getAsJsonArray("textures").get(0).getAsJsonObject();
                 int texWidth = texture.get("uv_width").getAsInt();
@@ -239,7 +282,12 @@ public final class HomunculusReplacementModel<T extends LivingEntity> extends En
                     if (group == null) continue;
                     String groupName = normalize(group.get("name").getAsString());
                     if ("base".equals(groupName)) {
-                        parseChildren(node.getAsJsonArray("children"), null, groupsById, elementsById, bones);
+                        parseChildren(
+                                node.getAsJsonArray("children"),
+                                null,
+                                groupsById,
+                                elementsById,
+                                bones);
                     } else {
                         parseGroup(node, null, groupsById, elementsById, bones);
                     }
@@ -250,7 +298,10 @@ public final class HomunculusReplacementModel<T extends LivingEntity> extends En
                     JsonObject animationObject = element.getAsJsonObject();
                     String name = normalize(animationObject.get("name").getAsString());
                     float length = animationObject.get("length").getAsFloat();
-                    String loopMode = animationObject.has("loop") ? animationObject.get("loop").getAsString() : "once";
+                    String loopMode =
+                            animationObject.has("loop")
+                                    ? animationObject.get("loop").getAsString()
+                                    : "once";
                     boolean loop = "loop".equalsIgnoreCase(loopMode);
                     Map<String, BoneAnimation> boneAnimations = new HashMap<>();
                     JsonObject animators = animationObject.getAsJsonObject("animators");
@@ -269,15 +320,25 @@ public final class HomunculusReplacementModel<T extends LivingEntity> extends En
                                 JsonObject keyframe = keyframeElement.getAsJsonObject();
                                 String channel = keyframe.get("channel").getAsString();
                                 float t = keyframe.get("time").getAsFloat();
-                                JsonObject point = keyframe.getAsJsonArray("data_points").get(0).getAsJsonObject();
-                                Sample sample = new Sample(parseFloat(point, "x"), parseFloat(point, "y"), parseFloat(point, "z"));
-                                if ("rotation".equals(channel)) rotationFrames.add(new Keyframe(t, sample));
-                                else if ("position".equals(channel)) positionFrames.add(new Keyframe(t, sample));
+                                JsonObject point =
+                                        keyframe.getAsJsonArray("data_points")
+                                                .get(0)
+                                                .getAsJsonObject();
+                                Sample sample =
+                                        new Sample(
+                                                parseFloat(point, "x"),
+                                                parseFloat(point, "y"),
+                                                parseFloat(point, "z"));
+                                if ("rotation".equals(channel))
+                                    rotationFrames.add(new Keyframe(t, sample));
+                                else if ("position".equals(channel))
+                                    positionFrames.add(new Keyframe(t, sample));
                             }
                         }
                         rotationFrames.sort(Comparator.comparingDouble(k -> k.time));
                         positionFrames.sort(Comparator.comparingDouble(k -> k.time));
-                        boneAnimations.put(boneName, new BoneAnimation(rotationFrames, positionFrames));
+                        boneAnimations.put(
+                                boneName, new BoneAnimation(rotationFrames, positionFrames));
                     }
                     animations.put(name, new Animation(length, loop, boneAnimations));
                 }
@@ -288,13 +349,20 @@ public final class HomunculusReplacementModel<T extends LivingEntity> extends En
             }
         }
 
-        private static void parseChildren(JsonArray children, String parentName,
-                                          Map<String, JsonObject> groupsById,
-                                          Map<String, JsonObject> elementsById,
-                                          Map<String, BoneDef> bones) {
+        private static void parseChildren(
+                JsonArray children,
+                String parentName,
+                Map<String, JsonObject> groupsById,
+                Map<String, JsonObject> elementsById,
+                Map<String, BoneDef> bones) {
             for (JsonElement childElement : children) {
                 if (childElement.isJsonObject()) {
-                    parseGroup(childElement.getAsJsonObject(), parentName, groupsById, elementsById, bones);
+                    parseGroup(
+                            childElement.getAsJsonObject(),
+                            parentName,
+                            groupsById,
+                            elementsById,
+                            bones);
                 } else if (childElement.isJsonPrimitive()) {
                     String uuid = childElement.getAsString();
                     if (groupsById.containsKey(uuid)) {
@@ -307,10 +375,12 @@ public final class HomunculusReplacementModel<T extends LivingEntity> extends En
             }
         }
 
-        private static void parseGroup(JsonObject node, String parentName,
-                                       Map<String, JsonObject> groupsById,
-                                       Map<String, JsonObject> elementsById,
-                                       Map<String, BoneDef> bones) {
+        private static void parseGroup(
+                JsonObject node,
+                String parentName,
+                Map<String, JsonObject> groupsById,
+                Map<String, JsonObject> elementsById,
+                Map<String, BoneDef> bones) {
             JsonObject group = groupsById.get(node.get("uuid").getAsString());
             if (group == null) return;
             String boneName = normalize(group.get("name").getAsString());
@@ -322,7 +392,14 @@ public final class HomunculusReplacementModel<T extends LivingEntity> extends En
             float pivotX = parent == null ? -originX : parent.originX - originX;
             float pivotY = parent == null ? 24.0F - originY : parent.originY - originY;
             float pivotZ = parent == null ? originZ : originZ - parent.originZ;
-            BoneDef bone = new BoneDef(boneName, parentName, originX, originY, originZ, new Transform(pivotX, pivotY, pivotZ));
+            BoneDef bone =
+                    new BoneDef(
+                            boneName,
+                            parentName,
+                            originX,
+                            originY,
+                            originZ,
+                            new Transform(pivotX, pivotY, pivotZ));
             bones.put(boneName, bone);
             if (parent != null) parent.children.add(boneName);
 
@@ -331,12 +408,18 @@ public final class HomunculusReplacementModel<T extends LivingEntity> extends En
             if (children != null) {
                 for (JsonElement childElement : children) {
                     if (childElement.isJsonObject()) {
-                        parseGroup(childElement.getAsJsonObject(), boneName, groupsById, elementsById, bones);
+                        parseGroup(
+                                childElement.getAsJsonObject(),
+                                boneName,
+                                groupsById,
+                                elementsById,
+                                bones);
                     } else if (childElement.isJsonPrimitive()) {
                         String uuid = childElement.getAsString();
                         JsonObject cube = elementsById.get(uuid);
                         if (cube != null) {
-                            String cubeName = cube.has("name") ? cube.get("name").getAsString() : "cube";
+                            String cubeName =
+                                    cube.has("name") ? cube.get("name").getAsString() : "cube";
                             cubeName = sanitize(cubeName) + "_" + cubeIndex++;
                             JsonArray from = cube.getAsJsonArray("from");
                             JsonArray to = cube.getAsJsonArray("to");
@@ -345,17 +428,17 @@ public final class HomunculusReplacementModel<T extends LivingEntity> extends En
                             // Recover the original box-UV origin from the baked per-face
                             // coordinates instead of crashing during resource reload.
                             int[] uv = resolveBoxUv(cube);
-                            bone.cubes.add(new CubeDef(
-                                    cubeName,
-                                    uv[0],
-                                    uv[1],
-                                    from.get(0).getAsFloat() - originX,
-                                    originY - to.get(1).getAsFloat(),
-                                    from.get(2).getAsFloat() - originZ,
-                                    to.get(0).getAsFloat() - from.get(0).getAsFloat(),
-                                    to.get(1).getAsFloat() - from.get(1).getAsFloat(),
-                                    to.get(2).getAsFloat() - from.get(2).getAsFloat()
-                            ));
+                            bone.cubes.add(
+                                    new CubeDef(
+                                            cubeName,
+                                            uv[0],
+                                            uv[1],
+                                            from.get(0).getAsFloat() - originX,
+                                            originY - to.get(1).getAsFloat(),
+                                            from.get(2).getAsFloat() - originZ,
+                                            to.get(0).getAsFloat() - from.get(0).getAsFloat(),
+                                            to.get(1).getAsFloat() - from.get(1).getAsFloat(),
+                                            to.get(2).getAsFloat() - from.get(2).getAsFloat()));
                         }
                     }
                 }
@@ -372,35 +455,39 @@ public final class HomunculusReplacementModel<T extends LivingEntity> extends En
         private static int[] resolveBoxUv(JsonObject cube) {
             JsonArray uvOffset = cube.getAsJsonArray("uv_offset");
             if (uvOffset != null && uvOffset.size() >= 2) {
-                return new int[]{uvOffset.get(0).getAsInt(), uvOffset.get(1).getAsInt()};
+                return new int[] {uvOffset.get(0).getAsInt(), uvOffset.get(1).getAsInt()};
             }
             if (cube.has("box_uv") && !cube.get("box_uv").getAsBoolean()) {
-                throw new IllegalArgumentException("Homunculus cube has per-face UV layout, not box UV: "
-                        + cube.get("uuid").getAsString());
+                throw new IllegalArgumentException(
+                        "Homunculus cube has per-face UV layout, not box UV: "
+                                + cube.get("uuid").getAsString());
             }
             JsonObject faces = cube.getAsJsonObject("faces");
             JsonObject north = faces == null ? null : faces.getAsJsonObject("north");
             JsonObject up = faces == null ? null : faces.getAsJsonObject("up");
             if (north == null || up == null) {
-                throw new IllegalArgumentException("Homunculus cube is missing UV faces: "
-                        + cube.get("uuid").getAsString());
+                throw new IllegalArgumentException(
+                        "Homunculus cube is missing UV faces: " + cube.get("uuid").getAsString());
             }
             JsonArray northUv = north.getAsJsonArray("uv");
             JsonArray upUv = up.getAsJsonArray("uv");
             if (northUv == null || northUv.size() < 4 || upUv == null || upUv.size() < 4) {
-                throw new IllegalArgumentException("Invalid UV face for Homunculus cube: "
-                        + cube.get("uuid").getAsString());
+                throw new IllegalArgumentException(
+                        "Invalid UV face for Homunculus cube: " + cube.get("uuid").getAsString());
             }
             JsonArray from = cube.getAsJsonArray("from");
             JsonArray to = cube.getAsJsonArray("to");
             int depth = Math.round(Math.abs(to.get(2).getAsFloat() - from.get(2).getAsFloat()));
-            int u = Math.round(Math.min(northUv.get(0).getAsFloat(), northUv.get(2).getAsFloat())) - depth;
+            int u =
+                    Math.round(Math.min(northUv.get(0).getAsFloat(), northUv.get(2).getAsFloat()))
+                            - depth;
             int v = Math.round(Math.min(upUv.get(1).getAsFloat(), upUv.get(3).getAsFloat()));
             if (u < 0 || v < 0) {
-                throw new IllegalArgumentException("Out-of-bounds derived UV for Homunculus cube: "
-                        + cube.get("uuid").getAsString());
+                throw new IllegalArgumentException(
+                        "Out-of-bounds derived UV for Homunculus cube: "
+                                + cube.get("uuid").getAsString());
             }
-            return new int[]{u, v};
+            return new int[] {u, v};
         }
 
         TexturedModelData createTexturedModelData() {
@@ -413,11 +500,19 @@ public final class HomunculusReplacementModel<T extends LivingEntity> extends En
         }
 
         private void buildBone(ModelPartData parent, BoneDef bone) {
-            ModelPartData bonePart = parent.addChild(bone.name, ModelPartBuilder.create(),
-                    ModelTransform.pivot(bone.transform.pivotX, bone.transform.pivotY, bone.transform.pivotZ));
+            ModelPartData bonePart =
+                    parent.addChild(
+                            bone.name,
+                            ModelPartBuilder.create(),
+                            ModelTransform.pivot(
+                                    bone.transform.pivotX,
+                                    bone.transform.pivotY,
+                                    bone.transform.pivotZ));
             for (CubeDef cube : bone.cubes) {
-                bonePart.addChild(cube.name,
-                        ModelPartBuilder.create().uv(cube.uvX, cube.uvY)
+                bonePart.addChild(
+                        cube.name,
+                        ModelPartBuilder.create()
+                                .uv(cube.uvX, cube.uvY)
                                 .cuboid(cube.x, cube.y, cube.z, cube.sizeX, cube.sizeY, cube.sizeZ),
                         ModelTransform.NONE);
             }
@@ -469,7 +564,13 @@ public final class HomunculusReplacementModel<T extends LivingEntity> extends En
         private final List<CubeDef> cubes = new ArrayList<>();
         private final List<String> children = new ArrayList<>();
 
-        private BoneDef(String name, String parentName, float originX, float originY, float originZ, Transform transform) {
+        private BoneDef(
+                String name,
+                String parentName,
+                float originX,
+                float originY,
+                float originZ,
+                Transform transform) {
             this.name = name;
             this.parentName = parentName;
             this.originX = originX;
@@ -479,19 +580,22 @@ public final class HomunculusReplacementModel<T extends LivingEntity> extends En
         }
     }
 
-    private record CubeDef(String name, int uvX, int uvY,
-                           float x, float y, float z,
-                           float sizeX, float sizeY, float sizeZ) {
-    }
+    private record CubeDef(
+            String name,
+            int uvX,
+            int uvY,
+            float x,
+            float y,
+            float z,
+            float sizeX,
+            float sizeY,
+            float sizeZ) {}
 
-    private record Keyframe(float time, Sample sample) {
-    }
+    private record Keyframe(float time, Sample sample) {}
 
-    private record BoneAnimation(List<Keyframe> rotation, List<Keyframe> position) {
-    }
+    private record BoneAnimation(List<Keyframe> rotation, List<Keyframe> position) {}
 
-    private record Animation(float length, boolean loop, Map<String, BoneAnimation> bones) {
-    }
+    private record Animation(float length, boolean loop, Map<String, BoneAnimation> bones) {}
 
     private record Sample(float x, float y, float z) {
         private static final Sample ZERO = new Sample(0.0F, 0.0F, 0.0F);
@@ -500,8 +604,7 @@ public final class HomunculusReplacementModel<T extends LivingEntity> extends En
             return new Sample(
                     MathHelper.lerp(delta, a.x, b.x),
                     MathHelper.lerp(delta, a.y, b.y),
-                    MathHelper.lerp(delta, a.z, b.z)
-            );
+                    MathHelper.lerp(delta, a.z, b.z));
         }
     }
 }

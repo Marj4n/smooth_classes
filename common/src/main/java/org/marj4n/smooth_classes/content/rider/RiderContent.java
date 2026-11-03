@@ -13,7 +13,8 @@ public final class RiderContent {
 
     public static final Ability CHARGE = ability("charge", "Rider's Charge", 12 * 20);
     public static final Ability WAR_AURA = ability("war_aura", "War Aura", 24 * 20);
-    public static final Ability BLAZING_HOOVES = ability("blazing_hooves", "Blazing Hooves", 20 * 20);
+    public static final Ability BLAZING_HOOVES =
+            ability("blazing_hooves", "Blazing Hooves", 20 * 20);
 
     public static final Talent CHARGE_REACH = talent("charge_reach", "Long Rein");
     public static final Talent CHARGE_IMPACT = talent("charge_impact", "Lance Impact");
@@ -43,22 +44,51 @@ public final class RiderContent {
     public static final Talent RECOVERY_II = talent("recovery_ii", "Mount Recovery II");
 
     private static final List<Ability> ABILITIES = List.of(CHARGE, WAR_AURA, BLAZING_HOOVES);
-    private static final List<Talent> TALENTS = List.of(
-            CHARGE_REACH, CHARGE_IMPACT, CHARGE_PHASE,
-            AURA_RESISTANCE, AURA_STRENGTH, AURA_HARM,
-            FIRE_DAMAGE, FIRE_DURATION, FIRE_RADIUS,
-            WATER_STRIDE, DREAD_STEED, HIPPOGRYPH,
-            HEALTH_I, HEALTH_II, HEALTH_III,
-            SPEED_I, SPEED_II, SPEED_III,
-            ARMOR_I, ARMOR_II, JUMP_I, JUMP_II, RECOVERY_I, RECOVERY_II
-    );
+    private static final List<Talent> TALENTS =
+            List.of(
+                    CHARGE_REACH,
+                    CHARGE_IMPACT,
+                    CHARGE_PHASE,
+                    AURA_RESISTANCE,
+                    AURA_STRENGTH,
+                    AURA_HARM,
+                    FIRE_DAMAGE,
+                    FIRE_DURATION,
+                    FIRE_RADIUS,
+                    WATER_STRIDE,
+                    DREAD_STEED,
+                    HIPPOGRYPH,
+                    HEALTH_I,
+                    HEALTH_II,
+                    HEALTH_III,
+                    SPEED_I,
+                    SPEED_II,
+                    SPEED_III,
+                    ARMOR_I,
+                    ARMOR_II,
+                    JUMP_I,
+                    JUMP_II,
+                    RECOVERY_I,
+                    RECOVERY_II);
 
     public static void register() {
         ABILITIES.forEach(AbilityRegistry::register);
         TALENTS.forEach(TalentRegistry::register);
     }
-    public static List<Ability> abilities() { return ABILITIES; }
-    public static List<Talent> talents() { return TALENTS; }
-    private static Ability ability(String path, String name, int cooldownTicks) { return new RiderAbility(path, name, "Rider signature ability.", cooldownTicks); }
-    private static Talent talent(String path, String name) { return new RiderTalent(path, name, "Rider mount talent."); }
+
+    public static List<Ability> abilities() {
+        return ABILITIES;
+    }
+
+    public static List<Talent> talents() {
+        return TALENTS;
+    }
+
+    private static Ability ability(String path, String name, int cooldownTicks) {
+        return new RiderAbility(path, name, "Rider signature ability.", cooldownTicks);
+    }
+
+    private static Talent talent(String path, String name) {
+        return new RiderTalent(path, name, "Rider mount talent.");
+    }
 }

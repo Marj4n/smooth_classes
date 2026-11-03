@@ -12,9 +12,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(EnchantmentHelper.class)
 public abstract class BladeLootingMixin {
     @Inject(method = "getLooting", at = @At("HEAD"), cancellable = true)
-    private static void smoothClasses$projectedLooting(LivingEntity entity, CallbackInfoReturnable<Integer> cir) {
+    private static void smoothClasses$projectedLooting(
+            LivingEntity entity, CallbackInfoReturnable<Integer> cir) {
         BladeDamageContext.Hit hit = BladeDamageContext.current();
         if (hit != null && hit.caster() == entity)
-            cir.setReturnValue(org.marj4n.smooth_classes.platform.PlatformItems.enchantmentLevel(Enchantments.LOOTING, hit.weapon()));
+            cir.setReturnValue(
+                    org.marj4n.smooth_classes.platform.PlatformItems.enchantmentLevel(
+                            Enchantments.LOOTING, hit.weapon()));
     }
 }

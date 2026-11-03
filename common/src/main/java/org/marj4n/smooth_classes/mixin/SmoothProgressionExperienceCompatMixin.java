@@ -18,17 +18,26 @@ import java.util.Optional;
  * leveling system or modifying another mod's resources. */
 @Mixin(value = ExperienceConfig.class, remap = false)
 public abstract class SmoothProgressionExperienceCompatMixin {
-    @Inject(method = "parse(Lnet/puffish/skillsmod/api/json/JsonObject;Lnet/puffish/skillsmod/api/config/ConfigContext;)Lnet/puffish/skillsmod/api/util/Result;",
-            at = @At("HEAD"), cancellable = true, remap = false)
-    private static void smoothClasses$legacyDisabledExperience(JsonObject json, ConfigContext context,
+    @Inject(
+            method =
+                    "parse(Lnet/puffish/skillsmod/api/json/JsonObject;Lnet/puffish/skillsmod/api/config/ConfigContext;)Lnet/puffish/skillsmod/api/util/Result;",
+            at = @At("HEAD"),
+            cancellable = true,
+            remap = false)
+    private static void smoothClasses$legacyDisabledExperience(
+            JsonObject json,
+            ConfigContext context,
             CallbackInfoReturnable<Result<Optional<ExperienceConfig>, Problem>> cir) {
         if (!PlatformLoader.getInstance().isModLoaded("smooth_progression")) return;
-        if (!json.getPath().toString().contains("smooth_classes:puffish_skills/categories/")) return;
+        if (!json.getPath().toString().contains("smooth_classes:puffish_skills/categories/"))
+            return;
         var enabled = json.getBoolean("enabled").getSuccess();
         if (enabled.isEmpty() || enabled.get()) return;
         // Consume only the known legacy schema fields. Unknown fields still go
         // through Puffish's normal unused-field/error validation.
-        for (String key : new String[]{"level_limit", "experience_per_level", "sources", "reset_on_death"}) json.get(key);
+        for (String key :
+                new String[] {"level_limit", "experience_per_level", "sources", "reset_on_death"})
+            json.get(key);
         cir.setReturnValue(Result.success(Optional.empty()));
     }
 }

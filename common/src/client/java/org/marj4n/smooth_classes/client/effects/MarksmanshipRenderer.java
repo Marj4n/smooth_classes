@@ -10,11 +10,14 @@ import org.marj4n.smooth_classes.SmoothClasses;
 import java.util.List;
 
 public class MarksmanshipRenderer extends OrbitingEffectRenderer {
-    public static final Identifier modelId_base = Identifier.of(SmoothClasses.MOD_ID, "spell_projectile/arrow");
-    public static final Identifier modelId_overlay = Identifier.of(SmoothClasses.MOD_ID, "spell_projectile/arrow");
+    public static final Identifier modelId_base =
+            Identifier.of(SmoothClasses.MOD_ID, "spell_projectile/arrow");
+    public static final Identifier modelId_overlay =
+            Identifier.of(SmoothClasses.MOD_ID, "spell_projectile/arrow");
 
     private static final RenderLayer BASE_RENDER_LAYER =
-            RenderLayer.getEntityTranslucent(net.minecraft.screen.PlayerScreenHandler.BLOCK_ATLAS_TEXTURE);
+            RenderLayer.getEntityTranslucent(
+                    net.minecraft.screen.PlayerScreenHandler.BLOCK_ATLAS_TEXTURE);
     private static final RenderLayer GLOWING_RENDER_LAYER =
             CustomLayers.spellEffect(LightEmission.NONE, false);
 
@@ -25,10 +28,6 @@ public class MarksmanshipRenderer extends OrbitingEffectRenderer {
     }
 
     public MarksmanshipRenderer() {
-        super(List.of(
-                new Model(BASE_RENDER_LAYER, modelId_base)),
-                1.2F,
-                1.1F);
+        super(List.of(new Model(BASE_RENDER_LAYER, modelId_base)), 1.2F, 1.1F);
     }
-
 }

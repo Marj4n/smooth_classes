@@ -20,46 +20,60 @@ public final class AvengerSummonHoverGlow {
     private static int hoveredId = -1;
     private static int confirmedOwnedId = -1;
 
-    private AvengerSummonHoverGlow() { }
+    private AvengerSummonHoverGlow() {}
 
     public static void register() {
-        ClientPlayNetworking.registerGlobalReceiver(SmoothClassesNetworking.SYNC_SUMMON_HOVER,
+        ClientPlayNetworking.registerGlobalReceiver(
+                SmoothClassesNetworking.SYNC_SUMMON_HOVER,
                 (client, handler, buf, responseSender) -> {
                     int id = buf.readVarInt();
                     boolean owned = buf.readBoolean();
-                    client.execute(() -> {
-                        if (id == hoveredId) confirmedOwnedId = owned ? id : -1;
-                    });
+                    client.execute(
+                            () -> {
+                                if (id == hoveredId) confirmedOwnedId = owned ? id : -1;
+                            });
                 });
-        ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            if (client.player == null || client.world == null || client.getNetworkHandler() == null) {
-                hoveredId = -1;
-                confirmedOwnedId = -1;
-                trackedWorld = null;
-                return;
-            }
-            if (trackedWorld != client.world) {
-                trackedWorld = client.world;
-                hoveredId = -1;
-                confirmedOwnedId = -1;
-            }
-            Entity target = client.crosshairTarget instanceof EntityHitResult hit ? hit.getEntity() : null;
-            int next = target == null ? -1 : target.getId();
-            if (next == hoveredId) return;
-            hoveredId = next;
-            confirmedOwnedId = -1;
-            if (next >= 0 && ClientPlayNetworking.canSend(SmoothClassesNetworking.CHECK_SUMMON_HOVER)) {
-                PacketByteBuf buf = PacketByteBufs.create();
-                buf.writeVarInt(next);
-                ClientPlayNetworking.send(SmoothClassesNetworking.CHECK_SUMMON_HOVER, buf);
-            }
-        });
+        ClientTickEvents.END_CLIENT_TICK.register(
+                client -> {
+                    if (client.player == null
+                            || client.world == null
+                            || client.getNetworkHandler() == null) {
+                        hoveredId = -1;
+                        confirmedOwnedId = -1;
+                        trackedWorld = null;
+                        return;
+                    }
+                    if (trackedWorld != client.world) {
+                        trackedWorld = client.world;
+                        hoveredId = -1;
+                        confirmedOwnedId = -1;
+                    }
+                    Entity target =
+                            client.crosshairTarget instanceof EntityHitResult hit
+                                    ? hit.getEntity()
+                                    : null;
+                    int next = target == null ? -1 : target.getId();
+                    if (next == hoveredId) return;
+                    hoveredId = next;
+                    confirmedOwnedId = -1;
+                    if (next >= 0
+                            && ClientPlayNetworking.canSend(
+                                    SmoothClassesNetworking.CHECK_SUMMON_HOVER)) {
+                        PacketByteBuf buf = PacketByteBufs.create();
+                        buf.writeVarInt(next);
+                        ClientPlayNetworking.send(SmoothClassesNetworking.CHECK_SUMMON_HOVER, buf);
+                    }
+                });
     }
 
     public static boolean isHighlighted(Entity entity) {
         MinecraftClient client = MinecraftClient.getInstance();
-        return entity != null && client.player != null && client.world == entity.getWorld()
-                && entity.getId() == confirmedOwnedId && entity.getId() == hoveredId
-                && client.crosshairTarget instanceof EntityHitResult hit && hit.getEntity() == entity;
+        return entity != null
+                && client.player != null
+                && client.world == entity.getWorld()
+                && entity.getId() == confirmedOwnedId
+                && entity.getId() == hoveredId
+                && client.crosshairTarget instanceof EntityHitResult hit
+                && hit.getEntity() == entity;
     }
 }

@@ -19,7 +19,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  */
 @Mixin(value = TransformationComponent.class, remap = false)
 public abstract class BewitchmentVampireTransformationMixin {
-    @ModifyVariable(method = "setTransformation", at = @At("HEAD"), argsOnly = true, ordinal = 0, remap = false)
+    @ModifyVariable(
+            method = "setTransformation",
+            at = @At("HEAD"),
+            argsOnly = true,
+            ordinal = 0,
+            remap = false)
     private Transformation smoothClasses$disableBewitchmentVampire(Transformation incoming) {
         return incoming == BWTransformations.VAMPIRE ? BWTransformations.HUMAN : incoming;
     }

@@ -29,12 +29,12 @@ import net.minecraft.world.World;
 public final class RiderHippogryphEntity extends HorseEntity {
     private static final float DEG_TO_RAD = (float) (Math.PI / 180.0D);
     private static final float HALF_PI = (float) (Math.PI / 2.0D);
-    private static final TrackedData<Boolean> FLYING = DataTracker.registerData(
-            RiderHippogryphEntity.class, TrackedDataHandlerRegistry.BOOLEAN
-    );
-    private static final TrackedData<Boolean> BOOSTING = DataTracker.registerData(
-            RiderHippogryphEntity.class, TrackedDataHandlerRegistry.BOOLEAN
-    );
+    private static final TrackedData<Boolean> FLYING =
+            DataTracker.registerData(
+                    RiderHippogryphEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
+    private static final TrackedData<Boolean> BOOSTING =
+            DataTracker.registerData(
+                    RiderHippogryphEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
 
     private static final double BASE_FLIGHT_SPEED_MULT = 1.65D;
     private static final double BOOST_FLIGHT_SPEED_MULT = 2.65D;
@@ -104,11 +104,9 @@ public final class RiderHippogryphEntity extends HorseEntity {
         return !isRiderFlying() && isOnGround() && (isTouchingWater() || isInLava());
     }
 
-
     public float getVisualFlightPitchRadians() {
         return visualFlightPitchRadians;
     }
-
 
     public float getVisualHeadYawRadians(float tickDelta) {
         float t = MathHelper.clamp(tickDelta, 0.0F, 1.0F);
@@ -117,20 +115,26 @@ public final class RiderHippogryphEntity extends HorseEntity {
     }
 
     public float getVisualHeadPitchRadians(float tickDelta) {
-        return MathHelper.lerp(MathHelper.clamp(tickDelta, 0.0F, 1.0F),
-                prevVisualHeadPitchDegrees, visualHeadPitchDegrees) * DEG_TO_RAD;
+        return MathHelper.lerp(
+                        MathHelper.clamp(tickDelta, 0.0F, 1.0F),
+                        prevVisualHeadPitchDegrees,
+                        visualHeadPitchDegrees)
+                * DEG_TO_RAD;
     }
 
     public float getWingFlightBlend(float tickDelta) {
-        return MathHelper.lerp(MathHelper.clamp(tickDelta, 0.0F, 1.0F), prevWingFlightBlend, wingFlightBlend);
+        return MathHelper.lerp(
+                MathHelper.clamp(tickDelta, 0.0F, 1.0F), prevWingFlightBlend, wingFlightBlend);
     }
 
     public float getWingBoostBlend(float tickDelta) {
-        return MathHelper.lerp(MathHelper.clamp(tickDelta, 0.0F, 1.0F), prevWingBoostBlend, wingBoostBlend);
+        return MathHelper.lerp(
+                MathHelper.clamp(tickDelta, 0.0F, 1.0F), prevWingBoostBlend, wingBoostBlend);
     }
 
     public float getWingFlapPhase(float tickDelta) {
-        return MathHelper.lerp(MathHelper.clamp(tickDelta, 0.0F, 1.0F), prevWingFlapPhase, wingFlapPhase);
+        return MathHelper.lerp(
+                MathHelper.clamp(tickDelta, 0.0F, 1.0F), prevWingFlapPhase, wingFlapPhase);
     }
 
     @Override
@@ -153,7 +157,8 @@ public final class RiderHippogryphEntity extends HorseEntity {
     }
 
     /** Called by the server packet sent from the controlling Rider client. */
-    public void acceptRiderFlightInput(ServerPlayerEntity player, boolean ascend, boolean descend, boolean boost) {
+    public void acceptRiderFlightInput(
+            ServerPlayerEntity player, boolean ascend, boolean descend, boolean boost) {
         if (getControllingPassenger() != player || !isSaddled()) return;
 
         boolean freshAscend = ascend && !this.riderAscend;
@@ -241,8 +246,10 @@ public final class RiderHippogryphEntity extends HorseEntity {
     }
 
     @Override
-    protected Vec3d getControlledMovementInput(PlayerEntity controllingPlayer, Vec3d movementInput) {
-        if (!isRiderFlying()) return super.getControlledMovementInput(controllingPlayer, movementInput);
+    protected Vec3d getControlledMovementInput(
+            PlayerEntity controllingPlayer, Vec3d movementInput) {
+        if (!isRiderFlying())
+            return super.getControlledMovementInput(controllingPlayer, movementInput);
 
         float sideways = controllingPlayer.sidewaysSpeed * 0.30F;
         float forward = controllingPlayer.forwardSpeed * 0.80F;
@@ -286,10 +293,12 @@ public final class RiderHippogryphEntity extends HorseEntity {
         double diveIntensity = diveIntensity(pitchRadians);
         boolean diving = forwardInput > 0.01D && diveIntensity > 0.0D;
 
-        double movementSpeed = Math.max(0.20D, getAttributeValue(EntityAttributes.GENERIC_MOVEMENT_SPEED));
+        double movementSpeed =
+                Math.max(0.20D, getAttributeValue(EntityAttributes.GENERIC_MOVEMENT_SPEED));
         double baseSpeed = movementSpeed * BASE_FLIGHT_SPEED_MULT;
         double sprintSpeed = movementSpeed * BOOST_FLIGHT_SPEED_MULT;
-        double flightSpeed = tickThrottle(hasInput, forwardInput, diveIntensity, baseSpeed, sprintSpeed);
+        double flightSpeed =
+                tickThrottle(hasInput, forwardInput, diveIntensity, baseSpeed, sprintSpeed);
 
         float yawRadians = getYaw() * DEG_TO_RAD;
         double forwardXZ = Math.cos(pitchRadians);
@@ -310,23 +319,32 @@ public final class RiderHippogryphEntity extends HorseEntity {
 
         if (hasInput && length > 0.01D) {
             Vec3d targetDirection = new Vec3d(targetX / length, targetY / length, targetZ / length);
-            preservingDivePullUp = !diving
-                    && forwardInput > 0.01D
-                    && targetDirection.y > 0.01D
-                    && diveBoostHoldTicks > 0;
+            preservingDivePullUp =
+                    !diving
+                            && forwardInput > 0.01D
+                            && targetDirection.y > 0.01D
+                            && diveBoostHoldTicks > 0;
 
             if (preservingDivePullUp) {
                 double maxDiveSpeed = Math.max(baseSpeed, sprintSpeed) * DIVE_SPEED_MULTIPLIER;
-                double preserved = MathHelper.clamp(Math.max(current.length(), flightSpeed), flightSpeed, maxDiveSpeed);
-                velocity = steerPreservingSpeed(current, targetDirection, preserved, FLIGHT_ACCELERATION, yawRadians);
+                double preserved =
+                        MathHelper.clamp(
+                                Math.max(current.length(), flightSpeed), flightSpeed, maxDiveSpeed);
+                velocity =
+                        steerPreservingSpeed(
+                                current,
+                                targetDirection,
+                                preserved,
+                                FLIGHT_ACCELERATION,
+                                yawRadians);
             } else {
                 Vec3d targetVelocity = targetDirection.multiply(flightSpeed);
                 double acceleration = diving ? DIVE_ACCELERATION : FLIGHT_ACCELERATION;
-                velocity = new Vec3d(
-                        MathHelper.lerp(acceleration, current.x, targetVelocity.x),
-                        MathHelper.lerp(acceleration, current.y, targetVelocity.y),
-                        MathHelper.lerp(acceleration, current.z, targetVelocity.z)
-                );
+                velocity =
+                        new Vec3d(
+                                MathHelper.lerp(acceleration, current.x, targetVelocity.x),
+                                MathHelper.lerp(acceleration, current.y, targetVelocity.y),
+                                MathHelper.lerp(acceleration, current.z, targetVelocity.z));
             }
         } else {
             velocity = current.multiply(1.0D - NO_INPUT_DRAG);
@@ -339,10 +357,15 @@ public final class RiderHippogryphEntity extends HorseEntity {
             else if (riderDescend && !riderAscend) vertical -= DESCEND_THRUST;
         }
 
-        double verticalLimit = preservingDivePullUp
-                ? Math.max(VERTICAL_SPEED_LIMIT, flightSpeed)
-                : VERTICAL_SPEED_LIMIT;
-        vertical = MathHelper.clamp(vertical, -Math.max(VERTICAL_SPEED_LIMIT, diving ? flightSpeed : 0.0D), verticalLimit);
+        double verticalLimit =
+                preservingDivePullUp
+                        ? Math.max(VERTICAL_SPEED_LIMIT, flightSpeed)
+                        : VERTICAL_SPEED_LIMIT;
+        vertical =
+                MathHelper.clamp(
+                        vertical,
+                        -Math.max(VERTICAL_SPEED_LIMIT, diving ? flightSpeed : 0.0D),
+                        verticalLimit);
         velocity = new Vec3d(velocity.x, vertical, velocity.z);
 
         move(MovementType.SELF, velocity);
@@ -370,8 +393,12 @@ public final class RiderHippogryphEntity extends HorseEntity {
         return MathHelper.clamp(pitch, -HALF_PI, HALF_PI);
     }
 
-    private double tickThrottle(boolean hasInput, double forwardInput, double diveIntensity,
-                                double baseSpeed, double sprintSpeed) {
+    private double tickThrottle(
+            boolean hasInput,
+            double forwardInput,
+            double diveIntensity,
+            double baseSpeed,
+            double sprintSpeed) {
         double baseTarget = isRiderBoosting() ? sprintSpeed : baseSpeed;
         double maxOverdrive = Math.max(baseTarget, sprintSpeed) * DIVE_SPEED_MULTIPLIER;
         double throttle = MathHelper.clamp(riderFlightThrottle, 0.0D, maxOverdrive);
@@ -380,7 +407,8 @@ public final class RiderHippogryphEntity extends HorseEntity {
 
         if (hasInput) {
             if (throttle <= 0.0D) throttle = baseTarget;
-            else if (throttle < baseTarget) throttle = MathHelper.lerp(FLIGHT_ACCELERATION, throttle, baseTarget);
+            else if (throttle < baseTarget)
+                throttle = MathHelper.lerp(FLIGHT_ACCELERATION, throttle, baseTarget);
         } else {
             riderFlightThrottle = Math.max(0.0D, throttle - 0.035D);
             return riderFlightThrottle;
@@ -390,7 +418,8 @@ public final class RiderHippogryphEntity extends HorseEntity {
             diveBoostHoldTicks = DIVE_EXIT_BOOST_HOLD_TICKS;
             double situationalCap = MathHelper.lerp(diveIntensity, baseTarget, maxOverdrive);
             double pitchGain = baseTarget * DIVE_ACCELERATION * 0.16D * diveIntensity;
-            if (throttle < situationalCap) throttle = Math.min(situationalCap, throttle + pitchGain);
+            if (throttle < situationalCap)
+                throttle = Math.min(situationalCap, throttle + pitchGain);
         } else if (throttle > baseTarget) {
             if (forwardActive && diveBoostHoldTicks > 0) {
                 diveBoostHoldTicks--;
@@ -411,8 +440,12 @@ public final class RiderHippogryphEntity extends HorseEntity {
         return MathHelper.clamp(normalized, 0.0D, 1.0D);
     }
 
-    private static Vec3d steerPreservingSpeed(Vec3d current, Vec3d targetDirection,
-                                               double speed, double turnFraction, float yawRadians) {
+    private static Vec3d steerPreservingSpeed(
+            Vec3d current,
+            Vec3d targetDirection,
+            double speed,
+            double turnFraction,
+            float yawRadians) {
         Vec3d to = targetDirection.normalize();
         if (current.lengthSquared() < 1.0E-8D) return to.multiply(speed);
 
@@ -431,9 +464,10 @@ public final class RiderHippogryphEntity extends HorseEntity {
         double turnRadians = Math.acos(dot) * MathHelper.clamp(turnFraction, 0.0D, 1.0D);
         double cos = Math.cos(turnRadians);
         double sin = Math.sin(turnRadians);
-        Vec3d turned = from.multiply(cos)
-                .add(axis.crossProduct(from).multiply(sin))
-                .add(axis.multiply(axis.dotProduct(from) * (1.0D - cos)));
+        Vec3d turned =
+                from.multiply(cos)
+                        .add(axis.crossProduct(from).multiply(sin))
+                        .add(axis.multiply(axis.dotProduct(from) * (1.0D - cos)));
         return turned.normalize().multiply(speed);
     }
 
@@ -446,7 +480,9 @@ public final class RiderHippogryphEntity extends HorseEntity {
         float targetHeadYaw = 0.0F;
         float targetHeadPitch = 0.0F;
         if (rider instanceof PlayerEntity player) {
-            targetHeadYaw = MathHelper.clamp(MathHelper.wrapDegrees(player.getYaw() - getYaw()), -28.0F, 28.0F);
+            targetHeadYaw =
+                    MathHelper.clamp(
+                            MathHelper.wrapDegrees(player.getYaw() - getYaw()), -28.0F, 28.0F);
             targetHeadPitch = MathHelper.clamp(player.getPitch(), -24.0F, 24.0F);
         }
 
@@ -454,8 +490,8 @@ public final class RiderHippogryphEntity extends HorseEntity {
         // body carve, no rider/camera roll.
         float headYawDelta = MathHelper.wrapDegrees(targetHeadYaw - visualHeadYawDegrees);
         visualHeadYawDegrees += headYawDelta * (flying ? 0.12F : 0.16F);
-        visualHeadPitchDegrees = MathHelper.lerp(flying ? 0.11F : 0.15F,
-                visualHeadPitchDegrees, targetHeadPitch);
+        visualHeadPitchDegrees =
+                MathHelper.lerp(flying ? 0.11F : 0.15F, visualHeadPitchDegrees, targetHeadPitch);
 
         if (!flying) {
             visualFlightPitchRadians = MathHelper.lerp(0.20F, visualFlightPitchRadians, 0.0F);
@@ -511,7 +547,8 @@ public final class RiderHippogryphEntity extends HorseEntity {
     }
 
     @Override
-    public boolean handleFallDamage(float fallDistance, float damageMultiplier, DamageSource damageSource) {
+    public boolean handleFallDamage(
+            float fallDistance, float damageMultiplier, DamageSource damageSource) {
         return false;
     }
 }

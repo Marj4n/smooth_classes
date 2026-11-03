@@ -13,11 +13,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(HudRenderHelper.SpellHotBarWidget.class)
 public abstract class VampireBatSpellHotbarMixin {
     @Inject(method = "render", at = @At("TAIL"), remap = false)
-    private static void smooth_classes$spellHotbarLocked(DrawContext context, int screenWidth, int screenHeight,
-                                                          HudRenderHelper.SpellHotBarWidget.ViewModel model,
-                                                          CallbackInfo ci) {
+    private static void smooth_classes$spellHotbarLocked(
+            DrawContext context,
+            int screenWidth,
+            int screenHeight,
+            HudRenderHelper.SpellHotBarWidget.ViewModel model,
+            CallbackInfo ci) {
         if (!"vampire".equals(OriginClientState.originId)
-                || !OriginClientState.hasFlag("vampire.form.bat") || model.isEmpty()) return;
+                || !OriginClientState.hasFlag("vampire.form.bat")
+                || model.isEmpty()) return;
         var area = HudRenderHelper.SpellHotBarWidget.lastRendered;
         if (area == null) return;
         var client = MinecraftClient.getInstance();
@@ -31,7 +35,12 @@ public abstract class VampireBatSpellHotbarMixin {
             int x = left + 3 + slot * 20;
             int y = top + 3;
             context.fill(x, y, x + 16, y + 16, 0xB0000000);
-            context.drawCenteredTextWithShadow(client.textRenderer, net.minecraft.text.Text.literal("X"), x + 8, y + 4, 0xFFFF5555);
+            context.drawCenteredTextWithShadow(
+                    client.textRenderer,
+                    net.minecraft.text.Text.literal("X"),
+                    x + 8,
+                    y + 4,
+                    0xFFFF5555);
         }
         context.getMatrices().pop();
     }

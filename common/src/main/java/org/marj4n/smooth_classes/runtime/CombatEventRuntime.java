@@ -25,9 +25,9 @@ import org.marj4n.smooth_classes.integration.OptionalCompatRuntime;
 public final class CombatEventRuntime {
     private CombatEventRuntime() {}
 
-
     /** Central Spell Engine cast route. */
-    public static void onSpellCast(ServerPlayerEntity player, List<Entity> targets, SpellSchool school) {
+    public static void onSpellCast(
+            ServerPlayerEntity player, List<Entity> targets, SpellSchool school) {
         BasePathRuntime.onSpellCast(player, targets, school);
         ClassPassiveRuntime.onSpellCast(player, targets, school);
         OptionalCompatRuntime.onSpellCast(player);
@@ -39,14 +39,16 @@ public final class CombatEventRuntime {
     }
 
     /** Spell-projectile impact hook. Ascendancy/projectile effects attach here in Chapters 6-7. */
-    public static void onSpellProjectileHit(ServerPlayerEntity owner, Entity projectile, LivingEntity target) {
-        RighteousHammerChargeRuntime.onTriggeredHit(owner,target);
+    public static void onSpellProjectileHit(
+            ServerPlayerEntity owner, Entity projectile, LivingEntity target) {
+        RighteousHammerChargeRuntime.onTriggeredHit(owner, target);
         AscendancyRuntime.spellProjectileHit(owner, target);
     }
 
     public static void onMeleeAttack(ServerPlayerEntity player, Entity target) {
-        if (!player.isAlive() || !target.isAttackable() || !(target instanceof LivingEntity living)) return;
-        RighteousHammerChargeRuntime.onTriggeredHit(player,living);
+        if (!player.isAlive() || !target.isAttackable() || !(target instanceof LivingEntity living))
+            return;
+        RighteousHammerChargeRuntime.onTriggeredHit(player, living);
         // Class passives inspect the pre-hit state (notably Assassin Stealth)
         // before the base path consumes Stealth on attack.
         ClassPassiveRuntime.onMeleeHit(player, living);
@@ -54,21 +56,39 @@ public final class CombatEventRuntime {
         RulerRuntime.onAnointedMeleeHit(player);
 
         // Renewal is intentionally proc-based: 15% per melee hit for +3 seconds.
-        if (has(player, PuffishSkillsIntegration.FOREIGNER, SkillNodeIds.spellbladeSpecialisationElementalSurgeRenewal)
+        if (has(
+                        player,
+                        PuffishSkillsIntegration.FOREIGNER,
+                        SkillNodeIds.spellbladeSpecialisationElementalSurgeRenewal)
                 && player.hasStatusEffect(SmoothEffects.ELEMENTAL_SURGE)
-                && player.getRandom().nextInt(100) < SmoothBalance.Foreigner.elementalSurgeRenewalChance) {
+                && player.getRandom().nextInt(100)
+                        < SmoothBalance.Foreigner.elementalSurgeRenewalChance) {
             StatusEffectInstance surge = player.getStatusEffect(SmoothEffects.ELEMENTAL_SURGE);
-            player.addStatusEffect(new StatusEffectInstance(SmoothEffects.ELEMENTAL_SURGE,
-                    surge.getDuration() + SmoothBalance.Foreigner.elementalSurgeRenewalTicks,
-                    surge.getAmplifier(), false, false, true));
+            player.addStatusEffect(
+                    new StatusEffectInstance(
+                            SmoothEffects.ELEMENTAL_SURGE,
+                            surge.getDuration()
+                                    + SmoothBalance.Foreigner.elementalSurgeRenewalTicks,
+                            surge.getAmplifier(),
+                            false,
+                            false,
+                            true));
         }
         // Bloodthirsty modifiers are melee-event procs.
         if (player.hasStatusEffect(SmoothEffects.BLOODTHIRSTY)) {
-            if (has(player, PuffishSkillsIntegration.BERSERKER, SkillNodeIds.berserkerSpecialisationBloodthirstyTremor)
-                    && player.getRandom().nextInt(100) < SmoothBalance.Berserker.bloodthirstyTremorChance)
+            if (has(
+                            player,
+                            PuffishSkillsIntegration.BERSERKER,
+                            SkillNodeIds.berserkerSpecialisationBloodthirstyTremor)
+                    && player.getRandom().nextInt(100)
+                            < SmoothBalance.Berserker.bloodthirstyTremorChance)
                 increment(player, SmoothEffects.EARTHSHAKER, 30, 1, 1);
-            if (has(player, PuffishSkillsIntegration.BERSERKER, SkillNodeIds.berserkerSpecialisationBloodthirstyTireless)
-                    && player.getRandom().nextInt(100) < SmoothBalance.Berserker.bloodthirstyTirelessChance)
+            if (has(
+                            player,
+                            PuffishSkillsIntegration.BERSERKER,
+                            SkillNodeIds.berserkerSpecialisationBloodthirstyTireless)
+                    && player.getRandom().nextInt(100)
+                            < SmoothBalance.Berserker.bloodthirstyTirelessChance)
                 decrement(player, SmoothEffects.EXHAUSTION, 1);
         }
     }
@@ -79,10 +99,12 @@ public final class CombatEventRuntime {
     }
 
     /** @return false when the incoming hit is consumed/cancelled. */
-    public static boolean onIncomingDamage(ServerPlayerEntity player, DamageSource source, float amount) {
+    public static boolean onIncomingDamage(
+            ServerPlayerEntity player, DamageSource source, float amount) {
         if (!player.isAlive()) return true;
 
-        if (!org.marj4n.smooth_classes.origin.OriginRuntime.allowIncomingDamage(player, source, amount)) return false;
+        if (!org.marj4n.smooth_classes.origin.OriginRuntime.allowIncomingDamage(
+                player, source, amount)) return false;
         if (!AscendancyRuntime.incomingDamage(player, source, amount)) return false;
 
         // Barrier consumes one stack and completely absorbs the hit.
@@ -94,7 +116,6 @@ public final class CombatEventRuntime {
         if (player.hasStatusEffect(SmoothEffects.GHOSTWALK)) return false;
 
         if (!ClassPassiveRuntime.allowDamage(player)) return false;
-
 
         BasePathRuntime.onDamaged(player);
         LivingEntity attacker = source.getAttacker() instanceof LivingEntity living ? living : null;
@@ -108,32 +129,56 @@ public final class CombatEventRuntime {
         return true;
     }
 
-    public static void afterIncomingDamage(ServerPlayerEntity player, DamageSource source, float amount) {
-        if(amount>0) {
+    public static void afterIncomingDamage(
+            ServerPlayerEntity player, DamageSource source, float amount) {
+        if (amount > 0) {
             AscendancyRuntime.boneArmorHit(player);
-            org.marj4n.smooth_classes.content.berserker.runtime.BerserkerRuntime.onRampageDamaged(player);
+            org.marj4n.smooth_classes.content.berserker.runtime.BerserkerRuntime.onRampageDamaged(
+                    player);
         }
         // Berserker path gains one Rage stack whenever real damage lands.
         if (has(player, PuffishSkillsIntegration.TREE, SkillNodeIds.berserkerPath))
             increment(player, SmoothEffects.RAGE, 300, 1, 99);
     }
 
-    public static void onKilledOther(ServerPlayerEntity player, ServerWorld world, LivingEntity victim) {
+    public static void onKilledOther(
+            ServerPlayerEntity player, ServerWorld world, LivingEntity victim) {
         org.marj4n.smooth_classes.origin.OriginRuntime.onKilledOther(player, victim);
         org.marj4n.smooth_classes.content.assassin.runtime.ShadowTechniqueRuntime.onKill(player);
-        org.marj4n.smooth_classes.content.avenger.runtime.AvengerReworkRuntime.onKilledOther(player, victim);
+        org.marj4n.smooth_classes.content.avenger.runtime.AvengerReworkRuntime.onKilledOther(
+                player, victim);
         org.marj4n.smooth_classes.content.lancer.runtime.LancerRuntime.onKill(player, victim);
         // Renewal effects are intentionally event-based, matching the
         // PlayerEntity#onKilledOther hook rather than polling.
-        if (has(player, PuffishSkillsIntegration.BERSERKER, SkillNodeIds.berserkerSpecialisationBloodthirsty)
+        if (has(
+                        player,
+                        PuffishSkillsIntegration.BERSERKER,
+                        SkillNodeIds.berserkerSpecialisationBloodthirsty)
                 && player.hasStatusEffect(SmoothEffects.BLOODTHIRSTY))
             player.heal(player.getMaxHealth() * SmoothBalance.Berserker.bloodthirstyHealPercent);
-        if (has(player, PuffishSkillsIntegration.ARCHER, SkillNodeIds.rangerSpecialisationElementalArrowsRenewal)
+        if (has(
+                        player,
+                        PuffishSkillsIntegration.ARCHER,
+                        SkillNodeIds.rangerSpecialisationElementalArrowsRenewal)
                 && player.hasStatusEffect(SmoothEffects.ELEMENTAL_ARROWS))
-            player.addStatusEffect(new StatusEffectInstance(SmoothEffects.ELEMENTAL_ARROWS, 500,
-                    Math.max(0, player.getStatusEffect(SmoothEffects.ELEMENTAL_ARROWS).getAmplifier()), false, false, true));
-        if (has(player, PuffishSkillsIntegration.ASSASSIN, SkillNodeIds.rogueSpecialisationEvasionFanOfBladesRenewal))
-            player.addStatusEffect(new StatusEffectInstance(SmoothEffects.FANOFBLADES, 500, 1, false, false, true));
+            player.addStatusEffect(
+                    new StatusEffectInstance(
+                            SmoothEffects.ELEMENTAL_ARROWS,
+                            500,
+                            Math.max(
+                                    0,
+                                    player.getStatusEffect(SmoothEffects.ELEMENTAL_ARROWS)
+                                            .getAmplifier()),
+                            false,
+                            false,
+                            true));
+        if (has(
+                player,
+                PuffishSkillsIntegration.ASSASSIN,
+                SkillNodeIds.rogueSpecialisationEvasionFanOfBladesRenewal))
+            player.addStatusEffect(
+                    new StatusEffectInstance(
+                            SmoothEffects.FANOFBLADES, 500, 1, false, false, true));
     }
 
     public static void onDeath(ServerPlayerEntity player, DamageSource source) {
@@ -142,21 +187,33 @@ public final class CombatEventRuntime {
         player.setInvisible(false);
     }
 
-    private static boolean has(ServerPlayerEntity player, net.minecraft.util.Identifier category, String skill) {
+    private static boolean has(
+            ServerPlayerEntity player, net.minecraft.util.Identifier category, String skill) {
         return PuffishSkillsIntegration.isSkillUnlocked(category, skill, player);
     }
 
-    private static void increment(LivingEntity e, net.minecraft.entity.effect.StatusEffect effect, int duration, int amount, int max) {
-        StatusEffectInstance old=e.getStatusEffect(effect);
-        int amp=old==null?Math.max(0,amount-1):Math.min(max-1,old.getAmplifier()+amount);
-        e.addStatusEffect(new StatusEffectInstance(effect,duration,amp,false,false,true));
+    private static void increment(
+            LivingEntity e,
+            net.minecraft.entity.effect.StatusEffect effect,
+            int duration,
+            int amount,
+            int max) {
+        StatusEffectInstance old = e.getStatusEffect(effect);
+        int amp =
+                old == null
+                        ? Math.max(0, amount - 1)
+                        : Math.min(max - 1, old.getAmplifier() + amount);
+        e.addStatusEffect(new StatusEffectInstance(effect, duration, amp, false, false, true));
     }
 
-    private static void decrement(LivingEntity e, net.minecraft.entity.effect.StatusEffect effect, int amount) {
-        StatusEffectInstance old=e.getStatusEffect(effect);
-        if(old==null)return;
-        int amp=old.getAmplifier()-amount;
-        if(amp<0)e.removeStatusEffect(effect);
-        else e.addStatusEffect(new StatusEffectInstance(effect,old.getDuration(),amp,false,false,true));
+    private static void decrement(
+            LivingEntity e, net.minecraft.entity.effect.StatusEffect effect, int amount) {
+        StatusEffectInstance old = e.getStatusEffect(effect);
+        if (old == null) return;
+        int amp = old.getAmplifier() - amount;
+        if (amp < 0) e.removeStatusEffect(effect);
+        else
+            e.addStatusEffect(
+                    new StatusEffectInstance(effect, old.getDuration(), amp, false, false, true));
     }
 }

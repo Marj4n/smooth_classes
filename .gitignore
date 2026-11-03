@@ -1,6 +1,6 @@
 # Gradle
 .gradle/
-build/
+/build/
 out/
 
 # IntelliJ IDEA
@@ -44,9 +44,7 @@ desktop.ini
 *~
 
 # Local test configs / generated runtime data
-/config/
-/fabric/config/
-/forge/config/
+config/
 world/
 saves/
 
@@ -57,3 +55,11 @@ saves/
 !gradle/wrapper/gradle-wrapper.jar
 # Local multi-loader build output
 multiloader-build.log
+/.gradle/
+/.idea/
+/out/
+/run/
+/runs/
+/common/build/
+/fabric/build/
+/forge/build/

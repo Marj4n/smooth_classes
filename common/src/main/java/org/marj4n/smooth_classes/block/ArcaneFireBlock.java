@@ -21,12 +21,14 @@ public final class ArcaneFireBlock extends Block {
     public static final int LIFETIME_TICKS = 80;
     public static final float CONTACT_DAMAGE = 2F;
 
-    public ArcaneFireBlock(Settings settings) { super(settings); }
+    public ArcaneFireBlock(Settings settings) {
+        super(settings);
+    }
 
     @Override
     @Deprecated // Vanilla implementation hook; callers use BlockState.
-    public void onBlockAdded(BlockState state, World world, BlockPos pos,
-                             BlockState oldState, boolean notify) {
+    public void onBlockAdded(
+            BlockState state, World world, BlockPos pos, BlockState oldState, boolean notify) {
         if (!world.isClient && !oldState.isOf(this))
             world.scheduleBlockTick(pos, this, LIFETIME_TICKS);
     }
@@ -48,8 +50,13 @@ public final class ArcaneFireBlock extends Block {
 
     @Override
     @Deprecated // Vanilla implementation hook; callers use BlockState.
-    public BlockState getStateForNeighborUpdate(BlockState state, Direction direction,
-            BlockState neighborState, WorldAccess world, BlockPos pos, BlockPos neighborPos) {
+    public BlockState getStateForNeighborUpdate(
+            BlockState state,
+            Direction direction,
+            BlockState neighborState,
+            WorldAccess world,
+            BlockPos pos,
+            BlockPos neighborPos) {
         return canPlaceAt(state, world, pos) ? state : Blocks.AIR.getDefaultState();
     }
 
@@ -66,11 +73,22 @@ public final class ArcaneFireBlock extends Block {
     @Override
     public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
         if (random.nextInt(12) == 0)
-            world.playSound(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
-                    SoundEvents.BLOCK_FIRE_AMBIENT, SoundCategory.BLOCKS,
-                    0.5F, 0.8F + random.nextFloat() * 0.3F, false);
-        world.addParticle(SmoothParticles.ARCANE_FLAME,
-                pos.getX() + random.nextDouble(), pos.getY() + 0.4,
-                pos.getZ() + random.nextDouble(), 0, 0.025, 0);
+            world.playSound(
+                    pos.getX() + 0.5,
+                    pos.getY() + 0.5,
+                    pos.getZ() + 0.5,
+                    SoundEvents.BLOCK_FIRE_AMBIENT,
+                    SoundCategory.BLOCKS,
+                    0.5F,
+                    0.8F + random.nextFloat() * 0.3F,
+                    false);
+        world.addParticle(
+                SmoothParticles.ARCANE_FLAME,
+                pos.getX() + random.nextDouble(),
+                pos.getY() + 0.4,
+                pos.getZ() + random.nextDouble(),
+                0,
+                0.025,
+                0);
     }
 }

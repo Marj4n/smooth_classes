@@ -1,6 +1,14 @@
-plugins { id 'dev.architectury.loom'; id 'maven-publish' }
-base { archivesName = rootProject.archives_base_name }
-java { toolchain.languageVersion = JavaLanguageVersion.of(21); withSourcesJar() }
+plugins {
+    id 'dev.architectury.loom'
+    id 'maven-publish'
+}
+base {
+    archivesName = rootProject.archives_base_name
+}
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(21)
+    withSourcesJar()
+}
 repositories {
     maven { url = 'https://maven.fabricmc.net/' }
     maven { url = 'https://maven.architectury.dev/' }
@@ -100,3 +108,14 @@ tasks.register('validateForgeRuntimeTargets') {
     }
 }
 tasks.named('compileJava') { dependsOn 'validateForgeRuntimeTargets' }
+
+
+sourceSets.test.java {
+    srcDir rootProject.file('common/src/test/java')
+    include '**/CuboidVertexCollectorTest.java'
+}
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.11.4'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.11.4'
+}
+tasks.named('test') { useJUnitPlatform() }

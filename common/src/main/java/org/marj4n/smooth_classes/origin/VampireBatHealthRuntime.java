@@ -35,9 +35,13 @@ public final class VampireBatHealthRuntime {
         OriginRuntime.refreshVampireAttributes(player);
 
         // Never resurrect the player or generate free HP when old saves lack a snapshot.
-        if (!hadSnapshot || !player.isAlive() || ending <= 0.0F
-                || !Float.isFinite(original) || !Float.isFinite(capped)
-                || original <= 0.0F || capped <= 0.0F) return;
+        if (!hadSnapshot
+                || !player.isAlive()
+                || ending <= 0.0F
+                || !Float.isFinite(original)
+                || !Float.isFinite(capped)
+                || original <= 0.0F
+                || capped <= 0.0F) return;
 
         // Example: enter with 15 HP -> bat is capped to 7 HP -> suffer 2 real damage.
         // Exit with 15 + (5 - 7) = 13 HP, not 5 and not a free full heal.

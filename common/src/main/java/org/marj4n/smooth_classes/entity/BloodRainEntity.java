@@ -15,15 +15,17 @@ import org.marj4n.smooth_classes.content.avenger.runtime.AvengerReworkRuntime;
 
 /** A fixed local storm; never changes the world's global weather. */
 public final class BloodRainEntity extends Entity {
-    private static final TrackedData<Integer> ASCENDANCY_TIER = DataTracker.registerData(
-            BloodRainEntity.class, TrackedDataHandlerRegistry.INTEGER
-    );
+    private static final TrackedData<Integer> ASCENDANCY_TIER =
+            DataTracker.registerData(BloodRainEntity.class, TrackedDataHandlerRegistry.INTEGER);
 
     public UUID owner;
     private long expires;
     private boolean empowered;
     private boolean transcendent;
-    public boolean transcendent() { return transcendent; }
+
+    public boolean transcendent() {
+        return transcendent;
+    }
 
     public BloodRainEntity(EntityType<?> type, World world) {
         super(type, world);
@@ -89,11 +91,17 @@ public final class BloodRainEntity extends Entity {
         if (age % 10 != 0) return;
 
         double radius = radius();
-        var box = new Box(
-                getX() - radius, world.getBottomY(), getZ() - radius,
-                getX() + radius, world.getTopY(), getZ() + radius
-        );
-        for (var e : world.getEntitiesByClass(LivingEntity.class, box, t -> t.isAlive() && !t.isSpectator())) {
+        var box =
+                new Box(
+                        getX() - radius,
+                        world.getBottomY(),
+                        getZ() - radius,
+                        getX() + radius,
+                        world.getTopY(),
+                        getZ() + radius);
+        for (var e :
+                world.getEntitiesByClass(
+                        LivingEntity.class, box, t -> t.isAlive() && !t.isSpectator())) {
             if (!inside(e.getX() - getX(), e.getZ() - getZ()) || !exposed(e)) continue;
             if (e.getUuid().equals(owner) || isOwnedByCaster(e)) {
                 applyBeneficialRain(e);
@@ -118,7 +126,8 @@ public final class BloodRainEntity extends Entity {
             effect(e, StatusEffects.REGENERATION, regeneration);
         }
         if (age % 20 == 0 && e instanceof net.minecraft.entity.player.PlayerEntity) {
-            e.addStatusEffect(new StatusEffectInstance(StatusEffects.SATURATION, 1, 2, false, false, true));
+            e.addStatusEffect(
+                    new StatusEffectInstance(StatusEffects.SATURATION, 1, 2, false, false, true));
         }
         if (transcendent) {
             effect(e, StatusEffects.RESISTANCE, 3);
@@ -145,9 +154,10 @@ public final class BloodRainEntity extends Entity {
     }
 
     private static void effect(LivingEntity e, StatusEffect fx, int amplifier) {
-        int period = fx == StatusEffects.REGENERATION
-                ? Math.max(1, 50 >> amplifier)
-                : fx == StatusEffects.WITHER ? Math.max(1, 40 >> amplifier) : 20;
+        int period =
+                fx == StatusEffects.REGENERATION
+                        ? Math.max(1, 50 >> amplifier)
+                        : fx == StatusEffects.WITHER ? Math.max(1, 40 >> amplifier) : 20;
         int duration = period * 2 - (int) (e.getWorld().getTime() % period);
         e.addStatusEffect(new StatusEffectInstance(fx, duration, amplifier, false, true, true));
     }

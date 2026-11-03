@@ -10,11 +10,23 @@ import org.marj4n.smooth_classes.content.avenger.runtime.AvengerSummoningRuntime
 public final class SummoningRitualAbility implements Ability {
     public static final Identifier ID = SmoothClasses.id("avenger/summoning_ritual");
 
-    @Override public Identifier id() { return ID; }
-    @Override public String name() { return "Summoning Ritual"; }
-    @Override public int cooldownTicks() { return 120 * 20; }
+    @Override
+    public Identifier id() {
+        return ID;
+    }
 
-    @Override public String description() {
+    @Override
+    public String name() {
+        return "Summoning Ritual";
+    }
+
+    @Override
+    public int cooldownTicks() {
+        return 120 * 20;
+    }
+
+    @Override
+    public String description() {
         return "Summons Avenger minions. Talents modify minion type, count and inherited combat attributes.";
     }
 

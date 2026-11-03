@@ -31,7 +31,7 @@ public final class MermodTailModel<T extends PlayerEntity> extends EntityModel<T
         this.tail6 = tail5.getChild("tail6");
         this.tail7 = tail6.getChild("tail7");
         this.fin = tail7.getChild("fin");
-        this.chain = new ModelPart[]{tail1, tail2, tail3, tail4, tail5, tail6, tail7};
+        this.chain = new ModelPart[] {tail1, tail2, tail3, tail4, tail5, tail6, tail7};
     }
 
     public static TexturedModelData createData() {
@@ -40,56 +40,114 @@ public final class MermodTailModel<T extends PlayerEntity> extends EntityModel<T
 
         // Mermod Siren base dimensions.
         ModelPartData main = root.addChild("main", ModelPartBuilder.create(), ModelTransform.NONE);
-        ModelPartData waist = main.addChild("waist", ModelPartBuilder.create().uv(24, 0)
-                .cuboid(-4.0F, 0.0F, -2.0F, 8.0F, 12.0F, 4.0F, new Dilation(0.10F)), ModelTransform.NONE);
+        ModelPartData waist =
+                main.addChild(
+                        "waist",
+                        ModelPartBuilder.create()
+                                .uv(24, 0)
+                                .cuboid(-4.0F, 0.0F, -2.0F, 8.0F, 12.0F, 4.0F, new Dilation(0.10F)),
+                        ModelTransform.NONE);
         addSideFins(waist, 4.0F, 8.0F, 5.0F, 4.0F, 24, 40);
 
-        ModelPartData t1 = waist.addChild("tail1", ModelPartBuilder.create().uv(0, 0)
-                .cuboid(-4.0F, 0.0F, -2.0F, 8.0F, 3.0F, 4.0F), ModelTransform.pivot(0.0F, 12.0F, 0.0F));
+        ModelPartData t1 =
+                waist.addChild(
+                        "tail1",
+                        ModelPartBuilder.create()
+                                .uv(0, 0)
+                                .cuboid(-4.0F, 0.0F, -2.0F, 8.0F, 3.0F, 4.0F),
+                        ModelTransform.pivot(0.0F, 12.0F, 0.0F));
         addSideFins(t1, 4.0F, 0.0F, 5.0F, 3.0F, 24, 44);
 
-        ModelPartData t2 = t1.addChild("tail2", ModelPartBuilder.create().uv(0, 7)
-                .cuboid(-3.5F, 0.0F, -2.0F, 7.0F, 3.0F, 4.0F, new Dilation(-0.10F)), ModelTransform.pivot(0.0F, 3.0F, 0.0F));
+        ModelPartData t2 =
+                t1.addChild(
+                        "tail2",
+                        ModelPartBuilder.create()
+                                .uv(0, 7)
+                                .cuboid(-3.5F, 0.0F, -2.0F, 7.0F, 3.0F, 4.0F, new Dilation(-0.10F)),
+                        ModelTransform.pivot(0.0F, 3.0F, 0.0F));
         addSideFins(t2, 3.0F, 0.0F, 6.0F, 3.0F, 24, 47);
 
-        ModelPartData t3 = t2.addChild("tail3", ModelPartBuilder.create().uv(0, 14)
-                .cuboid(-3.0F, 0.0F, -1.5F, 6.0F, 3.0F, 3.0F), ModelTransform.pivot(0.0F, 3.0F, 0.0F));
+        ModelPartData t3 =
+                t2.addChild(
+                        "tail3",
+                        ModelPartBuilder.create()
+                                .uv(0, 14)
+                                .cuboid(-3.0F, 0.0F, -1.5F, 6.0F, 3.0F, 3.0F),
+                        ModelTransform.pivot(0.0F, 3.0F, 0.0F));
         addSideFins(t3, 3.0F, 0.0F, 6.0F, 3.0F, 24, 50);
 
-        ModelPartData t4 = t3.addChild("tail4", ModelPartBuilder.create().uv(0, 20)
-                .cuboid(-2.5F, 0.0F, -1.5F, 5.0F, 3.0F, 3.0F, new Dilation(-0.08F)), ModelTransform.pivot(0.0F, 3.0F, 0.0F));
+        ModelPartData t4 =
+                t3.addChild(
+                        "tail4",
+                        ModelPartBuilder.create()
+                                .uv(0, 20)
+                                .cuboid(-2.5F, 0.0F, -1.5F, 5.0F, 3.0F, 3.0F, new Dilation(-0.08F)),
+                        ModelTransform.pivot(0.0F, 3.0F, 0.0F));
         addSideFins(t4, 2.0F, 0.0F, 7.0F, 3.0F, 24, 53);
 
-        ModelPartData t5 = t4.addChild("tail5", ModelPartBuilder.create().uv(0, 26)
-                .cuboid(-2.0F, 0.0F, -1.0F, 4.0F, 3.0F, 2.0F), ModelTransform.pivot(0.0F, 3.0F, 0.0F));
+        ModelPartData t5 =
+                t4.addChild(
+                        "tail5",
+                        ModelPartBuilder.create()
+                                .uv(0, 26)
+                                .cuboid(-2.0F, 0.0F, -1.0F, 4.0F, 3.0F, 2.0F),
+                        ModelTransform.pivot(0.0F, 3.0F, 0.0F));
         addSideFins(t5, 2.0F, 0.0F, 7.0F, 3.0F, 24, 56);
 
-        ModelPartData t6 = t5.addChild("tail6", ModelPartBuilder.create().uv(0, 31)
-                .cuboid(-2.0F, 0.0F, -1.0F, 4.0F, 3.0F, 2.0F, new Dilation(-0.08F)), ModelTransform.pivot(0.0F, 3.0F, 0.0F));
+        ModelPartData t6 =
+                t5.addChild(
+                        "tail6",
+                        ModelPartBuilder.create()
+                                .uv(0, 31)
+                                .cuboid(-2.0F, 0.0F, -1.0F, 4.0F, 3.0F, 2.0F, new Dilation(-0.08F)),
+                        ModelTransform.pivot(0.0F, 3.0F, 0.0F));
         addSideFins(t6, 1.5F, 0.0F, 8.0F, 3.0F, 32, 40);
 
-        ModelPartData t7 = t6.addChild("tail7", ModelPartBuilder.create().uv(0, 36)
-                .cuboid(-1.5F, 0.0F, -0.5F, 3.0F, 3.0F, 1.0F), ModelTransform.pivot(0.0F, 3.0F, 0.0F));
+        ModelPartData t7 =
+                t6.addChild(
+                        "tail7",
+                        ModelPartBuilder.create()
+                                .uv(0, 36)
+                                .cuboid(-1.5F, 0.0F, -0.5F, 3.0F, 3.0F, 1.0F),
+                        ModelTransform.pivot(0.0F, 3.0F, 0.0F));
         addSideFins(t7, 1.5F, 0.0F, 8.0F, 6.0F, 32, 43);
 
         // Mermod Siren fin is a broad flat 23x24 sheet. A tiny depth avoids z-fighting
         // while keeping the silhouette identical.
-        t7.addChild("fin", ModelPartBuilder.create().uv(0, 40)
-                .cuboid(-11.5F, 0.0F, 0.0F, 23.0F, 24.0F, 0.0F), ModelTransform.pivot(0.0F, 3.0F, 0.0F));
+        t7.addChild(
+                "fin",
+                ModelPartBuilder.create().uv(0, 40).cuboid(-11.5F, 0.0F, 0.0F, 23.0F, 24.0F, 0.0F),
+                ModelTransform.pivot(0.0F, 3.0F, 0.0F));
 
         return TexturedModelData.of(data, 48, 64);
     }
 
-    private static void addSideFins(ModelPartData part, float halfWidth, float y, float length, float height, int u, int v) {
-        part.addChild("fin_left_" + v, ModelPartBuilder.create().uv(u, v)
-                        .cuboid(halfWidth, y, 0.0F, length, height, 0.0F),
+    private static void addSideFins(
+            ModelPartData part,
+            float halfWidth,
+            float y,
+            float length,
+            float height,
+            int u,
+            int v) {
+        part.addChild(
+                "fin_left_" + v,
+                ModelPartBuilder.create().uv(u, v).cuboid(halfWidth, y, 0.0F, length, height, 0.0F),
                 ModelTransform.of(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, -0.18F));
-        part.addChild("fin_right_" + v, ModelPartBuilder.create().uv(u, v)
+        part.addChild(
+                "fin_right_" + v,
+                ModelPartBuilder.create()
+                        .uv(u, v)
                         .cuboid(-halfWidth - length, y, 0.0F, length, height, 0.0F),
                 ModelTransform.of(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.18F));
     }
 
-    public void prepare(PlayerEntityModel<?> parent, T player, float limbAngle, float limbDistance, float animationProgress) {
+    public void prepare(
+            PlayerEntityModel<?> parent,
+            T player,
+            float limbAngle,
+            float limbDistance,
+            float animationProgress) {
         main.copyTransform(parent.body);
         resetPose();
 
@@ -113,7 +171,8 @@ public final class MermodTailModel<T extends PlayerEntity> extends EntityModel<T
             fin.yaw = tail7.yaw * 1.55F;
             fin.roll = MathHelper.sin(animationProgress * 0.09F) * 0.04F;
         } else if (wet) {
-            // Rain / shallow water: keep the tail downward but alive rather than snapping horizontal.
+            // Rain / shallow water: keep the tail downward but alive rather than snapping
+            // horizontal.
             for (int i = 0; i < chain.length; i++) chain[i].pitch = 0.18F;
             tail6.pitch = 0.10F;
             animatePitchWave(animationProgress * 0.025F, 0.07F);
@@ -155,12 +214,24 @@ public final class MermodTailModel<T extends PlayerEntity> extends EntityModel<T
     }
 
     @Override
-    public void setAngles(T entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
-    }
+    public void setAngles(
+            T entity,
+            float limbAngle,
+            float limbDistance,
+            float animationProgress,
+            float headYaw,
+            float headPitch) {}
 
     @Override
-    public void render(MatrixStack matrices, VertexConsumer vertices, int light, int overlay,
-                       float red, float green, float blue, float alpha) {
+    public void render(
+            MatrixStack matrices,
+            VertexConsumer vertices,
+            int light,
+            int overlay,
+            float red,
+            float green,
+            float blue,
+            float alpha) {
         main.render(matrices, vertices, light, overlay, red, green, blue, alpha);
     }
 }

@@ -12,11 +12,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PersistentProjectileEntity.class)
 public abstract class ArrowHammerImpactMixin {
-    @Inject(method="onEntityHit",at=@At("HEAD"))
-    private void smooth_classes$arrowHammer(EntityHitResult hit,CallbackInfo ci) {
-        PersistentProjectileEntity projectile=(PersistentProjectileEntity)(Object)this;
-        if (!projectile.getWorld().isClient() && projectile.getOwner() instanceof ServerPlayerEntity player
+    @Inject(method = "onEntityHit", at = @At("HEAD"))
+    private void smooth_classes$arrowHammer(EntityHitResult hit, CallbackInfo ci) {
+        PersistentProjectileEntity projectile = (PersistentProjectileEntity) (Object) this;
+        if (!projectile.getWorld().isClient()
+                && projectile.getOwner() instanceof ServerPlayerEntity player
                 && hit.getEntity() instanceof LivingEntity target)
-            RighteousHammerChargeRuntime.onTriggeredHit(player,target);
+            RighteousHammerChargeRuntime.onTriggeredHit(player, target);
     }
 }

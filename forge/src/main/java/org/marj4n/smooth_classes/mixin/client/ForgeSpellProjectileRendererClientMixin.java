@@ -22,25 +22,42 @@ public class ForgeSpellProjectileRendererClientMixin {
     // Target the mod-owned, non-generic composite hook; Loom remaps the handler's
     // Minecraft argument types for Forge without hard-coded SRG render selectors.
     @Inject(method = "renderComposite", at = @At("HEAD"), remap = false)
-    private static void smooth_classes$render(float tickDelta,
+    private static void smooth_classes$render(
+            float tickDelta,
             net.minecraft.client.render.entity.EntityRenderDispatcher dispatcher,
             net.minecraft.client.render.item.ItemRenderer itemRenderer,
-            Spell.ProjectileModelComposite data, String modelId, net.minecraft.util.math.Vec3d velocity,
-            Entity entity, float scale, boolean lit, MatrixStack matrices,
-            VertexConsumerProvider vertices, int light,
+            Spell.ProjectileModelComposite data,
+            String modelId,
+            net.minecraft.util.math.Vec3d velocity,
+            Entity entity,
+            float scale,
+            boolean lit,
+            MatrixStack matrices,
+            VertexConsumerProvider vertices,
+            int light,
             org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable<Boolean> ci) {
         if (data == null || data.models == null) return;
         for (Spell.ProjectileModelComposite.Model model : data.models) {
             if (model == null || model.fx == null || model.fx.model_id == null) continue;
             String id = model.fx.model_id;
-            if (id.startsWith("smooth_classes:") && id.contains("sword")) model.rotate_degrees_per_tick = 0;
+            if (id.startsWith("smooth_classes:") && id.contains("sword"))
+                model.rotate_degrees_per_tick = 0;
         }
     }
 
-    @ModifyArg(method = "renderComposite", at = @At(value = "INVOKE", remap = false,
-            target = "Lnet/spell_engine/api/render/CustomModels;renderModel(Lnet/minecraft/client/renderer/RenderType;Lnet/spell_engine/mixin/client/render/ItemRendererAccessor;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/client/resources/model/BakedModel;)V"),
-            index = 0, require = 0, remap = false)
+    @ModifyArg(
+            method = "renderComposite",
+            at =
+                    @At(
+                            value = "INVOKE",
+                            remap = false,
+                            target =
+                                    "Lnet/spell_engine/api/render/CustomModels;renderModel(Lnet/minecraft/client/renderer/RenderType;Lnet/spell_engine/mixin/client/render/ItemRendererAccessor;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/client/resources/model/BakedModel;)V"),
+            index = 0,
+            require = 0,
+            remap = false)
     private static RenderLayer smooth_classes$heldItemCutout(RenderLayer original) {
-        return RenderLayer.getEntityCutout(net.minecraft.screen.PlayerScreenHandler.BLOCK_ATLAS_TEXTURE);
+        return RenderLayer.getEntityCutout(
+                net.minecraft.screen.PlayerScreenHandler.BLOCK_ATLAS_TEXTURE);
     }
 }

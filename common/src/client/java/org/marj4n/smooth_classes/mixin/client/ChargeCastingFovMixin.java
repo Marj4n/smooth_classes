@@ -24,20 +24,24 @@ public abstract class ChargeCastingFovMixin {
     private static double smooth_classes$chargeFov = NORMAL_FOV_MULTIPLIER;
 
     @Inject(method = "getFov", at = @At("RETURN"), cancellable = true)
-    private void smooth_classes$chargeFov(Camera camera, float tickDelta, boolean changingFov,
-                                          CallbackInfoReturnable<Double> cir) {
+    private void smooth_classes$chargeFov(
+            Camera camera,
+            float tickDelta,
+            boolean changingFov,
+            CallbackInfoReturnable<Double> cir) {
         if (!changingFov) return;
 
         MinecraftClient client = MinecraftClient.getInstance();
-        boolean heavyCharge = client.player != null && (
-                client.player.hasStatusEffect(SmoothEffects.ARCANE_SLASH)
-                        || ChargeHudState.active(ChargeHudState.PORTAL_OF_SOVEREIGNTY)
-        );
+        boolean heavyCharge =
+                client.player != null
+                        && (client.player.hasStatusEffect(SmoothEffects.ARCANE_SLASH)
+                                || ChargeHudState.active(ChargeHudState.PORTAL_OF_SOVEREIGNTY));
 
         double target = heavyCharge ? CHARGE_FOV_MULTIPLIER : NORMAL_FOV_MULTIPLIER;
         double smoothing = target < smooth_classes$chargeFov ? IN_SMOOTHING : OUT_SMOOTHING;
         smooth_classes$chargeFov += (target - smooth_classes$chargeFov) * smoothing;
-        if (Math.abs(smooth_classes$chargeFov - target) < 0.00025D) smooth_classes$chargeFov = target;
+        if (Math.abs(smooth_classes$chargeFov - target) < 0.00025D)
+            smooth_classes$chargeFov = target;
         cir.setReturnValue(cir.getReturnValue() * smooth_classes$chargeFov);
     }
 }

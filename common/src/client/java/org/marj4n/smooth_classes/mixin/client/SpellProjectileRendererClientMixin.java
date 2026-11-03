@@ -19,30 +19,50 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(SpellProjectileRenderer.class)
-public class SpellProjectileRendererClientMixin<T extends Entity & FlyingItemEntity> extends EntityRenderer<T> {
-    protected SpellProjectileRendererClientMixin(EntityRendererFactory.Context ctx){ super(ctx); }
+public class SpellProjectileRendererClientMixin<T extends Entity & FlyingItemEntity>
+        extends EntityRenderer<T> {
+    protected SpellProjectileRendererClientMixin(EntityRendererFactory.Context ctx) {
+        super(ctx);
+    }
 
-    @Inject(at=@At("HEAD"), method="render")
-    private void smooth_classes$render(T entity,float yaw,float tickDelta,MatrixStack matrices,
-            VertexConsumerProvider vertices,int light,CallbackInfo ci){
-        if(entity instanceof SpellProjectile projectile){
-            Spell.ProjectileModelComposite data=projectile.renderModels();
-            if(data!=null && data.models!=null){
-                for(Spell.ProjectileModelComposite.Model model:data.models){
-                    if(model==null || model.fx==null || model.fx.model_id==null) continue;
-                    String id=model.fx.model_id;
-                    if(id.startsWith("smooth_classes:") && id.contains("sword")) model.rotate_degrees_per_tick=0;
+    @Inject(at = @At("HEAD"), method = "render")
+    private void smooth_classes$render(
+            T entity,
+            float yaw,
+            float tickDelta,
+            MatrixStack matrices,
+            VertexConsumerProvider vertices,
+            int light,
+            CallbackInfo ci) {
+        if (entity instanceof SpellProjectile projectile) {
+            Spell.ProjectileModelComposite data = projectile.renderModels();
+            if (data != null && data.models != null) {
+                for (Spell.ProjectileModelComposite.Model model : data.models) {
+                    if (model == null || model.fx == null || model.fx.model_id == null) continue;
+                    String id = model.fx.model_id;
+                    if (id.startsWith("smooth_classes:") && id.contains("sword"))
+                        model.rotate_degrees_per_tick = 0;
                 }
             }
         }
     }
 
-    @ModifyArg(method="renderComposite",at=@At(value="INVOKE",
-            target="Lnet/spell_engine/api/render/CustomModels;renderModel(Lnet/minecraft/client/render/RenderLayer;Lnet/spell_engine/mixin/client/render/ItemRendererAccessor;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/client/render/model/BakedModel;)V"),
-            index=0,require=0)
-    private static RenderLayer smooth_classes$heldItemCutout(RenderLayer original){
-        return RenderLayer.getEntityCutout(net.minecraft.screen.PlayerScreenHandler.BLOCK_ATLAS_TEXTURE);
+    @ModifyArg(
+            method = "renderComposite",
+            at =
+                    @At(
+                            value = "INVOKE",
+                            target =
+                                    "Lnet/spell_engine/api/render/CustomModels;renderModel(Lnet/minecraft/client/render/RenderLayer;Lnet/spell_engine/mixin/client/render/ItemRendererAccessor;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/client/render/model/BakedModel;)V"),
+            index = 0,
+            require = 0)
+    private static RenderLayer smooth_classes$heldItemCutout(RenderLayer original) {
+        return RenderLayer.getEntityCutout(
+                net.minecraft.screen.PlayerScreenHandler.BLOCK_ATLAS_TEXTURE);
     }
 
-    @Override public Identifier getTexture(T entity){ return net.minecraft.screen.PlayerScreenHandler.BLOCK_ATLAS_TEXTURE; }
+    @Override
+    public Identifier getTexture(T entity) {
+        return net.minecraft.screen.PlayerScreenHandler.BLOCK_ATLAS_TEXTURE;
+    }
 }

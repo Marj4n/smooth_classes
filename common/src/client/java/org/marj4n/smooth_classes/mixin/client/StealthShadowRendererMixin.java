@@ -20,8 +20,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(EntityRenderDispatcher.class)
 public abstract class StealthShadowRendererMixin {
     @Inject(method = "renderShadow", at = @At("HEAD"), cancellable = true)
-    private static void smooth_classes$renderShadow(MatrixStack matrices, VertexConsumerProvider consumers,
-            Entity entity, float opacity, float tickDelta, WorldView world, float radius, CallbackInfo ci) {
+    private static void smooth_classes$renderShadow(
+            MatrixStack matrices,
+            VertexConsumerProvider consumers,
+            Entity entity,
+            float opacity,
+            float tickDelta,
+            WorldView world,
+            float radius,
+            CallbackInfo ci) {
         if (entity instanceof LivingEntity living && StealthVisualState.active(living)) {
             ci.cancel();
             return;

@@ -19,15 +19,22 @@ public final class RiderHippogryphWindTrailFeature
         extends FeatureRenderer<RiderHippogryphEntity, RiderHippogryphModel> {
 
     public RiderHippogryphWindTrailFeature(
-            FeatureRendererContext<RiderHippogryphEntity, RiderHippogryphModel> context
-    ) {
+            FeatureRendererContext<RiderHippogryphEntity, RiderHippogryphModel> context) {
         super(context);
     }
 
     @Override
-    public void render(MatrixStack matrices, VertexConsumerProvider vertices, int light,
-                       RiderHippogryphEntity entity, float limbAngle, float limbDistance,
-                       float tickDelta, float animationProgress, float headYaw, float headPitch) {
+    public void render(
+            MatrixStack matrices,
+            VertexConsumerProvider vertices,
+            int light,
+            RiderHippogryphEntity entity,
+            float limbAngle,
+            float limbDistance,
+            float tickDelta,
+            float animationProgress,
+            float headYaw,
+            float headPitch) {
         float boost = entity.getWingBoostBlend(tickDelta);
         if (!entity.isRiderFlying() || boost < 0.12F) return;
 
@@ -56,26 +63,30 @@ public final class RiderHippogryphWindTrailFeature
         // from every camera angle without the blocky CLOUD/POOF particle look.
         float w0 = 0.016F;
         float w1 = 0.002F;
-        quad(out, matrix,
-                -w0, 0.0F, 0.0F,
-                 w0, 0.0F, 0.0F,
-                 w1, 0.0F, length,
-                -w1, 0.0F, length,
+        quad(
+                out, matrix, -w0, 0.0F, 0.0F, w0, 0.0F, 0.0F, w1, 0.0F, length, -w1, 0.0F, length,
                 alpha);
-        quad(out, matrix,
-                 0.0F, -w0, 0.0F,
-                 0.0F,  w0, 0.0F,
-                 0.0F,  w1, length,
-                 0.0F, -w1, length,
+        quad(
+                out, matrix, 0.0F, -w0, 0.0F, 0.0F, w0, 0.0F, 0.0F, w1, length, 0.0F, -w1, length,
                 alpha);
     }
 
-    private static void quad(VertexConsumer out, Matrix4f matrix,
-                             float x1, float y1, float z1,
-                             float x2, float y2, float z2,
-                             float x3, float y3, float z3,
-                             float x4, float y4, float z4,
-                             int alpha) {
+    private static void quad(
+            VertexConsumer out,
+            Matrix4f matrix,
+            float x1,
+            float y1,
+            float z1,
+            float x2,
+            float y2,
+            float z2,
+            float x3,
+            float y3,
+            float z3,
+            float x4,
+            float y4,
+            float z4,
+            int alpha) {
         out.vertex(matrix, x1, y1, z1).color(245, 251, 255, alpha).next();
         out.vertex(matrix, x2, y2, z2).color(245, 251, 255, alpha).next();
         out.vertex(matrix, x3, y3, z3).color(245, 251, 255, 0).next();

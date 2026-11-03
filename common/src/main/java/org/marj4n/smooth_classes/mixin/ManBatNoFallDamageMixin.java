@@ -13,9 +13,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(LivingEntity.class)
 public abstract class ManBatNoFallDamageMixin {
     @Inject(method = "handleFallDamage", at = @At("HEAD"), cancellable = true)
-    private void smooth_classes$manBatNoFall(float fallDistance, float damageMultiplier,
-                                              DamageSource source, CallbackInfoReturnable<Boolean> cir) {
-        if ((Object)this instanceof PlayerEntity player) {
+    private void smooth_classes$manBatNoFall(
+            float fallDistance,
+            float damageMultiplier,
+            DamageSource source,
+            CallbackInfoReturnable<Boolean> cir) {
+        if ((Object) this instanceof PlayerEntity player) {
             var state = OriginRuntime.state(player);
             if (state.origin() == OriginType.VAMPIRE && state.hasFlag("vampire.form.man_bat")) {
                 cir.setReturnValue(false);

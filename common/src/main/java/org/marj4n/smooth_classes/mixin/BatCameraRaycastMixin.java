@@ -26,12 +26,18 @@ public abstract class BatCameraRaycastMixin {
     @Shadow public double prevY;
     @Shadow public double prevZ;
 
-    @Shadow public abstract double getX();
-    @Shadow public abstract double getY();
-    @Shadow public abstract double getZ();
+    @Shadow
+    public abstract double getX();
+
+    @Shadow
+    public abstract double getY();
+
+    @Shadow
+    public abstract double getZ();
 
     @Inject(method = "getCameraPosVec", at = @At("HEAD"), cancellable = true)
-    private void smooth_classes$batCameraRayOrigin(float tickDelta, CallbackInfoReturnable<Vec3d> cir) {
+    private void smooth_classes$batCameraRayOrigin(
+            float tickDelta, CallbackInfoReturnable<Vec3d> cir) {
         Entity self = (Entity) (Object) this;
         if (!(self instanceof PlayerEntity player)) return;
 
@@ -39,7 +45,9 @@ public abstract class BatCameraRaycastMixin {
         if (state.origin() != OriginType.VAMPIRE || !state.hasFlag("vampire.form.bat")) return;
 
         double x = MathHelper.lerp((double) tickDelta, prevX, getX());
-        double y = MathHelper.lerp((double) tickDelta, prevY, getY()) + OriginBodyGeometry.BAT_EYE_HEIGHT;
+        double y =
+                MathHelper.lerp((double) tickDelta, prevY, getY())
+                        + OriginBodyGeometry.BAT_EYE_HEIGHT;
         double z = MathHelper.lerp((double) tickDelta, prevZ, getZ());
         cir.setReturnValue(new Vec3d(x, y, z));
     }

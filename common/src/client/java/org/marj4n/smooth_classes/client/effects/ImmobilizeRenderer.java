@@ -12,34 +12,50 @@ import net.spell_engine.api.effect.CustomModelStatusEffect;
 import net.spell_engine.api.render.CustomModels;
 import org.marj4n.smooth_classes.SmoothClasses;
 
-
 public class ImmobilizeRenderer implements CustomModelStatusEffect.Renderer {
-    public static final Identifier modelId_base = Identifier.of(SmoothClasses.MOD_ID, "effect/immobilize");
+    public static final Identifier modelId_base =
+            Identifier.of(SmoothClasses.MOD_ID, "effect/immobilize");
 
     private static final RenderLayer BASE_RENDER_LAYER =
-            RenderLayer.getEntityTranslucent(net.minecraft.screen.PlayerScreenHandler.BLOCK_ATLAS_TEXTURE);
-
+            RenderLayer.getEntityTranslucent(
+                    net.minecraft.screen.PlayerScreenHandler.BLOCK_ATLAS_TEXTURE);
 
     @Override
-    public void renderEffect(long startTime, int amplifier, LivingEntity livingEntity, float delta, MatrixStack matrixStack, VertexConsumerProvider vertexConsumers, int light) {
+    public void renderEffect(
+            long startTime,
+            int amplifier,
+            LivingEntity livingEntity,
+            float delta,
+            MatrixStack matrixStack,
+            VertexConsumerProvider vertexConsumers,
+            int light) {
         float yOffset = 0.50F;
         float scale = 1.2F;
         float proneOffset = 0.55F; // Things get weird when prone, and render code hurts my head
-        boolean prone = livingEntity.isFallFlying() || livingEntity.isCrawling() || livingEntity.isInSwimmingPose();
+        boolean prone =
+                livingEntity.isFallFlying()
+                        || livingEntity.isCrawling()
+                        || livingEntity.isInSwimmingPose();
         matrixStack.push();
 
         matrixStack.translate(0, yOffset, 0);
-        if (prone)
-            scale = 0.0F;
+        if (prone) scale = 0.0F;
 
         // Apply rotation to match the entity's orientation
-        //matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-livingEntity.bodyYaw));
+        // matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-livingEntity.bodyYaw));
         if (prone)
-            matrixStack.multiply(RotationAxis.POSITIVE_X.rotationDegrees(livingEntity.getPitch() + 90));
+            matrixStack.multiply(
+                    RotationAxis.POSITIVE_X.rotationDegrees(livingEntity.getPitch() + 90));
         matrixStack.scale(scale, scale, scale);
 
-        CustomModels.render(BASE_RENDER_LAYER, MinecraftClient.getInstance().getItemRenderer(), modelId_base,
-                matrixStack, vertexConsumers, light, livingEntity.getId());
+        CustomModels.render(
+                BASE_RENDER_LAYER,
+                MinecraftClient.getInstance().getItemRenderer(),
+                modelId_base,
+                matrixStack,
+                vertexConsumers,
+                light,
+                livingEntity.getId());
         matrixStack.pop();
     }
 }

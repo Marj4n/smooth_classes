@@ -70,7 +70,6 @@ public final class RiderFluidWalkPhysics {
     }
 
     public static boolean matches(FluidState state, boolean water, boolean lava) {
-        return (water && state.isIn(FluidTags.WATER))
-                || (lava && state.isIn(FluidTags.LAVA));
+        return (water && state.isIn(FluidTags.WATER)) || (lava && state.isIn(FluidTags.LAVA));
     }
 }

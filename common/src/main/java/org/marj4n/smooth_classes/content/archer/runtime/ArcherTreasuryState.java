@@ -26,11 +26,9 @@ public final class ArcherTreasuryState extends PersistentState {
     private final Map<UUID, ItemStack[]> players = new HashMap<>();
 
     public static ArcherTreasuryState get(MinecraftServer server) {
-        return server.getOverworld().getPersistentStateManager().getOrCreate(
-                ArcherTreasuryState::fromNbt,
-                ArcherTreasuryState::new,
-                SAVE_ID
-        );
+        return server.getOverworld()
+                .getPersistentStateManager()
+                .getOrCreate(ArcherTreasuryState::fromNbt, ArcherTreasuryState::new, SAVE_ID);
     }
 
     private ItemStack[] slots(UUID player) {

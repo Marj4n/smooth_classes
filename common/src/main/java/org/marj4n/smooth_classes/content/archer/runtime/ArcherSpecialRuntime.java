@@ -46,7 +46,11 @@ public final class ArcherSpecialRuntime {
     private static final int WITHDRAW_CLOSE_DELAY_TICKS = 13;
     private static final int SLOT_LOCK_TICKS = 18;
 
-    private enum Action { NONE, DEPOSIT, WITHDRAW }
+    private enum Action {
+        NONE,
+        DEPOSIT,
+        WITHDRAW
+    }
 
     private static final class State {
         boolean selectorHeld;
@@ -76,13 +80,18 @@ public final class ArcherSpecialRuntime {
 
         int hotbar = player.getInventory().selectedSlot;
         ItemStack held = player.getInventory().getStack(hotbar);
-        if (held.isEmpty()) return ExecutionResult.failure("Hold H on an empty hotbar slot to draw from the Treasury.");
-        if (!isAllowedTreasuryItem(held)) return ExecutionResult.failure("Only weapons and arrows can be stored in the Treasury.");
+        if (held.isEmpty())
+            return ExecutionResult.failure(
+                    "Hold H on an empty hotbar slot to draw from the Treasury.");
+        if (!isAllowedTreasuryItem(held))
+            return ExecutionResult.failure(
+                    "Only weapons and arrows can be stored in the Treasury.");
 
         ArcherTreasuryState treasury = ArcherTreasuryState.get(player.getServer());
         int capacity = treasuryCapacity(player);
         if (treasury.firstEmpty(player.getUuid(), capacity) < 0)
-            return ExecutionResult.failure("The Treasury is full (" + capacity + "/" + capacity + ").");
+            return ExecutionResult.failure(
+                    "The Treasury is full (" + capacity + "/" + capacity + ").");
 
         long now = player.getServer().getTicks();
         state.action = Action.DEPOSIT;
@@ -100,8 +109,14 @@ public final class ArcherSpecialRuntime {
         spawnRightRearPortal(player, state);
         forceHotbarSlot(player, hotbar);
         playAnimation(player, "treasury_store");
-        player.getServerWorld().playSound(null, player.getBlockPos(), SoundEvents.BLOCK_BEACON_ACTIVATE,
-                SoundCategory.PLAYERS, 0.52F, 1.45F);
+        player.getServerWorld()
+                .playSound(
+                        null,
+                        player.getBlockPos(),
+                        SoundEvents.BLOCK_BEACON_ACTIVATE,
+                        SoundCategory.PLAYERS,
+                        0.52F,
+                        1.45F);
         return ExecutionResult.success(1, "Storing item in the Treasury.");
     }
 
@@ -114,7 +129,8 @@ public final class ArcherSpecialRuntime {
         long now = player.getServer().getTicks();
         if (held) {
             if (!player.getMainHandStack().isEmpty()) return;
-            if (!ArcherTreasuryState.get(player.getServer()).hasAny(player.getUuid(), treasuryCapacity(player))) return;
+            if (!ArcherTreasuryState.get(player.getServer())
+                    .hasAny(player.getUuid(), treasuryCapacity(player))) return;
             if (!state.selectorHeld) {
                 state.selectorHeld = true;
                 state.portalOpenedAt = now;
@@ -142,7 +158,8 @@ public final class ArcherSpecialRuntime {
 
         int hotbar = player.getInventory().selectedSlot;
         if (!player.getInventory().getStack(hotbar).isEmpty())
-            return ExecutionResult.failure("Select an empty hotbar slot before drawing from the Treasury.");
+            return ExecutionResult.failure(
+                    "Select an empty hotbar slot before drawing from the Treasury.");
 
         ArcherTreasuryState treasury = ArcherTreasuryState.get(player.getServer());
         ItemStack withdrawn = treasury.get(player.getUuid(), index);
@@ -171,8 +188,14 @@ public final class ArcherSpecialRuntime {
 
         forceHotbarSlot(player, hotbar);
         playAnimation(player, "treasury_draw");
-        player.getServerWorld().playSound(null, player.getBlockPos(), SoundEvents.BLOCK_AMETHYST_BLOCK_CHIME,
-                SoundCategory.PLAYERS, 0.60F, 1.22F);
+        player.getServerWorld()
+                .playSound(
+                        null,
+                        player.getBlockPos(),
+                        SoundEvents.BLOCK_AMETHYST_BLOCK_CHIME,
+                        SoundCategory.PLAYERS,
+                        0.60F,
+                        1.22F);
         return ExecutionResult.success(1, "Drawing item from the Treasury.");
     }
 
@@ -189,7 +212,8 @@ public final class ArcherSpecialRuntime {
         long now = player.getServer().getTicks();
         state.portals.removeIf(net.minecraft.entity.Entity::isRemoved);
 
-        if (state.lockSlotUntil > now && state.hotbarSlot >= 0) forceHotbarSlot(player, state.hotbarSlot);
+        if (state.lockSlotUntil > now && state.hotbarSlot >= 0)
+            forceHotbarSlot(player, state.hotbarSlot);
 
         updatePortalAnimation(player, state, now);
 
@@ -211,13 +235,15 @@ public final class ArcherSpecialRuntime {
     private static void commitDeposit(ServerPlayerEntity player, State state) {
         if (state.hotbarSlot < 0 || state.hotbarSlot >= 9 || state.pendingStack.isEmpty()) return;
         ItemStack current = player.getInventory().getStack(state.hotbarSlot);
-        boolean same = !current.isEmpty()
-                && current.getCount() == state.pendingStack.getCount()
-                && ItemStack.canCombine(current, state.pendingStack);
+        boolean same =
+                !current.isEmpty()
+                        && current.getCount() == state.pendingStack.getCount()
+                        && ItemStack.canCombine(current, state.pendingStack);
         if (!same) return; // Item changed during the animation; never duplicate it.
 
         ArcherTreasuryState treasury = ArcherTreasuryState.get(player.getServer());
-        int deposited = treasury.deposit(player.getUuid(), current.copy(), treasuryCapacity(player));
+        int deposited =
+                treasury.deposit(player.getUuid(), current.copy(), treasuryCapacity(player));
         if (deposited < 0) return;
 
         player.getInventory().setStack(state.hotbarSlot, ItemStack.EMPTY);
@@ -236,7 +262,8 @@ public final class ArcherSpecialRuntime {
         ArcherTreasuryState treasury = ArcherTreasuryState.get(player.getServer());
         ItemStack withdrawn = treasury.withdraw(player.getUuid(), state.treasurySlot);
         if (withdrawn.isEmpty()) return;
-        if (!ItemStack.canCombine(withdrawn, state.pendingStack) || withdrawn.getCount() != state.pendingStack.getCount()) {
+        if (!ItemStack.canCombine(withdrawn, state.pendingStack)
+                || withdrawn.getCount() != state.pendingStack.getCount()) {
             // Unexpected mutation: put the real stack back rather than risking loss/duplication.
             treasury.putAt(player.getUuid(), state.treasurySlot, withdrawn);
             return;
@@ -245,8 +272,8 @@ public final class ArcherSpecialRuntime {
         player.getInventory().setStack(state.hotbarSlot, withdrawn);
         player.getInventory().markDirty();
         player.swingHand(Hand.MAIN_HAND, true);
-        if (PuffishSkillsIntegration.isSkillUnlocked(PuffishSkillsIntegration.ARCHER,
-                SkillNodeIds.rangerRoyalDraw, player)) {
+        if (PuffishSkillsIntegration.isSkillUnlocked(
+                PuffishSkillsIntegration.ARCHER, SkillNodeIds.rangerRoyalDraw, player)) {
             addMarksmanship(player, 100, 1, 3);
         }
         state.pendingStack = ItemStack.EMPTY;
@@ -259,7 +286,12 @@ public final class ArcherSpecialRuntime {
 
         float opening;
         if (state.selectorHeld || (state.action != Action.NONE && now < state.portalCloseAt)) {
-            opening = Math.min(1F, Math.max(0F, (now - state.portalOpenedAt + 1L) / (float) PORTAL_OPEN_TICKS));
+            opening =
+                    Math.min(
+                            1F,
+                            Math.max(
+                                    0F,
+                                    (now - state.portalOpenedAt + 1L) / (float) PORTAL_OPEN_TICKS));
         } else if (state.portalDiscardAt > 0L) {
             opening = Math.max(0F, (state.portalDiscardAt - now) / (float) PORTAL_CLOSE_TICKS);
         } else {
@@ -280,7 +312,8 @@ public final class ArcherSpecialRuntime {
     }
 
     private static void spawnRightRearPortal(ServerPlayerEntity player, State state) {
-        BladePortalEntity portal = new BladePortalEntity(SmoothEntities.BLADE_PORTAL, player.getServerWorld());
+        BladePortalEntity portal =
+                new BladePortalEntity(SmoothEntities.BLADE_PORTAL, player.getServerWorld());
         portal.setCaster(player);
         portal.setSide(0);
         // Close enough for the right hand to visibly enter it, but still behind the shoulder.
@@ -299,50 +332,90 @@ public final class ArcherSpecialRuntime {
     }
 
     private static void playAnimation(ServerPlayerEntity player, String animationId) {
-        var entry = org.marj4n.smooth_classes.runtime.InternalSpellRuntime.entry(
-                player, SmoothClasses.id(animationId));
-        if (entry == null || entry.value().release == null || entry.value().release.animation == null) return;
-        var viewers = new ArrayList<>(net.fabricmc.fabric.api.networking.v1.PlayerLookup.tracking(player));
+        var entry =
+                org.marj4n.smooth_classes.runtime.InternalSpellRuntime.entry(
+                        player, SmoothClasses.id(animationId));
+        if (entry == null
+                || entry.value().release == null
+                || entry.value().release.animation == null) return;
+        var viewers =
+                new ArrayList<>(
+                        net.fabricmc.fabric.api.networking.v1.PlayerLookup.tracking(player));
         if (!viewers.contains(player)) viewers.add(player);
-        net.spell_engine.utils.AnimationHelper.sendAnimation(player, viewers,
+        net.spell_engine.utils.AnimationHelper.sendAnimation(
+                player,
+                viewers,
                 net.spell_engine.internals.casting.SpellCast.Animation.RELEASE,
-                entry.value().release.animation, 1F);
+                entry.value().release.animation,
+                1F);
     }
 
     public static boolean isAllowedTreasuryItem(ItemStack stack) {
         if (stack == null || stack.isEmpty() || stack.getItem() instanceof BlockItem) return false;
         Item item = stack.getItem();
-        if (item instanceof ArrowItem || item instanceof SwordItem || item instanceof AxeItem
-                || item instanceof TridentItem || item instanceof BowItem || item instanceof CrossbowItem) return true;
+        if (item instanceof ArrowItem
+                || item instanceof SwordItem
+                || item instanceof AxeItem
+                || item instanceof TridentItem
+                || item instanceof BowItem
+                || item instanceof CrossbowItem) return true;
 
-        // Compatibility fallback for modded weapon classes that don't subclass vanilla weapon items.
-        String path = org.marj4n.smooth_classes.platform.PlatformRegistries.ITEM.getId(item).getPath().toLowerCase(Locale.ROOT);
-        return containsWeaponWord(path, "sword") || containsWeaponWord(path, "blade")
-                || containsWeaponWord(path, "dagger") || containsWeaponWord(path, "spear")
-                || containsWeaponWord(path, "lance") || containsWeaponWord(path, "katana")
-                || containsWeaponWord(path, "cutlass") || containsWeaponWord(path, "rapier")
-                || containsWeaponWord(path, "glaive") || containsWeaponWord(path, "scythe")
-                || containsWeaponWord(path, "halberd") || containsWeaponWord(path, "mace")
-                || containsWeaponWord(path, "hammer") || containsWeaponWord(path, "sai")
-                || containsWeaponWord(path, "twinblade") || containsWeaponWord(path, "warglaive")
-                || containsWeaponWord(path, "chakram") || containsWeaponWord(path, "claymore")
-                || containsWeaponWord(path, "greataxe") || containsWeaponWord(path, "greathammer")
-                || containsWeaponWord(path, "bow") || containsWeaponWord(path, "arrow");
+        // Compatibility fallback for modded weapon classes that don't subclass vanilla weapon
+        // items.
+        String path =
+                org.marj4n.smooth_classes.platform.PlatformRegistries.ITEM
+                        .getId(item)
+                        .getPath()
+                        .toLowerCase(Locale.ROOT);
+        return containsWeaponWord(path, "sword")
+                || containsWeaponWord(path, "blade")
+                || containsWeaponWord(path, "dagger")
+                || containsWeaponWord(path, "spear")
+                || containsWeaponWord(path, "lance")
+                || containsWeaponWord(path, "katana")
+                || containsWeaponWord(path, "cutlass")
+                || containsWeaponWord(path, "rapier")
+                || containsWeaponWord(path, "glaive")
+                || containsWeaponWord(path, "scythe")
+                || containsWeaponWord(path, "halberd")
+                || containsWeaponWord(path, "mace")
+                || containsWeaponWord(path, "hammer")
+                || containsWeaponWord(path, "sai")
+                || containsWeaponWord(path, "twinblade")
+                || containsWeaponWord(path, "warglaive")
+                || containsWeaponWord(path, "chakram")
+                || containsWeaponWord(path, "claymore")
+                || containsWeaponWord(path, "greataxe")
+                || containsWeaponWord(path, "greathammer")
+                || containsWeaponWord(path, "bow")
+                || containsWeaponWord(path, "arrow");
     }
 
     private static boolean containsWeaponWord(String path, String word) {
-        return path.equals(word) || path.startsWith(word + "_") || path.endsWith("_" + word)
+        return path.equals(word)
+                || path.startsWith(word + "_")
+                || path.endsWith("_" + word)
                 || path.contains("_" + word + "_");
     }
 
-    private static boolean busy(State state) { return state.action != Action.NONE; }
+    private static boolean busy(State state) {
+        return state.action != Action.NONE;
+    }
 
     public static int treasuryCapacity(ServerPlayerEntity player) {
         int capacity = ArcherTreasuryState.BASE_SLOT_COUNT;
-        if (PuffishSkillsIntegration.isSkillUnlocked(PuffishSkillsIntegration.ARCHER, SkillNodeIds.rangerTreasuryExpansionI, player)) capacity++;
-        if (PuffishSkillsIntegration.isSkillUnlocked(PuffishSkillsIntegration.ARCHER, SkillNodeIds.rangerTreasuryExpansionII, player)) capacity++;
-        if (PuffishSkillsIntegration.isSkillUnlocked(PuffishSkillsIntegration.ARCHER, SkillNodeIds.rangerTreasuryExpansionIII, player)) capacity++;
-        if (PuffishSkillsIntegration.isSkillUnlocked(PuffishSkillsIntegration.ARCHER, SkillNodeIds.rangerTreasuryExpansionIV, player)) capacity++;
+        if (PuffishSkillsIntegration.isSkillUnlocked(
+                PuffishSkillsIntegration.ARCHER, SkillNodeIds.rangerTreasuryExpansionI, player))
+            capacity++;
+        if (PuffishSkillsIntegration.isSkillUnlocked(
+                PuffishSkillsIntegration.ARCHER, SkillNodeIds.rangerTreasuryExpansionII, player))
+            capacity++;
+        if (PuffishSkillsIntegration.isSkillUnlocked(
+                PuffishSkillsIntegration.ARCHER, SkillNodeIds.rangerTreasuryExpansionIII, player))
+            capacity++;
+        if (PuffishSkillsIntegration.isSkillUnlocked(
+                PuffishSkillsIntegration.ARCHER, SkillNodeIds.rangerTreasuryExpansionIV, player))
+            capacity++;
         return Math.min(ArcherTreasuryState.MAX_SLOT_COUNT, capacity);
     }
 
@@ -350,18 +423,23 @@ public final class ArcherSpecialRuntime {
         return ArcherTreasuryState.get(player.getServer()).snapshot(player.getUuid());
     }
 
-    private static void addMarksmanship(ServerPlayerEntity player, int duration, int stacks, int maxStacks) {
+    private static void addMarksmanship(
+            ServerPlayerEntity player, int duration, int stacks, int maxStacks) {
         StatusEffectInstance current = player.getStatusEffect(SmoothEffects.MARKSMANSHIP);
-        int amplifier = current == null ? Math.max(0, stacks - 1)
-                : Math.min(maxStacks - 1, current.getAmplifier() + stacks);
-        player.addStatusEffect(new StatusEffectInstance(SmoothEffects.MARKSMANSHIP,
-                duration, amplifier, false, false, true));
+        int amplifier =
+                current == null
+                        ? Math.max(0, stacks - 1)
+                        : Math.min(maxStacks - 1, current.getAmplifier() + stacks);
+        player.addStatusEffect(
+                new StatusEffectInstance(
+                        SmoothEffects.MARKSMANSHIP, duration, amplifier, false, false, true));
     }
 
     public static boolean drawing(ServerPlayerEntity player) {
         State state = STATES.get(player.getUuid());
         return state != null && state.action != Action.NONE;
     }
+
     public static void cleanup(ServerPlayerEntity player) {
         State state = STATES.remove(player.getUuid());
         if (state != null) {

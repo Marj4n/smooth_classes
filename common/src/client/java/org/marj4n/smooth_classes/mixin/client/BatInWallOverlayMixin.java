@@ -27,8 +27,7 @@ public abstract class BatInWallOverlayMixin {
 
     @Inject(method = "getInWallBlockState", at = @At("HEAD"), cancellable = true)
     private static void smooth_classes$skipFalseBatInWallOverlay(
-            PlayerEntity player,
-            CallbackInfoReturnable<BlockState> cir) {
+            PlayerEntity player, CallbackInfoReturnable<BlockState> cir) {
         var state = OriginRuntime.state(player);
         if (state.origin() == OriginType.VAMPIRE && state.hasFlag("vampire.form.bat")) {
             cir.setReturnValue(null);

@@ -23,14 +23,13 @@ public final class AbilityCooldownState extends PersistentState {
     private static final String SAVE_ID = "smooth_classes_ability_cooldowns";
 
     private record Entry(long readyAtMillis, long durationMillis) {}
+
     private final Map<UUID, Map<String, Entry>> players = new HashMap<>();
 
     public static AbilityCooldownState get(MinecraftServer server) {
-        return server.getOverworld().getPersistentStateManager().getOrCreate(
-                AbilityCooldownState::fromNbt,
-                AbilityCooldownState::new,
-                SAVE_ID
-        );
+        return server.getOverworld()
+                .getPersistentStateManager()
+                .getOrCreate(AbilityCooldownState::fromNbt, AbilityCooldownState::new, SAVE_ID);
     }
 
     public long remainingMillis(UUID player, Identifier ability, long nowMillis) {

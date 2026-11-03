@@ -51,7 +51,12 @@ public final class BatFormModel<T extends PlayerEntity> extends EntityModel<T> {
         return net.minecraft.client.render.entity.model.BatEntityModel.getTexturedModelData();
     }
 
-    public void prepare(T player, float animationProgress, float limbAngle, float limbDistance, float flightBlend) {
+    public void prepare(
+            T player,
+            float animationProgress,
+            float limbAngle,
+            float limbDistance,
+            float flightBlend) {
         float blend = MathHelper.clamp(flightBlend, 0.0F, 1.0F);
         // The same shared ModelPart instances render grounded/flying/roosting.
         // Always restore the original pivots before recomputing the next pose.
@@ -72,7 +77,7 @@ public final class BatFormModel<T extends PlayerEntity> extends EntityModel<T> {
         float bob = Math.abs(MathHelper.cos(limbAngle * 0.6662F)) * 0.05F * movement;
 
         float groundBodyPitch = 1.02F + bob;
-        float groundHeadPitch = -0.72F + player.getPitch() * ((float)Math.PI / 180.0F) * 0.12F;
+        float groundHeadPitch = -0.72F + player.getPitch() * ((float) Math.PI / 180.0F) * 0.12F;
         float groundRightWingPitch = 0.95F + stride;
         float groundLeftWingPitch = 0.95F - stride;
         float groundRightWingYaw = -0.30F;
@@ -91,9 +96,9 @@ public final class BatFormModel<T extends PlayerEntity> extends EntityModel<T> {
         float groundLeftTipRoll = 0.08F;
 
         // Current vanilla-like airborne state stays untouched.
-        float flap = MathHelper.cos(animationProgress * 1.30F) * (float)Math.PI * 0.25F;
+        float flap = MathHelper.cos(animationProgress * 1.30F) * (float) Math.PI * 0.25F;
         float airBodyPitch = 0.35F;
-        float airHeadPitch = player.getPitch() * ((float)Math.PI / 180.0F) * 0.22F;
+        float airHeadPitch = player.getPitch() * ((float) Math.PI / 180.0F) * 0.22F;
         float airRightWingPitch = 0.0F;
         float airLeftWingPitch = 0.0F;
         float airRightWingYaw = -0.10F - flap;
@@ -129,7 +134,6 @@ public final class BatFormModel<T extends PlayerEntity> extends EntityModel<T> {
         rightWingTip.roll = MathHelper.lerp(blend, groundRightTipRoll, airRightTipRoll);
         leftWingTip.roll = MathHelper.lerp(blend, groundLeftTipRoll, airLeftTipRoll);
     }
-
 
     /**
      * Actual vanilla BatEntityModel roosting angles (1.20-era), rather than
@@ -183,12 +187,24 @@ public final class BatFormModel<T extends PlayerEntity> extends EntityModel<T> {
     }
 
     @Override
-    public void setAngles(T entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
-    }
+    public void setAngles(
+            T entity,
+            float limbAngle,
+            float limbDistance,
+            float animationProgress,
+            float headYaw,
+            float headPitch) {}
 
     @Override
-    public void render(MatrixStack matrices, VertexConsumer vertices, int light, int overlay,
-                       float red, float green, float blue, float alpha) {
+    public void render(
+            MatrixStack matrices,
+            VertexConsumer vertices,
+            int light,
+            int overlay,
+            float red,
+            float green,
+            float blue,
+            float alpha) {
         root.render(matrices, vertices, light, overlay, red, green, blue, alpha);
     }
 }

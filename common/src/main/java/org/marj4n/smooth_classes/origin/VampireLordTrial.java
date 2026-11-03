@@ -25,8 +25,8 @@ public final class VampireLordTrial {
 
     private static final Identifier VESPER_ID = Identifier.of("alexscaves", "vesper");
     private static final Identifier FORSAKEN_ID = Identifier.of("alexscaves", "forsaken");
-    private static final RegistryKey<Biome> FORLORN_HOLLOWS = RegistryKey.of(
-            RegistryKeys.BIOME, Identifier.of("alexscaves", "forlorn_hollows"));
+    private static final RegistryKey<Biome> FORLORN_HOLLOWS =
+            RegistryKey.of(RegistryKeys.BIOME, Identifier.of("alexscaves", "forlorn_hollows"));
 
     private VampireLordTrial() {}
 
@@ -36,9 +36,12 @@ public final class VampireLordTrial {
 
     /** Visit the actual 3-D cave biome, not a structure/item or a spawned bat. */
     public static void onVisit(ServerPlayerEntity player, OriginState state) {
-        if (isForlornHollows(player.getWorld(), player.getBlockPos()) && state.flag(DISCOVERED_KEY)) {
-            player.sendMessage(Text.literal("Vampire Lord Trial: Forlorn Hollows discovered!")
-                    .formatted(Formatting.LIGHT_PURPLE), true);
+        if (isForlornHollows(player.getWorld(), player.getBlockPos())
+                && state.flag(DISCOVERED_KEY)) {
+            player.sendMessage(
+                    Text.literal("Vampire Lord Trial: Forlorn Hollows discovered!")
+                            .formatted(Formatting.LIGHT_PURPLE),
+                    true);
         }
     }
 
@@ -47,7 +50,9 @@ public final class VampireLordTrial {
      *  kills or despawns cannot advance someone else's Vampire Lord trial.
      */
     public static void onKill(ServerPlayerEntity player, OriginState state, LivingEntity victim) {
-        Identifier id = org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE.getId(victim.getType());
+        Identifier id =
+                org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE.getId(
+                        victim.getType());
         if (!VESPER_ID.equals(id) && !FORSAKEN_ID.equals(id)) return;
         if (!isForlornHollows(victim.getWorld(), victim.getBlockPos())) return;
         // If the very first tracked kill happens as the player enters the cave,
@@ -62,10 +67,16 @@ public final class VampireLordTrial {
         if (previous >= required) return; // Avoid replaying maxed-out progress messages.
         int kills = Math.min(required, previous + 1);
         state.progress(key, kills);
-        player.sendMessage(Text.literal("Vampire Lord Trial: "
-                + (vesper ? "Vespers" : "Forsaken") + " defeated "
-                + kills + "/" + required).formatted(
-                        kills == required ? Formatting.GREEN : Formatting.LIGHT_PURPLE), true);
+        player.sendMessage(
+                Text.literal(
+                                "Vampire Lord Trial: "
+                                        + (vesper ? "Vespers" : "Forsaken")
+                                        + " defeated "
+                                        + kills
+                                        + "/"
+                                        + required)
+                        .formatted(kills == required ? Formatting.GREEN : Formatting.LIGHT_PURPLE),
+                true);
     }
 
     public static boolean completed(OriginState state) {

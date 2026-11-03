@@ -29,17 +29,21 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  */
 @Mixin(value = BottleOfBloodItem.class, remap = false)
 public abstract class BewitchmentBloodBottleMixin {
-    @Unique
-    private static final int smooth_classes$BLOOD_PER_BOTTLE = 20;
+    @Unique private static final int smooth_classes$BLOOD_PER_BOTTLE = 20;
 
     // Bewitchment is an unmapped mod target. Match both development (Yarn)
     // and production (Fabric intermediary) names without asking Mixin to map
     // the third-party class: exactly one alias exists in any given runtime.
-    @Inject(method = {"finishUsing", "method_7861"}, at = @At("HEAD"),
-            cancellable = true, remap = false)
-    private void smooth_classes$drinkBloodForOriginVampire(ItemStack stack, World world,
-                                                            LivingEntity consumer,
-                                                            CallbackInfoReturnable<ItemStack> cir) {
+    @Inject(
+            method = {"finishUsing", "method_7861"},
+            at = @At("HEAD"),
+            cancellable = true,
+            remap = false)
+    private void smooth_classes$drinkBloodForOriginVampire(
+            ItemStack stack,
+            World world,
+            LivingEntity consumer,
+            CallbackInfoReturnable<ItemStack> cir) {
         if (!(consumer instanceof PlayerEntity player)) return;
         OriginState state = OriginRuntime.state(player);
         if (state.origin() != OriginType.VAMPIRE) return;

@@ -19,8 +19,9 @@ final class VsbVanillaLegPose {
 
     private VsbVanillaLegPose() {}
 
-    record Legs(Map<String, VsbFiguraAvatarRenderer.Vec3> rotations,
-                Map<String, VsbFiguraAvatarRenderer.Vec3> offsets) {}
+    record Legs(
+            Map<String, VsbFiguraAvatarRenderer.Vec3> rotations,
+            Map<String, VsbFiguraAvatarRenderer.Vec3> offsets) {}
 
     static Legs capture(PlayerEntityModel<?> model) {
         if (model == null) return new Legs(Map.of(), Map.of());
@@ -31,23 +32,29 @@ final class VsbVanillaLegPose {
         return new Legs(rotations, offsets);
     }
 
-    private static void put(Map<String, VsbFiguraAvatarRenderer.Vec3> rotations,
-                            Map<String, VsbFiguraAvatarRenderer.Vec3> offsets,
-                            String bone, ModelPart part, float vanillaPivotX) {
-        if (!Float.isFinite(part.pitch) || !Float.isFinite(part.yaw)
-                || !Float.isFinite(part.roll) || !Float.isFinite(part.pivotX)
-                || !Float.isFinite(part.pivotY) || !Float.isFinite(part.pivotZ)) return;
+    private static void put(
+            Map<String, VsbFiguraAvatarRenderer.Vec3> rotations,
+            Map<String, VsbFiguraAvatarRenderer.Vec3> offsets,
+            String bone,
+            ModelPart part,
+            float vanillaPivotX) {
+        if (!Float.isFinite(part.pitch)
+                || !Float.isFinite(part.yaw)
+                || !Float.isFinite(part.roll)
+                || !Float.isFinite(part.pivotX)
+                || !Float.isFinite(part.pivotY)
+                || !Float.isFinite(part.pivotZ)) return;
         // The source renderer reverses X/Z rotation signs to convert Figura's
         // Y-up geometry to Minecraft's Y-down model space.
-        rotations.put(bone, new VsbFiguraAvatarRenderer.Vec3(
-                -part.pitch * DEGREES,
-                part.yaw * DEGREES,
-                -part.roll * DEGREES));
+        rotations.put(
+                bone,
+                new VsbFiguraAvatarRenderer.Vec3(
+                        -part.pitch * DEGREES, part.yaw * DEGREES, -part.roll * DEGREES));
         // Minecraft biped legs rest at Y=12, Z=0. Preserve VSB's exact
         // geometry/hip locations and apply only animator-produced offsets.
-        offsets.put(bone, new VsbFiguraAvatarRenderer.Vec3(
-                part.pivotX - vanillaPivotX,
-                -(part.pivotY - 12F),
-                part.pivotZ));
+        offsets.put(
+                bone,
+                new VsbFiguraAvatarRenderer.Vec3(
+                        part.pivotX - vanillaPivotX, -(part.pivotY - 12F), part.pivotZ));
     }
 }

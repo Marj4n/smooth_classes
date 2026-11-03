@@ -5,40 +5,43 @@ import org.marj4n.smooth_classes.config.SmoothBalance;
 /** Central signature cooldown table. Values are seconds in SmoothBalance, returned as ticks here. */
 public final class SignatureCooldowns {
     private SignatureCooldowns() {}
+
     public static int ticks(String ability) {
-        int seconds=switch(ability){
-            case "meteor_shower" -> SmoothBalance.Caster.meteorCooldown;
-            case "ice_comet" -> SmoothBalance.Caster.iceCometCooldown;
-            case "static_discharge" -> SmoothBalance.Caster.staticDischargeCooldown;
-            case "arcane_bolt" -> SmoothBalance.Caster.arcaneBoltCooldown;
-            case "rampage" -> SmoothBalance.Berserker.rampageCooldown;
-            case "bloodthirsty" -> SmoothBalance.Berserker.bloodthirstyCooldown;
-            case "berserking" -> SmoothBalance.Berserker.berserkingCooldown;
-            case "evasion" -> SmoothBalance.Assassin.evasionCooldown;
-            case "preparation" -> SmoothBalance.Assassin.preparationCooldown;
-            case "siphoning_strikes" -> SmoothBalance.Assassin.siphoningCooldown;
-            case "unlimited_blade_works" -> SmoothBalance.Archer.portalOfSovereigntyCooldown;
-            case "arrow_rain" -> SmoothBalance.Archer.arrowRainCooldown;
-            case "elemental_arrows" -> SmoothBalance.Archer.elementalArrowsCooldown;
-            case "elemental_surge" -> SmoothBalance.Foreigner.elementalSurgeCooldown;
-            case "elemental_impact" -> SmoothBalance.Foreigner.elementalImpactCooldown;
-            case "spellweaver" -> SmoothBalance.Foreigner.spellweaverCooldown;
-            case "consecration" -> SmoothBalance.Saber.consecrationCooldown;
-            case "sacred_onslaught" -> SmoothBalance.Saber.sacredOnslaughtCooldown;
-            case "heavensmiths_call" -> SmoothBalance.Saber.divineAdjudicationCooldown;
-            case "sacred_orb" -> SmoothBalance.Ruler.sacredOrbCooldown;
-            case "divine_intervention" -> SmoothBalance.Ruler.divineInterventionCooldown;
-            case "anoint_weapon" -> SmoothBalance.Ruler.anointWeaponCooldown;
-            case "curtain_call" -> SmoothBalance.Avenger.curtainCallCooldown;
-            case "endless_devour" -> SmoothBalance.Avenger.endlessDevourCooldown;
-            case "rider_charge" -> SmoothBalance.Rider.chargeCooldown;
-            case "rider_war_aura" -> SmoothBalance.Rider.auraCooldown;
-            case "rider_blazing_hooves" -> SmoothBalance.Rider.blazingHoovesCooldown;
-            case "impaling_volley" -> SmoothBalance.Lancer.impalingVolleyCooldown;
-            case "dragon_thrust" -> SmoothBalance.Lancer.dragonThrustCooldown;
-            case "spearstorm" -> SmoothBalance.Lancer.spearstormCooldown;
-            default -> 20;
-        };
-        return seconds*20;
+        int seconds =
+                switch (ability) {
+                    case "meteor_shower" -> SmoothBalance.Caster.meteorCooldown;
+                    case "ice_comet" -> SmoothBalance.Caster.iceCometCooldown;
+                    case "static_discharge" -> SmoothBalance.Caster.staticDischargeCooldown;
+                    case "arcane_bolt" -> SmoothBalance.Caster.arcaneBoltCooldown;
+                    case "rampage" -> SmoothBalance.Berserker.rampageCooldown;
+                    case "bloodthirsty" -> SmoothBalance.Berserker.bloodthirstyCooldown;
+                    case "berserking" -> SmoothBalance.Berserker.berserkingCooldown;
+                    case "evasion" -> SmoothBalance.Assassin.evasionCooldown;
+                    case "preparation" -> SmoothBalance.Assassin.preparationCooldown;
+                    case "siphoning_strikes" -> SmoothBalance.Assassin.siphoningCooldown;
+                    case "unlimited_blade_works" ->
+                            SmoothBalance.Archer.portalOfSovereigntyCooldown;
+                    case "arrow_rain" -> SmoothBalance.Archer.arrowRainCooldown;
+                    case "elemental_arrows" -> SmoothBalance.Archer.elementalArrowsCooldown;
+                    case "elemental_surge" -> SmoothBalance.Foreigner.elementalSurgeCooldown;
+                    case "elemental_impact" -> SmoothBalance.Foreigner.elementalImpactCooldown;
+                    case "spellweaver" -> SmoothBalance.Foreigner.spellweaverCooldown;
+                    case "consecration" -> SmoothBalance.Saber.consecrationCooldown;
+                    case "sacred_onslaught" -> SmoothBalance.Saber.sacredOnslaughtCooldown;
+                    case "heavensmiths_call" -> SmoothBalance.Saber.divineAdjudicationCooldown;
+                    case "sacred_orb" -> SmoothBalance.Ruler.sacredOrbCooldown;
+                    case "divine_intervention" -> SmoothBalance.Ruler.divineInterventionCooldown;
+                    case "anoint_weapon" -> SmoothBalance.Ruler.anointWeaponCooldown;
+                    case "curtain_call" -> SmoothBalance.Avenger.curtainCallCooldown;
+                    case "endless_devour" -> SmoothBalance.Avenger.endlessDevourCooldown;
+                    case "rider_charge" -> SmoothBalance.Rider.chargeCooldown;
+                    case "rider_war_aura" -> SmoothBalance.Rider.auraCooldown;
+                    case "rider_blazing_hooves" -> SmoothBalance.Rider.blazingHoovesCooldown;
+                    case "impaling_volley" -> SmoothBalance.Lancer.impalingVolleyCooldown;
+                    case "dragon_thrust" -> SmoothBalance.Lancer.dragonThrustCooldown;
+                    case "spearstorm" -> SmoothBalance.Lancer.spearstormCooldown;
+                    default -> 20;
+                };
+        return seconds * 20;
     }
 }

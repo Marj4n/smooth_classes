@@ -27,11 +27,18 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(HeldItemRenderer.class)
 public abstract class OriginHeldItemRendererMixin {
     @Inject(method = "renderFirstPersonItem", at = @At("HEAD"), cancellable = true)
-    private void smooth_classes$originFirstPersonItem(AbstractClientPlayerEntity player, float tickDelta,
-                                                       float pitch, Hand hand, float swingProgress,
-                                                       ItemStack item, float equipProgress, MatrixStack matrices,
-                                                       VertexConsumerProvider vertexConsumers, int light,
-                                                       CallbackInfo ci) {
+    private void smooth_classes$originFirstPersonItem(
+            AbstractClientPlayerEntity player,
+            float tickDelta,
+            float pitch,
+            Hand hand,
+            float swingProgress,
+            ItemStack item,
+            float equipProgress,
+            MatrixStack matrices,
+            VertexConsumerProvider vertexConsumers,
+            int light,
+            CallbackInfo ci) {
         if (player == null) return;
         var state = OriginRuntime.state(player);
 
@@ -50,9 +57,14 @@ public abstract class OriginHeldItemRendererMixin {
      * Combat transformations. Maps keep their specialized two-hand visuals.
      */
     @Inject(method = "renderArmHoldingItem", at = @At("HEAD"), cancellable = true)
-    private void smooth_classes$itemOnlyInManBat(MatrixStack matrices, VertexConsumerProvider consumers,
-                                                  int light, float equipProgress, float swingProgress,
-                                                  Arm arm, CallbackInfo ci) {
+    private void smooth_classes$itemOnlyInManBat(
+            MatrixStack matrices,
+            VertexConsumerProvider consumers,
+            int light,
+            float equipProgress,
+            float swingProgress,
+            Arm arm,
+            CallbackInfo ci) {
         var player = MinecraftClient.getInstance().player;
         if (player == null) return;
         var state = OriginRuntime.state(player);

@@ -11,8 +11,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
 public abstract class WhenOnHighEffectGuardMixin {
-    @Inject(method="addStatusEffect(Lnet/minecraft/entity/effect/StatusEffectInstance;Lnet/minecraft/entity/Entity;)Z",at=@At("HEAD"),cancellable=true)
-    private void smooth$guard(StatusEffectInstance effect,Entity source,CallbackInfoReturnable<Boolean> cir){
-        if((Object)this instanceof ServerPlayerEntity p&&WhenOnHighRuntime.active(p)&&!effect.getEffectType().isBeneficial())cir.setReturnValue(false);
+    @Inject(
+            method =
+                    "addStatusEffect(Lnet/minecraft/entity/effect/StatusEffectInstance;Lnet/minecraft/entity/Entity;)Z",
+            at = @At("HEAD"),
+            cancellable = true)
+    private void smooth$guard(
+            StatusEffectInstance effect, Entity source, CallbackInfoReturnable<Boolean> cir) {
+        if ((Object) this instanceof ServerPlayerEntity p
+                && WhenOnHighRuntime.active(p)
+                && !effect.getEffectType().isBeneficial()) cir.setReturnValue(false);
     }
 }

@@ -13,9 +13,8 @@ import net.minecraft.world.World;
 
 /** Smooth Classes' base Rider horse. */
 public final class RiderHorseEntity extends HorseEntity {
-    private static final TrackedData<Boolean> WATER_STRIDE = DataTracker.registerData(
-            RiderHorseEntity.class, TrackedDataHandlerRegistry.BOOLEAN
-    );
+    private static final TrackedData<Boolean> WATER_STRIDE =
+            DataTracker.registerData(RiderHorseEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
 
     public RiderHorseEntity(EntityType<? extends HorseEntity> type, World world) {
         super(type, world);
@@ -55,7 +54,6 @@ public final class RiderHorseEntity extends HorseEntity {
 
     @Override
     public boolean canWalkOnFluid(FluidState state) {
-        return (hasWaterStride() && state.isIn(FluidTags.WATER))
-                || super.canWalkOnFluid(state);
+        return (hasWaterStride() && state.isIn(FluidTags.WATER)) || super.canWalkOnFluid(state);
     }
 }

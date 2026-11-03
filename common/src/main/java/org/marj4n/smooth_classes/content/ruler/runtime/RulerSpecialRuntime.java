@@ -36,12 +36,17 @@ public final class RulerSpecialRuntime {
     public static final int COOLDOWN_TICKS = 12 * 20;
     private static final double RANGE = 24D;
 
-    public enum Mode { PROTECT, CONDEMN }
+    public enum Mode {
+        PROTECT,
+        CONDEMN
+    }
+
     private static final class State {
         UUID target;
         Mode mode;
         long expiresAt;
     }
+
     private static final Map<UUID, State> STATES = new HashMap<>();
 
     private RulerSpecialRuntime() {}
@@ -50,7 +55,10 @@ public final class RulerSpecialRuntime {
         if (!AbilityRuntime.isClass(player, RulerClass.ID))
             return ExecutionResult.failure("Only Ruler can use Divine Edict.");
         if (!AbilityCooldowns.ready(player, ID))
-            return ExecutionResult.failure("Divine Edict can be issued again in " + seconds(AbilityCooldowns.remainingTicks(player, ID)) + "s.");
+            return ExecutionResult.failure(
+                    "Divine Edict can be issued again in "
+                            + seconds(AbilityCooldowns.remainingTicks(player, ID))
+                            + "s.");
 
         LivingEntity target = aimedLiving(player, RANGE);
         if (target == null) target = player;
@@ -65,13 +73,15 @@ public final class RulerSpecialRuntime {
         applyEdict(target, mode);
         edictFx(player, target, mode);
 
-        return ExecutionResult.success(1, "Divine Edict: " + mode.name().toLowerCase(java.util.Locale.ROOT));
+        return ExecutionResult.success(
+                1, "Divine Edict: " + mode.name().toLowerCase(java.util.Locale.ROOT));
     }
 
     public static void tick(ServerPlayerEntity player) {
         State state = STATES.get(player.getUuid());
         if (state == null) return;
-        if (!AbilityRuntime.isClass(player, RulerClass.ID) || !player.isAlive()
+        if (!AbilityRuntime.isClass(player, RulerClass.ID)
+                || !player.isAlive()
                 || player.getServer().getTicks() >= state.expiresAt) {
             STATES.remove(player.getUuid());
             return;
@@ -83,28 +93,55 @@ public final class RulerSpecialRuntime {
         }
         applyEdict(target, state.mode);
         if ((player.age % 20) == 0) {
-            player.getServerWorld().spawnParticles(state.mode == Mode.PROTECT ? ParticleTypes.END_ROD : ParticleTypes.SOUL_FIRE_FLAME,
-                    target.getX(), target.getBodyY(0.8D), target.getZ(), 4, 0.25D, 0.25D, 0.25D, 0.02D);
+            player.getServerWorld()
+                    .spawnParticles(
+                            state.mode == Mode.PROTECT
+                                    ? ParticleTypes.END_ROD
+                                    : ParticleTypes.SOUL_FIRE_FLAME,
+                            target.getX(),
+                            target.getBodyY(0.8D),
+                            target.getZ(),
+                            4,
+                            0.25D,
+                            0.25D,
+                            0.25D,
+                            0.02D);
         }
     }
 
     /** Ruler's own attacks gain a small judgement follow-up against the condemned target. */
     public static void onMeleeHit(ServerPlayerEntity player, LivingEntity target) {
         State state = STATES.get(player.getUuid());
-        if (state == null || state.mode != Mode.CONDEMN || !active(player) || !target.getUuid().equals(state.target) || !target.isAlive()) return;
+        if (state == null
+                || state.mode != Mode.CONDEMN
+                || !active(player)
+                || !target.getUuid().equals(state.target)
+                || !target.isAlive()) return;
         float damage = Math.max(1.0F, SpellPowerRuntime.healing(player, 0.30D));
         target.timeUntilRegen = 0;
         target.damage(SpellDamageSource.create(SpellSchools.HEALING, player), damage);
-        player.getServerWorld().spawnParticles(ParticleTypes.END_ROD,
-                target.getX(), target.getBodyY(0.65D), target.getZ(), 7, 0.3D, 0.35D, 0.3D, 0.04D);
+        player.getServerWorld()
+                .spawnParticles(
+                        ParticleTypes.END_ROD,
+                        target.getX(),
+                        target.getBodyY(0.65D),
+                        target.getZ(),
+                        7,
+                        0.3D,
+                        0.35D,
+                        0.3D,
+                        0.04D);
     }
 
     private static void applyEdict(LivingEntity target, Mode mode) {
         if (mode == Mode.PROTECT) {
-            target.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 30, 0, false, false, true));
+            target.addStatusEffect(
+                    new StatusEffectInstance(StatusEffects.RESISTANCE, 30, 0, false, false, true));
         } else {
-            target.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS, 30, 0, false, false, true));
-            target.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, 30, 0, false, false, false));
+            target.addStatusEffect(
+                    new StatusEffectInstance(StatusEffects.WEAKNESS, 30, 0, false, false, true));
+            target.addStatusEffect(
+                    new StatusEffectInstance(StatusEffects.GLOWING, 30, 0, false, false, false));
         }
     }
 
@@ -121,12 +158,17 @@ public final class RulerSpecialRuntime {
         Box scan = player.getBoundingBox().stretch(end.subtract(eye)).expand(1.0D);
         LivingEntity selected = null;
         double best = Double.MAX_VALUE;
-        for (LivingEntity candidate : player.getServerWorld().getEntitiesByClass(LivingEntity.class, scan,
-                e -> e != player && e.isAlive())) {
+        for (LivingEntity candidate :
+                player.getServerWorld()
+                        .getEntitiesByClass(
+                                LivingEntity.class, scan, e -> e != player && e.isAlive())) {
             var hit = candidate.getBoundingBox().expand(0.30D).raycast(eye, end);
             if (hit.isEmpty()) continue;
             double dist = eye.squaredDistanceTo(hit.get());
-            if (dist < best) { best = dist; selected = candidate; }
+            if (dist < best) {
+                best = dist;
+                selected = candidate;
+            }
         }
         return selected;
     }
@@ -139,23 +181,52 @@ public final class RulerSpecialRuntime {
     private static void edictFx(ServerPlayerEntity caster, LivingEntity target, Mode mode) {
         ServerWorld world = caster.getServerWorld();
         var particle = mode == Mode.PROTECT ? ParticleTypes.END_ROD : ParticleTypes.SOUL_FIRE_FLAME;
-        world.spawnParticles(particle, target.getX(), target.getBodyY(0.65D), target.getZ(),
-                26, 0.5D, 0.75D, 0.5D, 0.08D);
-        world.playSound(null, caster.getBlockPos(), SoundEvents.BLOCK_BEACON_ACTIVATE,
-                SoundCategory.PLAYERS, 0.65F, mode == Mode.PROTECT ? 1.45F : 0.75F);
+        world.spawnParticles(
+                particle,
+                target.getX(),
+                target.getBodyY(0.65D),
+                target.getZ(),
+                26,
+                0.5D,
+                0.75D,
+                0.5D,
+                0.08D);
+        world.playSound(
+                null,
+                caster.getBlockPos(),
+                SoundEvents.BLOCK_BEACON_ACTIVATE,
+                SoundCategory.PLAYERS,
+                0.65F,
+                mode == Mode.PROTECT ? 1.45F : 0.75F);
     }
 
     public static boolean active(ServerPlayerEntity player) {
         State state = STATES.get(player.getUuid());
         return state != null && state.expiresAt > player.getServer().getTicks();
     }
+
     public static int variant(ServerPlayerEntity player) {
         State state = STATES.get(player.getUuid());
         return state == null ? 0 : state.mode == Mode.PROTECT ? 1 : 2;
     }
-    public static long remainingTicks(ServerPlayerEntity player) { return AbilityCooldowns.remainingTicks(player, ID); }
-    public static int cooldownTicks() { return COOLDOWN_TICKS; }
-    public static void cleanup(ServerPlayerEntity player) { STATES.remove(player.getUuid()); }
-    public static void clear() { STATES.clear(); }
-    private static int seconds(long ticks) { return (int) Math.ceil(Math.max(0L, ticks) / 20.0D); }
+
+    public static long remainingTicks(ServerPlayerEntity player) {
+        return AbilityCooldowns.remainingTicks(player, ID);
+    }
+
+    public static int cooldownTicks() {
+        return COOLDOWN_TICKS;
+    }
+
+    public static void cleanup(ServerPlayerEntity player) {
+        STATES.remove(player.getUuid());
+    }
+
+    public static void clear() {
+        STATES.clear();
+    }
+
+    private static int seconds(long ticks) {
+        return (int) Math.ceil(Math.max(0L, ticks) / 20.0D);
+    }
 }
