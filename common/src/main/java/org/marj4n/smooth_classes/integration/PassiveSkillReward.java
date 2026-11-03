@@ -3,7 +3,6 @@ package org.marj4n.smooth_classes.integration;
 import net.minecraft.util.Identifier;
 import net.puffish.skillsmod.api.SkillsAPI;
 import net.puffish.skillsmod.api.json.JsonElement;
-import net.puffish.skillsmod.api.json.JsonObject;
 import net.puffish.skillsmod.api.reward.Reward;
 import net.puffish.skillsmod.api.reward.RewardConfigContext;
 import net.puffish.skillsmod.api.reward.RewardDisposeContext;
@@ -11,18 +10,10 @@ import net.puffish.skillsmod.api.reward.RewardUpdateContext;
 import net.puffish.skillsmod.api.util.Problem;
 import net.puffish.skillsmod.api.util.Result;
 
-import java.util.ArrayList;
 import java.util.List;
 import org.marj4n.smooth_classes.platform.PlatformLoader;
 
-/**
- * Compatibility reward used by the Smooth Classes-derived Puffish trees.
- *
- * <p>The reward intentionally stores only the passive skill id. Gameplay is owned by Smooth Classes
- * runtimes, which query Puffish unlock state. Registering this reward makes Puffish able to
- * deserialize the original tree definitions without coupling the datapack to the old Smooth Classes
- * Java code.
- */
+/** Marker reward: unlock state stays in Puffish and is read by the gameplay runtimes. */
 public final class PassiveSkillReward implements Reward {
     public static final Identifier ID = Identifier.of("smooth_classes", "passive_skill");
     private static final Identifier LEGACY_ID = Identifier.of("puffish_skills", "passive_skill");
@@ -51,23 +42,9 @@ public final class PassiveSkillReward implements Reward {
     private static Result<PassiveSkillReward, Problem> create(RewardConfigContext context) {
         return context.getData()
                 .andThen(JsonElement::getAsObject)
-                .andThen(PassiveSkillReward::create);
-    }
-
-    private static Result<PassiveSkillReward, Problem> create(JsonObject rootObject) {
-        var problems = new ArrayList<Problem>();
-
-        var passiveSkillId =
-                rootObject
-                        .get("passive_skill")
-                        .andThen(JsonElement::getAsString)
-                        .ifFailure(problems::add)
-                        .getSuccess();
-
-        if (problems.isEmpty()) {
-            return Result.success(new PassiveSkillReward(passiveSkillId.orElseThrow()));
-        }
-        return Result.failure(Problem.combine(problems));
+                .andThen(data -> data.get("passive_skill"))
+                .andThen(JsonElement::getAsString)
+                .andThen(value -> Result.success(new PassiveSkillReward(value)));
     }
 
     @Override
