@@ -76,7 +76,7 @@ tasks.named('processResources') {
 }
 
 // Intersection-bound generic render methods need a verified Forge runtime selector.
-tasks.named('processResources') { inputs.property('runtimeMixinBindings', '2') }
+tasks.named('processResources') { inputs.property('runtimeMixinBindings', '3') }
 sourceSets.main.java.exclude '**/mixin/client/AvengerDanceEnergyOverlayMixin.java'
 tasks.named('processResources') {
     filesMatching('smooth_classes.mixins.json') {
@@ -119,3 +119,38 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher:1.11.4'
 }
 tasks.named('test') { useJUnitPlatform() }
+
+// Forge armor rendering uses Model hooks, rather than Fabric's HumanoidModel calls.
+sourceSets.main.java.exclude '**/mixin/client/DemonArmorMixin.java'
+tasks.named('processResources') {
+    filesMatching('smooth_classes.mixins.json') {
+        filter { line -> line.replace('"client.DemonArmorMixin"', '"client.ForgeDemonArmorMixin"') }
+    }
+}
+
+tasks.register('validateForgeArmorTargets') {
+    doLast {
+        def runtime = new File(gradle.gradleUserHomeDir, 'caches/fabric-loom/1.20.1/forge/1.20.1-47.4.0/minecraft-merged-srg-patched.jar')
+        new java.util.jar.JarFile(runtime).withCloseable { jar ->
+            def node = new org.objectweb.asm.tree.ClassNode()
+            jar.getInputStream(jar.getJarEntry('net/minecraft/client/renderer/entity/layers/HumanoidArmorLayer.class')).withCloseable {
+                new org.objectweb.asm.ClassReader(it).accept(node, 0)
+            }
+            def descriptors = [
+                renderModel: '(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/item/ArmorItem;Lnet/minecraft/client/model/Model;ZFFFLnet/minecraft/resources/ResourceLocation;)V',
+                renderTrim: '(Lnet/minecraft/world/item/ArmorMaterial;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/item/armortrim/ArmorTrim;Lnet/minecraft/client/model/Model;Z)V',
+                renderGlint: '(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/client/model/Model;)V'
+            ]
+            descriptors.each { name, descriptor ->
+                def method = node.methods.find { it.name == name && it.desc == descriptor }
+                if (method == null) throw new GradleException('Missing Forge armor hook: ' + name)
+                def calls = method.instructions.findAll {
+                    it instanceof org.objectweb.asm.tree.MethodInsnNode && it.owner == 'net/minecraft/client/model/Model' && it.name == 'm_7695_' && it.desc == '(Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;IIFFFF)V'
+                }
+                if (calls.size() != 1) throw new GradleException('Changed Forge armor draw contract: ' + name)
+            }
+        }
+        logger.lifecycle('Validated all three Forge material/trim/glint Model draw targets')
+    }
+}
+tasks.named('compileJava') { dependsOn 'validateForgeArmorTargets' }
