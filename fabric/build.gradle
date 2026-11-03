@@ -88,3 +88,5 @@ tasks.named('test') {
     dependsOn extractTestEmbeddedMods
     classpath += files(provider { fileTree(testEmbeddedDir.get().asFile).matching { include '**/*.jar' }.files })
 }
+
+sourceSets.test.resources.srcDir rootProject.file('common/src/test/resources')

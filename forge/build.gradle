@@ -113,6 +113,8 @@ tasks.named('compileJava') { dependsOn 'validateForgeRuntimeTargets' }
 sourceSets.test.java {
     srcDir rootProject.file('common/src/test/java')
     include '**/CuboidVertexCollectorTest.java'
+    include '**/SkillEffectPoseTest.java'
+    include '**/SkillParticleEmitterTest.java'
 }
 dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter:5.11.4'
@@ -154,3 +156,5 @@ tasks.register('validateForgeArmorTargets') {
     }
 }
 tasks.named('compileJava') { dependsOn 'validateForgeArmorTargets' }
+
+sourceSets.test.resources.srcDir rootProject.file('common/src/test/resources')

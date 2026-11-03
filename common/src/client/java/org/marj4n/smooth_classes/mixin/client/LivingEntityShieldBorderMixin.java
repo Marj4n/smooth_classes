@@ -9,7 +9,8 @@ import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
 import org.joml.Matrix4f;
 import org.marj4n.smooth_classes.effects.SmoothEffects;
-import org.marj4n.smooth_classes.client.effects.RighteousHammersRenderer;
+import org.marj4n.smooth_classes.client.effects.SkillEffectRenderer;
+import org.marj4n.smooth_classes.client.effects.SkillEffectVisual;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -18,7 +19,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 /** Translucent, entity-following shield without a hard rectangular outline. */
 @Mixin(LivingEntityRenderer.class)
 public abstract class LivingEntityShieldBorderMixin {
-    private static final RighteousHammersRenderer HAMMERS = new RighteousHammersRenderer();
+    private static final SkillEffectRenderer HAMMERS =
+            new SkillEffectRenderer(SkillEffectVisual.HAMMERS);
 
     @Inject(
             method =
