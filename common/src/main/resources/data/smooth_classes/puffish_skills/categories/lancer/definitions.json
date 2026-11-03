@@ -52,7 +52,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "lancerImpalingVolley"
         }
@@ -84,7 +84,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "lancerVolleyFive"
         }
@@ -116,7 +116,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "lancerVolleySeven"
         }
@@ -148,7 +148,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "lancerVolleyNine"
         }
@@ -180,7 +180,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "lancerDragonThrust"
         }
@@ -212,7 +212,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "lancerThrustReach"
         }
@@ -244,7 +244,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "lancerThrustPin"
         }
@@ -276,7 +276,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "lancerThrustBreaker"
         }
@@ -308,7 +308,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "lancerSpearstorm"
         }
@@ -340,7 +340,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "lancerStormRadius"
         }
@@ -372,7 +372,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "lancerStormPulses"
         }
@@ -404,7 +404,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "lancerStormVortex"
         }
@@ -436,7 +436,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "lancerMomentumTrainingI"
         }
@@ -468,7 +468,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "lancerMomentumTrainingII"
         }
@@ -500,7 +500,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "lancerExecutionRhythm"
         }
@@ -532,7 +532,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "lancerBattleRecoveryI"
         }
@@ -564,7 +564,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "lancerBattleRecoveryII"
         }
@@ -596,7 +596,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "lancerFleetI"
         }
@@ -628,7 +628,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "lancerFleetII"
         }
@@ -660,7 +660,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "lancerIronGrip"
         }
@@ -692,7 +692,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "lancerPerfectMomentum"
         }

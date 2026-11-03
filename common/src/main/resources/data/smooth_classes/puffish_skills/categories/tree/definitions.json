@@ -806,7 +806,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "wayfarerStealth"
         }
@@ -838,7 +838,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "wayfarerSneak"
         }
@@ -870,7 +870,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "wayfarerReflexive"
         }
@@ -902,7 +902,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "wayfarerUnseen"
         }
@@ -934,7 +934,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "wayfarerGuarding"
         }
@@ -966,7 +966,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "wayfarerQuickfire"
         }
@@ -998,7 +998,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "initiateNullification"
         }
@@ -1112,7 +1112,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "initiateEmpower"
         }
@@ -1144,7 +1144,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "initiateAttuned"
         }
@@ -1176,7 +1176,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "initiateLightningRod"
         }
@@ -1366,7 +1366,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "warriorHeavyArmorMastery"
         }
@@ -1398,7 +1398,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "warriorMediumArmorMastery"
         }
@@ -1430,7 +1430,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "warriorSpellbreaker"
         }
@@ -1462,7 +1462,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "warriorGoliath"
         }
@@ -1494,7 +1494,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "warriorHeavyWeight"
         }
@@ -1526,7 +1526,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "warriorBound"
         }
@@ -1558,7 +1558,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "warriorDeathDefy"
         }
@@ -1624,7 +1624,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "warriorCarnage"
         }
@@ -1656,7 +1656,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "warriorTwinstrike"
         }
@@ -1688,7 +1688,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "warriorSwordfall"
         }
@@ -1825,7 +1825,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "initiateWhisperedWizardry"
         }
@@ -1857,7 +1857,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "initiateSpellcloak"
         }
@@ -1889,7 +1889,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "initiateOverload"
         }
@@ -2112,7 +2112,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "portalSapphire"
         }
@@ -2144,7 +2144,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "portalRuby"
         }

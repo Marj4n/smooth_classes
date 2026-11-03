@@ -12,17 +12,20 @@ import net.puffish.skillsmod.api.util.Problem;
 import net.puffish.skillsmod.api.util.Result;
 
 import java.util.ArrayList;
+import java.util.List;
+import org.marj4n.smooth_classes.platform.PlatformLoader;
 
 /**
  * Compatibility reward used by the Smooth Classes-derived Puffish trees.
  *
- * The reward intentionally stores only the passive skill id. Gameplay is owned by
- * Smooth Classes runtimes, which query Puffish unlock state. Registering this
- * reward makes Puffish able to deserialize the original tree definitions without
- * coupling the datapack to the old Smooth Classes Java code.
+ * <p>The reward intentionally stores only the passive skill id. Gameplay is owned by Smooth Classes
+ * runtimes, which query Puffish unlock state. Registering this reward makes Puffish able to
+ * deserialize the original tree definitions without coupling the datapack to the old Smooth Classes
+ * Java code.
  */
 public final class PassiveSkillReward implements Reward {
-    public static final Identifier ID = Identifier.of("puffish_skills", "passive_skill");
+    public static final Identifier ID = Identifier.of("smooth_classes", "passive_skill");
+    private static final Identifier LEGACY_ID = Identifier.of("puffish_skills", "passive_skill");
 
     private final String passiveSkillId;
 
@@ -31,7 +34,14 @@ public final class PassiveSkillReward implements Reward {
     }
 
     public static void register() {
-        SkillsAPI.registerReward(ID, PassiveSkillReward::create);
+        for (var id : registrationIds(PlatformLoader.getInstance().isModLoaded("simplyskills"))) {
+            SkillsAPI.registerReward(id, PassiveSkillReward::create);
+        }
+    }
+
+    static List<Identifier> registrationIds(boolean simplySkillsPresent) {
+        // Simply Skills owns the old shared ID when present. Both legacy rewards are markers.
+        return simplySkillsPresent ? List.of(ID) : List.of(ID, LEGACY_ID);
     }
 
     public String passiveSkillId() {

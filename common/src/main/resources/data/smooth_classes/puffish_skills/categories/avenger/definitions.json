@@ -24,7 +24,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "avengerDeathList"
         }
@@ -59,7 +59,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "avengerCurtainCall"
         }
@@ -91,7 +91,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "avengerCurtainCallI"
         }
@@ -123,7 +123,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "avengerCurtainCallII"
         }
@@ -155,7 +155,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "avengerEndlessDevour"
         }
@@ -187,7 +187,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "avengerDevour150"
         }
@@ -219,7 +219,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "avengerDevour200"
         }
@@ -251,7 +251,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "avengerDevourFast"
         }
@@ -283,7 +283,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "avengerSummonDamageI"
         }
@@ -315,7 +315,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "avengerSummonDamageII"
         }
@@ -347,7 +347,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "avengerSummonHealthI"
         }
@@ -379,7 +379,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "avengerSummonHealthII"
         }
@@ -411,7 +411,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "avengerSummonArmorI"
         }
@@ -443,7 +443,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "avengerSummonArmorII"
         }
@@ -475,7 +475,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "avengerDeathMarch"
         }
@@ -507,7 +507,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "avengerSoulPact"
         }

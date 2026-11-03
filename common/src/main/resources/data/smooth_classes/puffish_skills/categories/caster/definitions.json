@@ -114,7 +114,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "wizardPassiveSpellEcho"
         }
@@ -146,7 +146,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "wizardSignatureMeteorShower"
         }
@@ -178,7 +178,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "wizardSignatureMeteorShowerGreater"
         }
@@ -210,7 +210,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "wizardSignatureMeteorShowerWrath"
         }
@@ -242,7 +242,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "wizardSignatureMeteorShowerRenewingWrath"
         }
@@ -274,7 +274,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "wizardSignatureMeteorShowerRenewingWrath++"
         }
@@ -306,7 +306,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "wizardSignatureMeteorShowerRenewingWrath+++"
         }
@@ -338,7 +338,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "wizardSignatureIceComet"
         }
@@ -370,7 +370,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "wizardSignatureIceCometLeap"
         }
@@ -402,7 +402,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "wizardSignatureIceCometVolley"
         }
@@ -434,7 +434,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "wizardSignatureIceCometDamage+"
         }
@@ -466,7 +466,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "wizardSignatureIceCometDamage++"
         }
@@ -498,7 +498,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "wizardSignatureIceCometDamage+++"
         }
@@ -530,7 +530,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "wizardSignatureStaticDischarge"
         }
@@ -562,7 +562,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "wizardSignatureStaticDischargeLightningBall"
         }
@@ -594,7 +594,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "wizardSignatureStaticDischargeLeap"
         }
@@ -626,7 +626,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "wizardSignatureStaticDischargeLeap++"
         }
@@ -658,7 +658,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "wizardSignatureStaticDischargeLeap+++"
         }
@@ -690,7 +690,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "wizardSignatureStaticDischargeSpeed"
         }
@@ -722,7 +722,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "wizardSignatureStaticDischargeSpeed++"
         }
@@ -754,7 +754,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "wizardSignatureStaticDischargeSpeed+++"
         }
@@ -786,7 +786,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "wizardSignatureStaticDischargeLightningOrb"
         }
@@ -818,7 +818,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "wizardSignatureStaticDischargeLightningOrbOnHit"
         }
@@ -850,7 +850,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "wizardSignatureArcaneBolt"
         }
@@ -882,7 +882,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "wizardSignatureArcaneBoltLesser"
         }
@@ -914,7 +914,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "wizardSignatureArcaneBoltVolley"
         }
@@ -946,7 +946,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "wizardSignatureArcaneBoltGreater"
         }
