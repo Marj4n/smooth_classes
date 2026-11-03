@@ -269,16 +269,16 @@ public abstract class SkillsScreenMixin {
         SkillsScreenAccessor accessor = (SkillsScreenAccessor) this;
         Bounds2i bounds = accessor.getBounds();
 
-        // Don't draw star systems when prominent is loaded
         if (!PROMINENT_LOADED) drawParallaxTextures(context, bounds);
     }
 
     @Unique
     private void drawParallaxTextures(DrawContext context, Bounds2i bounds) {
         long currentTime = System.currentTimeMillis();
+        org.marj4n.smooth_classes.client.VoidFogBackdrop.draw(context, bounds, currentTime);
         updateEyes(bounds, currentTime);
         drawOminousEyes(context, bounds, currentTime);
-        updateAndDrawCloudsTexture(context, bounds);
+        org.marj4n.smooth_classes.client.VoidFogBackdrop.drawVeil(context, bounds, currentTime);
     }
 
     @Unique
@@ -378,7 +378,8 @@ public abstract class SkillsScreenMixin {
 
             RenderSystem.enableBlend();
             RenderSystem.defaultBlendFunc();
-            RenderSystem.setShaderColor(pulse, pulse * 0.80F, pulse * 0.70F, alpha);
+            org.marj4n.smooth_classes.client.VoidFogBackdrop.drawEyeGlow(context, alpha);
+            RenderSystem.setShaderColor(pulse, pulse * 0.35F, pulse * 0.70F, alpha);
             context.drawTexture(
                     OMINOUS_EYE,
                     0,
