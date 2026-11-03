@@ -9,9 +9,9 @@
     "text": "A fragile artificial being with a distinctive constructed body."
   },
   "icon": {
-    "type": "item",
+    "type": "texture",
     "data": {
-      "item": "minecraft:brewing_stand"
+      "texture": "smooth_classes:textures/icons/tabs32/origin_homunculus.png"
     }
   },
   "background": {
