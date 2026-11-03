@@ -22,10 +22,7 @@ public final class ForbiddenBirth {
             SKIP = Identifier.of("smooth_classes", "forbidden_birth_skip"),
             READY = Identifier.of("smooth_classes", "forbidden_birth_ready");
     public static final Item FRUIT =
-            org.marj4n.smooth_classes.platform.PlatformRegistry.register(
-                    org.marj4n.smooth_classes.platform.PlatformRegistries.ITEM,
-                    Identifier.of("smooth_classes", "forbidden_apple_cinematic"),
-                    new Item(new Item.Settings().maxCount(1)));
+            org.marj4n.smooth_classes.registry.SmoothItems.FORBIDDEN_APPLE_CINEMATIC;
 
     public record Scene(
             UUID player, UUID token, long start, Vec3d anchor, Vec3d fruit, Vec3d landing) {}
