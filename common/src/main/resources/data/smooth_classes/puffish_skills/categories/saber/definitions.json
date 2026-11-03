@@ -174,7 +174,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "crusaderAegis"
         }
@@ -206,7 +206,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "crusaderRetribution"
         }
@@ -238,7 +238,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "crusaderExhaustiveRecovery"
         }
@@ -270,7 +270,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "crusaderSignatureConsecration"
         }
@@ -302,7 +302,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "crusaderSignatureConsecrationDuration"
         }
@@ -334,7 +334,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "crusaderSignatureConsecrationWard"
         }
@@ -366,7 +366,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "crusaderSignatureConsecrationTaunt"
         }
@@ -398,7 +398,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "crusaderSignatureConsecrationMighty"
         }
@@ -430,7 +430,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "crusaderSignatureConsecrationSpellforged"
         }
@@ -462,7 +462,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "crusaderSignatureSacredOnslaught"
         }
@@ -494,7 +494,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "crusaderSignatureSacredOnslaughtHeal"
         }
@@ -526,7 +526,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "crusaderSignatureSacredOnslaughtDefend"
         }
@@ -558,7 +558,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "crusaderSignatureSacredOnslaughtMighty"
         }
@@ -590,7 +590,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "crusaderSignatureSacredOnslaughtStun"
         }
@@ -622,7 +622,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "crusaderSignatureDivineAdjudication"
         }
@@ -654,7 +654,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "crusaderSignatureDivineAdjudicationTaunt"
         }
@@ -686,7 +686,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "crusaderSignatureDivineAdjudicationMark"
         }
@@ -718,7 +718,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "crusaderSignatureDivineAdjudicationChain"
         }
@@ -750,7 +750,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "crusaderSignatureDivineAdjudicationRecuperate"
         }
@@ -782,7 +782,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "crusaderSignatureDivineAdjudicationMighty"
         }

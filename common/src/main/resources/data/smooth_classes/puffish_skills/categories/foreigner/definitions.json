@@ -84,7 +84,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "spellbladeWeaponExpert"
         }
@@ -116,7 +116,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "spellbladeSpellweaving"
         }
@@ -148,7 +148,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "spellbladeSignatureElementalSurge"
         }
@@ -180,7 +180,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "spellbladeSignatureElementalSurgeNoFrost"
         }
@@ -212,7 +212,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "spellbladeSignatureElementalSurgeNoFire"
         }
@@ -244,7 +244,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "spellbladeSignatureElementalSurgeRenewal"
         }
@@ -276,7 +276,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "spellbladeSignatureElementalSurgeNoLightning"
         }
@@ -308,7 +308,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "spellbladeSignatureElementalImpact"
         }
@@ -340,7 +340,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "spellbladeSignatureElementalImpactMagnet"
         }
@@ -372,7 +372,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "spellbladeSignatureElementalImpactResistance"
         }
@@ -404,7 +404,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "spellbladeSignatureSpellweaver"
         }
@@ -436,7 +436,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "spellbladeSignatureSpellweaverHaste"
         }
@@ -468,7 +468,7 @@
     },
     "rewards": [
       {
-        "type": "puffish_skills:passive_skill",
+        "type": "smooth_classes:passive_skill",
         "data": {
           "passive_skill": "spellbladeSignatureSpellweaverRegeneration"
         }
