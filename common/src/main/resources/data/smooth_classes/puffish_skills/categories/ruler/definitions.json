@@ -237,7 +237,7 @@
     "icon": {
       "type": "texture",
       "data": {
-        "texture": "minecraft:textures/mob_effect/strength.png"
+        "texture": "smooth_classes:textures/icons/approved_banner/banner_strength.png"
       }
     },
     "rewards": [
@@ -269,7 +269,7 @@
     "icon": {
       "type": "texture",
       "data": {
-        "texture": "minecraft:textures/mob_effect/resistance.png"
+        "texture": "smooth_classes:textures/icons/approved_banner/banner_resistance.png"
       }
     },
     "rewards": [
@@ -301,7 +301,7 @@
     "icon": {
       "type": "texture",
       "data": {
-        "texture": "minecraft:textures/mob_effect/haste.png"
+        "texture": "smooth_classes:textures/icons/approved_banner/banner_haste.png"
       }
     },
     "rewards": [

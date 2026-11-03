@@ -2,6 +2,8 @@
 
 RPG classes and origins for Minecraft 1.20.1, including class skills, Avenger summons and origin progression. Fabric and Forge share gameplay and assets, with separate loader entrypoints.
 
+Skill menus use custom class artwork and Vampire HUD icons. Avenger soul orders include a sound toggle for individual summons. Retired Homunculus equipment slots return stored items to the player's inventory.
+
 ## Build
 
 Use JDK 21; generated mods target Java 17.

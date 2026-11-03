@@ -9,9 +9,9 @@
     "translate": "text.skills.origin_vampire_category.description"
   },
   "icon": {
-    "type": "item",
+    "type": "texture",
     "data": {
-      "item": "minecraft:fermented_spider_eye"
+      "texture": "smooth_classes:textures/icons/tabs32/origin_vampire.png"
     }
   },
   "background": {

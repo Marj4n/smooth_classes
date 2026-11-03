@@ -9,9 +9,9 @@
     "translate": "text.skills.origin_slime_category.description"
   },
   "icon": {
-    "type": "item",
+    "type": "texture",
     "data": {
-      "item": "minecraft:slime_ball"
+      "texture": "smooth_classes:textures/icons/tabs32/origin_slime.png"
     }
   },
   "background": {

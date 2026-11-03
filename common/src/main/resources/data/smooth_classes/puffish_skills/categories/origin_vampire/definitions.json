@@ -18,9 +18,9 @@
       }
     },
     "icon": {
-      "type": "item",
+      "type": "texture",
       "data": {
-        "item": "minecraft:fermented_spider_eye"
+        "texture": "smooth_classes:textures/icons/origin_vampire/origin_base.png"
       }
     },
     "rewards": []
@@ -44,9 +44,9 @@
       }
     },
     "icon": {
-      "type": "item",
+      "type": "texture",
       "data": {
-        "item": "minecraft:phantom_membrane"
+        "texture": "smooth_classes:textures/icons/origin_vampire/bat_form.png"
       }
     },
     "rewards": []
@@ -70,9 +70,9 @@
       }
     },
     "icon": {
-      "type": "item",
+      "type": "texture",
       "data": {
-        "item": "minecraft:leather_chestplate"
+        "texture": "smooth_classes:textures/icons/origin_vampire/man_bat.png"
       }
     },
     "rewards": []
@@ -96,9 +96,9 @@
       }
     },
     "icon": {
-      "type": "item",
+      "type": "texture",
       "data": {
-        "item": "minecraft:spider_eye"
+        "texture": "smooth_classes:textures/icons/origin_vampire/blood_sense.png"
       }
     },
     "rewards": []
@@ -122,9 +122,9 @@
       }
     },
     "icon": {
-      "type": "item",
+      "type": "texture",
       "data": {
-        "item": "minecraft:glass_bottle"
+        "texture": "smooth_classes:textures/icons/origin_vampire/blood_flask.png"
       }
     },
     "rewards": []
@@ -148,9 +148,9 @@
       }
     },
     "icon": {
-      "type": "item",
+      "type": "texture",
       "data": {
-        "item": "minecraft:redstone"
+        "texture": "smooth_classes:textures/icons/origin_vampire/nobility.png"
       }
     },
     "rewards": []
@@ -174,9 +174,9 @@
       }
     },
     "icon": {
-      "type": "item",
+      "type": "texture",
       "data": {
-        "item": "minecraft:sunflower"
+        "texture": "smooth_classes:textures/icons/origin_vampire/sun_tolerance.png"
       }
     },
     "rewards": []
@@ -200,9 +200,9 @@
       }
     },
     "icon": {
-      "type": "item",
+      "type": "texture",
       "data": {
-        "item": "minecraft:nether_star"
+        "texture": "smooth_classes:textures/icons/origin_vampire/final.png"
       }
     },
     "rewards": []

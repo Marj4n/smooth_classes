@@ -110,7 +110,8 @@ public final class AbilityHud {
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         context.drawTexture(FRAME, x + 5, y + 6, 58, 22, 24, 24, 256, 256);
-        context.drawItem(new ItemStack(data.icon()), x + 10, y + 10);
+        org.marj4n.smooth_classes.client.origin.OriginSkillIconRenderer.draw(
+                context, new ItemStack(data.icon()), x + 10, y + 10);
         context.draw();
         context.getMatrices().push();
         context.getMatrices().translate(0, 0, 300);
