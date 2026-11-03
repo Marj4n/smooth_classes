@@ -1,6 +1,14 @@
-plugins { id 'dev.architectury.loom'; id 'maven-publish' }
-base { archivesName = rootProject.archives_base_name }
-java { toolchain.languageVersion = JavaLanguageVersion.of(21); withSourcesJar() }
+plugins {
+    id 'dev.architectury.loom'
+    id 'maven-publish'
+}
+base {
+    archivesName = rootProject.archives_base_name
+}
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(21)
+    withSourcesJar()
+}
 repositories {
     maven { url = 'https://maven.shedaniel.me/' }
     maven { url = 'https://maven.fabricmc.net/' }

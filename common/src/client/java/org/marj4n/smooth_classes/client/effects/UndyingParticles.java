@@ -6,19 +6,20 @@ import net.spell_engine.api.spell.fx.ParticleGroup;
 import net.spell_engine.api.spell.fx.ParticleGroupBuilder;
 import net.spell_engine.fx.ParticleHelper;
 
-
 public class UndyingParticles implements CustomParticleStatusEffect.Spawner {
 
     private final ParticleGroup particles;
 
     public UndyingParticles(int particleCount) {
-        this.particles = ParticleGroupBuilder.of("spell_engine:magic_holy")
-                .batch(batch -> batch
-                        .count(particleCount)
-                        .shape(ParticleGroup.Shape.PIPE)
-                        .anchor(ParticleGroup.Anchor.GROUND)
-                        .speed(0.1F)
-                        .extent(0.7F));
+        this.particles =
+                ParticleGroupBuilder.of("spell_engine:magic_holy")
+                        .batch(
+                                batch ->
+                                        batch.count(particleCount)
+                                                .shape(ParticleGroup.Shape.PIPE)
+                                                .anchor(ParticleGroup.Anchor.GROUND)
+                                                .speed(0.1F)
+                                                .extent(0.7F));
     }
 
     @Override

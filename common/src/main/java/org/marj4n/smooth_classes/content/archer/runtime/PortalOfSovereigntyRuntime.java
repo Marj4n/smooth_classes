@@ -39,7 +39,8 @@ public final class PortalOfSovereigntyRuntime {
     private static final int BASE_ACTIVE_PORTALS = 5;
     private static final int MAX_ACTIVE_PORTALS = 10;
     private static final Map<UUID, Integer> HELD_AT = new HashMap<>();
-    private static final net.minecraft.util.Identifier ABILITY = org.marj4n.smooth_classes.SmoothClasses.id("unlimited_blade_works");
+    private static final net.minecraft.util.Identifier ABILITY =
+            org.marj4n.smooth_classes.SmoothClasses.id("unlimited_blade_works");
 
     private static final class PortalPulse {
         final BladePortalEntity portal;
@@ -52,9 +53,10 @@ public final class PortalOfSovereigntyRuntime {
         PortalPulse(BladePortalEntity portal, int[] shotAges) {
             this.portal = portal;
             this.shotAges = shotAges;
-            this.closeStartAge = shotAges.length == 0
-                    ? PORTAL_OPEN_TICKS + 3
-                    : shotAges[shotAges.length - 1] + 1;
+            this.closeStartAge =
+                    shotAges.length == 0
+                            ? PORTAL_OPEN_TICKS + 3
+                            : shotAges[shotAges.length - 1] + 1;
             this.totalAge = closeStartAge + PORTAL_CLOSE_TICKS;
         }
 
@@ -105,9 +107,16 @@ public final class PortalOfSovereigntyRuntime {
         int nextPortalIn;
         boolean cancelApplied;
 
-        Session(ServerPlayerEntity player, ServerWorld world,
-                long end, float damage, double range, int pierce,
-                boolean focused, boolean rapid, int activePortalLimit) {
+        Session(
+                ServerPlayerEntity player,
+                ServerWorld world,
+                long end,
+                float damage,
+                double range,
+                int pierce,
+                boolean focused,
+                boolean rapid,
+                int activePortalLimit) {
             this.player = player;
             this.world = world;
             this.end = end;
@@ -116,7 +125,8 @@ public final class PortalOfSovereigntyRuntime {
             this.pierce = pierce;
             this.focused = focused;
             this.rapid = rapid;
-            this.activePortalLimit = MathHelper.clamp(activePortalLimit, BASE_ACTIVE_PORTALS, MAX_ACTIVE_PORTALS);
+            this.activePortalLimit =
+                    MathHelper.clamp(activePortalLimit, BASE_ACTIVE_PORTALS, MAX_ACTIVE_PORTALS);
             this.nextPortalIn = 0;
         }
     }
@@ -136,14 +146,22 @@ public final class PortalOfSovereigntyRuntime {
     }
 
     private static void animation(ServerPlayerEntity player, String name) {
-        var entry = org.marj4n.smooth_classes.runtime.InternalSpellRuntime.entry(player,
-                org.marj4n.smooth_classes.SmoothClasses.id(name));
-        if (entry == null || entry.value().release == null || entry.value().release.animation == null) return;
-        var viewers = new ArrayList<>(net.fabricmc.fabric.api.networking.v1.PlayerLookup.tracking(player));
+        var entry =
+                org.marj4n.smooth_classes.runtime.InternalSpellRuntime.entry(
+                        player, org.marj4n.smooth_classes.SmoothClasses.id(name));
+        if (entry == null
+                || entry.value().release == null
+                || entry.value().release.animation == null) return;
+        var viewers =
+                new ArrayList<>(
+                        net.fabricmc.fabric.api.networking.v1.PlayerLookup.tracking(player));
         if (!viewers.contains(player)) viewers.add(player);
-        net.spell_engine.utils.AnimationHelper.sendAnimation(player, viewers,
+        net.spell_engine.utils.AnimationHelper.sendAnimation(
+                player,
+                viewers,
                 net.spell_engine.internals.casting.SpellCast.Animation.RELEASE,
-                entry.value().release.animation, 1F);
+                entry.value().release.animation,
+                1F);
     }
 
     private static void cancelCharge(Session s) {
@@ -159,43 +177,56 @@ public final class PortalOfSovereigntyRuntime {
     private PortalOfSovereigntyRuntime() {}
 
     public static void register() {
-        ServerTickEvents.END_SERVER_TICK.register(server -> { if (!ACTIVE.isEmpty()) tick(); });
-        ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
-            Session old = ACTIVE.remove(handler.player.getUuid());
-            if (old != null) {
-                discardSession(old);
-                if (!old.released && !old.cancelApplied) {
-                    org.marj4n.smooth_classes.runtime.AbilityCooldowns.start(handler.player, ABILITY, 80);
-                }
-            }
-            HELD_AT.remove(handler.player.getUuid());
-        });
-        ServerLifecycleEvents.SERVER_STOPPING.register(server -> {
-            ACTIVE.values().forEach(PortalOfSovereigntyRuntime::discardSession);
-            ACTIVE.clear();
-            HELD_AT.clear();
-        });
+        ServerTickEvents.END_SERVER_TICK.register(
+                server -> {
+                    if (!ACTIVE.isEmpty()) tick();
+                });
+        ServerPlayConnectionEvents.DISCONNECT.register(
+                (handler, server) -> {
+                    Session old = ACTIVE.remove(handler.player.getUuid());
+                    if (old != null) {
+                        discardSession(old);
+                        if (!old.released && !old.cancelApplied) {
+                            org.marj4n.smooth_classes.runtime.AbilityCooldowns.start(
+                                    handler.player, ABILITY, 80);
+                        }
+                    }
+                    HELD_AT.remove(handler.player.getUuid());
+                });
+        ServerLifecycleEvents.SERVER_STOPPING.register(
+                server -> {
+                    ACTIVE.values().forEach(PortalOfSovereigntyRuntime::discardSession);
+                    ACTIVE.clear();
+                    HELD_AT.clear();
+                });
     }
 
     public static ExecutionResult cast(ServerPlayerEntity player) {
-        if (!AbilityRuntime.isClass(player, ArcherClass.ID)) return ExecutionResult.failure("Requires Archer.");
-        if (ACTIVE.containsKey(player.getUuid())) return ExecutionResult.failure("Portal of Sovereignty is already active.");
+        if (!AbilityRuntime.isClass(player, ArcherClass.ID))
+            return ExecutionResult.failure("Requires Archer.");
+        if (ACTIVE.containsKey(player.getUuid()))
+            return ExecutionResult.failure("Portal of Sovereignty is already active.");
         if (!DaggerCompatibility.isDagger(player.getMainHandStack()))
-            return ExecutionResult.failure("Hold a dagger in your main hand to cast Portal of Sovereignty.");
-        if (!held(player)) return ExecutionResult.failure("Hold the signature key until the portal finishes charging.");
+            return ExecutionResult.failure(
+                    "Hold a dagger in your main hand to cast Portal of Sovereignty.");
+        if (!held(player))
+            return ExecutionResult.failure(
+                    "Hold the signature key until the portal finishes charging.");
 
         int duration = 200;
-        for (String id : new String[]{"4q8hsjuia145trv7", "9hqz9uonnud6t9rw", "7i77726t2uhbe1oh"})
+        for (String id : new String[] {"4q8hsjuia145trv7", "9hqz9uonnud6t9rw", "7i77726t2uhbe1oh"})
             if (has(player, id)) duration += 40;
         if (has(player, "dr852odvrafemtmw")) duration += 80;
 
         float damage = 1F;
-        for (String id : new String[]{"ybvq1ijnytlldmmy", "inctw0dlvdx7wrf0", "xb84xgtz2cynhxe2"})
+        for (String id : new String[] {"ybvq1ijnytlldmmy", "inctw0dlvdx7wrf0", "xb84xgtz2cynhxe2"})
             if (has(player, id)) damage += .1F;
         if (has(player, "ydcjvatyvt2o7etu")) damage += .2F;
 
-        double range = 24 + (has(player, "qerw03l9ypwl67cl") ? 4 : 0)
-                + (has(player, "1sd5kv4wi1ylacx8") ? 8 : 0);
+        double range =
+                24
+                        + (has(player, "qerw03l9ypwl67cl") ? 4 : 0)
+                        + (has(player, "1sd5kv4wi1ylacx8") ? 8 : 0);
 
         int activePortalLimit = BASE_ACTIVE_PORTALS;
         if (has(player, "archer_blade_left_portal")) activePortalLimit += 2;
@@ -203,18 +234,31 @@ public final class PortalOfSovereigntyRuntime {
         activePortalLimit = Math.min(MAX_ACTIVE_PORTALS, activePortalLimit);
         boolean rapid = has(player, "5kcs5b8ne9c30zwn");
 
-        ACTIVE.put(player.getUuid(), new Session(player, player.getServerWorld(),
-                player.getWorld().getTime() + duration + CHARGE_TICKS,
-                damage, range,
-                has(player, "t5c5gzcskng8b8cz") ? 3 : 1,
-                has(player, "fau41sxkpniul48c"),
-                rapid, activePortalLimit));
+        ACTIVE.put(
+                player.getUuid(),
+                new Session(
+                        player,
+                        player.getServerWorld(),
+                        player.getWorld().getTime() + duration + CHARGE_TICKS,
+                        damage,
+                        range,
+                        has(player, "t5c5gzcskng8b8cz") ? 3 : 1,
+                        has(player, "fau41sxkpniul48c"),
+                        rapid,
+                        activePortalLimit));
 
         org.marj4n.smooth_classes.network.SmoothClassesNetworking.sendChargeState(
                 player, true, false, "unlimited_blade_works", 0, CHARGE_TICKS);
-        player.getServerWorld().playSound(null, player.getBlockPos(), SoundEvents.BLOCK_BEACON_ACTIVATE,
-                SoundCategory.PLAYERS, .8F, 1.5F);
-        org.marj4n.smooth_classes.runtime.SkillFx.sound(player, "magic_shamanic_power_12", .42F, 1.05F);
+        player.getServerWorld()
+                .playSound(
+                        null,
+                        player.getBlockPos(),
+                        SoundEvents.BLOCK_BEACON_ACTIVATE,
+                        SoundCategory.PLAYERS,
+                        .8F,
+                        1.5F);
+        org.marj4n.smooth_classes.runtime.SkillFx.sound(
+                player, "magic_shamanic_power_12", .42F, 1.05F);
         org.marj4n.smooth_classes.runtime.SkillFx.sound(player, "energy_charge", .34F, .78F);
         animation(player, "blade_charge");
         return ExecutionResult.success(1, "Charging Portal of Sovereignty");
@@ -223,15 +267,27 @@ public final class PortalOfSovereigntyRuntime {
     private static Vec3d aimedPoint(ServerPlayerEntity player, double range) {
         Vec3d eye = player.getEyePos();
         Vec3d end = eye.add(player.getRotationVec(1F).normalize().multiply(range));
-        var block = player.getWorld().raycast(new net.minecraft.world.RaycastContext(eye, end,
-                net.minecraft.world.RaycastContext.ShapeType.COLLIDER,
-                net.minecraft.world.RaycastContext.FluidHandling.NONE, player));
+        var block =
+                player.getWorld()
+                        .raycast(
+                                new net.minecraft.world.RaycastContext(
+                                        eye,
+                                        end,
+                                        net.minecraft.world.RaycastContext.ShapeType.COLLIDER,
+                                        net.minecraft.world.RaycastContext.FluidHandling.NONE,
+                                        player));
         if (block.getType() != net.minecraft.util.hit.HitResult.Type.MISS) end = block.getPos();
         Vec3d nearest = end;
-        for (var target : player.getWorld().getEntitiesByClass(net.minecraft.entity.LivingEntity.class,
-                new net.minecraft.util.math.Box(eye, end).expand(.2), e -> ProjectedDaggerEntity.validTarget(e, player))) {
+        for (var target :
+                player.getWorld()
+                        .getEntitiesByClass(
+                                net.minecraft.entity.LivingEntity.class,
+                                new net.minecraft.util.math.Box(eye, end).expand(.2),
+                                e -> ProjectedDaggerEntity.validTarget(e, player))) {
             var hit = target.getBoundingBox().expand(.1).raycast(eye, end);
-            if (hit.isPresent() && eye.squaredDistanceTo(hit.get()) < eye.squaredDistanceTo(nearest)) nearest = hit.get();
+            if (hit.isPresent()
+                    && eye.squaredDistanceTo(hit.get()) < eye.squaredDistanceTo(nearest))
+                nearest = hit.get();
         }
         return nearest;
     }
@@ -268,7 +324,8 @@ public final class PortalOfSovereigntyRuntime {
         return 1.16D * scale;
     }
 
-    private static boolean fitsSpacing(Session s, double back, double lateral, double vertical, float scale) {
+    private static boolean fitsSpacing(
+            Session s, double back, double lateral, double vertical, float scale) {
         double radius = portalRadius(scale);
         for (PortalPulse pulse : s.pulses) {
             BladePortalEntity other = pulse.portal;
@@ -283,8 +340,8 @@ public final class PortalOfSovereigntyRuntime {
         return true;
     }
 
-    private static BladePortalEntity buildPortal(Session s, double back, double lateral,
-                                                    double vertical, float scale) {
+    private static BladePortalEntity buildPortal(
+            Session s, double back, double lateral, double vertical, float scale) {
         BladePortalEntity portal = new BladePortalEntity(SmoothEntities.BLADE_PORTAL, s.world);
         portal.setCaster(s.player);
         portal.setSide(0);
@@ -294,9 +351,15 @@ public final class PortalOfSovereigntyRuntime {
         return portal;
     }
 
-    private static BladePortalEntity createSpacedPortal(Session s, double minBack, double backRange,
-                                                        double lateralRange, double verticalMin, double verticalRange,
-                                                        float minScale, float scaleRange) {
+    private static BladePortalEntity createSpacedPortal(
+            Session s,
+            double minBack,
+            double backRange,
+            double lateralRange,
+            double verticalMin,
+            double verticalRange,
+            float minScale,
+            float scaleRange) {
         var random = s.player.getRandom();
         double fallbackBack = 0D, fallbackLateral = 0D, fallbackVertical = 0D;
         float fallbackScale = 0F;
@@ -310,8 +373,10 @@ public final class PortalOfSovereigntyRuntime {
             double back = minBack + random.nextDouble() * backRange;
             double lateral = (random.nextDouble() * (lateralRange * 2D)) - lateralRange;
             if (Math.abs(lateral) < 0.70D) {
-                lateral = Math.copySign(0.70D + random.nextDouble() * 0.80D,
-                        lateral == 0 ? (random.nextBoolean() ? 1D : -1D) : lateral);
+                lateral =
+                        Math.copySign(
+                                0.70D + random.nextDouble() * 0.80D,
+                                lateral == 0 ? (random.nextBoolean() ? 1D : -1D) : lateral);
             }
             double vertical = verticalMin + random.nextDouble() * verticalRange;
             float scale = minScale + random.nextFloat() * scaleRange;
@@ -346,11 +411,8 @@ public final class PortalOfSovereigntyRuntime {
 
     private static PortalPulse spawnPulse(Session s, int ticksLeft) {
         var random = s.player.getRandom();
-        BladePortalEntity portal = createSpacedPortal(s,
-                1.55D, 2.25D,
-                5.10D,
-                -0.10D, 2.25D,
-                0.56F, 0.34F);
+        BladePortalEntity portal =
+                createSpacedPortal(s, 1.55D, 2.25D, 5.10D, -0.10D, 2.25D, 0.56F, 0.34F);
         if (portal == null || !s.world.spawnEntity(portal)) return null;
 
         int shots = 1;
@@ -370,40 +432,63 @@ public final class PortalOfSovereigntyRuntime {
             age += s.rapid ? 1 + random.nextInt(2) : 1 + random.nextInt(3);
         }
 
-        s.world.playSound(null, s.player.getBlockPos(), SoundEvents.BLOCK_BEACON_AMBIENT,
-                SoundCategory.PLAYERS, .13F, 1.45F + random.nextFloat() * .20F);
+        s.world.playSound(
+                null,
+                s.player.getBlockPos(),
+                SoundEvents.BLOCK_BEACON_AMBIENT,
+                SoundCategory.PLAYERS,
+                .13F,
+                1.45F + random.nextFloat() * .20F);
         return new PortalPulse(portal, shotAges);
     }
 
     private static void fireFromPortal(Session s, BladePortalEntity portal, int ticksLeft) {
         ServerPlayerEntity p = s.player;
         Vec3d look = p.getRotationVec(1F).normalize();
-        Vec3d right = new Vec3d(Math.cos(Math.toRadians(p.getYaw())), 0, Math.sin(Math.toRadians(p.getYaw())));
+        Vec3d right =
+                new Vec3d(
+                        Math.cos(Math.toRadians(p.getYaw())),
+                        0,
+                        Math.sin(Math.toRadians(p.getYaw())));
         Vec3d up = look.crossProduct(right).normalize();
         Vec3d aim = aimedPoint(p, s.range);
 
         double angle = p.getRandom().nextDouble() * Math.PI * 2D;
         double radius = Math.sqrt(p.getRandom().nextDouble()) * .74D;
-        Vec3d portalPlane = portal.getPos().add(right.multiply(Math.cos(angle) * radius))
-                .add(up.multiply(Math.sin(angle) * radius));
-        Vec3d start = portalPlane.subtract(look.multiply(ProjectedDaggerEntity.PORTAL_EMERGENCE_DEPTH));
+        Vec3d portalPlane =
+                portal.getPos()
+                        .add(right.multiply(Math.cos(angle) * radius))
+                        .add(up.multiply(Math.sin(angle) * radius));
+        Vec3d start =
+                portalPlane.subtract(look.multiply(ProjectedDaggerEntity.PORTAL_EMERGENCE_DEPTH));
 
         double spread = s.focused ? .10D : .48D;
         if (ticksLeft <= DISSIPATE_TICKS) spread *= 1.10D;
-        Vec3d target = aim
-                .add(right.multiply((p.getRandom().nextDouble() - .5D) * spread))
-                .add(up.multiply((p.getRandom().nextDouble() - .5D) * spread));
+        Vec3d target =
+                aim.add(right.multiply((p.getRandom().nextDouble() - .5D) * spread))
+                        .add(up.multiply((p.getRandom().nextDouble() - .5D) * spread));
 
-        ProjectedDaggerEntity dagger = new ProjectedDaggerEntity(SmoothEntities.PROJECTED_DAGGER, s.world);
-        dagger.configure(p, p.getMainHandStack(), (float) p.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE),
-                s.damage, s.range + 3D, s.pierce);
+        ProjectedDaggerEntity dagger =
+                new ProjectedDaggerEntity(SmoothEntities.PROJECTED_DAGGER, s.world);
+        dagger.configure(
+                p,
+                p.getMainHandStack(),
+                (float) p.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE),
+                s.damage,
+                s.range + 3D,
+                s.pierce);
         dagger.setPosition(start);
         dagger.setVelocity(target.subtract(start).normalize().multiply(s.focused ? 2.1D : 1.45D));
         dagger.faceVelocity();
         if (s.world.spawnEntity(dagger)) {
             s.projectiles.add(dagger);
-            s.world.playSound(null, p.getBlockPos(), SoundEvents.ENTITY_ARROW_SHOOT,
-                    SoundCategory.PLAYERS, .18F, 1.48F + p.getRandom().nextFloat() * .20F);
+            s.world.playSound(
+                    null,
+                    p.getBlockPos(),
+                    SoundEvents.ENTITY_ARROW_SHOOT,
+                    SoundCategory.PLAYERS,
+                    .18F,
+                    1.48F + p.getRandom().nextFloat() * .20F);
         }
     }
 
@@ -414,9 +499,14 @@ public final class PortalOfSovereigntyRuntime {
             Session s = iterator.next();
             s.projectiles.removeIf(net.minecraft.entity.Entity::isRemoved);
             ServerPlayerEntity p = s.player;
-            boolean invalid = !p.isAlive() || p.isRemoved() || p.isSpectator() || p.getServerWorld() != s.world
-                    || !AbilityRuntime.isClass(p, ArcherClass.ID) || !has(p, "is053f9imz801s57")
-                    || !DaggerCompatibility.isDagger(p.getMainHandStack());
+            boolean invalid =
+                    !p.isAlive()
+                            || p.isRemoved()
+                            || p.isSpectator()
+                            || p.getServerWorld() != s.world
+                            || !AbilityRuntime.isClass(p, ArcherClass.ID)
+                            || !has(p, "is053f9imz801s57")
+                            || !DaggerCompatibility.isDagger(p.getMainHandStack());
             if (invalid) {
                 discardSession(s);
                 cancelCharge(s);
@@ -426,7 +516,9 @@ public final class PortalOfSovereigntyRuntime {
 
             if (!s.released) {
                 p.setSprinting(false);
-                p.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 3, 3, false, false, false));
+                p.addStatusEffect(
+                        new StatusEffectInstance(
+                                StatusEffects.SLOWNESS, 3, 3, false, false, false));
 
                 if (!held(p)) {
                     discardSession(s);
@@ -446,13 +538,25 @@ public final class PortalOfSovereigntyRuntime {
                 org.marj4n.smooth_classes.runtime.SkillFx.sound(p, "spell_arcane_cast", .72F, .82F);
                 org.marj4n.smooth_classes.runtime.SkillFx.sound(p, "spell_slash_02", .72F, 1.16F);
                 org.marj4n.smooth_classes.integration.OptionalCompatRuntime.onSignatureAbility(p);
-                org.marj4n.smooth_classes.runtime.AbilityCooldowns.start(p, ABILITY,
-                        org.marj4n.smooth_classes.runtime.AbilityCooldowns.adjustedTicks(p,
-                                org.marj4n.smooth_classes.integration.OptionalCompatRuntime.signatureCooldown(p,
-                                        org.marj4n.smooth_classes.gameplay.SignatureCooldowns.ticks("unlimited_blade_works"))));
+                org.marj4n.smooth_classes.runtime.AbilityCooldowns.start(
+                        p,
+                        ABILITY,
+                        org.marj4n.smooth_classes.runtime.AbilityCooldowns.adjustedTicks(
+                                p,
+                                org.marj4n.smooth_classes.integration.OptionalCompatRuntime
+                                        .signatureCooldown(
+                                                p,
+                                                org.marj4n.smooth_classes.gameplay
+                                                        .SignatureCooldowns.ticks(
+                                                        "unlimited_blade_works"))));
                 org.marj4n.smooth_classes.network.SmoothClassesNetworking.sendAbilityState(p);
-                s.world.playSound(null, p.getBlockPos(), SoundEvents.BLOCK_BEACON_POWER_SELECT,
-                        SoundCategory.PLAYERS, .6F, 1.4F);
+                s.world.playSound(
+                        null,
+                        p.getBlockPos(),
+                        SoundEvents.BLOCK_BEACON_POWER_SELECT,
+                        SoundCategory.PLAYERS,
+                        .6F,
+                        1.4F);
                 s.nextPortalIn = 0;
             }
 

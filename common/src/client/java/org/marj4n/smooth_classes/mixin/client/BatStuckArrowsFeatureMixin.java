@@ -23,8 +23,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(StuckArrowsFeatureRenderer.class)
 public abstract class BatStuckArrowsFeatureMixin {
     @Inject(method = "getObjectCount", at = @At("HEAD"), cancellable = true)
-    private void smooth_classes$hideHumanoidBatArrows(LivingEntity entity,
-                                                       CallbackInfoReturnable<Integer> cir) {
+    private void smooth_classes$hideHumanoidBatArrows(
+            LivingEntity entity, CallbackInfoReturnable<Integer> cir) {
         if (!(entity instanceof PlayerEntity player)) return;
         var state = OriginRuntime.state(player);
         if (state.origin() == OriginType.VAMPIRE && state.hasFlag("vampire.form.bat")) {

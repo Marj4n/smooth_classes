@@ -14,20 +14,19 @@ final class VsbVanillaHeadPose {
 
     private VsbVanillaHeadPose() {}
 
-    static VsbFiguraAvatarRenderer.Vec3 capture(PlayerEntityModel<?> vanilla,
-                                                float headYaw, float headPitch) {
+    static VsbFiguraAvatarRenderer.Vec3 capture(
+            PlayerEntityModel<?> vanilla, float headYaw, float headPitch) {
         // Only used if the API invokes EntityModel#setAngles without the
         // parent renderer. Normal TPV, inventory and armor paths use the
         // finished vanilla model captured by ManBatPosePreparerFeatureRenderer.
         if (vanilla == null) return new VsbFiguraAvatarRenderer.Vec3(-headPitch, headYaw, 0F);
         ModelPart head = vanilla.head;
-        if (!Float.isFinite(head.pitch) || !Float.isFinite(head.yaw)
+        if (!Float.isFinite(head.pitch)
+                || !Float.isFinite(head.yaw)
                 || !Float.isFinite(head.roll)) {
             return VsbFiguraAvatarRenderer.Vec3.ZERO;
         }
         return new VsbFiguraAvatarRenderer.Vec3(
-                -head.pitch * DEGREES,
-                head.yaw * DEGREES,
-                -head.roll * DEGREES);
+                -head.pitch * DEGREES, head.yaw * DEGREES, -head.roll * DEGREES);
     }
 }

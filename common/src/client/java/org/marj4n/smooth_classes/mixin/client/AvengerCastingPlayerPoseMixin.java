@@ -18,15 +18,22 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(PlayerEntityModel.class)
 public abstract class AvengerCastingPlayerPoseMixin {
     @Inject(method = "setAngles(Lnet/minecraft/entity/LivingEntity;FFFFF)V", at = @At("TAIL"))
-    private void smooth_classes$ritualRightHand(LivingEntity entity, float limbAngle,
-            float limbDistance, float animationProgress, float headYaw,
-            float headPitch, CallbackInfo ci) {
+    private void smooth_classes$ritualRightHand(
+            LivingEntity entity,
+            float limbAngle,
+            float limbDistance,
+            float animationProgress,
+            float headYaw,
+            float headPitch,
+            CallbackInfo ci) {
         if (!(entity instanceof AbstractClientPlayerEntity player)) return;
         float pose = AvengerSoulAnimationClient.casterPose(player, animationProgress - player.age);
         if (pose <= 0F) return;
         PlayerEntityModel<?> model = (PlayerEntityModel<?>) (Object) this;
-        boolean raising = AvengerSoulAnimationClient.casterAction(player)
-                == org.marj4n.smooth_classes.content.avenger.runtime.AvengerSoulAnimationRuntime.EMERGE;
+        boolean raising =
+                AvengerSoulAnimationClient.casterAction(player)
+                        == org.marj4n.smooth_classes.content.avenger.runtime
+                                .AvengerSoulAnimationRuntime.EMERGE;
         if (raising) {
             // Kneel toward the dirt: lower the right shoulder so the hand
             // can actually reach ground level instead of pointing horizontally.

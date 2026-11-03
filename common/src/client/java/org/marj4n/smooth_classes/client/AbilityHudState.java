@@ -39,13 +39,19 @@ public final class AbilityHudState {
     public static int classSpecialSecondaryTotalMs = 1;
     public static long classSpecialSecondaryReadyAtMs = 0L;
     public static int treasuryCapacity = 4;
-    public static ItemStack[] treasurySlots = new ItemStack[]{
-            ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY,
-            ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY
-    };
+    public static ItemStack[] treasurySlots =
+            new ItemStack[] {
+                ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY,
+                ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY
+            };
 
-    public static void sync(String signature, int signatureTotalTicks, long signatureRemainingTicks,
-                            String ascendancy, int ascendancyTotalTicks, long ascendancyRemainingTicks) {
+    public static void sync(
+            String signature,
+            int signatureTotalTicks,
+            long signatureRemainingTicks,
+            String ascendancy,
+            int ascendancyTotalTicks,
+            long ascendancyRemainingTicks) {
         signatureAbility = signature == null ? "" : signature;
         ascendancyAbility = ascendancy == null ? "" : ascendancy;
         signatureCooldownMs = Math.max(1, signatureTotalTicks * 50);
@@ -55,9 +61,16 @@ public final class AbilityHudState {
         ascendancyReadyAtMs = now + Math.max(0L, ascendancyRemainingTicks) * 50L;
     }
 
-    public static long signatureRemainingMs() { return Math.max(0L, signatureReadyAtMs - System.currentTimeMillis()); }
-    public static long ascendancyRemainingMs() { return Math.max(0L, ascendancyReadyAtMs - System.currentTimeMillis()); }
-    public static void syncAvengerSummon(boolean visible, int charges, int maxCharges, int totalTicks, long remainingTicks) {
+    public static long signatureRemainingMs() {
+        return Math.max(0L, signatureReadyAtMs - System.currentTimeMillis());
+    }
+
+    public static long ascendancyRemainingMs() {
+        return Math.max(0L, ascendancyReadyAtMs - System.currentTimeMillis());
+    }
+
+    public static void syncAvengerSummon(
+            boolean visible, int charges, int maxCharges, int totalTicks, long remainingTicks) {
         avengerSummonVisible = visible;
         avengerSummonCharges = Math.max(0, charges);
         avengerSummonMaxCharges = Math.max(1, maxCharges);
@@ -65,7 +78,9 @@ public final class AbilityHudState {
         avengerSummonReadyAtMs = System.currentTimeMillis() + Math.max(0L, remainingTicks) * 50L;
     }
 
-    public static long avengerSummonRemainingMs() { return Math.max(0L, avengerSummonReadyAtMs - System.currentTimeMillis()); }
+    public static long avengerSummonRemainingMs() {
+        return Math.max(0L, avengerSummonReadyAtMs - System.currentTimeMillis());
+    }
 
     public static void syncShadow(boolean active, long remainingTicks, int range) {
         shadowActive = active;
@@ -73,11 +88,20 @@ public final class AbilityHudState {
         shadowRange = Math.max(1, range);
     }
 
-    public static long shadowRemainingMs() { return shadowActive ? Math.max(0L, shadowExpiresAtMs - System.currentTimeMillis()) : 0L; }
+    public static long shadowRemainingMs() {
+        return shadowActive ? Math.max(0L, shadowExpiresAtMs - System.currentTimeMillis()) : 0L;
+    }
 
-    public static void syncClassSpecial(String id, int totalTicks, long remainingTicks, boolean active, int variant,
-                                        int modeTotalTicks, long modeRemainingTicks,
-                                        int secondaryTotalTicks, long secondaryRemainingTicks) {
+    public static void syncClassSpecial(
+            String id,
+            int totalTicks,
+            long remainingTicks,
+            boolean active,
+            int variant,
+            int modeTotalTicks,
+            long modeRemainingTicks,
+            int secondaryTotalTicks,
+            long secondaryRemainingTicks) {
         classSpecialId = id == null ? "" : id;
         classSpecialVisible = !classSpecialId.isBlank();
         classSpecialCooldownMs = Math.max(1, totalTicks * 50);
@@ -94,19 +118,22 @@ public final class AbilityHudState {
     public static long classSpecialRemainingMs() {
         return Math.max(0L, classSpecialReadyAtMs - System.currentTimeMillis());
     }
+
     public static long classSpecialModeRemainingMs() {
         return Math.max(0L, classSpecialModeReadyAtMs - System.currentTimeMillis());
     }
+
     public static long classSpecialSecondaryRemainingMs() {
         return Math.max(0L, classSpecialSecondaryReadyAtMs - System.currentTimeMillis());
     }
 
     public static void syncTreasury(int capacity, ItemStack[] slots) {
         treasuryCapacity = Math.max(4, Math.min(8, capacity));
-        ItemStack[] copy = new ItemStack[]{
-                ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY,
-                ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY
-        };
+        ItemStack[] copy =
+                new ItemStack[] {
+                    ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY,
+                    ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY
+                };
         if (slots != null) {
             for (int i = 0; i < Math.min(copy.length, slots.length); i++) {
                 ItemStack stack = slots[i];
@@ -117,7 +144,10 @@ public final class AbilityHudState {
     }
 
     public static boolean treasuryHasAny() {
-        for (int i = 0; i < treasuryCapacity; i++) { ItemStack stack = treasurySlots[i]; if (stack != null && !stack.isEmpty()) return true; }
+        for (int i = 0; i < treasuryCapacity; i++) {
+            ItemStack stack = treasurySlots[i];
+            if (stack != null && !stack.isEmpty()) return true;
+        }
         return false;
     }
 
@@ -142,8 +172,10 @@ public final class AbilityHudState {
             // Radial selectors already show the selected icon/name; repeating D/A/E/etc.
             // on the HUD only adds visual noise.
             case "treasury_key", "arcane_attunement", "spell_imprint" -> "";
-            case "high_jump" -> classSpecialVariant == 1 ? "^" : classSpecialVariant == 2 ? "v" : "";
-            case "divine_edict" -> classSpecialVariant == 1 ? "P" : classSpecialVariant == 2 ? "C" : "";
+            case "high_jump" ->
+                    classSpecialVariant == 1 ? "^" : classSpecialVariant == 2 ? "v" : "";
+            case "divine_edict" ->
+                    classSpecialVariant == 1 ? "P" : classSpecialVariant == 2 ? "C" : "";
             default -> "";
         };
     }
@@ -178,7 +210,17 @@ public final class AbilityHudState {
         classSpecialSecondaryTotalMs = 1;
         classSpecialSecondaryReadyAtMs = 0L;
         treasuryCapacity = 4;
-        treasurySlots = new ItemStack[]{ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY, ItemStack.EMPTY};
+        treasurySlots =
+                new ItemStack[] {
+                    ItemStack.EMPTY,
+                    ItemStack.EMPTY,
+                    ItemStack.EMPTY,
+                    ItemStack.EMPTY,
+                    ItemStack.EMPTY,
+                    ItemStack.EMPTY,
+                    ItemStack.EMPTY,
+                    ItemStack.EMPTY
+                };
     }
 
     public static Identifier classSpecialFallbackIcon() {
@@ -194,57 +236,80 @@ public final class AbilityHudState {
             case 0 -> Identifier.of("wizards", "textures/item/spell_book/arcane.png");
             case 1 -> Identifier.of("wizards", "textures/item/spell_book/fire.png");
             case 2 -> Identifier.of("wizards", "textures/item/spell_book/frost.png");
-            case 3 -> Identifier.of("elemental_wizards_rpg", "textures/item/spellbooks/wind_spell_book.png");
-            case 4 -> Identifier.of("elemental_wizards_rpg", "textures/item/spellbooks/aqua_spell_book.png");
-            case 5 -> Identifier.of("elemental_wizards_rpg", "textures/item/spellbooks/terra_spell_book.png");
+            case 3 ->
+                    Identifier.of(
+                            "elemental_wizards_rpg",
+                            "textures/item/spellbooks/wind_spell_book.png");
+            case 4 ->
+                    Identifier.of(
+                            "elemental_wizards_rpg",
+                            "textures/item/spellbooks/aqua_spell_book.png");
+            case 5 ->
+                    Identifier.of(
+                            "elemental_wizards_rpg",
+                            "textures/item/spellbooks/terra_spell_book.png");
             default -> SmoothClasses.id("textures/icons/classes/caster.png");
         };
     }
 
-    public static Identifier signatureIcon() { return icon(signatureAbility, false); }
-    public static Identifier ascendancyIcon() { return icon(ascendancyAbility, true); }
-    public static Identifier avengerSummonIcon() { return SmoothClasses.id("textures/icons/alternate_reduced/necromancer_signature_summoning_ritual.png"); }
-    public static Identifier berserkerSpecialIcon() { return SmoothClasses.id("textures/gui/berserker_class_special.png"); }
+    public static Identifier signatureIcon() {
+        return icon(signatureAbility, false);
+    }
+
+    public static Identifier ascendancyIcon() {
+        return icon(ascendancyAbility, true);
+    }
+
+    public static Identifier avengerSummonIcon() {
+        return SmoothClasses.id(
+                "textures/icons/alternate_reduced/necromancer_signature_summoning_ritual.png");
+    }
+
+    public static Identifier berserkerSpecialIcon() {
+        return SmoothClasses.id("textures/gui/berserker_class_special.png");
+    }
 
     private static Identifier icon(String ability, boolean ascendancy) {
-        if (ability == null || ability.isBlank()) return SmoothClasses.id("textures/gui/cooldown_overlay.png");
+        if (ability == null || ability.isBlank())
+            return SmoothClasses.id("textures/gui/cooldown_overlay.png");
         String path;
         if (ascendancy) {
             path = "ascendancy_" + ability;
         } else {
-            path = switch (ability) {
-                case "meteor_shower" -> "wizard_signature_meteor_shower";
-                case "ice_comet" -> "wizard_signature_ice_comet";
-                case "static_discharge" -> "wizard_signature_lightning_beam";
-                case "arcane_bolt" -> "wizard_signature_arcane_bolt";
-                case "rampage" -> "berserker_signature_rampage";
-                case "bloodthirsty" -> "berserker_signature_bloodthirsty";
-                case "berserking" -> "berserker_signature_berserking";
-                case "evasion" -> "rogue_signature_evasion";
-                case "preparation" -> "rogue_signature_preparation";
-                case "siphoning_strikes" -> "rogue_signature_siphoning_strikes";
-                case "unlimited_blade_works" -> "unlimited_blade_works";
-                case "arrow_rain" -> "ranger_signature_arrow_rain";
-                case "elemental_arrows" -> "ranger_signature_elemental_arrows";
-                case "elemental_surge" -> "spellblade_signature_elemental_surge";
-                case "elemental_impact" -> "spellblade_signature_elemental_impact";
-                case "spellweaver" -> "spellblade_signature_spellweaver";
-                case "consecration" -> "crusader_signature_consecration";
-                case "sacred_onslaught" -> "crusader_signature_sacred_onslaught";
-                case "heavensmiths_call" -> "crusader_signature_divine_adjudication";
-                case "sacred_orb" -> "cleric_signature_sacred_orb";
-                case "divine_intervention" -> "cleric_signature_divine_intervention";
-                case "anoint_weapon" -> "cleric_signature_anoint_weapon";
-                case "curtain_call" -> "necromancer_shadow_combust";
-                case "endless_devour" -> "necromancer_blood_harvest";
-                case "rider_charge" -> "berserker_signature_rampage";
-                case "rider_war_aura" -> "cleric_signature_anoint_weapon";
-                case "rider_blazing_hooves" -> "spellblade_signature_elemental_surge";
-                case "impaling_volley" -> "lancer_signature_impaling_volley";
-                case "dragon_thrust" -> "lancer_signature_dragon_thrust";
-                case "spearstorm" -> "lancer_signature_spearstorm";
-                default -> "";
-            };
+            path =
+                    switch (ability) {
+                        case "meteor_shower" -> "wizard_signature_meteor_shower";
+                        case "ice_comet" -> "wizard_signature_ice_comet";
+                        case "static_discharge" -> "wizard_signature_lightning_beam";
+                        case "arcane_bolt" -> "wizard_signature_arcane_bolt";
+                        case "rampage" -> "berserker_signature_rampage";
+                        case "bloodthirsty" -> "berserker_signature_bloodthirsty";
+                        case "berserking" -> "berserker_signature_berserking";
+                        case "evasion" -> "rogue_signature_evasion";
+                        case "preparation" -> "rogue_signature_preparation";
+                        case "siphoning_strikes" -> "rogue_signature_siphoning_strikes";
+                        case "unlimited_blade_works" -> "unlimited_blade_works";
+                        case "arrow_rain" -> "ranger_signature_arrow_rain";
+                        case "elemental_arrows" -> "ranger_signature_elemental_arrows";
+                        case "elemental_surge" -> "spellblade_signature_elemental_surge";
+                        case "elemental_impact" -> "spellblade_signature_elemental_impact";
+                        case "spellweaver" -> "spellblade_signature_spellweaver";
+                        case "consecration" -> "crusader_signature_consecration";
+                        case "sacred_onslaught" -> "crusader_signature_sacred_onslaught";
+                        case "heavensmiths_call" -> "crusader_signature_divine_adjudication";
+                        case "sacred_orb" -> "cleric_signature_sacred_orb";
+                        case "divine_intervention" -> "cleric_signature_divine_intervention";
+                        case "anoint_weapon" -> "cleric_signature_anoint_weapon";
+                        case "curtain_call" -> "necromancer_shadow_combust";
+                        case "endless_devour" -> "necromancer_blood_harvest";
+                        case "rider_charge" -> "berserker_signature_rampage";
+                        case "rider_war_aura" -> "cleric_signature_anoint_weapon";
+                        case "rider_blazing_hooves" -> "spellblade_signature_elemental_surge";
+                        case "impaling_volley" -> "lancer_signature_impaling_volley";
+                        case "dragon_thrust" -> "lancer_signature_dragon_thrust";
+                        case "spearstorm" -> "lancer_signature_spearstorm";
+                        default -> "";
+                    };
         }
         if (path.isBlank()) return SmoothClasses.id("textures/gui/cooldown_overlay.png");
         return SmoothClasses.id("textures/icons/alternate_reduced/" + path + ".png");

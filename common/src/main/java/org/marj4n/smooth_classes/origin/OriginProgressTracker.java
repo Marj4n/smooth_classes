@@ -29,7 +29,9 @@ public final class OriginProgressTracker {
         OriginType origin = state.origin();
         if (origin == null || victim == null) return;
 
-        Identifier typeId = org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE.getId(victim.getType());
+        Identifier typeId =
+                org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE.getId(
+                        victim.getType());
         String species = typeId.toString();
         switch (origin) {
             case VAMPIRE -> {
@@ -45,18 +47,22 @@ public final class OriginProgressTracker {
             case MERMAID -> {
                 if (victim instanceof DrownedEntity drowned) {
                     state.addProgress("mermaid.drowned_kills", 1);
-                    if (drowned.getMainHandStack().isOf(Items.TRIDENT) || drowned.getOffHandStack().isOf(Items.TRIDENT)) {
+                    if (drowned.getMainHandStack().isOf(Items.TRIDENT)
+                            || drowned.getOffHandStack().isOf(Items.TRIDENT)) {
                         state.addProgress("mermaid.trident_drowned_kills", 1);
                     }
                 }
-                if (victim instanceof ElderGuardianEntity) state.addProgress("mermaid.elder_guardian_kills", 1);
-                if (victim instanceof net.minecraft.entity.mob.GuardianEntity) state.addProgress("mermaid.guardian_kills", 1);
+                if (victim instanceof ElderGuardianEntity)
+                    state.addProgress("mermaid.elder_guardian_kills", 1);
+                if (victim instanceof net.minecraft.entity.mob.GuardianEntity)
+                    state.addProgress("mermaid.guardian_kills", 1);
             }
             case DEMON -> {
                 org.marj4n.smooth_classes.origin.demon.DemonProgression.onKill(player, victim);
                 if (victim instanceof BlazeEntity) state.addProgress("demon.blaze_kills", 1);
                 if (victim instanceof MagmaCubeEntity) state.addProgress("demon.magma_kills", 1);
-                if (player.getWorld().getRegistryKey() == World.NETHER) state.addProgress("demon.nether_hostile_kills", 1);
+                if (player.getWorld().getRegistryKey() == World.NETHER)
+                    state.addProgress("demon.nether_hostile_kills", 1);
             }
             case ANGEL -> {
                 if (victim instanceof HostileEntity) {
@@ -81,11 +87,12 @@ public final class OriginProgressTracker {
                     state.flag("undead.skeletal_species." + species);
                 }
             }
-            default -> { }
+            default -> {}
         }
     }
 
-    public static void onVampireFeed(ServerPlayerEntity player, LivingEntity victim, int bloodGain) {
+    public static void onVampireFeed(
+            ServerPlayerEntity player, LivingEntity victim, int bloodGain) {
         OriginState state = OriginRuntime.state(player);
         if (state.origin() != OriginType.VAMPIRE) return;
         state.addProgress("vampire.lifetime_blood", Math.max(0, bloodGain));
@@ -101,10 +108,13 @@ public final class OriginProgressTracker {
         OriginType origin = state.origin();
         if (origin == null) return;
 
-        if (origin == OriginType.WEREWOLF && org.marj4n.smooth_classes.platform.PlatformItems.food(stack, player) != null
+        if (origin == OriginType.WEREWOLF
+                && org.marj4n.smooth_classes.platform.PlatformItems.food(stack, player) != null
                 && org.marj4n.smooth_classes.platform.PlatformItems.food(stack, player).isMeat()) {
             state.addProgress("werewolf.meat_eaten", 1);
-            Identifier itemId = org.marj4n.smooth_classes.platform.PlatformRegistries.ITEM.getId(stack.getItem());
+            Identifier itemId =
+                    org.marj4n.smooth_classes.platform.PlatformRegistries.ITEM.getId(
+                            stack.getItem());
             state.flag("werewolf.meat_species." + itemId);
         }
         if (origin == OriginType.VOID && stack.isOf(Items.CHORUS_FRUIT)) {
@@ -120,13 +130,15 @@ public final class OriginProgressTracker {
         switch (origin) {
             case VAMPIRE -> {
                 if (player.getWorld().isNight()) state.addProgress("vampire.night_ticks", 20);
-                if (state.progress("vampire.night_ticks") >= 10_000) state.flag("vampire.full_night_survived");
+                if (state.progress("vampire.night_ticks") >= 10_000)
+                    state.flag("vampire.full_night_survived");
                 VampireLordTrial.onVisit(player, state);
             }
             case MERMAID -> {
                 if (player.isSubmergedInWater()) state.addProgress("mermaid.submerged_ticks", 20);
                 else state.addProgress("mermaid.dry_ticks", 20);
-                if (player.getInventory().contains(new ItemStack(Items.NAUTILUS_SHELL))) state.flag("mermaid.has_nautilus");
+                if (player.getInventory().contains(new ItemStack(Items.NAUTILUS_SHELL)))
+                    state.flag("mermaid.has_nautilus");
             }
             case DEMON -> {
                 if (player.isInLava()) state.addProgress("demon.lava_ticks", 20);
@@ -140,9 +152,13 @@ public final class OriginProgressTracker {
                 if (player.isSneaking()) state.addProgress("slime.squeeze_ticks", 20);
             }
             case VOID -> {
-                if (player.getWorld().getRegistryKey() == World.END) state.addProgress("void.end_ticks", 20);
+                if (player.getWorld().getRegistryKey() == World.END)
+                    state.addProgress("void.end_ticks", 20);
             }
-            case UNDEAD -> state.progress("undead.soul_peak", Math.max(state.progress("undead.soul_peak"), state.soul()));
+            case UNDEAD ->
+                    state.progress(
+                            "undead.soul_peak",
+                            Math.max(state.progress("undead.soul_peak"), state.soul()));
             case SPRIGGAN -> {
                 var below = player.getWorld().getBlockState(player.getBlockPos().down());
                 if (below.isIn(BlockTags.DIRT) || below.isIn(BlockTags.LEAVES)) {
@@ -150,38 +166,62 @@ public final class OriginProgressTracker {
                 }
             }
             case DOPPELGANGER -> observeForms(player, state);
-            default -> { }
+            default -> {}
         }
     }
 
-    private static void observeHumanoids(ServerPlayerEntity player, OriginState state, String counter, String prefix) {
-        var nearby = player.getWorld().getEntitiesByClass(LivingEntity.class, player.getBoundingBox().expand(8.0D),
-                entity -> entity != player && entity.isAlive() && isHumanoid(entity));
+    private static void observeHumanoids(
+            ServerPlayerEntity player, OriginState state, String counter, String prefix) {
+        var nearby =
+                player.getWorld()
+                        .getEntitiesByClass(
+                                LivingEntity.class,
+                                player.getBoundingBox().expand(8.0D),
+                                entity ->
+                                        entity != player && entity.isAlive() && isHumanoid(entity));
         if (nearby.isEmpty()) return;
         state.addProgress(counter, 20);
         for (LivingEntity entity : nearby) {
-            state.flag(prefix + org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE.getId(entity.getType()));
+            state.flag(
+                    prefix
+                            + org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE
+                                    .getId(entity.getType()));
         }
     }
 
     private static void observeForms(ServerPlayerEntity player, OriginState state) {
-        var nearby = player.getWorld().getEntitiesByClass(LivingEntity.class, player.getBoundingBox().expand(8.0D),
-                entity -> entity != player && entity.isAlive());
+        var nearby =
+                player.getWorld()
+                        .getEntitiesByClass(
+                                LivingEntity.class,
+                                player.getBoundingBox().expand(8.0D),
+                                entity -> entity != player && entity.isAlive());
         for (LivingEntity entity : nearby) {
-            Identifier id = org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE.getId(entity.getType());
+            Identifier id =
+                    org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE.getId(
+                            entity.getType());
             String tickKey = "doppelganger.observe_ticks." + id;
             int ticks = state.addProgress(tickKey, 20);
-            if (ticks >= 200) state.flag("doppelganger.form_studied." + id); // 10 cumulative seconds
+            if (ticks >= 200)
+                state.flag("doppelganger.form_studied." + id); // 10 cumulative seconds
         }
     }
 
     public static boolean isHumanoid(LivingEntity entity) {
         if (entity == null) return false;
-        String path = org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE.getId(entity.getType()).getPath();
-        return path.contains("villager") || path.contains("illager") || path.contains("pillager")
-                || path.contains("vindicator") || path.contains("evoker") || path.contains("witch")
-                || path.contains("zombie") || path.contains("skeleton") || path.contains("piglin")
+        String path =
+                org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE
+                        .getId(entity.getType())
+                        .getPath();
+        return path.contains("villager")
+                || path.contains("illager")
+                || path.contains("pillager")
+                || path.contains("vindicator")
+                || path.contains("evoker")
+                || path.contains("witch")
+                || path.contains("zombie")
+                || path.contains("skeleton")
+                || path.contains("piglin")
                 || path.contains("player");
     }
-
 }

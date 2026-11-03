@@ -25,11 +25,9 @@ public final class AvengerDeathListState extends PersistentState {
     private final Map<UUID, PlayerLedger> players = new HashMap<>();
 
     public static AvengerDeathListState get(MinecraftServer server) {
-        return server.getOverworld().getPersistentStateManager().getOrCreate(
-                AvengerDeathListState::fromNbt,
-                AvengerDeathListState::new,
-                SAVE_ID
-        );
+        return server.getOverworld()
+                .getPersistentStateManager()
+                .getOrCreate(AvengerDeathListState::fromNbt, AvengerDeathListState::new, SAVE_ID);
     }
 
     public PlayerLedger ledger(UUID player) {
@@ -106,13 +104,16 @@ public final class AvengerDeathListState extends PersistentState {
             while (ledger.charges < MAX_SUMMON_CHARGES && nowMillis >= ledger.nextChargeAtMillis) {
                 ledger.charges++;
                 changed = true;
-                if (ledger.charges < MAX_SUMMON_CHARGES) ledger.nextChargeAtMillis += RECHARGE_MILLIS;
+                if (ledger.charges < MAX_SUMMON_CHARGES)
+                    ledger.nextChargeAtMillis += RECHARGE_MILLIS;
                 else ledger.nextChargeAtMillis = 0L;
             }
         }
         if (changed) markDirty();
-        long remaining = ledger.charges >= MAX_SUMMON_CHARGES || ledger.nextChargeAtMillis <= 0L
-                ? 0L : Math.max(0L, ledger.nextChargeAtMillis - nowMillis);
+        long remaining =
+                ledger.charges >= MAX_SUMMON_CHARGES || ledger.nextChargeAtMillis <= 0L
+                        ? 0L
+                        : Math.max(0L, ledger.nextChargeAtMillis - nowMillis);
         return new ChargeSnapshot(ledger.charges, remaining);
     }
 
@@ -122,7 +123,8 @@ public final class AvengerDeathListState extends PersistentState {
         PlayerLedger ledger = ledger(player);
         boolean wasFull = ledger.charges >= MAX_SUMMON_CHARGES;
         ledger.charges--;
-        if (wasFull || ledger.nextChargeAtMillis <= 0L) ledger.nextChargeAtMillis = nowMillis + RECHARGE_MILLIS;
+        if (wasFull || ledger.nextChargeAtMillis <= 0L)
+            ledger.nextChargeAtMillis = nowMillis + RECHARGE_MILLIS;
         markDirty();
         return true;
     }
@@ -153,9 +155,10 @@ public final class AvengerDeathListState extends PersistentState {
                 NbtCompound p = all.getCompound(key);
                 PlayerLedger ledger = new PlayerLedger();
                 ledger.awakened = p.getBoolean("Awakened");
-                ledger.charges = p.contains("Charges", NbtElement.NUMBER_TYPE)
-                        ? Math.max(0, Math.min(MAX_SUMMON_CHARGES, p.getInt("Charges")))
-                        : MAX_SUMMON_CHARGES;
+                ledger.charges =
+                        p.contains("Charges", NbtElement.NUMBER_TYPE)
+                                ? Math.max(0, Math.min(MAX_SUMMON_CHARGES, p.getInt("Charges")))
+                                : MAX_SUMMON_CHARGES;
                 ledger.nextChargeAtMillis = p.getLong("NextChargeAt");
                 readCounts(p.getCompound("Kills"), ledger.kills);
                 readCounts(p.getCompound("Souls"), ledger.souls);
@@ -169,9 +172,10 @@ public final class AvengerDeathListState extends PersistentState {
 
     private static NbtCompound writeCounts(Map<String, Integer> counts) {
         NbtCompound out = new NbtCompound();
-        counts.forEach((id, count) -> {
-            if (count != null && count > 0) out.putInt(id, count);
-        });
+        counts.forEach(
+                (id, count) -> {
+                    if (count != null && count > 0) out.putInt(id, count);
+                });
         return out;
     }
 
@@ -189,11 +193,25 @@ public final class AvengerDeathListState extends PersistentState {
         private final Map<String, Integer> kills = new HashMap<>();
         private final Map<String, Integer> souls = new HashMap<>();
 
-        public boolean awakened() { return awakened; }
-        public Map<String, Integer> kills() { return Collections.unmodifiableMap(kills); }
-        public Map<String, Integer> souls() { return Collections.unmodifiableMap(souls); }
-        public int charges() { return charges; }
-        public long nextChargeAtMillis() { return nextChargeAtMillis; }
+        public boolean awakened() {
+            return awakened;
+        }
+
+        public Map<String, Integer> kills() {
+            return Collections.unmodifiableMap(kills);
+        }
+
+        public Map<String, Integer> souls() {
+            return Collections.unmodifiableMap(souls);
+        }
+
+        public int charges() {
+            return charges;
+        }
+
+        public long nextChargeAtMillis() {
+            return nextChargeAtMillis;
+        }
     }
 
     public record ChargeSnapshot(int charges, long remainingMillis) {}

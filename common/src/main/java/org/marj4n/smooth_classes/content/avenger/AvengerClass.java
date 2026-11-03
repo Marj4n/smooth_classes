@@ -8,10 +8,21 @@ import java.util.List;
 
 public final class AvengerClass implements PlayerClass {
     public static final Identifier ID = SmoothClasses.id("avenger");
-    @Override public Identifier id() { return ID; }
-    @Override public String name() { return "Avenger"; }
-    @Override public String description() { return "Persistent Death List souls, bound summons, and soul magic controlled through H."; }
 
+    @Override
+    public Identifier id() {
+        return ID;
+    }
+
+    @Override
+    public String name() {
+        return "Avenger";
+    }
+
+    @Override
+    public String description() {
+        return "Persistent Death List souls, bound summons, and soul magic controlled through H.";
+    }
 
     @Override
     public List<Identifier> abilityIds() {

@@ -16,22 +16,48 @@ import org.marj4n.smooth_classes.config.SmoothBalance;
 /** Talent-aware runtime plan builder for Berserker. Actual Minecraft effects are executed by hooks/integrations. */
 public final class BerserkerRuntime {
     private BerserkerRuntime() {}
+
     private static void require(ServerPlayerEntity player) {
-        if (!AbilityRuntime.isClass(player, BerserkerClass.ID)) throw new IllegalStateException("Player is not Berserker");
+        if (!AbilityRuntime.isClass(player, BerserkerClass.ID))
+            throw new IllegalStateException("Player is not Berserker");
     }
-    private static boolean has(ServerPlayerEntity player, Identifier talent) { return AbilityRuntime.hasTalent(player, talent); }
+
+    private static boolean has(ServerPlayerEntity player, Identifier talent) {
+        return AbilityRuntime.hasTalent(player, talent);
+    }
 
     public record RampagePlan(boolean bloodlust, boolean relentless, boolean leap) {}
-    public static RampagePlan rampage(ServerPlayerEntity player) { require(player); return new RampagePlan(has(player, BerserkerContent.RAMPAGE_CHARGE.id()), has(player, BerserkerContent.RAMPAGE_CHARGE_RELENTLESS.id()), has(player, BerserkerContent.RAMPAGE_CHARGE_IMMOBILIZE.id())); }
-    public record BloodthirstyPlan(boolean heal, boolean frenzy) {}
-    public static BloodthirstyPlan bloodthirsty(ServerPlayerEntity player) { require(player); return new BloodthirstyPlan(has(player, BerserkerContent.BLOODTHIRSTY_MIGHTY.id()), has(player, BerserkerContent.BLOODTHIRSTY_TIRELESS.id())); }
-    public record BerserkingPlan(boolean resistance, boolean speed) {}
-    public static BerserkingPlan berserking(ServerPlayerEntity player) { require(player); return new BerserkingPlan(has(player, BerserkerContent.BERSERKING_LEAP.id()), has(player, BerserkerContent.BERSERKING_LEAP_PULL.id())); }
 
+    public static RampagePlan rampage(ServerPlayerEntity player) {
+        require(player);
+        return new RampagePlan(
+                has(player, BerserkerContent.RAMPAGE_CHARGE.id()),
+                has(player, BerserkerContent.RAMPAGE_CHARGE_RELENTLESS.id()),
+                has(player, BerserkerContent.RAMPAGE_CHARGE_IMMOBILIZE.id()));
+    }
+
+    public record BloodthirstyPlan(boolean heal, boolean frenzy) {}
+
+    public static BloodthirstyPlan bloodthirsty(ServerPlayerEntity player) {
+        require(player);
+        return new BloodthirstyPlan(
+                has(player, BerserkerContent.BLOODTHIRSTY_MIGHTY.id()),
+                has(player, BerserkerContent.BLOODTHIRSTY_TIRELESS.id()));
+    }
+
+    public record BerserkingPlan(boolean resistance, boolean speed) {}
+
+    public static BerserkingPlan berserking(ServerPlayerEntity player) {
+        require(player);
+        return new BerserkingPlan(
+                has(player, BerserkerContent.BERSERKING_LEAP.id()),
+                has(player, BerserkerContent.BERSERKING_LEAP_PULL.id()));
+    }
 
     public static ExecutionResult executeRampage(ServerPlayerEntity player) {
         RampagePlan plan = rampage(player);
-        ClassEffectRuntime.apply(player, SmoothEffects.RAMPAGE, SmoothBalance.Berserker.rampageDuration, 0);
+        ClassEffectRuntime.apply(
+                player, SmoothEffects.RAMPAGE, SmoothBalance.Berserker.rampageDuration, 0);
         if (plan.bloodlust()) {
             ClassEffectRuntime.apply(player, SmoothEffects.BULLRUSH, 20, 0);
             SkillFx.sound(player, "soundeffect_15", 0.5F, 1.1F);
@@ -41,8 +67,14 @@ public final class BerserkerRuntime {
 
     public static ExecutionResult executeBloodthirsty(ServerPlayerEntity player) {
         BloodthirstyPlan plan = bloodthirsty(player);
-        ClassEffectRuntime.apply(player, SmoothEffects.BLOODTHIRSTY, SmoothBalance.Berserker.bloodthirstyDuration, 0);
-        if (plan.heal()) ClassEffectRuntime.apply(player, SmoothEffects.MIGHT, SmoothBalance.Berserker.bloodthirstyDuration, 0);
+        ClassEffectRuntime.apply(
+                player,
+                SmoothEffects.BLOODTHIRSTY,
+                SmoothBalance.Berserker.bloodthirstyDuration,
+                0);
+        if (plan.heal())
+            ClassEffectRuntime.apply(
+                    player, SmoothEffects.MIGHT, SmoothBalance.Berserker.bloodthirstyDuration, 0);
         return ExecutionResult.success(1, "bloodthirsty");
     }
 
@@ -50,7 +82,8 @@ public final class BerserkerRuntime {
         BerserkingPlan plan = berserking(player);
         float sacrifice = player.getHealth() * 0.30F;
         player.damage(player.getDamageSources().generic(), sacrifice);
-        ClassEffectRuntime.apply(player, SmoothEffects.BERSERKING, Math.max(20, (int)(sacrifice * 20F)), 0);
+        ClassEffectRuntime.apply(
+                player, SmoothEffects.BERSERKING, Math.max(20, (int) (sacrifice * 20F)), 0);
         if (plan.resistance()) {
             ClassEffectRuntime.apply(player, SmoothEffects.LEAPSLAM, 62, 0);
             SkillFx.sound(player, "soundeffect_15", 0.5F, 1.1F);
@@ -61,15 +94,16 @@ public final class BerserkerRuntime {
     /** Rampage rewards taking real damage, not merely existing for another server tick. */
     public static void onRampageDamaged(ServerPlayerEntity player) {
         if (!player.hasStatusEffect(SmoothEffects.RAMPAGE)) return;
-        var random = switch (player.getRandom().nextInt(4)) {
-            case 0 -> StatusEffects.STRENGTH;
-            case 1 -> StatusEffects.SPEED;
-            case 2 -> StatusEffects.RESISTANCE;
-            default -> StatusEffects.HASTE;
-        };
+        var random =
+                switch (player.getRandom().nextInt(4)) {
+                    case 0 -> StatusEffects.STRENGTH;
+                    case 1 -> StatusEffects.SPEED;
+                    case 2 -> StatusEffects.RESISTANCE;
+                    default -> StatusEffects.HASTE;
+                };
         StatusEffectInstance current = player.getStatusEffect(random);
         int amplifier = current == null ? 0 : Math.min(2, current.getAmplifier() + 1);
-        player.addStatusEffect(new StatusEffectInstance(random, 150, amplifier, false, false, true));
+        player.addStatusEffect(
+                new StatusEffectInstance(random, 150, amplifier, false, false, true));
     }
-
 }

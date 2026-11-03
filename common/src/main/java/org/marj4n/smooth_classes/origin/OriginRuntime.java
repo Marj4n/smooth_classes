@@ -37,138 +37,189 @@ import java.util.UUID;
  * the save format.
  */
 public final class OriginRuntime {
-    private static final UUID HEALTH_MODIFIER = UUID.fromString("b2e7342c-3c2b-4c72-8f8a-3706118b0a11");
-    private static final UUID SPEED_MODIFIER = UUID.fromString("54c3f7bd-c230-4e62-9b3e-6f2a85220631");
-    private static final UUID ARMOR_MODIFIER = UUID.fromString("7f8d2218-2d6d-4a76-8e68-bd01c4da6c81");
-    private static final UUID ATTACK_MODIFIER = UUID.fromString("de04d8a8-6348-43e7-bc6e-9decb459df81");
-    private static final UUID KNOCKBACK_MODIFIER = UUID.fromString("b0c239e2-7df8-478b-aa2f-99308345ef51");
+    private static final UUID HEALTH_MODIFIER =
+            UUID.fromString("b2e7342c-3c2b-4c72-8f8a-3706118b0a11");
+    private static final UUID SPEED_MODIFIER =
+            UUID.fromString("54c3f7bd-c230-4e62-9b3e-6f2a85220631");
+    private static final UUID ARMOR_MODIFIER =
+            UUID.fromString("7f8d2218-2d6d-4a76-8e68-bd01c4da6c81");
+    private static final UUID ATTACK_MODIFIER =
+            UUID.fromString("de04d8a8-6348-43e7-bc6e-9decb459df81");
+    private static final UUID KNOCKBACK_MODIFIER =
+            UUID.fromString("b0c239e2-7df8-478b-aa2f-99308345ef51");
 
     private OriginRuntime() {}
 
     public static void register() {
-        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> server.execute(() -> {
-            ServerPlayerEntity player = handler.player;
-            ensureSelectedCategory(player);
-            if (state(player).origin() != OriginType.HUMAN) {
-                OriginProgressUnlocks.sync(player, state(player));
-            }
-            SmoothClassesNetworking.sendOriginState(player);
-            if (!state(player).hasOrigin()) {
-                if (!player.isCreative()) player.setInvulnerable(true);
-                SmoothClassesNetworking.openOriginSelection(player);
-            }
-        }));
+        ServerPlayConnectionEvents.JOIN.register(
+                (handler, sender, server) ->
+                        server.execute(
+                                () -> {
+                                    ServerPlayerEntity player = handler.player;
+                                    ensureSelectedCategory(player);
+                                    if (state(player).origin() != OriginType.HUMAN) {
+                                        OriginProgressUnlocks.sync(player, state(player));
+                                    }
+                                    SmoothClassesNetworking.sendOriginState(player);
+                                    if (!state(player).hasOrigin()) {
+                                        if (!player.isCreative()) player.setInvulnerable(true);
+                                        SmoothClassesNetworking.openOriginSelection(player);
+                                    }
+                                }));
 
         // Respawn creates a new PlayerEntity with the same UUID. Re-apply Origin
         // biology on the new entity and broadcast its cleared form to all clients.
-        ServerPlayerEvents.AFTER_RESPAWN.register((previous, respawned, alive) -> {
-            OriginState restored = state(respawned);
-            if (!alive) VampireFormRespawnRuntime.clear(restored);
-            if (restored.origin() != null) {
-                HomunculusAccessories.updateAttributes(respawned);
-                applyAttributes(respawned, restored.origin());
-                respawned.calculateDimensions();
-                ensureSelectedCategory(respawned);
-            }
-            SmoothClassesNetworking.sendOriginState(respawned);
-        });
-
-        ServerTickEvents.END_SERVER_TICK.register(server -> {
-            for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
-                tick(player);
-            }
-        });
-
-        UseEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
-            if (world.isClient || !(player instanceof ServerPlayerEntity serverPlayer)) return ActionResult.PASS;
-            OriginState state = state(serverPlayer);
-            if (state.origin() != OriginType.VAMPIRE || !(entity instanceof LivingEntity living)) return ActionResult.PASS;
-            if (!living.isAlive() || living == serverPlayer) return ActionResult.PASS;
-            boolean transformed = state.hasFlag("vampire.form.bat") || state.hasFlag("vampire.form.man_bat");
-            boolean biteable = VampireBloodReserve.isFeedable(living);
-            if (transformed || !biteable) return ActionResult.PASS;
-
-            // Direct bottle collection stays on sneak-right-click. Normal feeding is hold-to-feed
-            // and is handled by VampireFeedingRuntime, matching the Vampirism interaction loop.
-            ItemStack held = serverPlayer.getStackInHand(hand);
-            boolean bottleDirect = serverPlayer.isSneaking() && held.isOf(Items.GLASS_BOTTLE)
-                    && OriginSkillRuntime.unlocked(serverPlayer, OriginType.VAMPIRE, "blood_flask");
-            if (!bottleDirect) {
-                // Empty-hand use is reserved for hold-to-feed so villagers/animals do not
-                // open their normal interaction UI while the fang reticle is active.
-                if (held.isEmpty()) return ActionResult.SUCCESS;
-                return ActionResult.PASS;
-            }
-
-            if (!VampireBloodReserve.consume(living, serverPlayer)) {
-                serverPlayer.sendMessage(Text.literal("This creature needs time to replenish its blood."), true);
-                return ActionResult.SUCCESS;
-            }
-            if (!serverPlayer.isCreative()) held.decrement(1);
-            ItemStack bottle = createBloodFlask();
-            if (!serverPlayer.getInventory().insertStack(bottle)) serverPlayer.dropItem(bottle, false);
-            state.lastFeedTick(serverPlayer.age);
-            OriginProgressTracker.onVampireFeed(serverPlayer, living, 30);
-            serverPlayer.getWorld().playSound(null, serverPlayer.getBlockPos(),
-                    org.marj4n.smooth_classes.registry.SmoothSounds.get("origin_vampire_bite"),
-                    net.minecraft.sound.SoundCategory.PLAYERS, 0.8F, 1.0F);
-            SmoothClassesNetworking.sendOriginState(serverPlayer);
-            return ActionResult.SUCCESS;
-        });
-
-        UseItemCallback.EVENT.register((player, world, hand) -> {
-            ItemStack stack = player.getStackInHand(hand);
-            if (world.isClient || !(player instanceof ServerPlayerEntity serverPlayer)) {
-                return TypedActionResult.pass(stack);
-            }
-
-            OriginState originState = state(serverPlayer);
-            OriginType origin = originState.origin();
-
-            if (origin == OriginType.VAMPIRE
-                    && originState.hasFlag("vampire.form.bat")
-                    && !stack.isEmpty()) {
-                // The tiny Bat still has no usable hands. Man-Bat uses the
-                // source avatar's actual claw/item pivots and may use items.
-                return TypedActionResult.fail(stack);
-            }
-
-            if (origin == OriginType.VAMPIRE && OriginSkillRuntime.unlocked(serverPlayer, OriginType.VAMPIRE, "blood_flask")) {
-                if (isBloodFlask(stack)) {
-                    originState.blood(Math.min(vampireBloodCapacity(serverPlayer), originState.blood() + 30));
-                    if (!serverPlayer.isCreative()) {
-                        stack.decrement(1);
-                        ItemStack bottle = new ItemStack(Items.GLASS_BOTTLE);
-                        if (!serverPlayer.getInventory().insertStack(bottle)) serverPlayer.dropItem(bottle, false);
+        ServerPlayerEvents.AFTER_RESPAWN.register(
+                (previous, respawned, alive) -> {
+                    OriginState restored = state(respawned);
+                    if (!alive) VampireFormRespawnRuntime.clear(restored);
+                    if (restored.origin() != null) {
+                        HomunculusAccessories.updateAttributes(respawned);
+                        applyAttributes(respawned, restored.origin());
+                        respawned.calculateDimensions();
+                        ensureSelectedCategory(respawned);
                     }
-                    serverPlayer.heal(2.0F);
-                    SmoothClassesNetworking.sendOriginState(serverPlayer);
-                    serverPlayer.sendMessage(Text.literal("Blood " + originState.blood() + "/" + vampireBloodCapacity(serverPlayer)), true);
-                    return TypedActionResult.success(stack, false);
-                }
-                if (serverPlayer.isSneaking() && stack.isOf(Items.GLASS_BOTTLE) && originState.blood() >= 30) {
-                    originState.blood(originState.blood() - 30);
-                    if (!serverPlayer.isCreative()) stack.decrement(1);
-                    ItemStack flask = createBloodFlask();
-                    if (!serverPlayer.getInventory().insertStack(flask)) serverPlayer.dropItem(flask, false);
-                    SmoothClassesNetworking.sendOriginState(serverPlayer);
-                    return TypedActionResult.success(stack, false);
-                }
-            }
+                    SmoothClassesNetworking.sendOriginState(respawned);
+                });
 
-            if (!stack.isFood()) return TypedActionResult.pass(stack);
+        ServerTickEvents.END_SERVER_TICK.register(
+                server -> {
+                    for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
+                        tick(player);
+                    }
+                });
 
-            OriginProgressTracker.onFoodUse(serverPlayer, stack);
-            if (origin == OriginType.VAMPIRE) {
-                if (!serverPlayer.isCreative()) stack.decrement(1);
-                originState.blood(originState.blood() - 5);
-                serverPlayer.addStatusEffect(new StatusEffectInstance(StatusEffects.NAUSEA, 20 * 6, 0, false, false, true));
-                serverPlayer.addStatusEffect(new StatusEffectInstance(StatusEffects.POISON, 20 * 3, 0, false, false, true));
-                serverPlayer.sendMessage(Text.literal("Your body rejects mortal food."), true);
-                return TypedActionResult.success(stack, false);
-            }
-            return TypedActionResult.pass(stack);
-        });
+        UseEntityCallback.EVENT.register(
+                (player, world, hand, entity, hitResult) -> {
+                    if (world.isClient || !(player instanceof ServerPlayerEntity serverPlayer))
+                        return ActionResult.PASS;
+                    OriginState state = state(serverPlayer);
+                    if (state.origin() != OriginType.VAMPIRE
+                            || !(entity instanceof LivingEntity living)) return ActionResult.PASS;
+                    if (!living.isAlive() || living == serverPlayer) return ActionResult.PASS;
+                    boolean transformed =
+                            state.hasFlag("vampire.form.bat")
+                                    || state.hasFlag("vampire.form.man_bat");
+                    boolean biteable = VampireBloodReserve.isFeedable(living);
+                    if (transformed || !biteable) return ActionResult.PASS;
+
+                    // Direct bottle collection stays on sneak-right-click. Normal feeding is
+                    // hold-to-feed
+                    // and is handled by VampireFeedingRuntime, matching the Vampirism interaction
+                    // loop.
+                    ItemStack held = serverPlayer.getStackInHand(hand);
+                    boolean bottleDirect =
+                            serverPlayer.isSneaking()
+                                    && held.isOf(Items.GLASS_BOTTLE)
+                                    && OriginSkillRuntime.unlocked(
+                                            serverPlayer, OriginType.VAMPIRE, "blood_flask");
+                    if (!bottleDirect) {
+                        // Empty-hand use is reserved for hold-to-feed so villagers/animals do not
+                        // open their normal interaction UI while the fang reticle is active.
+                        if (held.isEmpty()) return ActionResult.SUCCESS;
+                        return ActionResult.PASS;
+                    }
+
+                    if (!VampireBloodReserve.consume(living, serverPlayer)) {
+                        serverPlayer.sendMessage(
+                                Text.literal("This creature needs time to replenish its blood."),
+                                true);
+                        return ActionResult.SUCCESS;
+                    }
+                    if (!serverPlayer.isCreative()) held.decrement(1);
+                    ItemStack bottle = createBloodFlask();
+                    if (!serverPlayer.getInventory().insertStack(bottle))
+                        serverPlayer.dropItem(bottle, false);
+                    state.lastFeedTick(serverPlayer.age);
+                    OriginProgressTracker.onVampireFeed(serverPlayer, living, 30);
+                    serverPlayer
+                            .getWorld()
+                            .playSound(
+                                    null,
+                                    serverPlayer.getBlockPos(),
+                                    org.marj4n.smooth_classes.registry.SmoothSounds.get(
+                                            "origin_vampire_bite"),
+                                    net.minecraft.sound.SoundCategory.PLAYERS,
+                                    0.8F,
+                                    1.0F);
+                    SmoothClassesNetworking.sendOriginState(serverPlayer);
+                    return ActionResult.SUCCESS;
+                });
+
+        UseItemCallback.EVENT.register(
+                (player, world, hand) -> {
+                    ItemStack stack = player.getStackInHand(hand);
+                    if (world.isClient || !(player instanceof ServerPlayerEntity serverPlayer)) {
+                        return TypedActionResult.pass(stack);
+                    }
+
+                    OriginState originState = state(serverPlayer);
+                    OriginType origin = originState.origin();
+
+                    if (origin == OriginType.VAMPIRE
+                            && originState.hasFlag("vampire.form.bat")
+                            && !stack.isEmpty()) {
+                        // The tiny Bat still has no usable hands. Man-Bat uses the
+                        // source avatar's actual claw/item pivots and may use items.
+                        return TypedActionResult.fail(stack);
+                    }
+
+                    if (origin == OriginType.VAMPIRE
+                            && OriginSkillRuntime.unlocked(
+                                    serverPlayer, OriginType.VAMPIRE, "blood_flask")) {
+                        if (isBloodFlask(stack)) {
+                            originState.blood(
+                                    Math.min(
+                                            vampireBloodCapacity(serverPlayer),
+                                            originState.blood() + 30));
+                            if (!serverPlayer.isCreative()) {
+                                stack.decrement(1);
+                                ItemStack bottle = new ItemStack(Items.GLASS_BOTTLE);
+                                if (!serverPlayer.getInventory().insertStack(bottle))
+                                    serverPlayer.dropItem(bottle, false);
+                            }
+                            serverPlayer.heal(2.0F);
+                            SmoothClassesNetworking.sendOriginState(serverPlayer);
+                            serverPlayer.sendMessage(
+                                    Text.literal(
+                                            "Blood "
+                                                    + originState.blood()
+                                                    + "/"
+                                                    + vampireBloodCapacity(serverPlayer)),
+                                    true);
+                            return TypedActionResult.success(stack, false);
+                        }
+                        if (serverPlayer.isSneaking()
+                                && stack.isOf(Items.GLASS_BOTTLE)
+                                && originState.blood() >= 30) {
+                            originState.blood(originState.blood() - 30);
+                            if (!serverPlayer.isCreative()) stack.decrement(1);
+                            ItemStack flask = createBloodFlask();
+                            if (!serverPlayer.getInventory().insertStack(flask))
+                                serverPlayer.dropItem(flask, false);
+                            SmoothClassesNetworking.sendOriginState(serverPlayer);
+                            return TypedActionResult.success(stack, false);
+                        }
+                    }
+
+                    if (!stack.isFood()) return TypedActionResult.pass(stack);
+
+                    OriginProgressTracker.onFoodUse(serverPlayer, stack);
+                    if (origin == OriginType.VAMPIRE) {
+                        if (!serverPlayer.isCreative()) stack.decrement(1);
+                        originState.blood(originState.blood() - 5);
+                        serverPlayer.addStatusEffect(
+                                new StatusEffectInstance(
+                                        StatusEffects.NAUSEA, 20 * 6, 0, false, false, true));
+                        serverPlayer.addStatusEffect(
+                                new StatusEffectInstance(
+                                        StatusEffects.POISON, 20 * 3, 0, false, false, true));
+                        serverPlayer.sendMessage(
+                                Text.literal("Your body rejects mortal food."), true);
+                        return TypedActionResult.success(stack, false);
+                    }
+                    return TypedActionResult.pass(stack);
+                });
     }
 
     public static OriginState state(ServerPlayerEntity player) {
@@ -200,7 +251,8 @@ public final class OriginRuntime {
         applyAttributes(player, origin);
         player.calculateDimensions();
         if (origin == OriginType.VAMPIRE) VampireGraveSpawn.awakenOnce(player, state(player));
-        if (origin == OriginType.DEMON) org.marj4n.smooth_classes.origin.demon.DemonBirth.begin(player);
+        if (origin == OriginType.DEMON)
+            org.marj4n.smooth_classes.origin.demon.DemonBirth.begin(player);
         SmoothClassesNetworking.sendOriginState(player);
         player.sendMessage(Text.literal("Origin Chosen: " + origin.displayName()), false);
         player.sendMessage(Text.literal(origin.subtitle()), true);
@@ -232,16 +284,23 @@ public final class OriginRuntime {
         OriginState state = state(player);
         if (state.origin() != OriginType.HUMAN) OriginProgressTracker.onKill(player, victim);
         if (state.origin() == OriginType.UNDEAD) {
-            int gain = victim.getMaxHealth() >= 100 ? 30 : victim.getMaxHealth() >= 40 ? 15 : victim.getMaxHealth() >= 20 ? 8 : 5;
+            int gain =
+                    victim.getMaxHealth() >= 100
+                            ? 30
+                            : victim.getMaxHealth() >= 40
+                                    ? 15
+                                    : victim.getMaxHealth() >= 20 ? 8 : 5;
             state.soul(state.soul() + gain);
             state.addProgress("undead.soul_harvested", gain);
-            if (player.age % 5 == 0) player.sendMessage(Text.literal("Soul Hunger " + state.soul() + "%"), true);
+            if (player.age % 5 == 0)
+                player.sendMessage(Text.literal("Soul Hunger " + state.soul() + "%"), true);
         }
         SmoothClassesNetworking.sendOriginState(player);
     }
 
     /** Damage gates that are genuinely biological rather than class defenses. */
-    public static boolean allowIncomingDamage(ServerPlayerEntity player, DamageSource source, float amount) {
+    public static boolean allowIncomingDamage(
+            ServerPlayerEntity player, DamageSource source, float amount) {
         OriginState state = state(player);
         OriginType origin = state.origin();
         if (origin == null) return true;
@@ -256,7 +315,9 @@ public final class OriginRuntime {
             return state.blood() <= 0;
         }
 
-        if (origin == OriginType.DEMON && org.marj4n.smooth_classes.origin.demon.DemonBiology.protectFire(player, source)) return false;
+        if (origin == OriginType.DEMON
+                && org.marj4n.smooth_classes.origin.demon.DemonBiology.protectFire(player, source))
+            return false;
         if (origin == OriginType.SLIME && source.isIn(DamageTypeTags.IS_FALL)) {
             return false;
         }
@@ -286,7 +347,7 @@ public final class OriginRuntime {
             case VOID -> tickVoid(player, state);
             case UNDEAD -> tickUndead(player, state);
             case SPRIGGAN -> tickSpriggan(player, state);
-            default -> { }
+            default -> {}
         }
 
         if (player.age % 20 == 0) {
@@ -309,7 +370,8 @@ public final class OriginRuntime {
         if (player.getHungerManager().getFoodLevel() != 20) {
             player.getHungerManager().setFoodLevel(20);
         }
-        player.addStatusEffect(new StatusEffectInstance(StatusEffects.NIGHT_VISION, 240, 0, false, false, false));
+        player.addStatusEffect(
+                new StatusEffectInstance(StatusEffects.NIGHT_VISION, 240, 0, false, false, false));
 
         long coffinUntil = state.longProgress("vampire.coffin_rest_until");
         if (coffinUntil > 0L) {
@@ -317,8 +379,12 @@ public final class OriginRuntime {
             if (now < coffinUntil) {
                 player.setVelocity(0.0D, 0.0D, 0.0D);
                 player.velocityModified = true;
-                player.addStatusEffect(new StatusEffectInstance(StatusEffects.BLINDNESS, 10, 0, false, false, false));
-                player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 10, 10, false, false, false));
+                player.addStatusEffect(
+                        new StatusEffectInstance(
+                                StatusEffects.BLINDNESS, 10, 0, false, false, false));
+                player.addStatusEffect(
+                        new StatusEffectInstance(
+                                StatusEffects.SLOWNESS, 10, 10, false, false, false));
             } else {
                 state.longProgress("vampire.coffin_rest_until", 0L);
                 long day = player.getWorld().getTimeOfDay();
@@ -356,13 +422,17 @@ public final class OriginRuntime {
         // actual rain/thunder and the local Raining Blood cloud shield sunlight.
         // Use the rain at this position, not just a global weather flag, so dry
         // biomes do not gain rain protection accidentally.
-        boolean stormShelter = VampireSunlightRules.weatherSheltered(
-                player.getWorld().hasRain(player.getBlockPos()),
-                player.getWorld().isThundering(),
-                org.marj4n.smooth_classes.runtime.BloodRainRuntime.shelters(player));
-        boolean exposed = VampireSunlightRules.exposedToSunlight(
-                batForm, player.getWorld().isDay(),
-                player.getWorld().isSkyVisible(player.getBlockPos()), stormShelter);
+        boolean stormShelter =
+                VampireSunlightRules.weatherSheltered(
+                        player.getWorld().hasRain(player.getBlockPos()),
+                        player.getWorld().isThundering(),
+                        org.marj4n.smooth_classes.runtime.BloodRainRuntime.shelters(player));
+        boolean exposed =
+                VampireSunlightRules.exposedToSunlight(
+                        batForm,
+                        player.getWorld().isDay(),
+                        player.getWorld().isSkyVisible(player.getBlockPos()),
+                        stormShelter);
         boolean lord = OriginSkillRuntime.unlocked(player, OriginType.VAMPIRE, "final");
         if (stormShelter) {
             // Stop active daylight punishment at once when sheltering weather
@@ -396,18 +466,23 @@ public final class OriginRuntime {
             }
         } else {
             int sun = state.sunExposure();
-            boolean tolerant = OriginSkillRuntime.unlocked(player, OriginType.VAMPIRE, "sun_tolerance");
+            boolean tolerant =
+                    OriginSkillRuntime.unlocked(player, OriginType.VAMPIRE, "sun_tolerance");
             int slowAt = tolerant ? 70 : 50;
             int weakAt = tolerant ? 90 : 75;
-            if (sun >= slowAt) applySunlightEffect(player, state, StatusEffects.SLOWNESS, "vampire.sunlight.slow");
-            if (sun >= weakAt) applySunlightEffect(player, state, StatusEffects.WEAKNESS, "vampire.sunlight.weak");
+            if (sun >= slowAt)
+                applySunlightEffect(player, state, StatusEffects.SLOWNESS, "vampire.sunlight.slow");
+            if (sun >= weakAt)
+                applySunlightEffect(player, state, StatusEffects.WEAKNESS, "vampire.sunlight.weak");
             if (sun >= 100 && player.age % (tolerant ? 40 : 20) == 0) player.setOnFireFor(1);
         }
 
         if (player.age % 200 == 0) {
             state.blood(state.blood() - 1);
             if (state.blood() == 0) {
-                player.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS, 220, 0, false, false, true));
+                player.addStatusEffect(
+                        new StatusEffectInstance(
+                                StatusEffects.WEAKNESS, 220, 0, false, false, true));
             }
         }
 
@@ -416,25 +491,33 @@ public final class OriginRuntime {
         // is truly empty, at vanilla's 80-tick starvation cadence. Like vanilla
         // survival starvation, Easy won't reduce health below 5 hearts and
         // Normal won't reduce it below half a heart; Hard can be fatal.
-        if (state.blood() == 0 && player.age % 80 == 0
-                && VampireBloodMetabolism.canStarve(state.blood(),
-                        player.getWorld().getDifficulty(), player.getHealth())) {
+        if (state.blood() == 0
+                && player.age % 80 == 0
+                && VampireBloodMetabolism.canStarve(
+                        state.blood(), player.getWorld().getDifficulty(), player.getHealth())) {
             player.damage(player.getDamageSources().starve(), 1.0F);
         }
 
         // Base Vampire recovery uses Blood rather than the invisible vanilla
         // food/saturation bar. Man-Bat has its own faster Blood-powered recovery;
         // don't add another heal on top of its existing regeneration.
-        if (!manBatForm && state.blood() > 0
-                && player.getWorld().getGameRules().getBoolean(net.minecraft.world.GameRules.NATURAL_REGENERATION)
-                && player.getHealth() < player.getMaxHealth() && player.age % 80 == 0) {
+        if (!manBatForm
+                && state.blood() > 0
+                && player.getWorld()
+                        .getGameRules()
+                        .getBoolean(net.minecraft.world.GameRules.NATURAL_REGENERATION)
+                && player.getHealth() < player.getMaxHealth()
+                && player.age % 80 == 0) {
             player.heal(1.0F);
         }
     }
 
     /** Track only the debuffs applied by our sunlight mechanic. */
-    private static void applySunlightEffect(ServerPlayerEntity player, OriginState state,
-                                            net.minecraft.entity.effect.StatusEffect effect, String marker) {
+    private static void applySunlightEffect(
+            ServerPlayerEntity player,
+            OriginState state,
+            net.minecraft.entity.effect.StatusEffect effect,
+            String marker) {
         player.addStatusEffect(new StatusEffectInstance(effect, 30, 0, false, false, true));
         state.flag(marker);
     }
@@ -448,16 +531,23 @@ public final class OriginRuntime {
         clearSunlightEffect(player, state, StatusEffects.WEAKNESS, "vampire.sunlight.weak");
     }
 
-    private static void clearSunlightEffect(ServerPlayerEntity player, OriginState state,
-                                            net.minecraft.entity.effect.StatusEffect effect, String marker) {
+    private static void clearSunlightEffect(
+            ServerPlayerEntity player,
+            OriginState state,
+            net.minecraft.entity.effect.StatusEffect effect,
+            String marker) {
         if (!state.hasFlag(marker)) return;
         state.unflag(marker);
         StatusEffectInstance current = player.getStatusEffect(effect);
         // Our daylight effects are amplifier 0, at most 30 ticks, nonambient,
         // particles hidden, and icon visible. Do not clear an unrelated effect.
-        if (current != null && VampireSunlightRules.isShortSunlightEffect(
-                current.getAmplifier(), current.getDuration(), current.isAmbient(),
-                current.shouldShowParticles(), current.shouldShowIcon())) {
+        if (current != null
+                && VampireSunlightRules.isShortSunlightEffect(
+                        current.getAmplifier(),
+                        current.getDuration(),
+                        current.isAmbient(),
+                        current.shouldShowParticles(),
+                        current.shouldShowIcon())) {
             player.removeStatusEffect(effect);
         }
     }
@@ -472,12 +562,17 @@ public final class OriginRuntime {
             int wetness = state.wetnessTicks();
             if (wetness <= 60 * 20) {
                 // An unevolved Mermaid cannot regenerate normally while drying out.
-                player.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS, 30, 0, false, false, true));
+                player.addStatusEffect(
+                        new StatusEffectInstance(
+                                StatusEffects.WEAKNESS, 30, 0, false, false, true));
             }
             if (wetness <= 30 * 20) {
-                player.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 30, 1, false, false, true));
+                player.addStatusEffect(
+                        new StatusEffectInstance(
+                                StatusEffects.SLOWNESS, 30, 1, false, false, true));
             }
-            if (wetness == 0 && player.age % 20 == 0
+            if (wetness == 0
+                    && player.age % 20 == 0
                     && !OriginSkillRuntime.unlocked(player, OriginType.MERMAID, "landwalker")) {
                 player.damage(player.getDamageSources().generic(), 1.0F);
             }
@@ -507,7 +602,8 @@ public final class OriginRuntime {
             state.flag("slime.airborne");
             if (velocity.y < -0.18D) {
                 int strength = Math.min(100, (int) Math.round(Math.abs(velocity.y) * 100.0D));
-                if (strength > state.progress("slime.fall_strength")) state.progress("slime.fall_strength", strength);
+                if (strength > state.progress("slime.fall_strength"))
+                    state.progress("slime.fall_strength", strength);
             }
         } else if (state.hasFlag("slime.airborne")) {
             int strength = state.progress("slime.fall_strength");
@@ -523,8 +619,14 @@ public final class OriginRuntime {
         }
 
         // Small automatic hop cadence while moving on land, close to a vanilla Slime's rhythm.
-        if (player.isOnGround() && !player.isSneaking() && horizontal > 0.0008D && (player.age % 12) == 0) {
-            double hop = state.hasFlag("slime.size.large") ? 0.38D : state.hasFlag("slime.size.small") ? 0.48D : 0.42D;
+        if (player.isOnGround()
+                && !player.isSneaking()
+                && horizontal > 0.0008D
+                && (player.age % 12) == 0) {
+            double hop =
+                    state.hasFlag("slime.size.large")
+                            ? 0.38D
+                            : state.hasFlag("slime.size.small") ? 0.48D : 0.42D;
             player.setVelocity(velocity.x, hop, velocity.z);
             player.velocityModified = true;
         }
@@ -557,12 +659,14 @@ public final class OriginRuntime {
 
     private static void tickVoid(ServerPlayerEntity player, OriginState state) {
         if (player.isTouchingWaterOrRain()) {
-            if (player.age % 10 == 0) state.instability(state.instability() + (player.isSubmergedInWater() ? 3 : 1));
+            if (player.age % 10 == 0)
+                state.instability(state.instability() + (player.isSubmergedInWater() ? 3 : 1));
         } else if (player.age % 10 == 0) {
             state.instability(state.instability() - 1);
         }
         if (state.instability() >= 100) {
-            player.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS, 30, 0, false, false, true));
+            player.addStatusEffect(
+                    new StatusEffectInstance(StatusEffects.WEAKNESS, 30, 0, false, false, true));
         }
     }
 
@@ -580,7 +684,10 @@ public final class OriginRuntime {
             // actual tree absorption comes with the Worldroot interaction pass.
             if (player.age % (20 * 8) == 0 && state.livingMass() > 0) {
                 state.livingMass(state.livingMass() - 1);
-                player.sendMessage(Text.literal("A burning branch was lost. Living Mass: " + state.livingMass()), true);
+                player.sendMessage(
+                        Text.literal(
+                                "A burning branch was lost. Living Mass: " + state.livingMass()),
+                        true);
                 applyAttributes(player, OriginType.SPRIGGAN);
             }
         }
@@ -588,7 +695,8 @@ public final class OriginRuntime {
 
     /** Apply the current vampire form health cap immediately during morph transitions. */
     static void refreshVampireAttributes(ServerPlayerEntity player) {
-        if (state(player).origin() == OriginType.VAMPIRE) applyAttributes(player, OriginType.VAMPIRE);
+        if (state(player).origin() == OriginType.VAMPIRE)
+            applyAttributes(player, OriginType.VAMPIRE);
     }
 
     private static void applyAttributes(ServerPlayerEntity player, OriginType origin) {
@@ -606,13 +714,16 @@ public final class OriginRuntime {
         double knockback = 0.0;
 
         switch (origin) {
-            case HUMAN -> { }
+            case HUMAN -> {}
             case VAMPIRE -> {
                 boolean lord = OriginSkillRuntime.unlocked(player, OriginType.VAMPIRE, "final");
                 boolean bat = state.hasFlag("vampire.form.bat");
                 boolean manBat = state.hasFlag("vampire.form.man_bat");
                 health = lord ? -2.0 : -5.0;
-                if (night) { speed = 0.12; attack = 0.08; }
+                if (night) {
+                    speed = 0.12;
+                    attack = 0.08;
+                }
                 if (bat) {
                     health -= 8.0;
                     speed += 0.35;
@@ -635,16 +746,28 @@ public final class OriginRuntime {
                 boolean queen = OriginSkillRuntime.unlocked(player, OriginType.MERMAID, "final");
                 health = queen ? -2.0 : -4.0;
                 if (player.isSubmergedInWater()) {
-                    speed = OriginSkillRuntime.unlocked(player, OriginType.MERMAID, "sea_kinship") ? 0.40 : 0.25;
+                    speed =
+                            OriginSkillRuntime.unlocked(player, OriginType.MERMAID, "sea_kinship")
+                                    ? 0.40
+                                    : 0.25;
                     armor = queen ? 6.0 : 4.0;
                 }
             }
-            case DEMON -> { /* All infernal biology lives in the Demon runtime. */ }
-            case ANGEL -> { health = -4.0; speed = 0.05; knockback = -0.10; }
+            case DEMON -> {
+                /* All infernal biology lives in the Demon runtime. */
+            }
+            case ANGEL -> {
+                health = -4.0;
+                speed = 0.05;
+                knockback = -0.10;
+            }
             case SLIME -> {
                 boolean sovereign = OriginSkillRuntime.unlocked(player, OriginType.SLIME, "final");
                 health = sovereign ? 0.0 : -4.0;
-                speed = state.hasFlag("slime.size.small") ? 0.22 : state.hasFlag("slime.size.large") ? -0.12 : 0.05;
+                speed =
+                        state.hasFlag("slime.size.small")
+                                ? 0.22
+                                : state.hasFlag("slime.size.large") ? -0.12 : 0.05;
                 armor = state.hasFlag("slime.size.large") ? 4.0 : 0.0;
                 knockback = state.hasFlag("slime.size.large") ? 0.35 : -0.20;
             }
@@ -655,12 +778,31 @@ public final class OriginRuntime {
             }
             case UNDEAD -> {
                 int mass = state.boneMass();
-                if (mass < 25) { health = -8.0; speed = 0.05; }
-                else if (mass < 50) { health = -4.0; speed = 0.02; armor = 2; }
-                else if (mass < 75) { health = 0.0; speed = -0.03; armor = 4; }
-                else if (mass < 100) { health = 4.0; speed = -0.08; armor = 6; }
-                else if (mass < 150) { health = 8.0; speed = -0.15; armor = 8; }
-                else { health = 12.0; speed = -0.25; armor = 10; knockback = 0.40; }
+                if (mass < 25) {
+                    health = -8.0;
+                    speed = 0.05;
+                } else if (mass < 50) {
+                    health = -4.0;
+                    speed = 0.02;
+                    armor = 2;
+                } else if (mass < 75) {
+                    health = 0.0;
+                    speed = -0.03;
+                    armor = 4;
+                } else if (mass < 100) {
+                    health = 4.0;
+                    speed = -0.08;
+                    armor = 6;
+                } else if (mass < 150) {
+                    health = 8.0;
+                    speed = -0.15;
+                    armor = 8;
+                } else {
+                    health = 12.0;
+                    speed = -0.25;
+                    armor = 10;
+                    knockback = 0.40;
+                }
             }
             case SPRIGGAN -> {
                 int mass = state.livingMass();
@@ -669,20 +811,58 @@ public final class OriginRuntime {
                 speed = -0.05 - (mass * 0.023);
                 knockback = Math.min(0.50, mass * 0.05);
             }
-            case DOPPELGANGER -> { health = -2.0; speed = 0.02; }
+            case DOPPELGANGER -> {
+                health = -2.0;
+                speed = 0.02;
+            }
         }
 
-        setModifier(player, EntityAttributes.GENERIC_MAX_HEALTH, HEALTH_MODIFIER, "Smooth Classes Origin Health", health, EntityAttributeModifier.Operation.ADDITION);
-        setModifier(player, EntityAttributes.GENERIC_MOVEMENT_SPEED, SPEED_MODIFIER, "Smooth Classes Origin Speed", speed, EntityAttributeModifier.Operation.MULTIPLY_TOTAL);
-        setModifier(player, EntityAttributes.GENERIC_ARMOR, ARMOR_MODIFIER, "Smooth Classes Origin Armor", armor, EntityAttributeModifier.Operation.ADDITION);
-        setModifier(player, EntityAttributes.GENERIC_ATTACK_DAMAGE, ATTACK_MODIFIER, "Smooth Classes Origin Attack", attack, EntityAttributeModifier.Operation.MULTIPLY_TOTAL);
-        setModifier(player, EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, KNOCKBACK_MODIFIER, "Smooth Classes Origin Knockback", knockback, EntityAttributeModifier.Operation.ADDITION);
+        setModifier(
+                player,
+                EntityAttributes.GENERIC_MAX_HEALTH,
+                HEALTH_MODIFIER,
+                "Smooth Classes Origin Health",
+                health,
+                EntityAttributeModifier.Operation.ADDITION);
+        setModifier(
+                player,
+                EntityAttributes.GENERIC_MOVEMENT_SPEED,
+                SPEED_MODIFIER,
+                "Smooth Classes Origin Speed",
+                speed,
+                EntityAttributeModifier.Operation.MULTIPLY_TOTAL);
+        setModifier(
+                player,
+                EntityAttributes.GENERIC_ARMOR,
+                ARMOR_MODIFIER,
+                "Smooth Classes Origin Armor",
+                armor,
+                EntityAttributeModifier.Operation.ADDITION);
+        setModifier(
+                player,
+                EntityAttributes.GENERIC_ATTACK_DAMAGE,
+                ATTACK_MODIFIER,
+                "Smooth Classes Origin Attack",
+                attack,
+                EntityAttributeModifier.Operation.MULTIPLY_TOTAL);
+        setModifier(
+                player,
+                EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE,
+                KNOCKBACK_MODIFIER,
+                "Smooth Classes Origin Knockback",
+                knockback,
+                EntityAttributeModifier.Operation.ADDITION);
 
         if (player.getHealth() > player.getMaxHealth()) player.setHealth(player.getMaxHealth());
     }
 
-    private static void setModifier(ServerPlayerEntity player, net.minecraft.entity.attribute.EntityAttribute attribute,
-                                    UUID id, String name, double amount, EntityAttributeModifier.Operation operation) {
+    private static void setModifier(
+            ServerPlayerEntity player,
+            net.minecraft.entity.attribute.EntityAttribute attribute,
+            UUID id,
+            String name,
+            double amount,
+            EntityAttributeModifier.Operation operation) {
         EntityAttributeInstance instance = player.getAttributeInstance(attribute);
         if (instance == null) return;
         instance.removeModifier(id);
@@ -700,7 +880,10 @@ public final class OriginRuntime {
         remove(player, EntityAttributes.GENERIC_KNOCKBACK_RESISTANCE, KNOCKBACK_MODIFIER);
     }
 
-    private static void remove(ServerPlayerEntity player, net.minecraft.entity.attribute.EntityAttribute attr, UUID id) {
+    private static void remove(
+            ServerPlayerEntity player,
+            net.minecraft.entity.attribute.EntityAttribute attr,
+            UUID id) {
         EntityAttributeInstance instance = player.getAttributeInstance(attr);
         if (instance != null) instance.removeModifier(id);
     }
@@ -730,24 +913,33 @@ public final class OriginRuntime {
 
     private static void ensureSelectedCategory(ServerPlayerEntity player) {
         OriginType origin = state(player).origin();
-        if (origin == OriginType.VAMPIRE || origin == OriginType.DEMON) unlockOriginCategory(player, origin);
+        if (origin == OriginType.VAMPIRE || origin == OriginType.DEMON)
+            unlockOriginCategory(player, origin);
     }
 
     private static void unlockOriginCategory(ServerPlayerEntity player, OriginType origin) {
-        PuffishSkillsIntegration.category(origin.categoryId()).ifPresent(category -> {
-            if (!category.isUnlocked(player)) category.unlock(player);
-            category.getSkill("origin_base").ifPresent(skill -> {
-                if (skill.getState(player) != net.puffish.skillsmod.api.Skill.State.UNLOCKED) skill.unlock(player);
-            });
-        });
+        PuffishSkillsIntegration.category(origin.categoryId())
+                .ifPresent(
+                        category -> {
+                            if (!category.isUnlocked(player)) category.unlock(player);
+                            category.getSkill("origin_base")
+                                    .ifPresent(
+                                            skill -> {
+                                                if (skill.getState(player)
+                                                        != net.puffish.skillsmod.api.Skill.State
+                                                                .UNLOCKED) skill.unlock(player);
+                                            });
+                        });
         PuffishSkillsIntegration.invalidateRuntimeCache(player);
     }
 
     private static void lockOriginCategories(ServerPlayerEntity player) {
         for (OriginType type : OriginType.values()) {
-            PuffishSkillsIntegration.category(type.categoryId()).ifPresent(category -> {
-                if (category.isUnlocked(player)) category.lock(player);
-            });
+            PuffishSkillsIntegration.category(type.categoryId())
+                    .ifPresent(
+                            category -> {
+                                if (category.isUnlocked(player)) category.lock(player);
+                            });
         }
         PuffishSkillsIntegration.invalidateRuntimeCache(player);
     }

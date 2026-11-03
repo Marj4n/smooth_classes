@@ -34,16 +34,17 @@ public abstract class RiderHorseSurfaceAnimationMixin {
             float animationProgress,
             float headYaw,
             float headPitch,
-            CallbackInfo ci
-    ) {
-        boolean surfaceWalking = entity instanceof RiderHorseEntity horse && horse.isRiderSurfaceWalking()
-                || entity instanceof RiderDreadSteedEntity dread && dread.isRiderSurfaceWalking();
+            CallbackInfo ci) {
+        boolean surfaceWalking =
+                entity instanceof RiderHorseEntity horse && horse.isRiderSurfaceWalking()
+                        || entity instanceof RiderDreadSteedEntity dread
+                                && dread.isRiderSurfaceWalking();
         if (!surfaceWalking) return;
 
-        double horizontal = Math.sqrt(
-                entity.getVelocity().x * entity.getVelocity().x
-                        + entity.getVelocity().z * entity.getVelocity().z
-        );
+        double horizontal =
+                Math.sqrt(
+                        entity.getVelocity().x * entity.getVelocity().x
+                                + entity.getVelocity().z * entity.getVelocity().z);
         float amount = MathHelper.clamp((float) horizontal * 3.35F, 0.0F, 1.0F);
         if (amount < 0.015F) {
             rightHindLeg.pitch = 0.0F;

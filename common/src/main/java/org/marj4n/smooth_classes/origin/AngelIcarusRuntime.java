@@ -17,7 +17,8 @@ import java.util.Optional;
  * them back on the Angel on the next check.
  */
 public final class AngelIcarusRuntime {
-    private static final Identifier WHITE_FEATHERED_WINGS = Identifier.of("icarus", "white_feathered_wings");
+    private static final Identifier WHITE_FEATHERED_WINGS =
+            Identifier.of("icarus", "white_feathered_wings");
     private static final String BOUND_TAG = "SmoothClassesAngelWing";
 
     private AngelIcarusRuntime() {}
@@ -30,17 +31,22 @@ public final class AngelIcarusRuntime {
 
     @SuppressWarnings("unchecked")
     private static void ensureEquipped(ServerPlayerEntity player) {
-        Item wingItem = org.marj4n.smooth_classes.platform.PlatformRegistries.ITEM.get(WHITE_FEATHERED_WINGS);
+        Item wingItem =
+                org.marj4n.smooth_classes.platform.PlatformRegistries.ITEM.get(
+                        WHITE_FEATHERED_WINGS);
         if (wingItem == null || wingItem == Items.AIR) return;
 
         try {
             Class<?> api = Class.forName("dev.emi.trinkets.api.TrinketsApi");
             Method getComponent = null;
             for (Method method : api.getMethods()) {
-                if (!method.getName().equals("getTrinketComponent") || method.getParameterCount() != 1) continue;
+                if (!method.getName().equals("getTrinketComponent")
+                        || method.getParameterCount() != 1) continue;
                 if (method.getParameterTypes()[0].isAssignableFrom(player.getClass())
-                        || method.getParameterTypes()[0].isAssignableFrom(net.minecraft.entity.LivingEntity.class)
-                        || net.minecraft.entity.LivingEntity.class.isAssignableFrom(method.getParameterTypes()[0])) {
+                        || method.getParameterTypes()[0].isAssignableFrom(
+                                net.minecraft.entity.LivingEntity.class)
+                        || net.minecraft.entity.LivingEntity.class.isAssignableFrom(
+                                method.getParameterTypes()[0])) {
                     getComponent = method;
                     break;
                 }
@@ -58,12 +64,14 @@ public final class AngelIcarusRuntime {
             if (capeInventory == null) return;
 
             Method getStack = capeInventory.getClass().getMethod("getStack", int.class);
-            Method setStack = capeInventory.getClass().getMethod("setStack", int.class, ItemStack.class);
+            Method setStack =
+                    capeInventory.getClass().getMethod("setStack", int.class, ItemStack.class);
             ItemStack current = (ItemStack) getStack.invoke(capeInventory, 0);
             if (isBoundAngelWing(current, wingItem)) return;
 
             ItemStack boundFromInventory = takeBoundWingFromInventory(player, wingItem);
-            ItemStack replacement = boundFromInventory.isEmpty() ? new ItemStack(wingItem) : boundFromInventory;
+            ItemStack replacement =
+                    boundFromInventory.isEmpty() ? new ItemStack(wingItem) : boundFromInventory;
             replacement.getOrCreateNbt().putBoolean(BOUND_TAG, true);
             replacement.getOrCreateNbt().putBoolean("Unbreakable", true);
 
@@ -97,7 +105,10 @@ public final class AngelIcarusRuntime {
     }
 
     private static boolean isBoundAngelWing(ItemStack stack, Item wingItem) {
-        return stack != null && !stack.isEmpty() && stack.isOf(wingItem)
-                && stack.hasNbt() && stack.getNbt().getBoolean(BOUND_TAG);
+        return stack != null
+                && !stack.isEmpty()
+                && stack.isOf(wingItem)
+                && stack.hasNbt()
+                && stack.getNbt().getBoolean(BOUND_TAG);
     }
 }

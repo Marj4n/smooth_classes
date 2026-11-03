@@ -10,14 +10,16 @@ import org.marj4n.smooth_classes.SmoothClasses;
 import java.util.List;
 
 public class VitalityBondRenderer extends OrbitingEffectRenderer {
-    public static final Identifier modelId_base = Identifier.of(SmoothClasses.MOD_ID, "effect/vitality_bond");
-    public static final Identifier modelId_overlay = Identifier.of(SmoothClasses.MOD_ID, "effect/vitality_bond");
+    public static final Identifier modelId_base =
+            Identifier.of(SmoothClasses.MOD_ID, "effect/vitality_bond");
+    public static final Identifier modelId_overlay =
+            Identifier.of(SmoothClasses.MOD_ID, "effect/vitality_bond");
 
     private static final RenderLayer BASE_RENDER_LAYER =
-            RenderLayer.getEntityTranslucent(net.minecraft.screen.PlayerScreenHandler.BLOCK_ATLAS_TEXTURE);
+            RenderLayer.getEntityTranslucent(
+                    net.minecraft.screen.PlayerScreenHandler.BLOCK_ATLAS_TEXTURE);
     private static final RenderLayer GLOWING_RENDER_LAYER =
             CustomLayers.spellEffect(LightEmission.RADIATE, false);
-
 
     @Override
     public void setSpeed(float newSpeed) {
@@ -26,11 +28,11 @@ public class VitalityBondRenderer extends OrbitingEffectRenderer {
     }
 
     public VitalityBondRenderer() {
-        super(List.of(
+        super(
+                List.of(
                         new Model(GLOWING_RENDER_LAYER, modelId_overlay),
                         new Model(BASE_RENDER_LAYER, modelId_base)),
                 0.6F,
                 1.10F);
     }
-
 }

@@ -28,11 +28,12 @@ import java.util.UUID;
 public final class SmoothProgressionSummonLevels {
     private static final String LEVEL_PREFIX = "smoothprogression.level.";
     private static final String ORIGINAL_LEVEL_PREFIX = "smooth_classes_avenger_original_level.";
-    private static final UUID PROGRESSION_HEALTH_MODIFIER = UUID.fromString(
-            "f6a2791b-857e-48c2-9ab9-df4e22b5f8d0");
-    private static final UUID PROGRESSION_BOSS_HEALTH_MODIFIER = UUID.fromString(
-            "2c9b713e-b6c1-4bfa-bd93-7b1ad9074d91");
-    private static final boolean LOADED = PlatformLoader.getInstance().isModLoaded("smooth_progression");
+    private static final UUID PROGRESSION_HEALTH_MODIFIER =
+            UUID.fromString("f6a2791b-857e-48c2-9ab9-df4e22b5f8d0");
+    private static final UUID PROGRESSION_BOSS_HEALTH_MODIFIER =
+            UUID.fromString("2c9b713e-b6c1-4bfa-bd93-7b1ad9074d91");
+    private static final boolean LOADED =
+            PlatformLoader.getInstance().isModLoaded("smooth_progression");
 
     private static boolean initialized;
     private static Method progressionGet;
@@ -44,7 +45,11 @@ public final class SmoothProgressionSummonLevels {
 
     /** Applies to any type of bound summon, including passive/modded and temporary Avenger minions. */
     public static void synchronize(ServerPlayerEntity owner, LivingEntity summon) {
-        if (!LOADED || owner == null || summon == null || summon.getWorld().isClient || !summon.isAlive()) return;
+        if (!LOADED
+                || owner == null
+                || summon == null
+                || summon.getWorld().isClient
+                || !summon.isAlive()) return;
         int level = getOwnerLevel(owner);
         if (level < 1) return;
 
@@ -92,8 +97,11 @@ public final class SmoothProgressionSummonLevels {
         // Wither boss HP as well. Keep this optional via reflection.
         initialize();
         if (bossLevelRefresh != null && summon instanceof WitherEntity) {
-            try { bossLevelRefresh.invoke(null, summon); }
-            catch (ReflectiveOperationException | RuntimeException ignored) { /* no hard dependency */ }
+            try {
+                bossLevelRefresh.invoke(null, summon);
+            } catch (ReflectiveOperationException | RuntimeException ignored) {
+                /* no hard dependency */
+            }
         }
     }
 
@@ -102,8 +110,10 @@ public final class SmoothProgressionSummonLevels {
         initialized = true;
         if (!LOADED) return;
         try {
-            Class<?> manager = Class.forName("org.marj4n.smooth_progression.progression.ProgressionManager");
-            Class<?> playerProgression = Class.forName("org.marj4n.smooth_progression.progression.PlayerProgression");
+            Class<?> manager =
+                    Class.forName("org.marj4n.smooth_progression.progression.ProgressionManager");
+            Class<?> playerProgression =
+                    Class.forName("org.marj4n.smooth_progression.progression.PlayerProgression");
             progressionGet = manager.getMethod("get", ServerPlayerEntity.class);
             playerGetLevel = playerProgression.getMethod("getLevel");
         } catch (ReflectiveOperationException | LinkageError ignored) {
@@ -112,8 +122,10 @@ public final class SmoothProgressionSummonLevels {
             playerGetLevel = null;
         }
         try {
-            Class<?> manager = Class.forName("org.marj4n.smooth_progression.entity.MobLevelScaling");
-            mobLevelReapply = manager.getDeclaredMethod("onEntityLoad", Entity.class, ServerWorld.class);
+            Class<?> manager =
+                    Class.forName("org.marj4n.smooth_progression.entity.MobLevelScaling");
+            mobLevelReapply =
+                    manager.getDeclaredMethod("onEntityLoad", Entity.class, ServerWorld.class);
             mobLevelReapply.setAccessible(true);
         } catch (ReflectiveOperationException | LinkageError | SecurityException ignored) {
             mobLevelReapply = null;
@@ -166,18 +178,21 @@ public final class SmoothProgressionSummonLevels {
 
     private static boolean hasStaleBossHealth(LivingEntity entity) {
         if (!(entity instanceof WitherEntity)) return false;
-        EntityAttributeInstance health = entity.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH);
+        EntityAttributeInstance health =
+                entity.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH);
         return health != null && health.getModifier(PROGRESSION_BOSS_HEALTH_MODIFIER) != null;
     }
 
     private static void reapplyProgressionHealth(LivingEntity summon) {
         // Smooth Progression itself only scales hostile mobs. Passive souls receive
         // the level tag but retain their native + Avenger-talent health balance.
-        if (!(summon instanceof HostileEntity hostile) || !(summon.getWorld() instanceof ServerWorld world)) return;
+        if (!(summon instanceof HostileEntity hostile)
+                || !(summon.getWorld() instanceof ServerWorld world)) return;
         initialize();
         if (mobLevelReapply == null) return;
 
-        EntityAttributeInstance attribute = hostile.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH);
+        EntityAttributeInstance attribute =
+                hostile.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH);
         if (attribute == null) return;
         float previousMax = Math.max(1F, hostile.getMaxHealth());
         float healthFraction = Math.max(0F, Math.min(1F, hostile.getHealth() / previousMax));
@@ -191,17 +206,22 @@ public final class SmoothProgressionSummonLevels {
 
         // MobLevelScaling's on-load method will not replace an existing UUID,
         // so remove only its OWN modifier before recalculating with the new level.
-        EntityAttributeModifier previousModifier = attribute.getModifier(PROGRESSION_HEALTH_MODIFIER);
+        EntityAttributeModifier previousModifier =
+                attribute.getModifier(PROGRESSION_HEALTH_MODIFIER);
         if (previousModifier != null) attribute.removeModifier(PROGRESSION_HEALTH_MODIFIER);
         try {
             mobLevelReapply.invoke(null, hostile, world);
         } catch (ReflectiveOperationException | RuntimeException ignored) {
             // Preserve pre-existing HP scaling if a later Smooth Progression
             // release changes the private on-load method implementation.
-            if (previousModifier != null && attribute.getModifier(PROGRESSION_HEALTH_MODIFIER) == null) {
+            if (previousModifier != null
+                    && attribute.getModifier(PROGRESSION_HEALTH_MODIFIER) == null) {
                 attribute.addPersistentModifier(previousModifier);
             }
         }
-        hostile.setHealth(Math.max(0.01F, Math.min(hostile.getMaxHealth(), hostile.getMaxHealth() * healthFraction)));
+        hostile.setHealth(
+                Math.max(
+                        0.01F,
+                        Math.min(hostile.getMaxHealth(), hostile.getMaxHealth() * healthFraction)));
     }
 }

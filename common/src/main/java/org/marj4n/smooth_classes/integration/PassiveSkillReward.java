@@ -47,10 +47,12 @@ public final class PassiveSkillReward implements Reward {
     private static Result<PassiveSkillReward, Problem> create(JsonObject rootObject) {
         var problems = new ArrayList<Problem>();
 
-        var passiveSkillId = rootObject.get("passive_skill")
-                .andThen(JsonElement::getAsString)
-                .ifFailure(problems::add)
-                .getSuccess();
+        var passiveSkillId =
+                rootObject
+                        .get("passive_skill")
+                        .andThen(JsonElement::getAsString)
+                        .ifFailure(problems::add)
+                        .getSuccess();
 
         if (problems.isEmpty()) {
             return Result.success(new PassiveSkillReward(passiveSkillId.orElseThrow()));

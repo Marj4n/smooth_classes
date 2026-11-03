@@ -103,24 +103,27 @@ public final class AvengerReworkRuntime {
         AvengerSoulAnimationRuntime.register();
         AvengerVisualBindings.registerServer();
         ServerLifecycleEvents.SERVER_STARTED.register(AvengerSummonCatalog::rebuild);
-        ServerTickEvents.END_SERVER_TICK.register(server -> {
-            // Avenger maintenance has no behavior faster than five ticks. Keep the
-            // player's own age phase so scheduled 20-tick work still lands correctly.
-            for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
-                if ((player.age % 5) == 0) tickPlayer(player);
-            }
-            if (!DEVOURS.isEmpty()) tickDevours(server);
-        });
-        ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
-            UUID playerId = handler.player.getUuid();
-            DEVOURS.remove(playerId);
-        });
-        ServerLifecycleEvents.SERVER_STOPPED.register(server -> {
-            DEVOURS.clear();
-            CURTAIN_BYPASS.clear();
-            MANUAL_CAPTURED.clear();
-            SUMMON_OWNER_CACHE.clear();
-        });
+        ServerTickEvents.END_SERVER_TICK.register(
+                server -> {
+                    // Avenger maintenance has no behavior faster than five ticks. Keep the
+                    // player's own age phase so scheduled 20-tick work still lands correctly.
+                    for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
+                        if ((player.age % 5) == 0) tickPlayer(player);
+                    }
+                    if (!DEVOURS.isEmpty()) tickDevours(server);
+                });
+        ServerPlayConnectionEvents.DISCONNECT.register(
+                (handler, server) -> {
+                    UUID playerId = handler.player.getUuid();
+                    DEVOURS.remove(playerId);
+                });
+        ServerLifecycleEvents.SERVER_STOPPED.register(
+                server -> {
+                    DEVOURS.clear();
+                    CURTAIN_BYPASS.clear();
+                    MANUAL_CAPTURED.clear();
+                    SUMMON_OWNER_CACHE.clear();
+                });
     }
 
     private static void tickPlayer(ServerPlayerEntity player) {
@@ -157,27 +160,41 @@ public final class AvengerReworkRuntime {
         if (MANUAL_CAPTURED.remove(victim.getUuid())) return;
         if (!AbilityRuntime.isClass(player, AvengerClass.ID)) return;
         if (victim instanceof PlayerEntity) return;
-        String entityId = org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE.getId(victim.getType()).toString();
-        if (!AvengerSummonRecipes.supported(entityId) || !AvengerSummonSafety.allowed(victim)) return;
+        String entityId =
+                org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE
+                        .getId(victim.getType())
+                        .toString();
+        if (!AvengerSummonRecipes.supported(entityId) || !AvengerSummonSafety.allowed(victim))
+            return;
 
         AvengerDeathListState state = AvengerDeathListState.get(player.getServer());
         state.recordKill(player.getUuid(), entityId);
         refreshDeathListNow(player, state);
-        player.sendMessage(Text.literal("Death List +1: " + AvengerSummonRecipes.friendlyEntityName(entityId))
-                .formatted(Formatting.DARK_PURPLE), true);
+        player.sendMessage(
+                Text.literal("Death List +1: " + AvengerSummonRecipes.friendlyEntityName(entityId))
+                        .formatted(Formatting.DARK_PURPLE),
+                true);
     }
 
     /** Credits kills made by bound summons to their Avenger owner. */
     public static void onSummonKilledOther(LivingEntity victim, DamageSource source) {
-        if (victim == null || source == null || victim instanceof PlayerEntity || victim.getWorld().isClient) return;
+        if (victim == null
+                || source == null
+                || victim instanceof PlayerEntity
+                || victim.getWorld().isClient) return;
         Entity killer = source.getAttacker();
         if (killer == null) killer = source.getSource();
         UUID owner = summonOwnerUuid(killer);
-        if (owner == null && victim.getAttacker() != null) owner = summonOwnerUuid(victim.getAttacker());
+        if (owner == null && victim.getAttacker() != null)
+            owner = summonOwnerUuid(victim.getAttacker());
         if (owner == null) return;
 
-        String entityId = org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE.getId(victim.getType()).toString();
-        if (!AvengerSummonRecipes.supported(entityId) || !AvengerSummonSafety.allowed(victim)) return;
+        String entityId =
+                org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE
+                        .getId(victim.getType())
+                        .toString();
+        if (!AvengerSummonRecipes.supported(entityId) || !AvengerSummonSafety.allowed(victim))
+            return;
         MinecraftServer server = victim.getServer();
         if (server == null) return;
 
@@ -188,14 +205,22 @@ public final class AvengerReworkRuntime {
         ServerPlayerEntity player = server.getPlayerManager().getPlayer(owner);
         if (player != null) {
             refreshDeathListNow(player, state);
-            player.sendMessage(Text.literal("Death List +1 (summon): "
-                    + AvengerSummonRecipes.friendlyEntityName(entityId)).formatted(Formatting.DARK_PURPLE), true);
+            player.sendMessage(
+                    Text.literal(
+                                    "Death List +1 (summon): "
+                                            + AvengerSummonRecipes.friendlyEntityName(entityId))
+                            .formatted(Formatting.DARK_PURPLE),
+                    true);
         }
     }
 
     private static void captureDevoured(ServerPlayerEntity player, LivingEntity victim) {
-        String entityId = org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE.getId(victim.getType()).toString();
-        if (!AvengerSummonRecipes.supported(entityId) || !AvengerSummonSafety.allowed(victim)) return;
+        String entityId =
+                org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE
+                        .getId(victim.getType())
+                        .toString();
+        if (!AvengerSummonRecipes.supported(entityId) || !AvengerSummonSafety.allowed(victim))
+            return;
         AvengerDeathListState state = AvengerDeathListState.get(player.getServer());
         state.recordKill(player.getUuid(), entityId);
         refreshDeathListNow(player, state);
@@ -227,7 +252,8 @@ public final class AvengerReworkRuntime {
      * The ledger itself lives in PersistentState, so gameplay events no longer rewrite
      * an inventory book. Ability state is still refreshed immediately for the HUD.
      */
-    private static void refreshDeathListNow(ServerPlayerEntity player, AvengerDeathListState state) {
+    private static void refreshDeathListNow(
+            ServerPlayerEntity player, AvengerDeathListState state) {
         if (player != null) SmoothClassesNetworking.sendAbilityState(player);
     }
 
@@ -245,13 +271,18 @@ public final class AvengerReworkRuntime {
         return nbt;
     }
 
-    private static void writeDeathListPages(NbtCompound nbt, ServerPlayerEntity player, AvengerDeathListState state) {
+    private static void writeDeathListPages(
+            NbtCompound nbt, ServerPlayerEntity player, AvengerDeathListState state) {
         UUID playerId = player.getUuid();
         AvengerDeathListState.PlayerLedger ledger = state.ledger(playerId);
-        AvengerDeathListState.ChargeSnapshot charges = state.refreshCharges(playerId, System.currentTimeMillis());
+        AvengerDeathListState.ChargeSnapshot charges =
+                state.refreshCharges(playerId, System.currentTimeMillis());
 
-        List<AvengerSummonRecipes.Recipe> recipes = new ArrayList<>(AvengerSummonRecipes.allRecipes());
-        recipes.sort(Comparator.comparing(recipe -> AvengerSummonRecipes.friendlyEntityName(recipe.entityId())));
+        List<AvengerSummonRecipes.Recipe> recipes =
+                new ArrayList<>(AvengerSummonRecipes.allRecipes());
+        recipes.sort(
+                Comparator.comparing(
+                        recipe -> AvengerSummonRecipes.friendlyEntityName(recipe.entityId())));
 
         int totalSouls = ledger.souls().values().stream().mapToInt(Integer::intValue).sum();
         int discovered = 0;
@@ -296,26 +327,41 @@ public final class AvengerReworkRuntime {
         nbt.put("pages", list);
     }
 
-    private static Text deathListCover(AvengerDeathListState.ChargeSnapshot charges, int totalSouls,
-                                       int discovered, int recipeCount) {
+    private static Text deathListCover(
+            AvengerDeathListState.ChargeSnapshot charges,
+            int totalSouls,
+            int discovered,
+            int recipeCount) {
         var page = Text.empty();
-        page.append(Text.literal("DEATH LIST\n").formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
-        page.append(Text.literal("From Corpses We Arise\n\n").formatted(Formatting.GRAY, Formatting.ITALIC));
+        page.append(
+                Text.literal("DEATH LIST\n").formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
+        page.append(
+                Text.literal("From Corpses We Arise\n\n")
+                        .formatted(Formatting.GRAY, Formatting.ITALIC));
 
         page.append(Text.literal("TOTAL SOULS  ").formatted(Formatting.GOLD, Formatting.BOLD));
         page.append(Text.literal(totalSouls + "\n").formatted(Formatting.AQUA, Formatting.BOLD));
         page.append(Text.literal("DISCOVERED    ").formatted(Formatting.DARK_GRAY));
-        page.append(Text.literal(discovered + "/" + recipeCount + "\n\n").formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        page.append(
+                Text.literal(discovered + "/" + recipeCount + "\n\n")
+                        .formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
 
         page.append(Text.literal("[Tap H] ").formatted(Formatting.GOLD, Formatting.BOLD));
         page.append(Text.literal("Attack / Recall / Summon\n").formatted(Formatting.GRAY));
         page.append(Text.literal("[Hold H] ").formatted(Formatting.AQUA, Formatting.BOLD));
         page.append(Text.literal("Soul command wheel\n").formatted(Formatting.GRAY));
-        page.append(Text.literal("Stay + recipe = stationary summon\n\n").formatted(Formatting.DARK_PURPLE));
+        page.append(
+                Text.literal("Stay + recipe = stationary summon\n\n")
+                        .formatted(Formatting.DARK_PURPLE));
 
         page.append(Text.literal("CHARGES  ").formatted(Formatting.GOLD, Formatting.BOLD));
-        page.append(Text.literal(charges.charges() + "/" + AvengerDeathListState.MAX_SUMMON_CHARGES + "\n")
-                .formatted(Formatting.GREEN, Formatting.BOLD));
+        page.append(
+                Text.literal(
+                                charges.charges()
+                                        + "/"
+                                        + AvengerDeathListState.MAX_SUMMON_CHARGES
+                                        + "\n")
+                        .formatted(Formatting.GREEN, Formatting.BOLD));
         if (charges.remainingMillis() > 0) {
             long seconds = Math.max(1L, (charges.remainingMillis() + 999L) / 1000L);
             page.append(Text.literal("Next charge  ").formatted(Formatting.DARK_GRAY));
@@ -324,9 +370,12 @@ public final class AvengerReworkRuntime {
         return page;
     }
 
-    private static void appendSoulStockPages(List<Text> pages, UUID playerId, AvengerDeathListState state,
-                                             AvengerDeathListState.PlayerLedger ledger,
-                                             List<AvengerSummonRecipes.Recipe> recipes) {
+    private static void appendSoulStockPages(
+            List<Text> pages,
+            UUID playerId,
+            AvengerDeathListState state,
+            AvengerDeathListState.PlayerLedger ledger,
+            List<AvengerSummonRecipes.Recipe> recipes) {
         var page = Text.empty();
         int onPage = 0;
         int pageIndex = 1;
@@ -335,15 +384,19 @@ public final class AvengerReworkRuntime {
             int slain = ledger.kills().getOrDefault(recipe.entityId(), 0);
             if (slain <= 0) continue;
             if (onPage == 0) {
-                page.append(Text.literal("SOUL STOCK " + pageIndex + "\n")
-                        .formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
+                page.append(
+                        Text.literal("SOUL STOCK " + pageIndex + "\n")
+                                .formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
                 page.append(Text.literal("----------------\n").formatted(Formatting.DARK_GRAY));
             }
             String name = AvengerSummonRecipes.friendlyEntityName(recipe.entityId());
             int souls = state.available(playerId, recipe.entityId());
             page.append(Text.literal(name + "  ").formatted(Formatting.WHITE));
-            page.append(Text.literal("x" + souls + "\n")
-                    .formatted(souls > 0 ? Formatting.AQUA : Formatting.DARK_GRAY, Formatting.BOLD));
+            page.append(
+                    Text.literal("x" + souls + "\n")
+                            .formatted(
+                                    souls > 0 ? Formatting.AQUA : Formatting.DARK_GRAY,
+                                    Formatting.BOLD));
             any = true;
             if (++onPage >= 8) {
                 pages.add(page);
@@ -354,17 +407,27 @@ public final class AvengerReworkRuntime {
         }
         if (onPage > 0) pages.add(page);
         if (!any) {
-            pages.add(Text.empty()
-                    .append(Text.literal("SOUL STOCK\n\n").formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
-                    .append(Text.literal("No souls discovered yet.\n\n").formatted(Formatting.GRAY))
-                    .append(Text.literal("Kill a supported creature to reveal its soul and recipe.")
-                            .formatted(Formatting.DARK_GRAY, Formatting.ITALIC)));
+            pages.add(
+                    Text.empty()
+                            .append(
+                                    Text.literal("SOUL STOCK\n\n")
+                                            .formatted(Formatting.DARK_PURPLE, Formatting.BOLD))
+                            .append(
+                                    Text.literal("No souls discovered yet.\n\n")
+                                            .formatted(Formatting.GRAY))
+                            .append(
+                                    Text.literal(
+                                                    "Kill a supported creature to reveal its soul and recipe.")
+                                            .formatted(Formatting.DARK_GRAY, Formatting.ITALIC)));
         }
     }
 
-    private static void appendRecipePages(List<Text> pages, UUID playerId, AvengerDeathListState state,
-                                          AvengerDeathListState.PlayerLedger ledger,
-                                          List<AvengerSummonRecipes.Recipe> recipes) {
+    private static void appendRecipePages(
+            List<Text> pages,
+            UUID playerId,
+            AvengerDeathListState state,
+            AvengerDeathListState.PlayerLedger ledger,
+            List<AvengerSummonRecipes.Recipe> recipes) {
         // Avoid 100+ oversized vanilla book pages now that ~150 optional mobs exist.
         // Discovered recipes get full ingredient listings; undiscovered souls are
         // compact, since their recipes must remain secret until the first kill.
@@ -378,12 +441,17 @@ public final class AvengerReworkRuntime {
         int pageIndex = 1;
         for (int i = 0; i < known.size() && pages.size() < 98; i += 2) {
             var page = Text.empty();
-            page.append(Text.literal("SOUL RECIPES " + pageIndex++ + "\n")
-                    .formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
+            page.append(
+                    Text.literal("SOUL RECIPES " + pageIndex++ + "\n")
+                            .formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
             page.append(Text.literal("----------------\n").formatted(Formatting.DARK_GRAY));
             for (int j = i; j < Math.min(i + 2, known.size()); j++) {
                 AvengerSummonRecipes.Recipe recipe = known.get(j);
-                appendSoulRecord(page, playerId, state, recipe,
+                appendSoulRecord(
+                        page,
+                        playerId,
+                        state,
+                        recipe,
                         ledger.kills().getOrDefault(recipe.entityId(), 0));
             }
             pages.add(page);
@@ -391,44 +459,77 @@ public final class AvengerReworkRuntime {
 
         for (int i = 0; i < unknown.size() && pages.size() < 98; i += 8) {
             var page = Text.empty();
-            page.append(Text.literal("UNDISCOVERED " + (1 + i / 8) + "\n")
-                    .formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
+            page.append(
+                    Text.literal("UNDISCOVERED " + (1 + i / 8) + "\n")
+                            .formatted(Formatting.DARK_PURPLE, Formatting.BOLD));
             page.append(Text.literal("----------------\n").formatted(Formatting.DARK_GRAY));
             for (int j = i; j < Math.min(i + 8, unknown.size()); j++) {
-                page.append(Text.literal(AvengerSummonRecipes.friendlyEntityName(unknown.get(j).entityId()) + "  ???\n")
-                        .formatted(Formatting.DARK_GRAY));
+                page.append(
+                        Text.literal(
+                                        AvengerSummonRecipes.friendlyEntityName(
+                                                        unknown.get(j).entityId())
+                                                + "  ???\n")
+                                .formatted(Formatting.DARK_GRAY));
             }
             pages.add(page);
         }
         if (pages.size() >= 98) {
-            pages.add(Text.literal("Large Soul Ledger\n\nFor all collected souls and recipes, use the Patchouli Death List interface.")
-                    .formatted(Formatting.DARK_PURPLE));
+            pages.add(
+                    Text.literal(
+                                    "Large Soul Ledger\n\nFor all collected souls and recipes, use the Patchouli Death List interface.")
+                            .formatted(Formatting.DARK_PURPLE));
         }
     }
 
-    private static void appendSoulRecord(net.minecraft.text.MutableText page, UUID playerId,
-                                         AvengerDeathListState state, AvengerSummonRecipes.Recipe recipe, int slain) {
+    private static void appendSoulRecord(
+            net.minecraft.text.MutableText page,
+            UUID playerId,
+            AvengerDeathListState state,
+            AvengerSummonRecipes.Recipe recipe,
+            int slain) {
         String entityId = recipe.entityId();
-        page.append(Text.literal("\n" + AvengerSummonRecipes.friendlyEntityName(entityId) + "\n")
-                .formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
+        page.append(
+                Text.literal("\n" + AvengerSummonRecipes.friendlyEntityName(entityId) + "\n")
+                        .formatted(Formatting.LIGHT_PURPLE, Formatting.BOLD));
         page.append(Text.literal("SOULS ").formatted(Formatting.GOLD, Formatting.BOLD));
-        page.append(Text.literal(String.valueOf(state.available(playerId, entityId))).formatted(Formatting.AQUA, Formatting.BOLD));
+        page.append(
+                Text.literal(String.valueOf(state.available(playerId, entityId)))
+                        .formatted(Formatting.AQUA, Formatting.BOLD));
         page.append(Text.literal("   SLAIN ").formatted(Formatting.DARK_GRAY));
-        page.append(Text.literal(String.valueOf(slain) + "\n").formatted(Formatting.YELLOW, Formatting.BOLD));
+        page.append(
+                Text.literal(String.valueOf(slain) + "\n")
+                        .formatted(Formatting.YELLOW, Formatting.BOLD));
 
         page.append(Text.literal("MAIN  ").formatted(Formatting.GREEN, Formatting.BOLD));
-        page.append(Text.literal(AvengerSummonRecipes.friendlyItemName(recipe.mainItemId()) + "\n").formatted(Formatting.WHITE));
+        page.append(
+                Text.literal(AvengerSummonRecipes.friendlyItemName(recipe.mainItemId()) + "\n")
+                        .formatted(Formatting.WHITE));
         page.append(Text.literal("OFF   ").formatted(Formatting.BLUE, Formatting.BOLD));
-        page.append(Text.literal(recipe.offhandItemId() == null
-                        ? "Not required\n" : AvengerSummonRecipes.friendlyItemName(recipe.offhandItemId()) + "\n")
-                .formatted(recipe.offhandItemId() == null ? Formatting.DARK_GRAY : Formatting.WHITE));
+        page.append(
+                Text.literal(
+                                recipe.offhandItemId() == null
+                                        ? "Not required\n"
+                                        : AvengerSummonRecipes.friendlyItemName(
+                                                        recipe.offhandItemId())
+                                                + "\n")
+                        .formatted(
+                                recipe.offhandItemId() == null
+                                        ? Formatting.DARK_GRAY
+                                        : Formatting.WHITE));
     }
 
-    private static void appendUndiscoveredRecord(net.minecraft.text.MutableText page, AvengerSummonRecipes.Recipe recipe) {
-        page.append(Text.literal("\n" + AvengerSummonRecipes.friendlyEntityName(recipe.entityId()) + "\n")
-                .formatted(Formatting.DARK_GRAY, Formatting.BOLD));
+    private static void appendUndiscoveredRecord(
+            net.minecraft.text.MutableText page, AvengerSummonRecipes.Recipe recipe) {
+        page.append(
+                Text.literal(
+                                "\n"
+                                        + AvengerSummonRecipes.friendlyEntityName(recipe.entityId())
+                                        + "\n")
+                        .formatted(Formatting.DARK_GRAY, Formatting.BOLD));
         page.append(Text.literal("UNDISCOVERED\n").formatted(Formatting.RED, Formatting.BOLD));
-        page.append(Text.literal("Recipe hidden until first kill.\n").formatted(Formatting.GRAY, Formatting.ITALIC));
+        page.append(
+                Text.literal("Recipe hidden until first kill.\n")
+                        .formatted(Formatting.GRAY, Formatting.ITALIC));
     }
 
     // ---------------------------------------------------------------------
@@ -443,14 +544,14 @@ public final class AvengerReworkRuntime {
     public static ExecutionResult summonFromHands(ServerPlayerEntity player) {
         if (!AbilityRuntime.isClass(player, AvengerClass.ID))
             return ExecutionResult.failure("You are not an Avenger.");
-        if (player.getServer() == null)
-            return ExecutionResult.failure("Server state unavailable.");
+        if (player.getServer() == null) return ExecutionResult.failure("Server state unavailable.");
 
         LivingEntity aimed = aimedTapTarget(player);
         if (aimed != null) {
             if (isOwnedSummon(player, aimed)) {
                 if (aimed.squaredDistanceTo(player) <= 32D * 32D) {
-                    return recallSummon(player, AvengerDeathListState.get(player.getServer()), aimed);
+                    return recallSummon(
+                            player, AvengerDeathListState.get(player.getServer()), aimed);
                 }
             } else if (validEnemy(player, aimed)) {
                 return markAttackTarget(player, aimed);
@@ -477,7 +578,8 @@ public final class AvengerReworkRuntime {
 
     /** Summon directly into a persistent Stay post, using the normal recipe and charge rules. */
     private static ExecutionResult summonFromHands(ServerPlayerEntity player, boolean stayOnSpawn) {
-        if (!AbilityRuntime.isClass(player, AvengerClass.ID)) return ExecutionResult.failure("You are not an Avenger.");
+        if (!AbilityRuntime.isClass(player, AvengerClass.ID))
+            return ExecutionResult.failure("You are not an Avenger.");
         MinecraftServer server = player.getServer();
         if (server == null) return ExecutionResult.failure("Server state unavailable.");
 
@@ -487,15 +589,21 @@ public final class AvengerReworkRuntime {
         // attacks; this routine is the shared ingredient/charge summon path.
         // Stay summons use the same recipe cost with a stationary spawn mode.
 
-        AvengerDeathListState.ChargeSnapshot charge = state.refreshCharges(player.getUuid(), System.currentTimeMillis());
+        AvengerDeathListState.ChargeSnapshot charge =
+                state.refreshCharges(player.getUuid(), System.currentTimeMillis());
         if (charge.charges() <= 0) {
-            return ExecutionResult.failure("From Corpses We Arise has no charges. Next charge in "
-                    + String.format(java.util.Locale.ROOT, "%.1f", charge.remainingMillis() / 1000D) + "s");
+            return ExecutionResult.failure(
+                    "From Corpses We Arise has no charges. Next charge in "
+                            + String.format(
+                                    java.util.Locale.ROOT, "%.1f", charge.remainingMillis() / 1000D)
+                            + "s");
         }
 
         ItemStack main = player.getMainHandStack();
         ItemStack off = player.getOffHandStack();
-        if (main.isEmpty()) return ExecutionResult.failure("Hold a Death List summon ingredient in your main hand.");
+        if (main.isEmpty())
+            return ExecutionResult.failure(
+                    "Hold a Death List summon ingredient in your main hand.");
         if (AvengerLibrarianSummons.isRecipe(main, off)
                 && !AvengerLibrarianSummons.hasStoredEnchantments(off)) {
             return ExecutionResult.failure("That enchanted book has no stored enchantments.");
@@ -503,7 +611,8 @@ public final class AvengerReworkRuntime {
 
         List<AvengerSummonRecipes.Recipe> recipes = AvengerSummonRecipes.matching(main, off);
         if (recipes.isEmpty()) {
-            return ExecutionResult.failure("No Death List recipe matches your main/off-hand items.");
+            return ExecutionResult.failure(
+                    "No Death List recipe matches your main/off-hand items.");
         }
 
         AvengerSummonRecipes.Recipe chosen = null;
@@ -515,8 +624,10 @@ public final class AvengerReworkRuntime {
         }
         if (chosen == null) {
             String first = recipes.get(0).entityId();
-            return ExecutionResult.failure("That soul is not in your Death List. Kill "
-                    + AvengerSummonRecipes.friendlyEntityName(first) + " first.");
+            return ExecutionResult.failure(
+                    "That soul is not in your Death List. Kill "
+                            + AvengerSummonRecipes.friendlyEntityName(first)
+                            + " first.");
         }
 
         Vec3d staySpot = stayOnSpawn ? aimedStaySpot(player) : null;
@@ -530,7 +641,8 @@ public final class AvengerReworkRuntime {
         }
         LivingEntity summoned = spawnRegisteredSoul(player, chosen, staySpot);
         if (summoned == null) return ExecutionResult.failure("No space to summon there.");
-        if (summoned instanceof VillagerEntity villager && AvengerLibrarianSummons.isRecipe(main, off)) {
+        if (summoned instanceof VillagerEntity villager
+                && AvengerLibrarianSummons.isRecipe(main, off)) {
             AvengerLibrarianSummons.bind(villager, off);
         }
 
@@ -554,14 +666,41 @@ public final class AvengerReworkRuntime {
         if (stayOnSpawn) applyStay(summoned);
         AvengerSoulAnimationRuntime.emerge(player, summoned);
         ServerWorld world = player.getServerWorld();
-        world.spawnParticles(ParticleTypes.SOUL, summoned.getX(), summoned.getBodyY(0.55D), summoned.getZ(),
-                28, 0.65D, 0.75D, 0.65D, 0.04D);
-        world.spawnParticles(ParticleTypes.SOUL_FIRE_FLAME, summoned.getX(), summoned.getBodyY(0.55D), summoned.getZ(),
-                12, 0.45D, 0.55D, 0.45D, 0.02D);
-        world.playSound(null, summoned.getBlockPos(), SoundEvents.BLOCK_SOUL_SAND_BREAK, SoundCategory.PLAYERS, 1.0F, 0.65F);
+        world.spawnParticles(
+                ParticleTypes.SOUL,
+                summoned.getX(),
+                summoned.getBodyY(0.55D),
+                summoned.getZ(),
+                28,
+                0.65D,
+                0.75D,
+                0.65D,
+                0.04D);
+        world.spawnParticles(
+                ParticleTypes.SOUL_FIRE_FLAME,
+                summoned.getX(),
+                summoned.getBodyY(0.55D),
+                summoned.getZ(),
+                12,
+                0.45D,
+                0.55D,
+                0.45D,
+                0.02D);
+        world.playSound(
+                null,
+                summoned.getBlockPos(),
+                SoundEvents.BLOCK_SOUL_SAND_BREAK,
+                SoundCategory.PLAYERS,
+                1.0F,
+                0.65F);
         SmoothClassesNetworking.sendAbilityState(player);
-        return ExecutionResult.success(1, "Summoned " + AvengerSummonRecipes.friendlyEntityName(chosen.entityId())
-                + " (" + summonCharges(player) + "/3 charges)");
+        return ExecutionResult.success(
+                1,
+                "Summoned "
+                        + AvengerSummonRecipes.friendlyEntityName(chosen.entityId())
+                        + " ("
+                        + summonCharges(player)
+                        + "/3 charges)");
     }
 
     /**
@@ -571,7 +710,8 @@ public final class AvengerReworkRuntime {
      */
     private static Vec3d aimedStaySpot(ServerPlayerEntity player) {
         HitResult hit = player.raycast(16D, 1F, false);
-        if (!(hit instanceof BlockHitResult block) || hit.getType() != HitResult.Type.BLOCK
+        if (!(hit instanceof BlockHitResult block)
+                || hit.getType() != HitResult.Type.BLOCK
                 || block.getSide() != Direction.UP) return null;
         return staySpotAbove(player.getServerWorld(), block.getBlockPos());
     }
@@ -583,7 +723,7 @@ public final class AvengerReworkRuntime {
         if (flat.lengthSquared() < 1.0E-6D) flat = new Vec3d(0D, 0D, 1D);
         flat = flat.normalize();
         ServerWorld world = player.getServerWorld();
-        for (double distance : new double[]{2.5D, 3.5D, 1.5D}) {
+        for (double distance : new double[] {2.5D, 3.5D, 1.5D}) {
             Vec3d inFront = player.getPos().add(flat.multiply(distance));
             int x = net.minecraft.util.math.MathHelper.floor(inFront.x);
             int z = net.minecraft.util.math.MathHelper.floor(inFront.z);
@@ -598,33 +738,45 @@ public final class AvengerReworkRuntime {
 
     private static Vec3d staySpotAbove(ServerWorld world, BlockPos ground) {
         BlockPos spawnBlock = ground.up();
-        if (!world.isChunkLoaded(ground.getX() >> 4, ground.getZ() >> 4) || !world.isChunkLoaded(spawnBlock.getX() >> 4, spawnBlock.getZ() >> 4)) return null;
+        if (!world.isChunkLoaded(ground.getX() >> 4, ground.getZ() >> 4)
+                || !world.isChunkLoaded(spawnBlock.getX() >> 4, spawnBlock.getZ() >> 4))
+            return null;
         var groundState = world.getBlockState(ground);
         var shape = groundState.getCollisionShape(world, ground);
         if (shape.isEmpty() || !groundState.getFluidState().isEmpty()) return null;
         if (!world.getBlockState(spawnBlock).getCollisionShape(world, spawnBlock).isEmpty()
                 || !world.getBlockState(spawnBlock).getFluidState().isEmpty()) return null;
         BlockPos headRoom = spawnBlock.up();
-        if (!world.getBlockState(headRoom).getCollisionShape(world, headRoom).isEmpty()) return null;
+        if (!world.getBlockState(headRoom).getCollisionShape(world, headRoom).isEmpty())
+            return null;
         double y = ground.getY() + shape.getMax(Direction.Axis.Y);
         return new Vec3d(ground.getX() + .5D, y, ground.getZ() + .5D);
     }
 
-    private static LivingEntity spawnRegisteredSoul(ServerPlayerEntity player, AvengerSummonRecipes.Recipe recipe,
-                                                    Vec3d requestedStaySpot) {
+    private static LivingEntity spawnRegisteredSoul(
+            ServerPlayerEntity player,
+            AvengerSummonRecipes.Recipe recipe,
+            Vec3d requestedStaySpot) {
         // Do not create an unexpected boss or non-living entity, even from a forged old ledger.
-        if (!AvengerSummonRecipes.supported(recipe.entityId()) || AvengerSummonSafety.bannedId(recipe.entityId())) return null;
-        EntityType<?> type = org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE.get(recipe.entityIdentifier());
+        if (!AvengerSummonRecipes.supported(recipe.entityId())
+                || AvengerSummonSafety.bannedId(recipe.entityId())) return null;
+        EntityType<?> type =
+                org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE.get(
+                        recipe.entityIdentifier());
         Vec3d look = player.getRotationVec(1F);
         Vec3d flat = new Vec3d(look.x, 0D, look.z);
         if (flat.lengthSquared() < 1.0E-6D) flat = new Vec3d(0D, 0D, 1D);
         flat = flat.normalize();
-        Vec3d pos = requestedStaySpot == null ? player.getPos().add(flat.multiply(2.5D)) : requestedStaySpot;
+        Vec3d pos =
+                requestedStaySpot == null
+                        ? player.getPos().add(flat.multiply(2.5D))
+                        : requestedStaySpot;
         Entity entity;
         try {
             entity = type.create(player.getServerWorld());
         } catch (RuntimeException | LinkageError spawnFailure) {
-            SmoothClasses.LOGGER.warn("Avenger constructor rejected {}", recipe.entityId(), spawnFailure);
+            SmoothClasses.LOGGER.warn(
+                    "Avenger constructor rejected {}", recipe.entityId(), spawnFailure);
             // Optional modded entities can reject invalid spawn contexts. No item,
             // soul, or charge has been consumed yet; don't crash the server.
             return null;
@@ -640,13 +792,19 @@ public final class AvengerReworkRuntime {
         living.refreshPositionAndAngles(pos.x, pos.y, pos.z, player.getYaw(), 0F);
         if (living instanceof MobEntity mob) {
             try {
-                org.marj4n.smooth_classes.platform.PlatformSpawns.initialize(mob, player.getServerWorld(), SpawnReason.MOB_SUMMONED);
+                org.marj4n.smooth_classes.platform.PlatformSpawns.initialize(
+                        mob, player.getServerWorld(), SpawnReason.MOB_SUMMONED);
             } catch (RuntimeException | LinkageError failure) {
-                SmoothClasses.LOGGER.warn("Avenger initialization rejected {}", recipe.entityId(), failure);
-                living.discard(); return null;
+                SmoothClasses.LOGGER.warn(
+                        "Avenger initialization rejected {}", recipe.entityId(), failure);
+                living.discard();
+                return null;
             }
         }
-        if (!AvengerSummonSafety.allowed(living)) { living.discard(); return null; }
+        if (!AvengerSummonSafety.allowed(living)) {
+            living.discard();
+            return null;
+        }
         if (requestedStaySpot != null && !player.getServerWorld().isSpaceEmpty(living)) {
             // Do not charge the player for a mob stuck inside a throne/wall.
             living.discard();
@@ -663,15 +821,25 @@ public final class AvengerReworkRuntime {
         SmoothProgressionSummonLevels.synchronize(player, living);
         // One captured soul summons one mob. Do not introduce a hidden boss or
         // free recallable souls through randomized natural-spawn passengers.
-        for (Entity passenger : living.streamSelfAndPassengers().filter(e -> e != living).toList()) {
+        for (Entity passenger :
+                living.streamSelfAndPassengers().filter(e -> e != living).toList()) {
             if (passenger instanceof LivingEntity rider) {
-                if (!AvengerSummonSafety.allowed(rider)) { living.discard(); rider.discard(); return null; }
+                if (!AvengerSummonSafety.allowed(rider)) {
+                    living.discard();
+                    rider.discard();
+                    return null;
+                }
             }
-            passenger.stopRiding(); passenger.discard();
+            passenger.stopRiding();
+            passenger.discard();
         }
-        if (living.isRemoved() || !living.isAlive() || !player.getServerWorld().spawnEntity(living)) {
-            SmoothClasses.LOGGER.warn("Avenger world rejected {} removed={}", recipe.entityId(), living.isRemoved());
-            living.discard(); return null;
+        if (living.isRemoved()
+                || !living.isAlive()
+                || !player.getServerWorld().spawnEntity(living)) {
+            SmoothClasses.LOGGER.warn(
+                    "Avenger world rejected {} removed={}", recipe.entityId(), living.isRemoved());
+            living.discard();
+            return null;
         }
         return living;
     }
@@ -696,9 +864,10 @@ public final class AvengerReworkRuntime {
         // grants a profession or pre-baked trades unless an enchanted book is
         // explicitly bound by the emerald + off-hand book recipe afterward.
         if (living instanceof VillagerEntity villager) {
-            villager.setVillagerData(villager.getVillagerData()
-                    .withProfession(VillagerProfession.NONE)
-                    .withLevel(1));
+            villager.setVillagerData(
+                    villager.getVillagerData()
+                            .withProfession(VillagerProfession.NONE)
+                            .withLevel(1));
             villager.setExperience(0);
         }
         if (living instanceof MobEntity mob) mob.setPersistent();
@@ -732,20 +901,28 @@ public final class AvengerReworkRuntime {
         if (ownerId == null || summon.getServer() == null) return;
         ServerPlayerEntity owner = summon.getServer().getPlayerManager().getPlayer(ownerId);
         if (owner != null) {
-            owner.sendMessage(Text.literal("Guard lost: " + summon.getName().getString())
-                    .formatted(Formatting.RED), true);
+            owner.sendMessage(
+                    Text.literal("Guard lost: " + summon.getName().getString())
+                            .formatted(Formatting.RED),
+                    true);
         }
     }
 
     private static void applySummonBuffs(ServerPlayerEntity owner, LivingEntity summon) {
-        int damageRank = talentRank(owner, AvengerContent.SUMMON_DAMAGE_I, AvengerContent.SUMMON_DAMAGE_II);
-        int healthRank = talentRank(owner, AvengerContent.SUMMON_HEALTH_I, AvengerContent.SUMMON_HEALTH_II);
-        int armorRank = talentRank(owner, AvengerContent.SUMMON_ARMOR_I, AvengerContent.SUMMON_ARMOR_II);
+        int damageRank =
+                talentRank(owner, AvengerContent.SUMMON_DAMAGE_I, AvengerContent.SUMMON_DAMAGE_II);
+        int healthRank =
+                talentRank(owner, AvengerContent.SUMMON_HEALTH_I, AvengerContent.SUMMON_HEALTH_II);
+        int armorRank =
+                talentRank(owner, AvengerContent.SUMMON_ARMOR_I, AvengerContent.SUMMON_ARMOR_II);
 
-        EntityAttributeInstance damage = summon.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE);
-        if (damage != null && damageRank > 0) damage.setBaseValue(damage.getBaseValue() * (1D + damageRank * 0.30D));
+        EntityAttributeInstance damage =
+                summon.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE);
+        if (damage != null && damageRank > 0)
+            damage.setBaseValue(damage.getBaseValue() * (1D + damageRank * 0.30D));
 
-        EntityAttributeInstance maxHealth = summon.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH);
+        EntityAttributeInstance maxHealth =
+                summon.getAttributeInstance(EntityAttributes.GENERIC_MAX_HEALTH);
         if (maxHealth != null) {
             double multiplier = 1D + healthRank * 0.30D;
             if (AbilityRuntime.hasTalent(owner, AvengerContent.SOUL_PACT.id())) multiplier += 0.25D;
@@ -763,12 +940,14 @@ public final class AvengerReworkRuntime {
         }
 
         if (AbilityRuntime.hasTalent(owner, AvengerContent.DEATH_MARCH.id())) {
-            EntityAttributeInstance speed = summon.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED);
+            EntityAttributeInstance speed =
+                    summon.getAttributeInstance(EntityAttributes.GENERIC_MOVEMENT_SPEED);
             if (speed != null) speed.setBaseValue(speed.getBaseValue() * 1.15D);
         }
     }
 
-    private static int talentRank(ServerPlayerEntity player, org.marj4n.smooth_classes.api.talent.Talent... talents) {
+    private static int talentRank(
+            ServerPlayerEntity player, org.marj4n.smooth_classes.api.talent.Talent... talents) {
         int count = 0;
         for (var talent : talents) if (AbilityRuntime.hasTalent(player, talent.id())) count++;
         return count;
@@ -796,7 +975,8 @@ public final class AvengerReworkRuntime {
         LivingEntity summon = aimedLiving(player, 32D, entity -> isOwnedSummon(player, entity));
         if (selection == 6 && summon == null) return summonFromHands(player, true);
         if (summon == null) return ExecutionResult.failure("Aim at your summon.");
-        if (AvengerSoulAnimationRuntime.busy(summon)) return ExecutionResult.failure("Soul ritual in progress.");
+        if (AvengerSoulAnimationRuntime.busy(summon))
+            return ExecutionResult.failure("Soul ritual in progress.");
         return switch (selection) {
             case 0 -> {
                 clearGuard(summon);
@@ -822,8 +1002,17 @@ public final class AvengerReworkRuntime {
                     mob.setTarget(null);
                     mob.getNavigation().stop();
                 }
-                player.getServerWorld().spawnParticles(ParticleTypes.SOUL, post.getX() + .5,
-                        post.getY() + 1.0, post.getZ() + .5, 12, .5, .3, .5, .02);
+                player.getServerWorld()
+                        .spawnParticles(
+                                ParticleTypes.SOUL,
+                                post.getX() + .5,
+                                post.getY() + 1.0,
+                                post.getZ() + .5,
+                                12,
+                                .5,
+                                .3,
+                                .5,
+                                .02);
                 yield ExecutionResult.success(1, "Guard");
             }
             case 2 -> recallSummon(player, AvengerDeathListState.get(player.getServer()), summon);
@@ -843,23 +1032,36 @@ public final class AvengerReworkRuntime {
     }
 
     /** Shared Attack order for the H radial wheel and quick tap. */
-    private static ExecutionResult markAttackTarget(ServerPlayerEntity player, LivingEntity target) {
+    private static ExecutionResult markAttackTarget(
+            ServerPlayerEntity player, LivingEntity target) {
         if (!validEnemy(player, target)) return ExecutionResult.failure("Invalid attack target.");
         for (String tag : new HashSet<>(player.getCommandTags())) {
             if (tag.startsWith(ATTACK_TAG_PREFIX)) player.removeScoreboardTag(tag);
         }
         player.addCommandTag(ATTACK_TAG_PREFIX + target.getUuid());
         syncAttackMarker(player);
-        player.getServerWorld().spawnParticles(ParticleTypes.ANGRY_VILLAGER,
-                target.getX(), target.getBodyY(0.8D), target.getZ(), 8, .35D, .4D, .35D, .02D);
+        player.getServerWorld()
+                .spawnParticles(
+                        ParticleTypes.ANGRY_VILLAGER,
+                        target.getX(),
+                        target.getBodyY(0.8D),
+                        target.getZ(),
+                        8,
+                        .35D,
+                        .4D,
+                        .35D,
+                        .02D);
         return ExecutionResult.success(1, "Attack");
     }
 
     private static UUID attackTargetId(ServerPlayerEntity owner) {
         for (String tag : owner.getCommandTags()) {
             if (tag.startsWith(ATTACK_TAG_PREFIX)) {
-                try { return UUID.fromString(tag.substring(ATTACK_TAG_PREFIX.length())); }
-                catch (IllegalArgumentException ignored) { return null; }
+                try {
+                    return UUID.fromString(tag.substring(ATTACK_TAG_PREFIX.length()));
+                } catch (IllegalArgumentException ignored) {
+                    return null;
+                }
             }
         }
         return null;
@@ -902,7 +1104,8 @@ public final class AvengerReworkRuntime {
         ServerPlayNetworking.send(owner, SmoothClassesNetworking.SYNC_AVENGER_ATTACK_MARK, packet);
     }
 
-    private static boolean orderedAttack(ServerPlayerEntity owner, MobEntity mob, LivingEntity target) {
+    private static boolean orderedAttack(
+            ServerPlayerEntity owner, MobEntity mob, LivingEntity target) {
         if (target == null || mob.squaredDistanceTo(target) > 64D * 64D) return false;
         if (mob.isAiDisabled()) mob.setAiDisabled(false);
         if (mob instanceof WardenEntity warden && warden.isValidTarget(target)) {
@@ -912,7 +1115,8 @@ public final class AvengerReworkRuntime {
         if (mob.squaredDistanceTo(target) > 2.25D * 2.25D) {
             mob.getNavigation().startMovingTo(target, 1.25D);
         } else if (mob.age % 20 == 0 && !(mob instanceof HostileEntity)) {
-            EntityAttributeInstance attribute = mob.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE);
+            EntityAttributeInstance attribute =
+                    mob.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE);
             float damage = attribute == null ? 2F : Math.max(2F, (float) attribute.getValue());
             target.damage(mob.getDamageSources().mobAttack(mob), damage);
         }
@@ -921,16 +1125,23 @@ public final class AvengerReworkRuntime {
 
     private static ExecutionResult callBackup(ServerPlayerEntity owner) {
         ServerWorld world = owner.getServerWorld();
-        List<LivingEntity> summons = world.getEntitiesByClass(LivingEntity.class,
-                owner.getBoundingBox().expand(64D), mob -> mob.isAlive()
-                        && isOwnedSummon(owner, mob) && mob.squaredDistanceTo(owner) <= 64D * 64D
-                        && mob.squaredDistanceTo(owner) > 7D * 7D && !AvengerSoulAnimationRuntime.busy(mob));
+        List<LivingEntity> summons =
+                world.getEntitiesByClass(
+                        LivingEntity.class,
+                        owner.getBoundingBox().expand(64D),
+                        mob ->
+                                mob.isAlive()
+                                        && isOwnedSummon(owner, mob)
+                                        && mob.squaredDistanceTo(owner) <= 64D * 64D
+                                        && mob.squaredDistanceTo(owner) > 7D * 7D
+                                        && !AvengerSoulAnimationRuntime.busy(mob));
         int pulled = 0;
         for (LivingEntity summon : summons) {
             BlockPos destination = safeBackupPosition(world, owner, summon, pulled);
             if (destination == null) continue;
             if (summon.hasVehicle() || summon.hasPassengers()) continue;
-            summon.requestTeleport(destination.getX() + .5D, destination.getY(), destination.getZ() + .5D);
+            summon.requestTeleport(
+                    destination.getX() + .5D, destination.getY(), destination.getZ() + .5D);
             clearGuard(summon);
             clearStay(summon);
             if (summon instanceof MobEntity mob) {
@@ -939,29 +1150,43 @@ public final class AvengerReworkRuntime {
                 mob.getNavigation().stop();
             }
             AvengerSoulAnimationRuntime.emerge(owner, summon);
-            world.spawnParticles(ParticleTypes.SOUL, destination.getX() + .5D,
-                    destination.getY() + .15D, destination.getZ() + .5D, 16, .5D, .25D, .5D, .03D);
+            world.spawnParticles(
+                    ParticleTypes.SOUL,
+                    destination.getX() + .5D,
+                    destination.getY() + .15D,
+                    destination.getZ() + .5D,
+                    16,
+                    .5D,
+                    .25D,
+                    .5D,
+                    .03D);
             pulled++;
         }
         if (pulled == 0) return ExecutionResult.failure("No nearby souls available.");
         return ExecutionResult.success(1, "Backup");
     }
 
-    private static BlockPos safeBackupPosition(ServerWorld world, ServerPlayerEntity owner,
-                                               LivingEntity summon, int slot) {
+    private static BlockPos safeBackupPosition(
+            ServerWorld world, ServerPlayerEntity owner, LivingEntity summon, int slot) {
         // Each summon gets a distinct spot. No chunk forcing or random underground teleports.
         for (int i = 0; i < 24; i++) {
             double angle = (slot * 2.3999632297D) + i * .65D;
             double radius = 2.5D + (slot % 4) + (i / 8);
-            int x = net.minecraft.util.math.MathHelper.floor(owner.getX() + Math.cos(angle) * radius);
-            int z = net.minecraft.util.math.MathHelper.floor(owner.getZ() + Math.sin(angle) * radius);
+            int x =
+                    net.minecraft.util.math.MathHelper.floor(
+                            owner.getX() + Math.cos(angle) * radius);
+            int z =
+                    net.minecraft.util.math.MathHelper.floor(
+                            owner.getZ() + Math.sin(angle) * radius);
             int baseY = owner.getBlockY();
             for (int dy = 3; dy >= -3; dy--) {
                 BlockPos p = new BlockPos(x, baseY + dy, z);
                 if (!world.isChunkLoaded(p.getX() >> 4, p.getZ() >> 4)) continue;
-                if (!world.getBlockState(p.down()).isSideSolidFullSquare(world, p.down(), Direction.UP)) continue;
+                if (!world.getBlockState(p.down())
+                        .isSideSolidFullSquare(world, p.down(), Direction.UP)) continue;
                 boolean room = true;
-                int height = Math.max(2, net.minecraft.util.math.MathHelper.ceil(summon.getHeight()));
+                int height =
+                        Math.max(2, net.minecraft.util.math.MathHelper.ceil(summon.getHeight()));
                 for (int h = 0; h < height; h++) {
                     BlockPos check = p.up(h);
                     if (!world.getBlockState(check).getCollisionShape(world, check).isEmpty()
@@ -995,9 +1220,12 @@ public final class AvengerReworkRuntime {
         float facing = summon.getYaw();
         UUID ownerId = summonOwnerUuid(summon);
         MinecraftServer server = summon.getServer();
-        ServerPlayerEntity owner = ownerId == null || server == null
-                ? null : server.getPlayerManager().getPlayer(ownerId);
-        if (owner != null && owner.getWorld() == summon.getWorld()
+        ServerPlayerEntity owner =
+                ownerId == null || server == null
+                        ? null
+                        : server.getPlayerManager().getPlayer(ownerId);
+        if (owner != null
+                && owner.getWorld() == summon.getWorld()
                 && summon.squaredDistanceTo(owner) <= 32.0D * 32.0D) {
             facing = yawToward(summon, owner.getX(), owner.getZ());
         }
@@ -1023,9 +1251,13 @@ public final class AvengerReworkRuntime {
         if (summon == null) return null;
         for (String tag : summon.getCommandTags()) {
             // Facing tags deliberately share the Stay namespace but are not positions.
-            if (!tag.startsWith(STAY_TAG_PREFIX) || tag.startsWith(STAY_FACING_TAG_PREFIX)) continue;
-            try { return BlockPos.fromLong(Long.parseLong(tag.substring(STAY_TAG_PREFIX.length()))); }
-            catch (NumberFormatException ignored) { return null; }
+            if (!tag.startsWith(STAY_TAG_PREFIX) || tag.startsWith(STAY_FACING_TAG_PREFIX))
+                continue;
+            try {
+                return BlockPos.fromLong(Long.parseLong(tag.substring(STAY_TAG_PREFIX.length())));
+            } catch (NumberFormatException ignored) {
+                return null;
+            }
         }
         return null;
     }
@@ -1041,14 +1273,18 @@ public final class AvengerReworkRuntime {
         for (String tag : mob.getCommandTags()) {
             if (!tag.startsWith(STAY_FACING_TAG_PREFIX)) continue;
             try {
-                return MathHelper.wrapDegrees(Float.parseFloat(tag.substring(STAY_FACING_TAG_PREFIX.length())));
+                return MathHelper.wrapDegrees(
+                        Float.parseFloat(tag.substring(STAY_FACING_TAG_PREFIX.length())));
             } catch (NumberFormatException ignored) {
                 // Malformed legacy tag; reconstruct an initial direction below.
             }
         }
-        float facing = (owner != null && owner.getWorld() == mob.getWorld()
-                && mob.squaredDistanceTo(owner) < 32.0D * 32.0D)
-                ? yawToward(mob, owner.getX(), owner.getZ()) : mob.getYaw();
+        float facing =
+                (owner != null
+                                && owner.getWorld() == mob.getWorld()
+                                && mob.squaredDistanceTo(owner) < 32.0D * 32.0D)
+                        ? yawToward(mob, owner.getX(), owner.getZ())
+                        : mob.getYaw();
         facing = MathHelper.wrapDegrees(facing);
         mob.addCommandTag(STAY_FACING_TAG_PREFIX + Math.round(facing));
         return facing;
@@ -1072,9 +1308,15 @@ public final class AvengerReworkRuntime {
         LivingEntity focus = null;
         double nearestDangerSq = STAY_WATCH_DANGER_RADIUS * STAY_WATCH_DANGER_RADIUS;
         Box area = mob.getBoundingBox().expand(STAY_WATCH_DANGER_RADIUS);
-        for (HostileEntity hostile : ((ServerWorld) mob.getWorld()).getEntitiesByClass(
-                HostileEntity.class, area, enemy -> enemy.isAlive() && enemy != mob
-                        && !isAvengerSummon(enemy))) {
+        for (HostileEntity hostile :
+                ((ServerWorld) mob.getWorld())
+                        .getEntitiesByClass(
+                                HostileEntity.class,
+                                area,
+                                enemy ->
+                                        enemy.isAlive()
+                                                && enemy != mob
+                                                && !isAvengerSummon(enemy))) {
             double distanceSq = mob.squaredDistanceTo(hostile);
             if (distanceSq < nearestDangerSq) {
                 focus = hostile;
@@ -1083,8 +1325,12 @@ public final class AvengerReworkRuntime {
         }
 
         // Prioritize imminent danger, otherwise acknowledge the owner nearby.
-        boolean ownerNearby = owner != null && owner.getWorld() == mob.getWorld()
-                && owner.isAlive() && mob.squaredDistanceTo(owner) <= STAY_WATCH_OWNER_RADIUS * STAY_WATCH_OWNER_RADIUS;
+        boolean ownerNearby =
+                owner != null
+                        && owner.getWorld() == mob.getWorld()
+                        && owner.isAlive()
+                        && mob.squaredDistanceTo(owner)
+                                <= STAY_WATCH_OWNER_RADIUS * STAY_WATCH_OWNER_RADIUS;
         if (ownerNearby && (focus == null || nearestDangerSq > 8.0D * 8.0D)) {
             focus = owner;
         }
@@ -1101,8 +1347,15 @@ public final class AvengerReworkRuntime {
             double dx = focus.getX() - mob.getX();
             double dz = focus.getZ() - mob.getZ();
             double dy = focus.getEyeY() - mob.getEyeY();
-            pitchTarget = MathHelper.clamp((float) -Math.toDegrees(Math.atan2(dy,
-                    Math.max(.01D, Math.sqrt(dx * dx + dz * dz)))), -24.0F, 24.0F);
+            pitchTarget =
+                    MathHelper.clamp(
+                            (float)
+                                    -Math.toDegrees(
+                                            Math.atan2(
+                                                    dy,
+                                                    Math.max(.01D, Math.sqrt(dx * dx + dz * dz)))),
+                            -24.0F,
+                            24.0F);
         } else {
             // Unique phase per summon prevents a row of throne guards moving in
             // perfect synchrony. The sweep is slow and close to their saved facing.
@@ -1116,8 +1369,13 @@ public final class AvengerReworkRuntime {
         // NoAI blocks the vanilla LookControl tick, so synchronize the explicit
         // head and body yaw after MobEntity.tick has finished.
         float body = turnToward(mob.bodyYaw, bodyTarget, 7.0F);
-        float head = turnToward(mob.headYaw,
-                body + MathHelper.clamp(MathHelper.wrapDegrees(headTarget - body), -70.0F, 70.0F), 13.0F);
+        float head =
+                turnToward(
+                        mob.headYaw,
+                        body
+                                + MathHelper.clamp(
+                                        MathHelper.wrapDegrees(headTarget - body), -70.0F, 70.0F),
+                        13.0F);
         mob.setYaw(body);
         mob.setBodyYaw(body);
         mob.setHeadYaw(head);
@@ -1133,7 +1391,9 @@ public final class AvengerReworkRuntime {
         BlockPos below = stay.down();
         var belowState = world.getBlockState(below);
         var belowShape = belowState.getCollisionShape(world, below);
-        return belowShape.isEmpty() ? stay.getY() : below.getY() + belowShape.getMax(Direction.Axis.Y);
+        return belowShape.isEmpty()
+                ? stay.getY()
+                : below.getY() + belowShape.getMax(Direction.Axis.Y);
     }
 
     /** True when this bound summon currently has a persistent guard post. */
@@ -1165,15 +1425,19 @@ public final class AvengerReworkRuntime {
      * 96-block follow range. Other players can load the post while the owner is away.
      */
     public static void tickGuardedMob(MobEntity mob) {
-        if (mob == null || mob.getWorld().isClient || mob.age % 5 != 0
-                || !isAvengerSummon(mob) || AvengerSoulAnimationRuntime.busy(mob)) return;
+        if (mob == null
+                || mob.getWorld().isClient
+                || mob.age % 5 != 0
+                || !isAvengerSummon(mob)
+                || AvengerSoulAnimationRuntime.busy(mob)) return;
         BlockPos post = guardPosition(mob);
         BlockPos stay = stayPosition(mob);
         if (post == null && stay == null) return;
         MinecraftServer server = mob.getServer();
         if (server == null) return;
         UUID ownerId = summonOwnerUuid(mob);
-        ServerPlayerEntity owner = ownerId == null ? null : server.getPlayerManager().getPlayer(ownerId);
+        ServerPlayerEntity owner =
+                ownerId == null ? null : server.getPlayerManager().getPlayer(ownerId);
         // Guards outside the owner's 96-block sweep update while their chunk is loaded.
         if (owner != null) SmoothProgressionSummonLevels.synchronize(owner, mob);
         // Stay is purely decorative. Even a global Attack order must not unfreeze
@@ -1212,8 +1476,12 @@ public final class AvengerReworkRuntime {
         if (target == null) {
             double bestDistance = Double.MAX_VALUE;
             Box search = new Box(post).expand(GUARD_DETECT_RADIUS);
-            for (HostileEntity hostile : ((ServerWorld) mob.getWorld()).getEntitiesByClass(
-                    HostileEntity.class, search, enemy -> isGuardHostile(owner, post, enemy))) {
+            for (HostileEntity hostile :
+                    ((ServerWorld) mob.getWorld())
+                            .getEntitiesByClass(
+                                    HostileEntity.class,
+                                    search,
+                                    enemy -> isGuardHostile(owner, post, enemy))) {
                 double distance = mob.squaredDistanceTo(hostile);
                 if (distance < bestDistance) {
                     bestDistance = distance;
@@ -1237,7 +1505,8 @@ public final class AvengerReworkRuntime {
             else if ((mob.age % 20) == 0 && !(mob instanceof HostileEntity)) {
                 // Cows/villagers and some optional soul types lack an attack goal
                 // or a generic attack-damage attribute, but still must defend post.
-                EntityAttributeInstance attack = mob.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE);
+                EntityAttributeInstance attack =
+                        mob.getAttributeInstance(EntityAttributes.GENERIC_ATTACK_DAMAGE);
                 float damage = attack == null ? 2.0F : Math.max(2.0F, (float) attack.getValue());
                 target.damage(mob.getDamageSources().mobAttack(mob), damage);
             }
@@ -1255,14 +1524,17 @@ public final class AvengerReworkRuntime {
             mob.requestTeleport(post.getX() + .5D, post.getY(), post.getZ() + .5D);
             mob.getNavigation().stop();
         } else if (horizontalSq > 1.6D * 1.6D) {
-            mob.getNavigation().startMovingTo(post.getX() + .5D, post.getY(), post.getZ() + .5D, 1.1D);
+            mob.getNavigation()
+                    .startMovingTo(post.getX() + .5D, post.getY(), post.getZ() + .5D, 1.1D);
         } else {
             mob.getNavigation().stop();
         }
     }
 
-    private static boolean isGuardHostile(ServerPlayerEntity owner, BlockPos post, LivingEntity target) {
-        if (!(target instanceof HostileEntity) || !target.isAlive() || isAvengerSummon(target)) return false;
+    private static boolean isGuardHostile(
+            ServerPlayerEntity owner, BlockPos post, LivingEntity target) {
+        if (!(target instanceof HostileEntity) || !target.isAlive() || isAvengerSummon(target))
+            return false;
         if (owner != null && !validEnemy(owner, target)) return false;
         double x = target.getX() - (post.getX() + .5D);
         double y = target.getY() - (post.getY() + .5D);
@@ -1270,7 +1542,8 @@ public final class AvengerReworkRuntime {
         return x * x + y * y + z * z <= GUARD_CHASE_RADIUS * GUARD_CHASE_RADIUS;
     }
 
-    private static ExecutionResult recallSummon(ServerPlayerEntity player, AvengerDeathListState state, LivingEntity summon) {
+    private static ExecutionResult recallSummon(
+            ServerPlayerEntity player, AvengerDeathListState state, LivingEntity summon) {
         if (!isOwnedSummon(player, summon)) {
             return ExecutionResult.failure("That summon does not belong to your Death List.");
         }
@@ -1278,7 +1551,10 @@ public final class AvengerReworkRuntime {
             return ExecutionResult.failure("That soul is still materializing or being absorbed.");
         }
 
-        String entityId = org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE.getId(summon.getType()).toString();
+        String entityId =
+                org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE
+                        .getId(summon.getType())
+                        .toString();
         AvengerSummonRecipes.Recipe recipe = AvengerSummonRecipes.recipe(entityId);
         if (recipe == null) {
             return ExecutionResult.failure("That summon has no Death List recall recipe.");
@@ -1287,14 +1563,25 @@ public final class AvengerReworkRuntime {
         if (!AvengerSoulAnimationRuntime.recall(player, summon, recipe)) {
             return ExecutionResult.failure("That soul cannot be recalled right now.");
         }
-        player.getServerWorld().playSound(null, summon.getBlockPos(), SoundEvents.BLOCK_SOUL_SAND_BREAK,
-                SoundCategory.PLAYERS, 0.9F, 0.55F);
-        return ExecutionResult.success(1, "Absorbing " + AvengerSummonRecipes.friendlyEntityName(entityId)
-                + " into the Death List. Soul and ingredients return after the ritual.");
+        player.getServerWorld()
+                .playSound(
+                        null,
+                        summon.getBlockPos(),
+                        SoundEvents.BLOCK_SOUL_SAND_BREAK,
+                        SoundCategory.PLAYERS,
+                        0.9F,
+                        0.55F);
+        return ExecutionResult.success(
+                1,
+                "Absorbing "
+                        + AvengerSummonRecipes.friendlyEntityName(entityId)
+                        + " into the Death List. Soul and ingredients return after the ritual.");
     }
 
-    private static ExecutionResult unbindSummon(ServerPlayerEntity player, AvengerDeathListState state, LivingEntity summon) {
-        if (AvengerSoulAnimationRuntime.busy(summon)) return ExecutionResult.failure("That soul is still in a ritual.");
+    private static ExecutionResult unbindSummon(
+            ServerPlayerEntity player, AvengerDeathListState state, LivingEntity summon) {
+        if (AvengerSoulAnimationRuntime.busy(summon))
+            return ExecutionResult.failure("That soul is still in a ritual.");
         // A manifested soul was already consumed from the ledger. Unbinding never
         // refunds it or erases other captured souls of the same species.
         clearGuard(summon);
@@ -1332,8 +1619,17 @@ public final class AvengerReworkRuntime {
         }
         summon.setAttacker(null);
         if (summon instanceof Angerable angerable) angerable.stopAnger();
-        player.getServerWorld().spawnParticles(ParticleTypes.SOUL, summon.getX(), summon.getBodyY(.5), summon.getZ(),
-                20, .4, .5, .4, .02);
+        player.getServerWorld()
+                .spawnParticles(
+                        ParticleTypes.SOUL,
+                        summon.getX(),
+                        summon.getBodyY(.5),
+                        summon.getZ(),
+                        20,
+                        .4,
+                        .5,
+                        .4,
+                        .02);
         refreshDeathListNow(player, state);
         return ExecutionResult.success(1, "Soul unbound. Its normal AI is restored.");
     }
@@ -1343,7 +1639,9 @@ public final class AvengerReworkRuntime {
         Identifier id = org.marj4n.smooth_classes.util.ResourceIds.parse(itemId);
         if (!org.marj4n.smooth_classes.platform.PlatformRegistries.ITEM.containsId(id)) return;
 
-        ItemStack refund = new ItemStack(org.marj4n.smooth_classes.platform.PlatformRegistries.ITEM.get(id), 1);
+        ItemStack refund =
+                new ItemStack(
+                        org.marj4n.smooth_classes.platform.PlatformRegistries.ITEM.get(id), 1);
         refundRecipeStack(player, refund);
     }
 
@@ -1370,7 +1668,10 @@ public final class AvengerReworkRuntime {
     }
 
     private static void mergeRefundStack(ItemStack existing, ItemStack refund) {
-        if (existing == null || existing.isEmpty() || refund.isEmpty() || !ItemStack.canCombine(existing, refund)) return;
+        if (existing == null
+                || existing.isEmpty()
+                || refund.isEmpty()
+                || !ItemStack.canCombine(existing, refund)) return;
         int room = existing.getMaxCount() - existing.getCount();
         if (room <= 0) return;
         int moved = Math.min(room, refund.getCount());
@@ -1381,18 +1682,26 @@ public final class AvengerReworkRuntime {
     public static int summonCharges(ServerPlayerEntity player) {
         if (player.getServer() == null) return 0;
         return AvengerDeathListState.get(player.getServer())
-                .refreshCharges(player.getUuid(), System.currentTimeMillis()).charges();
+                .refreshCharges(player.getUuid(), System.currentTimeMillis())
+                .charges();
     }
 
     public static long summonRechargeRemainingTicks(ServerPlayerEntity player) {
         if (player.getServer() == null) return 0L;
-        long ms = AvengerDeathListState.get(player.getServer())
-                .refreshCharges(player.getUuid(), System.currentTimeMillis()).remainingMillis();
+        long ms =
+                AvengerDeathListState.get(player.getServer())
+                        .refreshCharges(player.getUuid(), System.currentTimeMillis())
+                        .remainingMillis();
         return (ms + 49L) / 50L;
     }
 
-    public static int summonRechargeTotalTicks() { return (int) (AvengerDeathListState.RECHARGE_MILLIS / 50L); }
-    public static int maxSummonCharges() { return AvengerDeathListState.MAX_SUMMON_CHARGES; }
+    public static int summonRechargeTotalTicks() {
+        return (int) (AvengerDeathListState.RECHARGE_MILLIS / 50L);
+    }
+
+    public static int maxSummonCharges() {
+        return AvengerDeathListState.MAX_SUMMON_CHARGES;
+    }
 
     // ---------------------------------------------------------------------
     // Summon ownership / allied behavior
@@ -1410,14 +1719,19 @@ public final class AvengerReworkRuntime {
     }
 
     public static void discardHabitatMobUnlessBound(Object candidate) {
-        if (candidate instanceof Entity entity && entity.getWorld().isClient && entity.age < 20) return;
-        if (candidate instanceof Entity entity && !isAvengerSummon(entity)
-                && !(entity.getWorld().isClient && AvengerVisualBindings.clientBound(entity))) entity.discard();
+        if (candidate instanceof Entity entity && entity.getWorld().isClient && entity.age < 20)
+            return;
+        if (candidate instanceof Entity entity
+                && !isAvengerSummon(entity)
+                && !(entity.getWorld().isClient && AvengerVisualBindings.clientBound(entity)))
+            entity.discard();
     }
 
     public static boolean isBoundForHabitat(Object candidate) {
-        return candidate instanceof Entity entity && (isAvengerSummon(entity)
-                || entity.getWorld().isClient && (entity.age < 20 || AvengerVisualBindings.clientBound(entity)));
+        return candidate instanceof Entity entity
+                && (isAvengerSummon(entity)
+                        || entity.getWorld().isClient
+                                && (entity.age < 20 || AvengerVisualBindings.clientBound(entity)));
     }
 
     public static int boundHabitatLife(Object candidate, int naturalLife) {
@@ -1432,8 +1746,12 @@ public final class AvengerReworkRuntime {
         AvengerVisualBindings.refreshTracking(entity);
     }
 
-    public static boolean rejectNaturalCaveSpawn(net.minecraft.block.BlockState state, net.minecraft.block.Block block, Object candidate) {
-        return !(candidate instanceof Entity entity && isAvengerSummon(entity)) && state.isOf(block);
+    public static boolean rejectNaturalCaveSpawn(
+            net.minecraft.block.BlockState state,
+            net.minecraft.block.Block block,
+            Object candidate) {
+        return !(candidate instanceof Entity entity && isAvengerSummon(entity))
+                && state.isOf(block);
     }
 
     public static boolean isOwnedSummon(ServerPlayerEntity owner, Entity entity) {
@@ -1483,49 +1801,68 @@ public final class AvengerReworkRuntime {
         if (actor == null || target == null) return false;
         UUID actorOwner = summonOwnerUuid(actor);
         if (actorOwner == null) return false;
-        if (target instanceof ServerPlayerEntity player && actorOwner.equals(player.getUuid())) return true;
+        if (target instanceof ServerPlayerEntity player && actorOwner.equals(player.getUuid()))
+            return true;
         UUID targetOwner = summonOwnerUuid(target);
         if (actorOwner.equals(targetOwner)) return true;
         return target instanceof VillagerEntity;
     }
 
     public static boolean shouldWardenIgnore(Entity warden, Entity target) {
-        if (!(warden instanceof LivingEntity livingWarden) || !(target instanceof LivingEntity livingTarget)) return false;
+        if (!(warden instanceof LivingEntity livingWarden)
+                || !(target instanceof LivingEntity livingTarget)) return false;
         return shouldIgnoreSummonTarget(livingWarden, livingTarget);
     }
 
     /** Boss friends fire only at an order, retaliation target, or an actual guard threat. */
     public static boolean mayBoundWitherAttack(WitherEntity wither, LivingEntity target) {
-        if (target == null || !target.isAlive() || shouldIgnoreSummonTarget(wither, target) || isStaying(wither)) return false;
+        if (target == null
+                || !target.isAlive()
+                || shouldIgnoreSummonTarget(wither, target)
+                || isStaying(wither)) return false;
         UUID id = summonOwnerUuid(wither);
         if (id == null) return true;
         var server = wither.getServer();
         var owner = server == null ? null : server.getPlayerManager().getPlayer(id);
-        if (owner == null || owner.getWorld() != wither.getWorld() || !validEnemy(owner, target)) return false;
-        if (attackTarget(owner) == target || owner.getAttacking() == target || owner.getLastAttacker() == target || wither.getAttacker() == target) return true;
+        if (owner == null || owner.getWorld() != wither.getWorld() || !validEnemy(owner, target))
+            return false;
+        if (attackTarget(owner) == target
+                || owner.getAttacking() == target
+                || owner.getLastAttacker() == target
+                || wither.getAttacker() == target) return true;
         BlockPos post = guardPosition(wither);
         return post != null && isGuardHostile(owner, post, target);
     }
 
     public static boolean shouldBlockSummonedWardenDarkness(LivingEntity entity) {
         if (entity == null || entity.getWorld().isClient) return false;
-        UUID protectedOwner = entity instanceof ServerPlayerEntity player
-                ? player.getUuid() : summonOwnerUuid(entity);
-        if (protectedOwner == null || !(entity.getWorld() instanceof ServerWorld world)) return false;
-        return !world.getEntitiesByClass(WardenEntity.class, entity.getBoundingBox().expand(32D),
-                warden -> warden.isAlive() && isOwnedSummon(protectedOwner, warden)).isEmpty();
+        UUID protectedOwner =
+                entity instanceof ServerPlayerEntity player
+                        ? player.getUuid()
+                        : summonOwnerUuid(entity);
+        if (protectedOwner == null || !(entity.getWorld() instanceof ServerWorld world))
+            return false;
+        return !world.getEntitiesByClass(
+                        WardenEntity.class,
+                        entity.getBoundingBox().expand(32D),
+                        warden -> warden.isAlive() && isOwnedSummon(protectedOwner, warden))
+                .isEmpty();
     }
 
-    public static boolean shouldBlockSummonedWardenDarknessFrom(LivingEntity entity, Entity source) {
+    public static boolean shouldBlockSummonedWardenDarknessFrom(
+            LivingEntity entity, Entity source) {
         if (entity == null || source == null || entity.getWorld().isClient) return false;
-        UUID protectedOwner = entity instanceof ServerPlayerEntity player
-                ? player.getUuid() : summonOwnerUuid(entity);
+        UUID protectedOwner =
+                entity instanceof ServerPlayerEntity player
+                        ? player.getUuid()
+                        : summonOwnerUuid(entity);
         if (protectedOwner == null) return false;
         return source instanceof WardenEntity && isOwnedSummon(protectedOwner, source);
     }
 
     public static boolean shouldCancelFriendlyDamage(LivingEntity victim, DamageSource source) {
-        if (victim == null || source == null || CURTAIN_BYPASS.contains(victim.getUuid())) return false;
+        if (victim == null || source == null || CURTAIN_BYPASS.contains(victim.getUuid()))
+            return false;
         Entity attacker = source.getAttacker();
         if (attacker == null) attacker = source.getSource();
         if (attacker == null) return false;
@@ -1534,18 +1871,25 @@ public final class AvengerReworkRuntime {
         UUID attackerOwner = summonOwnerUuid(attacker);
 
         if (victimOwner != null) {
-            if (attacker instanceof ServerPlayerEntity player && victimOwner.equals(player.getUuid())) return true;
+            if (attacker instanceof ServerPlayerEntity player
+                    && victimOwner.equals(player.getUuid())) return true;
             if (attackerOwner != null && victimOwner.equals(attackerOwner)) return true;
         }
-        if (attackerOwner != null && victim instanceof ServerPlayerEntity player && attackerOwner.equals(player.getUuid())) return true;
+        if (attackerOwner != null
+                && victim instanceof ServerPlayerEntity player
+                && attackerOwner.equals(player.getUuid())) return true;
         if (attackerOwner != null && victim instanceof VillagerEntity) return true;
         return false;
     }
 
     private static void tickOwnedSummons(ServerPlayerEntity owner) {
         Box area = owner.getBoundingBox().expand(96D);
-        List<LivingEntity> summons = owner.getServerWorld().getEntitiesByClass(
-                LivingEntity.class, area, entity -> entity.isAlive() && isOwnedSummon(owner, entity));
+        List<LivingEntity> summons =
+                owner.getServerWorld()
+                        .getEntitiesByClass(
+                                LivingEntity.class,
+                                area,
+                                entity -> entity.isAlive() && isOwnedSummon(owner, entity));
 
         // Vanilla Warden darkness is an ambient pulse, not a normal combat target action.
         // Scrub it from the owner as a second line of defence in case vanilla/modded code
@@ -1566,18 +1910,21 @@ public final class AvengerReworkRuntime {
         for (LivingEntity summon : summons) alliedSummonIds.add(summon.getUuid());
 
         LivingEntity ownerTarget = owner.getAttacking();
-        if (ownerTarget == null || !validEnemy(owner, ownerTarget)) ownerTarget = owner.getLastAttacker();
+        if (ownerTarget == null || !validEnemy(owner, ownerTarget))
+            ownerTarget = owner.getLastAttacker();
         if (ownerTarget != null && !validEnemy(owner, ownerTarget)) ownerTarget = null;
 
         for (LivingEntity summon : summons) {
             SmoothProgressionSummonLevels.synchronize(owner, summon);
             // Clear stale retaliation data left by vanilla before our target filters run.
             LivingEntity attacker = summon.getAttacker();
-            if (attacker != null && shouldIgnoreSummonTarget(summon, attacker)) summon.setAttacker(null);
+            if (attacker != null && shouldIgnoreSummonTarget(summon, attacker))
+                summon.setAttacker(null);
 
             if (summon instanceof Angerable angerable) {
                 UUID angryAt = angerable.getAngryAt();
-                if (angryAt != null && (angryAt.equals(owner.getUuid()) || alliedSummonIds.contains(angryAt))) {
+                if (angryAt != null
+                        && (angryAt.equals(owner.getUuid()) || alliedSummonIds.contains(angryAt))) {
                     angerable.setAngryAt(null);
                     angerable.setAngerTime(0);
                 }
@@ -1595,7 +1942,8 @@ public final class AvengerReworkRuntime {
             LivingEntity attackOrder = attackTarget(owner);
             if (orderedAttack(owner, mob, attackOrder)) continue;
             LivingEntity current = mob.getTarget();
-            if (current != null && (!validEnemy(owner, current) || shouldIgnoreSummonTarget(summon, current))) {
+            if (current != null
+                    && (!validEnemy(owner, current) || shouldIgnoreSummonTarget(summon, current))) {
                 mob.setTarget(null);
                 mob.getNavigation().stop();
             }
@@ -1603,30 +1951,40 @@ public final class AvengerReworkRuntime {
             // Brain-driven mobs (piglins, hoglins, wardens, etc.) can keep an
             // ATTACK_TARGET memory even after MobEntity#target is cleared.
             var brain = mob.getBrain();
-            if (brain.hasMemoryModule(net.minecraft.entity.ai.brain.MemoryModuleType.ATTACK_TARGET)) {
-                var rememberedTarget = brain.getOptionalMemory(net.minecraft.entity.ai.brain.MemoryModuleType.ATTACK_TARGET);
-                if (rememberedTarget != null && rememberedTarget.isPresent()
+            if (brain.hasMemoryModule(
+                    net.minecraft.entity.ai.brain.MemoryModuleType.ATTACK_TARGET)) {
+                var rememberedTarget =
+                        brain.getOptionalMemory(
+                                net.minecraft.entity.ai.brain.MemoryModuleType.ATTACK_TARGET);
+                if (rememberedTarget != null
+                        && rememberedTarget.isPresent()
                         && shouldIgnoreSummonTarget(summon, rememberedTarget.get())) {
                     brain.forget(net.minecraft.entity.ai.brain.MemoryModuleType.ATTACK_TARGET);
-                    if (brain.hasMemoryModule(net.minecraft.entity.ai.brain.MemoryModuleType.WALK_TARGET)) {
+                    if (brain.hasMemoryModule(
+                            net.minecraft.entity.ai.brain.MemoryModuleType.WALK_TARGET)) {
                         brain.forget(net.minecraft.entity.ai.brain.MemoryModuleType.WALK_TARGET);
                     }
                 }
             }
             if (brain.hasMemoryModule(net.minecraft.entity.ai.brain.MemoryModuleType.ANGRY_AT)) {
-                var angryMemory = brain.getOptionalMemory(net.minecraft.entity.ai.brain.MemoryModuleType.ANGRY_AT);
+                var angryMemory =
+                        brain.getOptionalMemory(
+                                net.minecraft.entity.ai.brain.MemoryModuleType.ANGRY_AT);
                 if (angryMemory != null && angryMemory.isPresent()) {
                     UUID angryAt = angryMemory.get();
                     if (angryAt.equals(owner.getUuid()) || alliedSummonIds.contains(angryAt)) {
                         brain.forget(net.minecraft.entity.ai.brain.MemoryModuleType.ANGRY_AT);
-                        if (brain.hasMemoryModule(net.minecraft.entity.ai.brain.MemoryModuleType.ATTACK_TARGET)) {
-                            brain.forget(net.minecraft.entity.ai.brain.MemoryModuleType.ATTACK_TARGET);
+                        if (brain.hasMemoryModule(
+                                net.minecraft.entity.ai.brain.MemoryModuleType.ATTACK_TARGET)) {
+                            brain.forget(
+                                    net.minecraft.entity.ai.brain.MemoryModuleType.ATTACK_TARGET);
                         }
                     }
                 }
             }
 
-            if (ownerTarget != null && summon.squaredDistanceTo(ownerTarget) <= 64D * 64D
+            if (ownerTarget != null
+                    && summon.squaredDistanceTo(ownerTarget) <= 64D * 64D
                     && !shouldIgnoreSummonTarget(summon, ownerTarget)) {
                 mob.setAiDisabled(false);
                 if (summon instanceof WardenEntity warden && warden.isValidTarget(ownerTarget)) {
@@ -1636,9 +1994,10 @@ public final class AvengerReworkRuntime {
                     mob.setTarget(ownerTarget);
                 }
             } else {
-                boolean dangerousBoss = summon instanceof WardenEntity
-                        || summon.getType() == EntityType.WITHER
-                        || summon.getType() == EntityType.ENDER_DRAGON;
+                boolean dangerousBoss =
+                        summon instanceof WardenEntity
+                                || summon.getType() == EntityType.WITHER
+                                || summon.getType() == EntityType.ENDER_DRAGON;
                 if (dangerousBoss) mob.setTarget(null);
                 double ownerDistanceSq = summon.squaredDistanceTo(owner);
                 if (ownerDistanceSq > 64D * 64D) {
@@ -1651,10 +2010,16 @@ public final class AvengerReworkRuntime {
     }
 
     private static boolean validEnemy(ServerPlayerEntity owner, LivingEntity target) {
-        return target != null && target.isAlive() && target != owner && !(target instanceof VillagerEntity)
-                && !owner.isTeammate(target) && !isOwnedSummon(owner, target)
+        return target != null
+                && target.isAlive()
+                && target != owner
+                && !(target instanceof VillagerEntity)
+                && !owner.isTeammate(target)
+                && !isOwnedSummon(owner, target)
                 && (!(target instanceof ServerPlayerEntity player)
-                    || (!player.isSpectator() && !player.isCreative() && owner.getServer().isPvpEnabled()))
+                        || (!player.isSpectator()
+                                && !player.isCreative()
+                                && owner.getServer().isPvpEnabled()))
                 && OptionalCompatRuntime.canHarm(owner, target);
     }
 
@@ -1663,12 +2028,17 @@ public final class AvengerReworkRuntime {
     // ---------------------------------------------------------------------
 
     public static ExecutionResult executeCurtainCall(ServerPlayerEntity player) {
-        if (!AbilityRuntime.isClass(player, AvengerClass.ID)) return ExecutionResult.failure("You are not an Avenger.");
+        if (!AbilityRuntime.isClass(player, AvengerClass.ID))
+            return ExecutionResult.failure("You are not an Avenger.");
         LivingEntity target = aimedLiving(player, 36D, entity -> isOwnedSummon(player, entity));
-        if (target == null) return ExecutionResult.failure("Curtain Call requires one of your summons under the crosshair.");
-        if (AvengerSoulAnimationRuntime.busy(target)) return ExecutionResult.failure("Wait for the soul ritual to finish.");
+        if (target == null)
+            return ExecutionResult.failure(
+                    "Curtain Call requires one of your summons under the crosshair.");
+        if (AvengerSoulAnimationRuntime.busy(target))
+            return ExecutionResult.failure("Wait for the soul ritual to finish.");
 
-        int rank = talentRank(player, AvengerContent.CURTAIN_CALL_I, AvengerContent.CURTAIN_CALL_II);
+        int rank =
+                talentRank(player, AvengerContent.CURTAIN_CALL_I, AvengerContent.CURTAIN_CALL_II);
         float explosionPower = rank >= 2 ? 8F : rank == 1 ? 6F : 4F;
         double radius = rank >= 2 ? 9D : rank == 1 ? 7D : 5D;
         double soulCoefficient = rank >= 2 ? 2.5D : rank == 1 ? 1.75D : 1.0D;
@@ -1676,34 +2046,64 @@ public final class AvengerReworkRuntime {
         ServerWorld world = player.getServerWorld();
         Vec3d center = target.getPos().add(0D, target.getHeight() * 0.45D, 0D);
 
-        // Return the sacrificed soul deterministically before the blast. The kill hook is suppressed
+        // Return the sacrificed soul deterministically before the blast. The kill hook is
+        // suppressed
         // for this one entity so Curtain Call never duplicates the Death List entry.
-        AvengerDeathListState.get(player.getServer()).recordKill(player.getUuid(),
-                org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE.getId(target.getType()).toString());
+        AvengerDeathListState.get(player.getServer())
+                .recordKill(
+                        player.getUuid(),
+                        org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE
+                                .getId(target.getType())
+                                .toString());
         refreshDeathListNow(player, AvengerDeathListState.get(player.getServer()));
         MANUAL_CAPTURED.add(target.getUuid());
         CURTAIN_BYPASS.add(target.getUuid());
         try {
-            world.createExplosion(player, center.x, center.y, center.z, explosionPower, false, World.ExplosionSourceType.TNT);
-            for (LivingEntity enemy : world.getEntitiesByClass(LivingEntity.class,
-                    target.getBoundingBox().expand(radius), entity -> validEnemy(player, entity))) {
+            world.createExplosion(
+                    player,
+                    center.x,
+                    center.y,
+                    center.z,
+                    explosionPower,
+                    false,
+                    World.ExplosionSourceType.TNT);
+            for (LivingEntity enemy :
+                    world.getEntitiesByClass(
+                            LivingEntity.class,
+                            target.getBoundingBox().expand(radius),
+                            entity -> validEnemy(player, entity))) {
                 if (enemy == target) continue;
                 enemy.timeUntilRegen = 0;
                 enemy.damage(player.getDamageSources().indirectMagic(player, player), soulDamage);
             }
             if (target.isAlive()) {
                 target.timeUntilRegen = 0;
-                target.damage(player.getDamageSources().playerAttack(player), Math.max(1000F, target.getMaxHealth() * 10F));
+                target.damage(
+                        player.getDamageSources().playerAttack(player),
+                        Math.max(1000F, target.getMaxHealth() * 10F));
             }
         } finally {
             CURTAIN_BYPASS.remove(target.getUuid());
             if (target.isAlive()) MANUAL_CAPTURED.remove(target.getUuid());
         }
 
-        world.spawnParticles(ParticleTypes.SOUL_FIRE_FLAME, center.x, center.y, center.z,
-                rank >= 2 ? 70 : 40, radius * 0.35D, 1.2D, radius * 0.35D, 0.06D);
-        return ExecutionResult.success(1, "Curtain Call detonated " + AvengerSummonRecipes.friendlyEntityName(
-                org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE.getId(target.getType()).toString()));
+        world.spawnParticles(
+                ParticleTypes.SOUL_FIRE_FLAME,
+                center.x,
+                center.y,
+                center.z,
+                rank >= 2 ? 70 : 40,
+                radius * 0.35D,
+                1.2D,
+                radius * 0.35D,
+                0.06D);
+        return ExecutionResult.success(
+                1,
+                "Curtain Call detonated "
+                        + AvengerSummonRecipes.friendlyEntityName(
+                                org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE
+                                        .getId(target.getType())
+                                        .toString()));
     }
 
     // ---------------------------------------------------------------------
@@ -1711,26 +2111,56 @@ public final class AvengerReworkRuntime {
     // ---------------------------------------------------------------------
 
     public static ExecutionResult executeEndlessDevour(ServerPlayerEntity player) {
-        if (!AbilityRuntime.isClass(player, AvengerClass.ID)) return ExecutionResult.failure("You are not an Avenger.");
-        if (DEVOURS.containsKey(player.getUuid())) return ExecutionResult.failure("Endless Devour is already channeling.");
+        if (!AbilityRuntime.isClass(player, AvengerClass.ID))
+            return ExecutionResult.failure("You are not an Avenger.");
+        if (DEVOURS.containsKey(player.getUuid()))
+            return ExecutionResult.failure("Endless Devour is already channeling.");
 
-        LivingEntity target = aimedLiving(player, 28D, entity -> entity != player
-                && !(entity instanceof PlayerEntity) && !isOwnedSummon(player, entity));
-        if (target == null) return ExecutionResult.failure("Endless Devour requires a mob under the crosshair.");
+        LivingEntity target =
+                aimedLiving(
+                        player,
+                        28D,
+                        entity ->
+                                entity != player
+                                        && !(entity instanceof PlayerEntity)
+                                        && !isOwnedSummon(player, entity));
+        if (target == null)
+            return ExecutionResult.failure("Endless Devour requires a mob under the crosshair.");
 
-        double thresholdMultiplier = AbilityRuntime.hasTalent(player, AvengerContent.DEVOUR_200.id()) ? 2.0D
-                : AbilityRuntime.hasTalent(player, AvengerContent.DEVOUR_150.id()) ? 1.5D : 1.0D;
+        double thresholdMultiplier =
+                AbilityRuntime.hasTalent(player, AvengerContent.DEVOUR_200.id())
+                        ? 2.0D
+                        : AbilityRuntime.hasTalent(player, AvengerContent.DEVOUR_150.id())
+                                ? 1.5D
+                                : 1.0D;
         float allowed = Math.max(1F, player.getHealth()) * (float) thresholdMultiplier;
         if (target.getHealth() > allowed) {
-            return ExecutionResult.failure("Too much blood: target has " + String.format(java.util.Locale.ROOT, "%.1f", target.getHealth())
-                    + " HP, Devour limit is " + String.format(java.util.Locale.ROOT, "%.1f", allowed) + " HP.");
+            return ExecutionResult.failure(
+                    "Too much blood: target has "
+                            + String.format(java.util.Locale.ROOT, "%.1f", target.getHealth())
+                            + " HP, Devour limit is "
+                            + String.format(java.util.Locale.ROOT, "%.1f", allowed)
+                            + " HP.");
         }
 
-        int channelTicks = AbilityRuntime.hasTalent(player, AvengerContent.DEVOUR_FAST.id()) ? 14 : 24;
-        DEVOURS.put(player.getUuid(), new DevourChannel(target.getUuid(), target.getWorld().getRegistryKey().getValue(), channelTicks));
-        player.getServerWorld().playSound(null, player.getBlockPos(), SoundEvents.ENTITY_WARDEN_HEARTBEAT,
-                SoundCategory.PLAYERS, 0.65F, 0.65F);
-        return ExecutionResult.success(1, "Endless Devour channeling " + target.getName().getString());
+        int channelTicks =
+                AbilityRuntime.hasTalent(player, AvengerContent.DEVOUR_FAST.id()) ? 14 : 24;
+        DEVOURS.put(
+                player.getUuid(),
+                new DevourChannel(
+                        target.getUuid(),
+                        target.getWorld().getRegistryKey().getValue(),
+                        channelTicks));
+        player.getServerWorld()
+                .playSound(
+                        null,
+                        player.getBlockPos(),
+                        SoundEvents.ENTITY_WARDEN_HEARTBEAT,
+                        SoundCategory.PLAYERS,
+                        0.65F,
+                        0.65F);
+        return ExecutionResult.success(
+                1, "Endless Devour channeling " + target.getName().getString());
     }
 
     private static void tickDevours(MinecraftServer server) {
@@ -1739,17 +2169,27 @@ public final class AvengerReworkRuntime {
         for (Map.Entry<UUID, DevourChannel> entry : DEVOURS.entrySet()) {
             ServerPlayerEntity player = server.getPlayerManager().getPlayer(entry.getKey());
             DevourChannel channel = entry.getValue();
-            if (player == null || !player.isAlive() || !AbilityRuntime.isClass(player, AvengerClass.ID)) {
+            if (player == null
+                    || !player.isAlive()
+                    || !AbilityRuntime.isClass(player, AvengerClass.ID)) {
                 remove.add(entry.getKey());
                 continue;
             }
             ServerWorld world = null;
             for (ServerWorld candidate : server.getWorlds()) {
-                if (candidate.getRegistryKey().getValue().equals(channel.worldId)) { world = candidate; break; }
+                if (candidate.getRegistryKey().getValue().equals(channel.worldId)) {
+                    world = candidate;
+                    break;
+                }
             }
-            if (world == null) { remove.add(entry.getKey()); continue; }
+            if (world == null) {
+                remove.add(entry.getKey());
+                continue;
+            }
             Entity entity = world.getEntity(channel.targetId);
-            if (!(entity instanceof LivingEntity target) || !target.isAlive() || target instanceof PlayerEntity
+            if (!(entity instanceof LivingEntity target)
+                    || !target.isAlive()
+                    || target instanceof PlayerEntity
                     || player.squaredDistanceTo(target) > 32D * 32D) {
                 player.sendMessage(Text.literal("Endless Devour lost its prey."), true);
                 remove.add(entry.getKey());
@@ -1758,40 +2198,80 @@ public final class AvengerReworkRuntime {
 
             channel.ticksLeft--;
             Vec3d center = target.getPos().add(0D, target.getHeight() * 0.55D, 0D);
-            world.spawnParticles(ParticleTypes.SCULK_SOUL, center.x, center.y, center.z, 4,
-                    0.35D, 0.45D, 0.35D, 0.02D);
-            world.spawnParticles(ParticleTypes.SOUL, player.getX(), player.getBodyY(0.55D), player.getZ(), 3,
-                    0.25D, 0.35D, 0.25D, 0.015D);
+            world.spawnParticles(
+                    ParticleTypes.SCULK_SOUL,
+                    center.x,
+                    center.y,
+                    center.z,
+                    4,
+                    0.35D,
+                    0.45D,
+                    0.35D,
+                    0.02D);
+            world.spawnParticles(
+                    ParticleTypes.SOUL,
+                    player.getX(),
+                    player.getBodyY(0.55D),
+                    player.getZ(),
+                    3,
+                    0.25D,
+                    0.35D,
+                    0.25D,
+                    0.015D);
             if ((channel.ticksLeft % 5) == 0) {
                 // Repeated arm motion + eating audio gives the channel a visible chewing cadence
                 // without swapping or consuming whatever item the player is actually holding.
                 player.swingHand(Hand.MAIN_HAND, true);
-                world.playSound(null, player.getBlockPos(), SoundEvents.ENTITY_GENERIC_EAT,
-                        SoundCategory.PLAYERS, 0.8F, 0.75F + player.getRandom().nextFloat() * 0.2F);
+                world.playSound(
+                        null,
+                        player.getBlockPos(),
+                        SoundEvents.ENTITY_GENERIC_EAT,
+                        SoundCategory.PLAYERS,
+                        0.8F,
+                        0.75F + player.getRandom().nextFloat() * 0.2F);
             }
             if (channel.ticksLeft > 0) continue;
 
             captureDevoured(player, target);
-            world.spawnParticles(ParticleTypes.SOUL_FIRE_FLAME, center.x, center.y, center.z, 32,
-                    0.6D, 0.8D, 0.6D, 0.06D);
+            world.spawnParticles(
+                    ParticleTypes.SOUL_FIRE_FLAME,
+                    center.x,
+                    center.y,
+                    center.z,
+                    32,
+                    0.6D,
+                    0.8D,
+                    0.6D,
+                    0.06D);
             target.discard();
-            world.playSound(null, player.getBlockPos(), SoundEvents.ENTITY_PLAYER_BURP,
-                    SoundCategory.PLAYERS, 1.0F, 0.7F);
+            world.playSound(
+                    null,
+                    player.getBlockPos(),
+                    SoundEvents.ENTITY_PLAYER_BURP,
+                    SoundCategory.PLAYERS,
+                    1.0F,
+                    0.7F);
             remove.add(entry.getKey());
         }
         remove.forEach(DEVOURS::remove);
     }
 
-    private static LivingEntity aimedLiving(ServerPlayerEntity player, double range,
-                                             java.util.function.Predicate<LivingEntity> predicate) {
+    private static LivingEntity aimedLiving(
+            ServerPlayerEntity player,
+            double range,
+            java.util.function.Predicate<LivingEntity> predicate) {
         Vec3d eye = player.getEyePos();
         Vec3d direction = player.getRotationVec(1F).normalize();
         Vec3d end = eye.add(direction.multiply(range));
         Box scan = player.getBoundingBox().stretch(direction.multiply(range)).expand(1.5D);
         LivingEntity selected = null;
         double best = Double.MAX_VALUE;
-        for (LivingEntity target : player.getServerWorld().getEntitiesByClass(LivingEntity.class, scan,
-                entity -> entity.isAlive() && predicate.test(entity))) {
+        for (LivingEntity target :
+                player.getServerWorld()
+                        .getEntitiesByClass(
+                                LivingEntity.class,
+                                scan,
+                                entity -> entity.isAlive() && predicate.test(entity))) {
             var hit = target.getBoundingBox().expand(0.30D).raycast(eye, end);
             if (hit.isEmpty()) continue;
             double distance = eye.squaredDistanceTo(hit.get());

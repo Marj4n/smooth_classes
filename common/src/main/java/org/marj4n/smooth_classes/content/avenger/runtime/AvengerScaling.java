@@ -5,19 +5,21 @@ public final class AvengerScaling {
     private AvengerScaling() {}
 
     public static double attackDamage(double soulPower, AvengerMinionType type) {
-        double multiplier = switch (type) {
-            case GREATER_DREADGLARE -> 3.0;
-            case DREADGLARE, WRAITH -> 1.2;
-        };
+        double multiplier =
+                switch (type) {
+                    case GREATER_DREADGLARE -> 3.0;
+                    case DREADGLARE, WRAITH -> 1.2;
+                };
         return 3.0 + multiplier * soulPower;
     }
 
     public static double maxHealth(double ownerMaxHealth, AvengerMinionType type) {
-        double multiplier = switch (type) {
-            case DREADGLARE -> 1.4;
-            case WRAITH -> 0.8;
-            case GREATER_DREADGLARE -> 4.8;
-        };
+        double multiplier =
+                switch (type) {
+                    case DREADGLARE -> 1.4;
+                    case WRAITH -> 0.8;
+                    case GREATER_DREADGLARE -> 4.8;
+                };
         return 1.0 + multiplier * ownerMaxHealth;
     }
 
@@ -26,7 +28,8 @@ public final class AvengerScaling {
         return 1.0 + multiplier * ownerArmor;
     }
 
-    public static double inheritedArmorToughness(double ownerArmorToughness, AvengerMinionType type) {
+    public static double inheritedArmorToughness(
+            double ownerArmorToughness, AvengerMinionType type) {
         double multiplier = type == AvengerMinionType.GREATER_DREADGLARE ? 1.0 : 0.5;
         return 1.0 + multiplier * ownerArmorToughness;
     }

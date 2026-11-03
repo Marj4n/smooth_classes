@@ -4,10 +4,7 @@ import java.util.List;
 
 /** Immutable server-side result of resolving Summoning Ritual talents. */
 public record AvengerSummonPlan(
-        List<AvengerMinionType> minions,
-        boolean necroticFortification,
-        boolean shadowAura
-) {
+        List<AvengerMinionType> minions, boolean necroticFortification, boolean shadowAura) {
     public AvengerSummonPlan {
         minions = List.copyOf(minions);
     }

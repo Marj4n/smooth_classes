@@ -32,7 +32,7 @@ public final class OriginSkillRuntime {
             case VAMPIRE -> tickVampire(player, state);
             case MERMAID -> tickMermaid(player, state);
             case SLIME -> tickSlime(player, state);
-            default -> { }
+            default -> {}
         }
     }
 
@@ -52,8 +52,10 @@ public final class OriginSkillRuntime {
                 player.getAbilities().allowFlying = true;
                 if (changed) player.sendAbilitiesUpdate();
             }
-            player.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, 30, 1, false, false, false));
-            player.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS, 30, 4, false, false, false));
+            player.addStatusEffect(
+                    new StatusEffectInstance(StatusEffects.SPEED, 30, 1, false, false, false));
+            player.addStatusEffect(
+                    new StatusEffectInstance(StatusEffects.WEAKNESS, 30, 4, false, false, false));
             if (player.age % 40 == 0) state.blood(state.blood() - 1);
             if (state.blood() <= 0) exitVampireForms(player, state);
         } else if (manBat) {
@@ -63,23 +65,34 @@ public final class OriginSkillRuntime {
         }
 
         if (lord && player.getWorld().isNight()) {
-            player.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, 30, 0, false, false, false));
-            if (!bat) player.addStatusEffect(new StatusEffectInstance(StatusEffects.STRENGTH, 30, 0, false, false, false));
+            player.addStatusEffect(
+                    new StatusEffectInstance(StatusEffects.SPEED, 30, 0, false, false, false));
+            if (!bat)
+                player.addStatusEffect(
+                        new StatusEffectInstance(
+                                StatusEffects.STRENGTH, 30, 0, false, false, false));
         }
-
     }
 
     private static void tickMermaid(ServerPlayerEntity player, OriginState state) {
         boolean submerged = player.isSubmergedInWater();
         if (submerged && unlocked(player, OriginType.MERMAID, "sea_kinship")) {
-            player.addStatusEffect(new StatusEffectInstance(StatusEffects.DOLPHINS_GRACE, 40, 0, false, false, false));
-            if (player.age % 60 == 0 && player.getHealth() < player.getMaxHealth()) player.heal(1.0F);
+            player.addStatusEffect(
+                    new StatusEffectInstance(
+                            StatusEffects.DOLPHINS_GRACE, 40, 0, false, false, false));
+            if (player.age % 60 == 0 && player.getHealth() < player.getMaxHealth())
+                player.heal(1.0F);
         }
 
         if (unlocked(player, OriginType.MERMAID, "oceans_favor") && player.age % 10 == 0) {
-            for (MobEntity mob : player.getWorld().getEntitiesByClass(MobEntity.class,
-                    player.getBoundingBox().expand(18.0D), MobEntity::isAlive)) {
-                if (mob.getTarget() == player && (mob instanceof GuardianEntity || mob instanceof DrownedEntity)) {
+            for (MobEntity mob :
+                    player.getWorld()
+                            .getEntitiesByClass(
+                                    MobEntity.class,
+                                    player.getBoundingBox().expand(18.0D),
+                                    MobEntity::isAlive)) {
+                if (mob.getTarget() == player
+                        && (mob instanceof GuardianEntity || mob instanceof DrownedEntity)) {
                     mob.setTarget(null);
                 }
             }
@@ -89,11 +102,19 @@ public final class OriginSkillRuntime {
     private static void tickSlime(ServerPlayerEntity player, OriginState state) {
         if (unlocked(player, OriginType.SLIME, "fragment")) {
             long readyAt = state.longProgress("slime.fragment_ready_at");
-            if (player.getHealth() <= player.getMaxHealth() * 0.25F && player.getWorld().getTime() >= readyAt) {
-                player.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 20 * 5, 2, false, true, true));
-                player.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 20 * 5, 1, false, true, true));
-                player.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, 20 * 5, 1, false, true, true));
-                state.longProgress("slime.fragment_ready_at", player.getWorld().getTime() + 20L * 90L);
+            if (player.getHealth() <= player.getMaxHealth() * 0.25F
+                    && player.getWorld().getTime() >= readyAt) {
+                player.addStatusEffect(
+                        new StatusEffectInstance(
+                                StatusEffects.RESISTANCE, 20 * 5, 2, false, true, true));
+                player.addStatusEffect(
+                        new StatusEffectInstance(
+                                StatusEffects.REGENERATION, 20 * 5, 1, false, true, true));
+                player.addStatusEffect(
+                        new StatusEffectInstance(
+                                StatusEffects.SPEED, 20 * 5, 1, false, true, true));
+                state.longProgress(
+                        "slime.fragment_ready_at", player.getWorld().getTime() + 20L * 90L);
             }
         }
     }

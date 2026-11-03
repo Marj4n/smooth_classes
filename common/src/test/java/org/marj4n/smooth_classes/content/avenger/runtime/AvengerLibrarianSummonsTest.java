@@ -15,7 +15,8 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AvengerLibrarianSummonsTest {
-    @BeforeAll static void bootstrap() {
+    @BeforeAll
+    static void bootstrap() {
         SharedConstants.createGameVersion();
         Bootstrap.initialize();
     }
@@ -23,7 +24,7 @@ class AvengerLibrarianSummonsTest {
     private static ItemStack book() {
         ItemStack book = new ItemStack(Items.ENCHANTED_BOOK);
         NbtList enchantments = new NbtList();
-        for (String id : new String[]{"minecraft:mending", "example_mod:arcane_edge"}) {
+        for (String id : new String[] {"minecraft:mending", "example_mod:arcane_edge"}) {
             NbtCompound entry = new NbtCompound();
             entry.putString("id", id);
             entry.putShort("lvl", (short) (id.startsWith("minecraft:") ? 1 : 7));
@@ -35,14 +36,18 @@ class AvengerLibrarianSummonsTest {
         return book;
     }
 
-    @Test void fusionRequiresEmeraldMainHandAndEnchantedBookOffhand() {
+    @Test
+    void fusionRequiresEmeraldMainHandAndEnchantedBookOffhand() {
         assertTrue(AvengerLibrarianSummons.isRecipe(new ItemStack(Items.EMERALD), book()));
         assertFalse(AvengerLibrarianSummons.isRecipe(book(), new ItemStack(Items.EMERALD)));
         assertFalse(AvengerLibrarianSummons.isRecipe(new ItemStack(Items.DIAMOND), book()));
-        assertFalse(AvengerLibrarianSummons.isRecipe(new ItemStack(Items.EMERALD), new ItemStack(Items.BOOK)));
+        assertFalse(
+                AvengerLibrarianSummons.isRecipe(
+                        new ItemStack(Items.EMERALD), new ItemStack(Items.BOOK)));
     }
 
-    @Test void bookFusionUsesTheExistingVillagerSoulAndConsumesOffhand() {
+    @Test
+    void bookFusionUsesTheExistingVillagerSoulAndConsumesOffhand() {
         var recipes = AvengerSummonRecipes.matching(new ItemStack(Items.EMERALD), book());
         assertEquals(1, recipes.size());
         assertEquals("minecraft:villager", recipes.get(0).entityId());
@@ -50,14 +55,23 @@ class AvengerLibrarianSummonsTest {
         assertNull(AvengerSummonRecipes.recipe("minecraft:villager").offhandItemId());
     }
 
-    @Test void unrelatedOffhandAndExistingEmeraldFusionRecipesRemainUnchanged() {
-        assertNull(AvengerSummonRecipes.matching(new ItemStack(Items.EMERALD), new ItemStack(Items.SHIELD))
-                .get(0).offhandItemId());
-        assertEquals("minecraft:wandering_trader", AvengerSummonRecipes.matching(
-                new ItemStack(Items.EMERALD), new ItemStack(Items.LEAD)).get(0).entityId());
+    @Test
+    void unrelatedOffhandAndExistingEmeraldFusionRecipesRemainUnchanged() {
+        assertNull(
+                AvengerSummonRecipes.matching(
+                                new ItemStack(Items.EMERALD), new ItemStack(Items.SHIELD))
+                        .get(0)
+                        .offhandItemId());
+        assertEquals(
+                "minecraft:wandering_trader",
+                AvengerSummonRecipes.matching(
+                                new ItemStack(Items.EMERALD), new ItemStack(Items.LEAD))
+                        .get(0)
+                        .entityId());
     }
 
-    @Test void copyRetainsAllStoredEnchantmentsAndCustomNbtWithoutAliasing() {
+    @Test
+    void copyRetainsAllStoredEnchantmentsAndCustomNbtWithoutAliasing() {
         ItemStack source = book();
         source.setCount(3);
         ItemStack copy = AvengerLibrarianSummons.copyBook(source);
@@ -69,15 +83,19 @@ class AvengerLibrarianSummonsTest {
         assertEquals("preserve me", copy.getNbt().getString("ExampleModData"));
     }
 
-    @Test void emptyOrUnenchantedItemsCannotCreateOffers() {
+    @Test
+    void emptyOrUnenchantedItemsCannotCreateOffers() {
         assertFalse(AvengerLibrarianSummons.hasStoredEnchantments(ItemStack.EMPTY));
-        assertFalse(AvengerLibrarianSummons.hasStoredEnchantments(new ItemStack(Items.ENCHANTED_BOOK)));
+        assertFalse(
+                AvengerLibrarianSummons.hasStoredEnchantments(new ItemStack(Items.ENCHANTED_BOOK)));
         assertFalse(AvengerLibrarianSummons.hasStoredEnchantments(new ItemStack(Items.BOOK)));
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(
+                IllegalArgumentException.class,
                 () -> AvengerLibrarianSummons.offersFor(new ItemStack(Items.ENCHANTED_BOOK)));
     }
 
-    @Test void guaranteedTradeSellsTheExactBookForEmeraldsAndAnOrdinaryBook() {
+    @Test
+    void guaranteedTradeSellsTheExactBookForEmeraldsAndAnOrdinaryBook() {
         ItemStack source = book();
         TradeOfferList offers = AvengerLibrarianSummons.offersFor(source);
         assertEquals(1, offers.size());
@@ -92,7 +110,8 @@ class AvengerLibrarianSummonsTest {
         assertEquals("preserve me", source.getNbt().getString("ExampleModData"));
     }
 
-    @Test void vanillaOfferSaveReloadRetainsModdedIdsAndLevels() {
+    @Test
+    void vanillaOfferSaveReloadRetainsModdedIdsAndLevels() {
         TradeOffer offer = AvengerLibrarianSummons.offersFor(book()).get(0);
         offer.use();
         TradeOffer loaded = new TradeOffer(offer.toNbt());
@@ -100,7 +119,8 @@ class AvengerLibrarianSummonsTest {
         assertEquals(book().getNbt(), loaded.getSellItem().getNbt());
     }
 
-    @Test void originalRecallIngredientSurvivesNbtRoundTripIndependentOfTradeMutation() {
+    @Test
+    void originalRecallIngredientSurvivesNbtRoundTripIndependentOfTradeMutation() {
         ItemStack source = book();
         NbtCompound data = new NbtCompound();
         AvengerLibrarianSummons.writeBook(data, source);
@@ -111,7 +131,8 @@ class AvengerLibrarianSummonsTest {
         assertEquals(source.getNbt(), AvengerLibrarianSummons.readBook(data).getNbt());
     }
 
-    @Test void ordinaryVillagerSaveDataHasNoBoundBook() {
+    @Test
+    void ordinaryVillagerSaveDataHasNoBoundBook() {
         NbtCompound data = new NbtCompound();
         assertTrue(AvengerLibrarianSummons.readBook(data).isEmpty());
         AvengerLibrarianSummons.writeBook(data, book());
@@ -119,7 +140,8 @@ class AvengerLibrarianSummonsTest {
         assertTrue(data.isEmpty());
     }
 
-    @Test void fortuneRitualRepairsRandomVanillaTradeInTheAuthoritativeList() {
+    @Test
+    void fortuneRitualRepairsRandomVanillaTradeInTheAuthoritativeList() {
         ItemStack fortune = new ItemStack(Items.ENCHANTED_BOOK);
         NbtCompound enchantment = new NbtCompound();
         enchantment.putString("id", "minecraft:fortune");
@@ -131,10 +153,12 @@ class AvengerLibrarianSummonsTest {
         AvengerLibrarianSummons.replaceIncorrectOffer(liveOffers, fortune);
         assertEquals(1, liveOffers.size());
         assertEquals(fortune.getNbt(), liveOffers.get(0).getSellItem().getNbt());
-        assertEquals(fortune.getNbt(), new TradeOffer(liveOffers.get(0).toNbt()).getSellItem().getNbt());
+        assertEquals(
+                fortune.getNbt(), new TradeOffer(liveOffers.get(0).toNbt()).getSellItem().getNbt());
     }
 
-    @Test void repairRetainsCorrectOfferUsesAndDoesNotResetStock() {
+    @Test
+    void repairRetainsCorrectOfferUsesAndDoesNotResetStock() {
         TradeOfferList offers = AvengerLibrarianSummons.offersFor(book());
         TradeOffer original = offers.get(0);
         original.use();
@@ -143,7 +167,8 @@ class AvengerLibrarianSummonsTest {
         assertEquals(1, offers.get(0).getUses());
     }
 
-    @Test void absentBoundBookLeavesOrdinaryTradesUntouched() {
+    @Test
+    void absentBoundBookLeavesOrdinaryTradesUntouched() {
         TradeOfferList offers = AvengerLibrarianSummons.offersFor(book());
         TradeOffer original = offers.get(0);
         AvengerLibrarianSummons.replaceIncorrectOffer(offers, ItemStack.EMPTY);

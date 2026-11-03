@@ -23,7 +23,8 @@ public final class OriginAdvancementNotices {
         grant(player, origin, "origin_base");
     }
 
-    public static void onMilestoneUnlocked(ServerPlayerEntity player, OriginType origin, String skillId) {
+    public static void onMilestoneUnlocked(
+            ServerPlayerEntity player, OriginType origin, String skillId) {
         if (origin != OriginType.VAMPIRE) return;
         ensureRoot(player, origin);
         grant(player, origin, skillId);

@@ -22,8 +22,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ArmorFeatureRenderer.class)
 public abstract class ArmorStealthRendererMixin {
     @Inject(method = "renderArmor", at = @At("HEAD"), cancellable = true)
-    private void smooth_classes$renderArmor(MatrixStack matrices, VertexConsumerProvider consumers,
-            LivingEntity entity, EquipmentSlot slot, int light, BipedEntityModel<LivingEntity> model,
+    private void smooth_classes$renderArmor(
+            MatrixStack matrices,
+            VertexConsumerProvider consumers,
+            LivingEntity entity,
+            EquipmentSlot slot,
+            int light,
+            BipedEntityModel<LivingEntity> model,
             CallbackInfo ci) {
         VsbArmorRenderScale.end();
         if (entity.isInvisible() && StealthVisualState.active(entity)) {
@@ -46,11 +51,22 @@ public abstract class ArmorStealthRendererMixin {
     }
 
     /** Align the still-vanilla armor meshes to VSB's real bone pivots. */
-    @Inject(method = "renderArmor", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/client/render/entity/feature/ArmorFeatureRenderer;setVisible(Lnet/minecraft/client/render/entity/model/BipedEntityModel;Lnet/minecraft/entity/EquipmentSlot;)V",
-            shift = At.Shift.AFTER), require = 1)
-    private void smooth_classes$alignVsbArmor(MatrixStack matrices, VertexConsumerProvider consumers,
-            LivingEntity entity, EquipmentSlot slot, int light, BipedEntityModel<LivingEntity> model,
+    @Inject(
+            method = "renderArmor",
+            at =
+                    @At(
+                            value = "INVOKE",
+                            target =
+                                    "Lnet/minecraft/client/render/entity/feature/ArmorFeatureRenderer;setVisible(Lnet/minecraft/client/render/entity/model/BipedEntityModel;Lnet/minecraft/entity/EquipmentSlot;)V",
+                            shift = At.Shift.AFTER),
+            require = 1)
+    private void smooth_classes$alignVsbArmor(
+            MatrixStack matrices,
+            VertexConsumerProvider consumers,
+            LivingEntity entity,
+            EquipmentSlot slot,
+            int light,
+            BipedEntityModel<LivingEntity> model,
             CallbackInfo ci) {
         if (entity instanceof net.minecraft.entity.player.PlayerEntity player) {
             var state = OriginRuntime.state(player);
@@ -66,8 +82,13 @@ public abstract class ArmorStealthRendererMixin {
     }
 
     @Inject(method = "renderArmor", at = @At("RETURN"))
-    private void smooth_classes$finishArmorSlot(MatrixStack matrices, VertexConsumerProvider consumers,
-            LivingEntity entity, EquipmentSlot slot, int light, BipedEntityModel<LivingEntity> model,
+    private void smooth_classes$finishArmorSlot(
+            MatrixStack matrices,
+            VertexConsumerProvider consumers,
+            LivingEntity entity,
+            EquipmentSlot slot,
+            int light,
+            BipedEntityModel<LivingEntity> model,
             CallbackInfo ci) {
         VsbArmorRenderScale.end();
         if (entity instanceof net.minecraft.entity.player.PlayerEntity player

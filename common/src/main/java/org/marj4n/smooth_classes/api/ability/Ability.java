@@ -4,7 +4,12 @@ import net.minecraft.util.Identifier;
 
 public interface Ability {
     Identifier id();
+
     String name();
+
     String description();
-    default int cooldownTicks() { return 0; }
+
+    default int cooldownTicks() {
+        return 0;
+    }
 }

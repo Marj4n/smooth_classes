@@ -13,36 +13,83 @@ public final class SaberContent {
     private SaberContent() {}
 
     public static final Ability CONSECRATION = ability("consecration", "Consecration", 30 * 20);
-    public static final Ability SACRED_ONSLAUGHT = ability("sacred_onslaught", "Sacred Onslaught", 15 * 20);
-    public static final Ability DIVINE_ADJUDICATION = ability("heavensmiths_call", "Divine Adjudication", 40 * 20);
+    public static final Ability SACRED_ONSLAUGHT =
+            ability("sacred_onslaught", "Sacred Onslaught", 15 * 20);
+    public static final Ability DIVINE_ADJUDICATION =
+            ability("heavensmiths_call", "Divine Adjudication", 40 * 20);
 
     public static final Talent AEGIS = talent("aegis", "Aegis");
     public static final Talent RETRIBUTION = talent("retribution", "Retribution");
-    public static final Talent EXHAUSTIVE_RECOVERY = talent("exhaustive_recovery", "Exhaustive Recovery");
-    public static final Talent CONSECRATION_DURATION = talent("consecration_duration", "Consecration Duration");
+    public static final Talent EXHAUSTIVE_RECOVERY =
+            talent("exhaustive_recovery", "Exhaustive Recovery");
+    public static final Talent CONSECRATION_DURATION =
+            talent("consecration_duration", "Consecration Duration");
     public static final Talent CONSECRATION_WARD = talent("consecration_ward", "Consecration Ward");
-    public static final Talent CONSECRATION_TAUNT = talent("consecration_taunt", "Consecration Taunt");
-    public static final Talent CONSECRATION_MIGHTY = talent("consecration_mighty", "Consecration Mighty");
-    public static final Talent CONSECRATION_SPELLFORGED = talent("consecration_spellforged", "Consecration Spellforged");
-    public static final Talent SACRED_ONSLAUGHT_HEAL = talent("sacred_onslaught_heal", "Sacred Onslaught Heal");
-    public static final Talent SACRED_ONSLAUGHT_DEFEND = talent("sacred_onslaught_defend", "Sacred Onslaught Defend");
-    public static final Talent SACRED_ONSLAUGHT_MIGHTY = talent("sacred_onslaught_mighty", "Sacred Onslaught Mighty");
-    public static final Talent SACRED_ONSLAUGHT_STUN = talent("sacred_onslaught_stun", "Sacred Onslaught Stun");
-    public static final Talent DIVINE_ADJUDICATION_TAUNT = talent("heavensmiths_call_taunt", "Divine Adjudication Taunt");
-    public static final Talent DIVINE_ADJUDICATION_MARK = talent("heavensmiths_call_mark", "Divine Adjudication Mark");
-    public static final Talent DIVINE_ADJUDICATION_CHAIN = talent("heavensmiths_call_effect", "Divine Adjudication Chain");
-    public static final Talent DIVINE_ADJUDICATION_RECUPERATE = talent("heavensmiths_call_exhaust", "Divine Adjudication Recuperate");
-    public static final Talent DIVINE_ADJUDICATION_MIGHTY = talent("heavensmiths_call_mighty", "Divine Adjudication Mighty");
+    public static final Talent CONSECRATION_TAUNT =
+            talent("consecration_taunt", "Consecration Taunt");
+    public static final Talent CONSECRATION_MIGHTY =
+            talent("consecration_mighty", "Consecration Mighty");
+    public static final Talent CONSECRATION_SPELLFORGED =
+            talent("consecration_spellforged", "Consecration Spellforged");
+    public static final Talent SACRED_ONSLAUGHT_HEAL =
+            talent("sacred_onslaught_heal", "Sacred Onslaught Heal");
+    public static final Talent SACRED_ONSLAUGHT_DEFEND =
+            talent("sacred_onslaught_defend", "Sacred Onslaught Defend");
+    public static final Talent SACRED_ONSLAUGHT_MIGHTY =
+            talent("sacred_onslaught_mighty", "Sacred Onslaught Mighty");
+    public static final Talent SACRED_ONSLAUGHT_STUN =
+            talent("sacred_onslaught_stun", "Sacred Onslaught Stun");
+    public static final Talent DIVINE_ADJUDICATION_TAUNT =
+            talent("heavensmiths_call_taunt", "Divine Adjudication Taunt");
+    public static final Talent DIVINE_ADJUDICATION_MARK =
+            talent("heavensmiths_call_mark", "Divine Adjudication Mark");
+    public static final Talent DIVINE_ADJUDICATION_CHAIN =
+            talent("heavensmiths_call_effect", "Divine Adjudication Chain");
+    public static final Talent DIVINE_ADJUDICATION_RECUPERATE =
+            talent("heavensmiths_call_exhaust", "Divine Adjudication Recuperate");
+    public static final Talent DIVINE_ADJUDICATION_MIGHTY =
+            talent("heavensmiths_call_mighty", "Divine Adjudication Mighty");
 
-    private static final List<Ability> ABILITIES = List.of(CONSECRATION, SACRED_ONSLAUGHT, DIVINE_ADJUDICATION);
-    private static final List<Talent> TALENTS = List.of(AEGIS, RETRIBUTION, EXHAUSTIVE_RECOVERY, CONSECRATION_DURATION, CONSECRATION_WARD, CONSECRATION_TAUNT, CONSECRATION_MIGHTY, CONSECRATION_SPELLFORGED, SACRED_ONSLAUGHT_HEAL, SACRED_ONSLAUGHT_DEFEND, SACRED_ONSLAUGHT_MIGHTY, SACRED_ONSLAUGHT_STUN, DIVINE_ADJUDICATION_TAUNT, DIVINE_ADJUDICATION_MARK, DIVINE_ADJUDICATION_CHAIN, DIVINE_ADJUDICATION_RECUPERATE, DIVINE_ADJUDICATION_MIGHTY);
+    private static final List<Ability> ABILITIES =
+            List.of(CONSECRATION, SACRED_ONSLAUGHT, DIVINE_ADJUDICATION);
+    private static final List<Talent> TALENTS =
+            List.of(
+                    AEGIS,
+                    RETRIBUTION,
+                    EXHAUSTIVE_RECOVERY,
+                    CONSECRATION_DURATION,
+                    CONSECRATION_WARD,
+                    CONSECRATION_TAUNT,
+                    CONSECRATION_MIGHTY,
+                    CONSECRATION_SPELLFORGED,
+                    SACRED_ONSLAUGHT_HEAL,
+                    SACRED_ONSLAUGHT_DEFEND,
+                    SACRED_ONSLAUGHT_MIGHTY,
+                    SACRED_ONSLAUGHT_STUN,
+                    DIVINE_ADJUDICATION_TAUNT,
+                    DIVINE_ADJUDICATION_MARK,
+                    DIVINE_ADJUDICATION_CHAIN,
+                    DIVINE_ADJUDICATION_RECUPERATE,
+                    DIVINE_ADJUDICATION_MIGHTY);
 
     public static void register() {
         ABILITIES.forEach(AbilityRegistry::register);
         TALENTS.forEach(TalentRegistry::register);
     }
-    public static List<Ability> abilities() { return ABILITIES; }
-    public static List<Talent> talents() { return TALENTS; }
-    private static Ability ability(String path, String name, int cooldownTicks) { return new SaberAbility(path, name, "Saber signature ability.", cooldownTicks); }
-    private static Talent talent(String path, String name) { return new SaberTalent(path, name, "Saber talent node."); }
+
+    public static List<Ability> abilities() {
+        return ABILITIES;
+    }
+
+    public static List<Talent> talents() {
+        return TALENTS;
+    }
+
+    private static Ability ability(String path, String name, int cooldownTicks) {
+        return new SaberAbility(path, name, "Saber signature ability.", cooldownTicks);
+    }
+
+    private static Talent talent(String path, String name) {
+        return new SaberTalent(path, name, "Saber talent node.");
+    }
 }

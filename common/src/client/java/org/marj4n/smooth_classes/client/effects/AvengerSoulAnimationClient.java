@@ -40,24 +40,32 @@ public final class AvengerSoulAnimationClient {
         if (registered) return;
         registered = true;
         AvengerVisualBindingsClient.register();
-        ClientPlayNetworking.registerGlobalReceiver(SmoothClassesNetworking.AVENGER_SOUL_ANIMATION,
+        ClientPlayNetworking.registerGlobalReceiver(
+                SmoothClassesNetworking.AVENGER_SOUL_ANIMATION,
                 (client, handler, buf, responseSender) -> {
                     int entityId = buf.readVarInt();
                     UUID caster = buf.readUuid();
                     byte action = buf.readByte();
                     boolean ground = buf.readBoolean();
                     int duration = buf.readVarInt();
-                    Vec3d position = new Vec3d(buf.readDouble(), buf.readDouble(), buf.readDouble());
-                    client.execute(() -> {
-                        if (client.world == null || duration < 1 || duration > 80) return;
-                        if (client.world != currentWorld) clear(client.world);
-                        long now = client.world.getTime();
-                        PLAYBACKS.put(entityId, new Playback(entityId, caster, action, ground, duration, now, position));
-                        CASTERS.put(caster, new CastPose(action, duration, now));
-                    });
+                    Vec3d position =
+                            new Vec3d(buf.readDouble(), buf.readDouble(), buf.readDouble());
+                    client.execute(
+                            () -> {
+                                if (client.world == null || duration < 1 || duration > 80) return;
+                                if (client.world != currentWorld) clear(client.world);
+                                long now = client.world.getTime();
+                                PLAYBACKS.put(
+                                        entityId,
+                                        new Playback(
+                                                entityId, caster, action, ground, duration, now,
+                                                position));
+                                CASTERS.put(caster, new CastPose(action, duration, now));
+                            });
                 });
         ClientTickEvents.END_CLIENT_TICK.register(AvengerSoulAnimationClient::tick);
-        ClientPlayConnectionEvents.DISCONNECT.register((handler, client) -> client.execute(() -> clear(null)));
+        ClientPlayConnectionEvents.DISCONNECT.register(
+                (handler, client) -> client.execute(() -> clear(null)));
     }
 
     private static void clear(ClientWorld world) {
@@ -84,7 +92,8 @@ public final class AvengerSoulAnimationClient {
     }
 
     /** Used by the entity renderer's matrix stack, never by entity physics. */
-    public static void transform(LivingEntity entity, float delta, net.minecraft.client.util.math.MatrixStack matrices) {
+    public static void transform(
+            LivingEntity entity, float delta, net.minecraft.client.util.math.MatrixStack matrices) {
         if (entity == null || entity.getWorld() != currentWorld) return;
         Playback p = PLAYBACKS.get(entity.getId());
         if (p == null) return;
@@ -117,7 +126,8 @@ public final class AvengerSoulAnimationClient {
         if (world != currentWorld) clear(world);
         if (world == null || client.isPaused()) return;
         long now = world.getTime();
-        CASTERS.entrySet().removeIf(entry -> now - entry.getValue().start > entry.getValue().duration + 2);
+        CASTERS.entrySet()
+                .removeIf(entry -> now - entry.getValue().start > entry.getValue().duration + 2);
         Iterator<Map.Entry<Integer, Playback>> iterator = PLAYBACKS.entrySet().iterator();
         while (iterator.hasNext()) {
             Playback p = iterator.next().getValue();
@@ -139,8 +149,8 @@ public final class AvengerSoulAnimationClient {
         }
     }
 
-    private static void spawnEmergence(ClientWorld world, Playback p, Vec3d base,
-                                       double height, double progress, long tick) {
+    private static void spawnEmergence(
+            ClientWorld world, Playback p, Vec3d base, double height, double progress, long tick) {
         // Low particle budget: visually dense near the ground, cheap during battles.
         double radius = Math.min(0.72D, 0.32D + height * 0.12D);
         for (int j = 0; j < 3; j++) {
@@ -148,21 +158,34 @@ public final class AvengerSoulAnimationClient {
             double x = base.x + Math.cos(angle) * radius;
             double z = base.z + Math.sin(angle) * radius;
             double y = base.y + (p.ground ? 0.05D : height * 0.45D * (1D - progress));
-            world.addParticle(ParticleTypes.SOUL, x, y + 0.08D, z,
-                    Math.cos(angle) * 0.025D, 0.045D, Math.sin(angle) * 0.025D);
+            world.addParticle(
+                    ParticleTypes.SOUL,
+                    x,
+                    y + 0.08D,
+                    z,
+                    Math.cos(angle) * 0.025D,
+                    0.045D,
+                    Math.sin(angle) * 0.025D);
             if (p.ground && j < 2) {
                 BlockPos floor = BlockPos.ofFloored(x, base.y - 0.25D, z);
                 BlockState block = world.getBlockState(floor);
-                if (!block.isAir()) world.addParticle(new BlockStateParticleEffect(ParticleTypes.BLOCK, block),
-                        x, y + 0.05D, z, Math.cos(angle) * 0.06D, 0.13D, Math.sin(angle) * 0.06D);
+                if (!block.isAir())
+                    world.addParticle(
+                            new BlockStateParticleEffect(ParticleTypes.BLOCK, block),
+                            x,
+                            y + 0.05D,
+                            z,
+                            Math.cos(angle) * 0.06D,
+                            0.13D,
+                            Math.sin(angle) * 0.06D);
             } else if (!p.ground) {
                 world.addParticle(ParticleTypes.SOUL_FIRE_FLAME, x, y, z, 0, 0.014D, 0);
             }
         }
     }
 
-    private static void spawnAbsorption(ClientWorld world, Playback p, Vec3d base,
-                                        double height, double progress, long tick) {
+    private static void spawnAbsorption(
+            ClientWorld world, Playback p, Vec3d base, double height, double progress, long tick) {
         Vec3d hand = handPosition(world, p.caster);
         if (hand == null) return;
         Vec3d origin = base.add(0D, height * 0.6D, 0D);
@@ -172,7 +195,8 @@ public final class AvengerSoulAnimationClient {
             Vec3d onLine = origin.lerp(hand, t);
             double spin = tick * 0.62D + i * 1.7D;
             double spread = (1D - t) * 0.26D;
-            world.addParticle(i % 3 == 0 ? ParticleTypes.SOUL_FIRE_FLAME : ParticleTypes.SOUL,
+            world.addParticle(
+                    i % 3 == 0 ? ParticleTypes.SOUL_FIRE_FLAME : ParticleTypes.SOUL,
                     onLine.x + Math.cos(spin) * spread,
                     onLine.y + Math.sin(spin * 1.2D) * spread,
                     onLine.z + Math.sin(spin) * spread,
@@ -181,8 +205,7 @@ public final class AvengerSoulAnimationClient {
                     (hand.z - onLine.z) * 0.08D);
         }
         if (progress > 0.82D) {
-            world.addParticle(ParticleTypes.REVERSE_PORTAL, hand.x, hand.y, hand.z,
-                    0D, 0.012D, 0D);
+            world.addParticle(ParticleTypes.REVERSE_PORTAL, hand.x, hand.y, hand.z, 0D, 0.012D, 0D);
         }
     }
 
@@ -193,8 +216,10 @@ public final class AvengerSoulAnimationClient {
             double yaw = Math.toRadians(player.getYaw());
             Vec3d right = new Vec3d(Math.cos(yaw), 0D, Math.sin(yaw));
             Vec3d forward = new Vec3d(-Math.sin(yaw), 0D, Math.cos(yaw));
-            return player.getPos().add(0D, player.isSneaking() ? 0.72D : 1.02D, 0D)
-                    .add(right.multiply(0.44D)).add(forward.multiply(0.40D));
+            return player.getPos()
+                    .add(0D, player.isSneaking() ? 0.72D : 1.02D, 0D)
+                    .add(right.multiply(0.44D))
+                    .add(forward.multiply(0.40D));
         }
         return null;
     }
@@ -204,7 +229,14 @@ public final class AvengerSoulAnimationClient {
         return t * t * (3F - 2F * t);
     }
 
-    private record Playback(int id, UUID caster, byte action, boolean ground,
-                            int duration, long start, Vec3d position) {}
+    private record Playback(
+            int id,
+            UUID caster,
+            byte action,
+            boolean ground,
+            int duration,
+            long start,
+            Vec3d position) {}
+
     private record CastPose(byte action, int duration, long start) {}
 }

@@ -17,45 +17,51 @@ public final class PuffishSkillFeedback {
     private PuffishSkillFeedback() {}
 
     public static void register() {
-        SkillsAPI.registerSkillUnlockEvent((player, categoryId, skillId) -> {
-            if (!SmoothClasses.MOD_ID.equals(categoryId.getNamespace())) {
-                return;
-            }
-            playUnlockSound(player);
-            syncJunctions(player, categoryId, skillId);
-            PuffishSkillsIntegration.invalidateRuntimeCache(player);
-            org.marj4n.smooth_classes.runtime.AbilityRuntime.invalidateRuntimeCache(player);
-            PuffishSkillsIntegration.ensureAscendancyUnlocked(player);
-            SmoothClassesNetworking.sendAbilityState(player);
-        });
+        SkillsAPI.registerSkillUnlockEvent(
+                (player, categoryId, skillId) -> {
+                    if (!SmoothClasses.MOD_ID.equals(categoryId.getNamespace())) {
+                        return;
+                    }
+                    playUnlockSound(player);
+                    syncJunctions(player, categoryId, skillId);
+                    PuffishSkillsIntegration.invalidateRuntimeCache(player);
+                    org.marj4n.smooth_classes.runtime.AbilityRuntime.invalidateRuntimeCache(player);
+                    PuffishSkillsIntegration.ensureAscendancyUnlocked(player);
+                    SmoothClassesNetworking.sendAbilityState(player);
+                });
     }
 
-    private static void syncJunctions(ServerPlayerEntity player, Identifier categoryId, String skillId) {
+    private static void syncJunctions(
+            ServerPlayerEntity player, Identifier categoryId, String skillId) {
         if (!PuffishSkillsIntegration.TREE.equals(categoryId)) return;
-        String[] pair = switch (skillId) {
-            case "p5czucfm7f3126hu", "o2is5ive25amfsq8" ->
-                    new String[]{"p5czucfm7f3126hu", "o2is5ive25amfsq8"};
-            case "fblggw09uwd4mk3d", "4jsg72vigi1qyj9j" ->
-                    new String[]{"fblggw09uwd4mk3d", "4jsg72vigi1qyj9j"};
-            default -> null;
-        };
+        String[] pair =
+                switch (skillId) {
+                    case "p5czucfm7f3126hu", "o2is5ive25amfsq8" ->
+                            new String[] {"p5czucfm7f3126hu", "o2is5ive25amfsq8"};
+                    case "fblggw09uwd4mk3d", "4jsg72vigi1qyj9j" ->
+                            new String[] {"fblggw09uwd4mk3d", "4jsg72vigi1qyj9j"};
+                    default -> null;
+                };
         if (pair == null) return;
-        SkillsAPI.getCategory(categoryId).ifPresent(category -> {
-            for (String node : pair) category.getSkill(node).ifPresent(skill -> {
-                if (skill.getState(player) != Skill.State.UNLOCKED) skill.unlock(player);
-            });
-        });
+        SkillsAPI.getCategory(categoryId)
+                .ifPresent(
+                        category -> {
+                            for (String node : pair)
+                                category.getSkill(node)
+                                        .ifPresent(
+                                                skill -> {
+                                                    if (skill.getState(player)
+                                                            != Skill.State.UNLOCKED)
+                                                        skill.unlock(player);
+                                                });
+                        });
     }
 
     private static void playUnlockSound(ServerPlayerEntity player) {
-        SoundEvent sound = org.marj4n.smooth_classes.platform.PlatformRegistries.SOUND_EVENT.get(UNLOCK_SOUND_ID);
-        player.getServerWorld().playSound(
-                null,
-                player.getBlockPos(),
-                sound,
-                SoundCategory.PLAYERS,
-                0.85F,
-                0.92F
-        );
+        SoundEvent sound =
+                org.marj4n.smooth_classes.platform.PlatformRegistries.SOUND_EVENT.get(
+                        UNLOCK_SOUND_ID);
+        player.getServerWorld()
+                .playSound(null, player.getBlockPos(), sound, SoundCategory.PLAYERS, 0.85F, 0.92F);
     }
 }

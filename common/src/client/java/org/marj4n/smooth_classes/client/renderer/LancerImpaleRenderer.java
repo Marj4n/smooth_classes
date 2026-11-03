@@ -30,15 +30,15 @@ public final class LancerImpaleRenderer extends EntityRenderer<LancerImpaleEntit
             float tickDelta,
             MatrixStack matrices,
             VertexConsumerProvider vertexConsumers,
-            int light
-    ) {
+            int light) {
         ItemStack stack = entity.getVisualStack();
         if (stack.isEmpty()) return;
 
         matrices.push();
 
         if (entity.isGroundSpike()) {
-            // Rise from below the ground, linger briefly, then get pulled back down instead of popping away.
+            // Rise from below the ground, linger briefly, then get pulled back down instead of
+            // popping away.
             float age = entity.age + tickDelta;
             float rise = Math.min(1.0F, age / 6.0F);
             float sink = age <= 22.0F ? 0.0F : Math.min(1.0F, (age - 22.0F) / 12.0F);
@@ -51,7 +51,8 @@ public final class LancerImpaleRenderer extends EntityRenderer<LancerImpaleEntit
         }
 
         // Match projectile-style orientation first, then use the item's own baked model.
-        // This keeps custom spear/lance geometry recognisable while aiming the shaft into the victim.
+        // This keeps custom spear/lance geometry recognisable while aiming the shaft into the
+        // victim.
         matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(entity.getYaw() - 90.0F));
         matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(entity.getPitch() + 90.0F));
         matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(90.0F));
@@ -65,8 +66,7 @@ public final class LancerImpaleRenderer extends EntityRenderer<LancerImpaleEntit
                 matrices,
                 vertexConsumers,
                 entity.getWorld(),
-                entity.getId()
-        );
+                entity.getId());
 
         matrices.pop();
         super.render(entity, yaw, tickDelta, matrices, vertexConsumers, light);

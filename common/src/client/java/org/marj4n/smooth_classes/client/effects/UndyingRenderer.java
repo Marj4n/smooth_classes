@@ -14,61 +14,91 @@ import net.spell_engine.api.render.CustomModels;
 import net.spell_engine.api.render.LightEmission;
 import org.marj4n.smooth_classes.SmoothClasses;
 
-
 public class UndyingRenderer implements CustomModelStatusEffect.Renderer {
-    public static final Identifier modelId_base = Identifier.of(SmoothClasses.MOD_ID, "effect/undying");
-    public static final Identifier modelId_overlay = Identifier.of(SmoothClasses.MOD_ID, "effect/undying_glow");
-    public static final Identifier modelId_barrier = Identifier.of(SmoothClasses.MOD_ID, "effect/undying_barrier");
+    public static final Identifier modelId_base =
+            Identifier.of(SmoothClasses.MOD_ID, "effect/undying");
+    public static final Identifier modelId_overlay =
+            Identifier.of(SmoothClasses.MOD_ID, "effect/undying_glow");
+    public static final Identifier modelId_barrier =
+            Identifier.of(SmoothClasses.MOD_ID, "effect/undying_barrier");
 
     private static final RenderLayer BASE_RENDER_LAYER =
-            RenderLayer.getEntityTranslucent(net.minecraft.screen.PlayerScreenHandler.BLOCK_ATLAS_TEXTURE);
+            RenderLayer.getEntityTranslucent(
+                    net.minecraft.screen.PlayerScreenHandler.BLOCK_ATLAS_TEXTURE);
     private static final RenderLayer OVERLAY_RENDER_LAYER =
             CustomLayers.spellEffect(LightEmission.GLOW, true);
 
-
     @Override
-    public void renderEffect(long startTime, int amplifier, LivingEntity livingEntity, float delta, MatrixStack matrixStack, VertexConsumerProvider vertexConsumers, int light) {
+    public void renderEffect(
+            long startTime,
+            int amplifier,
+            LivingEntity livingEntity,
+            float delta,
+            MatrixStack matrixStack,
+            VertexConsumerProvider vertexConsumers,
+            int light) {
         float yOffset = 0.68F;
         float proneOffset = 0.30F; // Things get weird when prone, and render code hurts my head
-        boolean prone = livingEntity.isFallFlying() || livingEntity.isCrawling() || livingEntity.isInSwimmingPose();
+        boolean prone =
+                livingEntity.isFallFlying()
+                        || livingEntity.isCrawling()
+                        || livingEntity.isInSwimmingPose();
         matrixStack.push();
 
         matrixStack.translate(0, yOffset, 0);
-        if (prone)
-            matrixStack.translate(0, -proneOffset, 0);
+        if (prone) matrixStack.translate(0, -proneOffset, 0);
 
         // Apply rotation to match the entity's orientation
         matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-livingEntity.bodyYaw));
         if (prone)
-            matrixStack.multiply(RotationAxis.POSITIVE_X.rotationDegrees(livingEntity.getPitch() + 90));
+            matrixStack.multiply(
+                    RotationAxis.POSITIVE_X.rotationDegrees(livingEntity.getPitch() + 90));
 
-        CustomModels.render(BASE_RENDER_LAYER, MinecraftClient.getInstance().getItemRenderer(), modelId_base,
-                matrixStack, vertexConsumers, light, livingEntity.getId());
+        CustomModels.render(
+                BASE_RENDER_LAYER,
+                MinecraftClient.getInstance().getItemRenderer(),
+                modelId_base,
+                matrixStack,
+                vertexConsumers,
+                light,
+                livingEntity.getId());
         matrixStack.pop();
 
         float overlayScale = 1.05F;
         matrixStack.push();
         matrixStack.translate(0, yOffset, 0);
-        if (prone)
-            matrixStack.translate(0, -proneOffset, 0);
+        if (prone) matrixStack.translate(0, -proneOffset, 0);
         matrixStack.scale(overlayScale, overlayScale, overlayScale);
 
         // Apply rotation to match the entity's orientation
         matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-livingEntity.bodyYaw));
         if (prone)
-            matrixStack.multiply(RotationAxis.POSITIVE_X.rotationDegrees(livingEntity.getPitch() + 90));
+            matrixStack.multiply(
+                    RotationAxis.POSITIVE_X.rotationDegrees(livingEntity.getPitch() + 90));
 
-        CustomModels.render(OVERLAY_RENDER_LAYER, MinecraftClient.getInstance().getItemRenderer(), modelId_overlay,
-                matrixStack, vertexConsumers, light, livingEntity.getId());
+        CustomModels.render(
+                OVERLAY_RENDER_LAYER,
+                MinecraftClient.getInstance().getItemRenderer(),
+                modelId_overlay,
+                matrixStack,
+                vertexConsumers,
+                light,
+                livingEntity.getId());
         matrixStack.pop();
 
-        float shieldWidth=Math.max(1.1F,livingEntity.getWidth()*1.5F);
-        float shieldHeight=(livingEntity.getHeight()+.15F)/1.94F;
+        float shieldWidth = Math.max(1.1F, livingEntity.getWidth() * 1.5F);
+        float shieldHeight = (livingEntity.getHeight() + .15F) / 1.94F;
         matrixStack.push();
-        matrixStack.translate(0,livingEntity.getHeight()*.37F,0);
-        matrixStack.scale(shieldWidth,shieldHeight,shieldWidth);
-        CustomModels.render(BASE_RENDER_LAYER,MinecraftClient.getInstance().getItemRenderer(),modelId_barrier,
-                matrixStack,vertexConsumers,light,livingEntity.getId());
+        matrixStack.translate(0, livingEntity.getHeight() * .37F, 0);
+        matrixStack.scale(shieldWidth, shieldHeight, shieldWidth);
+        CustomModels.render(
+                BASE_RENDER_LAYER,
+                MinecraftClient.getInstance().getItemRenderer(),
+                modelId_barrier,
+                matrixStack,
+                vertexConsumers,
+                light,
+                livingEntity.getId());
         matrixStack.pop();
     }
 }

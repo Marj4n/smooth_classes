@@ -31,9 +31,17 @@ public final class VampireBloodDiet {
             this.bloodPerPortion = bloodPerPortion;
         }
 
-        public String key() { return key; }
-        public int tier() { return tier; }
-        public int bloodPerPortion() { return bloodPerPortion; }
+        public String key() {
+            return key;
+        }
+
+        public int tier() {
+            return tier;
+        }
+
+        public int bloodPerPortion() {
+            return bloodPerPortion;
+        }
     }
 
     public static final String DISCOVERY_PREFIX = "vampire.blood_type.";
@@ -57,14 +65,53 @@ public final class VampireBloodDiet {
         if (entityType.isIn(WILD)) return Type.WILD;
         if (entityType.isIn(AQUATIC)) return Type.AQUATIC;
 
-        if (entity instanceof VillagerEntity || entity instanceof WanderingTraderEntity) return Type.HUMANOID;
-        String path = org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE.getId(entityType).getPath();
-        if (containsAny(path, "villager", "trader", "merchant", "humanoid", "npc")) return Type.HUMANOID;
-        if (containsAny(path, "fish", "squid", "dolphin", "axolotl", "tadpole", "turtle", "jellyfish",
-                "whale", "seahorse", "octopus", "crab", "shrimp", "salmon", "cod", "puffer",
-                "nautilus", "manatee", "manta", "eel", "shark")) return Type.AQUATIC;
-        if (containsAny(path, "cow", "mooshroom", "pig", "sheep", "chicken", "horse", "donkey",
-                "mule", "llama", "goat", "alpaca", "bison", "buffalo", "yak", "turkey")) return Type.LIVESTOCK;
+        if (entity instanceof VillagerEntity || entity instanceof WanderingTraderEntity)
+            return Type.HUMANOID;
+        String path =
+                org.marj4n.smooth_classes.platform.PlatformRegistries.ENTITY_TYPE
+                        .getId(entityType)
+                        .getPath();
+        if (containsAny(path, "villager", "trader", "merchant", "humanoid", "npc"))
+            return Type.HUMANOID;
+        if (containsAny(
+                path,
+                "fish",
+                "squid",
+                "dolphin",
+                "axolotl",
+                "tadpole",
+                "turtle",
+                "jellyfish",
+                "whale",
+                "seahorse",
+                "octopus",
+                "crab",
+                "shrimp",
+                "salmon",
+                "cod",
+                "puffer",
+                "nautilus",
+                "manatee",
+                "manta",
+                "eel",
+                "shark")) return Type.AQUATIC;
+        if (containsAny(
+                path,
+                "cow",
+                "mooshroom",
+                "pig",
+                "sheep",
+                "chicken",
+                "horse",
+                "donkey",
+                "mule",
+                "llama",
+                "goat",
+                "alpaca",
+                "bison",
+                "buffalo",
+                "yak",
+                "turkey")) return Type.LIVESTOCK;
         return Type.WILD;
     }
 
@@ -87,9 +134,12 @@ public final class VampireBloodDiet {
      */
     public static void migrateLegacy(OriginState state) {
         if (state.hasFlag("vampire.blood_types_migrated_v16")) return;
-        if (state.hasFlag("vampire.blood_category.humanoid")) state.flag(DISCOVERY_PREFIX + "humanoid");
-        if (state.hasFlag("vampire.blood_category.animal")) state.flag(DISCOVERY_PREFIX + "livestock");
-        if (state.hasFlag("vampire.blood_category.aquatic")) state.flag(DISCOVERY_PREFIX + "aquatic");
+        if (state.hasFlag("vampire.blood_category.humanoid"))
+            state.flag(DISCOVERY_PREFIX + "humanoid");
+        if (state.hasFlag("vampire.blood_category.animal"))
+            state.flag(DISCOVERY_PREFIX + "livestock");
+        if (state.hasFlag("vampire.blood_category.aquatic"))
+            state.flag(DISCOVERY_PREFIX + "aquatic");
         state.flag("vampire.blood_types_migrated_v16");
     }
 

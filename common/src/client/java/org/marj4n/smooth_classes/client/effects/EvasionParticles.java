@@ -6,19 +6,20 @@ import net.spell_engine.api.spell.fx.ParticleGroup;
 import net.spell_engine.api.spell.fx.ParticleGroupBuilder;
 import net.spell_engine.fx.ParticleHelper;
 
-
 public class EvasionParticles implements CustomParticleStatusEffect.Spawner {
 
     private final ParticleGroup particles;
 
     public EvasionParticles(int particleCount) {
-        this.particles = ParticleGroupBuilder.of("minecraft:mycelium")
-                .batch(batch -> batch
-                        .count(particleCount)
-                        .shape(ParticleGroup.Shape.PIPE)
-                        .anchor(ParticleGroup.Anchor.GROUND)
-                        .speed(0.1F)
-                        .extent(0.7F));
+        this.particles =
+                ParticleGroupBuilder.of("minecraft:mycelium")
+                        .batch(
+                                batch ->
+                                        batch.count(particleCount)
+                                                .shape(ParticleGroup.Shape.PIPE)
+                                                .anchor(ParticleGroup.Anchor.GROUND)
+                                                .speed(0.1F)
+                                                .extent(0.7F));
     }
 
     @Override

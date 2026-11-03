@@ -42,11 +42,23 @@ public final class OriginClientState {
 
     private OriginClientState() {}
 
-    public static void sync(String origin, int bloodValue, int bloodCapacityValue, int sun, int wetness, int wing,
-                            int instabilityValue, int soulValue, int bone, int carbon, int living,
-                            Map<String, Integer> progressValues, Set<String> flagValues) {
+    public static void sync(
+            String origin,
+            int bloodValue,
+            int bloodCapacityValue,
+            int sun,
+            int wetness,
+            int wing,
+            int instabilityValue,
+            int soulValue,
+            int bone,
+            int carbon,
+            int living,
+            Map<String, Integer> progressValues,
+            Set<String> flagValues) {
         boolean wasBat = flags.contains("vampire.form.bat");
-        boolean enteringBat = flagValues != null && flagValues.contains("vampire.form.bat") && !wasBat;
+        boolean enteringBat =
+                flagValues != null && flagValues.contains("vampire.form.bat") && !wasBat;
         boolean wasLord = flags.contains("vampire.evolution.lord");
         boolean isLord = flagValues != null && flagValues.contains("vampire.evolution.lord");
         int previousSunExposure = sunExposure;
@@ -74,20 +86,38 @@ public final class OriginClientState {
         boneMass = bone;
         carbonLayer = carbon;
         livingMass = living;
-        progress = Collections.unmodifiableMap(new HashMap<>(progressValues == null ? Map.of() : progressValues));
-        flags = Collections.unmodifiableSet(new HashSet<>(flagValues == null ? Set.of() : flagValues));
+        progress =
+                Collections.unmodifiableMap(
+                        new HashMap<>(progressValues == null ? Map.of() : progressValues));
+        flags =
+                Collections.unmodifiableSet(
+                        new HashSet<>(flagValues == null ? Set.of() : flagValues));
         int batTicks = Math.max(0, progress.getOrDefault("ui.vampire.bat_cooldown_ticks", 0));
         vampireBatCooldownUntilMs = nowMs + batTicks * 50L;
-        manBatDurationUntilMs = nowMs + Math.max(0, progress.getOrDefault("ui.vampire.man_bat_duration_ticks", 0)) * 50L;
-        manBatCooldownUntilMs = nowMs + Math.max(0, progress.getOrDefault("ui.vampire.man_bat_cooldown_ticks", 0)) * 50L;
-        bloodSenseCooldownUntilMs = nowMs + Math.max(0, progress.getOrDefault("ui.vampire.blood_sense_cooldown_ticks", 0)) * 50L;
+        manBatDurationUntilMs =
+                nowMs
+                        + Math.max(0, progress.getOrDefault("ui.vampire.man_bat_duration_ticks", 0))
+                                * 50L;
+        manBatCooldownUntilMs =
+                nowMs
+                        + Math.max(0, progress.getOrDefault("ui.vampire.man_bat_cooldown_ticks", 0))
+                                * 50L;
+        bloodSenseCooldownUntilMs =
+                nowMs
+                        + Math.max(
+                                        0,
+                                        progress.getOrDefault(
+                                                "ui.vampire.blood_sense_cooldown_ticks", 0))
+                                * 50L;
 
         long newBloodSenseRemaining = Math.max(0L, bloodSenseCooldownUntilMs - nowMs);
-        boolean freshBloodSensePulse = originId.equals("vampire")
-                && newBloodSenseRemaining > previousBloodSenseRemaining + 4_000L
-                && newBloodSenseRemaining >= 8_500L;
+        boolean freshBloodSensePulse =
+                originId.equals("vampire")
+                        && newBloodSenseRemaining > previousBloodSenseRemaining + 4_000L
+                        && newBloodSenseRemaining >= 8_500L;
         if (freshBloodSensePulse) {
-            bloodSenseEffectUntilMs = nowMs + (isLord ? BLOOD_SENSE_LORD_EFFECT_MS : BLOOD_SENSE_BASE_EFFECT_MS);
+            bloodSenseEffectUntilMs =
+                    nowMs + (isLord ? BLOOD_SENSE_LORD_EFFECT_MS : BLOOD_SENSE_BASE_EFFECT_MS);
             bloodSenseFlashUntilMs = nowMs + BLOOD_SENSE_FLASH_MS;
         }
 
@@ -98,7 +128,6 @@ public final class OriginClientState {
         }
         initialized = true;
     }
-
 
     public static float visualSunExposure() {
         long now = System.nanoTime();
@@ -163,12 +192,22 @@ public final class OriginClientState {
         return count;
     }
 
-    public static Map<String, Integer> progressSnapshot() { return progress; }
-    public static Set<String> flagsSnapshot() { return flags; }
+    public static Map<String, Integer> progressSnapshot() {
+        return progress;
+    }
+
+    public static Set<String> flagsSnapshot() {
+        return flags;
+    }
 
     public static void reset() {
         originId = "";
-        blood = sunExposure = wetnessTicks = wingStaminaTicks = instability = soul = boneMass = carbonLayer = livingMass = 0;
+        blood =
+                sunExposure =
+                        wetnessTicks =
+                                wingStaminaTicks =
+                                        instability =
+                                                soul = boneMass = carbonLayer = livingMass = 0;
         visualSunExposure = 0.0F;
         visualSunLastNanos = 0L;
         bloodCapacity = 100;

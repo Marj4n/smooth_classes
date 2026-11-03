@@ -12,26 +12,38 @@ import net.spell_engine.api.render.CustomModels;
 import net.spell_engine.api.render.LightEmission;
 import org.marj4n.smooth_classes.SmoothClasses;
 
-
 public class TauntedRenderer implements CustomModelStatusEffect.Renderer {
-    public static final Identifier modelId_overlay = Identifier.of(SmoothClasses.MOD_ID, "effect/taunted");
+    public static final Identifier modelId_overlay =
+            Identifier.of(SmoothClasses.MOD_ID, "effect/taunted");
 
     private static final RenderLayer OVERLAY_RENDER_LAYER =
             CustomLayers.spellEffect(LightEmission.GLOW, false);
 
-
     @Override
-    public void renderEffect(long startTime, int amplifier, LivingEntity livingEntity, float delta, MatrixStack matrixStack, VertexConsumerProvider vertexConsumers, int light) {
+    public void renderEffect(
+            long startTime,
+            int amplifier,
+            LivingEntity livingEntity,
+            float delta,
+            MatrixStack matrixStack,
+            VertexConsumerProvider vertexConsumers,
+            int light) {
         float entitySize = livingEntity.getHeight();
-        float yOffset = 0F +entitySize - 0.40F;
+        float yOffset = 0F + entitySize - 0.40F;
 
         float overlayScale = 1.2F;
         matrixStack.push();
         matrixStack.translate(0, yOffset, 0);
         matrixStack.scale(overlayScale, overlayScale, overlayScale);
 
-        CustomModels.render(OVERLAY_RENDER_LAYER, MinecraftClient.getInstance().getItemRenderer(), modelId_overlay,
-                matrixStack, vertexConsumers, light, livingEntity.getId());
+        CustomModels.render(
+                OVERLAY_RENDER_LAYER,
+                MinecraftClient.getInstance().getItemRenderer(),
+                modelId_overlay,
+                matrixStack,
+                vertexConsumers,
+                light,
+                livingEntity.getId());
         matrixStack.pop();
     }
 }

@@ -35,6 +35,7 @@ public final class DeathListBookClient {
     private static final Identifier LEDGER_ENTRY = Identifier.of("smooth_classes", "ledger");
     private static final Map<String, Integer> SOULS = new HashMap<>();
     private static final Map<String, Integer> KILLS = new HashMap<>();
+
     /** Cache the discovered list once per server sync, not on every Patchouli text render. */
     private static List<AvengerSummonRecipes.Recipe> DISCOVERED_RECIPES = List.of();
 
@@ -50,14 +51,16 @@ public final class DeathListBookClient {
 
     public static void register() {
         registerPatchouliHooks();
-        ClientPlayNetworking.registerGlobalReceiver(SmoothClassesNetworking.SYNC_DEATH_LIST,
+        ClientPlayNetworking.registerGlobalReceiver(
+                SmoothClassesNetworking.SYNC_DEATH_LIST,
                 (client, handler, buf, responseSender) -> {
                     NbtCompound nbt = buf.readNbt();
-                    client.execute(() -> {
-                        if (nbt == null) return;
-                        syncLedger(nbt);
-                        if (!openPatchouliLedger()) openVanillaFallback(nbt);
-                    });
+                    client.execute(
+                            () -> {
+                                if (nbt == null) return;
+                                syncLedger(nbt);
+                                if (!openPatchouliLedger()) openVanillaFallback(nbt);
+                            });
                 });
     }
 
@@ -78,22 +81,34 @@ public final class DeathListBookClient {
         List<AvengerSummonRecipes.Recipe> discoveredRecipes = new ArrayList<>();
         List<AvengerSummonRecipes.Recipe> syncedRecipes = new ArrayList<>();
         if (nbt.contains("SmoothDeathRecipes")) {
-            var entries = nbt.getList("SmoothDeathRecipes", net.minecraft.nbt.NbtElement.COMPOUND_TYPE);
+            var entries =
+                    nbt.getList("SmoothDeathRecipes", net.minecraft.nbt.NbtElement.COMPOUND_TYPE);
             for (int i = 0; i < entries.size(); i++) {
                 var value = entries.getCompound(i);
-                syncedRecipes.add(new AvengerSummonRecipes.Recipe(value.getString("entity"), value.getString("main"), value.contains("off") ? value.getString("off") : null));
+                syncedRecipes.add(
+                        new AvengerSummonRecipes.Recipe(
+                                value.getString("entity"),
+                                value.getString("main"),
+                                value.contains("off") ? value.getString("off") : null));
             }
         } else syncedRecipes.addAll(AvengerSummonRecipes.allRecipes());
         for (AvengerSummonRecipes.Recipe recipe : syncedRecipes) {
             if (KILLS.getOrDefault(recipe.entityId(), 0) > 0) discoveredRecipes.add(recipe);
         }
-        discoveredRecipes.sort(Comparator.comparing(recipe -> AvengerSummonRecipes.friendlyEntityName(recipe.entityId())));
+        discoveredRecipes.sort(
+                Comparator.comparing(
+                        recipe -> AvengerSummonRecipes.friendlyEntityName(recipe.entityId())));
         DISCOVERED_RECIPES = List.copyOf(discoveredRecipes);
     }
 
     /** Read-only access to the server's latest synced snapshot for Soul Search. */
-    static int availableSouls(String id) { return SOULS.getOrDefault(id, 0); }
-    static int killCount(String id) { return KILLS.getOrDefault(id, 0); }
+    static int availableSouls(String id) {
+        return SOULS.getOrDefault(id, 0);
+    }
+
+    static int killCount(String id) {
+        return KILLS.getOrDefault(id, 0);
+    }
 
     /** Search only revealed recipes; hidden ingredients never leak before a soul is captured. */
     static List<AvengerSummonRecipes.Recipe> searchDiscoveredRecipes(String rawQuery) {
@@ -103,10 +118,15 @@ public final class DeathListBookClient {
         for (AvengerSummonRecipes.Recipe recipe : DISCOVERED_RECIPES) {
             String modId = recipe.entityId().split(":", 2)[0];
             String main = AvengerSummonRecipes.friendlyItemName(recipe.mainItemId());
-            String off = recipe.offhandItemId() == null ? "" : AvengerSummonRecipes.friendlyItemName(recipe.offhandItemId());
+            String off =
+                    recipe.offhandItemId() == null
+                            ? ""
+                            : AvengerSummonRecipes.friendlyItemName(recipe.offhandItemId());
             if (recipe.entityId().toLowerCase(Locale.ROOT).contains(query)
                     || modId.toLowerCase(Locale.ROOT).contains(query)
-                    || AvengerSummonRecipes.friendlyEntityName(recipe.entityId()).toLowerCase(Locale.ROOT).contains(query)
+                    || AvengerSummonRecipes.friendlyEntityName(recipe.entityId())
+                            .toLowerCase(Locale.ROOT)
+                            .contains(query)
                     || main.toLowerCase(Locale.ROOT).contains(query)
                     || off.toLowerCase(Locale.ROOT).contains(query)) {
                 matches.add(recipe);
@@ -116,7 +136,8 @@ public final class DeathListBookClient {
     }
 
     private static void registerPatchouliHooks() {
-        if (patchouliHooksRegistered || !PlatformLoader.getInstance().isModLoaded("patchouli")) return;
+        if (patchouliHooksRegistered || !PlatformLoader.getInstance().isModLoaded("patchouli"))
+            return;
         try {
             Object api = patchouliApi();
             Method registerCommand = findMethod(api, "registerCommand", 2);
@@ -126,38 +147,96 @@ public final class DeathListBookClient {
             // Patchouli does not recursively parse formatting commands returned by a
             // custom command/function. Keep all $(...) styling in the book JSON and
             // return raw values only from these callbacks.
-            registerCommand.invoke(api, "smooth_death_total_souls", (Function<Object, String>) ignored -> Integer.toString(totalSouls));
-            registerCommand.invoke(api, "smooth_death_discovered", (Function<Object, String>) ignored -> Integer.toString(discovered));
-            registerCommand.invoke(api, "smooth_death_recipe_count", (Function<Object, String>) ignored -> Integer.toString(recipeCount));
-            registerCommand.invoke(api, "smooth_death_charges", (Function<Object, String>) ignored -> Integer.toString(charges));
-            registerCommand.invoke(api, "smooth_death_max_charges", (Function<Object, String>) ignored -> Integer.toString(maxCharges));
-            registerCommand.invoke(api, "smooth_death_recharge", (Function<Object, String>) ignored -> rechargeText());
+            registerCommand.invoke(
+                    api,
+                    "smooth_death_total_souls",
+                    (Function<Object, String>) ignored -> Integer.toString(totalSouls));
+            registerCommand.invoke(
+                    api,
+                    "smooth_death_discovered",
+                    (Function<Object, String>) ignored -> Integer.toString(discovered));
+            registerCommand.invoke(
+                    api,
+                    "smooth_death_recipe_count",
+                    (Function<Object, String>) ignored -> Integer.toString(recipeCount));
+            registerCommand.invoke(
+                    api,
+                    "smooth_death_charges",
+                    (Function<Object, String>) ignored -> Integer.toString(charges));
+            registerCommand.invoke(
+                    api,
+                    "smooth_death_max_charges",
+                    (Function<Object, String>) ignored -> Integer.toString(maxCharges));
+            registerCommand.invoke(
+                    api,
+                    "smooth_death_recharge",
+                    (Function<Object, String>) ignored -> rechargeText());
 
             // Keep scalar ledger values on the same function path used by the
             // Soul Stock entries. Patchouli 1.20.x reliably resolves registered
             // functions here, while a few long custom command names can remain
             // literal depending on parser/registration order.
-            registerFunction.invoke(api, "smooth_death_meta",
+            registerFunction.invoke(
+                    api,
+                    "smooth_death_meta",
                     (BiFunction<String, Object, String>) (key, ignored) -> ledgerMeta(key));
 
-            registerFunction.invoke(api, "smooth_death_stock_name", (BiFunction<String, Object, String>) (slot, ignored) -> stockName(slot));
-            registerFunction.invoke(api, "smooth_death_stock_mark", (BiFunction<String, Object, String>) (slot, ignored) -> stockMark(slot));
-            registerFunction.invoke(api, "smooth_death_stock_count", (BiFunction<String, Object, String>) (slot, ignored) -> stockCount(slot));
-            registerFunction.invoke(api, "smooth_death_stock_main", (BiFunction<String, Object, String>) (slot, ignored) -> stockMain(slot));
-            registerFunction.invoke(api, "smooth_death_stock_off", (BiFunction<String, Object, String>) (slot, ignored) -> stockOff(slot));
+            registerFunction.invoke(
+                    api,
+                    "smooth_death_stock_name",
+                    (BiFunction<String, Object, String>) (slot, ignored) -> stockName(slot));
+            registerFunction.invoke(
+                    api,
+                    "smooth_death_stock_mark",
+                    (BiFunction<String, Object, String>) (slot, ignored) -> stockMark(slot));
+            registerFunction.invoke(
+                    api,
+                    "smooth_death_stock_count",
+                    (BiFunction<String, Object, String>) (slot, ignored) -> stockCount(slot));
+            registerFunction.invoke(
+                    api,
+                    "smooth_death_stock_main",
+                    (BiFunction<String, Object, String>) (slot, ignored) -> stockMain(slot));
+            registerFunction.invoke(
+                    api,
+                    "smooth_death_stock_off",
+                    (BiFunction<String, Object, String>) (slot, ignored) -> stockOff(slot));
 
-            registerFunction.invoke(api, "smooth_death_name", (BiFunction<String, Object, String>) (id, ignored) -> soulName(id));
-            registerFunction.invoke(api, "smooth_death_status", (BiFunction<String, Object, String>) (id, ignored) -> soulStatus(id));
-            registerFunction.invoke(api, "smooth_death_soul_count", (BiFunction<String, Object, String>) (id, ignored) -> soulCount(id));
-            registerFunction.invoke(api, "smooth_death_slain", (BiFunction<String, Object, String>) (id, ignored) -> slainCount(id));
-            registerFunction.invoke(api, "smooth_death_main", (BiFunction<String, Object, String>) (id, ignored) -> soulMain(id));
-            registerFunction.invoke(api, "smooth_death_off", (BiFunction<String, Object, String>) (id, ignored) -> soulOff(id));
-            registerFunction.invoke(api, "smooth_death_note", (BiFunction<String, Object, String>) (id, ignored) -> soulNote(id));
+            registerFunction.invoke(
+                    api,
+                    "smooth_death_name",
+                    (BiFunction<String, Object, String>) (id, ignored) -> soulName(id));
+            registerFunction.invoke(
+                    api,
+                    "smooth_death_status",
+                    (BiFunction<String, Object, String>) (id, ignored) -> soulStatus(id));
+            registerFunction.invoke(
+                    api,
+                    "smooth_death_soul_count",
+                    (BiFunction<String, Object, String>) (id, ignored) -> soulCount(id));
+            registerFunction.invoke(
+                    api,
+                    "smooth_death_slain",
+                    (BiFunction<String, Object, String>) (id, ignored) -> slainCount(id));
+            registerFunction.invoke(
+                    api,
+                    "smooth_death_main",
+                    (BiFunction<String, Object, String>) (id, ignored) -> soulMain(id));
+            registerFunction.invoke(
+                    api,
+                    "smooth_death_off",
+                    (BiFunction<String, Object, String>) (id, ignored) -> soulOff(id));
+            registerFunction.invoke(
+                    api,
+                    "smooth_death_note",
+                    (BiFunction<String, Object, String>) (id, ignored) -> soulNote(id));
 
             patchouliHooksRegistered = true;
             SmoothClasses.LOGGER.info("Registered Patchouli Death List value functions.");
         } catch (ReflectiveOperationException | LinkageError ex) {
-            SmoothClasses.LOGGER.warn("Patchouli Death List functions could not be registered; vanilla fallback remains available.", ex);
+            SmoothClasses.LOGGER.warn(
+                    "Patchouli Death List functions could not be registered; vanilla fallback remains available.",
+                    ex);
         }
     }
 
@@ -206,15 +285,18 @@ public final class DeathListBookClient {
 
     private static String stockMain(String slot) {
         AvengerSummonRecipes.Recipe recipe = stockRecipe(slot);
-        return recipe == null ? "" : "Main: " + AvengerSummonRecipes.friendlyItemName(recipe.mainItemId());
+        return recipe == null
+                ? ""
+                : "Main: " + AvengerSummonRecipes.friendlyItemName(recipe.mainItemId());
     }
 
     private static String stockOff(String slot) {
         AvengerSummonRecipes.Recipe recipe = stockRecipe(slot);
         if (recipe == null) return "";
-        return "Off: " + (recipe.offhandItemId() == null
-                ? "Not required"
-                : AvengerSummonRecipes.friendlyItemName(recipe.offhandItemId()));
+        return "Off: "
+                + (recipe.offhandItemId() == null
+                        ? "Not required"
+                        : AvengerSummonRecipes.friendlyItemName(recipe.offhandItemId()));
     }
 
     private static String normalizedSoulId(String rawId) {
@@ -231,7 +313,9 @@ public final class DeathListBookClient {
 
     private static String soulName(String rawId) {
         String id = normalizedSoulId(rawId);
-        return AvengerSummonRecipes.recipe(id) == null ? "Unknown Soul" : AvengerSummonRecipes.friendlyEntityName(id);
+        return AvengerSummonRecipes.recipe(id) == null
+                ? "Unknown Soul"
+                : AvengerSummonRecipes.friendlyEntityName(id);
     }
 
     private static String soulStatus(String rawId) {
@@ -259,7 +343,9 @@ public final class DeathListBookClient {
         AvengerSummonRecipes.Recipe recipe = soulRecipe(rawId);
         if (recipe == null) return "Unknown";
         if (!discoveredSoul(rawId)) return "UNDISCOVERED";
-        return recipe.offhandItemId() == null ? "Not required" : AvengerSummonRecipes.friendlyItemName(recipe.offhandItemId());
+        return recipe.offhandItemId() == null
+                ? "Not required"
+                : AvengerSummonRecipes.friendlyItemName(recipe.offhandItemId());
     }
 
     private static String soulNote(String rawId) {
@@ -283,7 +369,9 @@ public final class DeathListBookClient {
                     openEntry.invoke(api, BOOK_ID, LEDGER_ENTRY, 0);
                     if (isPatchouliDeathListOpen(api)) return true;
                 } catch (ReflectiveOperationException | IllegalArgumentException ex) {
-                    SmoothClasses.LOGGER.warn("Could not open the Death List ledger entry; trying the book landing page.", ex);
+                    SmoothClasses.LOGGER.warn(
+                            "Could not open the Death List ledger entry; trying the book landing page.",
+                            ex);
                 }
             }
 
@@ -297,7 +385,9 @@ public final class DeathListBookClient {
                 }
             }
         } catch (ReflectiveOperationException | LinkageError | IllegalArgumentException ex) {
-            SmoothClasses.LOGGER.warn("Could not access Patchouli Death List integration; using vanilla fallback.", ex);
+            SmoothClasses.LOGGER.warn(
+                    "Could not access Patchouli Death List integration; using vanilla fallback.",
+                    ex);
         }
         return false;
     }
@@ -324,7 +414,8 @@ public final class DeathListBookClient {
 
     private static Method findMethod(Object target, String name, int parameterCount) {
         for (Method method : target.getClass().getMethods()) {
-            if (method.getName().equals(name) && method.getParameterCount() == parameterCount) return method;
+            if (method.getName().equals(name) && method.getParameterCount() == parameterCount)
+                return method;
         }
         return null;
     }
@@ -332,6 +423,7 @@ public final class DeathListBookClient {
     private static void openVanillaFallback(NbtCompound nbt) {
         ItemStack virtualBook = new ItemStack(Items.WRITTEN_BOOK);
         virtualBook.setNbt(nbt.copy());
-        MinecraftClient.getInstance().setScreen(new BookScreen(BookScreen.Contents.create(virtualBook)));
+        MinecraftClient.getInstance()
+                .setScreen(new BookScreen(BookScreen.Contents.create(virtualBook)));
     }
 }

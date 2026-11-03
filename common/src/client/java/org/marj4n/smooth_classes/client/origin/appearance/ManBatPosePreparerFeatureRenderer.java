@@ -21,28 +21,53 @@ import org.marj4n.smooth_classes.origin.OriginType;
  * the same frame's shoulder/hip transforms.
  */
 public final class ManBatPosePreparerFeatureRenderer
-        extends FeatureRenderer<AbstractClientPlayerEntity, PlayerEntityModel<AbstractClientPlayerEntity>> {
+        extends FeatureRenderer<
+                AbstractClientPlayerEntity, PlayerEntityModel<AbstractClientPlayerEntity>> {
     private final ManBatFormModel<AbstractClientPlayerEntity> manBat;
 
     public ManBatPosePreparerFeatureRenderer(
-            FeatureRendererContext<AbstractClientPlayerEntity, PlayerEntityModel<AbstractClientPlayerEntity>> context,
+            FeatureRendererContext<
+                            AbstractClientPlayerEntity,
+                            PlayerEntityModel<AbstractClientPlayerEntity>>
+                    context,
             EntityRendererFactory.Context ctx) {
         super(context);
         manBat = new ManBatFormModel<>(ctx.getPart(SmoothClassesClient.ORIGIN_MAN_BAT_MODEL));
     }
 
     @Override
-    public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light,
-                       AbstractClientPlayerEntity player, float limbAngle, float limbDistance,
-                       float tickDelta, float animationProgress, float headYaw, float headPitch) {
+    public void render(
+            MatrixStack matrices,
+            VertexConsumerProvider vertexConsumers,
+            int light,
+            AbstractClientPlayerEntity player,
+            float limbAngle,
+            float limbDistance,
+            float tickDelta,
+            float animationProgress,
+            float headYaw,
+            float headPitch) {
         if (player.isInvisible() || player.isSpectator()) return;
         if (org.marj4n.smooth_classes.client.origin.demon.DemonVisualModel.applies(player)) {
-            org.marj4n.smooth_classes.client.origin.demon.DemonVisualModel.prepare(player,getContextModel(),limbAngle,limbDistance,animationProgress,headYaw,headPitch);
+            org.marj4n.smooth_classes.client.origin.demon.DemonVisualModel.prepare(
+                    player,
+                    getContextModel(),
+                    limbAngle,
+                    limbDistance,
+                    animationProgress,
+                    headYaw,
+                    headPitch);
             return;
         }
         var state = OriginRuntime.state(player);
         if (state.origin() != OriginType.VAMPIRE || !state.hasFlag("vampire.form.man_bat")) return;
-        manBat.prepare(player, getContextModel(), limbAngle, limbDistance,
-                animationProgress, headYaw, headPitch);
+        manBat.prepare(
+                player,
+                getContextModel(),
+                limbAngle,
+                limbDistance,
+                animationProgress,
+                headYaw,
+                headPitch);
     }
 }

@@ -19,8 +19,7 @@ public final class BloodRainWeatherState {
     private static ClientWorld cachedWorld;
     private static long cachedWorldTime = Long.MIN_VALUE;
 
-    private BloodRainWeatherState() {
-    }
+    private BloodRainWeatherState() {}
 
     public static boolean isInsideStorm(ClientWorld world, double x, double z) {
         refresh(world);

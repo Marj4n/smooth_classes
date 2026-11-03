@@ -44,8 +44,13 @@ public final class VampireCoffinBlock extends HorizontalFacingBlock {
 
     @Override
     @Deprecated // Vanilla implementation hook; callers use BlockState.
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player,
-                              Hand hand, BlockHitResult hit) {
+    public ActionResult onUse(
+            BlockState state,
+            World world,
+            BlockPos pos,
+            PlayerEntity player,
+            Hand hand,
+            BlockHitResult hit) {
         if (world.isClient) return ActionResult.SUCCESS;
         if (!(player instanceof ServerPlayerEntity serverPlayer)) return ActionResult.PASS;
         if (OriginRuntime.state(serverPlayer).origin() != OriginType.VAMPIRE) {
@@ -64,7 +69,8 @@ public final class VampireCoffinBlock extends HorizontalFacingBlock {
         origin.longProgress("vampire.coffin_x", pos.getX());
         origin.longProgress("vampire.coffin_y", pos.getY());
         origin.longProgress("vampire.coffin_z", pos.getZ());
-        serverPlayer.sendMessage(Text.literal("You retreat into the coffin until nightfall..."), true);
+        serverPlayer.sendMessage(
+                Text.literal("You retreat into the coffin until nightfall..."), true);
         return ActionResult.CONSUME;
     }
 }

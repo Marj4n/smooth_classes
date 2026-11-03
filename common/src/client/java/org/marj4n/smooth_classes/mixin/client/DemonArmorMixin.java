@@ -1,4 +1,5 @@
 package org.marj4n.smooth_classes.mixin.client;
+
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -20,13 +21,65 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class DemonArmorMixin {
     @Unique private AbstractClientPlayerEntity demon$player;
     @Unique private EquipmentSlot demon$slot;
-    @Inject(method="renderArmor",at=@At("HEAD"))
-    private void demon$begin(MatrixStack matrices,VertexConsumerProvider buffers,LivingEntity entity,EquipmentSlot slot,int light,BipedEntityModel<?> model,CallbackInfo ci){demon$player=entity instanceof AbstractClientPlayerEntity p&&DemonVisualModel.applies(p)?p:null;demon$slot=slot;}
-    @Inject(method="renderArmor",at=@At("RETURN"))
-    private void demon$end(MatrixStack matrices,VertexConsumerProvider buffers,LivingEntity entity,EquipmentSlot slot,int light,BipedEntityModel<?> model,CallbackInfo ci){demon$player=null;demon$slot=null;}
-    @Redirect(method={"renderArmorParts","renderTrim","renderGlint"},at=@At(value="INVOKE",target="Lnet/minecraft/client/render/entity/model/BipedEntityModel;render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;IIFFFF)V"))
-    private void demon$draw(BipedEntityModel<?> model,MatrixStack matrices,VertexConsumer vertices,int light,int overlay,float red,float green,float blue,float alpha){
-        if(demon$player!=null&&DemonVisualModel.renderArmor(demon$player,demon$slot,matrices,vertices,light,overlay,red,green,blue,alpha))return;
-        model.render(matrices,vertices,light,overlay,red,green,blue,alpha);
+
+    @Inject(method = "renderArmor", at = @At("HEAD"))
+    private void demon$begin(
+            MatrixStack matrices,
+            VertexConsumerProvider buffers,
+            LivingEntity entity,
+            EquipmentSlot slot,
+            int light,
+            BipedEntityModel<?> model,
+            CallbackInfo ci) {
+        demon$player =
+                entity instanceof AbstractClientPlayerEntity p && DemonVisualModel.applies(p)
+                        ? p
+                        : null;
+        demon$slot = slot;
+    }
+
+    @Inject(method = "renderArmor", at = @At("RETURN"))
+    private void demon$end(
+            MatrixStack matrices,
+            VertexConsumerProvider buffers,
+            LivingEntity entity,
+            EquipmentSlot slot,
+            int light,
+            BipedEntityModel<?> model,
+            CallbackInfo ci) {
+        demon$player = null;
+        demon$slot = null;
+    }
+
+    @Redirect(
+            method = {"renderArmorParts", "renderTrim", "renderGlint"},
+            at =
+                    @At(
+                            value = "INVOKE",
+                            target =
+                                    "Lnet/minecraft/client/render/entity/model/BipedEntityModel;render(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumer;IIFFFF)V"))
+    private void demon$draw(
+            BipedEntityModel<?> model,
+            MatrixStack matrices,
+            VertexConsumer vertices,
+            int light,
+            int overlay,
+            float red,
+            float green,
+            float blue,
+            float alpha) {
+        if (demon$player != null
+                && DemonVisualModel.renderArmor(
+                        demon$player,
+                        demon$slot,
+                        matrices,
+                        vertices,
+                        light,
+                        overlay,
+                        red,
+                        green,
+                        blue,
+                        alpha)) return;
+        model.render(matrices, vertices, light, overlay, red, green, blue, alpha);
     }
 }

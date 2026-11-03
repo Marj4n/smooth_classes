@@ -64,74 +64,537 @@ public final class RiderHippogryphModel extends EntityModel<RiderHippogryphEntit
     public static TexturedModelData getTexturedModelData() {
         ModelData modelData = new ModelData();
         ModelPartData root = modelData.getRoot();
-        ModelPartData Body = root.addChild("Body", ModelPartBuilder.create().uv(0, 34).cuboid(-5.0F, -8.0F, -19.0F, 10.0F, 10.0F, 24.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 11.0F, 9.0F));
-        ModelPartData HindThighL = Body.addChild("HindThighL", ModelPartBuilder.create().uv(96, 29).mirrored().cuboid(-2.5F, -2.0F, -2.5F, 4.0F, 9.0F, 5.0F, new Dilation(0.0F)), ModelTransform.pivot(4.0F, -1.0F, 2.0F));
-        ModelPartData HindLegL = HindThighL.addChild("HindLegL", ModelPartBuilder.create().uv(96, 43).mirrored().cuboid(-2.0F, 0.0F, -1.5F, 3.0F, 5.0F, 3.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 7.0F, 0.0F));
-        ModelPartData HindFootL = HindLegL.addChild("HindFootL", ModelPartBuilder.create().uv(96, 51).mirrored().cuboid(-2.5F, 0.0F, -2.0F, 4.0F, 3.0F, 4.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 5.0F, 0.0F));
-        ModelPartData BackLegR1_1 = Body.addChild("BackLegR1_1", ModelPartBuilder.create().uv(66, 40).mirrored().cuboid(-1.5F, 0.0F, -1.5F, 3.0F, 8.0F, 4.0F, new Dilation(0.0F)), ModelTransform.pivot(4.2F, -3.9F, -17.0F));
-        ModelPartData BackLegR2_1 = BackLegR1_1.addChild("BackLegR2_1", ModelPartBuilder.create().uv(81, 42).mirrored().cuboid(-1.0F, 0.0F, -0.7F, 2.0F, 10.0F, 3.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, 6.9F, 0.8F, -0.31869712F, 0.0F, 0.0F));
-        ModelPartData ToeL4_1 = BackLegR2_1.addChild("ToeL4_1", ModelPartBuilder.create().uv(51, 43).mirrored().cuboid(-0.5F, -0.5F, -0.7F, 1.0F, 5.0F, 2.0F, new Dilation(0.0F)), ModelTransform.of(-0.6F, 9.8F, 0.2F, -1.2292354F, 0.61086524F, 0.0F));
-        ModelPartData ToeR3_1 = BackLegR2_1.addChild("ToeR3_1", ModelPartBuilder.create().uv(51, 43).mirrored().cuboid(-0.5F, -0.5F, -0.7F, 1.0F, 5.0F, 2.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, 9.8F, -0.7F, -1.0927507F, 0.0F, 0.0F));
-        ModelPartData ToeR1_1 = BackLegR2_1.addChild("ToeR1_1", ModelPartBuilder.create().uv(51, 43).mirrored().cuboid(-0.5F, -0.5F, -0.7F, 1.0F, 5.0F, 2.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, 9.8F, 0.9F, -1.821251F, 3.1415927F, 0.0F));
-        ModelPartData ToeR2_1 = BackLegR2_1.addChild("ToeR2_1", ModelPartBuilder.create().uv(51, 43).mirrored().cuboid(-0.5F, -0.5F, -0.7F, 1.0F, 5.0F, 2.0F, new Dilation(0.0F)), ModelTransform.of(0.6F, 9.8F, 0.2F, -1.1838568F, -0.95609134F, 0.0F));
-        ModelPartData WingL = Body.addChild("WingL", ModelPartBuilder.create().uv(100, 107).mirrored().cuboid(-0.1F, 0.0F, -5.0F, 1.0F, 8.0F, 12.0F, new Dilation(0.0F)), ModelTransform.of(4.2F, -6.6F, -13.2F, 0.12217305F, 0.38397244F, -0.6981317F));
-        ModelPartData WingL2 = WingL.addChild("WingL2", ModelPartBuilder.create().uv(80, 90).mirrored().cuboid(-0.6F, -2.5F, -2.1F, 1.0F, 11.0F, 11.0F, new Dilation(0.0F)), ModelTransform.of(0.4F, 7.6F, -2.8F, 1.548107F, 0.0F, -0.17453292F));
-        ModelPartData WingL21 = WingL2.addChild("WingL21", ModelPartBuilder.create().uv(80, 90).mirrored().cuboid(-0.4F, -2.5F, -2.1F, 1.0F, 11.0F, 11.0F, new Dilation(0.0F)), ModelTransform.pivot(-0.5F, 0.0F, 0.0F));
-        ModelPartData WingL3 = WingL2.addChild("WingL3", ModelPartBuilder.create().uv(124, 86).mirrored().cuboid(-0.7F, -0.1F, -2.0F, 1.0F, 18.0F, 10.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 7.6F, 0.0F));
-        ModelPartData FingerL2 = WingL3.addChild("FingerL2", ModelPartBuilder.create().uv(50, 80).cuboid(-0.8F, -0.1F, -2.0F, 1.0F, 14.0F, 3.0F, new Dilation(0.0F)), ModelTransform.of(-0.1F, 15.0F, 2.0F, 0.10471976F, 0.0F, 0.0F));
-        ModelPartData FingerL3 = WingL3.addChild("FingerL3", ModelPartBuilder.create().uv(40, 80).cuboid(-0.8F, -0.1F, -2.0F, 1.0F, 16.0F, 3.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, 15.0F, 4.4F, 0.08726646F, 0.0F, 0.0F));
-        ModelPartData FingerL1 = WingL3.addChild("FingerL1", ModelPartBuilder.create().uv(60, 80).cuboid(-0.8F, -0.1F, -2.0F, 1.0F, 11.0F, 3.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, 15.0F, 0.1F, 0.12217305F, 0.0F, 0.0F));
-        ModelPartData FingerL4 = WingL3.addChild("FingerL4", ModelPartBuilder.create().uv(30, 80).cuboid(-0.9F, -0.1F, -2.0F, 1.0F, 11.0F, 3.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 15.0F, 6.6F));
-        ModelPartData Saddle = Body.addChild("Saddle", ModelPartBuilder.create().uv(80, 0).cuboid(-5.0F, 0.0F, -3.0F, 10.0F, 1.0F, 8.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, -8.9F, -7.0F));
-        ModelPartData StirrupL = Saddle.addChild("StirrupL", ModelPartBuilder.create().uv(70, 0).cuboid(-0.5F, 0.0F, -0.5F, 1.0F, 6.0F, 1.0F, new Dilation(0.0F)), ModelTransform.pivot(5.0F, 1.0F, 0.0F));
-        ModelPartData StirrupIronL = StirrupL.addChild("StirrupIronL", ModelPartBuilder.create().uv(74, 0).cuboid(-0.5F, 6.0F, -1.0F, 1.0F, 2.0F, 2.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-        ModelPartData Saddleback = Saddle.addChild("Saddleback", ModelPartBuilder.create().uv(80, 9).cuboid(-4.0F, -1.0F, 3.0F, 8.0F, 1.0F, 2.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-        ModelPartData SaddleFront = Saddle.addChild("SaddleFront", ModelPartBuilder.create().uv(106, 9).cuboid(-1.5F, -1.0F, -3.0F, 3.0F, 1.0F, 2.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-        ModelPartData StirrupR = Saddle.addChild("StirrupR", ModelPartBuilder.create().uv(80, 0).cuboid(-0.5F, 0.0F, -0.5F, 1.0F, 6.0F, 1.0F, new Dilation(0.0F)), ModelTransform.pivot(-5.0F, 1.0F, 0.0F));
-        ModelPartData StirrupIronR = StirrupR.addChild("StirrupIronR", ModelPartBuilder.create().uv(74, 4).cuboid(-0.5F, 6.0F, -1.0F, 1.0F, 2.0F, 2.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-        ModelPartData ChestR = Saddle.addChild("ChestR", ModelPartBuilder.create().uv(0, 34).cuboid(-3.0F, 0.0F, -3.0F, 8.0F, 8.0F, 3.0F, new Dilation(0.0F)), ModelTransform.of(-4.5F, 1.0F, 8.0F, 0.0F, 1.5707964F, 0.0F));
-        ModelPartData ChestL = Saddle.addChild("ChestL", ModelPartBuilder.create().uv(0, 47).cuboid(-3.0F, 0.0F, 0.0F, 8.0F, 8.0F, 3.0F, new Dilation(0.0F)), ModelTransform.of(4.5F, 1.0F, 8.0F, 0.0F, 1.5707964F, 0.0F));
-        ModelPartData Neck = Body.addChild("Neck", ModelPartBuilder.create().uv(1, 109).cuboid(-3.0F, -6.6F, -2.2F, 6.0F, 9.0F, 9.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, -1.1F, -18.2F, 0.7740535F, 0.0F, 0.0F));
-        ModelPartData Crest1 = Neck.addChild("Crest1", ModelPartBuilder.create().uv(30, 100).cuboid(0.0F, -8.0F, 0.1F, 1.0F, 8.0F, 6.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, -10.4F, 6.1F, -2.4586453F, 0.0F, 0.0F));
-        ModelPartData Neck2 = Neck.addChild("Neck2", ModelPartBuilder.create().uv(36, 108).cuboid(-2.02F, -8.5F, -1.6F, 4.0F, 10.0F, 7.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, -6.8F, 0.2F, -0.68294734F, 0.0F, 0.0F));
-        ModelPartData HeadPivot = Neck2.addChild("HeadPivot", ModelPartBuilder.create(), ModelTransform.of(0.0F, -7.8F, 1.2F, 0.3642502F, 0.0F, 0.0F));
-        ModelPartData Head = HeadPivot.addChild("Head", ModelPartBuilder.create().uv(0, 68).cuboid(-2.5F, -4.7F, -3.9F, 5.0F, 6.0F, 8.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 0.0F, 0.0F));
-        ModelPartData NoseBand = Head.addChild("NoseBand", ModelPartBuilder.create().uv(85, 60).cuboid(-3.0F, -11.1F, -7.0F, 6.0F, 6.0F, 12.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, 6.5F, -2.2F, 0.09110618F, 0.0F, 0.0F));
-        ModelPartData ReinR = NoseBand.addChild("ReinR", ModelPartBuilder.create().uv(46, 55).mirrored().cuboid(-3.1F, -6.0F, -3.4F, 0.0F, 3.0F, 19.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, 0.0F, 0.0F, -0.04363323F, 0.0F, 0.0F));
-        ModelPartData ReinL = NoseBand.addChild("ReinL", ModelPartBuilder.create().uv(46, 55).cuboid(3.1F, -6.3F, -3.4F, 0.0F, 3.0F, 19.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, 0.0F, 0.0F, -0.04363323F, 0.0F, 0.0F));
-        ModelPartData Jaw = Head.addChild("Jaw", ModelPartBuilder.create().uv(24, 68).cuboid(-2.0F, -0.3F, -5.4F, 4.0F, 1.0F, 7.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, 0.4F, -3.0F, -0.04555309F, 0.0F, 0.0F));
-        ModelPartData Quill_L = Head.addChild("Quill_L", ModelPartBuilder.create().uv(22, 99).mirrored().cuboid(-0.5F, -4.5F, -0.6F, 1.0F, 5.0F, 2.0F, new Dilation(0.0F)), ModelTransform.of(2.0F, -4.3F, 1.9F, -1.1838568F, 0.17453292F, 0.0F));
-        ModelPartData Crest1_1 = Head.addChild("Crest1_1", ModelPartBuilder.create().uv(30, 100).cuboid(0.0F, -8.0F, 0.1F, 1.0F, 8.0F, 6.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, -5.4F, 3.1F, -2.2310543F, 0.0F, 0.0F));
-        ModelPartData Beak = Head.addChild("Beak", ModelPartBuilder.create().uv(0, 84).cuboid(-2.01F, -3.2F, -4.0F, 4.0F, 4.0F, 5.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, -0.6F, -4.8F));
-        ModelPartData BeakTip = Beak.addChild("BeakTip", ModelPartBuilder.create().uv(14, 99).cuboid(-1.0F, -2.8F, -1.7F, 2.0F, 5.0F, 1.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 0.6F, -2.7F));
-        ModelPartData Beak2 = Beak.addChild("Beak2", ModelPartBuilder.create().uv(0, 84).cuboid(-1.99F, -3.2F, -4.0F, 4.0F, 4.0F, 5.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 0.1F, 0.0F));
-        ModelPartData Quill_R = Head.addChild("Quill_R", ModelPartBuilder.create().uv(22, 99).cuboid(-0.5F, -4.5F, -0.6F, 1.0F, 5.0F, 2.0F, new Dilation(0.0F)), ModelTransform.of(-2.0F, -4.2F, 1.9F, -1.1838568F, -0.17453292F, 0.0F));
-        ModelPartData Tail1 = Body.addChild("Tail1", ModelPartBuilder.create().uv(44, 0).cuboid(-1.0F, -1.0F, 0.0F, 2.0F, 2.0F, 3.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, -8.1F, 5.0F, -1.134464F, 0.0F, 0.0F));
-        ModelPartData Tail2 = Tail1.addChild("Tail2", ModelPartBuilder.create().uv(38, 7).cuboid(-1.5F, -2.0F, 0.0F, 3.0F, 4.0F, 7.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 0.0F, 2.6F));
-        ModelPartData Tail3 = Tail2.addChild("Tail3", ModelPartBuilder.create().uv(24, 3).cuboid(-1.5F, -2.0F, 0.0F, 3.0F, 4.0F, 7.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, -0.2F, 6.3F, -0.34906584F, 0.0F, 0.0F));
-        ModelPartData HindThighR = Body.addChild("HindThighR", ModelPartBuilder.create().uv(96, 29).cuboid(-1.5F, -2.0F, -2.5F, 4.0F, 9.0F, 5.0F, new Dilation(0.0F)), ModelTransform.pivot(-4.0F, -1.0F, 2.0F));
-        ModelPartData HindLegR = HindThighR.addChild("HindLegR", ModelPartBuilder.create().uv(96, 43).cuboid(-1.0F, 0.0F, -1.5F, 3.0F, 5.0F, 3.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 7.0F, 0.0F));
-        ModelPartData HindFootR = HindLegR.addChild("HindFootR", ModelPartBuilder.create().uv(96, 51).cuboid(-1.5F, 0.0F, -2.0F, 4.0F, 3.0F, 4.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 5.0F, 0.0F));
-        ModelPartData BackLegR1 = Body.addChild("BackLegR1", ModelPartBuilder.create().uv(66, 40).cuboid(-1.5F, 0.0F, -1.5F, 3.0F, 8.0F, 4.0F, new Dilation(0.0F)), ModelTransform.pivot(-4.2F, -3.9F, -17.0F));
-        ModelPartData BackLegR2 = BackLegR1.addChild("BackLegR2", ModelPartBuilder.create().uv(81, 42).cuboid(-1.0F, 0.0F, -0.7F, 2.0F, 10.0F, 3.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, 6.9F, 0.8F, -0.31869712F, 0.0F, 0.0F));
-        ModelPartData ToeR1 = BackLegR2.addChild("ToeR1", ModelPartBuilder.create().uv(51, 43).mirrored().cuboid(-0.5F, -0.5F, -0.7F, 1.0F, 5.0F, 2.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, 9.8F, 0.9F, -1.821251F, 3.1415927F, 0.0F));
-        ModelPartData ToeL4 = BackLegR2.addChild("ToeL4", ModelPartBuilder.create().uv(51, 43).mirrored().cuboid(-0.5F, -0.5F, -0.7F, 1.0F, 5.0F, 2.0F, new Dilation(0.0F)), ModelTransform.of(-0.6F, 9.8F, 0.2F, -1.2292354F, 0.95609134F, 0.0F));
-        ModelPartData ToeR3 = BackLegR2.addChild("ToeR3", ModelPartBuilder.create().uv(51, 43).mirrored().cuboid(-0.5F, -0.5F, -0.7F, 1.0F, 5.0F, 2.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, 9.8F, -0.7F, -1.0927507F, 0.0F, 0.0F));
-        ModelPartData ToeR2 = BackLegR2.addChild("ToeR2", ModelPartBuilder.create().uv(51, 43).mirrored().cuboid(-0.5F, -0.5F, -0.7F, 1.0F, 5.0F, 2.0F, new Dilation(0.0F)), ModelTransform.of(0.6F, 9.8F, 0.2F, -1.1838568F, -0.61086524F, 0.0F));
-        ModelPartData WingR = Body.addChild("WingR", ModelPartBuilder.create().uv(100, 107).cuboid(-0.9F, 0.0F, -5.0F, 1.0F, 8.0F, 12.0F, new Dilation(0.0F)), ModelTransform.of(-4.2F, -6.6F, -13.2F, 0.12217305F, -0.38397244F, 0.6981317F));
-        ModelPartData WingR2 = WingR.addChild("WingR2", ModelPartBuilder.create().uv(80, 90).cuboid(-0.4F, -2.5F, -2.1F, 1.0F, 11.0F, 11.0F, new Dilation(0.0F)), ModelTransform.of(-0.4F, 7.6F, -2.8F, 1.548107F, 0.0F, 0.17453292F));
-        ModelPartData WingR21 = WingR2.addChild("WingR21", ModelPartBuilder.create().uv(80, 90).cuboid(-0.6F, -2.5F, -2.1F, 1.0F, 11.0F, 11.0F, new Dilation(0.0F)), ModelTransform.pivot(0.5F, 0.0F, 0.0F));
-        ModelPartData WingR3 = WingR2.addChild("WingR3", ModelPartBuilder.create().uv(124, 86).cuboid(-0.3F, -0.1F, -2.0F, 1.0F, 18.0F, 10.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 7.6F, 0.0F));
-        ModelPartData FingerR3 = WingR3.addChild("FingerR3", ModelPartBuilder.create().uv(40, 80).mirrored().cuboid(-0.2F, -0.1F, -2.0F, 1.0F, 16.0F, 3.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, 15.0F, 4.5F, 0.08726646F, 0.0F, 0.0F));
-        ModelPartData FingerR2 = WingR3.addChild("FingerR2", ModelPartBuilder.create().uv(50, 80).mirrored().cuboid(-0.2F, -0.1F, -2.0F, 1.0F, 14.0F, 3.0F, new Dilation(0.0F)), ModelTransform.of(0.1F, 15.0F, 2.0F, 0.10471976F, 0.0F, 0.0F));
-        ModelPartData FingerR4 = WingR3.addChild("FingerR4", ModelPartBuilder.create().uv(30, 80).mirrored().cuboid(-0.1F, -0.1F, -2.0F, 1.0F, 11.0F, 3.0F, new Dilation(0.0F)), ModelTransform.pivot(0.0F, 15.6F, 6.6F));
-        ModelPartData FingerR1 = WingR3.addChild("FingerR1", ModelPartBuilder.create().uv(60, 80).mirrored().cuboid(-0.2F, -0.1F, -2.0F, 1.0F, 11.0F, 3.0F, new Dilation(0.0F)), ModelTransform.of(0.0F, 15.0F, 0.1F, 0.12217305F, 0.0F, 0.0F));
+        ModelPartData Body =
+                root.addChild(
+                        "Body",
+                        ModelPartBuilder.create()
+                                .uv(0, 34)
+                                .cuboid(
+                                        -5.0F,
+                                        -8.0F,
+                                        -19.0F,
+                                        10.0F,
+                                        10.0F,
+                                        24.0F,
+                                        new Dilation(0.0F)),
+                        ModelTransform.pivot(0.0F, 11.0F, 9.0F));
+        ModelPartData HindThighL =
+                Body.addChild(
+                        "HindThighL",
+                        ModelPartBuilder.create()
+                                .uv(96, 29)
+                                .mirrored()
+                                .cuboid(-2.5F, -2.0F, -2.5F, 4.0F, 9.0F, 5.0F, new Dilation(0.0F)),
+                        ModelTransform.pivot(4.0F, -1.0F, 2.0F));
+        ModelPartData HindLegL =
+                HindThighL.addChild(
+                        "HindLegL",
+                        ModelPartBuilder.create()
+                                .uv(96, 43)
+                                .mirrored()
+                                .cuboid(-2.0F, 0.0F, -1.5F, 3.0F, 5.0F, 3.0F, new Dilation(0.0F)),
+                        ModelTransform.pivot(0.0F, 7.0F, 0.0F));
+        ModelPartData HindFootL =
+                HindLegL.addChild(
+                        "HindFootL",
+                        ModelPartBuilder.create()
+                                .uv(96, 51)
+                                .mirrored()
+                                .cuboid(-2.5F, 0.0F, -2.0F, 4.0F, 3.0F, 4.0F, new Dilation(0.0F)),
+                        ModelTransform.pivot(0.0F, 5.0F, 0.0F));
+        ModelPartData BackLegR1_1 =
+                Body.addChild(
+                        "BackLegR1_1",
+                        ModelPartBuilder.create()
+                                .uv(66, 40)
+                                .mirrored()
+                                .cuboid(-1.5F, 0.0F, -1.5F, 3.0F, 8.0F, 4.0F, new Dilation(0.0F)),
+                        ModelTransform.pivot(4.2F, -3.9F, -17.0F));
+        ModelPartData BackLegR2_1 =
+                BackLegR1_1.addChild(
+                        "BackLegR2_1",
+                        ModelPartBuilder.create()
+                                .uv(81, 42)
+                                .mirrored()
+                                .cuboid(-1.0F, 0.0F, -0.7F, 2.0F, 10.0F, 3.0F, new Dilation(0.0F)),
+                        ModelTransform.of(0.0F, 6.9F, 0.8F, -0.31869712F, 0.0F, 0.0F));
+        ModelPartData ToeL4_1 =
+                BackLegR2_1.addChild(
+                        "ToeL4_1",
+                        ModelPartBuilder.create()
+                                .uv(51, 43)
+                                .mirrored()
+                                .cuboid(-0.5F, -0.5F, -0.7F, 1.0F, 5.0F, 2.0F, new Dilation(0.0F)),
+                        ModelTransform.of(-0.6F, 9.8F, 0.2F, -1.2292354F, 0.61086524F, 0.0F));
+        ModelPartData ToeR3_1 =
+                BackLegR2_1.addChild(
+                        "ToeR3_1",
+                        ModelPartBuilder.create()
+                                .uv(51, 43)
+                                .mirrored()
+                                .cuboid(-0.5F, -0.5F, -0.7F, 1.0F, 5.0F, 2.0F, new Dilation(0.0F)),
+                        ModelTransform.of(0.0F, 9.8F, -0.7F, -1.0927507F, 0.0F, 0.0F));
+        ModelPartData ToeR1_1 =
+                BackLegR2_1.addChild(
+                        "ToeR1_1",
+                        ModelPartBuilder.create()
+                                .uv(51, 43)
+                                .mirrored()
+                                .cuboid(-0.5F, -0.5F, -0.7F, 1.0F, 5.0F, 2.0F, new Dilation(0.0F)),
+                        ModelTransform.of(0.0F, 9.8F, 0.9F, -1.821251F, 3.1415927F, 0.0F));
+        ModelPartData ToeR2_1 =
+                BackLegR2_1.addChild(
+                        "ToeR2_1",
+                        ModelPartBuilder.create()
+                                .uv(51, 43)
+                                .mirrored()
+                                .cuboid(-0.5F, -0.5F, -0.7F, 1.0F, 5.0F, 2.0F, new Dilation(0.0F)),
+                        ModelTransform.of(0.6F, 9.8F, 0.2F, -1.1838568F, -0.95609134F, 0.0F));
+        ModelPartData WingL =
+                Body.addChild(
+                        "WingL",
+                        ModelPartBuilder.create()
+                                .uv(100, 107)
+                                .mirrored()
+                                .cuboid(-0.1F, 0.0F, -5.0F, 1.0F, 8.0F, 12.0F, new Dilation(0.0F)),
+                        ModelTransform.of(
+                                4.2F, -6.6F, -13.2F, 0.12217305F, 0.38397244F, -0.6981317F));
+        ModelPartData WingL2 =
+                WingL.addChild(
+                        "WingL2",
+                        ModelPartBuilder.create()
+                                .uv(80, 90)
+                                .mirrored()
+                                .cuboid(
+                                        -0.6F,
+                                        -2.5F,
+                                        -2.1F,
+                                        1.0F,
+                                        11.0F,
+                                        11.0F,
+                                        new Dilation(0.0F)),
+                        ModelTransform.of(0.4F, 7.6F, -2.8F, 1.548107F, 0.0F, -0.17453292F));
+        ModelPartData WingL21 =
+                WingL2.addChild(
+                        "WingL21",
+                        ModelPartBuilder.create()
+                                .uv(80, 90)
+                                .mirrored()
+                                .cuboid(
+                                        -0.4F,
+                                        -2.5F,
+                                        -2.1F,
+                                        1.0F,
+                                        11.0F,
+                                        11.0F,
+                                        new Dilation(0.0F)),
+                        ModelTransform.pivot(-0.5F, 0.0F, 0.0F));
+        ModelPartData WingL3 =
+                WingL2.addChild(
+                        "WingL3",
+                        ModelPartBuilder.create()
+                                .uv(124, 86)
+                                .mirrored()
+                                .cuboid(
+                                        -0.7F,
+                                        -0.1F,
+                                        -2.0F,
+                                        1.0F,
+                                        18.0F,
+                                        10.0F,
+                                        new Dilation(0.0F)),
+                        ModelTransform.pivot(0.0F, 7.6F, 0.0F));
+        ModelPartData FingerL2 =
+                WingL3.addChild(
+                        "FingerL2",
+                        ModelPartBuilder.create()
+                                .uv(50, 80)
+                                .cuboid(-0.8F, -0.1F, -2.0F, 1.0F, 14.0F, 3.0F, new Dilation(0.0F)),
+                        ModelTransform.of(-0.1F, 15.0F, 2.0F, 0.10471976F, 0.0F, 0.0F));
+        ModelPartData FingerL3 =
+                WingL3.addChild(
+                        "FingerL3",
+                        ModelPartBuilder.create()
+                                .uv(40, 80)
+                                .cuboid(-0.8F, -0.1F, -2.0F, 1.0F, 16.0F, 3.0F, new Dilation(0.0F)),
+                        ModelTransform.of(0.0F, 15.0F, 4.4F, 0.08726646F, 0.0F, 0.0F));
+        ModelPartData FingerL1 =
+                WingL3.addChild(
+                        "FingerL1",
+                        ModelPartBuilder.create()
+                                .uv(60, 80)
+                                .cuboid(-0.8F, -0.1F, -2.0F, 1.0F, 11.0F, 3.0F, new Dilation(0.0F)),
+                        ModelTransform.of(0.0F, 15.0F, 0.1F, 0.12217305F, 0.0F, 0.0F));
+        ModelPartData FingerL4 =
+                WingL3.addChild(
+                        "FingerL4",
+                        ModelPartBuilder.create()
+                                .uv(30, 80)
+                                .cuboid(-0.9F, -0.1F, -2.0F, 1.0F, 11.0F, 3.0F, new Dilation(0.0F)),
+                        ModelTransform.pivot(0.0F, 15.0F, 6.6F));
+        ModelPartData Saddle =
+                Body.addChild(
+                        "Saddle",
+                        ModelPartBuilder.create()
+                                .uv(80, 0)
+                                .cuboid(-5.0F, 0.0F, -3.0F, 10.0F, 1.0F, 8.0F, new Dilation(0.0F)),
+                        ModelTransform.pivot(0.0F, -8.9F, -7.0F));
+        ModelPartData StirrupL =
+                Saddle.addChild(
+                        "StirrupL",
+                        ModelPartBuilder.create()
+                                .uv(70, 0)
+                                .cuboid(-0.5F, 0.0F, -0.5F, 1.0F, 6.0F, 1.0F, new Dilation(0.0F)),
+                        ModelTransform.pivot(5.0F, 1.0F, 0.0F));
+        ModelPartData StirrupIronL =
+                StirrupL.addChild(
+                        "StirrupIronL",
+                        ModelPartBuilder.create()
+                                .uv(74, 0)
+                                .cuboid(-0.5F, 6.0F, -1.0F, 1.0F, 2.0F, 2.0F, new Dilation(0.0F)),
+                        ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        ModelPartData Saddleback =
+                Saddle.addChild(
+                        "Saddleback",
+                        ModelPartBuilder.create()
+                                .uv(80, 9)
+                                .cuboid(-4.0F, -1.0F, 3.0F, 8.0F, 1.0F, 2.0F, new Dilation(0.0F)),
+                        ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        ModelPartData SaddleFront =
+                Saddle.addChild(
+                        "SaddleFront",
+                        ModelPartBuilder.create()
+                                .uv(106, 9)
+                                .cuboid(-1.5F, -1.0F, -3.0F, 3.0F, 1.0F, 2.0F, new Dilation(0.0F)),
+                        ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        ModelPartData StirrupR =
+                Saddle.addChild(
+                        "StirrupR",
+                        ModelPartBuilder.create()
+                                .uv(80, 0)
+                                .cuboid(-0.5F, 0.0F, -0.5F, 1.0F, 6.0F, 1.0F, new Dilation(0.0F)),
+                        ModelTransform.pivot(-5.0F, 1.0F, 0.0F));
+        ModelPartData StirrupIronR =
+                StirrupR.addChild(
+                        "StirrupIronR",
+                        ModelPartBuilder.create()
+                                .uv(74, 4)
+                                .cuboid(-0.5F, 6.0F, -1.0F, 1.0F, 2.0F, 2.0F, new Dilation(0.0F)),
+                        ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        ModelPartData ChestR =
+                Saddle.addChild(
+                        "ChestR",
+                        ModelPartBuilder.create()
+                                .uv(0, 34)
+                                .cuboid(-3.0F, 0.0F, -3.0F, 8.0F, 8.0F, 3.0F, new Dilation(0.0F)),
+                        ModelTransform.of(-4.5F, 1.0F, 8.0F, 0.0F, 1.5707964F, 0.0F));
+        ModelPartData ChestL =
+                Saddle.addChild(
+                        "ChestL",
+                        ModelPartBuilder.create()
+                                .uv(0, 47)
+                                .cuboid(-3.0F, 0.0F, 0.0F, 8.0F, 8.0F, 3.0F, new Dilation(0.0F)),
+                        ModelTransform.of(4.5F, 1.0F, 8.0F, 0.0F, 1.5707964F, 0.0F));
+        ModelPartData Neck =
+                Body.addChild(
+                        "Neck",
+                        ModelPartBuilder.create()
+                                .uv(1, 109)
+                                .cuboid(-3.0F, -6.6F, -2.2F, 6.0F, 9.0F, 9.0F, new Dilation(0.0F)),
+                        ModelTransform.of(0.0F, -1.1F, -18.2F, 0.7740535F, 0.0F, 0.0F));
+        ModelPartData Crest1 =
+                Neck.addChild(
+                        "Crest1",
+                        ModelPartBuilder.create()
+                                .uv(30, 100)
+                                .cuboid(0.0F, -8.0F, 0.1F, 1.0F, 8.0F, 6.0F, new Dilation(0.0F)),
+                        ModelTransform.of(0.0F, -10.4F, 6.1F, -2.4586453F, 0.0F, 0.0F));
+        ModelPartData Neck2 =
+                Neck.addChild(
+                        "Neck2",
+                        ModelPartBuilder.create()
+                                .uv(36, 108)
+                                .cuboid(
+                                        -2.02F,
+                                        -8.5F,
+                                        -1.6F,
+                                        4.0F,
+                                        10.0F,
+                                        7.0F,
+                                        new Dilation(0.0F)),
+                        ModelTransform.of(0.0F, -6.8F, 0.2F, -0.68294734F, 0.0F, 0.0F));
+        ModelPartData HeadPivot =
+                Neck2.addChild(
+                        "HeadPivot",
+                        ModelPartBuilder.create(),
+                        ModelTransform.of(0.0F, -7.8F, 1.2F, 0.3642502F, 0.0F, 0.0F));
+        ModelPartData Head =
+                HeadPivot.addChild(
+                        "Head",
+                        ModelPartBuilder.create()
+                                .uv(0, 68)
+                                .cuboid(-2.5F, -4.7F, -3.9F, 5.0F, 6.0F, 8.0F, new Dilation(0.0F)),
+                        ModelTransform.pivot(0.0F, 0.0F, 0.0F));
+        ModelPartData NoseBand =
+                Head.addChild(
+                        "NoseBand",
+                        ModelPartBuilder.create()
+                                .uv(85, 60)
+                                .cuboid(
+                                        -3.0F,
+                                        -11.1F,
+                                        -7.0F,
+                                        6.0F,
+                                        6.0F,
+                                        12.0F,
+                                        new Dilation(0.0F)),
+                        ModelTransform.of(0.0F, 6.5F, -2.2F, 0.09110618F, 0.0F, 0.0F));
+        ModelPartData ReinR =
+                NoseBand.addChild(
+                        "ReinR",
+                        ModelPartBuilder.create()
+                                .uv(46, 55)
+                                .mirrored()
+                                .cuboid(-3.1F, -6.0F, -3.4F, 0.0F, 3.0F, 19.0F, new Dilation(0.0F)),
+                        ModelTransform.of(0.0F, 0.0F, 0.0F, -0.04363323F, 0.0F, 0.0F));
+        ModelPartData ReinL =
+                NoseBand.addChild(
+                        "ReinL",
+                        ModelPartBuilder.create()
+                                .uv(46, 55)
+                                .cuboid(3.1F, -6.3F, -3.4F, 0.0F, 3.0F, 19.0F, new Dilation(0.0F)),
+                        ModelTransform.of(0.0F, 0.0F, 0.0F, -0.04363323F, 0.0F, 0.0F));
+        ModelPartData Jaw =
+                Head.addChild(
+                        "Jaw",
+                        ModelPartBuilder.create()
+                                .uv(24, 68)
+                                .cuboid(-2.0F, -0.3F, -5.4F, 4.0F, 1.0F, 7.0F, new Dilation(0.0F)),
+                        ModelTransform.of(0.0F, 0.4F, -3.0F, -0.04555309F, 0.0F, 0.0F));
+        ModelPartData Quill_L =
+                Head.addChild(
+                        "Quill_L",
+                        ModelPartBuilder.create()
+                                .uv(22, 99)
+                                .mirrored()
+                                .cuboid(-0.5F, -4.5F, -0.6F, 1.0F, 5.0F, 2.0F, new Dilation(0.0F)),
+                        ModelTransform.of(2.0F, -4.3F, 1.9F, -1.1838568F, 0.17453292F, 0.0F));
+        ModelPartData Crest1_1 =
+                Head.addChild(
+                        "Crest1_1",
+                        ModelPartBuilder.create()
+                                .uv(30, 100)
+                                .cuboid(0.0F, -8.0F, 0.1F, 1.0F, 8.0F, 6.0F, new Dilation(0.0F)),
+                        ModelTransform.of(0.0F, -5.4F, 3.1F, -2.2310543F, 0.0F, 0.0F));
+        ModelPartData Beak =
+                Head.addChild(
+                        "Beak",
+                        ModelPartBuilder.create()
+                                .uv(0, 84)
+                                .cuboid(-2.01F, -3.2F, -4.0F, 4.0F, 4.0F, 5.0F, new Dilation(0.0F)),
+                        ModelTransform.pivot(0.0F, -0.6F, -4.8F));
+        ModelPartData BeakTip =
+                Beak.addChild(
+                        "BeakTip",
+                        ModelPartBuilder.create()
+                                .uv(14, 99)
+                                .cuboid(-1.0F, -2.8F, -1.7F, 2.0F, 5.0F, 1.0F, new Dilation(0.0F)),
+                        ModelTransform.pivot(0.0F, 0.6F, -2.7F));
+        ModelPartData Beak2 =
+                Beak.addChild(
+                        "Beak2",
+                        ModelPartBuilder.create()
+                                .uv(0, 84)
+                                .cuboid(-1.99F, -3.2F, -4.0F, 4.0F, 4.0F, 5.0F, new Dilation(0.0F)),
+                        ModelTransform.pivot(0.0F, 0.1F, 0.0F));
+        ModelPartData Quill_R =
+                Head.addChild(
+                        "Quill_R",
+                        ModelPartBuilder.create()
+                                .uv(22, 99)
+                                .cuboid(-0.5F, -4.5F, -0.6F, 1.0F, 5.0F, 2.0F, new Dilation(0.0F)),
+                        ModelTransform.of(-2.0F, -4.2F, 1.9F, -1.1838568F, -0.17453292F, 0.0F));
+        ModelPartData Tail1 =
+                Body.addChild(
+                        "Tail1",
+                        ModelPartBuilder.create()
+                                .uv(44, 0)
+                                .cuboid(-1.0F, -1.0F, 0.0F, 2.0F, 2.0F, 3.0F, new Dilation(0.0F)),
+                        ModelTransform.of(0.0F, -8.1F, 5.0F, -1.134464F, 0.0F, 0.0F));
+        ModelPartData Tail2 =
+                Tail1.addChild(
+                        "Tail2",
+                        ModelPartBuilder.create()
+                                .uv(38, 7)
+                                .cuboid(-1.5F, -2.0F, 0.0F, 3.0F, 4.0F, 7.0F, new Dilation(0.0F)),
+                        ModelTransform.pivot(0.0F, 0.0F, 2.6F));
+        ModelPartData Tail3 =
+                Tail2.addChild(
+                        "Tail3",
+                        ModelPartBuilder.create()
+                                .uv(24, 3)
+                                .cuboid(-1.5F, -2.0F, 0.0F, 3.0F, 4.0F, 7.0F, new Dilation(0.0F)),
+                        ModelTransform.of(0.0F, -0.2F, 6.3F, -0.34906584F, 0.0F, 0.0F));
+        ModelPartData HindThighR =
+                Body.addChild(
+                        "HindThighR",
+                        ModelPartBuilder.create()
+                                .uv(96, 29)
+                                .cuboid(-1.5F, -2.0F, -2.5F, 4.0F, 9.0F, 5.0F, new Dilation(0.0F)),
+                        ModelTransform.pivot(-4.0F, -1.0F, 2.0F));
+        ModelPartData HindLegR =
+                HindThighR.addChild(
+                        "HindLegR",
+                        ModelPartBuilder.create()
+                                .uv(96, 43)
+                                .cuboid(-1.0F, 0.0F, -1.5F, 3.0F, 5.0F, 3.0F, new Dilation(0.0F)),
+                        ModelTransform.pivot(0.0F, 7.0F, 0.0F));
+        ModelPartData HindFootR =
+                HindLegR.addChild(
+                        "HindFootR",
+                        ModelPartBuilder.create()
+                                .uv(96, 51)
+                                .cuboid(-1.5F, 0.0F, -2.0F, 4.0F, 3.0F, 4.0F, new Dilation(0.0F)),
+                        ModelTransform.pivot(0.0F, 5.0F, 0.0F));
+        ModelPartData BackLegR1 =
+                Body.addChild(
+                        "BackLegR1",
+                        ModelPartBuilder.create()
+                                .uv(66, 40)
+                                .cuboid(-1.5F, 0.0F, -1.5F, 3.0F, 8.0F, 4.0F, new Dilation(0.0F)),
+                        ModelTransform.pivot(-4.2F, -3.9F, -17.0F));
+        ModelPartData BackLegR2 =
+                BackLegR1.addChild(
+                        "BackLegR2",
+                        ModelPartBuilder.create()
+                                .uv(81, 42)
+                                .cuboid(-1.0F, 0.0F, -0.7F, 2.0F, 10.0F, 3.0F, new Dilation(0.0F)),
+                        ModelTransform.of(0.0F, 6.9F, 0.8F, -0.31869712F, 0.0F, 0.0F));
+        ModelPartData ToeR1 =
+                BackLegR2.addChild(
+                        "ToeR1",
+                        ModelPartBuilder.create()
+                                .uv(51, 43)
+                                .mirrored()
+                                .cuboid(-0.5F, -0.5F, -0.7F, 1.0F, 5.0F, 2.0F, new Dilation(0.0F)),
+                        ModelTransform.of(0.0F, 9.8F, 0.9F, -1.821251F, 3.1415927F, 0.0F));
+        ModelPartData ToeL4 =
+                BackLegR2.addChild(
+                        "ToeL4",
+                        ModelPartBuilder.create()
+                                .uv(51, 43)
+                                .mirrored()
+                                .cuboid(-0.5F, -0.5F, -0.7F, 1.0F, 5.0F, 2.0F, new Dilation(0.0F)),
+                        ModelTransform.of(-0.6F, 9.8F, 0.2F, -1.2292354F, 0.95609134F, 0.0F));
+        ModelPartData ToeR3 =
+                BackLegR2.addChild(
+                        "ToeR3",
+                        ModelPartBuilder.create()
+                                .uv(51, 43)
+                                .mirrored()
+                                .cuboid(-0.5F, -0.5F, -0.7F, 1.0F, 5.0F, 2.0F, new Dilation(0.0F)),
+                        ModelTransform.of(0.0F, 9.8F, -0.7F, -1.0927507F, 0.0F, 0.0F));
+        ModelPartData ToeR2 =
+                BackLegR2.addChild(
+                        "ToeR2",
+                        ModelPartBuilder.create()
+                                .uv(51, 43)
+                                .mirrored()
+                                .cuboid(-0.5F, -0.5F, -0.7F, 1.0F, 5.0F, 2.0F, new Dilation(0.0F)),
+                        ModelTransform.of(0.6F, 9.8F, 0.2F, -1.1838568F, -0.61086524F, 0.0F));
+        ModelPartData WingR =
+                Body.addChild(
+                        "WingR",
+                        ModelPartBuilder.create()
+                                .uv(100, 107)
+                                .cuboid(-0.9F, 0.0F, -5.0F, 1.0F, 8.0F, 12.0F, new Dilation(0.0F)),
+                        ModelTransform.of(
+                                -4.2F, -6.6F, -13.2F, 0.12217305F, -0.38397244F, 0.6981317F));
+        ModelPartData WingR2 =
+                WingR.addChild(
+                        "WingR2",
+                        ModelPartBuilder.create()
+                                .uv(80, 90)
+                                .cuboid(
+                                        -0.4F,
+                                        -2.5F,
+                                        -2.1F,
+                                        1.0F,
+                                        11.0F,
+                                        11.0F,
+                                        new Dilation(0.0F)),
+                        ModelTransform.of(-0.4F, 7.6F, -2.8F, 1.548107F, 0.0F, 0.17453292F));
+        ModelPartData WingR21 =
+                WingR2.addChild(
+                        "WingR21",
+                        ModelPartBuilder.create()
+                                .uv(80, 90)
+                                .cuboid(
+                                        -0.6F,
+                                        -2.5F,
+                                        -2.1F,
+                                        1.0F,
+                                        11.0F,
+                                        11.0F,
+                                        new Dilation(0.0F)),
+                        ModelTransform.pivot(0.5F, 0.0F, 0.0F));
+        ModelPartData WingR3 =
+                WingR2.addChild(
+                        "WingR3",
+                        ModelPartBuilder.create()
+                                .uv(124, 86)
+                                .cuboid(
+                                        -0.3F,
+                                        -0.1F,
+                                        -2.0F,
+                                        1.0F,
+                                        18.0F,
+                                        10.0F,
+                                        new Dilation(0.0F)),
+                        ModelTransform.pivot(0.0F, 7.6F, 0.0F));
+        ModelPartData FingerR3 =
+                WingR3.addChild(
+                        "FingerR3",
+                        ModelPartBuilder.create()
+                                .uv(40, 80)
+                                .mirrored()
+                                .cuboid(-0.2F, -0.1F, -2.0F, 1.0F, 16.0F, 3.0F, new Dilation(0.0F)),
+                        ModelTransform.of(0.0F, 15.0F, 4.5F, 0.08726646F, 0.0F, 0.0F));
+        ModelPartData FingerR2 =
+                WingR3.addChild(
+                        "FingerR2",
+                        ModelPartBuilder.create()
+                                .uv(50, 80)
+                                .mirrored()
+                                .cuboid(-0.2F, -0.1F, -2.0F, 1.0F, 14.0F, 3.0F, new Dilation(0.0F)),
+                        ModelTransform.of(0.1F, 15.0F, 2.0F, 0.10471976F, 0.0F, 0.0F));
+        ModelPartData FingerR4 =
+                WingR3.addChild(
+                        "FingerR4",
+                        ModelPartBuilder.create()
+                                .uv(30, 80)
+                                .mirrored()
+                                .cuboid(-0.1F, -0.1F, -2.0F, 1.0F, 11.0F, 3.0F, new Dilation(0.0F)),
+                        ModelTransform.pivot(0.0F, 15.6F, 6.6F));
+        ModelPartData FingerR1 =
+                WingR3.addChild(
+                        "FingerR1",
+                        ModelPartBuilder.create()
+                                .uv(60, 80)
+                                .mirrored()
+                                .cuboid(-0.2F, -0.1F, -2.0F, 1.0F, 11.0F, 3.0F, new Dilation(0.0F)),
+                        ModelTransform.of(0.0F, 15.0F, 0.1F, 0.12217305F, 0.0F, 0.0F));
         return TexturedModelData.of(modelData, 256, 128);
     }
 
     @Override
-    public void setAngles(RiderHippogryphEntity entity, float limbAngle, float limbDistance,
-                          float animationProgress, float headYaw, float headPitch) {
+    public void setAngles(
+            RiderHippogryphEntity entity,
+            float limbAngle,
+            float limbDistance,
+            float animationProgress,
+            float headYaw,
+            float headPitch) {
         float tickDelta = MathHelper.clamp(animationProgress - entity.age, 0.0F, 1.0F);
         float flightBlend = entity.getWingFlightBlend(tickDelta);
         float boostBlend = entity.getWingBoostBlend(tickDelta);
@@ -141,7 +604,8 @@ public final class RiderHippogryphModel extends EntityModel<RiderHippogryphEntit
         float flapPhase = entity.getWingFlapPhase(tickDelta);
 
         var velocity = entity.getVelocity();
-        float horizontalSpeed = (float) Math.sqrt(velocity.x * velocity.x + velocity.z * velocity.z);
+        float horizontalSpeed =
+                (float) Math.sqrt(velocity.x * velocity.x + velocity.z * velocity.z);
         float speed01 = MathHelper.clamp(horizontalSpeed / 0.95F, 0.0F, 1.0F);
         float climb01 = MathHelper.clamp((float) velocity.y * 2.2F, -1.0F, 1.0F);
 
@@ -276,16 +740,20 @@ public final class RiderHippogryphModel extends EntityModel<RiderHippogryphEntit
         frontLegL.pitch = MathHelper.lerp(flightBlend, groundFrontL, flightFront);
         hindThighR.pitch = MathHelper.lerp(flightBlend, groundHindR, flightHind);
         hindThighL.pitch = MathHelper.lerp(flightBlend, groundHindL, flightHind);
-        tail1.pitch = MathHelper.lerp(flightBlend, -1.134464F, -1.02F + entity.getVisualFlightPitchRadians() * 0.16F);
+        tail1.pitch =
+                MathHelper.lerp(
+                        flightBlend,
+                        -1.134464F,
+                        -1.02F + entity.getVisualFlightPitchRadians() * 0.16F);
 
         // Never feed raw renderer headYaw/headPitch directly into a mount that is
         // inches from the first-person camera.  Entity-side damping removes the
         // tiny network corrections that otherwise look like head stutter.
         headPivot.yaw += entity.getVisualHeadYawRadians(tickDelta) * 0.58F;
         headPivot.pitch += entity.getVisualHeadPitchRadians(tickDelta) * 0.50F;
-        tail2.yaw += MathHelper.sin(animationProgress * 0.18F) * 0.08F * (1.0F - flightBlend * 0.75F);
+        tail2.yaw +=
+                MathHelper.sin(animationProgress * 0.18F) * 0.08F * (1.0F - flightBlend * 0.75F);
     }
-
 
     public void applyLeftWingTipTransform(MatrixStack matrices) {
         body.rotate(matrices);
@@ -307,8 +775,15 @@ public final class RiderHippogryphModel extends EntityModel<RiderHippogryphEntit
     }
 
     @Override
-    public void render(MatrixStack matrices, VertexConsumer vertices, int light, int overlay,
-                       float red, float green, float blue, float alpha) {
+    public void render(
+            MatrixStack matrices,
+            VertexConsumer vertices,
+            int light,
+            int overlay,
+            float red,
+            float green,
+            float blue,
+            float alpha) {
         body.render(matrices, vertices, light, overlay, red, green, blue, alpha);
     }
 }

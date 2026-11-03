@@ -14,11 +14,17 @@ public final class AbilityRuntime {
 
     /** Talent state is stable between unlock events; keep a tiny five-tick cache. */
     private static final int TALENT_CACHE_WINDOW_TICKS = 5;
+
     private static final class TalentTickCache {
         int tickBucket = Integer.MIN_VALUE;
         final Map<Identifier, Integer> ranks = new HashMap<>();
-        void reset(int bucket) { tickBucket = bucket; ranks.clear(); }
+
+        void reset(int bucket) {
+            tickBucket = bucket;
+            ranks.clear();
+        }
     }
+
     private static final Map<UUID, TalentTickCache> TALENT_CACHE = new HashMap<>();
 
     public static boolean isClass(ServerPlayerEntity player, Identifier classId) {
@@ -26,7 +32,8 @@ public final class AbilityRuntime {
     }
 
     public static int talentRank(ServerPlayerEntity player, Identifier talentId) {
-        TalentTickCache cache = TALENT_CACHE.computeIfAbsent(player.getUuid(), ignored -> new TalentTickCache());
+        TalentTickCache cache =
+                TALENT_CACHE.computeIfAbsent(player.getUuid(), ignored -> new TalentTickCache());
         int bucket = player.age / TALENT_CACHE_WINDOW_TICKS;
         if (cache.tickBucket != bucket) cache.reset(bucket);
         Integer cached = cache.ranks.get(talentId);

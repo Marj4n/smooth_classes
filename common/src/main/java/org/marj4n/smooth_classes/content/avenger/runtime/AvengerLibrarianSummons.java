@@ -20,18 +20,21 @@ public final class AvengerLibrarianSummons {
 
     public interface BookCarrier {
         ItemStack smoothClasses$getLibrarianBook();
+
         void smoothClasses$setLibrarianBook(ItemStack book);
     }
 
     public static boolean isRecipe(ItemStack main, ItemStack offhand) {
-        return main.isOf(Items.EMERALD) && !offhand.isEmpty()
+        return main.isOf(Items.EMERALD)
+                && !offhand.isEmpty()
                 && offhand.getItem() instanceof EnchantedBookItem;
     }
 
     public static boolean hasStoredEnchantments(ItemStack book) {
         // Copy raw stored enchantments rather than resolving a vanilla-only list.
         // Mod IDs, multiple enchantments, levels and other book NBT are retained.
-        return !book.isEmpty() && book.getItem() instanceof EnchantedBookItem
+        return !book.isEmpty()
+                && book.getItem() instanceof EnchantedBookItem
                 && !EnchantedBookItem.getEnchantmentNbt(book).isEmpty();
     }
 
@@ -44,18 +47,29 @@ public final class AvengerLibrarianSummons {
 
     public static TradeOfferList offersFor(ItemStack book) {
         ItemStack result = copyBook(book);
-        if (result.isEmpty()) throw new IllegalArgumentException("An enchanted book with stored enchantments is required");
+        if (result.isEmpty())
+            throw new IllegalArgumentException(
+                    "An enchanted book with stored enchantments is required");
         TradeOfferList offers = new TradeOfferList();
-        offers.add(new TradeOffer(new ItemStack(Items.EMERALD, EMERALD_PRICE),
-                new ItemStack(Items.BOOK), result, 12, 1, 0.2F));
+        offers.add(
+                new TradeOffer(
+                        new ItemStack(Items.EMERALD, EMERALD_PRICE),
+                        new ItemStack(Items.BOOK),
+                        result,
+                        12,
+                        1,
+                        0.2F));
         return offers;
     }
 
     public static void bind(VillagerEntity villager, ItemStack source) {
         ItemStack book = copyBook(source);
-        if (book.isEmpty()) throw new IllegalArgumentException("Cannot bind an empty enchanted book");
-        villager.setVillagerData(villager.getVillagerData()
-                .withProfession(VillagerProfession.LIBRARIAN).withLevel(1));
+        if (book.isEmpty())
+            throw new IllegalArgumentException("Cannot bind an empty enchanted book");
+        villager.setVillagerData(
+                villager.getVillagerData()
+                        .withProfession(VillagerProfession.LIBRARIAN)
+                        .withLevel(1));
         // Villagers with trade experience retain their profession without a POI.
         // Normal lectern/work/restock behavior remains vanilla.
         villager.setExperience(1);
@@ -68,8 +82,8 @@ public final class AvengerLibrarianSummons {
         if (!(villager instanceof BookCarrier carrier)) return;
         ItemStack book = copyBook(carrier.smoothClasses$getLibrarianBook());
         if (book.isEmpty()) return; // Never touch ordinary or emerald-only villagers.
-        villager.setVillagerData(villager.getVillagerData()
-                .withProfession(VillagerProfession.LIBRARIAN));
+        villager.setVillagerData(
+                villager.getVillagerData().withProfession(VillagerProfession.LIBRARIAN));
         if (villager.getExperience() < 1) villager.setExperience(1);
         replaceIncorrectOffer(villager.getOffers(), book);
     }
@@ -79,7 +93,8 @@ public final class AvengerLibrarianSummons {
         if (original.isEmpty()) return;
         if (!offers.isEmpty()) {
             ItemStack sold = offers.get(0).getSellItem();
-            if (sold.isOf(original.getItem()) && java.util.Objects.equals(sold.getNbt(), original.getNbt())) return;
+            if (sold.isOf(original.getItem())
+                    && java.util.Objects.equals(sold.getNbt(), original.getNbt())) return;
         }
         // MerchantEntity.setOffersFromServer is a no-op on Java 1.20.1 server
         // entities. Mutate the actual authoritative list returned by getOffers.
@@ -88,7 +103,8 @@ public final class AvengerLibrarianSummons {
     }
 
     public static ItemStack boundBook(LivingEntity entity) {
-        if (!(entity instanceof VillagerEntity) || !(entity instanceof BookCarrier carrier)
+        if (!(entity instanceof VillagerEntity)
+                || !(entity instanceof BookCarrier carrier)
                 || !AvengerReworkRuntime.isAvengerSummon(entity)) return ItemStack.EMPTY;
         return copyBook(carrier.smoothClasses$getLibrarianBook());
     }

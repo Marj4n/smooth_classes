@@ -25,61 +25,155 @@ public final class OriginState {
 
     /** Generic counters/flags keep the evolution tracker data-driven and save-compatible. */
     private final Map<String, Integer> progress = new HashMap<>();
+
     private final Map<String, Long> longProgress = new HashMap<>();
     private final Set<String> flags = new HashSet<>();
 
-    public String originId() { return origin; }
-    public OriginType origin() { return OriginType.byId(origin).orElse(null); }
-    public boolean hasOrigin() { return origin() != null; }
+    public String originId() {
+        return origin;
+    }
+
+    public OriginType origin() {
+        return OriginType.byId(origin).orElse(null);
+    }
+
+    public boolean hasOrigin() {
+        return origin() != null;
+    }
 
     public void setOrigin(OriginType type) {
         origin = type == null ? "" : type.id();
         resetResources();
     }
 
-    public void clear() { setOrigin(null); }
+    public void clear() {
+        setOrigin(null);
+    }
 
-    public int blood() { return blood; }
-    public void blood(int value) { blood = clamp(value, 0, 200); }
-    public int sunExposure() { return sunExposure; }
-    public void sunExposure(int value) { sunExposure = clamp(value, 0, 100); }
-    public int wetnessTicks() { return wetnessTicks; }
-    public void wetnessTicks(int value) { wetnessTicks = Math.max(0, value); }
-    public int wingStaminaTicks() { return wingStaminaTicks; }
-    public void wingStaminaTicks(int value) { wingStaminaTicks = clamp(value, 0, 6 * 20); }
-    public int instability() { return instability; }
-    public void instability(int value) { instability = clamp(value, 0, 100); }
-    public int soul() { return soul; }
-    public void soul(int value) { soul = clamp(value, 0, 100); }
-    public int boneMass() { return boneMass; }
-    public void boneMass(int value) { boneMass = clamp(value, 0, 150); }
-    public int carbonLayer() { return carbonLayer; }
-    public void carbonLayer(int value) { carbonLayer = clamp(value, 0, 100); }
-    public int livingMass() { return livingMass; }
-    public void livingMass(int value) { livingMass = clamp(value, 0, 10); }
-    public int lavaGraceTicks() { return lavaGraceTicks; }
-    public void lavaGraceTicks(int value) { lavaGraceTicks = Math.max(0, value); }
-    public long lastFeedTick() { return lastFeedTick; }
-    public void lastFeedTick(long value) { lastFeedTick = value; }
+    public int blood() {
+        return blood;
+    }
 
-    public int progress(String key) { return Math.max(0, progress.getOrDefault(key, 0)); }
+    public void blood(int value) {
+        blood = clamp(value, 0, 200);
+    }
+
+    public int sunExposure() {
+        return sunExposure;
+    }
+
+    public void sunExposure(int value) {
+        sunExposure = clamp(value, 0, 100);
+    }
+
+    public int wetnessTicks() {
+        return wetnessTicks;
+    }
+
+    public void wetnessTicks(int value) {
+        wetnessTicks = Math.max(0, value);
+    }
+
+    public int wingStaminaTicks() {
+        return wingStaminaTicks;
+    }
+
+    public void wingStaminaTicks(int value) {
+        wingStaminaTicks = clamp(value, 0, 6 * 20);
+    }
+
+    public int instability() {
+        return instability;
+    }
+
+    public void instability(int value) {
+        instability = clamp(value, 0, 100);
+    }
+
+    public int soul() {
+        return soul;
+    }
+
+    public void soul(int value) {
+        soul = clamp(value, 0, 100);
+    }
+
+    public int boneMass() {
+        return boneMass;
+    }
+
+    public void boneMass(int value) {
+        boneMass = clamp(value, 0, 150);
+    }
+
+    public int carbonLayer() {
+        return carbonLayer;
+    }
+
+    public void carbonLayer(int value) {
+        carbonLayer = clamp(value, 0, 100);
+    }
+
+    public int livingMass() {
+        return livingMass;
+    }
+
+    public void livingMass(int value) {
+        livingMass = clamp(value, 0, 10);
+    }
+
+    public int lavaGraceTicks() {
+        return lavaGraceTicks;
+    }
+
+    public void lavaGraceTicks(int value) {
+        lavaGraceTicks = Math.max(0, value);
+    }
+
+    public long lastFeedTick() {
+        return lastFeedTick;
+    }
+
+    public void lastFeedTick(long value) {
+        lastFeedTick = value;
+    }
+
+    public int progress(String key) {
+        return Math.max(0, progress.getOrDefault(key, 0));
+    }
+
     public void progress(String key, int value) {
         if (key == null || key.isBlank()) return;
         progress.put(key, Math.max(0, value));
     }
+
     public int addProgress(String key, int amount) {
         int value = Math.max(0, progress(key) + amount);
         progress(key, value);
         return value;
     }
-    public long longProgress(String key) { return Math.max(0L, longProgress.getOrDefault(key, 0L)); }
+
+    public long longProgress(String key) {
+        return Math.max(0L, longProgress.getOrDefault(key, 0L));
+    }
+
     public void longProgress(String key, long value) {
         if (key == null || key.isBlank()) return;
         longProgress.put(key, Math.max(0L, value));
     }
-    public boolean hasFlag(String key) { return key != null && flags.contains(key); }
-    public boolean flag(String key) { return key != null && !key.isBlank() && flags.add(key); }
-    public boolean unflag(String key) { return key != null && flags.remove(key); }
+
+    public boolean hasFlag(String key) {
+        return key != null && flags.contains(key);
+    }
+
+    public boolean flag(String key) {
+        return key != null && !key.isBlank() && flags.add(key);
+    }
+
+    public boolean unflag(String key) {
+        return key != null && flags.remove(key);
+    }
+
     public boolean toggleFlag(String key) {
         if (key == null || key.isBlank()) return false;
         if (flags.contains(key)) {
@@ -89,18 +183,36 @@ public final class OriginState {
         flags.add(key);
         return true;
     }
+
     public int countFlags(String prefix) {
         if (prefix == null) return 0;
         int count = 0;
         for (String flag : flags) if (flag.startsWith(prefix)) count++;
         return count;
     }
-    public Map<String, Integer> progressSnapshot() { return Collections.unmodifiableMap(new HashMap<>(progress)); }
-    public Set<String> flagsSnapshot() { return Collections.unmodifiableSet(new HashSet<>(flags)); }
 
-    public void sync(String originId, int bloodValue, int sunValue, int wetnessValue, int wingValue,
-                     int instabilityValue, int soulValue, int boneValue, int carbonValue, int livingValue,
-                     long lastFeedValue, Map<String, Integer> progressValues, Set<String> flagValues) {
+    public Map<String, Integer> progressSnapshot() {
+        return Collections.unmodifiableMap(new HashMap<>(progress));
+    }
+
+    public Set<String> flagsSnapshot() {
+        return Collections.unmodifiableSet(new HashSet<>(flags));
+    }
+
+    public void sync(
+            String originId,
+            int bloodValue,
+            int sunValue,
+            int wetnessValue,
+            int wingValue,
+            int instabilityValue,
+            int soulValue,
+            int boneValue,
+            int carbonValue,
+            int livingValue,
+            long lastFeedValue,
+            Map<String, Integer> progressValues,
+            Set<String> flagValues) {
         this.origin = originId == null ? "" : originId;
         this.blood = clamp(bloodValue, 0, 200);
         this.sunExposure = clamp(sunValue, 0, 100);
@@ -169,7 +281,8 @@ public final class OriginState {
         nbt.put("OriginProgress", progressNbt);
 
         NbtCompound longProgressNbt = new NbtCompound();
-        for (var entry : longProgress.entrySet()) longProgressNbt.putLong(entry.getKey(), entry.getValue());
+        for (var entry : longProgress.entrySet())
+            longProgressNbt.putLong(entry.getKey(), entry.getValue());
         nbt.put("OriginLongProgress", longProgressNbt);
 
         NbtCompound flagNbt = new NbtCompound();
@@ -193,11 +306,13 @@ public final class OriginState {
 
         progress.clear();
         NbtCompound progressNbt = nbt.getCompound("OriginProgress");
-        for (String key : progressNbt.getKeys()) progress.put(key, Math.max(0, progressNbt.getInt(key)));
+        for (String key : progressNbt.getKeys())
+            progress.put(key, Math.max(0, progressNbt.getInt(key)));
 
         longProgress.clear();
         NbtCompound longProgressNbt = nbt.getCompound("OriginLongProgress");
-        for (String key : longProgressNbt.getKeys()) longProgress.put(key, Math.max(0L, longProgressNbt.getLong(key)));
+        for (String key : longProgressNbt.getKeys())
+            longProgress.put(key, Math.max(0L, longProgressNbt.getLong(key)));
 
         flags.clear();
         NbtCompound flagNbt = nbt.getCompound("OriginFlags");

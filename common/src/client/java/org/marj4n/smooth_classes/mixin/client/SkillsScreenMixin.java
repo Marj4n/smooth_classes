@@ -27,37 +27,39 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-
 @Mixin(SkillsScreen.class)
 public abstract class SkillsScreenMixin {
 
     @Unique
-    private static final boolean PROMINENT_LOADED = PlatformLoader.getInstance().isModLoaded("prominent");
-    @Unique
-    private static final Identifier OMINOUS_EYE = Identifier.of("smooth_classes", "textures/backgrounds/decor/ominous_eye.png");
-    @Unique
-    private static final int EYE_FRAME_COUNT = 8;
-    @Unique
-    private static final int EYE_FRAME_SIZE = 64;
-    @Unique
-    private static final int EYE_SHEET_WIDTH = EYE_FRAME_COUNT * EYE_FRAME_SIZE;
-    @Unique
-    private static final int EYE_MIN_GAP = 36;
-    @Unique
-    private final Identifier cloudsTexture1 = Identifier.of("smooth_classes", "textures/backgrounds/decor/clouds.png");
-    @Unique
-    private final Identifier cloudsTexture2 = Identifier.of("smooth_classes", "textures/backgrounds/decor/clouds_2.png");
-    @Unique
-    private final Identifier cloudsTexture3 = Identifier.of("smooth_classes", "textures/backgrounds/decor/clouds_3.png");
-    @Unique
-    private float cloudsX = 0;
+    private static final boolean PROMINENT_LOADED =
+            PlatformLoader.getInstance().isModLoaded("prominent");
 
     @Unique
-    private Identifier selectedCloudsTexture = null;
+    private static final Identifier OMINOUS_EYE =
+            Identifier.of("smooth_classes", "textures/backgrounds/decor/ominous_eye.png");
+
+    @Unique private static final int EYE_FRAME_COUNT = 8;
+    @Unique private static final int EYE_FRAME_SIZE = 64;
+    @Unique private static final int EYE_SHEET_WIDTH = EYE_FRAME_COUNT * EYE_FRAME_SIZE;
+    @Unique private static final int EYE_MIN_GAP = 36;
+
     @Unique
-    private final List<EyeManifestation> activeEyes = new ArrayList<>();
+    private final Identifier cloudsTexture1 =
+            Identifier.of("smooth_classes", "textures/backgrounds/decor/clouds.png");
+
     @Unique
-    private long nextEyeSpawnAt = 0L;
+    private final Identifier cloudsTexture2 =
+            Identifier.of("smooth_classes", "textures/backgrounds/decor/clouds_2.png");
+
+    @Unique
+    private final Identifier cloudsTexture3 =
+            Identifier.of("smooth_classes", "textures/backgrounds/decor/clouds_3.png");
+
+    @Unique private float cloudsX = 0;
+
+    @Unique private Identifier selectedCloudsTexture = null;
+    @Unique private final List<EyeManifestation> activeEyes = new ArrayList<>();
+    @Unique private long nextEyeSpawnAt = 0L;
 
     @Unique
     private void selectRandomCloudsTexture() {
@@ -118,18 +120,31 @@ public abstract class SkillsScreenMixin {
     }*/
 
     /** Origin categories are milestone trees, not point-buy trees. */
-    @Inject(method = "drawWindowWithCategory(Lnet/minecraft/client/gui/DrawContext;DDLnet/puffish/skillsmod/client/data/ClientCategoryData;)V",
-            at = @At("HEAD"), cancellable = true)
-    private void smoothClasses$hideOriginPoints(DrawContext context, double mouseX, double mouseY,
-                                                ClientCategoryData activeCategoryData, CallbackInfo ci) {
+    @Inject(
+            method =
+                    "drawWindowWithCategory(Lnet/minecraft/client/gui/DrawContext;DDLnet/puffish/skillsmod/client/data/ClientCategoryData;)V",
+            at = @At("HEAD"),
+            cancellable = true)
+    private void smoothClasses$hideOriginPoints(
+            DrawContext context,
+            double mouseX,
+            double mouseY,
+            ClientCategoryData activeCategoryData,
+            CallbackInfo ci) {
         if (smoothClasses$isOriginCategory(activeCategoryData)) ci.cancel();
     }
 
     /** Adds live checklist counters directly to the Origin tree and its hovered nodes. */
-    @Inject(method = "drawContentWithCategory(Lnet/minecraft/client/gui/DrawContext;DDLnet/puffish/skillsmod/client/data/ClientCategoryData;)V",
+    @Inject(
+            method =
+                    "drawContentWithCategory(Lnet/minecraft/client/gui/DrawContext;DDLnet/puffish/skillsmod/client/data/ClientCategoryData;)V",
             at = @At("TAIL"))
-    private void smoothClasses$drawOriginProgress(DrawContext context, double mouseX, double mouseY,
-                                                  ClientCategoryData activeCategoryData, CallbackInfo ci) {
+    private void smoothClasses$drawOriginProgress(
+            DrawContext context,
+            double mouseX,
+            double mouseY,
+            ClientCategoryData activeCategoryData,
+            CallbackInfo ci) {
         // The tree tab is also the ability-HUD page selector: close the GUI after
         // viewing Origin and the same three bound keys now operate Origin slots.
         if (smoothClasses$isOriginCategory(activeCategoryData)) AbilityPageState.setOriginPage();
@@ -162,15 +177,30 @@ public abstract class SkillsScreenMixin {
         // original title/description stay intact; live requirement rows are appended.
         var category = activeCategoryData.getConfig();
         double scale = activeCategoryData.getScale();
-        int transformedMouseX = (int) Math.round((mouseX - activeCategoryData.getX() - client.getWindow().getScaledWidth() / 2.0D) / scale);
-        int transformedMouseY = (int) Math.round((mouseY - activeCategoryData.getY() - client.getWindow().getScaledHeight() / 2.0D) / scale);
+        int transformedMouseX =
+                (int)
+                        Math.round(
+                                (mouseX
+                                                - activeCategoryData.getX()
+                                                - client.getWindow().getScaledWidth() / 2.0D)
+                                        / scale);
+        int transformedMouseY =
+                (int)
+                        Math.round(
+                                (mouseY
+                                                - activeCategoryData.getY()
+                                                - client.getWindow().getScaledHeight() / 2.0D)
+                                        / scale);
 
         for (var skill : category.skills().values()) {
             var definition = category.getDefinitionById(skill.definitionId()).orElse(null);
             if (definition == null) continue;
             int halfSize = Math.round(13.0F * definition.size());
-            boolean hovered = transformedMouseX >= skill.x() - halfSize && transformedMouseX < skill.x() + halfSize
-                    && transformedMouseY >= skill.y() - halfSize && transformedMouseY < skill.y() + halfSize;
+            boolean hovered =
+                    transformedMouseX >= skill.x() - halfSize
+                            && transformedMouseX < skill.x() + halfSize
+                            && transformedMouseY >= skill.y() - halfSize
+                            && transformedMouseY < skill.y() + halfSize;
             if (!hovered) continue;
 
             List<OrderedText> tooltip = new ArrayList<>();
@@ -189,9 +219,12 @@ public abstract class SkillsScreenMixin {
 
             List<Text> live = OriginProgressDisplay.nodeLines(origin, skill.id());
             if (live.isEmpty()) return;
-            tooltip.addAll(client.textRenderer.wrapLines(definition.description().copy().formatted(Formatting.GRAY), 300));
+            tooltip.addAll(
+                    client.textRenderer.wrapLines(
+                            definition.description().copy().formatted(Formatting.GRAY), 300));
             tooltip.add(Text.empty().asOrderedText());
-            tooltip.add(Text.literal("Live Requirements").formatted(Formatting.GOLD).asOrderedText());
+            tooltip.add(
+                    Text.literal("Live Requirements").formatted(Formatting.GOLD).asOrderedText());
             for (Text line : live) tooltip.addAll(client.textRenderer.wrapLines(line, 300));
             ((SkillsScreen) (Object) this).setTooltip(tooltip);
             return;
@@ -212,21 +245,32 @@ public abstract class SkillsScreenMixin {
         if (type == null) return null;
         // The server unlocks only the selected Origin category, but keep this guard
         // so a stale client tab can never show another Origin's personal counters.
-        return OriginClientState.originId.isBlank() || OriginClientState.originId.equals(type.id()) ? type : null;
+        return OriginClientState.originId.isBlank() || OriginClientState.originId.equals(type.id())
+                ? type
+                : null;
     }
 
     // MAIN
-    @Inject(method = "drawContentWithCategory(Lnet/minecraft/client/gui/DrawContext;DDLnet/puffish/skillsmod/client/data/ClientCategoryData;)V",
-            at = @At(value = "INVOKE",
-                    shift = At.Shift.AFTER,
-                    target = "Lnet/puffish/skillsmod/client/gui/SkillsScreen;drawBackground(Lnet/minecraft/client/gui/DrawContext;Lnet/puffish/skillsmod/client/config/ClientBackgroundConfig;)V"))
-    private void injectDrawBackground(DrawContext context, double mouseX, double mouseY, ClientCategoryData activeCategoryData, CallbackInfo ci) {
+    @Inject(
+            method =
+                    "drawContentWithCategory(Lnet/minecraft/client/gui/DrawContext;DDLnet/puffish/skillsmod/client/data/ClientCategoryData;)V",
+            at =
+                    @At(
+                            value = "INVOKE",
+                            shift = At.Shift.AFTER,
+                            target =
+                                    "Lnet/puffish/skillsmod/client/gui/SkillsScreen;drawBackground(Lnet/minecraft/client/gui/DrawContext;Lnet/puffish/skillsmod/client/config/ClientBackgroundConfig;)V"))
+    private void injectDrawBackground(
+            DrawContext context,
+            double mouseX,
+            double mouseY,
+            ClientCategoryData activeCategoryData,
+            CallbackInfo ci) {
         SkillsScreenAccessor accessor = (SkillsScreenAccessor) this;
         Bounds2i bounds = accessor.getBounds();
 
         // Don't draw star systems when prominent is loaded
-        if (!PROMINENT_LOADED)
-            drawParallaxTextures(context, bounds);
+        if (!PROMINENT_LOADED) drawParallaxTextures(context, bounds);
     }
 
     @Unique
@@ -297,10 +341,11 @@ public abstract class SkillsScreenMixin {
     private boolean eyeHasRoom(int x, int y, int size) {
         for (EyeManifestation eye : activeEyes) {
             int otherSize = Math.round(EYE_FRAME_SIZE * eye.scale());
-            boolean separated = x + size + EYE_MIN_GAP <= eye.x()
-                    || eye.x() + otherSize + EYE_MIN_GAP <= x
-                    || y + size + EYE_MIN_GAP <= eye.y()
-                    || eye.y() + otherSize + EYE_MIN_GAP <= y;
+            boolean separated =
+                    x + size + EYE_MIN_GAP <= eye.x()
+                            || eye.x() + otherSize + EYE_MIN_GAP <= x
+                            || y + size + EYE_MIN_GAP <= eye.y()
+                            || eye.y() + otherSize + EYE_MIN_GAP <= y;
             if (!separated) return false;
         }
         return true;
@@ -334,7 +379,16 @@ public abstract class SkillsScreenMixin {
             RenderSystem.enableBlend();
             RenderSystem.defaultBlendFunc();
             RenderSystem.setShaderColor(pulse, pulse * 0.80F, pulse * 0.70F, alpha);
-            context.drawTexture(OMINOUS_EYE, 0, 0, u, 0, EYE_FRAME_SIZE, EYE_FRAME_SIZE, EYE_SHEET_WIDTH, EYE_FRAME_SIZE);
+            context.drawTexture(
+                    OMINOUS_EYE,
+                    0,
+                    0,
+                    u,
+                    0,
+                    EYE_FRAME_SIZE,
+                    EYE_FRAME_SIZE,
+                    EYE_SHEET_WIDTH,
+                    EYE_FRAME_SIZE);
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
             RenderSystem.disableBlend();
             matrices.pop();
@@ -397,8 +451,7 @@ public abstract class SkillsScreenMixin {
 
     @Unique
     private void updateAndDrawCloudsTexture(DrawContext context, Bounds2i bounds) {
-        if (cloudsX == 0)
-            cloudsX = -bounds.width();
+        if (cloudsX == 0) cloudsX = -bounds.width();
         if (selectedCloudsTexture == null) {
             selectRandomCloudsTexture();
         }
@@ -418,7 +471,16 @@ public abstract class SkillsScreenMixin {
         RenderSystem.defaultBlendFunc();
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 0.5F);
         int cloudsHeight = 1440;
-        context.drawTexture(selectedCloudsTexture, (int) cloudsX, bounds.min().y, 0, 0, bounds.width() + 10240, cloudsHeight, bounds.width() + 10240, cloudsHeight);
+        context.drawTexture(
+                selectedCloudsTexture,
+                (int) cloudsX,
+                bounds.min().y,
+                0,
+                0,
+                bounds.width() + 10240,
+                cloudsHeight,
+                bounds.width() + 10240,
+                cloudsHeight);
         RenderSystem.disableBlend();
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
 

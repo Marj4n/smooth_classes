@@ -12,18 +12,42 @@ import org.marj4n.smooth_classes.effects.SmoothEffects;
 /** Talent-aware runtime plan builder for Assassin. Actual Minecraft effects are executed by hooks/integrations. */
 public final class AssassinRuntime {
     private AssassinRuntime() {}
+
     private static void require(ServerPlayerEntity player) {
-        if (!AbilityRuntime.isClass(player, AssassinClass.ID)) throw new IllegalStateException("Player is not Assassin");
+        if (!AbilityRuntime.isClass(player, AssassinClass.ID))
+            throw new IllegalStateException("Player is not Assassin");
     }
-    private static boolean has(ServerPlayerEntity player, Identifier talent) { return AbilityRuntime.hasTalent(player, talent); }
+
+    private static boolean has(ServerPlayerEntity player, Identifier talent) {
+        return AbilityRuntime.hasTalent(player, talent);
+    }
 
     public record EvasionPlan(boolean mastery, boolean stealth) {}
-    public static EvasionPlan evasion(ServerPlayerEntity player) { require(player); return new EvasionPlan(has(player, AssassinContent.EVASION_MASTERY.id()), has(player, AssassinContent.EVASION_BLADESTORM.id())); }
-    public record PreparationPlan(boolean shadowstrike, boolean reset) {}
-    public static PreparationPlan preparation(ServerPlayerEntity player) { require(player); return new PreparationPlan(has(player, AssassinContent.PREPARATION_SHADOWSTRIKE.id()), has(player, AssassinContent.PREPARATION_SHADOWSTRIKE_VAMPIRE.id())); }
-    public record SiphoningPlan(boolean heal, boolean haste) {}
-    public static SiphoningPlan siphoningStrikes(ServerPlayerEntity player) { require(player); return new SiphoningPlan(has(player, AssassinContent.SIPHONING_STRIKES_MIGHTY.id()), has(player, AssassinContent.SIPHONING_STRIKES_VANISH.id())); }
 
+    public static EvasionPlan evasion(ServerPlayerEntity player) {
+        require(player);
+        return new EvasionPlan(
+                has(player, AssassinContent.EVASION_MASTERY.id()),
+                has(player, AssassinContent.EVASION_BLADESTORM.id()));
+    }
+
+    public record PreparationPlan(boolean shadowstrike, boolean reset) {}
+
+    public static PreparationPlan preparation(ServerPlayerEntity player) {
+        require(player);
+        return new PreparationPlan(
+                has(player, AssassinContent.PREPARATION_SHADOWSTRIKE.id()),
+                has(player, AssassinContent.PREPARATION_SHADOWSTRIKE_VAMPIRE.id()));
+    }
+
+    public record SiphoningPlan(boolean heal, boolean haste) {}
+
+    public static SiphoningPlan siphoningStrikes(ServerPlayerEntity player) {
+        require(player);
+        return new SiphoningPlan(
+                has(player, AssassinContent.SIPHONING_STRIKES_MIGHTY.id()),
+                has(player, AssassinContent.SIPHONING_STRIKES_VANISH.id()));
+    }
 
     public static ExecutionResult executeEvasion(ServerPlayerEntity player) {
         EvasionPlan plan = evasion(player);
@@ -48,5 +72,4 @@ public final class AssassinRuntime {
             ClassEffectRuntime.apply(player, SmoothEffects.IMMOBILIZING_AURA, 600, 0);
         return ExecutionResult.success(1, "siphoning_strikes");
     }
-
 }

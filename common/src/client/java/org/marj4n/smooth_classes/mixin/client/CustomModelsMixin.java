@@ -30,8 +30,7 @@ public abstract class CustomModelsMixin {
             VertexConsumerProvider vertexConsumers,
             int light,
             BakedModel model,
-            CallbackInfo ci
-    ) {
+            CallbackInfo ci) {
         if (model == null) {
             ci.cancel();
         }

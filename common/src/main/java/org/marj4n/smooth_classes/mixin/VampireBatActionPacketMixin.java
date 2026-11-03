@@ -16,10 +16,12 @@ public abstract class VampireBatActionPacketMixin {
     @Shadow public ServerPlayerEntity player;
 
     @Inject(method = "onPlayerInteractBlock", at = @At("HEAD"), cancellable = true)
-    private void smooth_classes$noBatBlockUse(PlayerInteractBlockC2SPacket packet, CallbackInfo ci) {
+    private void smooth_classes$noBatBlockUse(
+            PlayerInteractBlockC2SPacket packet, CallbackInfo ci) {
         // Vanilla packet handlers dispatch once off-thread and once on the server thread.
         // Never read mutable Origin flags from Netty's networking thread.
-        if (player.getServer() != null && player.getServer().isOnThread()
+        if (player.getServer() != null
+                && player.getServer().isOnThread()
                 && VampireBatAbilityLock.isLocked(player)) ci.cancel();
     }
 
@@ -27,15 +29,18 @@ public abstract class VampireBatActionPacketMixin {
     private void smooth_classes$noBatItemUse(PlayerInteractItemC2SPacket packet, CallbackInfo ci) {
         // Vanilla packet handlers dispatch once off-thread and once on the server thread.
         // Never read mutable Origin flags from Netty's networking thread.
-        if (player.getServer() != null && player.getServer().isOnThread()
+        if (player.getServer() != null
+                && player.getServer().isOnThread()
                 && VampireBatAbilityLock.isLocked(player)) ci.cancel();
     }
 
     @Inject(method = "onPlayerInteractEntity", at = @At("HEAD"), cancellable = true)
-    private void smooth_classes$noBatEntityUse(PlayerInteractEntityC2SPacket packet, CallbackInfo ci) {
+    private void smooth_classes$noBatEntityUse(
+            PlayerInteractEntityC2SPacket packet, CallbackInfo ci) {
         // Vanilla packet handlers dispatch once off-thread and once on the server thread.
         // Never read mutable Origin flags from Netty's networking thread.
-        if (player.getServer() != null && player.getServer().isOnThread()
+        if (player.getServer() != null
+                && player.getServer().isOnThread()
                 && VampireBatAbilityLock.isLocked(player)) ci.cancel();
     }
 
@@ -43,19 +48,23 @@ public abstract class VampireBatActionPacketMixin {
     private void smooth_classes$noBatDigDropSwap(PlayerActionC2SPacket packet, CallbackInfo ci) {
         // Vanilla packet handlers dispatch once off-thread and once on the server thread.
         // Never read mutable Origin flags from Netty's networking thread.
-        if (player.getServer() != null && player.getServer().isOnThread()
+        if (player.getServer() != null
+                && player.getServer().isOnThread()
                 && VampireBatAbilityLock.isLocked(player)) ci.cancel();
     }
 
     @Inject(method = "onClickSlot", at = @At("HEAD"), cancellable = true)
     private void smooth_classes$noBatInventoryClicks(ClickSlotC2SPacket packet, CallbackInfo ci) {
-        if (player.getServer() != null && player.getServer().isOnThread()
+        if (player.getServer() != null
+                && player.getServer().isOnThread()
                 && VampireBatAbilityLock.isLocked(player)) ci.cancel();
     }
 
     @Inject(method = "onCreativeInventoryAction", at = @At("HEAD"), cancellable = true)
-    private void smooth_classes$noBatCreativeSlot(CreativeInventoryActionC2SPacket packet, CallbackInfo ci) {
-        if (player.getServer() != null && player.getServer().isOnThread()
+    private void smooth_classes$noBatCreativeSlot(
+            CreativeInventoryActionC2SPacket packet, CallbackInfo ci) {
+        if (player.getServer() != null
+                && player.getServer().isOnThread()
                 && VampireBatAbilityLock.isLocked(player)) ci.cancel();
     }
 
@@ -63,7 +72,8 @@ public abstract class VampireBatActionPacketMixin {
     private void smooth_classes$noBatSwing(HandSwingC2SPacket packet, CallbackInfo ci) {
         // Vanilla packet handlers dispatch once off-thread and once on the server thread.
         // Never read mutable Origin flags from Netty's networking thread.
-        if (player.getServer() != null && player.getServer().isOnThread()
+        if (player.getServer() != null
+                && player.getServer().isOnThread()
                 && VampireBatAbilityLock.isLocked(player)) ci.cancel();
     }
 }

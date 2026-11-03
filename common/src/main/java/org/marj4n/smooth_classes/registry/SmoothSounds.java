@@ -124,11 +124,17 @@ public final class SmoothSounds {
     private static SoundEvent register(String path) {
         Identifier id = SmoothClasses.id(path);
         SoundEvent event = SoundEvent.of(id);
-        org.marj4n.smooth_classes.platform.PlatformRegistry.register(org.marj4n.smooth_classes.platform.PlatformRegistries.SOUND_EVENT, id, event);
+        org.marj4n.smooth_classes.platform.PlatformRegistry.register(
+                org.marj4n.smooth_classes.platform.PlatformRegistries.SOUND_EVENT, id, event);
         EVENTS.put(path, event);
         return event;
     }
 
-    public static SoundEvent get(String path) { return EVENTS.get(path); }
-    public static Map<String, SoundEvent> all() { return Collections.unmodifiableMap(EVENTS); }
+    public static SoundEvent get(String path) {
+        return EVENTS.get(path);
+    }
+
+    public static Map<String, SoundEvent> all() {
+        return Collections.unmodifiableMap(EVENTS);
+    }
 }

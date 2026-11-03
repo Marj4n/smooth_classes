@@ -18,16 +18,23 @@ public final class AbilityCooldowns {
     public static long remainingTicks(ServerPlayerEntity player, Identifier ability) {
         MinecraftServer server = player.getServer();
         if (server == null) return 0L;
-        long millis = AbilityCooldownState.get(server)
-                .remainingMillis(player.getUuid(), ability, System.currentTimeMillis());
+        long millis =
+                AbilityCooldownState.get(server)
+                        .remainingMillis(player.getUuid(), ability, System.currentTimeMillis());
         return millis <= 0L ? 0L : Math.max(1L, (long) Math.ceil(millis / 50.0D));
     }
 
     /** 1.10.x cooldown formula: only haste above the neutral 1.0 multiplier reduces CD. */
     public static int adjustedTicks(ServerPlayerEntity player, int baseTicks) {
         double baseMs = Math.max(0, baseTicks) * 50.0D;
-        double hasteBonus = Math.max(0.0D, SpellPower.getHaste(player, SpellSchools.GENERIC) - 1.0D);
-        double reducedMs = baseMs - (hasteBonus * (2000.0D * SmoothBalance.General.spellHasteCooldownReductionModifier));
+        double hasteBonus =
+                Math.max(0.0D, SpellPower.getHaste(player, SpellSchools.GENERIC) - 1.0D);
+        double reducedMs =
+                baseMs
+                        - (hasteBonus
+                                * (2000.0D
+                                        * SmoothBalance.General
+                                                .spellHasteCooldownReductionModifier));
         double minimumMs = SmoothBalance.General.minimumAchievableCooldown * 1000.0D;
         reducedMs = Math.max(minimumMs, reducedMs);
         return Math.max(1, (int) Math.ceil(reducedMs / 50.0D));
@@ -37,8 +44,8 @@ public final class AbilityCooldowns {
         MinecraftServer server = player.getServer();
         if (server == null) return;
         long durationMillis = Math.max(0L, (long) ticks) * 50L;
-        AbilityCooldownState.get(server).start(
-                player.getUuid(), ability, durationMillis, System.currentTimeMillis());
+        AbilityCooldownState.get(server)
+                .start(player.getUuid(), ability, durationMillis, System.currentTimeMillis());
     }
 
     /** Explicit admin/reset hook. Normal logout must never call this. */
@@ -46,5 +53,4 @@ public final class AbilityCooldowns {
         MinecraftServer server = player.getServer();
         if (server != null) AbilityCooldownState.get(server).clearPlayer(player.getUuid());
     }
-
 }

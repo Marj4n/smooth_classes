@@ -45,34 +45,37 @@ public final class AvengerSoulAnimationRuntime {
     public static void register() {
         if (registered) return;
         registered = true;
-        ServerTickEvents.END_SERVER_TICK.register(server -> {
-            for (Phase phase : new ArrayList<>(ACTIVE.values())) {
-                if (phase.entity.isRemoved() || phase.entity.getWorld() != phase.world) {
-                    finish(phase, server);
-                } else if (--phase.ticks <= 0) {
-                    finish(phase, server);
-                } else {
-                    // Stop wandering/knockback until the body has fully materialized.
-                    phase.entity.setVelocity(Vec3d.ZERO);
-                    phase.entity.velocityModified = true;
-                    if (phase.entity instanceof MobEntity mob) mob.getNavigation().stop();
-                }
-            }
-        });
-        ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
-            // Refunds must reach the real inventory before the player data is saved.
-            for (Phase phase : new ArrayList<>(ACTIVE.values())) {
-                if (phase.owner.equals(handler.player.getUuid())) finish(phase, server);
-            }
-        });
-        ServerLifecycleEvents.SERVER_STOPPING.register(server -> {
-            // Never persist a disabled-AI mob or half-finished recall across restart.
-            for (Phase phase : new ArrayList<>(ACTIVE.values())) {
-                if (phase.action == ABSORB) cancel(phase);
-                else release(phase);
-            }
-            ACTIVE.clear();
-        });
+        ServerTickEvents.END_SERVER_TICK.register(
+                server -> {
+                    for (Phase phase : new ArrayList<>(ACTIVE.values())) {
+                        if (phase.entity.isRemoved() || phase.entity.getWorld() != phase.world) {
+                            finish(phase, server);
+                        } else if (--phase.ticks <= 0) {
+                            finish(phase, server);
+                        } else {
+                            // Stop wandering/knockback until the body has fully materialized.
+                            phase.entity.setVelocity(Vec3d.ZERO);
+                            phase.entity.velocityModified = true;
+                            if (phase.entity instanceof MobEntity mob) mob.getNavigation().stop();
+                        }
+                    }
+                });
+        ServerPlayConnectionEvents.DISCONNECT.register(
+                (handler, server) -> {
+                    // Refunds must reach the real inventory before the player data is saved.
+                    for (Phase phase : new ArrayList<>(ACTIVE.values())) {
+                        if (phase.owner.equals(handler.player.getUuid())) finish(phase, server);
+                    }
+                });
+        ServerLifecycleEvents.SERVER_STOPPING.register(
+                server -> {
+                    // Never persist a disabled-AI mob or half-finished recall across restart.
+                    for (Phase phase : new ArrayList<>(ACTIVE.values())) {
+                        if (phase.action == ABSORB) cancel(phase);
+                        else release(phase);
+                    }
+                    ACTIVE.clear();
+                });
     }
 
     public static boolean busy(LivingEntity entity) {
@@ -82,17 +85,31 @@ public final class AvengerSoulAnimationRuntime {
     public static void emerge(ServerPlayerEntity caster, LivingEntity entity) {
         if (entity == null || entity.isRemoved()) return;
         boolean ground = groundCompatible(entity);
-        Phase phase = new Phase(caster.getUuid(), entity, caster.getServerWorld(), EMERGE, EMERGE_TICKS, null);
+        Phase phase =
+                new Phase(
+                        caster.getUuid(),
+                        entity,
+                        caster.getServerWorld(),
+                        EMERGE,
+                        EMERGE_TICKS,
+                        null);
         ACTIVE.put(entity.getUuid(), phase);
         freeze(phase);
         caster.swingHand(net.minecraft.util.Hand.MAIN_HAND, true);
         broadcast(caster, entity, EMERGE, ground, EMERGE_TICKS);
     }
 
-    public static boolean recall(ServerPlayerEntity caster, LivingEntity entity,
-                                 AvengerSummonRecipes.Recipe recipe) {
+    public static boolean recall(
+            ServerPlayerEntity caster, LivingEntity entity, AvengerSummonRecipes.Recipe recipe) {
         if (entity == null || entity.isRemoved() || recipe == null || busy(entity)) return false;
-        Phase phase = new Phase(caster.getUuid(), entity, caster.getServerWorld(), ABSORB, ABSORB_TICKS, recipe);
+        Phase phase =
+                new Phase(
+                        caster.getUuid(),
+                        entity,
+                        caster.getServerWorld(),
+                        ABSORB,
+                        ABSORB_TICKS,
+                        recipe);
         ACTIVE.put(entity.getUuid(), phase);
         entity.removeAllPassengers();
         entity.stopRiding();
@@ -154,32 +171,54 @@ public final class AvengerSoulAnimationRuntime {
     }
 
     private static boolean groundCompatible(LivingEntity entity) {
-        if (entity.getHeight() > 3.5F || entity.getWorld().getBlockState(entity.getBlockPos().down()).isAir()) return false;
+        if (entity.getHeight() > 3.5F
+                || entity.getWorld().getBlockState(entity.getBlockPos().down()).isAir())
+            return false;
         EntityType<?> type = entity.getType();
         // Flying and swimming bodies materialize from a soul vortex instead.
-        return type != EntityType.WITHER && type != EntityType.ENDER_DRAGON
-                && type != EntityType.PHANTOM && type != EntityType.GHAST
-                && type != EntityType.VEX && type != EntityType.BLAZE
-                && type != EntityType.BAT && type != EntityType.COD
-                && type != EntityType.SALMON && type != EntityType.TROPICAL_FISH
-                && type != EntityType.PUFFERFISH && type != EntityType.SQUID
-                && type != EntityType.GLOW_SQUID && type != EntityType.DOLPHIN
-                && type != EntityType.GUARDIAN && type != EntityType.ELDER_GUARDIAN
-                && type != EntityType.ALLAY && type != EntityType.BEE
-                && type != EntityType.PARROT && type != EntityType.AXOLOTL
+        return type != EntityType.WITHER
+                && type != EntityType.ENDER_DRAGON
+                && type != EntityType.PHANTOM
+                && type != EntityType.GHAST
+                && type != EntityType.VEX
+                && type != EntityType.BLAZE
+                && type != EntityType.BAT
+                && type != EntityType.COD
+                && type != EntityType.SALMON
+                && type != EntityType.TROPICAL_FISH
+                && type != EntityType.PUFFERFISH
+                && type != EntityType.SQUID
+                && type != EntityType.GLOW_SQUID
+                && type != EntityType.DOLPHIN
+                && type != EntityType.GUARDIAN
+                && type != EntityType.ELDER_GUARDIAN
+                && type != EntityType.ALLAY
+                && type != EntityType.BEE
+                && type != EntityType.PARROT
+                && type != EntityType.AXOLOTL
                 && type != EntityType.TADPOLE;
     }
 
-    private static void broadcast(ServerPlayerEntity caster, LivingEntity entity,
-                                  byte action, boolean ground, int ticks) {
+    private static void broadcast(
+            ServerPlayerEntity caster,
+            LivingEntity entity,
+            byte action,
+            boolean ground,
+            int ticks) {
         // Immutable per-receiver packets: Fabric consumes the buffer when sending.
         var viewers = PlayerLookup.around(caster.getServerWorld(), entity.getPos(), 64D);
-        for (ServerPlayerEntity viewer : viewers) send(viewer, caster, entity, action, ground, ticks);
+        for (ServerPlayerEntity viewer : viewers)
+            send(viewer, caster, entity, action, ground, ticks);
         if (!viewers.contains(caster)) send(caster, caster, entity, action, ground, ticks);
     }
 
-    private static void send(ServerPlayerEntity viewer, ServerPlayerEntity caster, LivingEntity entity,
-                             byte action, boolean ground, int ticks) {
+    private static void send(
+            ServerPlayerEntity viewer,
+            ServerPlayerEntity caster,
+            LivingEntity entity,
+            byte action,
+            boolean ground,
+            int ticks) {
         PacketByteBuf buf = PacketByteBufs.create();
         buf.writeVarInt(entity.getId());
         buf.writeUuid(caster.getUuid());
@@ -203,15 +242,21 @@ public final class AvengerSoulAnimationRuntime {
         boolean oldNoAi;
         boolean oldInvulnerable;
 
-        Phase(UUID owner, LivingEntity entity, ServerWorld world, byte action,
-              int ticks, AvengerSummonRecipes.Recipe recipe) {
+        Phase(
+                UUID owner,
+                LivingEntity entity,
+                ServerWorld world,
+                byte action,
+                int ticks,
+                AvengerSummonRecipes.Recipe recipe) {
             this.owner = owner;
             this.entity = entity;
             this.world = world;
             this.action = action;
             this.ticks = ticks;
             this.recipe = recipe;
-            this.boundBook = recipe == null ? ItemStack.EMPTY : AvengerLibrarianSummons.boundBook(entity);
+            this.boundBook =
+                    recipe == null ? ItemStack.EMPTY : AvengerLibrarianSummons.boundBook(entity);
         }
     }
 }

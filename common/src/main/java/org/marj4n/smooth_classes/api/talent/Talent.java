@@ -4,7 +4,12 @@ import net.minecraft.util.Identifier;
 
 public interface Talent {
     Identifier id();
+
     String name();
+
     String description();
-    default int maxRank() { return 1; }
+
+    default int maxRank() {
+        return 1;
+    }
 }

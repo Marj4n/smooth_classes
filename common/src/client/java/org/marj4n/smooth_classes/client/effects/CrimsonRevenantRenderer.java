@@ -8,8 +8,14 @@ import net.spell_engine.api.effect.CustomModelStatusEffect;
 /** Model visuals disabled; Crimson Revenant now uses particles + first-person overlay. */
 public final class CrimsonRevenantRenderer implements CustomModelStatusEffect.Renderer {
     @Override
-    public void renderEffect(long startTime, int amplifier, LivingEntity entity, float delta,
-                             MatrixStack matrices, VertexConsumerProvider consumers, int light) {
+    public void renderEffect(
+            long startTime,
+            int amplifier,
+            LivingEntity entity,
+            float delta,
+            MatrixStack matrices,
+            VertexConsumerProvider consumers,
+            int light) {
         // no-op on purpose
     }
 }

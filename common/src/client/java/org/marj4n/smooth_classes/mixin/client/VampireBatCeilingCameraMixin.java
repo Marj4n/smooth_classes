@@ -21,10 +21,16 @@ public abstract class VampireBatCeilingCameraMixin {
     @Shadow @Final private Quaternionf rotation;
 
     @Inject(method = "update", at = @At("TAIL"))
-    private void smooth_classes$perchCameraRoll(BlockView area, Entity focusedEntity,
-            boolean thirdPerson, boolean inverseView, float tickDelta, CallbackInfo ci) {
+    private void smooth_classes$perchCameraRoll(
+            BlockView area,
+            Entity focusedEntity,
+            boolean thirdPerson,
+            boolean inverseView,
+            float tickDelta,
+            CallbackInfo ci) {
         MinecraftClient client = MinecraftClient.getInstance();
-        if (focusedEntity != client.player || !(focusedEntity instanceof AbstractClientPlayerEntity player)) return;
+        if (focusedEntity != client.player
+                || !(focusedEntity instanceof AbstractClientPlayerEntity player)) return;
         float perch = OriginMorphState.batPerch(player);
         if (perch > 0.0F) rotation.rotateZ(MathHelper.PI * perch);
     }

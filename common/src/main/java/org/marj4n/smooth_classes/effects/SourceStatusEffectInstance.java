@@ -11,9 +11,14 @@ import net.minecraft.entity.effect.StatusEffectInstance;
 public final class SourceStatusEffectInstance extends StatusEffectInstance {
     private final LivingEntity sourceEntity;
 
-    public SourceStatusEffectInstance(StatusEffect type, int duration, int amplifier,
-                                      boolean ambient, boolean showParticles, boolean showIcon,
-                                      LivingEntity sourceEntity) {
+    public SourceStatusEffectInstance(
+            StatusEffect type,
+            int duration,
+            int amplifier,
+            boolean ambient,
+            boolean showParticles,
+            boolean showIcon,
+            LivingEntity sourceEntity) {
         super(type, duration, amplifier, ambient, showParticles, showIcon);
         this.sourceEntity = sourceEntity;
     }

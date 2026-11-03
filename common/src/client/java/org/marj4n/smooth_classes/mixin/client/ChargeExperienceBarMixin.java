@@ -39,13 +39,12 @@ public abstract class ChargeExperienceBarMixin {
         context.setShaderColor(red, green, blue, 1F);
 
         // Spell Engine 1.10.7 castbar.png: top 5px = fill, bottom 5px = frame/background.
-        context.drawTexture(CAST_BAR, x, y, 0F, 5F,
-                BAR_WIDTH, BAR_HEIGHT, BAR_WIDTH, 10);
+        context.drawTexture(CAST_BAR, x, y, 0F, 5F, BAR_WIDTH, BAR_HEIGHT, BAR_WIDTH, 10);
 
-        int fill = MathHelper.clamp(Math.round(BAR_WIDTH * ChargeHudState.progress()), 0, BAR_WIDTH);
+        int fill =
+                MathHelper.clamp(Math.round(BAR_WIDTH * ChargeHudState.progress()), 0, BAR_WIDTH);
         if (fill > 0) {
-            context.drawTexture(CAST_BAR, x, y, 0F, 0F,
-                    fill, BAR_HEIGHT, BAR_WIDTH, 10);
+            context.drawTexture(CAST_BAR, x, y, 0F, 0F, fill, BAR_HEIGHT, BAR_WIDTH, 10);
         }
 
         context.setShaderColor(1F, 1F, 1F, 1F);

@@ -21,7 +21,8 @@ public final class ChargeHudState {
 
     private ChargeHudState() {}
 
-    public static void sync(boolean newActive, boolean completed, String newAbility, int elapsed, int total) {
+    public static void sync(
+            boolean newActive, boolean completed, String newAbility, int elapsed, int total) {
         if (!newActive) {
             active = false;
             ability = "";
@@ -61,8 +62,10 @@ public final class ChargeHudState {
     /** Smoothly fills between the server's start packet and completion packet. */
     public static float progress() {
         if (!active) return 0F;
-        double localTicks = syncedAtNanos == 0L ? 0D
-                : Math.max(0D, (System.nanoTime() - syncedAtNanos) / 50_000_000D);
+        double localTicks =
+                syncedAtNanos == 0L
+                        ? 0D
+                        : Math.max(0D, (System.nanoTime() - syncedAtNanos) / 50_000_000D);
         return MathHelper.clamp((float) ((elapsedTicks + localTicks) / totalTicks), 0F, 1F);
     }
 

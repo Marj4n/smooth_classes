@@ -34,7 +34,6 @@ import org.marj4n.smooth_classes.content.avenger.runtime.AvengerMinionGameplay;
 public abstract class AvengerMinionEntity extends TameableEntity {
     public static final int LIFESPAN_TICKS = 2400;
 
-
     protected AvengerMinionEntity(EntityType<? extends TameableEntity> type, World world) {
         super(type, world);
         this.moveControl = new DirectionalFlightMoveControl(this, 1, true);
@@ -43,8 +42,16 @@ public abstract class AvengerMinionEntity extends TameableEntity {
 
     @Override
     protected void initGoals() {
-        goalSelector.add(1, new FollowOwnerGoal(this, 1.0D, this instanceof WraithEntity ? 8.0F : 20.0F, this instanceof WraithEntity ? 12.0F : 2.0F, true));
-        if (!(this instanceof WraithEntity)) goalSelector.add(3, new MeleeAttackGoal(this, 1.0D, true));
+        goalSelector.add(
+                1,
+                new FollowOwnerGoal(
+                        this,
+                        1.0D,
+                        this instanceof WraithEntity ? 8.0F : 20.0F,
+                        this instanceof WraithEntity ? 12.0F : 2.0F,
+                        true));
+        if (!(this instanceof WraithEntity))
+            goalSelector.add(3, new MeleeAttackGoal(this, 1.0D, true));
         goalSelector.add(4, new WanderAroundFarGoal(this, 1.0D));
 
         if (!(this instanceof WraithEntity)) {
@@ -61,7 +68,7 @@ public abstract class AvengerMinionEntity extends TameableEntity {
 
         if (!hasNoGravity()) {
             this.moveControl = new DirectionalFlightMoveControl(this, 1, true);
-        setNoGravity(true);
+            setNoGravity(true);
         }
 
         if (getWorld().isClient()) {
@@ -70,7 +77,8 @@ public abstract class AvengerMinionEntity extends TameableEntity {
 
         Entity ownerEntity = getOwner();
 
-        if (age > LIFESPAN_TICKS || (age > 120 && (ownerEntity == null || !ownerEntity.isAlive()))) {
+        if (age > LIFESPAN_TICKS
+                || (age > 120 && (ownerEntity == null || !ownerEntity.isAlive()))) {
             discard();
             return;
         }
@@ -121,28 +129,40 @@ public abstract class AvengerMinionEntity extends TameableEntity {
     }
 
     @Override
-    public boolean handleFallDamage(float fallDistance, float damageMultiplier, DamageSource damageSource) {
+    public boolean handleFallDamage(
+            float fallDistance, float damageMultiplier, DamageSource damageSource) {
         return false;
     }
 
-
-    @Override public void tickMovement() {
+    @Override
+    public void tickMovement() {
         super.tickMovement();
-        Vec3d v=getVelocity();
-        if(!v.equals(Vec3d.ZERO)){
-            float yaw=(float)(MathHelper.atan2(v.z,v.x)*(180.0/Math.PI))-90F;
-            float pitch=(float)(-(MathHelper.atan2(v.y,Math.sqrt(v.x*v.x+v.z*v.z))*(180.0/Math.PI)));
-            setYaw(yaw); bodyYaw=yaw; setPitch(pitch);
+        Vec3d v = getVelocity();
+        if (!v.equals(Vec3d.ZERO)) {
+            float yaw = (float) (MathHelper.atan2(v.z, v.x) * (180.0 / Math.PI)) - 90F;
+            float pitch =
+                    (float)
+                            (-(MathHelper.atan2(v.y, Math.sqrt(v.x * v.x + v.z * v.z))
+                                    * (180.0 / Math.PI)));
+            setYaw(yaw);
+            bodyYaw = yaw;
+            setPitch(pitch);
         }
     }
 
-    @Override protected EntityNavigation createNavigation(World world) {
-        BirdNavigation nav=new BirdNavigation(this,world);
-        nav.setCanPathThroughDoors(false); nav.setCanSwim(false); nav.setCanEnterOpenDoors(false); return nav;
+    @Override
+    protected EntityNavigation createNavigation(World world) {
+        BirdNavigation nav = new BirdNavigation(this, world);
+        nav.setCanPathThroughDoors(false);
+        nav.setCanSwim(false);
+        nav.setCanEnterOpenDoors(false);
+        return nav;
     }
 
     public abstract double healthMultiplier();
+
     public abstract double attackMultiplier();
+
     public abstract boolean isGreater();
 
     @Nullable

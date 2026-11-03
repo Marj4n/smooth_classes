@@ -18,7 +18,8 @@ import net.minecraft.world.World;
  */
 public final class LancerImpaleEntity extends Entity {
     private static final TrackedData<ItemStack> STACK =
-            DataTracker.registerData(LancerImpaleEntity.class, TrackedDataHandlerRegistry.ITEM_STACK);
+            DataTracker.registerData(
+                    LancerImpaleEntity.class, TrackedDataHandlerRegistry.ITEM_STACK);
     private static final TrackedData<Boolean> GROUND_SPIKE =
             DataTracker.registerData(LancerImpaleEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
 
@@ -43,8 +44,13 @@ public final class LancerImpaleEntity extends Entity {
         dataTracker.set(STACK, visual);
     }
 
-    public void setGroundSpike(boolean groundSpike) { dataTracker.set(GROUND_SPIKE, groundSpike); }
-    public boolean isGroundSpike() { return dataTracker.get(GROUND_SPIKE); }
+    public void setGroundSpike(boolean groundSpike) {
+        dataTracker.set(GROUND_SPIKE, groundSpike);
+    }
+
+    public boolean isGroundSpike() {
+        return dataTracker.get(GROUND_SPIKE);
+    }
 
     @Override
     public void tick() {

@@ -12,8 +12,13 @@ public final class AvengerSummoningRuntime {
     private AvengerSummoningRuntime() {}
 
     public static int getMinionLimit(ServerPlayerEntity player) {
-        int legionRanks = Math.min(4, Math.max(0,
-                AbilityRuntime.talentRank(player, AvengerContent.UNDEAD_LEGION.id())));
+        int legionRanks =
+                Math.min(
+                        4,
+                        Math.max(
+                                0,
+                                AbilityRuntime.talentRank(
+                                        player, AvengerContent.UNDEAD_LEGION.id())));
         return 1 + legionRanks;
     }
 
@@ -26,7 +31,8 @@ public final class AvengerSummoningRuntime {
             return plan(player, result);
         }
 
-        boolean canSummonWraith = AbilityRuntime.hasTalent(player, AvengerContent.SUMMON_WRAITH.id());
+        boolean canSummonWraith =
+                AbilityRuntime.hasTalent(player, AvengerContent.SUMMON_WRAITH.id());
         boolean wraithLegion = AbilityRuntime.hasTalent(player, AvengerContent.WRAITH_LEGION.id());
 
         for (int i = 0; i < count; i++) {
@@ -41,11 +47,11 @@ public final class AvengerSummoningRuntime {
         return plan(player, result);
     }
 
-    private static AvengerSummonPlan plan(ServerPlayerEntity player, List<AvengerMinionType> minions) {
+    private static AvengerSummonPlan plan(
+            ServerPlayerEntity player, List<AvengerMinionType> minions) {
         return new AvengerSummonPlan(
                 minions,
                 AbilityRuntime.hasTalent(player, AvengerContent.NECROTIC_FORTIFICATION.id()),
-                AbilityRuntime.hasTalent(player, AvengerContent.SHADOW_AURA.id())
-        );
+                AbilityRuntime.hasTalent(player, AvengerContent.SHADOW_AURA.id()));
     }
 }

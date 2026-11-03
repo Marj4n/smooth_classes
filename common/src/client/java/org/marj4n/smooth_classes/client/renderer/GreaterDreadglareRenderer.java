@@ -1,7 +1,5 @@
 package org.marj4n.smooth_classes.client.renderer;
 
-
-
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.MobEntityRenderer;
@@ -12,14 +10,18 @@ import org.marj4n.smooth_classes.client.SmoothClassesClient;
 import org.marj4n.smooth_classes.client.renderer.model.GreaterDreadglareModel;
 import org.marj4n.smooth_classes.entity.GreaterDreadglareEntity;
 
+public class GreaterDreadglareRenderer
+        extends MobEntityRenderer<GreaterDreadglareEntity, GreaterDreadglareModel> {
 
-public class GreaterDreadglareRenderer extends MobEntityRenderer<GreaterDreadglareEntity, GreaterDreadglareModel> {
-
-
-     private static final Identifier TEXTURE = Identifier.of("smooth_classes","textures/entity/dreadglare.png");
+    private static final Identifier TEXTURE =
+            Identifier.of("smooth_classes", "textures/entity/dreadglare.png");
 
     public GreaterDreadglareRenderer(EntityRendererFactory.Context ctx) {
-        super(ctx, new GreaterDreadglareModel(ctx.getPart(SmoothClassesClient.GREATER_DREADGLARE_MODEL)), 1.0f);
+        super(
+                ctx,
+                new GreaterDreadglareModel(
+                        ctx.getPart(SmoothClassesClient.GREATER_DREADGLARE_MODEL)),
+                1.0f);
     }
 
     @Override
@@ -28,17 +30,34 @@ public class GreaterDreadglareRenderer extends MobEntityRenderer<GreaterDreadgla
     }
 
     @Override
-    protected void scale(GreaterDreadglareEntity entity, MatrixStack matrixStack, float partialTickTime) {
+    protected void scale(
+            GreaterDreadglareEntity entity, MatrixStack matrixStack, float partialTickTime) {
         matrixStack.scale(1.5f, 1.5f, 1.5f);
     }
 
     @Override
-    public void render(GreaterDreadglareEntity greaterDreadglareEntity, float entityYaw, float partialTicks, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int packedLightIn) {
+    public void render(
+            GreaterDreadglareEntity greaterDreadglareEntity,
+            float entityYaw,
+            float partialTicks,
+            MatrixStack matrixStack,
+            VertexConsumerProvider vertexConsumerProvider,
+            int packedLightIn) {
         matrixStack.push();
-        matrixStack.multiply(RotationAxis.POSITIVE_X.rotationDegrees(greaterDreadglareEntity.getPitch(partialTicks)));
-        matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(greaterDreadglareEntity.getYaw(partialTicks)));
+        matrixStack.multiply(
+                RotationAxis.POSITIVE_X.rotationDegrees(
+                        greaterDreadglareEntity.getPitch(partialTicks)));
+        matrixStack.multiply(
+                RotationAxis.POSITIVE_Y.rotationDegrees(
+                        greaterDreadglareEntity.getYaw(partialTicks)));
 
-        super.render(greaterDreadglareEntity, entityYaw, partialTicks, matrixStack, vertexConsumerProvider, packedLightIn);
+        super.render(
+                greaterDreadglareEntity,
+                entityYaw,
+                partialTicks,
+                matrixStack,
+                vertexConsumerProvider,
+                packedLightIn);
 
         matrixStack.pop();
     }

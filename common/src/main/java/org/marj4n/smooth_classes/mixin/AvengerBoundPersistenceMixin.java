@@ -31,7 +31,8 @@ public abstract class AvengerBoundPersistenceMixin {
     }
 
     @Inject(method = "isAffectedByDaylight", at = @At("HEAD"), cancellable = true)
-    private void smooth_classes$protectBoundUndeadFromDaylight(CallbackInfoReturnable<Boolean> cir) {
+    private void smooth_classes$protectBoundUndeadFromDaylight(
+            CallbackInfoReturnable<Boolean> cir) {
         if (AvengerReworkRuntime.isAvengerSummon((MobEntity) (Object) this)) {
             cir.setReturnValue(false);
         }

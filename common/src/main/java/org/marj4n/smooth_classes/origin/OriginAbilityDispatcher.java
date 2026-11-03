@@ -14,8 +14,13 @@ import org.marj4n.smooth_classes.network.SmoothClassesNetworking;
 /** Server-authoritative active abilities for the four V1 Origins. */
 public final class OriginAbilityDispatcher {
     public record Result(boolean success, String message) {
-        public static Result fail(String message) { return new Result(false, message); }
-        public static Result ok(String message) { return new Result(true, message); }
+        public static Result fail(String message) {
+            return new Result(false, message);
+        }
+
+        public static Result ok(String message) {
+            return new Result(true, message);
+        }
     }
 
     private OriginAbilityDispatcher() {}
@@ -29,7 +34,8 @@ public final class OriginAbilityDispatcher {
         return switch (origin) {
             case HUMAN -> Result.fail("Human has no Origin abilities. Use your Class skills.");
             case VAMPIRE -> activateVampire(player, state, slot);
-            case DEMON -> org.marj4n.smooth_classes.origin.demon.DemonRuntime.activate(player, slot);
+            case DEMON ->
+                    org.marj4n.smooth_classes.origin.demon.DemonRuntime.activate(player, slot);
             case HOMUNCULUS -> activateHomunculus(player, slot);
             case MERMAID -> activateMermaid(player, state, slot);
             case SLIME -> activateSlime(player, state, slot);
@@ -40,32 +46,46 @@ public final class OriginAbilityDispatcher {
     private static Result activateHomunculus(ServerPlayerEntity player, int slot) {
         if (slot == 0) {
             var blade = HomunculusAccessories.stack(player, HomunculusAccessories.WEAPON);
-            return blade.isEmpty() ? Result.fail("Equip a sword in Accessories > Weapon Arm first.")
-                    : Result.ok("Weapon Arm: " + blade.getName().getString() + " (spear-style thrust).");
+            return blade.isEmpty()
+                    ? Result.fail("Equip a sword in Accessories > Weapon Arm first.")
+                    : Result.ok(
+                            "Weapon Arm: "
+                                    + blade.getName().getString()
+                                    + " (spear-style thrust).");
         }
         if (slot == 1) {
             int count = 0;
-            for (String part : new String[]{HomunculusAccessories.HEAD,
-                    HomunculusAccessories.CHEST, HomunculusAccessories.LEGS, HomunculusAccessories.FEET}) {
+            for (String part :
+                    new String[] {
+                        HomunculusAccessories.HEAD,
+                        HomunculusAccessories.CHEST,
+                        HomunculusAccessories.LEGS,
+                        HomunculusAccessories.FEET
+                    }) {
                 if (HomunculusAccessories.patched(player, part)) count++;
             }
             return Result.ok("Body repair: " + count + "/4 inner armor slots filled.");
         }
-        return Result.fail("Alchemical Core evolution is not yet available in this debugging build.");
+        return Result.fail(
+                "Alchemical Core evolution is not yet available in this debugging build.");
     }
 
     private static Result activateVampire(ServerPlayerEntity player, OriginState state, int slot) {
         if (state.hasFlag("vampire.form.bat") && slot != 0)
             return Result.fail("Return from Bat Form before casting abilities.");
         if (slot == 0) {
-            if (!OriginSkillRuntime.unlocked(player, OriginType.VAMPIRE, "bat_form")) return Result.fail("Bat Form is still locked.");
+            if (!OriginSkillRuntime.unlocked(player, OriginType.VAMPIRE, "bat_form"))
+                return Result.fail("Bat Form is still locked.");
             long ready = state.longProgress("vampire.bat_form_ready_at");
-            if (!state.hasFlag("vampire.form.bat") && player.getWorld().getTime() < ready) return Result.fail("Bat Form is recovering.");
+            if (!state.hasFlag("vampire.form.bat") && player.getWorld().getTime() < ready)
+                return Result.fail("Bat Form is recovering.");
             if (state.hasFlag("vampire.form.bat")) {
                 VampireBatPerchRuntime.stop(player, state, false);
                 state.unflag("vampire.form.bat");
                 VampireBatHealthRuntime.exit(player, state);
-                state.longProgress("vampire.bat_form_ready_at", player.getWorld().getTime() + 200L); // Nycto-like 10s cooldown
+                state.longProgress(
+                        "vampire.bat_form_ready_at",
+                        player.getWorld().getTime() + 200L); // Nycto-like 10s cooldown
                 if (!player.isCreative() && !player.isSpectator()) {
                     player.getAbilities().flying = false;
                     player.getAbilities().allowFlying = false;
@@ -103,7 +123,8 @@ public final class OriginAbilityDispatcher {
         }
 
         if (slot == 1) {
-            if (!OriginSkillRuntime.unlocked(player, OriginType.VAMPIRE, "man_bat")) return Result.fail("Man-Bat is still locked.");
+            if (!OriginSkillRuntime.unlocked(player, OriginType.VAMPIRE, "man_bat"))
+                return Result.fail("Man-Bat is still locked.");
 
             if (state.hasFlag("vampire.form.man_bat")) {
                 state.unflag("vampire.form.man_bat");
@@ -132,7 +153,8 @@ public final class OriginAbilityDispatcher {
             return Result.ok("Man-Bat unleashed.");
         }
 
-        if (!OriginSkillRuntime.unlocked(player, OriginType.VAMPIRE, "blood_sense")) return Result.fail("Blood Sense is still locked.");
+        if (!OriginSkillRuntime.unlocked(player, OriginType.VAMPIRE, "blood_sense"))
+            return Result.fail("Blood Sense is still locked.");
         long now = player.getWorld().getTime();
         long ready = state.longProgress("vampire.blood_sense_ready_at");
         if (now < ready) return Result.fail("Blood Sense is recovering.");
@@ -142,68 +164,138 @@ public final class OriginAbilityDispatcher {
         double radius = lord ? 40.0D : 20.0D;
         double radiusSquared = radius * radius;
         int revealTicks = lord ? 20 * 20 : 20 * 10;
-        for (MobEntity living : player.getWorld().getEntitiesByClass(MobEntity.class,
-                player.getBoundingBox().expand(radius), MobEntity::isAlive)) {
+        for (MobEntity living :
+                player.getWorld()
+                        .getEntitiesByClass(
+                                MobEntity.class,
+                                player.getBoundingBox().expand(radius),
+                                MobEntity::isAlive)) {
             if (living.squaredDistanceTo(player) > radiusSquared) continue;
-            living.addStatusEffect(new StatusEffectInstance(StatusEffects.GLOWING, revealTicks, 0, false, false, false));
+            living.addStatusEffect(
+                    new StatusEffectInstance(
+                            StatusEffects.GLOWING, revealTicks, 0, false, false, false));
             detected++;
         }
         state.longProgress("vampire.blood_sense_ready_at", now + (lord ? 10L : 20L) * 20L);
-        player.getServerWorld().spawnParticles(ParticleTypes.CRIMSON_SPORE, player.getX(), player.getBodyY(0.8D), player.getZ(),
-                28, 0.55D, 0.75D, 0.55D, 0.02D);
-        player.getServerWorld().spawnParticles(org.marj4n.smooth_classes.registry.SmoothParticles.VAMPIRE_BAT_SWARM,
-                player.getX(), player.getBodyY(0.8D), player.getZ(),
-                12, 0.40D, 0.55D, 0.40D, 0.08D);
-        player.getServerWorld().spawnParticles(ParticleTypes.ENCHANT, player.getX(), player.getBodyY(0.8D), player.getZ(),
-                18, 0.42D, 0.60D, 0.42D, 0.04D);
-        player.getServerWorld().playSound(null, player.getBlockPos(),
-                net.minecraft.sound.SoundEvents.ENTITY_WARDEN_HEARTBEAT,
-                net.minecraft.sound.SoundCategory.PLAYERS, 0.45F, 1.45F);
-        player.getServerWorld().playSound(null, player.getBlockPos(),
-                net.minecraft.sound.SoundEvents.BLOCK_SCULK_SHRIEKER_SHRIEK,
-                net.minecraft.sound.SoundCategory.PLAYERS, 0.18F, 1.8F);
+        player.getServerWorld()
+                .spawnParticles(
+                        ParticleTypes.CRIMSON_SPORE,
+                        player.getX(),
+                        player.getBodyY(0.8D),
+                        player.getZ(),
+                        28,
+                        0.55D,
+                        0.75D,
+                        0.55D,
+                        0.02D);
+        player.getServerWorld()
+                .spawnParticles(
+                        org.marj4n.smooth_classes.registry.SmoothParticles.VAMPIRE_BAT_SWARM,
+                        player.getX(),
+                        player.getBodyY(0.8D),
+                        player.getZ(),
+                        12,
+                        0.40D,
+                        0.55D,
+                        0.40D,
+                        0.08D);
+        player.getServerWorld()
+                .spawnParticles(
+                        ParticleTypes.ENCHANT,
+                        player.getX(),
+                        player.getBodyY(0.8D),
+                        player.getZ(),
+                        18,
+                        0.42D,
+                        0.60D,
+                        0.42D,
+                        0.04D);
+        player.getServerWorld()
+                .playSound(
+                        null,
+                        player.getBlockPos(),
+                        net.minecraft.sound.SoundEvents.ENTITY_WARDEN_HEARTBEAT,
+                        net.minecraft.sound.SoundCategory.PLAYERS,
+                        0.45F,
+                        1.45F);
+        player.getServerWorld()
+                .playSound(
+                        null,
+                        player.getBlockPos(),
+                        net.minecraft.sound.SoundEvents.BLOCK_SCULK_SHRIEKER_SHRIEK,
+                        net.minecraft.sound.SoundCategory.PLAYERS,
+                        0.18F,
+                        1.8F);
         SmoothClassesNetworking.sendOriginState(player);
         return Result.ok("Blood Sense: " + detected + " targets detected.");
     }
 
     private static Result activateMermaid(ServerPlayerEntity player, OriginState state, int slot) {
         if (slot == 0) {
-            if (!OriginSkillRuntime.unlocked(player, OriginType.MERMAID, "siren_voice")) return Result.fail("Siren Voice is still locked.");
+            if (!OriginSkillRuntime.unlocked(player, OriginType.MERMAID, "siren_voice"))
+                return Result.fail("Siren Voice is still locked.");
             long ready = state.longProgress("mermaid.siren_ready_at");
-            if (player.getWorld().getTime() < ready) return Result.fail("Siren Voice is recovering.");
-            double radius = OriginSkillRuntime.unlocked(player, OriginType.MERMAID, "drowned_song") ? 18.0D : 12.0D;
-            for (MobEntity mob : player.getWorld().getEntitiesByClass(MobEntity.class, player.getBoundingBox().expand(radius), MobEntity::isAlive)) {
+            if (player.getWorld().getTime() < ready)
+                return Result.fail("Siren Voice is recovering.");
+            double radius =
+                    OriginSkillRuntime.unlocked(player, OriginType.MERMAID, "drowned_song")
+                            ? 18.0D
+                            : 12.0D;
+            for (MobEntity mob :
+                    player.getWorld()
+                            .getEntitiesByClass(
+                                    MobEntity.class,
+                                    player.getBoundingBox().expand(radius),
+                                    MobEntity::isAlive)) {
                 mob.setTarget(null);
-                mob.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 20 * 6, 2, false, true, true));
-                mob.addStatusEffect(new StatusEffectInstance(StatusEffects.WEAKNESS, 20 * 6, 1, false, true, true));
+                mob.addStatusEffect(
+                        new StatusEffectInstance(
+                                StatusEffects.SLOWNESS, 20 * 6, 2, false, true, true));
+                mob.addStatusEffect(
+                        new StatusEffectInstance(
+                                StatusEffects.WEAKNESS, 20 * 6, 1, false, true, true));
                 Vec3d toward = player.getPos().subtract(mob.getPos());
-                if (toward.lengthSquared() > 0.001D) mob.addVelocity(toward.normalize().multiply(0.12D));
+                if (toward.lengthSquared() > 0.001D)
+                    mob.addVelocity(toward.normalize().multiply(0.12D));
             }
             state.longProgress("mermaid.siren_ready_at", player.getWorld().getTime() + 20L * 30L);
             return Result.ok("Siren Voice.");
         }
 
         if (slot == 1) {
-            if (!OriginSkillRuntime.unlocked(player, OriginType.MERMAID, "sea_kinship")) return Result.fail("Sea Kinship is still locked.");
-            if (!player.isTouchingWaterOrRain()) return Result.fail("You need water for Tidal Rush.");
+            if (!OriginSkillRuntime.unlocked(player, OriginType.MERMAID, "sea_kinship"))
+                return Result.fail("Sea Kinship is still locked.");
+            if (!player.isTouchingWaterOrRain())
+                return Result.fail("You need water for Tidal Rush.");
             Vec3d look = player.getRotationVec(1.0F).normalize();
             player.setVelocity(look.x * 1.35D, Math.max(0.15D, look.y * 0.8D), look.z * 1.35D);
             player.velocityModified = true;
             return Result.ok("Tidal Rush.");
         }
 
-        if (!OriginSkillRuntime.unlocked(player, OriginType.MERMAID, "final")) return Result.fail("Mermaid Queen is still locked.");
-        for (MobEntity mob : player.getWorld().getEntitiesByClass(MobEntity.class, player.getBoundingBox().expand(24.0D), MobEntity::isAlive)) {
+        if (!OriginSkillRuntime.unlocked(player, OriginType.MERMAID, "final"))
+            return Result.fail("Mermaid Queen is still locked.");
+        for (MobEntity mob :
+                player.getWorld()
+                        .getEntitiesByClass(
+                                MobEntity.class,
+                                player.getBoundingBox().expand(24.0D),
+                                MobEntity::isAlive)) {
             if (mob instanceof GuardianEntity || mob instanceof DrownedEntity) mob.setTarget(null);
         }
-        player.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 20 * 10, 1, false, true, true));
-        player.addStatusEffect(new StatusEffectInstance(StatusEffects.DOLPHINS_GRACE, 20 * 15, 1, false, true, true));
+        player.addStatusEffect(
+                new StatusEffectInstance(
+                        StatusEffects.REGENERATION, 20 * 10, 1, false, true, true));
+        player.addStatusEffect(
+                new StatusEffectInstance(
+                        StatusEffects.DOLPHINS_GRACE, 20 * 15, 1, false, true, true));
         return Result.ok("Royal Tide.");
     }
 
     private static Result activateSlime(ServerPlayerEntity player, OriginState state, int slot) {
         if (slot == 0) {
-            if (!OriginSkillRuntime.unlocked(player, OriginType.SLIME, "humanoid")) return Result.fail("Humanoid Form is still locked.");
+            if (!OriginSkillRuntime.unlocked(player, OriginType.SLIME, "humanoid"))
+                return Result.fail("Humanoid Form is still locked.");
             boolean humanoid = state.toggleFlag("slime.form.humanoid");
             player.calculateDimensions();
             SmoothClassesNetworking.sendOriginState(player);
@@ -212,7 +304,8 @@ public final class OriginAbilityDispatcher {
 
         if (slot == 1) {
             if (!OriginSkillRuntime.unlocked(player, OriginType.SLIME, "size_control")) {
-                if (!OriginSkillRuntime.unlocked(player, OriginType.SLIME, "squeeze")) return Result.fail("Squeeze is still locked.");
+                if (!OriginSkillRuntime.unlocked(player, OriginType.SLIME, "squeeze"))
+                    return Result.fail("Squeeze is still locked.");
                 boolean squeeze = state.toggleFlag("slime.squeeze");
                 player.calculateDimensions();
                 SmoothClassesNetworking.sendOriginState(player);
@@ -238,19 +331,22 @@ public final class OriginAbilityDispatcher {
             return Result.ok("Small Slime.");
         }
 
-        if (!OriginSkillRuntime.unlocked(player, OriginType.SLIME, "fragment")) return Result.fail("Fragmentation is still locked.");
+        if (!OriginSkillRuntime.unlocked(player, OriginType.SLIME, "fragment"))
+            return Result.fail("Fragmentation is still locked.");
         long ready = state.longProgress("slime.fragment_manual_ready_at");
         if (player.getWorld().getTime() < ready) return Result.fail("Fragmentation is recovering.");
-        player.addStatusEffect(new StatusEffectInstance(StatusEffects.RESISTANCE, 20 * 6, 2, false, true, true));
-        player.addStatusEffect(new StatusEffectInstance(StatusEffects.REGENERATION, 20 * 6, 1, false, true, true));
-        player.addStatusEffect(new StatusEffectInstance(StatusEffects.SPEED, 20 * 6, 1, false, true, true));
-        state.longProgress("slime.fragment_manual_ready_at", player.getWorld().getTime() + 20L * 90L);
+        player.addStatusEffect(
+                new StatusEffectInstance(StatusEffects.RESISTANCE, 20 * 6, 2, false, true, true));
+        player.addStatusEffect(
+                new StatusEffectInstance(StatusEffects.REGENERATION, 20 * 6, 1, false, true, true));
+        player.addStatusEffect(
+                new StatusEffectInstance(StatusEffects.SPEED, 20 * 6, 1, false, true, true));
+        state.longProgress(
+                "slime.fragment_manual_ready_at", player.getWorld().getTime() + 20L * 90L);
         return Result.ok("Fragmentation.");
     }
 
     private static void vampireTransformFx(ServerPlayerEntity player, boolean entering) {
         VampireTransformationEffects.play(player, entering);
     }
-
-
 }

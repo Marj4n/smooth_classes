@@ -19,7 +19,7 @@ public class OrbitingEffectRenderer implements CustomModelStatusEffect.Renderer 
     private final float scale;
     private final float horizontalOffset;
 
-    public void setSpeed (float newSpeed) {
+    public void setSpeed(float newSpeed) {
         speed = newSpeed;
     }
 
@@ -29,7 +29,14 @@ public class OrbitingEffectRenderer implements CustomModelStatusEffect.Renderer 
         this.horizontalOffset = horizontalOffset;
     }
 
-    public void renderEffect(long startTime, int amplifier, LivingEntity livingEntity, float delta, MatrixStack matrixStack, VertexConsumerProvider vertexConsumers, int light) {
+    public void renderEffect(
+            long startTime,
+            int amplifier,
+            LivingEntity livingEntity,
+            float delta,
+            MatrixStack matrixStack,
+            VertexConsumerProvider vertexConsumers,
+            int light) {
         matrixStack.push();
         float time = livingEntity.getWorld().getTime() + delta;
         float initialAngle = time * speed - 45.0F;
@@ -39,23 +46,48 @@ public class OrbitingEffectRenderer implements CustomModelStatusEffect.Renderer 
         int stacks = amplifier + 1;
         float turnAngle = 360.0F / stacks;
 
-        for(int i = 0; i < stacks; ++i) {
+        for (int i = 0; i < stacks; ++i) {
             float angle = initialAngle + turnAngle * i;
-            renderModel(matrixStack, this.scale, verticalOffset, horizontalOffset, angle, itemRenderer, vertexConsumers, light, livingEntity);
+            renderModel(
+                    matrixStack,
+                    this.scale,
+                    verticalOffset,
+                    horizontalOffset,
+                    angle,
+                    itemRenderer,
+                    vertexConsumers,
+                    light,
+                    livingEntity);
         }
 
         matrixStack.pop();
     }
 
-    private void renderModel(MatrixStack matrixStack, float scale, float verticalOffset, float horizontalOffset, float rotation, ItemRenderer itemRenderer, VertexConsumerProvider vertexConsumers, int light, LivingEntity livingEntity) {
+    private void renderModel(
+            MatrixStack matrixStack,
+            float scale,
+            float verticalOffset,
+            float horizontalOffset,
+            float rotation,
+            ItemRenderer itemRenderer,
+            VertexConsumerProvider vertexConsumers,
+            int light,
+            LivingEntity livingEntity) {
         matrixStack.push();
         matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(rotation));
         matrixStack.translate(0.0F, verticalOffset, -horizontalOffset);
         matrixStack.scale(scale, scale, scale);
 
-        for(Model model : models) {
+        for (Model model : models) {
             matrixStack.push();
-            CustomModels.render(model.layer(), itemRenderer, model.modelId(), matrixStack, vertexConsumers, light, livingEntity.getId());
+            CustomModels.render(
+                    model.layer(),
+                    itemRenderer,
+                    model.modelId(),
+                    matrixStack,
+                    vertexConsumers,
+                    light,
+                    livingEntity.getId());
             matrixStack.pop();
         }
 

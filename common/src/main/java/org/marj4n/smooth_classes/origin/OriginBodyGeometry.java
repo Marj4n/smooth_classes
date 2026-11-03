@@ -23,6 +23,7 @@ public final class OriginBodyGeometry {
      * collision body, which caused TPV to clip ceilings while FPV remained below.
      */
     public static final double BAT_FLIGHT_VISUAL_LIFT = 0.14D;
+
     public static final double BAT_AIRBORNE_RENDER_Y =
             BAT_GROUNDED_RENDER_Y - BAT_FLIGHT_VISUAL_LIFT;
 

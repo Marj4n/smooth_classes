@@ -17,40 +17,39 @@ import static org.marj4n.smooth_classes.SmoothClasses.MOD_ID;
  */
 public final class ModelRegistry {
 
-    private ModelRegistry() {
-    }
+    private ModelRegistry() {}
 
-    public static final List<Identifier> CUSTOM_MODELS = List.of(
-            // Spell projectile models
-            id("spell_projectile/swordfall"),
-            id("spell_projectile/sword"),
-            id("spell_projectile/ice_projectile"),
-            id("spell_projectile/fire_projectile"),
-            id("spell_projectile/lightning_projectile"),
-            id("spell_projectile/arcane_projectile"),
-            id("spell_projectile/meteor_projectile"),
-            id("spell_projectile/comet_projectile"),
-            id("spell_projectile/arcane_slash"),
-            id("spell_projectile/arrow"),
-            id("spell_projectile/righteous_shield"),
-            id("spell_projectile/righteous_hammers"),
-            id("spell_projectile/eldritch_hammers"),
-            id("spell_projectile/bones"),
+    public static final List<Identifier> CUSTOM_MODELS =
+            List.of(
+                    // Spell projectile models
+                    id("spell_projectile/swordfall"),
+                    id("spell_projectile/sword"),
+                    id("spell_projectile/ice_projectile"),
+                    id("spell_projectile/fire_projectile"),
+                    id("spell_projectile/lightning_projectile"),
+                    id("spell_projectile/arcane_projectile"),
+                    id("spell_projectile/meteor_projectile"),
+                    id("spell_projectile/comet_projectile"),
+                    id("spell_projectile/arcane_slash"),
+                    id("spell_projectile/arrow"),
+                    id("spell_projectile/righteous_shield"),
+                    id("spell_projectile/righteous_hammers"),
+                    id("spell_projectile/eldritch_hammers"),
+                    id("spell_projectile/bones"),
 
-            // Custom status/effect models
-            id("effect/barrier"),
-            id("effect/curse"),
-            id("effect/crimson_revenant_skull"),
-            id("effect/crimson_revenant_avatar"),
-            id("effect/death_mark"),
-            id("effect/immobilize"),
-            id("effect/magic_circle"),
-            id("effect/taunted"),
-            id("effect/undying"),
-            id("effect/undying_barrier"),
-            id("effect/undying_glow"),
-            id("effect/vitality_bond")
-    );
+                    // Custom status/effect models
+                    id("effect/barrier"),
+                    id("effect/curse"),
+                    id("effect/crimson_revenant_skull"),
+                    id("effect/crimson_revenant_avatar"),
+                    id("effect/death_mark"),
+                    id("effect/immobilize"),
+                    id("effect/magic_circle"),
+                    id("effect/taunted"),
+                    id("effect/undying"),
+                    id("effect/undying_barrier"),
+                    id("effect/undying_glow"),
+                    id("effect/vitality_bond"));
 
     private static boolean registered;
 

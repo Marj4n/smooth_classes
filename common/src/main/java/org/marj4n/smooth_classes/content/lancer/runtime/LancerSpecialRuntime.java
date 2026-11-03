@@ -39,6 +39,7 @@ public final class LancerSpecialRuntime {
     }
 
     private static final Map<UUID, State> STATES = new HashMap<>();
+
     private LancerSpecialRuntime() {}
 
     public static ExecutionResult activate(ServerPlayerEntity player) {
@@ -53,18 +54,28 @@ public final class LancerSpecialRuntime {
                 current.diving = true;
                 Vec3d look = player.getRotationVec(1.0F).normalize();
                 double horizontal = 1.25D;
-                player.setVelocity(look.x * horizontal, Math.min(-1.45D, look.y * 1.2D - 0.9D), look.z * horizontal);
+                player.setVelocity(
+                        look.x * horizontal,
+                        Math.min(-1.45D, look.y * 1.2D - 0.9D),
+                        look.z * horizontal);
                 player.velocityModified = true;
                 player.fallDistance = 0F;
                 diveFx(player);
                 return ExecutionResult.success(1, "High Jump converted into Dragoon Dive.");
             }
-            return ExecutionResult.failure(current.diving ? "Dragoon Dive is already descending." : "Get airborne before diving.");
+            return ExecutionResult.failure(
+                    current.diving
+                            ? "Dragoon Dive is already descending."
+                            : "Get airborne before diving.");
         }
 
-        if (!player.isOnGround()) return ExecutionResult.failure("High Jump must start from the ground.");
+        if (!player.isOnGround())
+            return ExecutionResult.failure("High Jump must start from the ground.");
         if (!AbilityCooldowns.ready(player, ID))
-            return ExecutionResult.failure("High Jump can be used again in " + seconds(AbilityCooldowns.remainingTicks(player, ID)) + "s.");
+            return ExecutionResult.failure(
+                    "High Jump can be used again in "
+                            + seconds(AbilityCooldowns.remainingTicks(player, ID))
+                            + "s.");
 
         State state = new State();
         state.startedAt = player.getServer().getTicks();
@@ -95,10 +106,28 @@ public final class LancerSpecialRuntime {
 
         if (state.diving) {
             if ((player.age % 2) == 0) {
-                player.getServerWorld().spawnParticles(ParticleTypes.CLOUD,
-                        player.getX(), player.getBodyY(0.45D), player.getZ(), 4, 0.22D, 0.25D, 0.22D, 0.03D);
-                player.getServerWorld().spawnParticles(ParticleTypes.CRIT,
-                        player.getX(), player.getBodyY(0.4D), player.getZ(), 3, 0.18D, 0.2D, 0.18D, 0.02D);
+                player.getServerWorld()
+                        .spawnParticles(
+                                ParticleTypes.CLOUD,
+                                player.getX(),
+                                player.getBodyY(0.45D),
+                                player.getZ(),
+                                4,
+                                0.22D,
+                                0.25D,
+                                0.22D,
+                                0.03D);
+                player.getServerWorld()
+                        .spawnParticles(
+                                ParticleTypes.CRIT,
+                                player.getX(),
+                                player.getBodyY(0.4D),
+                                player.getZ(),
+                                3,
+                                0.18D,
+                                0.2D,
+                                0.18D,
+                                0.02D);
             }
             if (state.airTicks > 4 && player.isOnGround()) {
                 impact(player, state);
@@ -117,7 +146,12 @@ public final class LancerSpecialRuntime {
     }
 
     private static void impact(ServerPlayerEntity player, State state) {
-        float damage = (float) Math.max(4.0D, player.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE) * 1.65D);
+        float damage =
+                (float)
+                        Math.max(
+                                4.0D,
+                                player.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE)
+                                        * 1.65D);
         int hits = 0;
         for (LivingEntity target : CombatRuntime.nearbyEnemies(player, 4.0D)) {
             target.timeUntilRegen = 0;
@@ -131,9 +165,33 @@ public final class LancerSpecialRuntime {
         LancerRuntime.grantSpecialMomentum(player, hits > 0 ? 12 : 4);
         var world = player.getServerWorld();
         spawnSpearEruption(player, state.spearVisual);
-        world.spawnParticles(ParticleTypes.EXPLOSION, player.getX(), player.getY() + 0.15D, player.getZ(), 4, 1.25D, 0.15D, 1.25D, 0.0D);
-        world.spawnParticles(ParticleTypes.CRIT, player.getX(), player.getY() + 0.2D, player.getZ(), 42, 1.8D, 0.35D, 1.8D, 0.12D);
-        world.playSound(null, player.getBlockPos(), SoundEvents.ITEM_TRIDENT_THUNDER, SoundCategory.PLAYERS, 0.75F, 1.3F);
+        world.spawnParticles(
+                ParticleTypes.EXPLOSION,
+                player.getX(),
+                player.getY() + 0.15D,
+                player.getZ(),
+                4,
+                1.25D,
+                0.15D,
+                1.25D,
+                0.0D);
+        world.spawnParticles(
+                ParticleTypes.CRIT,
+                player.getX(),
+                player.getY() + 0.2D,
+                player.getZ(),
+                42,
+                1.8D,
+                0.35D,
+                1.8D,
+                0.12D);
+        world.playSound(
+                null,
+                player.getBlockPos(),
+                SoundEvents.ITEM_TRIDENT_THUNDER,
+                SoundCategory.PLAYERS,
+                0.75F,
+                1.3F);
     }
 
     private static void spawnSpearEruption(ServerPlayerEntity player, ItemStack visualStack) {
@@ -161,7 +219,8 @@ public final class LancerSpecialRuntime {
             spear.setPitch(-90.0F);
             world.spawnEntity(spear);
 
-            world.spawnParticles(ParticleTypes.CRIT, x, surfaceY + 0.05D, z, 3, 0.10D, 0.03D, 0.10D, 0.02D);
+            world.spawnParticles(
+                    ParticleTypes.CRIT, x, surfaceY + 0.05D, z, 3, 0.10D, 0.03D, 0.10D, 0.02D);
         }
     }
 
@@ -169,32 +228,98 @@ public final class LancerSpecialRuntime {
         double fallback = player.getY();
         Vec3d start = new Vec3d(x, fallback + 2.4D, z);
         Vec3d end = new Vec3d(x, fallback - 3.2D, z);
-        var hit = player.getServerWorld().raycast(new RaycastContext(
-                start, end, RaycastContext.ShapeType.COLLIDER, RaycastContext.FluidHandling.NONE, player));
-        return hit.getType() == net.minecraft.util.hit.HitResult.Type.MISS ? fallback : hit.getPos().y;
+        var hit =
+                player.getServerWorld()
+                        .raycast(
+                                new RaycastContext(
+                                        start,
+                                        end,
+                                        RaycastContext.ShapeType.COLLIDER,
+                                        RaycastContext.FluidHandling.NONE,
+                                        player));
+        return hit.getType() == net.minecraft.util.hit.HitResult.Type.MISS
+                ? fallback
+                : hit.getPos().y;
     }
 
     private static void leapFx(ServerPlayerEntity player) {
         var world = player.getServerWorld();
-        world.spawnParticles(ParticleTypes.CLOUD, player.getX(), player.getY() + 0.15D, player.getZ(), 28, 0.7D, 0.15D, 0.7D, 0.08D);
-        world.spawnParticles(ParticleTypes.END_ROD, player.getX(), player.getY() + 0.25D, player.getZ(), 12, 0.45D, 0.15D, 0.45D, 0.06D);
-        world.playSound(null, player.getBlockPos(), SoundEvents.ITEM_TRIDENT_RIPTIDE_1, SoundCategory.PLAYERS, 0.8F, 1.25F);
+        world.spawnParticles(
+                ParticleTypes.CLOUD,
+                player.getX(),
+                player.getY() + 0.15D,
+                player.getZ(),
+                28,
+                0.7D,
+                0.15D,
+                0.7D,
+                0.08D);
+        world.spawnParticles(
+                ParticleTypes.END_ROD,
+                player.getX(),
+                player.getY() + 0.25D,
+                player.getZ(),
+                12,
+                0.45D,
+                0.15D,
+                0.45D,
+                0.06D);
+        world.playSound(
+                null,
+                player.getBlockPos(),
+                SoundEvents.ITEM_TRIDENT_RIPTIDE_1,
+                SoundCategory.PLAYERS,
+                0.8F,
+                1.25F);
     }
 
     private static void diveFx(ServerPlayerEntity player) {
         var world = player.getServerWorld();
-        world.spawnParticles(ParticleTypes.FLASH, player.getX(), player.getBodyY(0.5D), player.getZ(), 1, 0, 0, 0, 0);
-        world.playSound(null, player.getBlockPos(), SoundEvents.ITEM_TRIDENT_RIPTIDE_2, SoundCategory.PLAYERS, 0.75F, 1.5F);
+        world.spawnParticles(
+                ParticleTypes.FLASH,
+                player.getX(),
+                player.getBodyY(0.5D),
+                player.getZ(),
+                1,
+                0,
+                0,
+                0,
+                0);
+        world.playSound(
+                null,
+                player.getBlockPos(),
+                SoundEvents.ITEM_TRIDENT_RIPTIDE_2,
+                SoundCategory.PLAYERS,
+                0.75F,
+                1.5F);
     }
 
-    public static boolean active(ServerPlayerEntity player) { return STATES.containsKey(player.getUuid()); }
+    public static boolean active(ServerPlayerEntity player) {
+        return STATES.containsKey(player.getUuid());
+    }
+
     public static int variant(ServerPlayerEntity player) {
         State state = STATES.get(player.getUuid());
         return state == null ? 0 : state.diving ? 2 : 1;
     }
-    public static long remainingTicks(ServerPlayerEntity player) { return AbilityCooldowns.remainingTicks(player, ID); }
-    public static int cooldownTicks() { return COOLDOWN_TICKS; }
-    public static void cleanup(ServerPlayerEntity player) { STATES.remove(player.getUuid()); }
-    public static void clear() { STATES.clear(); }
-    private static int seconds(long ticks) { return (int) Math.ceil(Math.max(0L, ticks) / 20.0D); }
+
+    public static long remainingTicks(ServerPlayerEntity player) {
+        return AbilityCooldowns.remainingTicks(player, ID);
+    }
+
+    public static int cooldownTicks() {
+        return COOLDOWN_TICKS;
+    }
+
+    public static void cleanup(ServerPlayerEntity player) {
+        STATES.remove(player.getUuid());
+    }
+
+    public static void clear() {
+        STATES.clear();
+    }
+
+    private static int seconds(long ticks) {
+        return (int) Math.ceil(Math.max(0L, ticks) / 20.0D);
+    }
 }

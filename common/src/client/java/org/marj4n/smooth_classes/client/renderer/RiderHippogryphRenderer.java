@@ -1,7 +1,5 @@
 package org.marj4n.smooth_classes.client.renderer;
 
-
-
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.MobEntityRenderer;
 import net.minecraft.client.util.math.MatrixStack;
@@ -18,7 +16,10 @@ public final class RiderHippogryphRenderer
             SmoothClasses.id("textures/entity/rider/hippogryph_white.png");
 
     public RiderHippogryphRenderer(EntityRendererFactory.Context ctx) {
-        super(ctx, new RiderHippogryphModel(ctx.getPart(SmoothClassesClient.RIDER_HIPPOGRYPH_MODEL)), 0.8F);
+        super(
+                ctx,
+                new RiderHippogryphModel(ctx.getPart(SmoothClassesClient.RIDER_HIPPOGRYPH_MODEL)),
+                0.8F);
         this.addFeature(new RiderHippogryphWindTrailFeature(this));
     }
 

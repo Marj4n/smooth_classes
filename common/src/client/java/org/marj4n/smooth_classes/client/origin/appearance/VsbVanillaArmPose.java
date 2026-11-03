@@ -20,8 +20,9 @@ final class VsbVanillaArmPose {
 
     private VsbVanillaArmPose() {}
 
-    record Arms(Map<String, VsbFiguraAvatarRenderer.Vec3> rotations,
-                Map<String, VsbFiguraAvatarRenderer.Vec3> offsets) {}
+    record Arms(
+            Map<String, VsbFiguraAvatarRenderer.Vec3> rotations,
+            Map<String, VsbFiguraAvatarRenderer.Vec3> offsets) {}
 
     static Arms capture(PlayerEntityModel<?> model) {
         if (model == null) return new Arms(Map.of(), Map.of());
@@ -32,21 +33,27 @@ final class VsbVanillaArmPose {
         return new Arms(rotations, offsets);
     }
 
-    private static void put(Map<String, VsbFiguraAvatarRenderer.Vec3> rotation,
-                            Map<String, VsbFiguraAvatarRenderer.Vec3> offset,
-                            String sourceBone, ModelPart part, float vanillaPivotX) {
-        if (!Float.isFinite(part.pitch) || !Float.isFinite(part.yaw)
-                || !Float.isFinite(part.roll) || !Float.isFinite(part.pivotX)
-                || !Float.isFinite(part.pivotY) || !Float.isFinite(part.pivotZ)) return;
-        rotation.put(sourceBone, new VsbFiguraAvatarRenderer.Vec3(
-                -part.pitch * DEGREES,
-                part.yaw * DEGREES,
-                -part.roll * DEGREES));
+    private static void put(
+            Map<String, VsbFiguraAvatarRenderer.Vec3> rotation,
+            Map<String, VsbFiguraAvatarRenderer.Vec3> offset,
+            String sourceBone,
+            ModelPart part,
+            float vanillaPivotX) {
+        if (!Float.isFinite(part.pitch)
+                || !Float.isFinite(part.yaw)
+                || !Float.isFinite(part.roll)
+                || !Float.isFinite(part.pivotX)
+                || !Float.isFinite(part.pivotY)
+                || !Float.isFinite(part.pivotZ)) return;
+        rotation.put(
+                sourceBone,
+                new VsbFiguraAvatarRenderer.Vec3(
+                        -part.pitch * DEGREES, part.yaw * DEGREES, -part.roll * DEGREES));
         // Copy extra animator arm translations relative to the vanilla biped
         // shoulder. Flip only Y because VSB Blockbench uses Y-up.
-        offset.put(sourceBone, new VsbFiguraAvatarRenderer.Vec3(
-                part.pivotX - vanillaPivotX,
-                -(part.pivotY - 2F),
-                part.pivotZ));
+        offset.put(
+                sourceBone,
+                new VsbFiguraAvatarRenderer.Vec3(
+                        part.pivotX - vanillaPivotX, -(part.pivotY - 2F), part.pivotZ));
     }
 }

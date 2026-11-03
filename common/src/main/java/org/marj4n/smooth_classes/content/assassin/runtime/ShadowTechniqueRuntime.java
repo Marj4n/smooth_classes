@@ -38,9 +38,18 @@ public final class ShadowTechniqueRuntime {
     private static final int SHADOW_LIFETIME_TICKS = 200; // 10s
     private static final int DASH_TICKS = 6;
 
-    private record Shadow(ServerWorld world, ShadowAnchorEntity anchor, long expires, float yaw, float pitch) {}
-    private record Dash(ServerWorld world, Vec3d start, Vec3d end, float yaw, float pitch,
-                        int tick, boolean returning, UUID blindTarget) {}
+    private record Shadow(
+            ServerWorld world, ShadowAnchorEntity anchor, long expires, float yaw, float pitch) {}
+
+    private record Dash(
+            ServerWorld world,
+            Vec3d start,
+            Vec3d end,
+            float yaw,
+            float pitch,
+            int tick,
+            boolean returning,
+            UUID blindTarget) {}
 
     private static final Map<UUID, Shadow> ACTIVE = new HashMap<>();
     private static final Map<UUID, Dash> DASHES = new HashMap<>();
@@ -55,34 +64,41 @@ public final class ShadowTechniqueRuntime {
     }
 
     public static void register() {
-        ServerTickEvents.END_SERVER_TICK.register(server -> {
-            BLINDED.values().removeIf(until -> server.getTicks() >= until);
+        ServerTickEvents.END_SERVER_TICK.register(
+                server -> {
+                    BLINDED.values().removeIf(until -> server.getTicks() >= until);
 
-            for (UUID id : new ArrayList<>(DASHES.keySet())) {
-                ServerPlayerEntity player = server.getPlayerManager().getPlayer(id);
-                tickDash(id, player);
-            }
+                    for (UUID id : new ArrayList<>(DASHES.keySet())) {
+                        ServerPlayerEntity player = server.getPlayerManager().getPlayer(id);
+                        tickDash(id, player);
+                    }
 
-            for (UUID id : new ArrayList<>(ACTIVE.keySet())) {
-                Shadow shadow = ACTIVE.get(id);
-                ServerPlayerEntity player = server.getPlayerManager().getPlayer(id);
-                if (shadow == null) continue;
-                if (player == null || !player.isAlive() || player.getServerWorld() != shadow.world || shadow.anchor.isRemoved()) {
-                    finish(id, player, true);
-                    continue;
-                }
-                if (shadow.world.getTime() >= shadow.expires && !DASHES.containsKey(id)) {
-                    finish(id, player, true);
-                }
-            }
-        });
-        ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> finish(handler.player.getUuid(), handler.player, true));
-        ServerLifecycleEvents.SERVER_STOPPING.register(server -> {
-            for (UUID id : new ArrayList<>(ACTIVE.keySet())) finish(id, server.getPlayerManager().getPlayer(id), true);
-            DASHES.clear();
-            EMPOWERED.clear();
-            BLINDED.clear();
-        });
+                    for (UUID id : new ArrayList<>(ACTIVE.keySet())) {
+                        Shadow shadow = ACTIVE.get(id);
+                        ServerPlayerEntity player = server.getPlayerManager().getPlayer(id);
+                        if (shadow == null) continue;
+                        if (player == null
+                                || !player.isAlive()
+                                || player.getServerWorld() != shadow.world
+                                || shadow.anchor.isRemoved()) {
+                            finish(id, player, true);
+                            continue;
+                        }
+                        if (shadow.world.getTime() >= shadow.expires && !DASHES.containsKey(id)) {
+                            finish(id, player, true);
+                        }
+                    }
+                });
+        ServerPlayConnectionEvents.DISCONNECT.register(
+                (handler, server) -> finish(handler.player.getUuid(), handler.player, true));
+        ServerLifecycleEvents.SERVER_STOPPING.register(
+                server -> {
+                    for (UUID id : new ArrayList<>(ACTIVE.keySet()))
+                        finish(id, server.getPlayerManager().getPlayer(id), true);
+                    DASHES.clear();
+                    EMPOWERED.clear();
+                    BLINDED.clear();
+                });
     }
 
     public static boolean owns(ShadowAnchorEntity entity) {
@@ -104,23 +120,33 @@ public final class ShadowTechniqueRuntime {
     public static int range(ServerPlayerEntity player) {
         if (player == null) return 10;
         int range = 10;
-        if (AbilityRuntime.hasTalent(player, AssassinContent.PREPARATION_SHADOWSTRIKE.id())) range += 4;
-        if (AbilityRuntime.hasTalent(player, AssassinContent.PREPARATION_SHADOWSTRIKE_VAMPIRE.id())) range += 4;
-        if (AbilityRuntime.hasTalent(player, AssassinContent.PREPARATION_SHADOWSTRIKE_SHIELD.id())) range += 4;
+        if (AbilityRuntime.hasTalent(player, AssassinContent.PREPARATION_SHADOWSTRIKE.id()))
+            range += 4;
+        if (AbilityRuntime.hasTalent(player, AssassinContent.PREPARATION_SHADOWSTRIKE_VAMPIRE.id()))
+            range += 4;
+        if (AbilityRuntime.hasTalent(player, AssassinContent.PREPARATION_SHADOWSTRIKE_SHIELD.id()))
+            range += 4;
         return range;
     }
 
     /** Base cooldown shown by the tree: 30s -> 25s -> 20s on the two pursuit upgrades. */
     public static int cooldownBaseTicks(ServerPlayerEntity player) {
         int ticks = 600;
-        if (player != null && AbilityRuntime.hasTalent(player, AssassinContent.PREPARATION_SHADOWSTRIKE_VAMPIRE.id())) ticks -= 100;
-        if (player != null && AbilityRuntime.hasTalent(player, AssassinContent.PREPARATION_SHADOWSTRIKE_SHIELD.id())) ticks -= 100;
+        if (player != null
+                && AbilityRuntime.hasTalent(
+                        player, AssassinContent.PREPARATION_SHADOWSTRIKE_VAMPIRE.id()))
+            ticks -= 100;
+        if (player != null
+                && AbilityRuntime.hasTalent(
+                        player, AssassinContent.PREPARATION_SHADOWSTRIKE_SHIELD.id())) ticks -= 100;
         return Math.max(20, ticks);
     }
 
     /** HUD total includes generic haste, but does not roll random optional-mod cooldown procs. */
     public static int cooldownHudTicks(ServerPlayerEntity player) {
-        return player == null ? 600 : AbilityCooldowns.adjustedTicks(player, cooldownBaseTicks(player));
+        return player == null
+                ? 600
+                : AbilityCooldowns.adjustedTicks(player, cooldownBaseTicks(player));
     }
 
     private static void finish(UUID id, ServerPlayerEntity player, boolean cooldown) {
@@ -135,7 +161,9 @@ public final class ShadowTechniqueRuntime {
             int cooldownTicks = 0;
             if (cooldown) {
                 int base = cooldownBaseTicks(player);
-                base = org.marj4n.smooth_classes.integration.OptionalCompatRuntime.signatureCooldown(player, base);
+                base =
+                        org.marj4n.smooth_classes.integration.OptionalCompatRuntime
+                                .signatureCooldown(player, base);
                 cooldownTicks = AbilityCooldowns.adjustedTicks(player, base);
             }
             AbilityCooldowns.start(player, SmoothClasses.id("preparation"), cooldownTicks);
@@ -144,22 +172,29 @@ public final class ShadowTechniqueRuntime {
     }
 
     private static void vanishFx(ServerWorld world, Vec3d pos) {
-        world.spawnParticles(ParticleTypes.LARGE_SMOKE, pos.x, pos.y + .9D, pos.z, 18, .35D, .7D, .35D, .025D);
-        world.spawnParticles(ParticleTypes.REVERSE_PORTAL, pos.x, pos.y + .9D, pos.z, 24, .4D, .8D, .4D, .08D);
+        world.spawnParticles(
+                ParticleTypes.LARGE_SMOKE, pos.x, pos.y + .9D, pos.z, 18, .35D, .7D, .35D, .025D);
+        world.spawnParticles(
+                ParticleTypes.REVERSE_PORTAL, pos.x, pos.y + .9D, pos.z, 24, .4D, .8D, .4D, .08D);
     }
 
     public static void onKill(ServerPlayerEntity player) {
-        if (ACTIVE.containsKey(player.getUuid()) || AbilityCooldowns.remainingTicks(player, SmoothClasses.id("preparation")) > 0)
+        if (ACTIVE.containsKey(player.getUuid())
+                || AbilityCooldowns.remainingTicks(player, SmoothClasses.id("preparation")) > 0)
             finish(player.getUuid(), player, false);
     }
 
     public static float empower(DamageSource source, float amount) {
-        return source.isOf(DamageTypes.PLAYER_ATTACK) && source.getAttacker() instanceof ServerPlayerEntity player
-                && EMPOWERED.contains(player.getUuid()) ? amount * 1.3F : amount;
+        return source.isOf(DamageTypes.PLAYER_ATTACK)
+                        && source.getAttacker() instanceof ServerPlayerEntity player
+                        && EMPOWERED.contains(player.getUuid())
+                ? amount * 1.3F
+                : amount;
     }
 
     public static void confirmedHit(DamageSource source) {
-        if (source.isOf(DamageTypes.PLAYER_ATTACK) && source.getAttacker() instanceof ServerPlayerEntity player)
+        if (source.isOf(DamageTypes.PLAYER_ATTACK)
+                && source.getAttacker() instanceof ServerPlayerEntity player)
             EMPOWERED.remove(player.getUuid());
     }
 
@@ -178,11 +213,14 @@ public final class ShadowTechniqueRuntime {
     }
 
     /** New aim-driven entry point used by the Shadow input packet. */
-    public static ExecutionResult castAimed(ServerPlayerEntity player, int entityId, Vec3d blockHit) {
-        if (!AbilityRuntime.isClass(player, AssassinClass.ID)) return ExecutionResult.failure("You are not an Assassin.");
+    public static ExecutionResult castAimed(
+            ServerPlayerEntity player, int entityId, Vec3d blockHit) {
+        if (!AbilityRuntime.isClass(player, AssassinClass.ID))
+            return ExecutionResult.failure("You are not an Assassin.");
         if (!"preparation".equals(SignatureAbilityDispatcher.selectedAbility(player)))
             return ExecutionResult.failure("Shadow Technique is not selected.");
-        if (DASHES.containsKey(player.getUuid())) return ExecutionResult.failure("Shadow movement is already in progress.");
+        if (DASHES.containsKey(player.getUuid()))
+            return ExecutionResult.failure("Shadow movement is already in progress.");
 
         Shadow old = ACTIVE.get(player.getUuid());
         if (old != null) return beginReturn(player, old);
@@ -199,23 +237,29 @@ public final class ShadowTechniqueRuntime {
             if (!(entity instanceof LivingEntity living) || living == player || !living.isAlive())
                 return ExecutionResult.failure("That shadow target is no longer valid.");
             if (living.isTeammate(player)
-                    || (living instanceof net.minecraft.entity.player.PlayerEntity other && !player.shouldDamagePlayer(other)))
+                    || (living instanceof net.minecraft.entity.player.PlayerEntity other
+                            && !player.shouldDamagePlayer(other)))
                 return ExecutionResult.failure("You cannot shadow-step to that target.");
-            if (player.getEyePos().squaredDistanceTo(living.getBoundingBox().getCenter()) > (range + 2D) * (range + 2D))
+            if (player.getEyePos().squaredDistanceTo(living.getBoundingBox().getCenter())
+                    > (range + 2D) * (range + 2D))
                 return ExecutionResult.failure("That target is outside shadow range.");
-            if (!player.canSee(living)) return ExecutionResult.failure("That target is not visible.");
+            if (!player.canSee(living))
+                return ExecutionResult.failure("That target is not visible.");
 
             target = living;
             double behind = Math.max(1.4D, (target.getWidth() + player.getWidth()) * .5D + .45D);
             Vec3d back = Vec3d.fromPolar(0F, target.getYaw()).multiply(-behind);
             destination = safeDestination(player, target.getPos().add(back));
         } else {
-            if (blockHit == null) return ExecutionResult.failure("Aim at a creature or block, then release Shadow Technique.");
+            if (blockHit == null)
+                return ExecutionResult.failure(
+                        "Aim at a creature or block, then release Shadow Technique.");
             Vec3d eye = player.getEyePos();
             Vec3d offset = blockHit.subtract(eye);
             if (offset.lengthSquared() > (range + .75D) * (range + .75D))
                 return ExecutionResult.failure("That block is outside shadow range.");
-            if (offset.lengthSquared() < .001D) return ExecutionResult.failure("No safe shadow destination.");
+            if (offset.lengthSquared() < .001D)
+                return ExecutionResult.failure("No safe shadow destination.");
 
             // Never trust the client-selected point by itself. Re-raycast from the
             // server player's current view so block Shadow steps cannot pass through
@@ -229,20 +273,38 @@ public final class ShadowTechniqueRuntime {
             destination = safeDestination(player, requested);
         }
 
-        if (destination == null) return ExecutionResult.failure("No safe space at the destination.");
+        if (destination == null)
+            return ExecutionResult.failure("No safe space at the destination.");
 
         ShadowAnchorEntity anchor = SmoothEntities.SHADOW_ANCHOR.create(player.getWorld());
         if (anchor == null) return ExecutionResult.failure("Cannot create shadow.");
-        anchor.refreshPositionAndAngles(player.getX(), player.getY(), player.getZ(), player.getYaw(), 0);
-        if (!player.getWorld().spawnEntity(anchor)) return ExecutionResult.failure("Cannot create shadow.");
+        anchor.refreshPositionAndAngles(
+                player.getX(), player.getY(), player.getZ(), player.getYaw(), 0);
+        if (!player.getWorld().spawnEntity(anchor))
+            return ExecutionResult.failure("Cannot create shadow.");
 
-        ACTIVE.put(player.getUuid(), new Shadow(player.getServerWorld(), anchor,
-                player.getWorld().getTime() + SHADOW_LIFETIME_TICKS, player.getYaw(), player.getPitch()));
+        ACTIVE.put(
+                player.getUuid(),
+                new Shadow(
+                        player.getServerWorld(),
+                        anchor,
+                        player.getWorld().getTime() + SHADOW_LIFETIME_TICKS,
+                        player.getYaw(),
+                        player.getPitch()));
         EMPOWERED.add(player.getUuid());
 
         UUID blindTarget = target == null ? null : target.getUuid();
-        DASHES.put(player.getUuid(), new Dash(player.getServerWorld(), player.getPos(), destination,
-                player.getYaw(), player.getPitch(), 0, false, blindTarget));
+        DASHES.put(
+                player.getUuid(),
+                new Dash(
+                        player.getServerWorld(),
+                        player.getPos(),
+                        destination,
+                        player.getYaw(),
+                        player.getPitch(),
+                        0,
+                        false,
+                        blindTarget));
         SmoothClassesNetworking.sendAbilityState(player);
         SkillFx.sound(player, "soundeffect_39", .6F, 1.2F);
         return ExecutionResult.success(1, "Shadow Technique");
@@ -251,8 +313,17 @@ public final class ShadowTechniqueRuntime {
     private static ExecutionResult beginReturn(ServerPlayerEntity player, Shadow shadow) {
         if (player.getServerWorld() != shadow.world || !free(player, shadow.anchor.getPos()))
             return ExecutionResult.failure("The return point is obstructed.");
-        DASHES.put(player.getUuid(), new Dash(shadow.world, player.getPos(), shadow.anchor.getPos(),
-                shadow.yaw, shadow.pitch, 0, true, null));
+        DASHES.put(
+                player.getUuid(),
+                new Dash(
+                        shadow.world,
+                        player.getPos(),
+                        shadow.anchor.getPos(),
+                        shadow.yaw,
+                        shadow.pitch,
+                        0,
+                        true,
+                        null));
         return ExecutionResult.success(1, "Returning to shadow");
     }
 
@@ -270,12 +341,21 @@ public final class ShadowTechniqueRuntime {
         Vec3d pos = dash.start.lerp(dash.end, eased);
         player.teleport(dash.world, pos.x, pos.y, pos.z, dash.yaw, dash.pitch);
         player.fallDistance = 0F;
-        dash.world.spawnParticles(ParticleTypes.REVERSE_PORTAL, pos.x, pos.y + .85D, pos.z,
-                4, .18D, .4D, .18D, .02D);
+        dash.world.spawnParticles(
+                ParticleTypes.REVERSE_PORTAL, pos.x, pos.y + .85D, pos.z, 4, .18D, .4D, .18D, .02D);
 
         if (nextTick < DASH_TICKS) {
-            DASHES.put(id, new Dash(dash.world, dash.start, dash.end, dash.yaw, dash.pitch,
-                    nextTick, dash.returning, dash.blindTarget));
+            DASHES.put(
+                    id,
+                    new Dash(
+                            dash.world,
+                            dash.start,
+                            dash.end,
+                            dash.yaw,
+                            dash.pitch,
+                            nextTick,
+                            dash.returning,
+                            dash.blindTarget));
             return;
         }
 
@@ -307,8 +387,16 @@ public final class ShadowTechniqueRuntime {
                         && player.canSee(target)) {
                     player.attack(target);
                     SkillFx.sound(player, "soundeffect_39", .7F, .82F);
-                    dash.world.spawnParticles(ParticleTypes.SWEEP_ATTACK,
-                            target.getX(), target.getBodyY(.55D), target.getZ(), 1, 0D, 0D, 0D, 0D);
+                    dash.world.spawnParticles(
+                            ParticleTypes.SWEEP_ATTACK,
+                            target.getX(),
+                            target.getBodyY(.55D),
+                            target.getZ(),
+                            1,
+                            0D,
+                            0D,
+                            0D,
+                            0D);
                 }
             }
         }
@@ -319,6 +407,7 @@ public final class ShadowTechniqueRuntime {
     public static ExecutionResult cast(ServerPlayerEntity player) {
         Shadow old = ACTIVE.get(player.getUuid());
         if (old != null) return beginReturn(player, old);
-        return ExecutionResult.failure("Hold the Shadow Technique key to aim, then release on a target or block.");
+        return ExecutionResult.failure(
+                "Hold the Shadow Technique key to aim, then release on a target or block.");
     }
 }

@@ -36,16 +36,19 @@ public final class VampireLordTeaser {
     private static final int TICKS_AFTER_LAST_BOLT = 48;
     private static final double RADIUS = 3.8D;
 
-    private VampireLordTeaser() { }
+    private VampireLordTeaser() {}
 
     /** Called only on the first successful unlocking of the final Vampire node. */
     public static void begin(ServerPlayerEntity player, OriginState state) {
         if (state.origin() != OriginType.VAMPIRE || state.hasFlag(REWARDED)) return;
-        if (state.longProgress(START_TICK) != 0L || state.longProgress(BOOK_READY_TICK) != 0L) return;
+        if (state.longProgress(START_TICK) != 0L || state.longProgress(BOOK_READY_TICK) != 0L)
+            return;
         state.progress(STRIKES, 0);
         state.longProgress(START_TICK, Math.max(1L, player.getServerWorld().getTime()));
-        player.sendMessage(Text.literal("Seven thunders answer the broken Grail...")
-                .formatted(Formatting.DARK_PURPLE), true);
+        player.sendMessage(
+                Text.literal("Seven thunders answer the broken Grail...")
+                        .formatted(Formatting.DARK_PURPLE),
+                true);
     }
 
     /** OP-only preview on a disposable test world; does NOT unlock Vampire Lord. */
@@ -106,10 +109,10 @@ public final class VampireLordTeaser {
             bolt.refreshPositionAfterTeleport(x, y, z);
             world.spawnEntity(bolt);
         }
-        world.spawnParticles(ParticleTypes.ELECTRIC_SPARK,
-                x, y + 0.50D, z, 18, 0.22D, 0.65D, 0.22D, 0.09D);
-        world.spawnParticles(ParticleTypes.CRIMSON_SPORE,
-                x, y + 0.15D, z, 13, 0.28D, 0.35D, 0.28D, 0.03D);
+        world.spawnParticles(
+                ParticleTypes.ELECTRIC_SPARK, x, y + 0.50D, z, 18, 0.22D, 0.65D, 0.22D, 0.09D);
+        world.spawnParticles(
+                ParticleTypes.CRIMSON_SPORE, x, y + 0.15D, z, 13, 0.28D, 0.35D, 0.28D, 0.03D);
     }
 
     private static void deliverBook(ServerPlayerEntity player) {
@@ -119,15 +122,26 @@ public final class VampireLordTeaser {
         }
         player.getInventory().markDirty();
         player.playerScreenHandler.sendContentUpdates();
-        player.getServerWorld().playSound(null, player.getBlockPos(),
-                SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.PLAYERS, 0.9F, 0.72F);
+        player.getServerWorld()
+                .playSound(
+                        null,
+                        player.getBlockPos(),
+                        SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE,
+                        SoundCategory.PLAYERS,
+                        0.9F,
+                        0.72F);
         player.networkHandler.sendPacket(new TitleFadeS2CPacket(10, 55, 25));
-        player.networkHandler.sendPacket(new TitleS2CPacket(
-                Text.literal("THE UNWRITTEN TESTAMENT").formatted(Formatting.DARK_RED)));
-        player.networkHandler.sendPacket(new SubtitleS2CPacket(
-                Text.literal("The Grail has not told its last secret.").formatted(Formatting.GRAY)));
-        player.sendMessage(Text.literal("A strange book has appeared. Its final page remains unwritten...")
-                .formatted(Formatting.LIGHT_PURPLE), false);
+        player.networkHandler.sendPacket(
+                new TitleS2CPacket(
+                        Text.literal("THE UNWRITTEN TESTAMENT").formatted(Formatting.DARK_RED)));
+        player.networkHandler.sendPacket(
+                new SubtitleS2CPacket(
+                        Text.literal("The Grail has not told its last secret.")
+                                .formatted(Formatting.GRAY)));
+        player.sendMessage(
+                Text.literal("A strange book has appeared. Its final page remains unwritten...")
+                        .formatted(Formatting.LIGHT_PURPLE),
+                false);
     }
 
     private static ItemStack makeBook() {
@@ -138,17 +152,33 @@ public final class VampireLordTeaser {
         nbt.putInt("generation", 0);
 
         NbtCompound display = new NbtCompound();
-        display.putString("Name", Text.Serializer.toJson(
-                Text.literal("The Unwritten Testament").formatted(Formatting.DARK_PURPLE, Formatting.ITALIC)));
+        display.putString(
+                "Name",
+                Text.Serializer.toJson(
+                        Text.literal("The Unwritten Testament")
+                                .formatted(Formatting.DARK_PURPLE, Formatting.ITALIC)));
         nbt.put("display", display);
 
         NbtList pages = new NbtList();
-        pages.add(page("SEVEN THUNDERS\n\nThe seven veils are broken.\nSeven thunders answered your awakening.\n\nBut thunder does not explain why a forgotten heart began to beat."));
-        pages.add(page("ONE GRAVE\n\nHundreds slept beneath the chapel.\nOnly one coffin stirred when the Holy Grail shattered.\n\nThe priests named it a curse. The gravedigger called it mercy."));
-        pages.add(page("THE UNANSWERED CALL\n\nDid the Grail truly choose you?\nOr did something hidden within its fragments recognize what the living had forgotten?\n\nEven the dead may carry secrets."));
-        pages.add(NbtString.of(Text.Serializer.toJson(
-                Text.literal("THE NEXT CHAPTER\n\nThe answer lies beyond the Seventh Veil.\n\n")
-                        .append(Text.literal("COMING SOON").formatted(Formatting.DARK_RED, Formatting.BOLD)))));
+        pages.add(
+                page(
+                        "SEVEN THUNDERS\n\nThe seven veils are broken.\nSeven thunders answered your awakening.\n\nBut thunder does not explain why a forgotten heart began to beat."));
+        pages.add(
+                page(
+                        "ONE GRAVE\n\nHundreds slept beneath the chapel.\nOnly one coffin stirred when the Holy Grail shattered.\n\nThe priests named it a curse. The gravedigger called it mercy."));
+        pages.add(
+                page(
+                        "THE UNANSWERED CALL\n\nDid the Grail truly choose you?\nOr did something hidden within its fragments recognize what the living had forgotten?\n\nEven the dead may carry secrets."));
+        pages.add(
+                NbtString.of(
+                        Text.Serializer.toJson(
+                                Text.literal(
+                                                "THE NEXT CHAPTER\n\nThe answer lies beyond the Seventh Veil.\n\n")
+                                        .append(
+                                                Text.literal("COMING SOON")
+                                                        .formatted(
+                                                                Formatting.DARK_RED,
+                                                                Formatting.BOLD)))));
         nbt.put("pages", pages);
         return book;
     }

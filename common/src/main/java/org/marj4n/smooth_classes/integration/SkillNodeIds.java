@@ -71,11 +71,14 @@ public final class SkillNodeIds {
     public static final String roguePath = "ib0a72j4dae7m4dx";
     public static final String rangerPath = "rlpa0zbspqxpn4vr";
     public static final String wizardSpellEcho = "668b6cq3md39qvos";
-    public static final String wizardSpecialisationMeteorShowerRenewingWrathTwo = "80vfz0ye7lxpzx0j";
-    public static final String wizardSpecialisationMeteorShowerRenewingWrathThree = "ryqv4fap1td01iwy";
+    public static final String wizardSpecialisationMeteorShowerRenewingWrathTwo =
+            "80vfz0ye7lxpzx0j";
+    public static final String wizardSpecialisationMeteorShowerRenewingWrathThree =
+            "ryqv4fap1td01iwy";
     public static final String wizardSpecialisationIceCometDamageTwo = "7ngfgbcdg33dpadz";
     public static final String wizardSpecialisationIceCometDamageThree = "m5h4006g0loxutrg";
-    public static final String wizardSpecialisationStaticDischargeLightningBall = "xb9uxi8zv4e1pdzy";
+    public static final String wizardSpecialisationStaticDischargeLightningBall =
+            "xb9uxi8zv4e1pdzy";
     public static final String wizardSpecialisationStaticDischargeLeapTwo = "09yy7mk9csney6w2";
     public static final String wizardSpecialisationStaticDischargeLeapThree = "cefchlgpfk2j5fg4";
     public static final String wizardSpecialisationStaticDischargeSpeedTwo = "s18lslxmj1eu3rmt";

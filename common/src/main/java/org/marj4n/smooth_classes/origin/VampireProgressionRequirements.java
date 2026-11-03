@@ -6,7 +6,7 @@ package org.marj4n.smooth_classes.origin;
  * Counters are lifetime milestones, not spendable Origin XP.
  */
 public final class VampireProgressionRequirements {
-    private VampireProgressionRequirements() { }
+    private VampireProgressionRequirements() {}
 
     public static final int BAT_KILLS = 5;
     public static final int MAN_BAT_HUMANOID_BLOOD = 200;

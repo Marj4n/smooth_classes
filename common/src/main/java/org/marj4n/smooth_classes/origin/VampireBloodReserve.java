@@ -20,17 +20,23 @@ public final class VampireBloodReserve {
     // Regeneration is intentionally slow. Taking the LAST portion is fatal.
     private static final long VILLAGER_REGEN = 75L * 20L;
     private static final long PASSIVE_REGEN = 55L * 20L;
-    private static final TagKey<EntityType<?>> ALLOW = TagKey.of(RegistryKeys.ENTITY_TYPE,
-            Identifier.of("smooth_classes", "vampire_blood_sources"));
-    private static final TagKey<EntityType<?>> DENY = TagKey.of(RegistryKeys.ENTITY_TYPE,
-            Identifier.of("smooth_classes", "vampire_blood_excluded"));
+    private static final TagKey<EntityType<?>> ALLOW =
+            TagKey.of(
+                    RegistryKeys.ENTITY_TYPE,
+                    Identifier.of("smooth_classes", "vampire_blood_sources"));
+    private static final TagKey<EntityType<?>> DENY =
+            TagKey.of(
+                    RegistryKeys.ENTITY_TYPE,
+                    Identifier.of("smooth_classes", "vampire_blood_excluded"));
 
     private VampireBloodReserve() {}
 
     public interface Holder {
         /** This value is backed by entity tracked data and synchronizes to clients. */
         int smooth_classes$getBloodPips();
+
         long smooth_classes$getBloodUpdatedAt();
+
         void smooth_classes$setBloodReserve(int pips, long timestamp);
     }
 
@@ -61,8 +67,8 @@ public final class VampireBloodReserve {
             count = (int) Math.min(MAX_PIPS, count + gained);
             // Carry leftover time so a partially depleted animal can continue
             // recovering at the same interval, independent of feeding attempts.
-            holder.smooth_classes$setBloodReserve(count,
-                    count == MAX_PIPS ? now : last + gained * period);
+            holder.smooth_classes$setBloodReserve(
+                    count, count == MAX_PIPS ? now : last + gained * period);
         }
         return count;
     }
@@ -72,8 +78,8 @@ public final class VampireBloodReserve {
      * portion is taken. A partially drained survivor can regenerate over time.
      */
     public static boolean consume(LivingEntity target, ServerPlayerEntity vampire) {
-        if (target.getWorld().isClient || !isFeedable(target)
-                || !(target instanceof Holder holder)) return false;
+        if (target.getWorld().isClient || !isFeedable(target) || !(target instanceof Holder holder))
+            return false;
         int pips = available(target);
         if (pips <= 0) return false;
 

@@ -12,7 +12,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(KeyboardInput.class)
 public abstract class VampireBatPerchKeyboardInputMixin {
     @Inject(method = "tick", at = @At("TAIL"))
-    private void smooth_classes$lockPerchedBatKeyboard(boolean slowDown, float slowDownFactor, CallbackInfo ci) {
+    private void smooth_classes$lockPerchedBatKeyboard(
+            boolean slowDown, float slowDownFactor, CallbackInfo ci) {
         if (!"vampire".equals(OriginClientState.originId)
                 || !OriginClientState.hasFlag("vampire.form.bat")
                 || !OriginClientState.hasFlag("vampire.bat.perched")) return;

@@ -1,6 +1,5 @@
 package org.marj4n.smooth_classes;
 
-
 import net.minecraft.util.Identifier;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.spell_engine.api.spell.event.SpellEvents;
@@ -27,6 +26,7 @@ public final class SmoothClasses {
     public static Identifier id(String path) {
         return Identifier.of(MOD_ID, path);
     }
+
     public void onInitialize() {
         org.marj4n.smooth_classes.platform.PlatformRegistry.initializeContent();
         PassiveSkillReward.register();
@@ -46,31 +46,39 @@ public final class SmoothClasses {
         ClassPassiveRuntime.register();
         // Spell Engine's official PRE-cast event runs client-side and server-side.
         // Returning a non-success attempt blocks spells even if a mod bypasses keybinds.
-        SpellEvents.CASTING_ATTEMPT.PRE.register(args ->
-                org.marj4n.smooth_classes.origin.VampireBatAbilityLock.isLocked(args.caster())
-                        ? net.spell_engine.internals.casting.SpellCast.Attempt.none() : null);
-        SpellEvents.SPELL_CAST.register(args -> {
-            if (args.caster() instanceof ServerPlayerEntity player) {
-                CombatEventRuntime.onSpellCast(player, args.targets(), args.spell().value().school);
-                // DIRECT delivery has applied its impact to the selected targets here.
-                // Projectile spells consume a hammer only at their entity collision hook.
-                var delivery=args.spell().value().deliver;
-                if (delivery!=null && delivery.type!=null
-                        && "DIRECT".equals(String.valueOf(delivery.type))) {
-                    for (var entity:args.targets()) {
-                        if (entity instanceof net.minecraft.entity.LivingEntity target)
-                            org.marj4n.smooth_classes.runtime.RighteousHammerChargeRuntime.onTriggeredHit(player,target);
+        SpellEvents.CASTING_ATTEMPT.PRE.register(
+                args ->
+                        org.marj4n.smooth_classes.origin.VampireBatAbilityLock.isLocked(
+                                        args.caster())
+                                ? net.spell_engine.internals.casting.SpellCast.Attempt.none()
+                                : null);
+        SpellEvents.SPELL_CAST.register(
+                args -> {
+                    if (args.caster() instanceof ServerPlayerEntity player) {
+                        CombatEventRuntime.onSpellCast(
+                                player, args.targets(), args.spell().value().school);
+                        // DIRECT delivery has applied its impact to the selected targets here.
+                        // Projectile spells consume a hammer only at their entity collision hook.
+                        var delivery = args.spell().value().deliver;
+                        if (delivery != null
+                                && delivery.type != null
+                                && "DIRECT".equals(String.valueOf(delivery.type))) {
+                            for (var entity : args.targets()) {
+                                if (entity instanceof net.minecraft.entity.LivingEntity target)
+                                    org.marj4n.smooth_classes.runtime.RighteousHammerChargeRuntime
+                                            .onTriggeredHit(player, target);
+                            }
+                        }
                     }
-                }
-            }
-        });
+                });
         SmoothClassesNetworking.registerServer();
         org.marj4n.smooth_classes.origin.HomunculusAccessories.register();
         org.marj4n.smooth_classes.origin.OriginRuntime.register();
         org.marj4n.smooth_classes.origin.OriginCommands.register();
         org.marj4n.smooth_classes.origin.VampireGraveSpawn.register();
         org.marj4n.smooth_classes.origin.demon.DemonRuntime.register();
-        LOGGER.info("Smooth Classes initialized. Puffish Skills owns class trees and unlock state; {} class definitions registered.",
+        LOGGER.info(
+                "Smooth Classes initialized. Puffish Skills owns class trees and unlock state; {} class definitions registered.",
                 org.marj4n.smooth_classes.registry.ClassRegistry.values().size());
     }
 }

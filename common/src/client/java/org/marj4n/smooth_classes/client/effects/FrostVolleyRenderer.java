@@ -10,14 +10,16 @@ import org.marj4n.smooth_classes.SmoothClasses;
 import java.util.List;
 
 public class FrostVolleyRenderer extends OrbitingEffectRenderer {
-    public static final Identifier modelId_base = Identifier.of(SmoothClasses.MOD_ID, "spell_projectile/ice_projectile");
-    public static final Identifier modelId_overlay = Identifier.of(SmoothClasses.MOD_ID, "spell_projectile/ice_projectile");
+    public static final Identifier modelId_base =
+            Identifier.of(SmoothClasses.MOD_ID, "spell_projectile/ice_projectile");
+    public static final Identifier modelId_overlay =
+            Identifier.of(SmoothClasses.MOD_ID, "spell_projectile/ice_projectile");
 
     private static final RenderLayer BASE_RENDER_LAYER =
-            RenderLayer.getEntityTranslucent(net.minecraft.screen.PlayerScreenHandler.BLOCK_ATLAS_TEXTURE);
+            RenderLayer.getEntityTranslucent(
+                    net.minecraft.screen.PlayerScreenHandler.BLOCK_ATLAS_TEXTURE);
     private static final RenderLayer OVERLAY_RENDER_LAYER =
             CustomLayers.spellEffect(LightEmission.GLOW, true);
-
 
     @Override
     public void setSpeed(float newSpeed) {
@@ -26,10 +28,6 @@ public class FrostVolleyRenderer extends OrbitingEffectRenderer {
     }
 
     public FrostVolleyRenderer() {
-        super(List.of(
-                new Model(OVERLAY_RENDER_LAYER, modelId_overlay)),
-                0.4F,
-                1.55F);
+        super(List.of(new Model(OVERLAY_RENDER_LAYER, modelId_overlay)), 0.4F, 1.55F);
     }
-
 }

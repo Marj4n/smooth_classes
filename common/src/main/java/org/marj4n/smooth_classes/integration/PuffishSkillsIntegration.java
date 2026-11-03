@@ -33,9 +33,10 @@ public final class PuffishSkillsIntegration {
     public static final Identifier RIDER = id("rider");
     public static final Identifier LANCER = id("lancer");
 
-    public static final List<Identifier> CLASS_CATEGORIES = List.of(
-            AVENGER, FOREIGNER, CASTER, BERSERKER, ARCHER, ASSASSIN, SABER, RULER, RIDER, LANCER
-    );
+    public static final List<Identifier> CLASS_CATEGORIES =
+            List.of(
+                    AVENGER, FOREIGNER, CASTER, BERSERKER, ARCHER, ASSASSIN, SABER, RULER, RIDER,
+                    LANCER);
 
     /** Category objects are registry-stable after datapack/mod bootstrap. Cache only successful lookups. */
     private static final Map<Identifier, Category> CATEGORY_CACHE = new HashMap<>();
@@ -58,14 +59,19 @@ public final class PuffishSkillsIntegration {
             skills.clear();
         }
     }
+
     private static final Map<UUID, TickStateCache> TICK_STATE_CACHE = new HashMap<>();
 
     /** Ascendancy tree count is more expensive and does not need per-tick rescanning. */
     private record AscendancyCountCache(long tickBucket, int count) {}
+
     private static final Map<UUID, AscendancyCountCache> ASCENDANCY_COUNT_CACHE = new HashMap<>();
 
     private PuffishSkillsIntegration() {}
-    private static Identifier id(String path) { return Identifier.of("smooth_classes", path); }
+
+    private static Identifier id(String path) {
+        return Identifier.of("smooth_classes", path);
+    }
 
     public static Optional<Category> category(Identifier id) {
         Category cached = CATEGORY_CACHE.get(id);
@@ -76,7 +82,8 @@ public final class PuffishSkillsIntegration {
     }
 
     private static TickStateCache tickState(ServerPlayerEntity player) {
-        TickStateCache cache = TICK_STATE_CACHE.computeIfAbsent(player.getUuid(), ignored -> new TickStateCache());
+        TickStateCache cache =
+                TICK_STATE_CACHE.computeIfAbsent(player.getUuid(), ignored -> new TickStateCache());
         int bucket = player.age / RUNTIME_CACHE_WINDOW_TICKS;
         if (cache.tickBucket != bucket) cache.reset(bucket);
         return cache;
@@ -92,16 +99,19 @@ public final class PuffishSkillsIntegration {
         return unlocked;
     }
 
-    public static boolean isSkillUnlocked(Identifier categoryId, String skillId, LivingEntity entity) {
+    public static boolean isSkillUnlocked(
+            Identifier categoryId, String skillId, LivingEntity entity) {
         if (!(entity instanceof ServerPlayerEntity player)) return false;
         TickStateCache cache = tickState(player);
-        Map<String, Boolean> categorySkills = cache.skills.computeIfAbsent(categoryId, ignored -> new HashMap<>());
+        Map<String, Boolean> categorySkills =
+                cache.skills.computeIfAbsent(categoryId, ignored -> new HashMap<>());
         Boolean cached = categorySkills.get(skillId);
         if (cached != null) return cached;
-        boolean unlocked = category(categoryId)
-                .flatMap(c -> c.getSkill(skillId))
-                .map(s -> s.getState(player) == Skill.State.UNLOCKED)
-                .orElse(false);
+        boolean unlocked =
+                category(categoryId)
+                        .flatMap(c -> c.getSkill(skillId))
+                        .map(s -> s.getState(player) == Skill.State.UNLOCKED)
+                        .orElse(false);
         categorySkills.put(skillId, unlocked);
         return unlocked;
     }
@@ -113,9 +123,10 @@ public final class PuffishSkillsIntegration {
         AscendancyCountCache cached = ASCENDANCY_COUNT_CACHE.get(player.getUuid());
         if (cached != null && cached.tickBucket() == bucket) return cached.count();
 
-        int count = category(categoryId)
-                .map(c -> (int) c.streamUnlockedSkills(player).count())
-                .orElse(0);
+        int count =
+                category(categoryId)
+                        .map(c -> (int) c.streamUnlockedSkills(player).count())
+                        .orElse(0);
         ASCENDANCY_COUNT_CACHE.put(player.getUuid(), new AscendancyCountCache(bucket, count));
         return count;
     }

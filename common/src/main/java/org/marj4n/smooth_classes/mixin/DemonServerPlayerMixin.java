@@ -10,11 +10,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 /** ServerPlayerEntity overrides death without invoking LivingEntity.onDeath. */
 @Mixin(ServerPlayerEntity.class)
 public abstract class DemonServerPlayerMixin {
-    @Inject(method="onDeath",at=@At("HEAD"))
-    private void demon$playerDeath(DamageSource source,CallbackInfo ci){
-        var player=(ServerPlayerEntity)(Object)this;
-        ForbiddenBirth.finish(player,"death");
-        if(DemonProgression.demon(player)){DemonDomain.end(player);DemonThrone.removeSeat(player);DemonPortals.cancel(player.getUuid());}
+    @Inject(method = "onDeath", at = @At("HEAD"))
+    private void demon$playerDeath(DamageSource source, CallbackInfo ci) {
+        var player = (ServerPlayerEntity) (Object) this;
+        ForbiddenBirth.finish(player, "death");
+        if (DemonProgression.demon(player)) {
+            DemonDomain.end(player);
+            DemonThrone.removeSeat(player);
+            DemonPortals.cancel(player.getUuid());
+        }
         DemonCurse.onDeath(player);
     }
 }

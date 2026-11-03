@@ -27,18 +27,28 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  */
 @Mixin(HeldItemFeatureRenderer.class)
 public abstract class ManBatHeldItemAnchorMixin {
-    @Inject(method = "renderItem(Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/render/model/json/ModelTransformationMode;Lnet/minecraft/util/Arm;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V",
-            at = @At(value = "INVOKE",
-                    target = "Lnet/minecraft/client/render/entity/model/ModelWithArms;setArmAngle(Lnet/minecraft/util/Arm;Lnet/minecraft/client/util/math/MatrixStack;)V"),
+    @Inject(
+            method =
+                    "renderItem(Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/item/ItemStack;Lnet/minecraft/client/render/model/json/ModelTransformationMode;Lnet/minecraft/util/Arm;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V",
+            at =
+                    @At(
+                            value = "INVOKE",
+                            target =
+                                    "Lnet/minecraft/client/render/entity/model/ModelWithArms;setArmAngle(Lnet/minecraft/util/Arm;Lnet/minecraft/client/util/math/MatrixStack;)V"),
             require = 1)
-    private void smooth_classes$alignManBatItemToShoulder(LivingEntity entity, ItemStack stack,
-                                                             ModelTransformationMode mode, Arm arm,
-                                                             MatrixStack matrices,
-                                                             VertexConsumerProvider vertexConsumers,
-                                                             int light, CallbackInfo ci) {
+    private void smooth_classes$alignManBatItemToShoulder(
+            LivingEntity entity,
+            ItemStack stack,
+            ModelTransformationMode mode,
+            Arm arm,
+            MatrixStack matrices,
+            VertexConsumerProvider vertexConsumers,
+            int light,
+            CallbackInfo ci) {
         if (!(entity instanceof PlayerEntity player) || stack.isEmpty()) return;
         var origin = OriginRuntime.state(player);
-        if (origin.origin() != OriginType.VAMPIRE || !origin.hasFlag("vampire.form.man_bat")) return;
+        if (origin.origin() != OriginType.VAMPIRE || !origin.hasFlag("vampire.form.man_bat"))
+            return;
 
         // Figura VSB physical shoulders: Y=25, Z=2 (feet-at-zero, Y-up).
         // Vanilla biped shoulders: model Y=2, Z=0 (head-at-zero, Y-down).

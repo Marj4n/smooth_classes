@@ -1,7 +1,5 @@
 package org.marj4n.smooth_classes.client.renderer;
 
-
-
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.entity.MobEntityRenderer;
@@ -27,12 +25,14 @@ public final class RiderDreadSteedRenderer
 
     public RiderDreadSteedRenderer(EntityRendererFactory.Context ctx) {
         super(ctx, new HorseEntityModel<>(ctx.getPart(EntityModelLayers.SKELETON_HORSE)), 0.75F);
-        addFeature(new EyesFeatureRenderer<RiderDreadSteedEntity, HorseEntityModel<RiderDreadSteedEntity>>(this) {
-            @Override
-            public RenderLayer getEyesTexture() {
-                return RenderLayer.getEyes(EYES_TEXTURE);
-            }
-        });
+        addFeature(
+                new EyesFeatureRenderer<
+                        RiderDreadSteedEntity, HorseEntityModel<RiderDreadSteedEntity>>(this) {
+                    @Override
+                    public RenderLayer getEyesTexture() {
+                        return RenderLayer.getEyes(EYES_TEXTURE);
+                    }
+                });
     }
 
     @Override
