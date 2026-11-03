@@ -1,8 +1,6 @@
 {
   "replace": false,
   "order": 120,
-  "slots": [
-    "homunculus_feet_patch"
-  ],
+  "slots": [],
   "icon": "accessories:gui/group/feet"
 }
