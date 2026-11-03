@@ -1,6 +1,6 @@
 {
   "replace": false,
-  "amount": 1,
+  "amount": 0,
   "operation": "set",
   "order": 1000,
   "icon": "smooth_classes:gui/slot/homunculus_head_patch",

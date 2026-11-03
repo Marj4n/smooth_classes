@@ -63,9 +63,9 @@ public final class OriginAbilityHud {
                             };
                     case HOMUNCULUS ->
                             new Slot[] {
-                                s("Weapon Arm", Items.IRON_SWORD),
-                                s("Body Config", Items.IRON_CHESTPLATE),
-                                s("Alchemical Core", Items.BREWING_STAND)
+                                s("Class Only", Items.BARRIER),
+                                s("Class Only", Items.BARRIER),
+                                s("Class Only", Items.BARRIER)
                             };
                     case VOID ->
                             new Slot[] {
