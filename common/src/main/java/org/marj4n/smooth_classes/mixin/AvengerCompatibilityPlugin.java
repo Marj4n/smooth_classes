@@ -18,6 +18,14 @@ public final class AvengerCompatibilityPlugin implements IMixinConfigPlugin {
     }
 
     public boolean shouldApplyMixin(String target, String mixin) {
+        if (mixin.endsWith("AvengerAechorHabitatMixin")
+                || mixin.endsWith("AvengerWhirlwindHabitatMixin")) {
+            return net.fabricmc.loader.api.FabricLoader.getInstance().isModLoaded("aether");
+        }
+        if (mixin.endsWith("RpgGeoArmorManBatMixin")) {
+            return net.fabricmc.loader.api.FabricLoader.getInstance()
+                    .isModLoaded("armor_model_api");
+        }
         return true;
     }
 
