@@ -9,10 +9,15 @@ import org.marj4n.smooth_classes.SmoothClasses;
 public final class SmoothItems {
     public static final Item SACRED_BANNER_ICON = new Item(new Item.Settings().maxCount(1));
     public static final Item BLOOD_BOTTLE = new Item(new Item.Settings().maxCount(16));
+    public static final Item FORBIDDEN_APPLE_CINEMATIC = new Item(new Item.Settings().maxCount(1));
 
     private SmoothItems() {}
 
     public static void register() {
+        org.marj4n.smooth_classes.platform.PlatformRegistry.register(
+                org.marj4n.smooth_classes.platform.PlatformRegistries.ITEM,
+                SmoothClasses.id("forbidden_apple_cinematic"),
+                FORBIDDEN_APPLE_CINEMATIC);
         org.marj4n.smooth_classes.platform.PlatformRegistry.register(
                 org.marj4n.smooth_classes.platform.PlatformRegistries.ITEM,
                 SmoothClasses.id("sacred_banner_icon"),
