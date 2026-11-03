@@ -81,7 +81,7 @@
               {
                 "orientation": "ALONG_MOTION",
                 "fx": {
-                  "model_id": "paladins:projectile/judgement",
+                  "model_id": "paladins:spell_projectile/judgement",
                   "scale": 1.2
                 }
               }
