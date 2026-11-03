@@ -83,7 +83,7 @@
               {
                 "orientation": "ALONG_MOTION",
                 "fx": {
-                  "model_id": "minecraft:sea_lantern",
+                  "model_id": "minecraft:block/sea_lantern",
                   "scale": 0.0
                 }
               }

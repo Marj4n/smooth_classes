@@ -1385,5 +1385,6 @@
   "accessories.slot.homunculus_leg_patch": "Leg Patch",
   "accessories.slot.homunculus_feet_patch": "Feet Patch",
   "accessories.slot.homunculus_weapon_arm": "Weapon Arm",
-  "accessories.group.homunculus": "Homunculus"
+  "accessories.group.homunculus": "Homunculus",
+  "item.smooth_classes.forbidden_apple_cinematic": "Forbidden Apple"
 }
