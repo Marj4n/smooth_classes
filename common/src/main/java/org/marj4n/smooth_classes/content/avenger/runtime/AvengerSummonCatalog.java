@@ -98,9 +98,19 @@ public final class AvengerSummonCatalog {
             }
             Entity e = null;
             try {
-                e = PlatformRegistries.ENTITY_TYPE.get(id).create(world);
+                var type = PlatformRegistries.ENTITY_TYPE.get(id);
+                e = type.create(world);
                 if (!(e instanceof MobEntity mob)) {
                     report.add(row(key, "not_a_mob"));
+                    continue;
+                }
+                if (mob.getType() != type) {
+                    // Some registry factories wrap a vanilla mob without creating a new soul type.
+                    report.add(
+                            row(
+                                    key,
+                                    "factory_alias_of: "
+                                            + PlatformRegistries.ENTITY_TYPE.getId(mob.getType())));
                     continue;
                 }
                 if (!AvengerSummonSafety.allowed(mob)) {
