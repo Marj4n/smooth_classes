@@ -69,6 +69,7 @@ public final class AvengerSummonHoverGlow {
     public static boolean isHighlighted(Entity entity) {
         MinecraftClient client = MinecraftClient.getInstance();
         return entity != null
+                && client != null
                 && client.player != null
                 && client.world == entity.getWorld()
                 && entity.getId() == confirmedOwnedId

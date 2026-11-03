@@ -968,7 +968,7 @@ public final class AvengerReworkRuntime {
     public static ExecutionResult selectSummonOrder(ServerPlayerEntity player, int selection) {
         if (!AbilityRuntime.isClass(player, AvengerClass.ID))
             return ExecutionResult.failure("Only Avengers can command souls.");
-        if (selection < 0 || selection > 7) return ExecutionResult.failure("Unknown order.");
+        if (selection < 0 || selection > 8) return ExecutionResult.failure("Unknown order.");
         if (selection == 5) return orderAttack(player);
         if (selection == 7) return callBackup(player);
 
@@ -1015,6 +1015,12 @@ public final class AvengerReworkRuntime {
                                 .02);
                 yield ExecutionResult.success(1, "Guard");
             }
+            case 8 ->
+                    ExecutionResult.success(
+                            1,
+                            AvengerSummonSilence.toggle(summon)
+                                    ? "Shut Up: sounds muted"
+                                    : "Summon sounds restored");
             case 2 -> recallSummon(player, AvengerDeathListState.get(player.getServer()), summon);
             case 3 -> unbindSummon(player, AvengerDeathListState.get(player.getServer()), summon);
             case 6 -> {
@@ -1595,6 +1601,7 @@ public final class AvengerReworkRuntime {
         for (String tag : new HashSet<>(summon.getCommandTags())) {
             if (tag.startsWith(OWNER_TAG_PREFIX)) summon.removeScoreboardTag(tag);
         }
+        AvengerSummonSilence.restore(summon);
         SUMMON_OWNER_CACHE.remove(summon);
         refreshBoundVisualState(summon);
         // The Wither only becomes an ordinary boss AFTER all owner tags are gone.

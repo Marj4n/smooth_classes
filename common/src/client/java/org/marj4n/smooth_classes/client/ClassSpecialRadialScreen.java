@@ -28,7 +28,8 @@ public final class ClassSpecialRadialScreen extends Screen {
         "Death List",
         "Attack",
         "Stay",
-        "Need Backup"
+        "Need Backup",
+        "Shut Up"
     };
     private static final ItemStack[] SOUL_ICONS = {
         new ItemStack(Items.LEAD),
@@ -38,7 +39,8 @@ public final class ClassSpecialRadialScreen extends Screen {
         new ItemStack(Items.WRITTEN_BOOK),
         new ItemStack(Items.IRON_SWORD),
         new ItemStack(Items.ARMOR_STAND),
-        new ItemStack(Items.GOAT_HORN)
+        new ItemStack(Items.GOAT_HORN),
+        new ItemStack(Items.WHITE_WOOL)
     };
 
     private static final String[] SCHOOL_NAMES = {
