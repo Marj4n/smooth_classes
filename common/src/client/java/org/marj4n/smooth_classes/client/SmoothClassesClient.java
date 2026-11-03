@@ -9,7 +9,6 @@ import net.minecraft.client.render.entity.HorseEntityRenderer;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.minecraft.util.math.MathHelper;
-import org.marj4n.smooth_classes.client.effects.RighteousHammersRenderer;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
@@ -86,7 +85,8 @@ public final class SmoothClassesClient {
     private static boolean manBatJumpWasDown;
     private static int manBatJumpHeartbeat;
     private static final AbilityHud HUD = new AbilityHud();
-    private static final RighteousHammersRenderer HAMMER_RENDERER = new RighteousHammersRenderer();
+    private static final SkillEffectRenderer HAMMER_RENDERER =
+            new SkillEffectRenderer(SkillEffectVisual.HAMMERS);
 
     public static KeyBinding signatureKey() {
         return signature;
@@ -946,10 +946,16 @@ public final class SmoothClassesClient {
         EntityRendererRegistry.register(
                 SmoothEntities.DEMON_SEAT,
                 org.marj4n.smooth_classes.client.origin.demon.DemonSeatRenderer::new);
-        EntityRendererRegistry.register(SmoothEntities.DREADGLARE, DreadglareRenderer::new);
-        EntityRendererRegistry.register(
-                SmoothEntities.GREATER_DREADGLARE, GreaterDreadglareRenderer::new);
-        EntityRendererRegistry.register(SmoothEntities.WRAITH, WraithRenderer::new);
+        EntityRendererRegistry.register(SmoothEntities.DREADGLARE, context ->
+                new SummonedMobRenderer<>(context, new DreadglareModel(context.getPart(DREADGLARE_MODEL)),
+                        SmoothClasses.id("textures/entity/dreadglare.png"), 1F, true));
+        EntityRendererRegistry.register(SmoothEntities.GREATER_DREADGLARE, context ->
+                new SummonedMobRenderer<>(context,
+                        new GreaterDreadglareModel(context.getPart(GREATER_DREADGLARE_MODEL)),
+                        SmoothClasses.id("textures/entity/dreadglare.png"), 1.5F, true));
+        EntityRendererRegistry.register(SmoothEntities.WRAITH, context ->
+                new SummonedMobRenderer<>(context, new WraithModel(context.getPart(WRAITH_MODEL)),
+                        SmoothClasses.id("textures/entity/wraith.png"), 1F, false));
         EntityRendererRegistry.register(
                 SmoothEntities.BLADE_PORTAL,
                 org.marj4n.smooth_classes.client.renderer.BladePortalRenderer::new);
@@ -967,22 +973,22 @@ public final class SmoothClassesClient {
     }
 
     private static void registerVisualEffects() {
-        CustomModelStatusEffect.register(SmoothEffects.BLADESTORM, new BladestormRenderer());
-        CustomModelStatusEffect.register(SmoothEffects.ARCANE_VOLLEY, new ArcaneVolleyRenderer());
-        CustomModelStatusEffect.register(SmoothEffects.FROST_VOLLEY, new FrostVolleyRenderer());
-        CustomModelStatusEffect.register(SmoothEffects.VITALITY_BOND, new VitalityBondRenderer());
-        CustomModelStatusEffect.register(SmoothEffects.UNDYING, new UndyingRenderer());
+        CustomModelStatusEffect.register(SmoothEffects.BLADESTORM, new SkillEffectRenderer(SkillEffectVisual.BLADESTORM));
+        CustomModelStatusEffect.register(SmoothEffects.ARCANE_VOLLEY, new SkillEffectRenderer(SkillEffectVisual.ARCANE_VOLLEY));
+        CustomModelStatusEffect.register(SmoothEffects.FROST_VOLLEY, new SkillEffectRenderer(SkillEffectVisual.FROST_VOLLEY));
+        CustomModelStatusEffect.register(SmoothEffects.VITALITY_BOND, new SkillEffectRenderer(SkillEffectVisual.VITALITY_BOND));
+        CustomModelStatusEffect.register(SmoothEffects.UNDYING, new SkillEffectRenderer(SkillEffectVisual.UNDYING));
         CustomModelStatusEffect.register(SmoothEffects.DIVINE_RAY, new DivineRayRenderer());
-        CustomParticleStatusEffect.register(SmoothEffects.UNDYING, new UndyingParticles(2));
-        CustomParticleStatusEffect.register(SmoothEffects.BARRIER, new BarrierParticles(1));
-        CustomParticleStatusEffect.register(SmoothEffects.RAGE, new RageParticles(1));
-        CustomParticleStatusEffect.register(SmoothEffects.EVASION, new EvasionParticles(1));
-        CustomModelStatusEffect.register(SmoothEffects.IMMOBILIZE, new ImmobilizeRenderer());
-        CustomModelStatusEffect.register(SmoothEffects.DEATH_MARK, new DeathMarkRenderer());
-        CustomModelStatusEffect.register(SmoothEffects.TAUNTED, new TauntedRenderer());
-        CustomModelStatusEffect.register(SmoothEffects.MARKSMANSHIP, new MarksmanshipRenderer());
-        CustomModelStatusEffect.register(SmoothEffects.MAGIC_CIRCLE, new MagicCircleRenderer());
-        CustomModelStatusEffect.register(SmoothEffects.AGONY, new CurseRenderer());
-        CustomModelStatusEffect.register(SmoothEffects.TORMENT, new CurseRenderer());
+        CustomParticleStatusEffect.register(SmoothEffects.UNDYING, new SkillParticleEmitter(SkillParticleEmitter.Profile.UNDYING, 2));
+        CustomParticleStatusEffect.register(SmoothEffects.BARRIER, new SkillParticleEmitter(SkillParticleEmitter.Profile.BARRIER, 1));
+        CustomParticleStatusEffect.register(SmoothEffects.RAGE, new SkillParticleEmitter(SkillParticleEmitter.Profile.RAGE, 1));
+        CustomParticleStatusEffect.register(SmoothEffects.EVASION, new SkillParticleEmitter(SkillParticleEmitter.Profile.EVASION, 1));
+        CustomModelStatusEffect.register(SmoothEffects.IMMOBILIZE, new SkillEffectRenderer(SkillEffectVisual.IMMOBILIZE));
+        CustomModelStatusEffect.register(SmoothEffects.DEATH_MARK, new SkillEffectRenderer(SkillEffectVisual.DEATH_MARK));
+        CustomModelStatusEffect.register(SmoothEffects.TAUNTED, new SkillEffectRenderer(SkillEffectVisual.TAUNTED));
+        CustomModelStatusEffect.register(SmoothEffects.MARKSMANSHIP, new SkillEffectRenderer(SkillEffectVisual.MARKSMANSHIP));
+        CustomModelStatusEffect.register(SmoothEffects.MAGIC_CIRCLE, new SkillEffectRenderer(SkillEffectVisual.MAGIC_CIRCLE));
+        CustomModelStatusEffect.register(SmoothEffects.AGONY, new SkillEffectRenderer(SkillEffectVisual.CURSE));
+        CustomModelStatusEffect.register(SmoothEffects.TORMENT, new SkillEffectRenderer(SkillEffectVisual.CURSE));
     }
 }
