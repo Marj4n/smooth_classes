@@ -1,5 +1,8 @@
-Forbidden Apple Tree structure based on "Horror Tree with Face" by Psemata — Planet Minecraft.
-Official source: https://www.planetminecraft.com/project/1-21-8-horror-tree-with-face-download/
-Original variant: horror-tree-with_face1.schem
-Schematic SHA-256: 0ffe42aed930e87687e22fb605cefa65325c0f96a7f87126d7cb790a5a62ec1a
-Original tree is NOT made by Marj4n. Free-use statement prohibits resale or claiming authorship. Public redistribution permission must be reviewed before release.
+Current Forbidden Tree: The Sanguine Widow, independently designed for Smooth Classes.
+AI-assisted native Renas authoring under Marj4n direction; deterministic voxel export.
+Canonical native source: ORIGINAL_FORBIDDEN_TREE_001_CINEMATIC_CLEARANCE_REVISION_001/native-r07.bbmodel
+Native SHA-256: 0648d0c66a56d08de545386c0f03d42ce1fdf581014015e2143c5cfaab62e00d
+Current NBT SHA-256: 942240f35dee4f9c428595dcf08bace0e4f9afdbfac5000ae9acaaa02a943557
+The previous Psemata-derived structure and attribution remain preserved privately as historical evidence.
+Runtime block materials are vanilla Minecraft assets with their own terms.
+This provenance record is not a public release authorization or legal/exclusive-ownership guarantee.

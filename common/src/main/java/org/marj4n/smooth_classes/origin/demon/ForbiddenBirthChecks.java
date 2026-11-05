@@ -198,11 +198,11 @@ public final class ForbiddenBirthChecks {
             }
             case "tree" -> {
                 check(
-                        "Actual1.20.1 registry validates53 palette states",
-                        ForbiddenTreeAsset.paletteCount() == 53);
+                        "Actual1.20.1 registry validates8 palette states",
+                        ForbiddenTreeAsset.paletteCount() == ForbiddenTreeAsset.PALETTE_COUNT);
                 check(
-                        "Correct with-face original contains8271 blocks",
-                        ForbiddenTreeAsset.cells().size() == 8271);
+                        "Correct with-face original contains33094 blocks",
+                        ForbiddenTreeAsset.cells().size() == ForbiddenTreeAsset.BLOCK_COUNT);
                 check(
                         "Exactly one completed designated tree",
                         r.anchored
@@ -219,9 +219,9 @@ public final class ForbiddenBirthChecks {
                     if (c.state().isOf(Blocks.DIORITE_STAIRS) && actual.equals(c.state())) face++;
                 }
                 check(
-                        "All8271 source cells preserved, allowing natural grass aging",
-                        matched == 8271);
-                check("All10 original diorite face detail cells preserved", face == 10);
+                        "All33094 source cells preserved, allowing natural grass aging",
+                        matched == ForbiddenTreeAsset.BLOCK_COUNT);
+                check("Single original diorite recognition marker preserved", face == 1);
                 record(
                         "Source structure measured",
                         true,

@@ -31,6 +31,14 @@ public abstract class OriginVanillaModelRenderMixin {
         if ((Object) this instanceof PlayerEntityModel<?>
                 && OriginVanillaBodyGuard.shouldSuppressVanillaPlayerGeometry()) {
             ci.cancel();
+        } else if ((Object) this instanceof PlayerEntityModel<?> playerModel
+                && OriginVanillaBodyGuard.shouldSuppressSirenLegGeometry()) {
+            // Apply at the final vanilla mesh draw, after animation modifiers can restore visibility.
+            // Retain head/body/arms, pose calculations, armor and all non-player models.
+            playerModel.rightLeg.visible = false;
+            playerModel.leftLeg.visible = false;
+            playerModel.rightPants.visible = false;
+            playerModel.leftPants.visible = false;
         }
     }
 }

@@ -59,9 +59,14 @@ tasks.named('processResources') {
 tasks.named('jar') {
     archiveClassifier = 'dev-fabric'
     from(rootProject.file('LICENSE.txt'))
+    from(rootProject.file('THIRD_PARTY_NOTICES.md'))
 }
 tasks.named('remapJar') { archiveClassifier = 'fabric' }
-tasks.named('sourcesJar') { archiveClassifier = 'fabric-sources' }
+tasks.named('sourcesJar') {
+    archiveClassifier = 'fabric-sources'
+    from(rootProject.file('LICENSE.txt'))
+    from(rootProject.file('THIRD_PARTY_NOTICES.md'))
+}
 
 sourceSets.test.java.srcDirs += [rootProject.file('common/src/test/java')]
 dependencies {
@@ -90,3 +95,12 @@ tasks.named('test') {
 }
 
 sourceSets.test.resources.srcDir rootProject.file('common/src/test/resources')
+
+// Keep privately retained historical upstream art out of every distribution JAR.
+// Exact paths only; approved originals and external-license notices remain packaged.
+tasks.withType(Jar).configureEach {
+    exclude 'assets/smooth_classes/textures/entity/rider/hippogryph_white.png'
+    exclude 'assets/smooth_classes/textures/entity/origin/mermaid_tail_mermod.png'
+    exclude 'assets/smooth_classes/textures/entity/rider/dread_steed.png'
+    exclude 'assets/smooth_classes/textures/entity/rider/dread_steed_eyes.png'
+}

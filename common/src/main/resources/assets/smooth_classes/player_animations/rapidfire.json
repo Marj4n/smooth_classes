@@ -1,200 +1,118 @@
 {
-    "name": "rapidfire",
-    "author": "Sweenus",
-    "description": "Ranged fire",
-    "emote":{
-        "isLoop": "false",
-        "returnTick": 1,
-        "beginTick":0,
-        "endTick":8,
-        "stopTick":9,
-        "degrees":false,
-        "moves":[
-            
-            {
-                "tick":4,
-                "easing": "EASEINOUTQUAD",
-                "turn": 0,
-                "rightArm":{
-                    "yaw":-0.2652900218963623
-                }
-            },
-            {
-                "tick":5,
-                "easing": "EASEINOUTQUAD",
-                "turn": 0,
-                "rightArm":{
-                    "yaw":-0.3019419312477112
-                }
-            },
-            {
-                "tick":6,
-                "easing": "EASEINOUTQUAD",
-                "turn": 0,
-                "rightArm":{
-                    "yaw":-0.2722713351249695
-                }
-            },
-            {
-                "tick":7,
-                "easing": "EASEINOUTQUAD",
-                "turn": 0,
-                "rightArm":{
-                    "yaw":-0.28448864817619324
-                }
-            },
-            {
-                "tick":4,
-                "easing": "EASEINOUTQUAD",
-                "turn": 0,
-                "rightArm":{
-                    "roll":0.2705260217189789
-                }
-            },
-            {
-                "tick":5,
-                "easing": "EASEINOUTQUAD",
-                "turn": 0,
-                "rightArm":{
-                    "roll":0.22863812744617462
-                }
-            },
-            {
-                "tick":6,
-                "easing": "EASEINOUTQUAD",
-                "turn": 0,
-                "rightArm":{
-                    "roll":0.22340214252471924
-                }
-            },
-            {
-                "tick":4,
-                "easing": "EASEINOUTQUAD",
-                "turn": 0,
-                "rightArm":{
-                    "z":-1.7599999904632568
-                }
-            },
-            {
-                "tick":8,
-                "easing": "EASEINOUTQUAD",
-                "turn": 0,
-                "rightArm":{
-                    "z":-0.24000006914138794
-                }
-            },
-            {
-                "tick":4,
-                "easing": "EASEINOUTQUAD",
-                "turn": 0,
-                "rightArm":{
-                    "pitch":-1.5568336248397827
-                }
-            },
-            {
-                "tick":4,
-                "easing": "EASEINOUTQUAD",
-                "turn": 0,
-                "leftArm":{
-                    "roll":-0.06283184885978699
-                }
-            },
-            {
-                "tick":7,
-                "easing": "EASEINOUTQUAD",
-                "turn": 0,
-                "leftArm":{
-                    "roll":-0.24573005735874176
-                }
-            },
-            {
-                "tick":8,
-                "easing": "EASEINOUTQUAD",
-                "turn": 0,
-                "leftArm":{
-                    "roll":-0.19896753132343292
-                }
-            },
-            {
-                "tick":4,
-                "easing": "EASEINOUTQUAD",
-                "turn": 0,
-                "leftArm":{
-                    "yaw":1.0157815217971802
-                }
-            },
-            {
-                "tick":6,
-                "easing": "EASEINOUTQUAD",
-                "turn": 0,
-                "leftArm":{
-                    "yaw":0.7836527824401855
-                }
-            },
-            {
-                "tick":7,
-                "easing": "EASEINOUTQUAD",
-                "turn": 0,
-                "leftArm":{
-                    "yaw":0.6711881160736084
-                }
-            },
-            {
-                "tick":8,
-                "easing": "EASEINOUTQUAD",
-                "turn": 0,
-                "leftArm":{
-                    "yaw":0.5759586095809937
-                }
-            },
-            {
-                "tick":4,
-                "easing": "EASEINOUTQUAD",
-                "turn": 0,
-                "leftArm":{
-                    "pitch":-1.6022121906280518
-                }
-            },
-            {
-                "tick":7,
-                "easing": "EASEINOUTQUAD",
-                "turn": 0,
-                "leftArm":{
-                    "y":1.8000001907348633
-                }
-            },
-            {
-                "tick":4,
-                "easing": "EASEINOUTQUAD",
-                "turn": 0,
-                "leftArm":{
-                    "z":0.5199999809265137
-                }
-            },
-            {
-                "tick":6,
-                "easing": "EASEINOUTQUAD",
-                "turn": 0,
-                "leftArm":{
-                    "z":1.8399999141693115
-                }
-            },
-            {
-                "tick":7,
-                "easing": "EASEINOUTQUAD",
-                "turn": 0,
-                "leftArm":{
-                    "z":0.7599999904632568
-                }
-            },
-            {
-                "tick":8,
-                "easing": "EASEINOUTQUAD",
-                "turn": 0,
-                "leftArm":{
-                    "z":-0.7999999523162842
-                }
-            }
-        ]
-    }
+  "version": 1,
+  "name": "rapidfire",
+  "author": "Smooth Classes original choreography via AI-assisted native Renas authoring",
+  "description": "Original rapidfire motion; timing and target channel authority preserved. Native source and adapter evidence retained.",
+  "emote": {
+    "isLoop": "false",
+    "returnTick": 1,
+    "beginTick": 0,
+    "endTick": 8,
+    "stopTick": 9,
+    "degrees": false,
+    "moves": [
+      {
+        "tick": 0,
+        "easing": "linear",
+        "rightArm": {
+          "pitch": -1.361356816555577,
+          "yaw": 0.20943951023931956,
+          "roll": -0.4188790204786391,
+          "z": 0.0
+        },
+        "leftArm": {
+          "pitch": -1.3264502315156905,
+          "yaw": -0.20943951023931956,
+          "roll": 0.4188790204786391,
+          "y": 2.0,
+          "z": 0.0
+        }
+      },
+      {
+        "tick": 2,
+        "easing": "linear",
+        "rightArm": {
+          "pitch": -1.53588974175501,
+          "yaw": 0.15707963267948966,
+          "roll": -0.3839724354387525,
+          "z": 0.0
+        },
+        "leftArm": {
+          "pitch": -1.4311699866353502,
+          "yaw": -0.15707963267948966,
+          "roll": 0.3839724354387525,
+          "y": 2.0,
+          "z": 0.0
+        }
+      },
+      {
+        "tick": 4,
+        "easing": "linear",
+        "rightArm": {
+          "pitch": -1.6755160819145565,
+          "yaw": 0.12217304763960307,
+          "roll": -0.4014257279586958,
+          "z": 0.8
+        },
+        "leftArm": {
+          "pitch": -1.5533430342749532,
+          "yaw": -0.15707963267948966,
+          "roll": 0.3665191429188092,
+          "y": 2.0,
+          "z": 0.5
+        }
+      },
+      {
+        "tick": 6,
+        "easing": "linear",
+        "rightArm": {
+          "pitch": -1.5009831567151235,
+          "yaw": 0.17453292519943295,
+          "roll": -0.3839724354387525,
+          "z": 0.2
+        },
+        "leftArm": {
+          "pitch": -1.3962634015954636,
+          "yaw": -0.17453292519943295,
+          "roll": 0.3839724354387525,
+          "y": 2.0,
+          "z": 0.1
+        }
+      },
+      {
+        "tick": 8,
+        "easing": "linear",
+        "rightArm": {
+          "pitch": -0.6632251157578453,
+          "yaw": 0.10471975511965978,
+          "roll": -0.17453292519943295,
+          "z": 0.0
+        },
+        "leftArm": {
+          "pitch": -0.6283185307179586,
+          "yaw": -0.10471975511965978,
+          "roll": 0.17453292519943295,
+          "y": 2.0,
+          "z": 0.0
+        }
+      },
+      {
+        "tick": 9,
+        "easing": "linear",
+        "rightArm": {
+          "pitch": -0.0,
+          "yaw": -0.0,
+          "roll": 0.0,
+          "z": 0.0
+        },
+        "leftArm": {
+          "pitch": -0.0,
+          "yaw": -0.0,
+          "roll": 0.0,
+          "y": 2.0,
+          "z": 0.0
+        }
+      }
+    ]
+  }
 }

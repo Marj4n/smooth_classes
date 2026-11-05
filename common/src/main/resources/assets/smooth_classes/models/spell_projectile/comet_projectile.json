@@ -1,101 +1,1785 @@
 {
-	"credit": "Made by Sweenus using Blockbench",
-	"texture_size": [64, 64],
-	"textures": {
-		"0": "smooth_classes:item/projectile/comet_projectile",
-		"particle": "smooth_classes:item/projectile/comet_projectile"
-	},
-	"elements": [
-		{
-			"from": [3, 3, 3],
-			"to": [13, 13, 13],
-			"rotation": {"angle": 22.5, "axis": "z", "origin": [10, 7, 10]},
-			"faces": {
-				"north": {"uv": [0, 0, 2.5, 2.5], "texture": "#0"},
-				"east": {"uv": [0, 0, 2.5, 2.5], "texture": "#0"},
-				"south": {"uv": [0, 0, 2.5, 2.5], "texture": "#0"},
-				"west": {"uv": [0, 0, 2.5, 2.5], "texture": "#0"},
-				"up": {"uv": [0, 0, 2.5, 2.5], "texture": "#0"},
-				"down": {"uv": [0, 0, 2.5, 2.5], "texture": "#0"}
-			}
-		},
-		{
-			"from": [1, 3, 1],
-			"to": [11, 13, 10],
-			"rotation": {"angle": -22.5, "axis": "x", "origin": [10, 7, 10]},
-			"faces": {
-				"north": {"uv": [2.5, 5, 5, 7.5], "texture": "#0"},
-				"east": {"uv": [2.5, 5, 5, 7.5], "texture": "#0"},
-				"south": {"uv": [2.5, 5, 5, 7.5], "texture": "#0"},
-				"west": {"uv": [2.5, 5, 5, 7.5], "texture": "#0"},
-				"up": {"uv": [2.5, 5, 5, 7.5], "texture": "#0"},
-				"down": {"uv": [2.5, 5, 5, 7.5], "texture": "#0"}
-			}
-		},
-		{
-			"from": [4, 7, 11],
-			"to": [11, 12, 14],
-			"rotation": {"angle": 22.5, "axis": "z", "origin": [10, 7, 10]},
-			"faces": {
-				"north": {"uv": [4.25, 7.5, 6, 8.75], "texture": "#0"},
-				"east": {"uv": [4.25, 7.5, 6, 8.75], "texture": "#0"},
-				"south": {"uv": [4.25, 7.5, 6, 8.75], "texture": "#0"},
-				"west": {"uv": [4.25, 7.5, 6, 8.75], "texture": "#0"},
-				"up": {"uv": [4.25, 7.5, 6, 8.75], "texture": "#0"},
-				"down": {"uv": [4.25, 7.5, 6, 8.75], "texture": "#0"}
-			}
-		},
-		{
-			"from": [7, 7, 4],
-			"to": [14, 12, 11],
-			"rotation": {"angle": 0, "axis": "z", "origin": [10, 7, 10]},
-			"faces": {
-				"north": {"uv": [7.75, 7.5, 9.5, 8.75], "texture": "#0"},
-				"east": {"uv": [7.75, 7.5, 9.5, 8.75], "texture": "#0"},
-				"south": {"uv": [7.75, 7.5, 9.5, 8.75], "texture": "#0"},
-				"west": {"uv": [7.75, 7.5, 9.5, 8.75], "texture": "#0"},
-				"up": {"uv": [7.75, 7.5, 9.5, 8.75], "texture": "#0"},
-				"down": {"uv": [7.75, 7.5, 9.5, 8.75], "texture": "#0"}
-			}
-		},
-		{
-			"from": [4, 10, 8],
-			"to": [11, 15, 12],
-			"rotation": {"angle": 22.5, "axis": "z", "origin": [10, 7, 10]},
-			"faces": {
-				"north": {"uv": [9.25, 2.25, 11, 3.5], "texture": "#0"},
-				"east": {"uv": [9.25, 2.25, 11, 3.5], "texture": "#0"},
-				"south": {"uv": [9.25, 2.25, 11, 3.5], "texture": "#0"},
-				"west": {"uv": [9.25, 2.25, 11, 3.5], "texture": "#0"},
-				"up": {"uv": [9.25, 2.25, 11, 3.5], "texture": "#0"},
-				"down": {"uv": [9.25, 2.25, 11, 3.5], "texture": "#0"}
-			}
-		},
-		{
-			"from": [8, 10, 4],
-			"to": [12, 14, 8],
-			"rotation": {"angle": 22.5, "axis": "z", "origin": [10, 7, 10]},
-			"faces": {
-				"north": {"uv": [10, 0, 11, 1], "texture": "#0"},
-				"east": {"uv": [10, 0, 11, 1], "texture": "#0"},
-				"south": {"uv": [10, 0, 11, 1], "texture": "#0"},
-				"west": {"uv": [10, 0, 11, 1], "texture": "#0"},
-				"up": {"uv": [10, 0, 11, 1], "texture": "#0"},
-				"down": {"uv": [10, 0, 11, 1], "texture": "#0"}
-			}
-		},
-		{
-			"from": [4, 10, 5],
-			"to": [8, 16, 8],
-			"rotation": {"angle": 22.5, "axis": "z", "origin": [10, 7, 10]},
-			"faces": {
-				"north": {"uv": [9.5, 4.5, 10.5, 6], "texture": "#0"},
-				"east": {"uv": [9.5, 4.5, 10.5, 6], "texture": "#0"},
-				"south": {"uv": [9.5, 4.5, 10.5, 6], "texture": "#0"},
-				"west": {"uv": [9.5, 4.5, 10.5, 6], "texture": "#0"},
-				"up": {"uv": [9.5, 4.5, 10.5, 6], "texture": "#0"},
-				"down": {"uv": [9.5, 4.5, 10.5, 6], "texture": "#0"}
-			}
-		}
-	]
+  "textures": {
+    "0": "smooth_classes:original_models_001/comet_projectile",
+    "particle": "smooth_classes:original_models_001/comet_projectile"
+  },
+  "elements": [
+    {
+      "name": "crystal_heart",
+      "from": [
+        5.0,
+        4.0,
+        4.0
+      ],
+      "to": [
+        13.0,
+        12.0,
+        11.0
+      ],
+      "rotation": {
+        "angle": -45.0,
+        "axis": "x",
+        "origin": [
+          9.0,
+          8.0,
+          7.5
+        ]
+      },
+      "faces": {
+        "east": {
+          "uv": [
+            2.5,
+            4.5,
+            4.25,
+            6.5
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            2.5,
+            0,
+            4.5,
+            2
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            4.5,
+            4.5,
+            6.25,
+            6.5
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "north": {
+          "uv": [
+            2.5,
+            2.25,
+            4.5,
+            4.25
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            4.75,
+            0,
+            6.5,
+            2
+          ],
+          "texture": "#0",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [
+            4.75,
+            2.25,
+            6.5,
+            4.25
+          ],
+          "texture": "#0",
+          "rotation": 270
+        }
+      }
+    },
+    {
+      "name": "cross_crystal",
+      "from": [
+        3.0,
+        6.0,
+        3.0
+      ],
+      "to": [
+        12.0,
+        10.0,
+        12.0
+      ],
+      "rotation": {
+        "angle": 45.0,
+        "axis": "y",
+        "origin": [
+          7.5,
+          8.0,
+          7.5
+        ]
+      },
+      "faces": {
+        "east": {
+          "uv": [
+            0,
+            5,
+            2.25,
+            6
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            0,
+            6.25,
+            2.25,
+            7.25
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            6.5,
+            4.5,
+            8.75,
+            5.5
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "north": {
+          "uv": [
+            6.5,
+            5.75,
+            8.75,
+            6.75
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            0,
+            0,
+            2.25,
+            2.25
+          ],
+          "texture": "#0",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [
+            0,
+            2.5,
+            2.25,
+            4.75
+          ],
+          "texture": "#0",
+          "rotation": 270
+        }
+      }
+    },
+    {
+      "name": "wake_crystal_0_0",
+      "from": [
+        5.0,
+        7.2,
+        3.2
+      ],
+      "to": [
+        7.0,
+        8.8,
+        4.8
+      ],
+      "rotation": {
+        "angle": -22.5,
+        "axis": "x",
+        "origin": [
+          6.0,
+          8.0,
+          4.0
+        ]
+      },
+      "faces": {
+        "east": {
+          "uv": [
+            3,
+            8.25,
+            3.4,
+            8.65
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            0.75,
+            7.5,
+            1.25,
+            7.9
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            4.5,
+            8.25,
+            4.9,
+            8.65
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "north": {
+          "uv": [
+            1.5,
+            7.5,
+            2,
+            7.9
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            7.5,
+            1.5,
+            7.9,
+            2
+          ],
+          "texture": "#0",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [
+            3.25,
+            7.5,
+            3.65,
+            8
+          ],
+          "texture": "#0",
+          "rotation": 270
+        }
+      }
+    },
+    {
+      "name": "wake_crystal_0_1",
+      "from": [
+        3.0,
+        7.365,
+        3.365
+      ],
+      "to": [
+        5.0,
+        8.635,
+        4.635
+      ],
+      "rotation": {
+        "angle": -22.5,
+        "axis": "x",
+        "origin": [
+          4.0,
+          8.0,
+          4.0
+        ]
+      },
+      "faces": {
+        "east": {
+          "uv": [
+            9,
+            5.25,
+            9.3175,
+            5.5675
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            0.75,
+            8.25,
+            1.25,
+            8.5675
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            9,
+            6,
+            9.3175,
+            6.3175
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "north": {
+          "uv": [
+            1.5,
+            8.25,
+            2,
+            8.5675
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            8.25,
+            1.5,
+            8.5675,
+            2
+          ],
+          "texture": "#0",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [
+            8.25,
+            2.25,
+            8.5675,
+            2.75
+          ],
+          "texture": "#0",
+          "rotation": 270
+        }
+      }
+    },
+    {
+      "name": "wake_crystal_0_2",
+      "from": [
+        1.0,
+        7.53,
+        3.53
+      ],
+      "to": [
+        3.0,
+        8.47,
+        4.47
+      ],
+      "rotation": {
+        "angle": -22.5,
+        "axis": "x",
+        "origin": [
+          2.0,
+          8.0,
+          4.0
+        ]
+      },
+      "faces": {
+        "east": {
+          "uv": [
+            4.5,
+            7.75,
+            4.735,
+            7.985
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            0.75,
+            9,
+            1.25,
+            9.235
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            9.75,
+            7.25,
+            9.985,
+            7.485
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "north": {
+          "uv": [
+            1.5,
+            9,
+            2,
+            9.235
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            9,
+            1.5,
+            9.235,
+            2
+          ],
+          "texture": "#0",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [
+            9,
+            2.25,
+            9.235,
+            2.75
+          ],
+          "texture": "#0",
+          "rotation": 270
+        }
+      }
+    },
+    {
+      "name": "wake_crystal_0_3",
+      "from": [
+        -1.0,
+        7.695,
+        3.695
+      ],
+      "to": [
+        1.0,
+        8.305,
+        4.305
+      ],
+      "rotation": {
+        "angle": -22.5,
+        "axis": "x",
+        "origin": [
+          0.0,
+          8.0,
+          4.0
+        ]
+      },
+      "faces": {
+        "east": {
+          "uv": [
+            10,
+            2.25,
+            10.1525,
+            2.4025
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            9.75,
+            7.75,
+            10.25,
+            7.9025
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            10,
+            4.5,
+            10.1525,
+            4.6525
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "north": {
+          "uv": [
+            9.75,
+            8.25,
+            10.25,
+            8.4025
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            7.75,
+            9.75,
+            7.9025,
+            10.25
+          ],
+          "texture": "#0",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [
+            8.75,
+            9.75,
+            8.9025,
+            10.25
+          ],
+          "texture": "#0",
+          "rotation": 270
+        }
+      }
+    },
+    {
+      "name": "wake_crystal_1_0",
+      "from": [
+        4.25,
+        9.2,
+        7.2
+      ],
+      "to": [
+        7.0,
+        10.8,
+        8.8
+      ],
+      "rotation": {
+        "angle": 22.5,
+        "axis": "x",
+        "origin": [
+          5.625,
+          10.0,
+          8.0
+        ]
+      },
+      "faces": {
+        "east": {
+          "uv": [
+            5.25,
+            8.25,
+            5.65,
+            8.65
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            6.75,
+            0,
+            7.4375,
+            0.4
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            0,
+            8.5,
+            0.4,
+            8.9
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "north": {
+          "uv": [
+            6.75,
+            0.75,
+            7.4375,
+            1.15
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            6.75,
+            1.5,
+            7.15,
+            2.1875
+          ],
+          "texture": "#0",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [
+            2.5,
+            6.75,
+            2.9,
+            7.4375
+          ],
+          "texture": "#0",
+          "rotation": 270
+        }
+      }
+    },
+    {
+      "name": "wake_crystal_1_1",
+      "from": [
+        1.5,
+        9.365,
+        7.365
+      ],
+      "to": [
+        4.25,
+        10.635,
+        8.635
+      ],
+      "rotation": {
+        "angle": 22.5,
+        "axis": "x",
+        "origin": [
+          2.875,
+          10.0,
+          8.0
+        ]
+      },
+      "faces": {
+        "east": {
+          "uv": [
+            7.5,
+            9,
+            7.8175,
+            9.3175
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            6.75,
+            2.5,
+            7.4375,
+            2.8175
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            9,
+            7.5,
+            9.3175,
+            7.8175
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "north": {
+          "uv": [
+            3.25,
+            6.75,
+            3.9375,
+            7.0675
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            6.75,
+            3.25,
+            7.0675,
+            3.9375
+          ],
+          "texture": "#0",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [
+            4.25,
+            6.75,
+            4.5675,
+            7.4375
+          ],
+          "texture": "#0",
+          "rotation": 270
+        }
+      }
+    },
+    {
+      "name": "wake_crystal_1_2",
+      "from": [
+        -1.25,
+        9.53,
+        7.53
+      ],
+      "to": [
+        1.5,
+        10.47,
+        8.47
+      ],
+      "rotation": {
+        "angle": 22.5,
+        "axis": "x",
+        "origin": [
+          0.125,
+          10.0,
+          8.0
+        ]
+      },
+      "faces": {
+        "east": {
+          "uv": [
+            9.75,
+            8.75,
+            9.985,
+            8.985
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            7.5,
+            4,
+            8.1875,
+            4.235
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            9.25,
+            9.75,
+            9.485,
+            9.985
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "north": {
+          "uv": [
+            7.75,
+            1,
+            8.4375,
+            1.235
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            7.75,
+            2.25,
+            7.985,
+            2.9375
+          ],
+          "texture": "#0",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [
+            4,
+            7.75,
+            4.235,
+            8.4375
+          ],
+          "texture": "#0",
+          "rotation": 270
+        }
+      }
+    },
+    {
+      "name": "wake_crystal_1_3",
+      "from": [
+        -4.0,
+        9.695,
+        7.695
+      ],
+      "to": [
+        -1.25,
+        10.305,
+        8.305
+      ],
+      "rotation": {
+        "angle": 22.5,
+        "axis": "x",
+        "origin": [
+          -2.625,
+          10.0,
+          8.0
+        ]
+      },
+      "faces": {
+        "east": {
+          "uv": [
+            10.25,
+            5,
+            10.4025,
+            5.1525
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            9.5,
+            6.75,
+            10.1875,
+            6.9025
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            10.25,
+            5.5,
+            10.4025,
+            5.6525
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "north": {
+          "uv": [
+            9.75,
+            2.75,
+            10.4375,
+            2.9025
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            8.25,
+            9.5,
+            8.4025,
+            10.1875
+          ],
+          "texture": "#0",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [
+            9.75,
+            5,
+            9.9025,
+            5.6875
+          ],
+          "texture": "#0",
+          "rotation": 270
+        }
+      }
+    },
+    {
+      "name": "wake_crystal_2_0",
+      "from": [
+        5.25,
+        5.2,
+        9.2
+      ],
+      "to": [
+        7.0,
+        6.8,
+        10.8
+      ],
+      "rotation": {
+        "angle": -22.5,
+        "axis": "x",
+        "origin": [
+          6.125,
+          6.0,
+          10.0
+        ]
+      },
+      "faces": {
+        "east": {
+          "uv": [
+            8.5,
+            0,
+            8.9,
+            0.4
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            6,
+            7.75,
+            6.4375,
+            8.15
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            8.5,
+            3,
+            8.9,
+            3.4
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "north": {
+          "uv": [
+            7.75,
+            7,
+            8.1875,
+            7.4
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            7.75,
+            7.75,
+            8.15,
+            8.1875
+          ],
+          "texture": "#0",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [
+            6.75,
+            8,
+            7.15,
+            8.4375
+          ],
+          "texture": "#0",
+          "rotation": 270
+        }
+      }
+    },
+    {
+      "name": "wake_crystal_2_1",
+      "from": [
+        3.5,
+        5.365,
+        9.365
+      ],
+      "to": [
+        5.25,
+        6.635,
+        10.635
+      ],
+      "rotation": {
+        "angle": -22.5,
+        "axis": "x",
+        "origin": [
+          4.375,
+          6.0,
+          10.0
+        ]
+      },
+      "faces": {
+        "east": {
+          "uv": [
+            9,
+            8.25,
+            9.3175,
+            8.5675
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            8.75,
+            0.75,
+            9.1875,
+            1.0675
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            9,
+            9,
+            9.3175,
+            9.3175
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "north": {
+          "uv": [
+            2.25,
+            8.75,
+            2.6875,
+            9.0675
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            3.75,
+            8.75,
+            4.0675,
+            9.1875
+          ],
+          "texture": "#0",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [
+            6.75,
+            8.75,
+            7.0675,
+            9.1875
+          ],
+          "texture": "#0",
+          "rotation": 270
+        }
+      }
+    },
+    {
+      "name": "wake_crystal_2_2",
+      "from": [
+        1.75,
+        5.53,
+        9.53
+      ],
+      "to": [
+        3.5,
+        6.47,
+        10.47
+      ],
+      "rotation": {
+        "angle": -22.5,
+        "axis": "x",
+        "origin": [
+          2.625,
+          6.0,
+          10.0
+        ]
+      },
+      "faces": {
+        "east": {
+          "uv": [
+            9.75,
+            9.25,
+            9.985,
+            9.485
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            3,
+            9,
+            3.4375,
+            9.235
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            9.75,
+            9.75,
+            9.985,
+            9.985
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "north": {
+          "uv": [
+            4.5,
+            9,
+            4.9375,
+            9.235
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            9,
+            4.5,
+            9.235,
+            4.9375
+          ],
+          "texture": "#0",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [
+            5.25,
+            9,
+            5.485,
+            9.4375
+          ],
+          "texture": "#0",
+          "rotation": 270
+        }
+      }
+    },
+    {
+      "name": "wake_crystal_2_3",
+      "from": [
+        0.0,
+        5.695,
+        9.695
+      ],
+      "to": [
+        1.75,
+        6.305,
+        10.305
+      ],
+      "rotation": {
+        "angle": -22.5,
+        "axis": "x",
+        "origin": [
+          0.875,
+          6.0,
+          10.0
+        ]
+      },
+      "faces": {
+        "east": {
+          "uv": [
+            5.75,
+            10.25,
+            5.9025,
+            10.4025
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            10,
+            0.5,
+            10.4375,
+            0.6525
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            6.25,
+            10.25,
+            6.4025,
+            10.4025
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "north": {
+          "uv": [
+            10,
+            1,
+            10.4375,
+            1.1525
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            10,
+            1.5,
+            10.1525,
+            1.9375
+          ],
+          "texture": "#0",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [
+            10,
+            3.75,
+            10.1525,
+            4.1875
+          ],
+          "texture": "#0",
+          "rotation": 270
+        }
+      }
+    },
+    {
+      "name": "wake_crystal_3_0",
+      "from": [
+        4.75,
+        4.2,
+        5.2
+      ],
+      "to": [
+        7.0,
+        5.8,
+        6.8
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            8.5,
+            3.75,
+            8.9,
+            4.15
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            5,
+            6.75,
+            5.5625,
+            7.15
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            6,
+            8.5,
+            6.4,
+            8.9
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "north": {
+          "uv": [
+            6,
+            7,
+            6.5625,
+            7.4
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            7,
+            7,
+            7.4,
+            7.5625
+          ],
+          "texture": "#0",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [
+            0,
+            7.5,
+            0.4,
+            8.0625
+          ],
+          "texture": "#0",
+          "rotation": 270
+        }
+      }
+    },
+    {
+      "name": "wake_crystal_3_1",
+      "from": [
+        2.5,
+        4.365,
+        5.365
+      ],
+      "to": [
+        4.75,
+        5.635,
+        6.635
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0,
+            9.25,
+            0.3175,
+            9.5675
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            7.5,
+            3.25,
+            8.0625,
+            3.5675
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            9.25,
+            0,
+            9.5675,
+            0.3175
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "north": {
+          "uv": [
+            5,
+            7.5,
+            5.5625,
+            7.8175
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            7.75,
+            0,
+            8.0675,
+            0.5625
+          ],
+          "texture": "#0",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [
+            2.25,
+            7.75,
+            2.5675,
+            8.3125
+          ],
+          "texture": "#0",
+          "rotation": 270
+        }
+      }
+    },
+    {
+      "name": "wake_crystal_3_2",
+      "from": [
+        0.25,
+        4.53,
+        5.53
+      ],
+      "to": [
+        2.5,
+        5.47,
+        6.47
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            0,
+            10,
+            0.235,
+            10.235
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            8.5,
+            7,
+            9.0625,
+            7.235
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            10,
+            0,
+            10.235,
+            0.235
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "north": {
+          "uv": [
+            7.5,
+            8.5,
+            8.0625,
+            8.735
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            8.5,
+            7.5,
+            8.735,
+            8.0625
+          ],
+          "texture": "#0",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [
+            8.5,
+            8.5,
+            8.735,
+            9.0625
+          ],
+          "texture": "#0",
+          "rotation": 270
+        }
+      }
+    },
+    {
+      "name": "wake_crystal_3_3",
+      "from": [
+        -2.0,
+        4.695,
+        5.695
+      ],
+      "to": [
+        0.25,
+        5.305,
+        6.305
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            10.25,
+            7.25,
+            10.4025,
+            7.4025
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            9.75,
+            3.25,
+            10.3125,
+            3.4025
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            10.25,
+            8.75,
+            10.4025,
+            8.9025
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "north": {
+          "uv": [
+            9.75,
+            6,
+            10.3125,
+            6.1525
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            5.25,
+            9.75,
+            5.4025,
+            10.3125
+          ],
+          "texture": "#0",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [
+            7.25,
+            9.75,
+            7.4025,
+            10.3125
+          ],
+          "texture": "#0",
+          "rotation": 270
+        }
+      }
+    },
+    {
+      "name": "white_fracture_0",
+      "from": [
+        12.6,
+        6.0,
+        4.0
+      ],
+      "to": [
+        13.1,
+        9.0,
+        4.4
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            9.25,
+            3,
+            9.35,
+            3.75
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            5.75,
+            9.25,
+            5.875,
+            10
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            6.25,
+            9.25,
+            6.35,
+            10
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "north": {
+          "uv": [
+            0.75,
+            9.5,
+            0.875,
+            10.25
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            9.25,
+            10.25,
+            9.35,
+            10.375
+          ],
+          "texture": "#0",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [
+            10.25,
+            9.25,
+            10.35,
+            9.375
+          ],
+          "texture": "#0",
+          "rotation": 270
+        }
+      }
+    },
+    {
+      "name": "white_fracture_1",
+      "from": [
+        12.6,
+        6.5,
+        5.4
+      ],
+      "to": [
+        13.1,
+        9.5,
+        5.8
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            9.5,
+            0.75,
+            9.6,
+            1.5
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            1.25,
+            9.5,
+            1.375,
+            10.25
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            1.75,
+            9.5,
+            1.85,
+            10.25
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "north": {
+          "uv": [
+            9.5,
+            1.75,
+            9.625,
+            2.5
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            9.75,
+            10.25,
+            9.85,
+            10.375
+          ],
+          "texture": "#0",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [
+            10.25,
+            9.75,
+            10.35,
+            9.875
+          ],
+          "texture": "#0",
+          "rotation": 270
+        }
+      }
+    },
+    {
+      "name": "white_fracture_2",
+      "from": [
+        12.6,
+        7.0,
+        6.8
+      ],
+      "to": [
+        13.1,
+        10.0,
+        7.2
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            2.25,
+            9.5,
+            2.35,
+            10.25
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            2.75,
+            9.5,
+            2.875,
+            10.25
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            3.25,
+            9.5,
+            3.35,
+            10.25
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "north": {
+          "uv": [
+            3.75,
+            9.5,
+            3.875,
+            10.25
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            10.25,
+            10.25,
+            10.35,
+            10.375
+          ],
+          "texture": "#0",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [
+            0,
+            10.5,
+            0.1,
+            10.625
+          ],
+          "texture": "#0",
+          "rotation": 270
+        }
+      }
+    },
+    {
+      "name": "white_fracture_3",
+      "from": [
+        12.6,
+        7.5,
+        8.2
+      ],
+      "to": [
+        13.1,
+        10.5,
+        8.6
+      ],
+      "faces": {
+        "east": {
+          "uv": [
+            9.5,
+            4,
+            9.6,
+            4.75
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "south": {
+          "uv": [
+            4.25,
+            9.5,
+            4.375,
+            10.25
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "west": {
+          "uv": [
+            4.75,
+            9.5,
+            4.85,
+            10.25
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "north": {
+          "uv": [
+            6.75,
+            9.5,
+            6.875,
+            10.25
+          ],
+          "texture": "#0",
+          "rotation": 0
+        },
+        "up": {
+          "uv": [
+            10.5,
+            0,
+            10.6,
+            0.125
+          ],
+          "texture": "#0",
+          "rotation": 90
+        },
+        "down": {
+          "uv": [
+            0.5,
+            10.5,
+            0.6,
+            10.625
+          ],
+          "texture": "#0",
+          "rotation": 270
+        }
+      }
+    }
+  ],
+  "credit": "Original geometry/UV designed for Smooth Classes via AI-assisted Renas Blockbench authoring, 2026-11-05. See batch provenance; not a blanket legal clearance."
 }

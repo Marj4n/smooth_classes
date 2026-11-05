@@ -1,6 +1,11 @@
-MARJ4N PERMISSION-REQUIRED NOTICE
+SMOOTH CLASSES — MARJ4N PROPRIETARY LICENSE
 
 Copyright (c) 2026 Marj4n. All rights reserved in material owned by Marj4n.
+
+Project ownership
+Smooth Classes is developed and maintained by Marj4n. Original Smooth Classes
+source code and assets whose rights are held by Marj4n are proprietary and
+are governed by this license. All rights not expressly granted are reserved.
 
 Scope
 This notice applies only to original source code, artwork and other material

@@ -33,7 +33,7 @@ public final class OriginAppearanceFeatureRenderer
     private static final Identifier DEMON_TINT =
             SmoothClasses.id("textures/entity/origin/demon_overlay.png");
     private static final Identifier MERMAID_TAIL =
-            SmoothClasses.id("textures/entity/origin/mermaid_tail_mermod.png");
+            SmoothClasses.id("textures/original_additional_models_001/origin_siren_tail.png");
     private static final Identifier VOID =
             SmoothClasses.id("textures/entity/origin/void_overlay.png");
     private static final Identifier VOID_EYES =

@@ -268,7 +268,7 @@ public final class ForbiddenTreePlacement {
                 checkpoint(server);
                 releaseJob();
                 SmoothClasses.LOGGER.info(
-                        "FORBIDDEN_TREE READY anchor=[{},{},{}] placements={} physical85 selection96 palette53 blocks8271",
+                        "FORBIDDEN_TREE READY anchor=[{},{},{}] placements={} physical85 selection96 palette8 blocks33094",
                         r.x,
                         r.y,
                         r.z,

@@ -27,8 +27,16 @@ Build-time resource and packaging checks are part of the existing build.
 
 ## Credits and license
 
-By Marj4n. Third-party art and integration notices remain with their assets, including `FORBIDDEN_TREE_CREDITS.txt`. See [LICENSE.txt](LICENSE.txt).
+Smooth Classes is developed and maintained by **Marj4n**. Its original code and assets whose rights are held by Marj4n are proprietary: **All Rights Reserved**. See [LICENSE.txt](LICENSE.txt) for the permissions to play official releases and the written-permission requirement for reuse, modification, ports and redistribution.
+
+Minecraft, loaders, libraries and other mod integrations retain their own rights and licenses. Applicable third-party and historical notices are documented in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md), including the structure credits in `FORBIDDEN_TREE_CREDITS.txt`. Existing valid rights remain applicable.
 
 ## Reuse permissions
 
 Reusing or modifying Marj4n-owned source code or assets requires prior written permission. Contact Marj4n through [nivekts.vercel.app](https://nivekts.vercel.app/) with the intended use. See [LICENSE.txt](LICENSE.txt) for gameplay permissions and exceptions. Third-party licenses, existing grants and GitHub platform rights remain applicable.
+
+## Current replacement validation
+
+The current original asset replacements include effect models/materials, equipped animation clips, Dreadglare models, the Rider mount and Siren tail, Dread Steed materials, pixel artwork, sounds and the Forbidden Tree. The Rider surface-motion and flight calculations have separate behavior-preserving implementations.
+
+The current engineering checks pass **227 Fabric +116 Forge tests (343 total)**. Fluid adapter comparisons cover 937,280 test-double steps; flight comparisons cover 71,752 cases/sequence steps with Minecraft's vector/math API. These scoped checks preserve the frozen calculation contracts and resource packages. They do not establish universal mounted gameplay, Forge runtime, shader or multiplayer coverage, or a legal determination of exclusive rights.

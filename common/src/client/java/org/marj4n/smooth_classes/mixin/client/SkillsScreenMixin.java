@@ -43,81 +43,8 @@ public abstract class SkillsScreenMixin {
     @Unique private static final int EYE_SHEET_WIDTH = EYE_FRAME_COUNT * EYE_FRAME_SIZE;
     @Unique private static final int EYE_MIN_GAP = 36;
 
-    @Unique
-    private final Identifier cloudsTexture1 =
-            Identifier.of("smooth_classes", "textures/backgrounds/decor/clouds.png");
-
-    @Unique
-    private final Identifier cloudsTexture2 =
-            Identifier.of("smooth_classes", "textures/backgrounds/decor/clouds_2.png");
-
-    @Unique
-    private final Identifier cloudsTexture3 =
-            Identifier.of("smooth_classes", "textures/backgrounds/decor/clouds_3.png");
-
-    @Unique private float cloudsX = 0;
-
-    @Unique private Identifier selectedCloudsTexture = null;
     @Unique private final List<EyeManifestation> activeEyes = new ArrayList<>();
     @Unique private long nextEyeSpawnAt = 0L;
-
-    @Unique
-    private void selectRandomCloudsTexture() {
-        int textureIndex = ThreadLocalRandom.current().nextInt(3);
-        switch (textureIndex) {
-            case 0 -> selectedCloudsTexture = cloudsTexture1;
-            case 1 -> selectedCloudsTexture = cloudsTexture2;
-            default -> selectedCloudsTexture = cloudsTexture3;
-        }
-    }
-
-    /* Scaling Variant - not aligned
-    @Redirect(method = "drawContentWithCategory(Lnet/minecraft/client/gui/DrawContext;DDLnet/puffish/skillsmod/client/data/ClientSkillCategoryData;)V",
-            at = @At(value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/DrawContext;drawTexture(Lnet/minecraft/util/Identifier;IIFFIIII)V"))
-    private void redirectDrawTexture(DrawContext context, Identifier texture, int x, int y, float u, float v, int width, int height, int textureWidth, int textureHeight) {
-        int originalTextureWidth = 5120;
-        int originalTextureHeight = 2880;
-
-        float aspectRatio = (float) originalTextureWidth / (float) originalTextureHeight;
-
-        int newTextureWidth = bounds.width();
-        int newTextureHeight = (int) (newTextureWidth / aspectRatio);
-
-        int centerX = bounds.min().x + bounds.width() / 2;
-        int centerY = bounds.min().y + bounds.height() / 2;
-
-        int newX = centerX - newTextureWidth / 2;
-        int newY = centerY - newTextureHeight / 2;
-
-        context.drawTexture(texture, newX, newY, u, v, newTextureWidth, newTextureHeight, newTextureWidth, newTextureHeight);
-    }
-     */
-    // Maintains image position in 16:9
-    /*
-    @Redirect(method = "drawContentWithCategory(Lnet/minecraft/client/gui/DrawContext;DDLnet/puffish/skillsmod/client/data/ClientSkillCategoryData;)V",
-            at = @At(value = "INVOKE",
-                    target = "Lnet/minecraft/client/gui/DrawContext;drawTexture(Lnet/minecraft/util/Identifier;IIFFIIII)V"))
-    private void redirectDrawTexture(DrawContext context, Identifier texture, int x, int y, float u, float v, int width, int height, int textureWidth, int textureHeight) {
-        SkillsScreen screen = (SkillsScreen) (Object) this;
-        SkillsScreenAccessor accessor = (SkillsScreenAccessor) screen;
-        Bounds2i bounds = accessor.getBounds();
-        int originalTextureWidth = 1920;
-        int originalTextureHeight = 1080;
-
-        float aspectRatio = (float) originalTextureWidth / (float) originalTextureHeight;
-
-        int newTextureWidth = bounds.width(); // new width
-        int newTextureHeight = (int) (newTextureWidth / aspectRatio);
-
-        int centerX = bounds.min().x + bounds.width() / 2;
-        int centerY = bounds.min().y + bounds.height() / 2;
-
-        int newX = centerX - newTextureWidth / 2;
-        int newY = centerY - newTextureHeight / 2;
-
-        context.drawTexture(texture, newX, newY, u, v, newTextureWidth, newTextureHeight, newTextureWidth, newTextureHeight);
-    }*/
 
     /** Origin categories are milestone trees, not point-buy trees. */
     @Inject(
@@ -450,41 +377,4 @@ public abstract class SkillsScreenMixin {
         }
     }
 
-    @Unique
-    private void updateAndDrawCloudsTexture(DrawContext context, Bounds2i bounds) {
-        if (cloudsX == 0) cloudsX = -bounds.width();
-        if (selectedCloudsTexture == null) {
-            selectRandomCloudsTexture();
-        }
-        float cloudsSpeed = 0.05f;
-        float newX = cloudsX + cloudsSpeed;
-        if (newX <= -bounds.width()) {
-            newX = -bounds.width();
-        } else if (newX > 0) {
-            newX = 0;
-        }
-        cloudsX = newX;
-        MatrixStack matrixStack = context.getMatrices();
-        matrixStack.push();
-
-        // Set partial transparency
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 0.5F);
-        int cloudsHeight = 1440;
-        context.drawTexture(
-                selectedCloudsTexture,
-                (int) cloudsX,
-                bounds.min().y,
-                0,
-                0,
-                bounds.width() + 10240,
-                cloudsHeight,
-                bounds.width() + 10240,
-                cloudsHeight);
-        RenderSystem.disableBlend();
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-
-        matrixStack.pop();
-    }
 }
