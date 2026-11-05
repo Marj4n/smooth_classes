@@ -63,9 +63,14 @@ tasks.named('processResources') {
 tasks.named('jar') {
     archiveClassifier = 'dev-forge'
     from(rootProject.file('LICENSE.txt'))
+    from(rootProject.file('THIRD_PARTY_NOTICES.md'))
 }
 tasks.named('remapJar') { archiveClassifier = 'forge' }
-tasks.named('sourcesJar') { archiveClassifier = 'forge-sources' }
+tasks.named('sourcesJar') {
+    archiveClassifier = 'forge-sources'
+    from(rootProject.file('LICENSE.txt'))
+    from(rootProject.file('THIRD_PARTY_NOTICES.md'))
+}
 
 // Use the Forge runtime selector for Spell Engine's generic renderer override.
 sourceSets.main.java.exclude '**/mixin/client/SpellProjectileRendererClientMixin.java'
@@ -115,6 +120,9 @@ sourceSets.test.java {
     include '**/CuboidVertexCollectorTest.java'
     include '**/SkillEffectPoseTest.java'
     include '**/SkillParticleEmitterTest.java'
+    include '**/HealingSpellResourceTest.java'
+    include '**/RiderSurfaceMotionTest.java'
+    include '**/RiderFlightMotionTest.java'
 }
 dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter:5.11.4'
@@ -158,3 +166,12 @@ tasks.register('validateForgeArmorTargets') {
 tasks.named('compileJava') { dependsOn 'validateForgeArmorTargets' }
 
 sourceSets.test.resources.srcDir rootProject.file('common/src/test/resources')
+
+// Keep privately retained historical upstream art out of every distribution JAR.
+// Exact paths only; approved originals and external-license notices remain packaged.
+tasks.withType(Jar).configureEach {
+    exclude 'assets/smooth_classes/textures/entity/rider/hippogryph_white.png'
+    exclude 'assets/smooth_classes/textures/entity/origin/mermaid_tail_mermod.png'
+    exclude 'assets/smooth_classes/textures/entity/rider/dread_steed.png'
+    exclude 'assets/smooth_classes/textures/entity/rider/dread_steed_eyes.png'
+}

@@ -97,7 +97,7 @@
     {
       "action": {
         "type": "HEAL",
-        "damage": {
+        "heal": {
           "spell_power_coefficient": 0.2
         }
       },

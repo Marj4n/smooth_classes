@@ -16,6 +16,101 @@
         "namespace": "^smooth_classes$",
         "path": "^item/sacred_banner_(source|gold)$"
       }
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "smooth_classes:original_models_001/barrier",
+      "sprite": "smooth_classes:original_models_001/barrier"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "smooth_classes:original_models_001/curse",
+      "sprite": "smooth_classes:original_models_001/curse"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "smooth_classes:original_models_001/death_mark",
+      "sprite": "smooth_classes:original_models_001/death_mark"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "smooth_classes:original_models_001/immobilize",
+      "sprite": "smooth_classes:original_models_001/immobilize"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "smooth_classes:original_models_001/magic_circle",
+      "sprite": "smooth_classes:original_models_001/magic_circle"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "smooth_classes:original_models_001/taunted",
+      "sprite": "smooth_classes:original_models_001/taunted"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "smooth_classes:original_models_001/undying",
+      "sprite": "smooth_classes:original_models_001/undying"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "smooth_classes:original_models_001/undying_glow",
+      "sprite": "smooth_classes:original_models_001/undying_glow"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "smooth_classes:original_models_001/vitality_bond",
+      "sprite": "smooth_classes:original_models_001/vitality_bond"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "smooth_classes:original_models_001/arcane_slash",
+      "sprite": "smooth_classes:original_models_001/arcane_slash"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "smooth_classes:original_models_001/arrow",
+      "sprite": "smooth_classes:original_models_001/arrow"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "smooth_classes:original_models_001/bones",
+      "sprite": "smooth_classes:original_models_001/bones"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "smooth_classes:original_models_001/comet_projectile",
+      "sprite": "smooth_classes:original_models_001/comet_projectile"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "smooth_classes:original_models_001/meteor_projectile",
+      "sprite": "smooth_classes:original_models_001/meteor_projectile"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "smooth_classes:original_models_001/eldritch_hammers",
+      "sprite": "smooth_classes:original_models_001/eldritch_hammers"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "smooth_classes:original_models_001/righteous_shield",
+      "sprite": "smooth_classes:original_models_001/righteous_shield"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "smooth_classes:original_models_001/sword",
+      "sprite": "smooth_classes:original_models_001/sword"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "smooth_classes:original_models_001/swordfall",
+      "sprite": "smooth_classes:original_models_001/swordfall"
+    },
+    {
+      "type": "minecraft:single",
+      "resource": "smooth_classes:original_models_001/righteous_hammers",
+      "sprite": "smooth_classes:original_models_001/righteous_hammers"
     }
   ]
 }

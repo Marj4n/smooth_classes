@@ -22,9 +22,9 @@ import net.minecraft.world.World;
 /**
  * Standalone Smooth Classes Rider Hippogryph.
  *
- * Rider flight is intentionally modelled after the rider-flight controller used
- * by Saints & Dragons 1.20.1: smooth yaw following, throttle, sprint/CTRL boost,
- * pitch-directed flight, dive overdrive and momentum-preserving pull-up.
+ * World binding for Smooth Classes flight inputs, state and the RiderFlightMotion solver.
+ * Historical Saints & Dragons reference is retained in THIRD_PARTY_NOTICES.md.
+ * Behavior-preserving implementation work is not a clean-room or rights-transfer claim.
  */
 public final class RiderHippogryphEntity extends HorseEntity {
     private static final float DEG_TO_RAD = (float) (Math.PI / 180.0D);
@@ -36,18 +36,7 @@ public final class RiderHippogryphEntity extends HorseEntity {
             DataTracker.registerData(
                     RiderHippogryphEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
 
-    private static final double BASE_FLIGHT_SPEED_MULT = 1.65D;
-    private static final double BOOST_FLIGHT_SPEED_MULT = 2.65D;
-    private static final double FLIGHT_ACCELERATION = 0.24D;
-    private static final double DIVE_SPEED_MULTIPLIER = 2.05D;
-    private static final double DIVE_ACCELERATION = 0.27D;
-    private static final double STRAFE_POWER = 0.45D;
-    private static final double NO_INPUT_DRAG = 0.055D;
-    private static final double ASCEND_THRUST = 0.090D;
-    private static final double DESCEND_THRUST = 0.125D;
-    private static final double VERTICAL_SPEED_LIMIT = 0.85D;
     private static final double TAKEOFF_UPWARD = 0.52D;
-    private static final int DIVE_EXIT_BOOST_HOLD_TICKS = 50;
 
     private boolean riderAscend;
     private boolean riderDescend;
@@ -285,190 +274,18 @@ public final class RiderHippogryphEntity extends HorseEntity {
     }
 
     private void flyWithRider(PlayerEntity rider, Vec3d input) {
-        double forwardInput = input.z;
-        double strafeInput = input.x;
-        boolean hasInput = Math.abs(forwardInput) > 0.01D || Math.abs(strafeInput) > 0.01D;
-
-        float pitchRadians = resolveRiderPitchRadians(rider, forwardInput);
-        double diveIntensity = diveIntensity(pitchRadians);
-        boolean diving = forwardInput > 0.01D && diveIntensity > 0.0D;
-
-        double movementSpeed =
-                Math.max(0.20D, getAttributeValue(EntityAttributes.GENERIC_MOVEMENT_SPEED));
-        double baseSpeed = movementSpeed * BASE_FLIGHT_SPEED_MULT;
-        double sprintSpeed = movementSpeed * BOOST_FLIGHT_SPEED_MULT;
-        double flightSpeed =
-                tickThrottle(hasInput, forwardInput, diveIntensity, baseSpeed, sprintSpeed);
-
-        float yawRadians = getYaw() * DEG_TO_RAD;
-        double forwardXZ = Math.cos(pitchRadians);
-        double forwardX = -Math.sin(yawRadians) * forwardXZ;
-        double forwardY = -Math.sin(pitchRadians);
-        double forwardZ = Math.cos(yawRadians) * forwardXZ;
-        double rightX = Math.cos(yawRadians);
-        double rightZ = Math.sin(yawRadians);
-
-        double targetX = forwardX * forwardInput + rightX * strafeInput * STRAFE_POWER;
-        double targetY = forwardY * forwardInput * 1.35D;
-        double targetZ = forwardZ * forwardInput + rightZ * strafeInput * STRAFE_POWER;
-        double length = Math.sqrt(targetX * targetX + targetY * targetY + targetZ * targetZ);
-
-        Vec3d current = getVelocity();
-        Vec3d velocity;
-        boolean preservingDivePullUp = false;
-
-        if (hasInput && length > 0.01D) {
-            Vec3d targetDirection = new Vec3d(targetX / length, targetY / length, targetZ / length);
-            preservingDivePullUp =
-                    !diving
-                            && forwardInput > 0.01D
-                            && targetDirection.y > 0.01D
-                            && diveBoostHoldTicks > 0;
-
-            if (preservingDivePullUp) {
-                double maxDiveSpeed = Math.max(baseSpeed, sprintSpeed) * DIVE_SPEED_MULTIPLIER;
-                double preserved =
-                        MathHelper.clamp(
-                                Math.max(current.length(), flightSpeed), flightSpeed, maxDiveSpeed);
-                velocity =
-                        steerPreservingSpeed(
-                                current,
-                                targetDirection,
-                                preserved,
-                                FLIGHT_ACCELERATION,
-                                yawRadians);
-            } else {
-                Vec3d targetVelocity = targetDirection.multiply(flightSpeed);
-                double acceleration = diving ? DIVE_ACCELERATION : FLIGHT_ACCELERATION;
-                velocity =
-                        new Vec3d(
-                                MathHelper.lerp(acceleration, current.x, targetVelocity.x),
-                                MathHelper.lerp(acceleration, current.y, targetVelocity.y),
-                                MathHelper.lerp(acceleration, current.z, targetVelocity.z));
-            }
-        } else {
-            velocity = current.multiply(1.0D - NO_INPUT_DRAG);
-            if (velocity.lengthSquared() < 0.0001D) velocity = Vec3d.ZERO;
-        }
-
-        double vertical = velocity.y;
-        if (!diving) {
-            if (riderAscend && !riderDescend) vertical += ASCEND_THRUST;
-            else if (riderDescend && !riderAscend) vertical -= DESCEND_THRUST;
-        }
-
-        double verticalLimit =
-                preservingDivePullUp
-                        ? Math.max(VERTICAL_SPEED_LIMIT, flightSpeed)
-                        : VERTICAL_SPEED_LIMIT;
-        vertical =
-                MathHelper.clamp(
-                        vertical,
-                        -Math.max(VERTICAL_SPEED_LIMIT, diving ? flightSpeed : 0.0D),
-                        verticalLimit);
-        velocity = new Vec3d(velocity.x, vertical, velocity.z);
-
-        move(MovementType.SELF, velocity);
-        setVelocity(velocity);
+        var frame = new RiderFlightMotion.Input(input.z, input.x, rider.getPitch(), getYaw(),
+                getAttributeValue(EntityAttributes.GENERIC_MOVEMENT_SPEED),
+                riderAscend, riderDescend, isRiderBoosting(), getVelocity());
+        var step = RiderFlightMotion.step(frame,
+                new RiderFlightMotion.Memory(riderFlightThrottle, diveBoostHoldTicks));
+        riderFlightThrottle = step.memory().throttle();
+        diveBoostHoldTicks = step.memory().momentumTicks();
+        move(MovementType.SELF, step.velocity());
+        setVelocity(step.velocity());
         velocityModified = true;
         fallDistance = 0.0F;
         rider.fallDistance = 0.0F;
-    }
-
-    private float resolveRiderPitchRadians(PlayerEntity rider, double forwardInput) {
-        float pitch = MathHelper.clamp(rider.getPitch(), -75.0F, 75.0F) * DEG_TO_RAD;
-
-        // Space/shift can curve the mount vertically without requiring the camera
-        // to stare straight up/down. With W held we bias 45 degrees; hovering uses
-        // a steeper 80-degree bias, matching the design of Saints & Dragons.
-        if (riderAscend != riderDescend) {
-            float biasDeg = forwardInput > 0.01D ? 45.0F : 80.0F;
-            float bias = biasDeg * DEG_TO_RAD * (riderAscend ? -1.0F : 1.0F);
-            if (Math.signum(pitch) != Math.signum(bias) && Math.abs(pitch) >= Math.abs(bias)) {
-                pitch = 0.0F;
-            } else {
-                pitch += bias;
-            }
-        }
-        return MathHelper.clamp(pitch, -HALF_PI, HALF_PI);
-    }
-
-    private double tickThrottle(
-            boolean hasInput,
-            double forwardInput,
-            double diveIntensity,
-            double baseSpeed,
-            double sprintSpeed) {
-        double baseTarget = isRiderBoosting() ? sprintSpeed : baseSpeed;
-        double maxOverdrive = Math.max(baseTarget, sprintSpeed) * DIVE_SPEED_MULTIPLIER;
-        double throttle = MathHelper.clamp(riderFlightThrottle, 0.0D, maxOverdrive);
-        boolean forwardActive = forwardInput > 0.01D;
-        boolean diving = forwardActive && diveIntensity > 0.0D;
-
-        if (hasInput) {
-            if (throttle <= 0.0D) throttle = baseTarget;
-            else if (throttle < baseTarget)
-                throttle = MathHelper.lerp(FLIGHT_ACCELERATION, throttle, baseTarget);
-        } else {
-            riderFlightThrottle = Math.max(0.0D, throttle - 0.035D);
-            return riderFlightThrottle;
-        }
-
-        if (diving) {
-            diveBoostHoldTicks = DIVE_EXIT_BOOST_HOLD_TICKS;
-            double situationalCap = MathHelper.lerp(diveIntensity, baseTarget, maxOverdrive);
-            double pitchGain = baseTarget * DIVE_ACCELERATION * 0.16D * diveIntensity;
-            if (throttle < situationalCap)
-                throttle = Math.min(situationalCap, throttle + pitchGain);
-        } else if (throttle > baseTarget) {
-            if (forwardActive && diveBoostHoldTicks > 0) {
-                diveBoostHoldTicks--;
-            } else {
-                throttle = Math.max(baseTarget, throttle - baseTarget * 0.035D);
-            }
-        } else if (!isRiderBoosting() && throttle > 0.0D) {
-            throttle = Math.max(0.0D, throttle - baseTarget * 0.025D);
-        }
-
-        riderFlightThrottle = MathHelper.clamp(throttle, 0.0D, maxOverdrive);
-        return riderFlightThrottle;
-    }
-
-    private static double diveIntensity(float pitchRadians) {
-        double pitchDegrees = Math.toDegrees(pitchRadians);
-        double normalized = (pitchDegrees - 30.0D) / (70.0D - 30.0D);
-        return MathHelper.clamp(normalized, 0.0D, 1.0D);
-    }
-
-    private static Vec3d steerPreservingSpeed(
-            Vec3d current,
-            Vec3d targetDirection,
-            double speed,
-            double turnFraction,
-            float yawRadians) {
-        Vec3d to = targetDirection.normalize();
-        if (current.lengthSquared() < 1.0E-8D) return to.multiply(speed);
-
-        Vec3d from = current.normalize();
-        double dot = MathHelper.clamp(from.dotProduct(to), -1.0D, 1.0D);
-        if (dot > 0.9999D) return to.multiply(speed);
-
-        Vec3d axis = from.crossProduct(to);
-        if (axis.lengthSquared() < 1.0E-8D) {
-            Vec3d horizontalForward = new Vec3d(-Math.sin(yawRadians), 0.0D, Math.cos(yawRadians));
-            axis = from.crossProduct(horizontalForward);
-            if (axis.lengthSquared() < 1.0E-8D) axis = new Vec3d(1.0D, 0.0D, 0.0D);
-        }
-        axis = axis.normalize();
-
-        double turnRadians = Math.acos(dot) * MathHelper.clamp(turnFraction, 0.0D, 1.0D);
-        double cos = Math.cos(turnRadians);
-        double sin = Math.sin(turnRadians);
-        Vec3d turned =
-                from.multiply(cos)
-                        .add(axis.crossProduct(from).multiply(sin))
-                        .add(axis.multiply(axis.dotProduct(from) * (1.0D - cos)));
-        return turned.normalize().multiply(speed);
     }
 
     private void tickFlightVisuals(boolean flying) {

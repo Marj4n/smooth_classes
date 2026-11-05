@@ -1,0 +1,14 @@
+{
+  "batch": "ORIGINAL_RUNTIME_GRIP_AND_STEED_001",
+  "source_native_SHA256": {
+    "grip/source/grip-full-item-r03.bbmodel": "670f634348bc885aa9f7f5f7bbd92359f393aa77b491e17461cd948a1c7d1e96",
+    "steed/source/original-materials-r03.bbmodel": "2ccea0d487fce40e2ccc2671039d7c5a4deb8cc723cba9b568b357ca28118395"
+  },
+  "source_package_SHA256": "55d279ed2d10e09b92a9eadef04023d9c2bfa0b04945b6f9abde1580e59768cb",
+  "artwork": "Independent AI-assisted native Renas authoring; private reference geometry/art not claimed original",
+  "third_party_scope": "See root THIRD_PARTY_NOTICES.md; rights held by third parties excluded from LICENSE.txt",
+  "visual_adapter": null,
+  "gameplay_mechanics": "Unchanged",
+  "runtime_coverage": "Controlled Fabric actual-renderer validation; see controller reports. Not full gameplay, Forge runtime, shader or multiplayer certification",
+  "tail_visual_waist_bind_offset_model_units": null
+}

@@ -7,66 +7,49 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
 /**
- * Fluid-surface horse physics adapted from Eternal Nether / Bygone Nether's
- * WitherSkeletonHorse floatHorse() behavior.
- *
- * The important part is not only canWalkOnFluid(): once the horse reaches the
- * top fluid block it is explicitly treated as on-ground. While submerged it
- * receives a small buoyancy impulse until it reaches that surface.
+ * Minecraft binding for the Smooth Classes surface-motion policy.
+ * Historical Eternal Nether / Bygone Nether reference is recorded in THIRD_PARTY_NOTICES.md.
+ * This behavior-preserving reimplementation does not assert clean-room authorship or legal clearance.
  */
 public final class RiderFluidWalkPhysics {
     private RiderFluidWalkPhysics() {}
 
     public static void tick(AbstractHorseEntity horse, boolean water, boolean lava) {
-        boolean inWater = water && horse.isTouchingWater();
-        boolean inLava = lava && horse.isInLava();
-        if (!inWater && !inLava) return;
+        if (!(water && horse.isTouchingWater()) && !(lava && horse.isInLava())) return;
+        Sample sample = supportingFluid(horse, water, lava);
+        if (sample == null) return;
 
-        BlockPos pos = horse.getBlockPos();
-        FluidState state = horse.getWorld().getFluidState(pos);
+        var world = horse.getWorld();
+        boolean column = matches(world.getFluidState(sample.cell().up()), water, lava);
+        double surface = RiderSurfaceMotion.top(sample.cell().getY(),
+                sample.fluid().getHeight(world, sample.cell()));
+        var mode = RiderSurfaceMotion.mode(true, column, horse.getBoundingBox().minY,
+                surface);
 
-        // getBlockPos() can already point at the block just above the liquid when
-        // the feet are exactly on the surface. Check one block down as well.
-        if (!matches(state, water, lava)) {
-            BlockPos down = pos.down();
-            FluidState downState = horse.getWorld().getFluidState(down);
-            if (matches(downState, water, lava)) {
-                pos = down;
-                state = downState;
-            }
+        if (mode == RiderSurfaceMotion.Mode.SUPPORTED) horse.setOnGround(true);
+        // Keep the supported branch's fall-distance reset before its velocity write.
+        if (mode == RiderSurfaceMotion.Mode.SUPPORTED) horse.fallDistance = 0.0F;
+        Vec3d velocity = horse.getVelocity();
+        if (RiderSurfaceMotion.replacesVelocity(mode, velocity.y)) {
+            horse.setVelocity(
+                    RiderSurfaceMotion.horizontal(mode, velocity.x),
+                    RiderSurfaceMotion.vertical(mode, velocity.y),
+                    RiderSurfaceMotion.horizontal(mode, velocity.z));
+            horse.velocityModified = true;
         }
+        if (mode == RiderSurfaceMotion.Mode.RISING) horse.fallDistance = 0.0F;
+    }
 
-        if (!matches(state, water, lava)) return;
+    private record Sample(BlockPos cell, FluidState fluid) {}
 
-        FluidState above = horse.getWorld().getFluidState(pos.up());
-        double height = state.getHeight(horse.getWorld(), pos);
-        if (height <= 0.0D) height = 1.0D;
-        double surfaceY = pos.getY() + height;
-
-        // Eternal Nether's floatHorse() marks the horse as grounded when it has
-        // reached the top fluid block. That makes ridden horse movement use the
-        // normal grounded branch instead of swimming movement.
-        boolean topFluidBlock = !matches(above, water, lava);
-        boolean feetAtSurface = horse.getBoundingBox().minY >= surfaceY - 0.42D;
-
-        if (topFluidBlock && feetAtSurface) {
-            horse.setOnGround(true);
-            horse.fallDistance = 0.0F;
-
-            Vec3d v = horse.getVelocity();
-            if (v.y < 0.0D) {
-                horse.setVelocity(v.x, 0.0D, v.z);
-                horse.velocityModified = true;
-            }
-            return;
-        }
-
-        // Same idea as Eternal Nether's:
-        // velocity = velocity * 0.5 + (0, 0.05, 0)
-        Vec3d v = horse.getVelocity();
-        horse.setVelocity(v.multiply(0.5D).add(0.0D, 0.05D, 0.0D));
-        horse.velocityModified = true;
-        horse.fallDistance = 0.0F;
+    private static Sample supportingFluid(AbstractHorseEntity horse, boolean water, boolean lava) {
+        BlockPos feet = horse.getBlockPos();
+        var world = horse.getWorld();
+        FluidState current = world.getFluidState(feet);
+        if (matches(current, water, lava)) return new Sample(feet, current);
+        BlockPos below = feet.down();
+        FluidState lower = world.getFluidState(below);
+        return matches(lower, water, lava) ? new Sample(below, lower) : null;
     }
 
     public static boolean matches(FluidState state, boolean water, boolean lava) {

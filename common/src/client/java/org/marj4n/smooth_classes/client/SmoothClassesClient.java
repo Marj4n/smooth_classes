@@ -12,6 +12,8 @@ import net.minecraft.util.math.MathHelper;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.render.entity.model.EntityModelLayer;
+import net.minecraft.client.render.entity.model.EntityModelLayers;
+import net.minecraft.client.render.entity.model.BipedEntityModel;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.text.Text;
 import net.minecraft.sound.SoundCategory;
@@ -39,8 +41,6 @@ public final class SmoothClassesClient {
             new EntityModelLayer(SmoothClasses.id("dreadglare"), "main");
     public static final EntityModelLayer GREATER_DREADGLARE_MODEL =
             new EntityModelLayer(SmoothClasses.id("greater_dreadglare"), "main");
-    public static final EntityModelLayer WRAITH_MODEL =
-            new EntityModelLayer(SmoothClasses.id("wraith"), "main");
     public static final EntityModelLayer RIDER_HIPPOGRYPH_MODEL =
             new EntityModelLayer(SmoothClasses.id("rider_hippogryph"), "main");
     public static final EntityModelLayer ORIGIN_COSMETICS_MODEL =
@@ -920,7 +920,6 @@ public final class SmoothClassesClient {
         registrar.accept(ORIGIN_HOMUNCULUS_MODEL, HomunculusReplacementModel::createData);
         registrar.accept(DREADGLARE_MODEL, DreadglareModel::getTexturedModelData);
         registrar.accept(GREATER_DREADGLARE_MODEL, GreaterDreadglareModel::getTexturedModelData);
-        registrar.accept(WRAITH_MODEL, WraithModel::getTexturedModelData);
         registrar.accept(RIDER_HIPPOGRYPH_MODEL, RiderHippogryphModel::getTexturedModelData);
     }
 
@@ -948,14 +947,16 @@ public final class SmoothClassesClient {
                 org.marj4n.smooth_classes.client.origin.demon.DemonSeatRenderer::new);
         EntityRendererRegistry.register(SmoothEntities.DREADGLARE, context ->
                 new SummonedMobRenderer<>(context, new DreadglareModel(context.getPart(DREADGLARE_MODEL)),
-                        SmoothClasses.id("textures/entity/dreadglare.png"), 1F, true));
+                        SmoothClasses.id("textures/entity/original_mob_models_001/dreadglare.png"), 1F, true));
         EntityRendererRegistry.register(SmoothEntities.GREATER_DREADGLARE, context ->
                 new SummonedMobRenderer<>(context,
                         new GreaterDreadglareModel(context.getPart(GREATER_DREADGLARE_MODEL)),
-                        SmoothClasses.id("textures/entity/dreadglare.png"), 1.5F, true));
+                        SmoothClasses.id("textures/entity/original_mob_models_001/greater_dreadglare.png"), 1.5F, true));
         EntityRendererRegistry.register(SmoothEntities.WRAITH, context ->
-                new SummonedMobRenderer<>(context, new WraithModel(context.getPart(WRAITH_MODEL)),
-                        SmoothClasses.id("textures/entity/wraith.png"), 1F, false));
+                new SummonedMobRenderer<>(context,
+                        new BipedEntityModel<>(context.getPart(EntityModelLayers.SKELETON)),
+                        new net.minecraft.util.Identifier("minecraft", "textures/entity/skeleton/skeleton.png"),
+                        1F, false));
         EntityRendererRegistry.register(
                 SmoothEntities.BLADE_PORTAL,
                 org.marj4n.smooth_classes.client.renderer.BladePortalRenderer::new);
@@ -992,3 +993,4 @@ public final class SmoothClassesClient {
         CustomModelStatusEffect.register(SmoothEffects.TORMENT, new SkillEffectRenderer(SkillEffectVisual.CURSE));
     }
 }
+

@@ -1,0 +1,14 @@
+{
+  "batch": "ORIGINAL_ADDITIONAL_MODELS_001",
+  "source_native_SHA256": {
+    "rider_hippogryph/native-r06.bbmodel": "7bebebf19f169856a052bcd5ff2d589babf9ab832b35e119c4495c7ade95ce79",
+    "origin_siren_tail/native-final-review-r03.bbmodel": "489038a06a4f615be2e48a9a392da55a83a142364ca7bbba69b29c2bc81f6de7"
+  },
+  "source_package_SHA256": "41b90144438545ac47ebd4af6292dbce1a4fadd4dc71e719f1a84d119a4dc949",
+  "artwork": "Independent AI-assisted native Renas authoring; private reference geometry/art not claimed original",
+  "third_party_scope": "See root THIRD_PARTY_NOTICES.md; rights held by third parties excluded from LICENSE.txt",
+  "visual_adapter": "Siren full-swim axis baseline -HALF_PI->0 plus unchanged wave phase/amplitude; final vanilla leg mesh suppression only at existing full-morph threshold; waist bind unchanged",
+  "gameplay_mechanics": "Unchanged",
+  "runtime_coverage": "Controlled Fabric actual-renderer validation; see controller reports. Not full gameplay, Forge runtime, shader or multiplayer certification",
+  "tail_visual_waist_bind_offset_model_units": 0
+}

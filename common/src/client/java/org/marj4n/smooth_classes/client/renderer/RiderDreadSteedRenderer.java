@@ -19,9 +19,9 @@ public final class RiderDreadSteedRenderer
         extends MobEntityRenderer<RiderDreadSteedEntity, HorseEntityModel<RiderDreadSteedEntity>> {
 
     private static final Identifier TEXTURE =
-            SmoothClasses.id("textures/entity/rider/dread_steed.png");
+            SmoothClasses.id("textures/original_runtime_grip_and_steed_001/dread_steed_base.png");
     private static final Identifier EYES_TEXTURE =
-            SmoothClasses.id("textures/entity/rider/dread_steed_eyes.png");
+            SmoothClasses.id("textures/original_runtime_grip_and_steed_001/dread_steed_eyes.png");
 
     public RiderDreadSteedRenderer(EntityRendererFactory.Context ctx) {
         super(ctx, new HorseEntityModel<>(ctx.getPart(EntityModelLayers.SKELETON_HORSE)), 0.75F);

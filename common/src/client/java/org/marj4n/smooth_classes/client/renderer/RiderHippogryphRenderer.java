@@ -13,7 +13,7 @@ public final class RiderHippogryphRenderer
         extends MobEntityRenderer<RiderHippogryphEntity, RiderHippogryphModel> {
 
     private static final Identifier TEXTURE =
-            SmoothClasses.id("textures/entity/rider/hippogryph_white.png");
+            SmoothClasses.id("textures/original_additional_models_001/rider_hippogryph.png");
 
     public RiderHippogryphRenderer(EntityRendererFactory.Context ctx) {
         super(
